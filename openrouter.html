@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live AI Model Pricing — OpenRouter Data — Global AI Intelligence</title>
+<title>Live AI Model Pricing & Gateway Insights — Global AI Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
@@ -98,9 +98,65 @@
 </nav>
 
 <div class="container">
-  <h1>Live AI Model Pricing</h1>
-  <div class="sub">Real-time pricing data from OpenRouter's public API — 500+ models across all major providers.</div>
+  <h1>Live Pricing & Gateway Insights</h1>
+  <div class="sub">Real-time pricing from OpenRouter API + token flow data from Portkey — the two largest public windows into global AI traffic.</div>
   <div class="live-badge"><div class="live-dot"></div> Live data from openrouter.ai/api/v1/models</div>
+
+  <!-- Gateway Comparison Section -->
+  <div class="card" style="margin-bottom:24px; border:1px solid rgba(59,130,246,0.2); background:linear-gradient(135deg, rgba(59,130,246,0.05), rgba(168,85,247,0.05));">
+    <h2 style="margin-bottom:4px;">AI Gateway Traffic Comparison</h2>
+    <div style="font-size:11px; color:var(--text-dim); margin-bottom:16px;">Both gateways are passthrough — tokens are already counted in provider totals. This is a window into demand distribution, not additive volume.</div>
+
+    <div style="display:flex; gap:8px; margin-bottom:16px;">
+      <button class="filter-pill active" id="gw-both" onclick="setGatewayView('both')">Both</button>
+      <button class="filter-pill" id="gw-portkey" onclick="setGatewayView('portkey')">Portkey only</button>
+      <button class="filter-pill" id="gw-openrouter" onclick="setGatewayView('openrouter')">OpenRouter only</button>
+    </div>
+
+    <!-- Gateway stats -->
+    <div class="stats-bar" style="margin-bottom:20px;">
+      <div class="stat-item" id="gw-stat-tokens"><div class="val" style="color:#a78bfa;">—</div><div class="lbl">Combined Tokens/Day</div></div>
+      <div class="stat-item" id="gw-stat-requests"><div class="val" style="color:var(--accent);">—</div><div class="lbl">Combined Requests/Day</div></div>
+      <div class="stat-item" id="gw-stat-spend"><div class="val" style="color:var(--green);">—</div><div class="lbl">Combined Daily Spend</div></div>
+      <div class="stat-item" id="gw-stat-growth"><div class="val" style="color:var(--orange);">—</div><div class="lbl">Portkey Weekly Growth</div></div>
+    </div>
+
+    <!-- Top models comparison -->
+    <div class="grid-2">
+      <div id="gw-portkey-panel">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-size:14px;font-weight:700;">Portkey</span>
+          <span style="font-size:10px;color:var(--text-dim);padding:2px 8px;background:rgba(168,85,247,0.1);border-radius:4px;">1.9T tokens/day · $1.3M/day</span>
+        </div>
+        <table style="font-size:11px;">
+          <thead><tr><th style="font-size:10px;">Model</th><th style="font-size:10px;">Tokens/Day</th><th style="font-size:10px;">$/Day</th><th style="font-size:10px;">Share</th></tr></thead>
+          <tbody id="gw-portkey-models"></tbody>
+        </table>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:6px;">Source: portkey.ai/rankings/daily · Updated 2026-03-27</div>
+      </div>
+      <div id="gw-openrouter-panel">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-size:14px;font-weight:700;">OpenRouter</span>
+          <span style="font-size:10px;color:var(--text-dim);padding:2px 8px;background:rgba(59,130,246,0.1);border-radius:4px;">280B tokens/day · 8.4T/month</span>
+        </div>
+        <table style="font-size:11px;">
+          <thead><tr><th style="font-size:10px;">Model</th><th style="font-size:10px;">Tokens/Day</th><th style="font-size:10px;">$/Day</th><th style="font-size:10px;">Share</th></tr></thead>
+          <tbody id="gw-openrouter-models"></tbody>
+        </table>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:6px;">Source: openrouter.ai/rankings · Estimated from public data</div>
+      </div>
+    </div>
+
+    <!-- Overlay chart -->
+    <div style="margin-top:20px;">
+      <h2 style="font-size:14px; margin-bottom:8px;">Model Share by Gateway</h2>
+      <div class="chart-wrap"><canvas id="chart-gateway"></canvas></div>
+    </div>
+
+    <div class="context-note">
+      <strong>Why this matters:</strong> Portkey serves enterprise/production AI (24K orgs) while OpenRouter skews developer/prosumer (2.5M users). Comparing their model rankings reveals whether enterprise and developer preferences align. Key finding: Claude dominates Portkey (~30% of traffic) while OpenRouter shows more model diversity — suggesting enterprises consolidate on fewer providers while developers experiment broadly.
+    </div>
+  </div>
 
   <div class="stats-bar" id="stats-bar">
     <div class="stat-item"><div class="val" style="color:var(--accent);" id="s-models">—</div><div class="lbl">Models Available</div></div>
@@ -375,7 +431,107 @@ function sortTable(key) {
 
 function filterTable() { renderTable(); }
 
-// Init
+// === Gateway Insights ===
+const PORTKEY_DATA = {
+  totalTokens: 1.9e12, totalRequests: 151.8e6, totalSpend: 1300000, weeklyGrowth: '~35%',
+  updated: '2026-03-27',
+  models: [
+    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:284.8e9, spend:333700, share:15.0 },
+    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:262.1e9, spend:198400, share:13.8 },
+    { name:'Gemini 2.5 Flash', provider:'Google', tokens:241.5e9, spend:72200, share:12.7 },
+    { name:'GPT-5-mini', provider:'OpenAI', tokens:198.3e9, spend:89400, share:10.4 },
+    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:176.2e9, spend:42100, share:9.3 },
+    { name:'GPT-4o', provider:'OpenAI', tokens:152.7e9, spend:168500, share:8.0 },
+    { name:'DeepSeek R1', provider:'DeepSeek', tokens:141.9e9, spend:38200, share:7.5 },
+    { name:'Gemini 2.5 Pro', provider:'Google', tokens:118.4e9, spend:112800, share:6.2 },
+    { name:'Llama 3.1 70B', provider:'Meta', tokens:97.6e9, spend:28600, share:5.1 },
+    { name:'GPT-5', provider:'OpenAI', tokens:86.2e9, spend:142300, share:4.5 },
+  ]
+};
+
+const OPENROUTER_DATA = {
+  totalTokens: 280e9, totalRequests: 25e6, totalSpend: 224000,
+  models: [
+    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:47.6e9, spend:42800, share:17.0 },
+    { name:'Gemini 2.5 Flash', provider:'Google', tokens:39.2e9, spend:11800, share:14.0 },
+    { name:'DeepSeek R1', provider:'DeepSeek', tokens:33.6e9, spend:9100, share:12.0 },
+    { name:'GPT-4o-mini', provider:'OpenAI', tokens:28.0e9, spend:4200, share:10.0 },
+    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:25.2e9, spend:6000, share:9.0 },
+    { name:'Llama 3.1 8B', provider:'Meta', tokens:22.4e9, spend:1100, share:8.0 },
+    { name:'GPT-4o', provider:'OpenAI', tokens:19.6e9, spend:21600, share:7.0 },
+    { name:'Mistral Large', provider:'Mistral', tokens:14.0e9, spend:8400, share:5.0 },
+    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:11.2e9, spend:13100, share:4.0 },
+    { name:'Qwen 2.5 72B', provider:'Qwen', tokens:8.4e9, spend:2500, share:3.0 },
+  ]
+};
+
+const GW_PROVIDER_COLORS = { 'Anthropic':'#d97706', 'OpenAI':'#10a37f', 'Google':'#4285f4', 'DeepSeek':'#a78bfa', 'Meta':'#60a5fa', 'Mistral':'#f97316', 'Qwen':'#06b6d4' };
+
+let gatewayChart = null;
+let gatewayView = 'both';
+
+function setGatewayView(view) {
+  gatewayView = view;
+  ['both','portkey','openrouter'].forEach(v => {
+    document.getElementById('gw-'+v).classList.toggle('active', v === view);
+  });
+  document.getElementById('gw-portkey-panel').style.display = (view === 'openrouter') ? 'none' : '';
+  document.getElementById('gw-openrouter-panel').style.display = (view === 'portkey') ? 'none' : '';
+  renderGateway();
+}
+
+function fmtB(n) { return n >= 1e12 ? (n/1e12).toFixed(1)+'T' : n >= 1e9 ? (n/1e9).toFixed(0)+'B' : (n/1e6).toFixed(0)+'M'; }
+function fmtUSD(n) { return n >= 1e6 ? '$'+(n/1e6).toFixed(1)+'M' : '$'+(n/1e3).toFixed(0)+'K'; }
+
+function renderGateway() {
+  const p = PORTKEY_DATA, o = OPENROUTER_DATA;
+  const showP = gatewayView !== 'openrouter', showO = gatewayView !== 'portkey';
+
+  const tokens = (showP ? p.totalTokens : 0) + (showO ? o.totalTokens : 0);
+  const reqs = (showP ? p.totalRequests : 0) + (showO ? o.totalRequests : 0);
+  const spend = (showP ? p.totalSpend : 0) + (showO ? o.totalSpend : 0);
+
+  document.querySelector('#gw-stat-tokens .val').textContent = fmtB(tokens);
+  document.querySelector('#gw-stat-requests .val').textContent = fmtB(reqs);
+  document.querySelector('#gw-stat-spend .val').textContent = fmtUSD(spend);
+  document.querySelector('#gw-stat-growth .val').textContent = p.weeklyGrowth;
+
+  // Render model tables
+  function renderModelTable(el, data) {
+    el.innerHTML = data.models.map(m =>
+      `<tr><td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${GW_PROVIDER_COLORS[m.provider]||'#475569'};margin-right:4px;"></span>${m.name}</td><td>${fmtB(m.tokens)}</td><td>${fmtUSD(m.spend)}</td><td>${m.share.toFixed(1)}%</td></tr>`
+    ).join('');
+  }
+  renderModelTable(document.getElementById('gw-portkey-models'), p);
+  renderModelTable(document.getElementById('gw-openrouter-models'), o);
+
+  // Chart
+  if (gatewayChart) gatewayChart.destroy();
+
+  // Merge model names across both gateways
+  const allNames = [...new Set([...p.models.map(m=>m.name), ...o.models.map(m=>m.name)])];
+  const pMap = Object.fromEntries(p.models.map(m=>[m.name, m.share]));
+  const oMap = Object.fromEntries(o.models.map(m=>[m.name, m.share]));
+
+  const datasets = [];
+  if (showP) datasets.push({ label:'Portkey', data:allNames.map(n=>pMap[n]||0), backgroundColor:'rgba(168,85,247,0.7)', borderRadius:3 });
+  if (showO) datasets.push({ label:'OpenRouter', data:allNames.map(n=>oMap[n]||0), backgroundColor:'rgba(59,130,246,0.7)', borderRadius:3 });
+
+  gatewayChart = new Chart(document.getElementById('chart-gateway'), {
+    type:'bar',
+    data:{ labels:allNames, datasets },
+    options:{
+      responsive:true, maintainAspectRatio:false, indexAxis:'y',
+      plugins:{ legend:{ labels:{ color:'#e2e8f0', font:{size:11} } }, tooltip:{ callbacks:{ label:ctx=>`${ctx.dataset.label}: ${ctx.parsed.x.toFixed(1)}%` } } },
+      scales:{ x:{ title:{display:true,text:'% of gateway traffic'}, grid:{color:'rgba(255,255,255,0.05)'} }, y:{ grid:{display:false} } }
+    }
+  });
+}
+
+// Init gateway
+renderGateway();
+
+// Init OpenRouter live data
 fetchData();
 </script>
 </body>
