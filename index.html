@@ -40,6 +40,7 @@
   .filter-pill.active[data-dim="industries"] { background:var(--green); border-color:var(--green); }
   .filter-pill.active[data-dim="useCases"] { background:var(--orange); border-color:var(--orange); }
   .filter-pill.active[data-dim="demandTypes"] { background:var(--pink); border-color:var(--pink); }
+  .filter-pill.active[data-dim="modelType"] { background:#8b5cf6; border-color:#8b5cf6; }
   .filter-reset { padding:4px 10px; border-radius:16px; border:1px solid rgba(239,68,68,0.3); background:transparent; color:var(--red); font-size:10px; cursor:pointer; }
 
   /* Cards */
@@ -260,13 +261,13 @@
 // Self-hosted adds ~80-120T/day on top, for ~500-600T total including open-source.
 
 const PROVIDERS = {
-  'OpenAI':        { tokens: 200, rev: 16.8, color: '#10a37f', growth: '+180% YoY', consumerPct: 60, bizPct: 40 },
-  'Anthropic':     { tokens: 110, rev: 14.0, color: '#d97706', growth: '14x in 14mo', consumerPct: 35, bizPct: 65 },
-  'Google/Gemini': { tokens: 90,  rev: 4.2,  color: '#4285f4', growth: '14x in \'24', consumerPct: 40, bizPct: 60 },
-  'Meta (open)':   { tokens: 80,  rev: 0,    color: '#60a5fa', growth: '+400% YoY', consumerPct: 0, bizPct: 0 },
-  'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
-  'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80 },
-  'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
+  'OpenAI':        { tokens: 200, rev: 16.8, color: '#10a37f', growth: '+180% YoY', consumerPct: 60, bizPct: 40, modelType: 'frontier' },
+  'Anthropic':     { tokens: 110, rev: 14.0, color: '#d97706', growth: '14x in 14mo', consumerPct: 35, bizPct: 65, modelType: 'frontier' },
+  'Google/Gemini': { tokens: 90,  rev: 4.2,  color: '#4285f4', growth: '14x in \'24', consumerPct: 40, bizPct: 60, modelType: 'frontier' },
+  'Meta':          { tokens: 80,  rev: 0,    color: '#60a5fa', growth: '+400% YoY', consumerPct: 0, bizPct: 0, modelType: 'open' },
+  'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50, modelType: 'open' },
+  'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80, modelType: 'open' },
+  'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30, modelType: 'frontier' },
   // Open model inference (~100T tokens/day) is NOT listed as a separate provider.
   // Those tokens are already counted under Meta (80T), DeepSeek (40T), Mistral (15T).
   // The inference revenue (~$1.1B) flows through Together, Fireworks, Groq, etc. and
@@ -323,7 +324,7 @@ const CROSS_WEIGHTS = {
     industries: { 'Software & Tech': .30, 'Financial Services': .10, 'Healthcare': .12, 'Retail & E-commerce': .10, 'Marketing & Ads': .10, 'Customer Service': .08, 'Education': .08, 'Manufacturing': .04, 'Legal & Gov & Other': .08 },
     useCases:   { 'Coding & Dev Tools': .20, 'Chat & Assistants': .30, 'Content & Writing': .15, 'Enterprise Agents': .10, 'Search & RAG': .12, 'Data Analysis': .08, 'Other': .05 },
   },
-  'Meta (open)': {
+  'Meta': {
     regions:    { 'North America': .35, 'Asia-Pacific': .30, 'Europe': .20, 'Middle East': .05, 'Latin America': .05, 'Africa': .05 },
     industries: { 'Software & Tech': .45, 'Financial Services': .15, 'Healthcare': .08, 'Retail & E-commerce': .08, 'Marketing & Ads': .05, 'Customer Service': .05, 'Education': .04, 'Manufacturing': .05, 'Legal & Gov & Other': .05 },
     useCases:   { 'Coding & Dev Tools': .35, 'Chat & Assistants': .25, 'Content & Writing': .10, 'Enterprise Agents': .12, 'Search & RAG': .08, 'Data Analysis': .05, 'Other': .05 },
@@ -445,6 +446,7 @@ const MODELS = [
 // FILTER STATE
 // ============================================================
 const filters = { providers: [], regions: [], industries: [], useCases: [], demandTypes: [] };
+let modelTypeFilter = 'all'; // 'all', 'frontier', 'open'
 
 // Demand type definitions and cross-weights per provider
 const DEMAND_TYPES = {
@@ -459,7 +461,7 @@ const DEMAND_WEIGHTS = {
   'OpenAI':        { 'Consumer Subs': 0.55, 'API / Developer': 0.15, 'Enterprise Platform': 0.15, 'Cloud Channel': 0.15 },
   'Anthropic':     { 'Consumer Subs': 0.20, 'API / Developer': 0.35, 'Enterprise Platform': 0.25, 'Cloud Channel': 0.20 },
   'Google/Gemini': { 'Consumer Subs': 0.35, 'API / Developer': 0.20, 'Enterprise Platform': 0.20, 'Cloud Channel': 0.25 },
-  'Meta (open)':   { 'Consumer Subs': 0.10, 'API / Developer': 0.50, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.10 },
+  'Meta':   { 'Consumer Subs': 0.10, 'API / Developer': 0.50, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.10 },
   'DeepSeek':      { 'Consumer Subs': 0.40, 'API / Developer': 0.40, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.10 },
   'Mistral':       { 'Consumer Subs': 0.10, 'API / Developer': 0.35, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.25 },
   'xAI':           { 'Consumer Subs': 0.70, 'API / Developer': 0.15, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.05 },
@@ -472,8 +474,13 @@ const charts = {};
 // FILTER ENGINE
 // ============================================================
 function getFilteredProviderData() {
-  const activeProviders = filters.providers.length > 0
+  let activeProviders = filters.providers.length > 0
     ? filters.providers : Object.keys(PROVIDERS);
+
+  // Apply model type filter
+  if (modelTypeFilter !== 'all') {
+    activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
+  }
 
   const result = {};
   activeProviders.forEach(p => {
@@ -551,6 +558,28 @@ function getFilteredDimensionData(dimObj, dimKey) {
 // ============================================================
 function buildFilterBar() {
   const bar = document.getElementById('filter-bar');
+
+  // Model type toggle (special — not a multi-select filter)
+  const mtGroup = document.createElement('div');
+  mtGroup.className = 'filter-group';
+  mtGroup.innerHTML = '<span class="filter-label">Model Type</span>';
+  ['All', 'Frontier', 'Open'].forEach(label => {
+    const pill = document.createElement('button');
+    pill.className = 'filter-pill' + (label === 'All' ? ' active' : '');
+    pill.textContent = label;
+    pill.dataset.dim = 'modelType';
+    pill.dataset.value = label.toLowerCase();
+    pill.style.cssText = label === 'All' ? '' : '';
+    pill.onclick = () => {
+      modelTypeFilter = label.toLowerCase();
+      document.querySelectorAll('.filter-pill[data-dim="modelType"]').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      renderAll();
+    };
+    mtGroup.appendChild(pill);
+  });
+  bar.appendChild(mtGroup);
+
   const dims = [
     { key: 'providers', label: 'Provider', items: Object.keys(PROVIDERS), color: 'var(--accent)' },
     { key: 'regions', label: 'Region', items: Object.keys(REGIONS), color: 'var(--accent2)' },
