@@ -175,11 +175,11 @@
 
   <div class="grid-2">
     <div class="card">
-      <h2>Output Price Distribution ($/1M tokens)</h2>
+      <h2>Output Price Distribution <span style="font-size:11px;font-weight:400;color:var(--text-dim);">$/1M tokens · OpenRouter live data</span></h2>
       <div class="chart-wrap"><canvas id="chart-dist"></canvas></div>
     </div>
     <div class="card">
-      <h2>Models by Provider</h2>
+      <h2>Models by Provider <span style="font-size:11px;font-weight:400;color:var(--text-dim);">· OpenRouter catalogue</span></h2>
       <div class="chart-wrap"><canvas id="chart-providers"></canvas></div>
     </div>
   </div>
@@ -538,6 +538,7 @@ function setGatewayView(view) {
   document.getElementById('gw-portkey-panel').style.display = (view === 'openrouter') ? 'none' : '';
   document.getElementById('gw-openrouter-panel').style.display = (view === 'portkey') ? 'none' : '';
   renderGateway();
+  if (allModels.length > 0) render();
 }
 
 function setModelType(type) {
@@ -609,11 +610,12 @@ function renderGateway() {
   pFiltered.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].portkey = m.tokens; });
   oFiltered.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].openrouter = m.tokens; });
 
-  // Sort by combined tokens descending
+  // Sort by combined tokens descending, top 10 only
   const sortedNames = Object.entries(allModelsGW)
     .map(([name, d]) => ({ name, ...d, total: (showP ? d.portkey : 0) + (showO ? d.openrouter : 0) }))
     .filter(d => d.total > 0)
-    .sort((a, b) => b.total - a.total);
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 10);
 
   const labels = sortedNames.map(d => d.name);
 
