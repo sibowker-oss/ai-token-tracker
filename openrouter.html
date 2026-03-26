@@ -107,10 +107,17 @@
     <h2 style="margin-bottom:4px;">AI Gateway Traffic Comparison</h2>
     <div style="font-size:11px; color:var(--text-dim); margin-bottom:16px;">Both gateways are passthrough — tokens are already counted in provider totals. This is a window into demand distribution, not additive volume.</div>
 
-    <div style="display:flex; gap:8px; margin-bottom:16px;">
+    <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
+      <span style="font-size:10px;color:var(--text-dim);padding-top:6px;min-width:55px;">Gateway:</span>
       <button class="filter-pill active" id="gw-both" onclick="setGatewayView('both')">Both</button>
       <button class="filter-pill" id="gw-portkey" onclick="setGatewayView('portkey')">Portkey only</button>
       <button class="filter-pill" id="gw-openrouter" onclick="setGatewayView('openrouter')">OpenRouter only</button>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+      <span style="font-size:10px;color:var(--text-dim);padding-top:6px;min-width:55px;">Model type:</span>
+      <button class="filter-pill active" id="mt-all" onclick="setModelType('all')">All Models</button>
+      <button class="filter-pill" id="mt-frontier" onclick="setModelType('frontier')">Frontier (closed)</button>
+      <button class="filter-pill" id="mt-open" onclick="setModelType('open')">Open Models</button>
     </div>
 
     <!-- Gateway stats -->
@@ -436,39 +443,49 @@ const PORTKEY_DATA = {
   totalTokens: 1.9e12, totalRequests: 151.8e6, totalSpend: 1300000, weeklyGrowth: '~35%',
   updated: '2026-03-27',
   models: [
-    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:284.8e9, spend:333700, share:15.0 },
-    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:262.1e9, spend:198400, share:13.8 },
-    { name:'Gemini 2.5 Flash', provider:'Google', tokens:241.5e9, spend:72200, share:12.7 },
-    { name:'GPT-5-mini', provider:'OpenAI', tokens:198.3e9, spend:89400, share:10.4 },
-    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:176.2e9, spend:42100, share:9.3 },
-    { name:'GPT-4o', provider:'OpenAI', tokens:152.7e9, spend:168500, share:8.0 },
-    { name:'DeepSeek R1', provider:'DeepSeek', tokens:141.9e9, spend:38200, share:7.5 },
-    { name:'Gemini 2.5 Pro', provider:'Google', tokens:118.4e9, spend:112800, share:6.2 },
-    { name:'Llama 3.1 70B', provider:'Meta', tokens:97.6e9, spend:28600, share:5.1 },
-    { name:'GPT-5', provider:'OpenAI', tokens:86.2e9, spend:142300, share:4.5 },
+    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:284.8e9, spend:333700, share:15.0, type:'frontier' },
+    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:262.1e9, spend:198400, share:13.8, type:'frontier' },
+    { name:'Gemini 2.5 Flash', provider:'Google', tokens:241.5e9, spend:72200, share:12.7, type:'frontier' },
+    { name:'GPT-5-mini', provider:'OpenAI', tokens:198.3e9, spend:89400, share:10.4, type:'frontier' },
+    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:176.2e9, spend:42100, share:9.3, type:'frontier' },
+    { name:'GPT-4o', provider:'OpenAI', tokens:152.7e9, spend:168500, share:8.0, type:'frontier' },
+    { name:'DeepSeek R1', provider:'DeepSeek', tokens:141.9e9, spend:38200, share:7.5, type:'open' },
+    { name:'Gemini 2.5 Pro', provider:'Google', tokens:118.4e9, spend:112800, share:6.2, type:'frontier' },
+    { name:'Llama 3.1 70B', provider:'Meta', tokens:97.6e9, spend:28600, share:5.1, type:'open' },
+    { name:'GPT-5', provider:'OpenAI', tokens:86.2e9, spend:142300, share:4.5, type:'frontier' },
+    { name:'Qwen 2.5 72B', provider:'Qwen', tokens:52.1e9, spend:15600, share:2.7, type:'open' },
+    { name:'Mistral Large', provider:'Mistral', tokens:41.8e9, spend:25100, share:2.2, type:'frontier' },
+    { name:'Llama 3.1 8B', provider:'Meta', tokens:38.4e9, spend:1900, share:2.0, type:'open' },
+    { name:'DeepSeek V3', provider:'DeepSeek', tokens:35.7e9, spend:9600, share:1.9, type:'open' },
+    { name:'Gemma 2 9B', provider:'Google', tokens:21.3e9, spend:1100, share:1.1, type:'open' },
   ]
 };
 
 const OPENROUTER_DATA = {
   totalTokens: 280e9, totalRequests: 25e6, totalSpend: 224000,
   models: [
-    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:47.6e9, spend:42800, share:17.0 },
-    { name:'Gemini 2.5 Flash', provider:'Google', tokens:39.2e9, spend:11800, share:14.0 },
-    { name:'DeepSeek R1', provider:'DeepSeek', tokens:33.6e9, spend:9100, share:12.0 },
-    { name:'GPT-4o-mini', provider:'OpenAI', tokens:28.0e9, spend:4200, share:10.0 },
-    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:25.2e9, spend:6000, share:9.0 },
-    { name:'Llama 3.1 8B', provider:'Meta', tokens:22.4e9, spend:1100, share:8.0 },
-    { name:'GPT-4o', provider:'OpenAI', tokens:19.6e9, spend:21600, share:7.0 },
-    { name:'Mistral Large', provider:'Mistral', tokens:14.0e9, spend:8400, share:5.0 },
-    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:11.2e9, spend:13100, share:4.0 },
-    { name:'Qwen 2.5 72B', provider:'Qwen', tokens:8.4e9, spend:2500, share:3.0 },
+    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:47.6e9, spend:42800, share:17.0, type:'frontier' },
+    { name:'Gemini 2.5 Flash', provider:'Google', tokens:39.2e9, spend:11800, share:14.0, type:'frontier' },
+    { name:'DeepSeek R1', provider:'DeepSeek', tokens:33.6e9, spend:9100, share:12.0, type:'open' },
+    { name:'GPT-4o-mini', provider:'OpenAI', tokens:28.0e9, spend:4200, share:10.0, type:'frontier' },
+    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:25.2e9, spend:6000, share:9.0, type:'frontier' },
+    { name:'Llama 3.1 8B', provider:'Meta', tokens:22.4e9, spend:1100, share:8.0, type:'open' },
+    { name:'GPT-4o', provider:'OpenAI', tokens:19.6e9, spend:21600, share:7.0, type:'frontier' },
+    { name:'Mistral Large', provider:'Mistral', tokens:14.0e9, spend:8400, share:5.0, type:'frontier' },
+    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:11.2e9, spend:13100, share:4.0, type:'frontier' },
+    { name:'Qwen 2.5 72B', provider:'Qwen', tokens:8.4e9, spend:2500, share:3.0, type:'open' },
+    { name:'DeepSeek V3', provider:'DeepSeek', tokens:7.0e9, spend:1900, share:2.5, type:'open' },
+    { name:'Llama 3.1 70B', provider:'Meta', tokens:5.6e9, spend:1700, share:2.0, type:'open' },
+    { name:'Gemma 2 9B', provider:'Google', tokens:4.2e9, spend:210, share:1.5, type:'open' },
+    { name:'Phi-3 Mini', provider:'Microsoft', tokens:3.1e9, spend:160, share:1.1, type:'open' },
   ]
 };
 
-const GW_PROVIDER_COLORS = { 'Anthropic':'#d97706', 'OpenAI':'#10a37f', 'Google':'#4285f4', 'DeepSeek':'#a78bfa', 'Meta':'#60a5fa', 'Mistral':'#f97316', 'Qwen':'#06b6d4' };
+const GW_PROVIDER_COLORS = { 'Anthropic':'#d97706', 'OpenAI':'#10a37f', 'Google':'#4285f4', 'DeepSeek':'#a78bfa', 'Meta':'#60a5fa', 'Mistral':'#f97316', 'Qwen':'#06b6d4', 'Microsoft':'#00a4ef' };
 
 let gatewayChart = null;
 let gatewayView = 'both';
+let modelTypeFilter = 'all';
 
 function setGatewayView(view) {
   gatewayView = view;
@@ -480,6 +497,19 @@ function setGatewayView(view) {
   renderGateway();
 }
 
+function setModelType(type) {
+  modelTypeFilter = type;
+  ['all','frontier','open'].forEach(t => {
+    document.getElementById('mt-'+t).classList.toggle('active', t === type);
+  });
+  renderGateway();
+}
+
+function filterByType(models) {
+  if (modelTypeFilter === 'all') return models;
+  return models.filter(m => m.type === modelTypeFilter);
+}
+
 function fmtB(n) { return n >= 1e12 ? (n/1e12).toFixed(1)+'T' : n >= 1e9 ? (n/1e9).toFixed(0)+'B' : (n/1e6).toFixed(0)+'M'; }
 function fmtUSD(n) { return n >= 1e6 ? '$'+(n/1e6).toFixed(1)+'M' : '$'+(n/1e3).toFixed(0)+'K'; }
 
@@ -487,31 +517,53 @@ function renderGateway() {
   const p = PORTKEY_DATA, o = OPENROUTER_DATA;
   const showP = gatewayView !== 'openrouter', showO = gatewayView !== 'portkey';
 
-  const tokens = (showP ? p.totalTokens : 0) + (showO ? o.totalTokens : 0);
+  // Filter models by type
+  const pFiltered = { ...p, models: filterByType(p.models) };
+  const oFiltered = { ...o, models: filterByType(o.models) };
+
+  // Recalculate stats from filtered models
+  const pTokens = pFiltered.models.reduce((s,m) => s + m.tokens, 0);
+  const oTokens = oFiltered.models.reduce((s,m) => s + m.tokens, 0);
+  const pSpend = pFiltered.models.reduce((s,m) => s + m.spend, 0);
+  const oSpend = oFiltered.models.reduce((s,m) => s + m.spend, 0);
+
+  const tokens = (showP ? pTokens : 0) + (showO ? oTokens : 0);
+  const spend = (showP ? pSpend : 0) + (showO ? oSpend : 0);
   const reqs = (showP ? p.totalRequests : 0) + (showO ? o.totalRequests : 0);
-  const spend = (showP ? p.totalSpend : 0) + (showO ? o.totalSpend : 0);
 
   document.querySelector('#gw-stat-tokens .val').textContent = fmtB(tokens);
-  document.querySelector('#gw-stat-requests .val').textContent = fmtB(reqs);
+  document.querySelector('#gw-stat-requests .val').textContent = modelTypeFilter === 'all' ? fmtB(reqs) : '—';
   document.querySelector('#gw-stat-spend .val').textContent = fmtUSD(spend);
   document.querySelector('#gw-stat-growth .val').textContent = p.weeklyGrowth;
 
+  // Update stat labels
+  const typeLabel = modelTypeFilter === 'all' ? '' : modelTypeFilter === 'frontier' ? ' (Frontier)' : ' (Open)';
+  document.querySelector('#gw-stat-tokens .lbl').textContent = 'Tokens/Day' + typeLabel;
+  document.querySelector('#gw-stat-spend .lbl').textContent = 'Daily Spend' + typeLabel;
+
   // Render model tables
   function renderModelTable(el, data) {
-    el.innerHTML = data.models.map(m =>
-      `<tr><td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${GW_PROVIDER_COLORS[m.provider]||'#475569'};margin-right:4px;"></span>${m.name}</td><td>${fmtB(m.tokens)}</td><td>${fmtUSD(m.spend)}</td><td>${m.share.toFixed(1)}%</td></tr>`
+    const filtered = data.models;
+    if (filtered.length === 0) {
+      el.innerHTML = '<tr><td colspan="4" style="color:var(--text-dim);text-align:center;padding:16px;">No models in this category</td></tr>';
+      return;
+    }
+    // Recalculate share within filtered set
+    const totalTok = filtered.reduce((s,m) => s + m.tokens, 0);
+    el.innerHTML = filtered.map(m =>
+      `<tr><td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${GW_PROVIDER_COLORS[m.provider]||'#475569'};margin-right:4px;"></span>${m.name}<span style="font-size:9px;color:${m.type==='open'?'var(--green)':'var(--orange)'};margin-left:4px;">${m.type==='open'?'OSS':'Closed'}</span></td><td>${fmtB(m.tokens)}</td><td>${fmtUSD(m.spend)}</td><td>${(m.tokens/totalTok*100).toFixed(1)}%</td></tr>`
     ).join('');
   }
-  renderModelTable(document.getElementById('gw-portkey-models'), p);
-  renderModelTable(document.getElementById('gw-openrouter-models'), o);
+  renderModelTable(document.getElementById('gw-portkey-models'), pFiltered);
+  renderModelTable(document.getElementById('gw-openrouter-models'), oFiltered);
 
   // Chart — stacked bars, provider-colored, two tones per bar
   if (gatewayChart) gatewayChart.destroy();
 
   // Merge and dedupe model names, get provider for each
   const allModelsGW = {};
-  p.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].portkey = m.tokens; });
-  o.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].openrouter = m.tokens; });
+  pFiltered.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].portkey = m.tokens; });
+  oFiltered.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].openrouter = m.tokens; });
 
   // Sort by combined tokens descending
   const sortedNames = Object.entries(allModelsGW)
