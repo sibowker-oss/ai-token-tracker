@@ -267,13 +267,11 @@ const PROVIDERS = {
   'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
   'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80 },
   'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
-  'Open Models':    { tokens: 100, rev: 2.5,   color: '#8b5cf6', growth: '+300% YoY', consumerPct: 10, bizPct: 90 },
-  // ~100T tokens/day of open-weight model inference (Llama, DeepSeek, Mistral, Qwen).
-  // ~$2.5B in inference revenue for OPEN MODELS ONLY (excluding frontier model pass-through):
-  // Together/Fireworks/Groq OSS portion ~$150M, CoreWeave OSS inference ~$500M,
-  // Lambda ~$200M, sovereign AI clouds ~$400M, hyperscaler GPU rental for OSS ~$1.2B.
-  // NB: These platforms also serve frontier models — that revenue is already counted
-  // under OpenAI/Anthropic/Google above. Only the open-weight portion is here.
+  // Open model inference (~100T tokens/day) is NOT listed as a separate provider.
+  // Those tokens are already counted under Meta (80T), DeepSeek (40T), Mistral (15T).
+  // The inference revenue (~$1.1B) flows through Together, Fireworks, Groq, etc. and
+  // sits within the Model API column of the demand matrix (~80% frontier, ~20% open).
+  // See the Live Pricing page for open vs frontier gateway breakdowns.
   'Others':        { tokens: 20,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60 },
 };
 
@@ -345,11 +343,8 @@ const CROSS_WEIGHTS = {
     industries: { 'Software & Tech': .35, 'Financial Services': .10, 'Healthcare': .05, 'Retail & E-commerce': .05, 'Marketing & Ads': .10, 'Customer Service': .05, 'Education': .05, 'Manufacturing': .03, 'Legal & Gov & Other': .22 },
     useCases:   { 'Coding & Dev Tools': .15, 'Chat & Assistants': .50, 'Content & Writing': .15, 'Enterprise Agents': .05, 'Search & RAG': .05, 'Data Analysis': .05, 'Other': .05 },
   },
-  'Open Models': {
-    regions:    { 'North America': .25, 'Asia-Pacific': .40, 'Europe': .22, 'Middle East': .05, 'Latin America': .04, 'Africa': .04 },
-    industries: { 'Software & Tech': .35, 'Financial Services': .20, 'Healthcare': .10, 'Retail & E-commerce': .05, 'Marketing & Ads': .03, 'Customer Service': .05, 'Education': .05, 'Manufacturing': .08, 'Legal & Gov & Other': .09 },
-    useCases:   { 'Coding & Dev Tools': .30, 'Chat & Assistants': .25, 'Content & Writing': .08, 'Enterprise Agents': .15, 'Search & RAG': .10, 'Data Analysis': .07, 'Other': .05 },
-  },
+  // Open Models removed — tokens already counted under Meta, DeepSeek, Mistral.
+  // Inference provider revenue (~$1.1B) sits within Model API column of demand matrix.
   'Others': {
     regions:    { 'North America': .30, 'Asia-Pacific': .35, 'Europe': .20, 'Middle East': .06, 'Latin America': .05, 'Africa': .04 },
     industries: { 'Software & Tech': .35, 'Financial Services': .15, 'Healthcare': .10, 'Retail & E-commerce': .10, 'Marketing & Ads': .05, 'Customer Service': .08, 'Education': .05, 'Manufacturing': .05, 'Legal & Gov & Other': .07 },
@@ -369,19 +364,19 @@ const DEMAND_MATRIX = {
   rows: [
     { segment: 'Consumer', cells: [
       { rev: '~$10-12B', conv: '50%', color: '#f59e0b', ex: 'ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced', note: 'Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk.' },
-      { rev: '~$0.5B', conv: '100%', color: '#10b981', ex: 'Hobbyist devs, indie hackers, students using API keys', note: 'Small but pure. Every cent = tokens.' },
+      { rev: '~$0.5B', conv: '100%', color: '#10b981', ex: 'Hobbyist devs, indie hackers, students using API keys', note: 'Small but pure. Every cent = tokens. ~95% frontier, ~5% open models.' },
       { rev: '~$2-3B', conv: '90%', color: '#10b981', ex: 'Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier', note: 'Real usage. AI native absorbs API cost.' },
       { rev: '~$0.5-1B', conv: '15%', color: '#ef4444', ex: 'Canva AI features, Grammarly, Notion AI, Adobe Firefly', note: 'AI bundled free into consumer SaaS tiers. Retention play, not revenue driver. Adobe Firefly: growth flat at 10-11%.' },
     ]},
     { segment: 'SME', cells: [
       { rev: '~$1-2B', conv: '60%', color: '#f59e0b', ex: 'ChatGPT Team ($25/user), Claude Team', note: 'Growing. Usage varies widely across seats.' },
-      { rev: '~$2-3B', conv: '100%', color: '#10b981', ex: 'Startups on APIs, dev agencies, Vercel AI SDK users', note: 'Pure demand. Retool: avg $50K-$500K/yr. Fastest growing.' },
+      { rev: '~$2-3B', conv: '100%', color: '#10b981', ex: 'Startups on APIs, dev agencies, Vercel AI SDK users', note: 'Pure demand. ~65% frontier, ~35% open (AI natives buying Together/Fireworks inference). Fastest growing.' },
       { rev: '~$2-3B', conv: '85%', color: '#10b981', ex: 'Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin', note: 'Strong PMF. SMEs adopt AI natives faster than SaaS AI.' },
       { rev: '~$1-2B', conv: '15%', color: '#ef4444', ex: 'HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI', note: 'Feature checkbox on renewal, low activation. HubSpot Breeze: no separate revenue disclosed = immaterial.' },
     ]},
     { segment: 'Enterprise', cells: [
       { rev: '~$1-2B', conv: '45%', color: '#f59e0b', ex: 'ChatGPT Enterprise ($60+/user), Claude for Enterprise', note: 'Standalone AI subs — higher activation, users chose to buy it.' },
-      { rev: '~$3-5B', conv: '100%', color: '#10b981', ex: 'Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys', note: 'LARGEST FUTURE TAM. Small today but 100% real. Goldman: →$50-80B by 2028.' },
+      { rev: '~$3-5B', conv: '100%', color: '#10b981', ex: 'Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys', note: 'LARGEST FUTURE TAM. Small today but 100% real. ~95% frontier, ~5% open. Goldman: →$50-80B by 2028.' },
       { rev: '~$1-2B', conv: '80%', color: '#10b981', ex: 'Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI', note: 'Real usage — AI natives solving specific enterprise workflows.' },
       { rev: '~$5-7B real (~$15B claimed)', conv: '10-20%', color: '#ef4444', ex: 'M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B — the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real — cleanest reporter)', note: 'COGS test: SF inference est. $6-12M on $800M "AI rev" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration.' },
     ]},
@@ -468,7 +463,7 @@ const DEMAND_WEIGHTS = {
   'DeepSeek':      { 'Consumer Subs': 0.40, 'API / Developer': 0.40, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.10 },
   'Mistral':       { 'Consumer Subs': 0.10, 'API / Developer': 0.35, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.25 },
   'xAI':           { 'Consumer Subs': 0.70, 'API / Developer': 0.15, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.05 },
-  'Open Models':{ 'Consumer Subs': 0.10, 'API / Developer': 0.50, 'Enterprise Platform': 0.35, 'Cloud Channel': 0.05 },
+  // Open Models removed — revenue sits within Model API column
   'Others':        { 'Consumer Subs': 0.30, 'API / Developer': 0.30, 'Enterprise Platform': 0.20, 'Cloud Channel': 0.20 },
 };
 const charts = {};
