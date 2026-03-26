@@ -106,11 +106,12 @@
     .hero-stat .value { font-size:22px; }
     .hero-stat .label { font-size:10px; }
 
-    /* Filter bar */
-    .filter-bar { padding:8px 0; }
-    .filter-label { font-size:10px; min-width:55px; }
-    .filter-pill { font-size:10px; padding:6px 10px; min-height:44px; display:inline-flex; align-items:center; }
-    .filter-reset { font-size:9px; padding:6px 8px; min-height:44px; display:inline-flex; align-items:center; }
+    /* Filter bar: not sticky on mobile, collapsible */
+    .filter-bar { position:relative; top:auto; padding:8px 0; max-height:120px; overflow-y:auto; }
+    .filter-label { font-size:9px; min-width:50px; }
+    .filter-pill { font-size:9px; padding:4px 8px; min-height:36px; display:inline-flex; align-items:center; }
+    .filter-reset { font-size:8px; padding:4px 6px; min-height:36px; display:inline-flex; align-items:center; }
+    .filter-group { margin-bottom:2px; }
 
     /* Grid layouts: single column */
     .grid-2, .grid-3 { grid-template-columns:1fr; }
