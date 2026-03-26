@@ -97,6 +97,8 @@
   <a href="calculator.html" style="color:#94a3b8;text-decoration:none;">Shelfware Calculator</a>
   <a href="timeline.html" style="color:#94a3b8;text-decoration:none;">Time Machine</a>
   <a href="feed.html" style="color:#94a3b8;text-decoration:none;">Weekly Feed</a>
+  <a href="capex.html">Capex Gap</a>
+  <a href="estimator.html">Token Estimator</a>
 </nav>
 <div class="container">
 
@@ -542,16 +544,21 @@ function updateHeroStats() {
   const provCount = Object.keys(data).length;
   const hasFilters = Object.values(filters).some(f => f.length > 0);
 
+  const bearTokens = Math.round(totalTokens * 0.4);
+  const bullTokens = Math.round(totalTokens * 1.8);
+  const bearRev = (totalRev * 0.6).toFixed(1);
+  const bullRev = (totalRev * 1.2).toFixed(1);
+
   document.getElementById('hero-stats').innerHTML = `
     <div class="hero-stat">
       <div class="label">Est. Tokens / Day</div>
       <div class="value" style="color:var(--accent);">~${Math.round(totalTokens)}T</div>
-      <div class="detail">${hasFilters ? 'filtered view' : 'all providers combined'}</div>
+      <div class="detail" style="font-size:10px;">Bear: ${bearTokens}T · Bull: ${bullTokens}T</div>
     </div>
     <div class="hero-stat">
       <div class="label">Annualized Revenue</div>
       <div class="value" style="color:var(--green);">$${totalRev.toFixed(1)}B</div>
-      <div class="detail">${hasFilters ? 'filtered view' : 'model provider revenue'}</div>
+      <div class="detail" style="font-size:10px;">Bear: $${bearRev}B · Bull: $${bullRev}B</div>
     </div>
     <div class="hero-stat">
       <div class="label">Active Providers</div>

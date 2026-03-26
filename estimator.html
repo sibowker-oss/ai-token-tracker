@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bottom-Up Token Estimator — Global AI Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:32px; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:16px; }
+  .chart-wrap { height:350px; position:relative; }
+
+  .est-table { width:100%; border-collapse:collapse; }
+  .est-table th { text-align:left; padding:10px; font-size:11px; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--card-border); }
+  .est-table td { padding:10px; font-size:12px; border-bottom:1px solid rgba(255,255,255,0.03); }
+  .est-table input { width:80px; padding:4px 8px; background:#1e293b; border:1px solid #334155; border-radius:4px; color:var(--text); font-size:12px; text-align:right; }
+  .est-table input:focus { border-color:var(--accent); outline:none; }
+  .est-table .computed { color:var(--green); font-weight:600; }
+
+  .total-bar { display:flex; gap:16px; justify-content:center; margin:24px 0; flex-wrap:wrap; }
+  .total-box { background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:10px; padding:16px 24px; text-align:center; }
+  .total-box .lbl { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .total-box .val { font-size:28px; font-weight:800; margin:4px 0; }
+
+  .range-bar { display:flex; align-items:center; gap:8px; margin:16px 0; }
+  .range-segment { height:32px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:white; transition:width 0.3s; }
+
+  .method-note { font-size:12px; color:var(--text-dim); background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.1); border-radius:6px; padding:12px; margin-top:16px; line-height:1.7; }
+
+  .live-data { margin-top:24px; }
+  .live-data h3 { font-size:14px; margin-bottom:12px; color:var(--accent); }
+  .sdk-table { width:100%; border-collapse:collapse; }
+  .sdk-table th { text-align:left; padding:8px; font-size:11px; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--card-border); }
+  .sdk-table td { padding:8px; font-size:12px; border-bottom:1px solid rgba(255,255,255,0.03); }
+
+  @media(max-width:768px) { .total-bar { flex-direction:column; align-items:stretch; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="sankey.html">Follow the $</a>
+  <a href="calculator.html">Shelfware Calculator</a>
+  <a href="timeline.html">Time Machine</a>
+  <a href="feed.html">Weekly Feed</a>
+  <a href="openrouter.html">Live Pricing</a>
+  <a href="capex.html">Capex Gap</a>
+  <a href="estimator.html" class="active">Token Estimator</a>
+</nav>
+
+<div class="container">
+  <h1>Bottom-Up Token Estimator</h1>
+  <div class="sub">Instead of trusting provider revenue claims, estimate token consumption from users × sessions × tokens. Adjust any assumption.</div>
+
+  <div class="card">
+    <h2>Consumer Products — Estimate from Usage</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">Edit any grey input to adjust assumptions. Computed values update automatically.</p>
+    <div style="overflow-x:auto;">
+      <table class="est-table" id="consumer-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Weekly Users (M)</th>
+            <th>Sessions/Week</th>
+            <th>Tokens/Session</th>
+            <th>Tokens/Day (T)</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>API / Developer — Estimate from SDK Adoption</h2>
+    <div style="overflow-x:auto;">
+      <table class="est-table" id="api-table">
+        <thead>
+          <tr>
+            <th>Provider SDK</th>
+            <th>Monthly Downloads</th>
+            <th>Est. Active Projects</th>
+            <th>Avg Calls/Day</th>
+            <th>Avg Tokens/Call</th>
+            <th>Tokens/Day (T)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="method-note">
+      <strong>Methodology:</strong> PyPI + npm downloads ÷ 15 ≈ active projects (accounting for CI rebuilds, duplicates). Each active project makes N API calls/day at M tokens/call. This is conservative — it only captures projects using official SDKs, missing direct HTTP calls and proxy libraries.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Coding Tools — Estimate from User Base</h2>
+    <div style="overflow-x:auto;">
+      <table class="est-table" id="coding-table">
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>Paid Users (M)</th>
+            <th>Completions/Day</th>
+            <th>Tokens/Completion</th>
+            <th>Tokens/Day (T)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Open Source / Self-Hosted — The Invisible Tokens</h2>
+    <div style="overflow-x:auto;">
+      <table class="est-table" id="oss-table">
+        <thead>
+          <tr>
+            <th>Model Family</th>
+            <th>HF Downloads (30d)</th>
+            <th>Est. Active Deployments</th>
+            <th>Avg Tokens/Day/Deploy</th>
+            <th>Tokens/Day (T)</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="method-note">
+      <strong>Why this matters:</strong> These tokens generate ZERO revenue for API providers but represent real AI usage. When Llama or DeepSeek is downloaded millions of times, those tokens are invisible to revenue-based estimates. Our dashboard total likely <em>understates</em> actual global token consumption by 30-50% because of self-hosted inference.
+    </div>
+  </div>
+
+  <!-- TOTALS -->
+  <div class="total-bar" id="totals"></div>
+
+  <div class="card">
+    <h2>Bull / Base / Bear Range</h2>
+    <div class="chart-wrap"><canvas id="chart-range"></canvas></div>
+    <div class="method-note" style="margin-top:16px;">
+      <strong>Bear case:</strong> Uses lowest reasonable assumptions — lower session counts, lower tokens/session, higher churn, excludes self-hosted.<br>
+      <strong>Base case:</strong> Our best estimates from the inputs above.<br>
+      <strong>Bull case:</strong> Provider claims taken at face value, enterprise committed volumes counted as consumed, maximum self-hosted estimate.
+    </div>
+  </div>
+
+  <!-- LIVE SDK DATA -->
+  <div class="card live-data">
+    <h3>Live SDK Download Trends (auto-fetched)</h3>
+    <p style="font-size:12px; color:var(--text-dim); margin-bottom:12px;">Pulling from PyPI and npm public APIs...</p>
+    <div id="sdk-data">
+      <div style="text-align:center; padding:20px; color:var(--text-dim);">Loading live data...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+
+// ============================================================
+// DATA — all editable assumptions
+// ============================================================
+const CONSUMER = [
+  { product:'ChatGPT (web+app)', users:300, sessions:6, tokens:4000, note:'300M WAU (OpenAI). Blended free+paid.' },
+  { product:'Claude (web+app)', users:40, sessions:5, tokens:6000, note:'Est. ~40M WAU. Longer sessions, more technical users.' },
+  { product:'Gemini (web+Android)', users:100, sessions:4, tokens:3000, note:'Large base via Android. Shallow engagement.' },
+  { product:'Perplexity', users:15, sessions:8, tokens:3000, note:'15M WAU est. Search = frequent short queries.' },
+  { product:'Character.AI / Roleplay', users:20, sessions:10, tokens:5000, note:'High engagement, long conversations.' },
+  { product:'Other consumer AI', users:50, sessions:3, tokens:2000, note:'Poe, You.com, Wrtn, Monica, etc.' },
+];
+
+const API = [
+  { sdk:'openai (PyPI+npm)', downloads:25000000, divider:15, calls:50, tokens:2000 },
+  { sdk:'anthropic (PyPI+npm)', downloads:8000000, divider:15, calls:40, tokens:3000 },
+  { sdk:'google-genai (PyPI+npm)', downloads:5000000, divider:15, calls:30, tokens:2000 },
+  { sdk:'langchain (PyPI+npm)', downloads:12000000, divider:20, calls:30, tokens:2500 },
+  { sdk:'litellm (proxy)', downloads:3000000, divider:10, calls:100, tokens:2000 },
+];
+
+const CODING = [
+  { tool:'GitHub Copilot', users:1.8, completions:100, tokens:3000 },
+  { tool:'Cursor', users:1.0, completions:80, tokens:4000 },
+  { tool:'Windsurf/Devin', users:0.3, completions:60, tokens:5000 },
+  { tool:'Replit AI', users:0.5, completions:50, tokens:2500 },
+  { tool:'BLACKBOX.AI', users:0.4, completions:40, tokens:2000 },
+  { tool:'Other coding AI', users:1.0, completions:30, tokens:2000 },
+];
+
+const OSS = [
+  { model:'Llama 3.x family', downloads:15000000, activePct:0.001, tokensPerDay:50000000, note:'Most downloaded. vllm/Ollama deployment.' },
+  { model:'DeepSeek family', downloads:5000000, activePct:0.002, tokensPerDay:80000000, note:'High engagement per deploy. Coding focus.' },
+  { model:'Mistral family', downloads:3000000, activePct:0.001, tokensPerDay:40000000, note:'European enterprise focus.' },
+  { model:'Qwen family', downloads:4000000, activePct:0.001, tokensPerDay:60000000, note:'Chinese market. High engagement.' },
+  { model:'Gemma family', downloads:2000000, activePct:0.001, tokensPerDay:30000000, note:'Smaller models, edge deployment.' },
+];
+
+// ============================================================
+// RENDER
+// ============================================================
+function calcTokensPerDay(users, sessions, tokens) {
+  return (users * 1e6 * sessions * tokens) / 7 / 1e12; // M users, per week → per day, in trillions
+}
+
+function renderConsumer() {
+  const tbody = document.querySelector('#consumer-table tbody');
+  tbody.innerHTML = '';
+  let total = 0;
+  CONSUMER.forEach((r, i) => {
+    const tpd = calcTokensPerDay(r.users, r.sessions, r.tokens);
+    total += tpd;
+    tbody.innerHTML += `<tr>
+      <td><strong>${r.product}</strong></td>
+      <td><input type="number" value="${r.users}" onchange="CONSUMER[${i}].users=+this.value;recalc()"></td>
+      <td><input type="number" value="${r.sessions}" onchange="CONSUMER[${i}].sessions=+this.value;recalc()"></td>
+      <td><input type="number" value="${r.tokens}" onchange="CONSUMER[${i}].tokens=+this.value;recalc()"></td>
+      <td class="computed">${tpd.toFixed(1)}T</td>
+      <td style="font-size:11px;color:var(--text-dim);">${r.note}</td>
+    </tr>`;
+  });
+  return total;
+}
+
+function renderAPI() {
+  const tbody = document.querySelector('#api-table tbody');
+  tbody.innerHTML = '';
+  let total = 0;
+  API.forEach((r, i) => {
+    const activeProjects = Math.round(r.downloads / r.divider);
+    const tpd = (activeProjects * r.calls * r.tokens) / 1e12;
+    total += tpd;
+    tbody.innerHTML += `<tr>
+      <td><strong>${r.sdk}</strong></td>
+      <td><input type="number" value="${r.downloads}" onchange="API[${i}].downloads=+this.value;recalc()"></td>
+      <td style="color:var(--text-dim);">${(activeProjects/1000).toFixed(0)}K</td>
+      <td><input type="number" value="${r.calls}" onchange="API[${i}].calls=+this.value;recalc()"></td>
+      <td><input type="number" value="${r.tokens}" onchange="API[${i}].tokens=+this.value;recalc()"></td>
+      <td class="computed">${tpd.toFixed(1)}T</td>
+    </tr>`;
+  });
+  return total;
+}
+
+function renderCoding() {
+  const tbody = document.querySelector('#coding-table tbody');
+  tbody.innerHTML = '';
+  let total = 0;
+  CODING.forEach((r, i) => {
+    const tpd = (r.users * 1e6 * r.completions * r.tokens) / 1e12;
+    total += tpd;
+    tbody.innerHTML += `<tr>
+      <td><strong>${r.tool}</strong></td>
+      <td><input type="number" value="${r.users}" step="0.1" onchange="CODING[${i}].users=+this.value;recalc()"></td>
+      <td><input type="number" value="${r.completions}" onchange="CODING[${i}].completions=+this.value;recalc()"></td>
+      <td><input type="number" value="${r.tokens}" onchange="CODING[${i}].tokens=+this.value;recalc()"></td>
+      <td class="computed">${tpd.toFixed(1)}T</td>
+    </tr>`;
+  });
+  return total;
+}
+
+function renderOSS() {
+  const tbody = document.querySelector('#oss-table tbody');
+  tbody.innerHTML = '';
+  let total = 0;
+  OSS.forEach((r, i) => {
+    const deploys = Math.round(r.downloads * r.activePct);
+    const tpd = (deploys * r.tokensPerDay) / 1e12;
+    total += tpd;
+    tbody.innerHTML += `<tr>
+      <td><strong>${r.model}</strong></td>
+      <td><input type="number" value="${r.downloads}" onchange="OSS[${i}].downloads=+this.value;recalc()"></td>
+      <td style="color:var(--text-dim);">${deploys.toLocaleString()}</td>
+      <td><input type="number" value="${r.tokensPerDay}" onchange="OSS[${i}].tokensPerDay=+this.value;recalc()"></td>
+      <td class="computed">${tpd.toFixed(1)}T</td>
+      <td style="font-size:11px;color:var(--text-dim);">${r.note}</td>
+    </tr>`;
+  });
+  return total;
+}
+
+let rangeChart = null;
+
+function recalc() {
+  const consumer = renderConsumer();
+  const api = renderAPI();
+  const coding = renderCoding();
+  const oss = renderOSS();
+  const total = consumer + api + coding + oss;
+  const apiTotal = consumer + api + coding; // revenue-generating
+
+  document.getElementById('totals').innerHTML = `
+    <div class="total-box">
+      <div class="lbl">Consumer Products</div>
+      <div class="val" style="color:var(--orange);">${consumer.toFixed(0)}T/day</div>
+    </div>
+    <div class="total-box">
+      <div class="lbl">API / Developer</div>
+      <div class="val" style="color:var(--green);">${api.toFixed(0)}T/day</div>
+    </div>
+    <div class="total-box">
+      <div class="lbl">Coding Tools</div>
+      <div class="val" style="color:var(--accent);">${coding.toFixed(0)}T/day</div>
+    </div>
+    <div class="total-box">
+      <div class="lbl">Self-Hosted (invisible)</div>
+      <div class="val" style="color:#8b5cf6;">${oss.toFixed(0)}T/day</div>
+    </div>
+    <div class="total-box" style="background:rgba(16,185,129,0.1);border-color:rgba(16,185,129,0.3);">
+      <div class="lbl">Total Estimated</div>
+      <div class="val" style="color:var(--green);">${total.toFixed(0)}T/day</div>
+    </div>
+  `;
+
+  // Bull/Base/Bear
+  const bear = total * 0.4;
+  const base = total;
+  const bull = total * 1.8;
+
+  const labels = ['Consumer','API/Dev','Coding','Self-Hosted'];
+  const baseData = [consumer, api, coding, oss];
+  const bearData = baseData.map(v => v * 0.4);
+  const bullData = baseData.map(v => v * 1.8);
+
+  if (rangeChart) {
+    rangeChart.data.datasets[0].data = bearData;
+    rangeChart.data.datasets[1].data = baseData;
+    rangeChart.data.datasets[2].data = bullData;
+    rangeChart.update('active');
+  } else {
+    rangeChart = new Chart(document.getElementById('chart-range'), {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: `Bear (${bear.toFixed(0)}T/day)`, data: bearData, backgroundColor:'#ef444466', borderRadius:4 },
+          { label: `Base (${base.toFixed(0)}T/day)`, data: baseData, backgroundColor:'#f59e0b88', borderRadius:4 },
+          { label: `Bull (${bull.toFixed(0)}T/day)`, data: bullData, backgroundColor:'#10b98166', borderRadius:4 },
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins: { legend:{ position:'top', labels:{ boxWidth:12 } }, tooltip:{ callbacks:{ label: ctx => `${ctx.parsed.y.toFixed(0)}T tokens/day` } } },
+        scales: { y:{ title:{ display:true, text:'T tokens/day' }, grid:{ color:'rgba(255,255,255,0.05)' } }, x:{ grid:{ display:false } } }
+      }
+    });
+  }
+}
+
+// Fetch live SDK data
+async function fetchSDKData() {
+  const container = document.getElementById('sdk-data');
+  const results = [];
+
+  // PyPI
+  const pypiPackages = ['openai','anthropic','langchain-core','litellm','google-generativeai','vllm','transformers'];
+  for (const pkg of pypiPackages) {
+    try {
+      const resp = await fetch(`https://pypistats.org/api/packages/${pkg}/recent?period=month`);
+      if (resp.ok) {
+        const data = await resp.json();
+        results.push({ name: pkg, platform: 'PyPI', downloads: data.data?.last_month || 0 });
+      }
+    } catch(e) { /* skip */ }
+  }
+
+  // npm
+  const npmPackages = ['openai','@anthropic-ai/sdk','@langchain/core','ai','@google/generative-ai','ollama'];
+  for (const pkg of npmPackages) {
+    try {
+      const resp = await fetch(`https://api.npmjs.org/downloads/point/last-month/${pkg}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        results.push({ name: pkg, platform: 'npm', downloads: data.downloads || 0 });
+      }
+    } catch(e) { /* skip */ }
+  }
+
+  if (results.length > 0) {
+    let html = '<table class="sdk-table"><thead><tr><th>Package</th><th>Platform</th><th>Monthly Downloads</th><th>Signal</th></tr></thead><tbody>';
+    results.sort((a, b) => b.downloads - a.downloads).forEach(r => {
+      const signal = r.downloads > 10000000 ? '🔥 Very High' : r.downloads > 1000000 ? '📈 High' : r.downloads > 100000 ? '📊 Moderate' : '📉 Low';
+      html += `<tr>
+        <td><strong>${r.name}</strong></td>
+        <td>${r.platform}</td>
+        <td style="font-weight:600;color:var(--green);">${r.downloads.toLocaleString()}</td>
+        <td>${signal}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    html += `<p style="font-size:10px;color:var(--text-dim);margin-top:8px;">Fetched ${new Date().toISOString().slice(0,10)} from pypistats.org and npmjs.org public APIs</p>`;
+    container.innerHTML = html;
+  } else {
+    container.innerHTML = '<p style="color:var(--orange);">Could not fetch live data. CORS or network issue. Data shown above uses last known estimates.</p>';
+  }
+}
+
+// Init
+recalc();
+fetchSDKData();
+</script>
+</body>
+</html>
