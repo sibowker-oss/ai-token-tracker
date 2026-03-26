@@ -134,6 +134,77 @@
     <p>In the 1999-2001 telecom bubble, fiber optic capacity was overbuilt by ~10x relative to demand. Companies like Global Crossing, WorldCom, and 360networks spent hundreds of billions laying fiber that took 15+ years to fully utilize. Some bears argue the AI GPU buildout has similar dynamics: massive capital deployment based on demand projections that may take much longer to materialize than investors expect. The difference: AI infrastructure depreciates in 3-5 years, unlike fiber which lasted decades. If demand doesn't arrive quickly, the GPUs become worthless — unlike dark fiber that could wait.</p>
   </div>
 
+  <!-- PAYBACK MODEL -->
+  <div class="card" style="margin-top:20px; border-color:var(--accent);">
+    <h2>What Needs to Happen: AI Revenue Payback Model</h2>
+    <p style="font-size:13px; color:var(--text-dim); margin-bottom:20px;">
+      Adjust the sliders to model different scenarios. The chart shows cumulative capex (what's been spent) vs. cumulative gross profit from AI revenue (what's been earned back). The lines need to cross for the investment to pay off.
+    </p>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:20px;">
+      <div>
+        <label style="font-size:12px; font-weight:600;">Annual Revenue Growth Rate: <span id="v-growth" style="color:var(--green);">80%</span></label>
+        <input type="range" id="s-growth" min="20" max="200" value="80" step="5" style="width:100%;" oninput="updatePayback()">
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-dim);"><span>20% (bear)</span><span>80% (base)</span><span>200% (bull)</span></div>
+      </div>
+      <div>
+        <label style="font-size:12px; font-weight:600;">Gross Margin on Inference: <span id="v-margin" style="color:var(--green);">50%</span></label>
+        <input type="range" id="s-margin" min="10" max="80" value="50" step="5" style="width:100%;" oninput="updatePayback()">
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-dim);"><span>10% (today)</span><span>50% (target)</span><span>80% (mature)</span></div>
+      </div>
+      <div>
+        <label style="font-size:12px; font-weight:600;">Annual Capex Growth: <span id="v-capex" style="color:var(--orange);">15%</span></label>
+        <input type="range" id="s-capex" min="-20" max="50" value="15" step="5" style="width:100%;" oninput="updatePayback()">
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-dim);"><span>-20% (cut)</span><span>15% (moderate)</span><span>50% (aggressive)</span></div>
+      </div>
+      <div>
+        <label style="font-size:12px; font-weight:600;">GPU Useful Life: <span id="v-life" style="color:var(--orange);">4</span> years</label>
+        <input type="range" id="s-life" min="2" max="7" value="4" step="1" style="width:100%;" oninput="updatePayback()">
+        <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-dim);"><span>2yr (rapid obsolescence)</span><span>4yr (standard)</span><span>7yr (optimistic)</span></div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;">
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; text-transform:uppercase; color:var(--text-dim);">Payback Year</div>
+        <div style="font-size:24px; font-weight:800;" id="payback-year">—</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; text-transform:uppercase; color:var(--text-dim);">Cumulative Capex by 2030</div>
+        <div style="font-size:24px; font-weight:800; color:var(--red);" id="cum-capex">—</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; text-transform:uppercase; color:var(--text-dim);">Cumulative Gross Profit by 2030</div>
+        <div style="font-size:24px; font-weight:800; color:var(--green);" id="cum-profit">—</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:12px; text-align:center;">
+        <div style="font-size:10px; text-transform:uppercase; color:var(--text-dim);">Revenue Needed (2030)</div>
+        <div style="font-size:24px; font-weight:800; color:var(--accent);" id="rev-needed">—</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap" style="height:380px;"><canvas id="chart-payback"></canvas></div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:16px;">
+      <button onclick="setScenario(40,30,25,3)" style="padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:var(--red);font-size:12px;font-weight:600;cursor:pointer;">
+        Bear Scenario<br><span style="font-size:10px;font-weight:400;">40% growth, 30% margin, 25% capex, 3yr life</span>
+      </button>
+      <button onclick="setScenario(80,50,15,4)" style="padding:10px;background:rgba(249,159,11,0.1);border:1px solid rgba(249,159,11,0.3);border-radius:8px;color:var(--orange);font-size:12px;font-weight:600;cursor:pointer;">
+        Base Scenario<br><span style="font-size:10px;font-weight:400;">80% growth, 50% margin, 15% capex, 4yr life</span>
+      </button>
+      <button onclick="setScenario(150,65,10,5)" style="padding:10px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;color:var(--green);font-size:12px;font-weight:600;cursor:pointer;">
+        Bull Scenario<br><span style="font-size:10px;font-weight:400;">150% growth, 65% margin, 10% capex, 5yr life</span>
+      </button>
+    </div>
+
+    <div class="method-note" style="margin-top:16px; font-size:11px; color:var(--text-dim); background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.1); border-radius:6px; padding:12px; line-height:1.7;">
+      <strong>Model assumptions:</strong> Starting AI revenue: $38B (2025). Starting AI capex: $250B (2025).
+      Capex depreciates straight-line over the GPU useful life. Revenue grows at the specified annual rate, compounding quarterly.
+      Gross profit = revenue × gross margin. The "payback year" is when cumulative gross profit exceeds cumulative depreciated capex.
+      This is simplified — ignores operating costs, R&D, working capital, and the fact that training capex may generate value differently than inference capex.
+    </div>
+  </div>
+
   <div class="card" style="margin-top:20px; background:rgba(16,185,129,0.05); border-color:rgba(16,185,129,0.15);">
     <h2 style="color:var(--green);">The Bull Rebuttal</h2>
     <p style="font-size:13px; color:var(--text-dim); line-height:1.7;">
@@ -227,6 +298,207 @@ new Chart(document.getElementById('chart-gpu'), {
     }
   }
 });
+
+// ============================================================
+// PAYBACK MODEL
+// ============================================================
+let paybackChart = null;
+
+function setScenario(growth, margin, capex, life) {
+  document.getElementById('s-growth').value = growth;
+  document.getElementById('s-margin').value = margin;
+  document.getElementById('s-capex').value = capex;
+  document.getElementById('s-life').value = life;
+  updatePayback();
+}
+
+function updatePayback() {
+  const growthRate = parseInt(document.getElementById('s-growth').value) / 100;
+  const grossMargin = parseInt(document.getElementById('s-margin').value) / 100;
+  const capexGrowth = parseInt(document.getElementById('s-capex').value) / 100;
+  const gpuLife = parseInt(document.getElementById('s-life').value);
+
+  document.getElementById('v-growth').textContent = (growthRate * 100).toFixed(0) + '%';
+  document.getElementById('v-margin').textContent = (grossMargin * 100).toFixed(0) + '%';
+  document.getElementById('v-capex').textContent = (capexGrowth * 100).toFixed(0) + '%';
+  document.getElementById('v-life').textContent = gpuLife;
+
+  // Model from 2024 to 2032 (quarterly)
+  const startYear = 2024;
+  const endYear = 2032;
+  const quarters = [];
+  const cumCapexData = [];
+  const cumProfitData = [];
+  const annRevData = [];
+  const annCapexData = [];
+
+  let baseRevQ = 38 / 4; // $38B annual = $9.5B/quarter starting 2025
+  let baseCapexQ = 250 / 4; // $250B annual = $62.5B/quarter starting 2025
+  let cumCapex = 0;
+  let cumProfit = 0;
+  let paybackQ = -1;
+
+  // Depreciation tracking: each quarter's capex depreciates over gpuLife years
+  const depreciationQueue = [];
+
+  for (let y = startYear; y <= endYear; y++) {
+    for (let q = 1; q <= 4; q++) {
+      const label = `Q${q}'${(y % 100).toString().padStart(2, '0')}`;
+      quarters.push(label);
+
+      const elapsed = (y - 2025) + (q - 1) / 4;
+
+      // Revenue grows from base
+      let rev;
+      if (elapsed < 0) {
+        // Pre-2025 actuals (rough)
+        const preQ = [4.5, 6.3, 8.4, 11.8]; // 2024 quarterly
+        const qi = (y - 2024) * 4 + (q - 1);
+        rev = qi >= 0 && qi < 4 ? preQ[qi] : 2;
+      } else {
+        rev = baseRevQ * Math.pow(1 + growthRate, elapsed);
+      }
+
+      // Capex grows from base
+      let capex;
+      if (elapsed < 0) {
+        const preCapQ = [25, 30, 38, 45];
+        const qi = (y - 2024) * 4 + (q - 1);
+        capex = qi >= 0 && qi < 4 ? preCapQ[qi] : 15;
+      } else {
+        capex = baseCapexQ * Math.pow(1 + capexGrowth, elapsed);
+      }
+
+      // Track depreciation
+      depreciationQueue.push({ amount: capex, remainingQ: gpuLife * 4 });
+
+      // Calculate active (non-deprecated) cumulative capex
+      let activeCapex = 0;
+      depreciationQueue.forEach(d => {
+        if (d.remainingQ > 0) activeCapex += d.amount;
+      });
+      // Age all items
+      depreciationQueue.forEach(d => d.remainingQ--);
+
+      cumCapex = activeCapex;
+      const grossProfit = rev * grossMargin;
+      cumProfit += grossProfit;
+
+      cumCapexData.push(cumCapex);
+      cumProfitData.push(cumProfit);
+      annRevData.push(rev * 4); // annualize
+      annCapexData.push(capex * 4);
+
+      if (paybackQ < 0 && cumProfit >= cumCapex && elapsed >= 0) {
+        paybackQ = quarters.length - 1;
+      }
+    }
+  }
+
+  // Update stat boxes
+  const idx2030 = quarters.indexOf("Q4'30");
+  const finalIdx = quarters.length - 1;
+
+  if (paybackQ >= 0) {
+    document.getElementById('payback-year').style.color = 'var(--green)';
+    document.getElementById('payback-year').textContent = quarters[paybackQ];
+  } else {
+    document.getElementById('payback-year').style.color = 'var(--red)';
+    document.getElementById('payback-year').textContent = 'Never*';
+  }
+
+  document.getElementById('cum-capex').textContent = '$' + (cumCapexData[idx2030] / 1000).toFixed(1) + 'T';
+  document.getElementById('cum-profit').textContent = '$' + (cumProfitData[idx2030] / 1000).toFixed(1) + 'T';
+
+  // What annual revenue is needed in 2030 to cover that year's capex at the given margin?
+  const capex2030 = annCapexData[idx2030];
+  const revNeeded = capex2030 / grossMargin;
+  document.getElementById('rev-needed').textContent = '$' + revNeeded.toFixed(0) + 'B/yr';
+
+  // Chart
+  if (paybackChart) {
+    paybackChart.data.labels = quarters;
+    paybackChart.data.datasets[0].data = cumCapexData;
+    paybackChart.data.datasets[1].data = cumProfitData;
+    if (paybackChart.data.datasets.length > 2) {
+      paybackChart.data.datasets[2].data = annRevData;
+    }
+    paybackChart.update('active');
+    return;
+  }
+
+  paybackChart = new Chart(document.getElementById('chart-payback'), {
+    type: 'line',
+    data: {
+      labels: quarters,
+      datasets: [
+        {
+          label: 'Active Capex (non-deprecated)',
+          data: cumCapexData,
+          borderColor: '#ef4444',
+          backgroundColor: '#ef444422',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 0,
+          borderWidth: 2,
+        },
+        {
+          label: 'Cumulative Gross Profit',
+          data: cumProfitData,
+          borderColor: '#10b981',
+          backgroundColor: '#10b98122',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 0,
+          borderWidth: 2,
+        },
+        {
+          label: 'Annual Revenue (right axis)',
+          data: annRevData,
+          borderColor: '#3b82f6',
+          backgroundColor: 'transparent',
+          borderDash: [5, 5],
+          tension: 0.3,
+          pointRadius: 0,
+          borderWidth: 1.5,
+          yAxisID: 'y1',
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, padding: 12 } },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const v = ctx.parsed.y;
+              return ctx.dataset.label + ': $' + (v >= 1000 ? (v/1000).toFixed(2) + 'T' : v.toFixed(0) + 'B');
+            }
+          }
+        },
+      },
+      scales: {
+        y: {
+          position: 'left',
+          title: { display: true, text: '$B (cumulative)' },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+        },
+        y1: {
+          position: 'right',
+          title: { display: true, text: '$B/yr (annualized revenue)' },
+          grid: { display: false },
+        },
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 16 } }
+      }
+    }
+  });
+}
+
+// Init payback model
+updatePayback();
 </script>
 </body>
 </html>
