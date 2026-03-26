@@ -185,7 +185,7 @@
   </div>
 
   <div class="card">
-    <h2>Frontier Model Price Comparison <span style="font-size:12px;font-weight:400;color:var(--text-dim);">— output $/1M tokens, live</span></h2>
+    <h2 id="price-compare-title">Model Price Comparison <span style="font-size:12px;font-weight:400;color:var(--text-dim);">— output $/1M tokens, live</span></h2>
     <div class="chart-wrap"><canvas id="chart-frontier"></canvas></div>
   </div>
 
@@ -230,6 +230,23 @@ let allModels = [];
 let currentSort = { key: 'outputPrice', dir: 'asc' };
 let providerFilter = '';
 
+// Providers whose models are open-weight/open-source
+const OPEN_PROVIDERS = new Set(['meta-llama','deepseek','qwen','mistralai','microsoft','nvidia','01-ai','nous','openchat','teknium','undi95','nousresearch','huggingfaceh4','garage-bainai','databricks','allenai','mosaicml','togethercomputer','recursal','lizpreciatior','open-orca','phind','codellama','wizardlm','lmsys']);
+// Models from "closed" providers that are actually open-weight
+const OPEN_MODEL_PATTERNS = ['gemma','phi-','llama','codestral','mistral-','pixtral','command-r'];
+
+function isOpenModel(m) {
+  if (OPEN_PROVIDERS.has(m.provider)) return true;
+  const idLower = m.id.toLowerCase();
+  return OPEN_MODEL_PATTERNS.some(pat => idLower.includes(pat));
+}
+
+function getFilteredModels() {
+  if (modelTypeFilter === 'all') return allModels;
+  if (modelTypeFilter === 'open') return allModels.filter(m => m.isOpen);
+  return allModels.filter(m => !m.isOpen);
+}
+
 const PROVIDER_COLORS = {
   'openai':'#10a37f', 'anthropic':'#d97706', 'google':'#4285f4', 'meta-llama':'#60a5fa',
   'deepseek':'#a78bfa', 'mistralai':'#f97316', 'x-ai':'#e2e8f0', 'cohere':'#ec4899',
@@ -270,15 +287,19 @@ async function fetchData() {
     const resp = await fetch('https://openrouter.ai/api/v1/models');
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const json = await resp.json();
-    allModels = json.data.map(m => ({
-      id: m.id,
-      name: m.name || m.id,
-      provider: getProviderFromId(m.id),
-      inputPrice: toPerMillion(m.pricing?.prompt || '0'),
-      outputPrice: toPerMillion(m.pricing?.completion || '0'),
-      context: m.context_length || 0,
-      modality: m.architecture?.modality || 'text→text',
-    })).filter(m => m.name && !m.id.includes(':free'));
+    allModels = json.data.map(m => {
+      const model = {
+        id: m.id,
+        name: m.name || m.id,
+        provider: getProviderFromId(m.id),
+        inputPrice: toPerMillion(m.pricing?.prompt || '0'),
+        outputPrice: toPerMillion(m.pricing?.completion || '0'),
+        context: m.context_length || 0,
+        modality: m.architecture?.modality || 'text→text',
+      };
+      model.isOpen = isOpenModel(model);
+      return model;
+    }).filter(m => m.name && !m.id.includes(':free'));
 
     document.getElementById('loading').style.display = 'none';
     render();
@@ -290,20 +311,22 @@ async function fetchData() {
 }
 
 function render() {
-  // Stats
-  const providers = [...new Set(allModels.map(m => m.provider))];
-  const outputPrices = allModels.filter(m => m.outputPrice > 0).map(m => m.outputPrice);
-  const freeCount = allModels.filter(m => m.outputPrice === 0).length;
+  const models = getFilteredModels();
 
-  document.getElementById('s-models').textContent = allModels.length;
+  // Stats
+  const providers = [...new Set(models.map(m => m.provider))];
+  const outputPrices = models.filter(m => m.outputPrice > 0).map(m => m.outputPrice);
+  const freeCount = models.filter(m => m.outputPrice === 0).length;
+
+  document.getElementById('s-models').textContent = models.length;
   document.getElementById('s-providers').textContent = providers.length;
-  document.getElementById('s-cheapest').textContent = formatPrice(Math.min(...outputPrices));
-  document.getElementById('s-expensive').textContent = formatPrice(Math.max(...outputPrices));
+  document.getElementById('s-cheapest').textContent = outputPrices.length ? formatPrice(Math.min(...outputPrices)) : '—';
+  document.getElementById('s-expensive').textContent = outputPrices.length ? formatPrice(Math.max(...outputPrices)) : '—';
   document.getElementById('s-free').textContent = freeCount;
 
   // Provider filters
   const topProviders = providers
-    .map(p => ({ p, count: allModels.filter(m => m.provider === p).length }))
+    .map(p => ({ p, count: models.filter(m => m.provider === p).length }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 12);
 
@@ -313,7 +336,7 @@ function render() {
     filtersEl.innerHTML += `<button class="filter-pill" onclick="setProviderFilter('${tp.p}', this)">${tp.p} (${tp.count})</button>`;
   });
 
-  renderCharts(providers);
+  renderCharts(models, providers);
   renderTable();
 }
 
@@ -324,13 +347,20 @@ function setProviderFilter(p, el) {
   renderTable();
 }
 
-function renderCharts(providers) {
+let distChart = null, provChart = null, frontierChart = null;
+
+function renderCharts(models, providers) {
+  // Destroy existing charts
+  if (distChart) distChart.destroy();
+  if (provChart) provChart.destroy();
+  if (frontierChart) frontierChart.destroy();
+
   // Price distribution histogram
   const buckets = [0, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100, 500];
   const bucketLabels = ['Free', '<$0.10', '$0.10-0.50', '$0.50-1', '$1-2', '$2-5', '$5-10', '$10-20', '$20-50', '$50-100', '$100+'];
   const counts = new Array(bucketLabels.length).fill(0);
 
-  allModels.forEach(m => {
+  models.forEach(m => {
     const p = m.outputPrice;
     if (p === 0) counts[0]++;
     else if (p < 0.1) counts[1]++;
@@ -345,7 +375,7 @@ function renderCharts(providers) {
     else counts[10]++;
   });
 
-  new Chart(document.getElementById('chart-dist'), {
+  distChart = new Chart(document.getElementById('chart-dist'), {
     type: 'bar',
     data: { labels: bucketLabels, datasets: [{ data: counts, backgroundColor: '#3b82f6aa', borderRadius: 4 }] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
@@ -353,11 +383,11 @@ function renderCharts(providers) {
 
   // Provider model counts
   const topP = providers
-    .map(p => ({ name: p, count: allModels.filter(m => m.provider === p).length }))
+    .map(p => ({ name: p, count: models.filter(m => m.provider === p).length }))
     .sort((a, b) => b.count - a.count)
     .slice(0, 15);
 
-  new Chart(document.getElementById('chart-providers'), {
+  provChart = new Chart(document.getElementById('chart-providers'), {
     type: 'bar',
     data: {
       labels: topP.map(p => p.name),
@@ -366,29 +396,42 @@ function renderCharts(providers) {
     options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } } }
   });
 
-  // Frontier comparison
-  const frontier = [
+  // Price comparison — adapts to model type filter
+  const frontierIds = [
     'openai/gpt-4o', 'openai/gpt-4o-mini', 'openai/o3-mini',
     'anthropic/claude-sonnet-4', 'anthropic/claude-3.5-sonnet', 'anthropic/claude-opus-4',
     'google/gemini-2.5-pro-preview', 'google/gemini-2.0-flash-001',
     'deepseek/deepseek-r1', 'deepseek/deepseek-chat',
     'mistralai/mistral-large', 'x-ai/grok-3',
   ];
+  const openIds = [
+    'meta-llama/llama-3.1-8b-instruct', 'meta-llama/llama-3.1-70b-instruct', 'meta-llama/llama-3.1-405b-instruct',
+    'deepseek/deepseek-r1', 'deepseek/deepseek-chat',
+    'qwen/qwen-2.5-72b-instruct', 'qwen/qwen-2.5-7b-instruct',
+    'mistralai/mistral-7b-instruct', 'mistralai/mistral-large',
+    'google/gemma-2-9b-it', 'microsoft/phi-3-mini-128k-instruct',
+    'nvidia/llama-3.1-nemotron-70b-instruct',
+  ];
 
-  const frontierModels = frontier
-    .map(id => allModels.find(m => m.id === id || m.id.startsWith(id)))
+  const compareIds = modelTypeFilter === 'open' ? openIds : modelTypeFilter === 'frontier' ? frontierIds : [...frontierIds, ...openIds];
+  const titleEl = document.getElementById('price-compare-title');
+  titleEl.innerHTML = (modelTypeFilter === 'open' ? 'Open Model' : modelTypeFilter === 'frontier' ? 'Frontier Model' : 'Model') + ' Price Comparison <span style="font-size:12px;font-weight:400;color:var(--text-dim);">— output $/1M tokens, live</span>';
+
+  const compareModels = compareIds
+    .map(id => models.find(m => m.id === id || m.id.startsWith(id)))
     .filter(Boolean)
+    .filter((m, i, arr) => arr.findIndex(x => x.id === m.id) === i)
     .sort((a, b) => a.outputPrice - b.outputPrice);
 
-  if (frontierModels.length > 0) {
-    new Chart(document.getElementById('chart-frontier'), {
+  if (compareModels.length > 0) {
+    frontierChart = new Chart(document.getElementById('chart-frontier'), {
       type: 'bar',
       data: {
-        labels: frontierModels.map(m => m.name.replace(/^[^:]+:\s*/, '')),
+        labels: compareModels.map(m => m.name.replace(/^[^:]+:\s*/, '')),
         datasets: [{
           label: 'Output $/1M tokens',
-          data: frontierModels.map(m => m.outputPrice),
-          backgroundColor: frontierModels.map(m => (getProviderColor(m.provider) || '#475569') + 'cc'),
+          data: compareModels.map(m => m.outputPrice),
+          backgroundColor: compareModels.map(m => (getProviderColor(m.provider) || '#475569') + 'cc'),
           borderRadius: 4,
         }]
       },
@@ -402,7 +445,7 @@ function renderCharts(providers) {
 }
 
 function renderTable() {
-  let filtered = allModels;
+  let filtered = getFilteredModels();
   if (providerFilter) filtered = filtered.filter(m => m.provider === providerFilter);
 
   const search = document.getElementById('search').value.toLowerCase();
@@ -503,6 +546,7 @@ function setModelType(type) {
     document.getElementById('mt-'+t).classList.toggle('active', t === type);
   });
   renderGateway();
+  if (allModels.length > 0) render();
 }
 
 function filterByType(models) {
