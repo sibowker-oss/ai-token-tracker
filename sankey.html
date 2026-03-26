@@ -79,79 +79,81 @@ ctx.scale(2, 2);
 // Column positions
 const COL = [40, W * 0.22, W * 0.48, W * 0.74, W - 80];
 
-// Data: Buyers → Channels → Providers → Outcome
+// Data revised: Trad SaaS down from $13B to $5B (real incremental GenAI only)
+// Total ~$38B flows: Consumer $14, SME $8, Enterprise $16
 const BUYERS = [
-  { label: 'Consumer', value: 15, color: '#f59e0b', y: 0 },
+  { label: 'Consumer', value: 14, color: '#f59e0b', y: 0 },
   { label: 'SME', value: 8, color: '#8b5cf6', y: 0 },
-  { label: 'Enterprise', value: 15, color: '#3b82f6', y: 0 },
+  { label: 'Enterprise', value: 16, color: '#3b82f6', y: 0 },
 ];
 
 const CHANNELS = [
   { label: 'Model Subs', value: 13, color: '#f59e0b', y: 0 },
-  { label: 'Model API', value: 6, color: '#3b82f6', y: 0 },
-  { label: 'AI Native Subs', value: 6, color: '#10b981', y: 0 },
-  { label: 'Trad. SaaS', value: 13, color: '#ef4444', y: 0 },
+  { label: 'Model API', value: 8, color: '#3b82f6', y: 0 },
+  { label: 'AI Native', value: 7, color: '#10b981', y: 0 },
+  { label: 'Open Models', value: 2.5, color: '#8b5cf6', y: 0 },
+  { label: 'Trad. SaaS', value: 5, color: '#ef4444', y: 0 },
 ];
 
 const PROVIDERS = [
   { label: 'OpenAI', value: 16.8, color: '#10a37f', y: 0 },
   { label: 'Anthropic', value: 14.0, color: '#d97706', y: 0 },
   { label: 'Google', value: 4.2, color: '#4285f4', y: 0 },
-  { label: 'Others', value: 3.2, color: '#475569', y: 0 },
+  { label: 'Open/Infra', value: 2.5, color: '#8b5cf6', y: 0 },
 ];
 
 const OUTCOMES = [
-  { label: 'Real Tokens', value: 24, color: '#10b981', y: 0 },
-  { label: 'Shelfware', value: 10, color: '#ef4444', y: 0 },
-  { label: 'Margin/Ops', value: 4, color: '#475569', y: 0 },
+  { label: 'Real Tokens', value: 28, color: '#10b981', y: 0 },
+  { label: 'Shelfware', value: 4, color: '#ef4444', y: 0 },
+  { label: 'Margin/Ops', value: 5.5, color: '#475569', y: 0 },
 ];
 
 // Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
 const FLOWS = [
   // Buyers → Channels
-  [0, 0, 1, 0, 11, '#f59e0b33'],   // Consumer → Model Subs
-  [0, 0, 1, 2, 2.5, '#f59e0b33'],  // Consumer → AI Native
-  [0, 0, 1, 3, 1.5, '#f59e0b33'],  // Consumer → Trad SaaS
-  [0, 1, 1, 0, 1.5, '#8b5cf633'],  // SME → Model Subs
-  [0, 1, 1, 1, 2.5, '#8b5cf633'],  // SME → API
-  [0, 1, 1, 2, 2.5, '#8b5cf633'],  // SME → AI Native
-  [0, 1, 1, 3, 1.5, '#8b5cf633'],  // SME → Trad SaaS
-  [0, 2, 1, 0, 1.5, '#3b82f633'],  // Enterprise → Model Subs
-  [0, 2, 1, 1, 4, '#3b82f633'],    // Enterprise → API
-  [0, 2, 1, 2, 1.5, '#3b82f633'],  // Enterprise → AI Native
-  [0, 2, 1, 3, 10, '#3b82f633'],   // Enterprise → Trad SaaS
+  [0, 0, 1, 0, 10.5, '#f59e0b33'],  // Consumer → Model Subs
+  [0, 0, 1, 2, 2.5, '#f59e0b33'],   // Consumer → AI Native
+  [0, 0, 1, 4, 1, '#f59e0b33'],     // Consumer → Trad SaaS
+  [0, 1, 1, 0, 1.5, '#8b5cf633'],   // SME → Model Subs
+  [0, 1, 1, 1, 2.5, '#8b5cf633'],   // SME → API
+  [0, 1, 1, 2, 2.5, '#8b5cf633'],   // SME → AI Native
+  [0, 1, 1, 3, 0.5, '#8b5cf633'],   // SME → Open Models
+  [0, 1, 1, 4, 1, '#8b5cf633'],     // SME → Trad SaaS
+  [0, 2, 1, 0, 1, '#3b82f633'],     // Enterprise → Model Subs
+  [0, 2, 1, 1, 5.5, '#3b82f633'],   // Enterprise → API (largest future TAM)
+  [0, 2, 1, 2, 2, '#3b82f633'],     // Enterprise → AI Native
+  [0, 2, 1, 3, 2, '#3b82f633'],     // Enterprise → Open Models
+  [0, 2, 1, 4, 3, '#3b82f633'],     // Enterprise → Trad SaaS (revised DOWN)
 
   // Channels → Providers
-  [1, 0, 2, 0, 7, '#f59e0b22'],    // Model Subs → OpenAI
-  [1, 0, 2, 1, 4, '#f59e0b22'],    // Model Subs → Anthropic
-  [1, 0, 2, 2, 1.5, '#f59e0b22'],  // Model Subs → Google
-  [1, 0, 2, 3, 0.5, '#f59e0b22'],  // Model Subs → Others
-  [1, 1, 2, 0, 2, '#3b82f622'],    // API → OpenAI
-  [1, 1, 2, 1, 2.5, '#3b82f622'],  // API → Anthropic
-  [1, 1, 2, 2, 1, '#3b82f622'],    // API → Google
-  [1, 1, 2, 3, 0.5, '#3b82f622'],  // API → Others
-  [1, 2, 2, 0, 2, '#10b98122'],    // AI Native → OpenAI
-  [1, 2, 2, 1, 2.5, '#10b98122'],  // AI Native → Anthropic
-  [1, 2, 2, 2, 0.7, '#10b98122'],  // AI Native → Google
-  [1, 2, 2, 3, 0.8, '#10b98122'],  // AI Native → Others
-  [1, 3, 2, 0, 5.8, '#ef444422'],  // Trad SaaS → OpenAI
-  [1, 3, 2, 1, 5, '#ef444422'],    // Trad SaaS → Anthropic
-  [1, 3, 2, 2, 1, '#ef444422'],    // Trad SaaS → Google
-  [1, 3, 2, 3, 1.4, '#ef444422'],  // Trad SaaS → Others
+  [1, 0, 2, 0, 7, '#f59e0b22'],     // Model Subs → OpenAI
+  [1, 0, 2, 1, 4.5, '#f59e0b22'],   // Model Subs → Anthropic
+  [1, 0, 2, 2, 1.5, '#f59e0b22'],   // Model Subs → Google
+  [1, 1, 2, 0, 3, '#3b82f622'],     // API → OpenAI
+  [1, 1, 2, 1, 3.5, '#3b82f622'],   // API → Anthropic
+  [1, 1, 2, 2, 1.5, '#3b82f622'],   // API → Google
+  [1, 2, 2, 0, 2.5, '#10b98122'],   // AI Native → OpenAI
+  [1, 2, 2, 1, 3, '#10b98122'],     // AI Native → Anthropic
+  [1, 2, 2, 2, 1, '#10b98122'],     // AI Native → Google
+  [1, 2, 2, 3, 0.5, '#10b98122'],   // AI Native → Open/Infra
+  [1, 3, 2, 3, 2, '#8b5cf622'],     // Open Models → Open/Infra
+  [1, 3, 2, 0, 0.5, '#8b5cf622'],   // Open Models → OpenAI (some via proxy)
+  [1, 4, 2, 0, 3.8, '#ef444422'],   // Trad SaaS → OpenAI (M365 Copilot, mostly)
+  [1, 4, 2, 1, 1, '#ef444422'],     // Trad SaaS → Anthropic
+  [1, 4, 2, 2, 0.2, '#ef444422'],   // Trad SaaS → Google
 
   // Providers → Outcomes
-  [2, 0, 3, 0, 10, '#10a37f33'],   // OpenAI → Real Tokens
-  [2, 0, 3, 1, 4.8, '#10a37f22'],  // OpenAI → Shelfware
-  [2, 0, 3, 2, 2, '#10a37f11'],    // OpenAI → Margin
-  [2, 1, 3, 0, 10, '#d9770633'],   // Anthropic → Real Tokens
-  [2, 1, 3, 1, 3, '#d9770622'],    // Anthropic → Shelfware
-  [2, 1, 3, 2, 1, '#d9770611'],    // Anthropic → Margin
-  [2, 2, 3, 0, 2.5, '#4285f433'],  // Google → Real Tokens
-  [2, 2, 3, 1, 1.2, '#4285f422'],  // Google → Shelfware
-  [2, 2, 3, 2, 0.5, '#4285f411'],  // Google → Margin
-  [2, 3, 3, 0, 1.5, '#47556933'],  // Others → Real Tokens
-  [2, 3, 3, 1, 1, '#47556922'],    // Others → Shelfware
-  [2, 3, 3, 2, 0.5, '#47556911'],  // Others → Margin
+  [2, 0, 3, 0, 12, '#10a37f33'],    // OpenAI → Real Tokens
+  [2, 0, 3, 1, 2, '#10a37f22'],     // OpenAI → Shelfware (M365 Copilot shelfware)
+  [2, 0, 3, 2, 2.8, '#10a37f11'],   // OpenAI → Margin
+  [2, 1, 3, 0, 10, '#d9770633'],    // Anthropic → Real Tokens
+  [2, 1, 3, 1, 1.5, '#d9770622'],   // Anthropic → Shelfware
+  [2, 1, 3, 2, 0.5, '#d9770611'],   // Anthropic → Margin
+  [2, 2, 3, 0, 3, '#4285f433'],     // Google → Real Tokens
+  [2, 2, 3, 1, 0.5, '#4285f422'],   // Google → Shelfware
+  [2, 2, 3, 2, 0.7, '#4285f411'],   // Google → Margin
+  [2, 3, 3, 0, 2, '#8b5cf633'],     // Open/Infra → Real Tokens
+  [2, 3, 3, 2, 0.5, '#8b5cf611'],   // Open/Infra → Margin
 ];
 
 const COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];

@@ -182,7 +182,7 @@
     <strong>Token volumes:</strong> Triangulated from 4 independent methods: (1) Revenue ÷ blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv × 30-50% utilization — SemiAnalysis), (3) Bottom-up user × session × token estimation, (4) SDK download proxies (openai PyPI: 224M/month, anthropic: 77M/month — pypistats.org, Mar 2026). Previous estimate of ~680T/day revised down to ~565T based on GPU utilization cross-check.<br>
     <strong>Self-hosted tokens:</strong> Not included in provider totals. Llama 3.1 8B: 8.3M HuggingFace downloads/30d. vllm: 7.4M PyPI downloads/month. Estimated ~80-120T/day of inference happening outside API providers — real usage generating zero revenue.<br>
     <strong>Skeptical cross-checks:</strong> Sequoia "$200B question" capex gap (David Cahn, Sep 2024). Goldman Sachs "Too much spend, too little benefit" (Jun 2024). UBS: 4.4% of US adults use AI daily. ChatGPT Day-30 retention: 10-15% (Sensor Tower). GPU utilization 30-50% (SemiAnalysis). 85% AI projects fail (RAND/Gartner).<br>
-    <strong>Enterprise reality:</strong> Growth deceleration data from earnings calls (SF: 18%→8-9%, NOW: 25%→20%, MSFT M365: stable, WDAY: 20%→15-17%). SKU bundling analysis from UpperEdge. M365 Copilot usage 30-40% (Gartner, Directions on Microsoft).<br>
+    <strong>Enterprise reality (2+ sources per claim):</strong> M365 Copilot 15M seats (Microsoft Q2 FY26 earnings). 35.8% usage (Recon Analytics, 150K respondents — NOT Gartner). Only 5% past pilot (Gartner 2025, 187 respondents). 70% tried, 8% kept choosing (Recon Analytics). SF Agentforce $800M ARR (SF Q4 FY26 earnings), ~50% deals free (derived from SF quarterly deal counts). NOW $600M ACV (NOW Q4 2025 earnings), Pro Plus premium 30-60% (UpperEdge). GitHub Copilot 4.7M subs (MSFT earnings). COGS cross-check: CRM gross margin flat 77% = minimal AI COGS. NOW -1.7pp. MSFT cloud -3pp. Full analysis: enterprise-saas-ai-sku-analysis.md.<br>
     <strong>Geographic/Industry:</strong> Stanford HAI AI Index 2024, IDC, SlashData, Gartner AI Use Case Survey 2024, McKinsey Global AI Survey 2024.<br>
     <strong>Live data:</strong> OpenRouter pricing via public API (openrouter.ai/api/v1/models). PyPI/npm download stats from pypistats.org and api.npmjs.org. HuggingFace model downloads via API.<br>
     <strong>Cross-dimensional weights:</strong> Editorial estimates for filtering. Filtered views show directional splits, not precise figures.
@@ -320,30 +320,35 @@ const DEMAND_MATRIX = {
       { rev: '~$10-12B', conv: '50%', color: '#f59e0b', ex: 'ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced', note: 'Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk.' },
       { rev: '~$0.5B', conv: '100%', color: '#10b981', ex: 'Hobbyist devs, indie hackers, students using API keys', note: 'Small but pure. Every cent = tokens.' },
       { rev: '~$2-3B', conv: '90%', color: '#10b981', ex: 'Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier', note: 'Real usage. AI native absorbs API cost.' },
-      { rev: '~$1-2B', conv: '15%', color: '#ef4444', ex: 'Canva AI features, Grammarly, Notion AI, Adobe Firefly', note: 'AI bundled into consumer SaaS. Low incremental token usage.' },
+      { rev: '~$0.5-1B', conv: '15%', color: '#ef4444', ex: 'Canva AI features, Grammarly, Notion AI, Adobe Firefly', note: 'AI bundled free into consumer SaaS tiers. Retention play, not revenue driver. Adobe Firefly: growth flat at 10-11%.' },
     ]},
     { segment: 'SME', cells: [
       { rev: '~$1-2B', conv: '60%', color: '#f59e0b', ex: 'ChatGPT Team ($25/user), Claude Team', note: 'Growing. Usage varies widely across seats.' },
       { rev: '~$2-3B', conv: '100%', color: '#10b981', ex: 'Startups on APIs, dev agencies, Vercel AI SDK users', note: 'Pure demand. Retool: avg $50K-$500K/yr. Fastest growing.' },
       { rev: '~$2-3B', conv: '85%', color: '#10b981', ex: 'Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin', note: 'Strong PMF. SMEs adopt AI natives faster than SaaS AI.' },
-      { rev: '~$2-3B', conv: '15%', color: '#ef4444', ex: 'HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI', note: 'Feature checkbox on renewal, low actual activation.' },
+      { rev: '~$1-2B', conv: '15%', color: '#ef4444', ex: 'HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI', note: 'Feature checkbox on renewal, low activation. HubSpot Breeze: no separate revenue disclosed = immaterial.' },
     ]},
     { segment: 'Enterprise', cells: [
       { rev: '~$1-2B', conv: '45%', color: '#f59e0b', ex: 'ChatGPT Enterprise ($60+/user), Claude for Enterprise', note: 'Standalone AI subs — higher activation, users chose to buy it.' },
       { rev: '~$3-5B', conv: '100%', color: '#10b981', ex: 'Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys', note: 'LARGEST FUTURE TAM. Small today but 100% real. Goldman: →$50-80B by 2028.' },
       { rev: '~$1-2B', conv: '80%', color: '#10b981', ex: 'Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI', note: 'Real usage — AI natives solving specific enterprise workflows.' },
-      { rev: '~$12-15B', conv: '10-20%', color: '#ef4444', ex: 'M365 Copilot ($5.4B), SF Agentforce ($800M), NOW Assist ($500M), GitHub Copilot ($2B+)', note: 'HIGHEST REV, LOWEST TOKENS. 35.8% M365 active; <20% NOW. Bundling, shelfware, 360 deals.' },
+      { rev: '~$5-7B real (~$15B claimed)', conv: '10-20%', color: '#ef4444', ex: 'M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B — the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real — cleanest reporter)', note: 'COGS test: SF inference est. $6-12M on $800M "AI rev" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration.' },
     ]},
   ]
 };
 
 // Enterprise Reality data
+// Enterprise Reality: verified with 2+ sources per claim (see enterprise-saas-ai-sku-analysis.md)
+// Total claimed: ~$52B. Total real incremental: ~$9-13B. Inflation: 4-5x.
+// ZERO of top 10 vendors show growth acceleration from AI.
 const ENTERPRISE_REALITY = [
-  { name:'Salesforce', ticker:'CRM', claimed:'$800M "AI" ARR (incl. Data Cloud, legacy Einstein)', usage:'~12% have Agentforce deals; many are free pilots', real:'~$50-150M actual LLM tokens', flags:'Data Cloud ($900M+) lumped into AI metrics. Legacy Einstein (2016-era ML scoring) relabeled as "AI." Growth: 18%→11%→8-9% — DECELERATING despite AI push.', growth:'8-9%', prevGrowth:'18%' },
-  { name:'ServiceNow', ticker:'NOW', claimed:'$600M+ Now Assist ACV', usage:'<20% of Fulfillers active; 50-70% of ACV is SKU upgrade revenue', real:'~$60-100M actual LLM tokens', flags:'Pro→Pro Plus upgrade ($50/user delta) counted as "AI ACV" even though it includes non-AI features. cRPO growth shows no step-function increase. Growth: 25%→22%→20% — decelerating.', growth:'20-21%', prevGrowth:'25%' },
-  { name:'Microsoft 365 Copilot', ticker:'MSFT', claimed:'15M seats × $30/mo = $5.4B', usage:'30-40% weekly active; many enterprises reducing seats at renewal', real:'~$1-1.5B if adjusted for usage', flags:'Auto-installing without admin opt-in to inflate adoption. Barclays: "less than hoped by bulls." Own staff prefer ChatGPT. Enterprises not expanding after pilots.', growth:'12-15%', prevGrowth:'15%' },
-  { name:'SAP', ticker:'SAP', claimed:'"2/3 of deals include AI" — Joule bundled free', usage:'No separate metering. Joule included in RISE/GROW SKUs by default.', real:'Negligible — like saying "100% of iPhones include Siri"', flags:'Cloud growth (26-28%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT by AI. No analyst attributes acceleration to Joule.', growth:'26-28%', prevGrowth:'23%' },
-  { name:'Workday', ticker:'WDAY', claimed:'Not disclosed — Flex Credits model', usage:'Early stage. No AI-specific metrics disclosed.', real:'Minimal', flags:'Growth decelerating from 20%+ to 15-17%. No visible AI impact on revenue trajectory.', growth:'15-17%', prevGrowth:'20%+' },
+  { name:'Salesforce', ticker:'CRM', claimed:'$800M Agentforce ARR (within $2.9B "AI+Data" that includes Informatica acquisition)', usage:'~50% of 29K deals are free/seeded. COGS test: inference cost est. $6-12M/yr on $800M = 98%+ "AI margin"', real:'~$250-350M real GenAI (rest is Data Cloud, Informatica, legacy Einstein)', flags:'$2.9B bundles Informatica ($1.5B acq.) + Data 360 + Agentforce. Gross margin flat at 77% = minimal AI COGS. AWU metric criticized as vanity metric. <2% of $41.5B revenue.', growth:'8-9%', prevGrowth:'18%' },
+  { name:'ServiceNow', ticker:'NOW', claimed:'$600M+ Now Assist ACV (verified, Q4 2025 earnings)', usage:'Pro Plus premium est. 30-60% (UpperEdge). COGS test: inference cost est. $15-50M/yr = 92-97% "AI margin"', real:'~$400-500M (cleanest reporter — AI is a genuine premium SKU)', flags:'Most honest of the group. But Pro Plus bundles non-AI features. Gross margin down 1.7pp (79.2→77.5%) — slight AI cost impact. Hidden consumption-based "assists" fees.', growth:'20-21%', prevGrowth:'25%' },
+  { name:'M365 Copilot', ticker:'MSFT', claimed:'15M seats × $30/mo = $5.4B list (verified, MSFT Q2 FY26 earnings)', usage:'35.8% active (Recon Analytics, 150K respondents). Only 5% of orgs past pilot (Gartner). 70% tried, only 8% kept choosing it.', real:'~$2.5-3.5B net (40-60% discounting per Citi/JPM). Cloud margin down 3pp (72→69%) — real AI infra cost.', flags:'3.3% of 450M installed base after 2 years. Market share FELL 18.8%→11.5% (Recon Analytics Jul→Jan). Auto-installing. Morgan Stanley: "wall of sorry."', growth:'12-15%', prevGrowth:'15%' },
+  { name:'GitHub Copilot', ticker:'MSFT', claimed:'4.7M paid subs (verified, MSFT earnings). GitHub total $2B ARR — Copilot est. $1-2.3B', usage:'42% market share of AI coding. 27-30% acceptance rate (not 55% — that was task speed). Lost $20/user/mo in 2023 (WSJ).', real:'$1-2.3B — the ONE product where AI IS the product', flags:'Genuinely works. But facing Cursor ($1B ARR), open-source alternatives. Microsoft added Anthropic models "at great expense to margins" (SemiAnalysis). Usage caps introduced mid-2025.', growth:'75% subs YoY', prevGrowth:'N/A' },
+  { name:'SAP', ticker:'SAP', claimed:'"2/3 of deals include AI" — Joule bundled free in RISE/GROW', usage:'No separate metering. No AI revenue disclosed = immaterial.', real:'~$0-200M. Like saying "100% of iPhones include Siri"', flags:'Cloud growth (23%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT AI. No analyst attributes growth to Joule.', growth:'8-9%', prevGrowth:'8%' },
+  { name:'Adobe', ticker:'ADBE', claimed:'Firefly ~$400-500M, AI-first ARR $250M', usage:'75% of Fortune 500 "adopted" but free tier inflates. Some cannibalizes stock photo revenue.', real:'~$200-300M incremental', flags:'Growth completely flat at 10-11% pre AND post AI. Firefly has moved the needle zero on top-line growth.', growth:'10-11%', prevGrowth:'10-11%' },
+  { name:'Workday', ticker:'WDAY', claimed:'Not disclosed — "growing demand for AI SKUs"', usage:'No AI metric = immaterial. Flex Credits model.', real:'~$0-100M', flags:'Growth crashing: 21%→13%. AI has zero visible impact.', growth:'13%', prevGrowth:'21%' },
 ];
 
 // Top consumers
@@ -363,7 +368,8 @@ const TOP_CONSUMERS = [
   { co:'Klarna', hq:'Sweden', type:'Fintech', tokens:'~100B/day', prov:'OpenAI', ev:'AI agent = 700 human agents' },
   { co:'BLACKBOX.AI', hq:'US', type:'AI Dev Tool', tokens:'~100B/day', prov:'OpenAI, Anthropic, Google', ev:'20M+ devs, $31.7M rev' },
   { co:'MiniMax', hq:'China', type:'AI Platform', tokens:'~80B/day', prov:'Own + Anthropic', ev:'212M users, HKEX IPO, $150M+ cloud' },
-  { co:'Salesforce Einstein', hq:'US', type:'Ent SaaS', tokens:'~10T/day*', prov:'OpenAI, own', ev:'2T+ predictions/wk (*mostly ML, not LLM)' },
+  { co:'GitHub Copilot', hq:'US', type:'AI Dev Tool', tokens:'~200B/day', prov:'OpenAI, Anthropic', ev:'4.7M paid subs (MSFT earnings), 27-30% acceptance rate, $1-2.3B ARR, 42% market share' },
+  { co:'Salesforce Agentforce', hq:'US', type:'Ent SaaS', tokens:'~5B/day', prov:'OpenAI, own', ev:'$800M claimed ARR, est. inference cost $6-12M/yr. COGS test: 98% margin = mostly relabeled revenue' },
   { co:'Yellow.ai', hq:'India', type:'Enterprise AI', tokens:'~50B/day', prov:'OpenAI, Google', ev:'1,300+ clients, $79.5M rev' },
   { co:'Grab', hq:'Singapore', type:'Super-app', tokens:'~40B/day', prov:'OpenAI', ev:'42M+ MAU, OpenAI strategic partner' },
   { co:'Sea/Shopee', hq:'Singapore', type:'E-commerce', tokens:'~30B/day', prov:'OpenAI, Google', ev:'OpenAI strategic MOU, $13B+ rev' },
@@ -653,11 +659,12 @@ function updateDemandChart() {
   const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
 
   // Estimate demand type split (revenue only)
-  // Adjusted: enterprise platform down (shelfware), API/dev up (real growth signal)
-  const consumerSubs = totalRev * 0.40;
-  const apiDev = totalRev * 0.28;
-  const entPlatform = totalRev * 0.20;
-  const cloudChannel = totalRev * 0.12;
+  // Revised: Traditional SaaS much smaller than claimed (~$5-7B real of ~$15B claimed)
+  // Enterprise SaaS = ~3.5-5% of $250B enterprise SaaS market (Gartner)
+  const consumerSubs = totalRev * 0.38;
+  const apiDev = totalRev * 0.30;
+  const entPlatform = totalRev * 0.18;
+  const cloudChannel = totalRev * 0.14;
 
   const labels = ['Consumer Subs', 'API / Developer', 'Enterprise Platform', 'Cloud Channel'];
   const values = [consumerSubs, apiDev, entPlatform, cloudChannel];
