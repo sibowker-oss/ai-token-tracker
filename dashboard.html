@@ -216,10 +216,14 @@ const PROVIDERS = {
   'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
   'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80 },
   'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
-  'Self-Hosted OSS':{ tokens: 100, rev: 4.0,   color: '#8b5cf6', growth: '+300% YoY', consumerPct: 5, bizPct: 95 },
-  // Rev: ~$4B est. inference platform spend (Together ~$150M, Fireworks ~$75M, CoreWeave AI inference ~$1B,
-  // Lambda ~$300M, Groq ~$50M, plus enterprise GPU cloud spend allocated to OSS inference ~$2.5B).
-  // This revenue goes to INFRASTRUCTURE providers, not model makers. The model IP is free.
+  'Open Models':    { tokens: 100, rev: 0.5,   color: '#8b5cf6', growth: '+300% YoY', consumerPct: 10, bizPct: 90 },
+  // ~100T tokens/day of open-weight model inference (Llama, DeepSeek, Mistral, Qwen).
+  // Revenue here is near-zero because the infrastructure spend shows up elsewhere:
+  // - AI Clouds (Together, Fireworks, Groq) = separate API providers
+  // - Hyperscaler GPU rental (AWS, Azure, GCP) = cloud revenue
+  // - Sovereign AI clouds (Singtel, SoftBank, Samsung SDS) = telecom/cloud revenue
+  // - Truly on-prem (own GPUs) = capex only, no recurring revenue
+  // The $0.5B is a token estimate for small inference platforms not captured elsewhere.
   'Others':        { tokens: 20,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60 },
 };
 
@@ -291,7 +295,7 @@ const CROSS_WEIGHTS = {
     industries: { 'Software & Tech': .35, 'Financial Services': .10, 'Healthcare': .05, 'Retail & E-commerce': .05, 'Marketing & Ads': .10, 'Customer Service': .05, 'Education': .05, 'Manufacturing': .03, 'Legal & Gov & Other': .22 },
     useCases:   { 'Coding & Dev Tools': .15, 'Chat & Assistants': .50, 'Content & Writing': .15, 'Enterprise Agents': .05, 'Search & RAG': .05, 'Data Analysis': .05, 'Other': .05 },
   },
-  'Self-Hosted OSS': {
+  'Open Models': {
     regions:    { 'North America': .25, 'Asia-Pacific': .40, 'Europe': .22, 'Middle East': .05, 'Latin America': .04, 'Africa': .04 },
     industries: { 'Software & Tech': .35, 'Financial Services': .20, 'Healthcare': .10, 'Retail & E-commerce': .05, 'Marketing & Ads': .03, 'Customer Service': .05, 'Education': .05, 'Manufacturing': .08, 'Legal & Gov & Other': .09 },
     useCases:   { 'Coding & Dev Tools': .30, 'Chat & Assistants': .25, 'Content & Writing': .08, 'Enterprise Agents': .15, 'Search & RAG': .10, 'Data Analysis': .07, 'Other': .05 },
@@ -408,7 +412,7 @@ const DEMAND_WEIGHTS = {
   'DeepSeek':      { 'Consumer Subs': 0.40, 'API / Developer': 0.40, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.10 },
   'Mistral':       { 'Consumer Subs': 0.10, 'API / Developer': 0.35, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.25 },
   'xAI':           { 'Consumer Subs': 0.70, 'API / Developer': 0.15, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.05 },
-  'Self-Hosted OSS':{ 'Consumer Subs': 0.10, 'API / Developer': 0.50, 'Enterprise Platform': 0.35, 'Cloud Channel': 0.05 },
+  'Open Models':{ 'Consumer Subs': 0.10, 'API / Developer': 0.50, 'Enterprise Platform': 0.35, 'Cloud Channel': 0.05 },
   'Others':        { 'Consumer Subs': 0.30, 'API / Developer': 0.30, 'Enterprise Platform': 0.20, 'Cloud Channel': 0.20 },
 };
 const charts = {};
