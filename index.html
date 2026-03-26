@@ -158,6 +158,80 @@
   <table class="detail" id="enterprise-table"></table>
 </div>
 
+<!-- ===== OPEN SOURCE / SELF-HOSTED ===== -->
+<div class="card" style="border-color:rgba(139,92,246,0.3);">
+  <h2 style="color:#8b5cf6;">The Invisible Tokens: Open Source & Self-Hosted AI</h2>
+  <p style="font-size:13px; color:var(--text-dim); margin-bottom:16px; line-height:1.7;">
+    The dashboard above tracks provider-served tokens — AI inference that generates revenue.
+    But a large and growing share of global AI usage happens <strong>outside the API providers entirely</strong>,
+    on self-hosted infrastructure using open-weight models. These tokens are <strong>invisible to revenue-based estimates</strong>.
+  </p>
+
+  <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;">
+    <div style="background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim);">Est. Self-Hosted Tokens</div>
+      <div style="font-size:28px; font-weight:800; color:#8b5cf6;">~80-120T/day</div>
+      <div style="font-size:10px; color:var(--text-dim);">not counted in provider totals above</div>
+    </div>
+    <div style="background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim);">vllm + Ollama Downloads</div>
+      <div style="font-size:28px; font-weight:800; color:#8b5cf6;">19.5M/mo</div>
+      <div style="font-size:10px; color:var(--text-dim);">inference engines (PyPI + npm, Mar 2026)</div>
+    </div>
+    <div style="background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim);">HuggingFace Transformers</div>
+      <div style="font-size:28px; font-weight:800; color:#8b5cf6;">124M/mo</div>
+      <div style="font-size:10px; color:var(--text-dim);">larger than openai SDK (224M)</div>
+    </div>
+    <div style="background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); border-radius:10px; padding:16px; text-align:center;">
+      <div style="font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim);">Revenue Generated</div>
+      <div style="font-size:28px; font-weight:800; color:var(--red);">$0</div>
+      <div style="font-size:10px; color:var(--text-dim);">zero API revenue from self-hosted</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+    <div>
+      <h3 style="font-size:14px; margin-bottom:10px;">Model Downloads (HuggingFace, last 30 days)</h3>
+      <div style="height:250px;"><canvas id="chart-oss-models"></canvas></div>
+    </div>
+    <div>
+      <h3 style="font-size:14px; margin-bottom:10px;">Infrastructure Downloads (PyPI/npm, last month)</h3>
+      <div style="height:250px;"><canvas id="chart-oss-infra"></canvas></div>
+    </div>
+  </div>
+
+  <div style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:14px;">
+      <div style="font-size:13px; font-weight:700; color:#8b5cf6; margin-bottom:6px;">Why it matters</div>
+      <div style="font-size:12px; color:var(--text-dim); line-height:1.6;">
+        Provider revenue understates total AI usage by 15-25%. When analysts
+        say "AI revenue is only $38B," they're missing the inference
+        happening on enterprise GPUs, developer laptops (Ollama), and
+        sovereign AI deployments that never touch an API.
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:14px;">
+      <div style="font-size:13px; font-weight:700; color:#8b5cf6; margin-bottom:6px;">Who's self-hosting and why</div>
+      <div style="font-size:12px; color:var(--text-dim); line-height:1.6;">
+        <strong>Data sovereignty:</strong> Banks, governments, healthcare (can't send data to US APIs).<br>
+        <strong>Cost:</strong> At scale, self-hosted is 3-10x cheaper per token.<br>
+        <strong>Latency:</strong> On-prem inference = no network round-trip.<br>
+        <strong>China:</strong> Limited access to Western APIs. Qwen, DeepSeek, Baichuan dominate.
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:14px;">
+      <div style="font-size:13px; font-weight:700; color:#8b5cf6; margin-bottom:6px;">The trend</div>
+      <div style="font-size:12px; color:var(--text-dim); line-height:1.6;">
+        Open-source models are closing the quality gap fast. Llama 4 and DeepSeek R1
+        match or beat GPT-4o on many benchmarks. As quality converges, the value prop
+        of API providers shifts from "better models" to "convenience + ecosystem."
+        Self-hosted share is growing, not shrinking.
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== TOP CONSUMERS ===== -->
 <div class="card">
   <h2>Top Token Consumers <span class="sub" id="consumer-filter-label"></span></h2>
@@ -900,6 +974,46 @@ buildFilterBar();
 updateAll();
 renderDemandMatrix();
 renderEnterpriseTable();
+renderOSSCharts();
+
+function renderOSSCharts() {
+  // Model downloads chart
+  new Chart(document.getElementById('chart-oss-models'), {
+    type: 'bar',
+    data: {
+      labels: ['Llama 3.1 8B', 'Mistral 7B', 'DeepSeek R1', 'Llama 3.1 70B', 'DeepSeek V3', 'Qwen2.5 72B', 'Gemma 2 9B', 'Llama 4 Scout'],
+      datasets: [{
+        data: [8274, 2202, 1867, 1074, 925, 744, 276, 245],
+        backgroundColor: ['#60a5facc','#f97316cc','#a78bfacc','#60a5fa99','#a78bfa99','#06b6d4cc','#4285f4cc','#60a5fa66'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.parsed.x.toLocaleString()}K downloads (30d)` } } },
+      scales: { x: { title: { display: true, text: 'Downloads (thousands, 30d)' }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } }
+    }
+  });
+
+  // Infrastructure downloads chart
+  new Chart(document.getElementById('chart-oss-infra'), {
+    type: 'bar',
+    data: {
+      labels: ['transformers', 'ollama (PyPI)', 'vllm', 'ollama (npm)', 'together', 'llama-cpp (est.)'],
+      datasets: [{
+        label: 'Monthly downloads',
+        data: [124.0, 10.1, 7.4, 1.9, 4.6, 3.0],
+        backgroundColor: ['#8b5cf6cc','#f59e0bcc','#10b981cc','#f59e0b99','#3b82f6cc','#06b6d4cc'],
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.parsed.x.toFixed(1)}M downloads/month` } } },
+      scales: { x: { title: { display: true, text: 'Downloads (millions/month)' }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } }
+    }
+  });
+}
 </script>
 </body>
 </html>
