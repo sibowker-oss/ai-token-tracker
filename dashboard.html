@@ -216,14 +216,12 @@ const PROVIDERS = {
   'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
   'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80 },
   'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
-  'Open Models':    { tokens: 100, rev: 0.5,   color: '#8b5cf6', growth: '+300% YoY', consumerPct: 10, bizPct: 90 },
+  'Open Models':    { tokens: 100, rev: 4.0,   color: '#8b5cf6', growth: '+300% YoY', consumerPct: 10, bizPct: 90 },
   // ~100T tokens/day of open-weight model inference (Llama, DeepSeek, Mistral, Qwen).
-  // Revenue here is near-zero because the infrastructure spend shows up elsewhere:
-  // - AI Clouds (Together, Fireworks, Groq) = separate API providers
-  // - Hyperscaler GPU rental (AWS, Azure, GCP) = cloud revenue
-  // - Sovereign AI clouds (Singtel, SoftBank, Samsung SDS) = telecom/cloud revenue
-  // - Truly on-prem (own GPUs) = capex only, no recurring revenue
-  // The $0.5B is a token estimate for small inference platforms not captured elsewhere.
+  // ~$4B in inference revenue flows to AI Clouds and infrastructure providers:
+  // Together ~$150M, Fireworks ~$75M, CoreWeave inference ~$1B, Lambda ~$300M,
+  // Groq ~$50M, sovereign AI clouds ~$500M, hyperscaler GPU rental for OSS ~$2B.
+  // Revenue is real but goes to infra layer, not model makers. Model IP is free.
   'Others':        { tokens: 20,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60 },
 };
 
