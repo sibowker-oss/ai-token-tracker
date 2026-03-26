@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shelfware Calculator — Global AI Intelligence</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:900px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:32px; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .form-group { margin-bottom:20px; }
+  .form-group label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
+  .form-group .help { font-size:11px; color:var(--text-dim); margin-top:4px; }
+  select, input[type=number] {
+    width:100%; padding:10px 14px; background:#1e293b; border:1px solid #334155; border-radius:8px;
+    color:var(--text); font-size:14px; font-family:inherit; outline:none;
+  }
+  select:focus, input:focus { border-color:var(--accent); }
+  .btn { padding:12px 32px; background:var(--accent); color:white; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; width:100%; }
+  .btn:hover { background:#2563eb; }
+
+  .result { display:none; }
+  .result.show { display:block; }
+  .result-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  .result-box { background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:10px; padding:20px; text-align:center; }
+  .result-box .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .result-box .value { font-size:32px; font-weight:800; margin:8px 0; }
+  .result-box .detail { font-size:12px; color:var(--text-dim); }
+  .waste-bar { height:40px; border-radius:8px; overflow:hidden; display:flex; margin:16px 0; }
+  .waste-bar div { display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:white; }
+  .verdict { padding:20px; border-radius:10px; margin-top:16px; }
+  .verdict h3 { font-size:16px; margin-bottom:8px; }
+  .verdict p { font-size:13px; line-height:1.6; }
+  .compare { margin-top:20px; }
+  .compare h3 { font-size:14px; margin-bottom:12px; color:var(--text-dim); }
+  .compare-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:13px; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="counter.html">Live Counter</a>
+  <a href="sankey.html">Follow the $</a>
+  <a href="calculator.html" class="active">Shelfware Calculator</a>
+  <a href="timeline.html">Time Machine</a>
+  <a href="feed.html">Weekly Feed</a>
+  <a href="openrouter.html">Live Pricing</a>
+</nav>
+
+<div class="container">
+  <h1>What's Your Company <em>Actually</em> Using?</h1>
+  <div class="sub">Enter your AI subscriptions. We'll estimate how much is real AI consumption vs. shelfware.</div>
+
+  <div class="card">
+    <div class="form-group">
+      <label>AI Product</label>
+      <select id="product">
+        <option value="">Select a product...</option>
+        <optgroup label="Traditional SaaS AI (High Shelfware Risk)">
+          <option value="m365cop">Microsoft 365 Copilot ($30/user/mo)</option>
+          <option value="sfagent">Salesforce Agentforce ($2/conversation)</option>
+          <option value="nowassist">ServiceNow Now Assist (included in Pro+)</option>
+          <option value="sapjoule">SAP Joule (bundled)</option>
+          <option value="wdayillum">Workday Illuminate (Flex Credits)</option>
+        </optgroup>
+        <optgroup label="AI Model Subscriptions (Medium Shelfware Risk)">
+          <option value="chatgptent">ChatGPT Enterprise ($60/user/mo)</option>
+          <option value="chatgptteam">ChatGPT Team ($25/user/mo)</option>
+          <option value="claudeent">Claude for Enterprise ($30/user/mo)</option>
+          <option value="ghcopilot">GitHub Copilot Business ($19/user/mo)</option>
+          <option value="geminient">Gemini for Google Workspace ($20/user/mo)</option>
+        </optgroup>
+        <optgroup label="AI Native Products (Low Shelfware Risk)">
+          <option value="cursor">Cursor Business ($40/user/mo)</option>
+          <option value="perplexity">Perplexity Enterprise ($40/user/mo)</option>
+          <option value="intercom">Intercom Fin ($0.99/resolution)</option>
+          <option value="harvey">Harvey (custom pricing)</option>
+          <option value="replit">Replit Teams ($25/user/mo)</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Number of Licenses / Seats</label>
+      <input type="number" id="seats" placeholder="e.g. 500" min="1" value="">
+      <div class="help">How many users are licensed for this product?</div>
+    </div>
+
+    <div class="form-group">
+      <label>Monthly Cost Per Seat ($) — auto-filled, override if different</label>
+      <input type="number" id="cost" placeholder="Auto-filled from product" min="0" step="0.01">
+    </div>
+
+    <button class="btn" onclick="calculate()">Calculate Real AI Value</button>
+  </div>
+
+  <div class="result" id="result">
+    <div class="card">
+      <h2 style="margin-bottom:16px;" id="result-title"></h2>
+
+      <div class="result-grid">
+        <div class="result-box">
+          <div class="label">You're Paying</div>
+          <div class="value" style="color:var(--text);" id="r-paying"></div>
+          <div class="detail" id="r-paying-detail"></div>
+        </div>
+        <div class="result-box">
+          <div class="label">Estimated Real AI Value</div>
+          <div class="value" id="r-real"></div>
+          <div class="detail" id="r-real-detail"></div>
+        </div>
+        <div class="result-box">
+          <div class="label">Active Usage Rate</div>
+          <div class="value" id="r-usage"></div>
+          <div class="detail" id="r-usage-detail"></div>
+        </div>
+        <div class="result-box">
+          <div class="label">Shelfware Waste</div>
+          <div class="value" style="color:var(--red);" id="r-waste"></div>
+          <div class="detail" id="r-waste-detail"></div>
+        </div>
+      </div>
+
+      <div style="font-size:12px; color:var(--text-dim); margin-bottom:8px;">Where your money goes:</div>
+      <div class="waste-bar" id="waste-bar"></div>
+      <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim);">
+        <span>🟢 Real AI usage</span><span>🟡 Low-usage seats</span><span>🔴 Shelfware</span>
+      </div>
+
+      <div class="verdict" id="verdict"></div>
+
+      <div class="compare">
+        <h3>What you could buy instead with that budget:</h3>
+        <div id="alternatives"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRODUCTS = {
+  // Traditional SaaS
+  m365cop:    { name: 'Microsoft 365 Copilot', cost: 30, activeRate: 0.358, tokenConv: 0.15, category: 'trad', source: 'Gartner: 35.8% active usage; only 3.3% of M365 base' },
+  sfagent:    { name: 'Salesforce Agentforce', cost: 2, activeRate: 0.12, tokenConv: 0.10, category: 'trad', source: '~12% of customers have deals; community reports minimal usage', perConvo: true },
+  nowassist:  { name: 'ServiceNow Now Assist', cost: 15, activeRate: 0.20, tokenConv: 0.15, category: 'trad', source: '<20% of licensed Fulfillers actively use AI features' },
+  sapjoule:   { name: 'SAP Joule', cost: 10, activeRate: 0.10, tokenConv: 0.08, category: 'trad', source: '"Ninefold growth" from undisclosed base. No separate AI SKU.' },
+  wdayillum:  { name: 'Workday Illuminate', cost: 8, activeRate: 0.08, tokenConv: 0.05, category: 'trad', source: 'Early stage. MIT: only 5% see real AI ROI.' },
+
+  // Model Subs
+  chatgptent: { name: 'ChatGPT Enterprise', cost: 60, activeRate: 0.45, tokenConv: 0.40, category: 'modelsub', source: 'Higher activation than bundled SaaS — users chose to buy it' },
+  chatgptteam:{ name: 'ChatGPT Team', cost: 25, activeRate: 0.55, tokenConv: 0.50, category: 'modelsub', source: 'Team leads buy it intentionally. Moderate activation.' },
+  claudeent:  { name: 'Claude for Enterprise', cost: 30, activeRate: 0.50, tokenConv: 0.45, category: 'modelsub', source: 'Enterprise API-heavy. Higher activation than average.' },
+  ghcopilot:  { name: 'GitHub Copilot Business', cost: 19, activeRate: 0.65, tokenConv: 0.60, category: 'modelsub', source: '55% code acceptance rate. Devs actively use it.' },
+  geminient:  { name: 'Gemini for Workspace', cost: 20, activeRate: 0.30, tokenConv: 0.20, category: 'modelsub', source: 'Bundled into Workspace. Lower activation than standalone AI.' },
+
+  // AI Natives
+  cursor:     { name: 'Cursor Business', cost: 40, activeRate: 0.85, tokenConv: 0.85, category: 'native', source: 'Every keystroke = API call. Power users consume $5K/mo retail.' },
+  perplexity: { name: 'Perplexity Enterprise', cost: 40, activeRate: 0.75, tokenConv: 0.90, category: 'native', source: 'Search = tokens. 780M queries/month platform-wide.' },
+  intercom:   { name: 'Intercom Fin', cost: 0.99, activeRate: 0.90, tokenConv: 0.95, category: 'native', source: '$0.99/resolution. Each resolution = multiple LLM calls.', perConvo: true },
+  harvey:     { name: 'Harvey', cost: 100, activeRate: 0.80, tokenConv: 0.80, category: 'native', source: 'Legal doc analysis = massive context windows. $190M ARR.' },
+  replit:     { name: 'Replit Teams', cost: 25, activeRate: 0.70, tokenConv: 0.75, category: 'native', source: 'Code generation is the product. Gross margin swings with LLM costs.' },
+};
+
+document.getElementById('product').addEventListener('change', function() {
+  const p = PRODUCTS[this.value];
+  if (p && !p.perConvo) document.getElementById('cost').value = p.cost;
+  else document.getElementById('cost').value = '';
+});
+
+function calculate() {
+  const prodKey = document.getElementById('product').value;
+  const seats = parseInt(document.getElementById('seats').value);
+  const costPerSeat = parseFloat(document.getElementById('cost').value);
+
+  if (!prodKey || !seats || !costPerSeat) { alert('Please fill in all fields'); return; }
+
+  const prod = PRODUCTS[prodKey];
+  const monthlyTotal = seats * costPerSeat;
+  const annualTotal = monthlyTotal * 12;
+  const activeUsers = Math.round(seats * prod.activeRate);
+  const realValue = monthlyTotal * prod.tokenConv;
+  const waste = monthlyTotal - realValue;
+  const wastePct = ((1 - prod.tokenConv) * 100).toFixed(0);
+
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result-title').textContent = `${prod.name} — ${seats.toLocaleString()} seats`;
+
+  document.getElementById('r-paying').textContent = `$${(monthlyTotal / 1000).toFixed(0)}K/mo`;
+  document.getElementById('r-paying-detail').textContent = `$${(annualTotal / 1000).toFixed(0)}K/year`;
+
+  const realColor = prod.tokenConv >= 0.6 ? 'var(--green)' : prod.tokenConv >= 0.3 ? 'var(--orange)' : 'var(--red)';
+  document.getElementById('r-real').style.color = realColor;
+  document.getElementById('r-real').textContent = `$${(realValue / 1000).toFixed(0)}K/mo`;
+  document.getElementById('r-real-detail').textContent = `${(prod.tokenConv * 100).toFixed(0)}% of spend → actual tokens`;
+
+  document.getElementById('r-usage').style.color = prod.activeRate >= 0.6 ? 'var(--green)' : prod.activeRate >= 0.3 ? 'var(--orange)' : 'var(--red)';
+  document.getElementById('r-usage').textContent = `${(prod.activeRate * 100).toFixed(0)}%`;
+  document.getElementById('r-usage-detail').textContent = `~${activeUsers.toLocaleString()} of ${seats.toLocaleString()} seats active`;
+
+  document.getElementById('r-waste').textContent = `$${(waste / 1000).toFixed(0)}K/mo`;
+  document.getElementById('r-waste-detail').textContent = `${wastePct}% of your spend`;
+
+  // Waste bar
+  const tokenPct = prod.tokenConv * 100;
+  const lowUsePct = (prod.activeRate - prod.tokenConv) * 100;
+  const shelfPct = 100 - tokenPct - Math.max(0, lowUsePct);
+  document.getElementById('waste-bar').innerHTML = `
+    <div style="width:${tokenPct}%;background:var(--green);">${tokenPct.toFixed(0)}%</div>
+    <div style="width:${Math.max(0, lowUsePct)}%;background:var(--orange);">${lowUsePct > 5 ? lowUsePct.toFixed(0) + '%' : ''}</div>
+    <div style="width:${shelfPct}%;background:var(--red);">${shelfPct.toFixed(0)}%</div>
+  `;
+
+  // Verdict
+  const v = document.getElementById('verdict');
+  if (prod.category === 'trad') {
+    v.style.background = 'rgba(239,68,68,0.08)';
+    v.style.border = '1px solid rgba(239,68,68,0.2)';
+    v.innerHTML = `<h3 style="color:var(--red);">⚠️ High Shelfware Risk</h3>
+      <p style="color:var(--text-dim);">You're spending <strong>$${(annualTotal/1000).toFixed(0)}K/year</strong> but only ~<strong>$${(realValue*12/1000).toFixed(0)}K</strong> is driving actual AI inference.
+      That's <strong>$${(waste*12/1000).toFixed(0)}K/year in shelfware</strong>.
+      The AI features are bundled into your existing subscription — most users never activate them.<br><br>
+      <strong>Source:</strong> ${prod.source}</p>`;
+  } else if (prod.category === 'modelsub') {
+    v.style.background = 'rgba(249,159,11,0.08)';
+    v.style.border = '1px solid rgba(249,159,11,0.2)';
+    v.innerHTML = `<h3 style="color:var(--orange);">⚡ Moderate Efficiency</h3>
+      <p style="color:var(--text-dim);">Standalone AI subscriptions have better activation than SaaS-bundled AI because users opted in.
+      But you're still losing <strong>$${(waste*12/1000).toFixed(0)}K/year</strong> to underutilized seats.<br><br>
+      <strong>Source:</strong> ${prod.source}</p>`;
+  } else {
+    v.style.background = 'rgba(16,185,129,0.08)';
+    v.style.border = '1px solid rgba(16,185,129,0.2)';
+    v.innerHTML = `<h3 style="color:var(--green);">✅ High Token Efficiency</h3>
+      <p style="color:var(--text-dim);">AI-native products convert most revenue into actual token consumption.
+      Your <strong>$${(annualTotal/1000).toFixed(0)}K/year</strong> is mostly working for you.
+      The product IS AI — every interaction drives inference.<br><br>
+      <strong>Source:</strong> ${prod.source}</p>`;
+  }
+
+  // Alternatives
+  const alt = document.getElementById('alternatives');
+  const budget = monthlyTotal;
+  alt.innerHTML = '';
+  const alts = [
+    { name: 'Cursor Business seats', cost: 40, conv: 0.85 },
+    { name: 'Claude Enterprise seats', cost: 30, conv: 0.45 },
+    { name: 'Direct API spend (100% tokens)', cost: 1, conv: 1.0, perUnit: 'per $1' },
+    { name: 'Perplexity Enterprise seats', cost: 40, conv: 0.90 },
+    { name: 'GitHub Copilot Business seats', cost: 19, conv: 0.60 },
+  ];
+  alts.forEach(a => {
+    const units = Math.floor(budget / a.cost);
+    const realVal = budget * a.conv;
+    alt.innerHTML += `<div class="compare-row">
+      <span>${units.toLocaleString()} ${a.name}</span>
+      <span style="color:var(--green);font-weight:600;">$${(realVal/1000).toFixed(0)}K/mo real AI value (${(a.conv*100).toFixed(0)}%)</span>
+    </div>`;
+  });
+
+  document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

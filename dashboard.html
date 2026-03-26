@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global AI Token Usage Estimator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --card: #111827;
+    --card-border: #1e293b;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --accent3: #06b6d4;
+    --green: #10b981;
+    --orange: #f59e0b;
+    --red: #ef4444;
+    --pink: #ec4899;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+  .container { max-width:1400px; margin:0 auto; padding:24px; }
+
+  header { text-align:center; padding:32px 0 24px; border-bottom:1px solid var(--card-border); margin-bottom:0; }
+  header h1 { font-size:32px; font-weight:700; background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:4px; }
+  header p { color:var(--text-dim); font-size:14px; }
+
+  /* Filter Bar */
+  .filter-bar { position:sticky; top:0; z-index:100; background:rgba(17,24,39,0.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--card-border); padding:12px 0; margin-bottom:24px; }
+  .filter-group { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:6px; }
+  .filter-group:last-child { margin-bottom:0; }
+  .filter-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); min-width:70px; font-weight:600; }
+  .filter-pill { padding:4px 12px; border-radius:16px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; user-select:none; }
+  .filter-pill:hover { border-color:var(--accent); color:var(--text); }
+  .filter-pill.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .filter-pill.active[data-dim="regions"] { background:var(--accent2); border-color:var(--accent2); }
+  .filter-pill.active[data-dim="industries"] { background:var(--green); border-color:var(--green); }
+  .filter-pill.active[data-dim="useCases"] { background:var(--orange); border-color:var(--orange); }
+  .filter-reset { padding:4px 10px; border-radius:16px; border:1px solid rgba(239,68,68,0.3); background:transparent; color:var(--red); font-size:10px; cursor:pointer; }
+
+  /* Cards */
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; color:var(--text); }
+  .card h2 .sub { font-size:12px; font-weight:400; color:var(--text-dim); }
+
+  /* Hero Stats */
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:4px 0; }
+  .hero-stat .detail { font-size:11px; color:var(--text-dim); }
+
+  /* Chart grids */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+  .chart-wrap { position:relative; height:320px; }
+  .chart-wrap-tall { position:relative; height:400px; }
+
+  /* Matrix table */
+  .matrix-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .matrix-table th { padding:10px; background:#1e3a5f; color:white; text-align:center; border:1px solid #334155; }
+  .matrix-table th:first-child { background:#1e293b; text-align:left; width:80px; }
+  .matrix-table td { padding:10px; border:1px solid #334155; vertical-align:top; }
+  .matrix-cell-rev { font-size:16px; font-weight:800; }
+  .matrix-cell-conv { font-size:10px; padding:2px 6px; border-radius:3px; font-weight:600; }
+
+  /* Detail tables */
+  table.detail { width:100%; border-collapse:collapse; }
+  table.detail th { text-align:left; padding:8px 10px; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); border-bottom:1px solid var(--card-border); }
+  table.detail td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+
+  /* Badges */
+  .badge { padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; }
+  .badge-openai { background:rgba(16,163,127,0.15); color:#10a37f; }
+  .badge-anthropic { background:rgba(217,119,6,0.15); color:#d97706; }
+  .badge-google { background:rgba(66,133,244,0.15); color:#4285f4; }
+  .badge-meta { background:rgba(96,165,250,0.15); color:#60a5fa; }
+  .badge-deepseek { background:rgba(167,139,250,0.15); color:#a78bfa; }
+
+  footer { text-align:center; padding:32px 0 16px; font-size:12px; color:var(--text-dim); border-top:1px solid var(--card-border); margin-top:32px; }
+
+  @media(max-width:900px) {
+    .hero-grid { grid-template-columns:repeat(2,1fr); }
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    .filter-group { flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+<nav style="display:flex;gap:16px;padding:12px 24px;background:#111827;border-bottom:1px solid #1e293b;font-size:13px;flex-wrap:wrap;">
+  <a href="dashboard.html" style="color:#3b82f6;text-decoration:none;font-weight:600;">Dashboard</a>
+  <a href="counter.html" style="color:#94a3b8;text-decoration:none;">Live Counter</a>
+  <a href="sankey.html" style="color:#94a3b8;text-decoration:none;">Follow the $</a>
+  <a href="calculator.html" style="color:#94a3b8;text-decoration:none;">Shelfware Calculator</a>
+  <a href="timeline.html" style="color:#94a3b8;text-decoration:none;">Time Machine</a>
+  <a href="feed.html" style="color:#94a3b8;text-decoration:none;">Weekly Feed</a>
+</nav>
+<div class="container">
+
+<header>
+  <h1>Global AI Token Usage Estimator</h1>
+  <p>Directional estimates from public filings, earnings calls, press reports & developer surveys — March 2026</p>
+</header>
+
+<!-- ===== FILTER BAR ===== -->
+<div class="filter-bar" id="filter-bar"></div>
+
+<!-- ===== HERO STATS ===== -->
+<div class="hero-grid" id="hero-stats"></div>
+
+<!-- ===== MAIN CHARTS ===== -->
+<div class="card">
+  <h2>Token Volume & Revenue by Provider <span class="sub">— click bars to filter</span></h2>
+  <div class="chart-wrap"><canvas id="chart-provider"></canvas></div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h2>Revenue by Demand Type</h2>
+    <div class="chart-wrap"><canvas id="chart-demand"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>Consumer vs Business Split by Provider</h2>
+    <div class="chart-wrap"><canvas id="chart-biz-consumer"></canvas></div>
+  </div>
+</div>
+
+<!-- ===== DIMENSION CHARTS (filterable) ===== -->
+<div class="grid-3">
+  <div class="card">
+    <h2>By Region</h2>
+    <div class="chart-wrap"><canvas id="chart-region"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>By Industry</h2>
+    <div class="chart-wrap"><canvas id="chart-industry"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>By Use Case</h2>
+    <div class="chart-wrap"><canvas id="chart-usecase"></canvas></div>
+  </div>
+</div>
+
+<!-- ===== DEMAND MATRIX ===== -->
+<div class="card">
+  <h2>Token Demand Quality Matrix <span class="sub">— who buys × how they buy. Not all "$1 of AI revenue" is equal.</span></h2>
+  <div style="overflow-x:auto;">
+    <table class="matrix-table" id="demand-matrix"></table>
+  </div>
+</div>
+
+<!-- ===== ENTERPRISE REALITY CHECK ===== -->
+<div class="card">
+  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">— Booked revenue vs. actual token consumption</span></h2>
+  <table class="detail" id="enterprise-table"></table>
+</div>
+
+<!-- ===== TOP CONSUMERS ===== -->
+<div class="card">
+  <h2>Top Token Consumers <span class="sub" id="consumer-filter-label"></span></h2>
+  <div style="overflow-x:auto;">
+    <table class="detail" id="consumer-table"></table>
+  </div>
+</div>
+
+<!-- ===== MODEL PRICING ===== -->
+<div class="card">
+  <h2>Model Pricing & Estimated Volume</h2>
+  <div style="overflow-x:auto;">
+    <table class="detail" id="model-table"></table>
+  </div>
+</div>
+
+<!-- ===== METHODOLOGY ===== -->
+<div class="card" style="background:rgba(59,130,246,0.05); border-color:rgba(59,130,246,0.2);">
+  <h2>Methodology & Sources</h2>
+  <p style="font-size:12px; color:var(--text-dim); line-height:1.7;">
+    <strong>Provider revenue:</strong> OpenAI ($16.8B ARR est. Q1'26 — WSJ, Bloomberg); Anthropic ($14B ARR Mar'26 — SaaStr); Google Cloud AI ("billions" — Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
+    <strong>Token volumes:</strong> Back-calculated from revenue ÷ blended model pricing. OpenRouter (8.4T tokens/month — openrouter.ai/state-of-ai). Portkey (1T+/day — company disclosure).<br>
+    <strong>Geographic splits:</strong> Stanford HAI AI Index 2024, IDC Worldwide AI Spending Guide, SlashData developer populations.<br>
+    <strong>Industry/Use case:</strong> Gartner AI Use Case Survey 2024, McKinsey Global AI Survey 2024, Stack Overflow Dev Survey 2024.<br>
+    <strong>Enterprise reality:</strong> Salesforce Q3 FY26 earnings, ServiceNow Q4 FY25 earnings, Microsoft Q2 FY25 earnings, Recon Analytics, Gartner, MIT Research.<br>
+    <strong>Demand matrix:</strong> Synthesized from a16z Enterprise GenAI report, Barclays AI research, The Information, Retool State of AI 2024.<br>
+    <strong>Cross-dimensional weights:</strong> Editorial estimates for filtering. Filtered views show directional splits, not precise figures.
+  </p>
+</div>
+
+<footer>Global AI Token Usage Estimator v2.0 — APAC AI Intelligence Project — Data as of March 2026<br>Estimates are directional. Not investment advice.</footer>
+
+</div>
+
+<script>
+// ============================================================
+// DATA MODEL
+// ============================================================
+
+const PROVIDERS = {
+  'OpenAI':        { tokens: 270, rev: 16.8, color: '#10a37f', growth: '+180% YoY', consumerPct: 60, bizPct: 40 },
+  'Anthropic':     { tokens: 150, rev: 14.0, color: '#d97706', growth: '14x in 14mo', consumerPct: 35, bizPct: 65 },
+  'Google/Gemini': { tokens: 120, rev: 4.2,  color: '#4285f4', growth: '14x in \'24', consumerPct: 40, bizPct: 60 },
+  'Meta (open)':   { tokens: 60,  rev: 0,    color: '#60a5fa', growth: '+400% YoY', consumerPct: 0, bizPct: 0 },
+  'DeepSeek':      { tokens: 30,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
+  'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80 },
+  'xAI':           { tokens: 12,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
+  'Others':        { tokens: 23,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60 },
+};
+
+const REGIONS = {
+  'North America': { pct: 40, color: '#3b82f6', growth: '+160% YoY' },
+  'Asia-Pacific':  { pct: 30, color: '#8b5cf6', growth: '+280% YoY' },
+  'Europe':        { pct: 18, color: '#06b6d4', growth: '+140% YoY' },
+  'Middle East':   { pct: 5,  color: '#f59e0b', growth: '+350% YoY' },
+  'Latin America': { pct: 4,  color: '#10b981', growth: '+200% YoY' },
+  'Africa':        { pct: 3,  color: '#ec4899', growth: '+300% YoY' },
+};
+
+const INDUSTRIES = {
+  'Software & Tech':       { pct: 33, color: '#3b82f6' },
+  'Financial Services':    { pct: 16, color: '#10b981' },
+  'Healthcare':            { pct: 9,  color: '#ef4444' },
+  'Retail & E-commerce':   { pct: 9,  color: '#f59e0b' },
+  'Marketing & Ads':       { pct: 8,  color: '#ec4899' },
+  'Customer Service':      { pct: 7,  color: '#06b6d4' },
+  'Education':             { pct: 5,  color: '#14b8a6' },
+  'Manufacturing':         { pct: 4,  color: '#8b5cf6' },
+  'Legal & Gov & Other':   { pct: 9,  color: '#475569' },
+};
+
+const USE_CASES = {
+  'Coding & Dev Tools':  { pct: 28, color: '#8b5cf6' },
+  'Chat & Assistants':   { pct: 27, color: '#3b82f6' },
+  'Content & Writing':   { pct: 15, color: '#f59e0b' },
+  'Enterprise Agents':   { pct: 10, color: '#10b981' },
+  'Search & RAG':        { pct: 10, color: '#06b6d4' },
+  'Data Analysis':       { pct: 7,  color: '#ef4444' },
+  'Other':               { pct: 5,  color: '#475569' },
+};
+
+// Cross-weights: how each provider's tokens distribute across dimensions
+const CROSS_WEIGHTS = {
+  'OpenAI': {
+    regions:    { 'North America': .45, 'Asia-Pacific': .25, 'Europe': .18, 'Middle East': .05, 'Latin America': .04, 'Africa': .03 },
+    industries: { 'Software & Tech': .30, 'Financial Services': .12, 'Healthcare': .08, 'Retail & E-commerce': .12, 'Marketing & Ads': .10, 'Customer Service': .08, 'Education': .07, 'Manufacturing': .04, 'Legal & Gov & Other': .09 },
+    useCases:   { 'Coding & Dev Tools': .25, 'Chat & Assistants': .35, 'Content & Writing': .15, 'Enterprise Agents': .08, 'Search & RAG': .07, 'Data Analysis': .05, 'Other': .05 },
+  },
+  'Anthropic': {
+    regions:    { 'North America': .50, 'Asia-Pacific': .22, 'Europe': .18, 'Middle East': .04, 'Latin America': .03, 'Africa': .03 },
+    industries: { 'Software & Tech': .45, 'Financial Services': .18, 'Healthcare': .06, 'Retail & E-commerce': .05, 'Marketing & Ads': .04, 'Customer Service': .05, 'Education': .03, 'Manufacturing': .03, 'Legal & Gov & Other': .11 },
+    useCases:   { 'Coding & Dev Tools': .45, 'Chat & Assistants': .20, 'Content & Writing': .08, 'Enterprise Agents': .12, 'Search & RAG': .05, 'Data Analysis': .06, 'Other': .04 },
+  },
+  'Google/Gemini': {
+    regions:    { 'North America': .35, 'Asia-Pacific': .30, 'Europe': .20, 'Middle East': .06, 'Latin America': .05, 'Africa': .04 },
+    industries: { 'Software & Tech': .30, 'Financial Services': .10, 'Healthcare': .12, 'Retail & E-commerce': .10, 'Marketing & Ads': .10, 'Customer Service': .08, 'Education': .08, 'Manufacturing': .04, 'Legal & Gov & Other': .08 },
+    useCases:   { 'Coding & Dev Tools': .20, 'Chat & Assistants': .30, 'Content & Writing': .15, 'Enterprise Agents': .10, 'Search & RAG': .12, 'Data Analysis': .08, 'Other': .05 },
+  },
+  'Meta (open)': {
+    regions:    { 'North America': .35, 'Asia-Pacific': .30, 'Europe': .20, 'Middle East': .05, 'Latin America': .05, 'Africa': .05 },
+    industries: { 'Software & Tech': .45, 'Financial Services': .15, 'Healthcare': .08, 'Retail & E-commerce': .08, 'Marketing & Ads': .05, 'Customer Service': .05, 'Education': .04, 'Manufacturing': .05, 'Legal & Gov & Other': .05 },
+    useCases:   { 'Coding & Dev Tools': .35, 'Chat & Assistants': .25, 'Content & Writing': .10, 'Enterprise Agents': .12, 'Search & RAG': .08, 'Data Analysis': .05, 'Other': .05 },
+  },
+  'DeepSeek': {
+    regions:    { 'North America': .20, 'Asia-Pacific': .55, 'Europe': .15, 'Middle East': .04, 'Latin America': .03, 'Africa': .03 },
+    industries: { 'Software & Tech': .50, 'Financial Services': .10, 'Healthcare': .05, 'Retail & E-commerce': .08, 'Marketing & Ads': .05, 'Customer Service': .05, 'Education': .07, 'Manufacturing': .05, 'Legal & Gov & Other': .05 },
+    useCases:   { 'Coding & Dev Tools': .40, 'Chat & Assistants': .30, 'Content & Writing': .08, 'Enterprise Agents': .05, 'Search & RAG': .07, 'Data Analysis': .07, 'Other': .03 },
+  },
+  'Mistral': {
+    regions:    { 'North America': .25, 'Asia-Pacific': .15, 'Europe': .45, 'Middle East': .06, 'Latin America': .05, 'Africa': .04 },
+    industries: { 'Software & Tech': .40, 'Financial Services': .20, 'Healthcare': .08, 'Retail & E-commerce': .06, 'Marketing & Ads': .05, 'Customer Service': .05, 'Education': .04, 'Manufacturing': .05, 'Legal & Gov & Other': .07 },
+    useCases:   { 'Coding & Dev Tools': .30, 'Chat & Assistants': .25, 'Content & Writing': .12, 'Enterprise Agents': .15, 'Search & RAG': .08, 'Data Analysis': .06, 'Other': .04 },
+  },
+  'xAI': {
+    regions:    { 'North America': .55, 'Asia-Pacific': .15, 'Europe': .18, 'Middle East': .05, 'Latin America': .04, 'Africa': .03 },
+    industries: { 'Software & Tech': .35, 'Financial Services': .10, 'Healthcare': .05, 'Retail & E-commerce': .05, 'Marketing & Ads': .10, 'Customer Service': .05, 'Education': .05, 'Manufacturing': .03, 'Legal & Gov & Other': .22 },
+    useCases:   { 'Coding & Dev Tools': .15, 'Chat & Assistants': .50, 'Content & Writing': .15, 'Enterprise Agents': .05, 'Search & RAG': .05, 'Data Analysis': .05, 'Other': .05 },
+  },
+  'Others': {
+    regions:    { 'North America': .30, 'Asia-Pacific': .35, 'Europe': .20, 'Middle East': .06, 'Latin America': .05, 'Africa': .04 },
+    industries: { 'Software & Tech': .35, 'Financial Services': .15, 'Healthcare': .10, 'Retail & E-commerce': .10, 'Marketing & Ads': .05, 'Customer Service': .08, 'Education': .05, 'Manufacturing': .05, 'Legal & Gov & Other': .07 },
+    useCases:   { 'Coding & Dev Tools': .25, 'Chat & Assistants': .30, 'Content & Writing': .15, 'Enterprise Agents': .10, 'Search & RAG': .08, 'Data Analysis': .07, 'Other': .05 },
+  },
+};
+
+// Demand matrix data
+const DEMAND_MATRIX = {
+  columns: ['AI Model Subs', 'Model API', 'AI Native Subs', 'Traditional SaaS Subs'],
+  colSubs: [
+    'ChatGPT Plus, Claude Pro, Gemini Advanced',
+    'Direct API calls to OpenAI, Anthropic, Google',
+    'Cursor, Perplexity, Jasper, Harvey',
+    'M365 Copilot, SF Agentforce, NOW Assist, Canva AI',
+  ],
+  rows: [
+    { segment: 'Consumer', cells: [
+      { rev: '~$10-12B', conv: '50%', color: '#f59e0b', ex: 'ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced', note: 'Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk.' },
+      { rev: '~$0.5B', conv: '100%', color: '#3b82f6', ex: 'Hobbyist devs, indie hackers, students using API keys', note: 'Small but pure. Every cent = tokens.' },
+      { rev: '~$2-3B', conv: '90%', color: '#10b981', ex: 'Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier', note: 'Real usage. AI native absorbs API cost.' },
+      { rev: '~$1-2B', conv: '15%', color: '#ef4444', ex: 'Canva AI features, Grammarly, Notion AI, Adobe Firefly', note: 'AI bundled into consumer SaaS. Low incremental token usage.' },
+    ]},
+    { segment: 'SME', cells: [
+      { rev: '~$1-2B', conv: '60%', color: '#f59e0b', ex: 'ChatGPT Team ($25/user), Claude Team', note: 'Growing. Usage varies widely across seats.' },
+      { rev: '~$2-3B', conv: '100%', color: '#3b82f6', ex: 'Startups on APIs, dev agencies, Vercel AI SDK users', note: 'Pure demand. Retool: avg $50K-$500K/yr. Fastest growing.' },
+      { rev: '~$2-3B', conv: '85%', color: '#10b981', ex: 'Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin', note: 'Strong PMF. SMEs adopt AI natives faster than SaaS AI.' },
+      { rev: '~$2-3B', conv: '15%', color: '#ef4444', ex: 'HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI', note: 'Feature checkbox on renewal, low actual activation.' },
+    ]},
+    { segment: 'Enterprise', cells: [
+      { rev: '~$1-2B', conv: '45%', color: '#f59e0b', ex: 'ChatGPT Enterprise ($60+/user), Claude for Enterprise', note: 'Standalone AI subs — higher activation, users chose to buy it.' },
+      { rev: '~$3-5B', conv: '100%', color: '#3b82f6', ex: 'Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys', note: 'LARGEST FUTURE TAM. Small today but 100% real. Goldman: →$50-80B by 2028.' },
+      { rev: '~$1-2B', conv: '80%', color: '#10b981', ex: 'Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI', note: 'Real usage — AI natives solving specific enterprise workflows.' },
+      { rev: '~$12-15B', conv: '10-20%', color: '#ef4444', ex: 'M365 Copilot ($5.4B), SF Agentforce ($800M), NOW Assist ($500M), GitHub Copilot ($2B+)', note: 'HIGHEST REV, LOWEST TOKENS. 35.8% M365 active; <20% NOW. Bundling, shelfware, 360 deals.' },
+    ]},
+  ]
+};
+
+// Enterprise Reality data
+const ENTERPRISE_REALITY = [
+  { name:'Salesforce', ticker:'CRM', claimed:'$800M "AI" ARR (incl. Data Cloud, legacy Einstein)', usage:'~12% have Agentforce deals; many are free pilots', real:'~$50-150M actual LLM tokens', flags:'Data Cloud ($900M+) lumped into AI metrics. Legacy Einstein (2016-era ML scoring) relabeled as "AI." Growth: 18%→11%→8-9% — DECELERATING despite AI push.', growth:'8-9%', prevGrowth:'18%' },
+  { name:'ServiceNow', ticker:'NOW', claimed:'$600M+ Now Assist ACV', usage:'<20% of Fulfillers active; 50-70% of ACV is SKU upgrade revenue', real:'~$60-100M actual LLM tokens', flags:'Pro→Pro Plus upgrade ($50/user delta) counted as "AI ACV" even though it includes non-AI features. cRPO growth shows no step-function increase. Growth: 25%→22%→20% — decelerating.', growth:'20-21%', prevGrowth:'25%' },
+  { name:'Microsoft 365 Copilot', ticker:'MSFT', claimed:'15M seats × $30/mo = $5.4B', usage:'30-40% weekly active; many enterprises reducing seats at renewal', real:'~$1-1.5B if adjusted for usage', flags:'Auto-installing without admin opt-in to inflate adoption. Barclays: "less than hoped by bulls." Own staff prefer ChatGPT. Enterprises not expanding after pilots.', growth:'12-15%', prevGrowth:'15%' },
+  { name:'SAP', ticker:'SAP', claimed:'"2/3 of deals include AI" — Joule bundled free', usage:'No separate metering. Joule included in RISE/GROW SKUs by default.', real:'Negligible — like saying "100% of iPhones include Siri"', flags:'Cloud growth (26-28%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT by AI. No analyst attributes acceleration to Joule.', growth:'26-28%', prevGrowth:'23%' },
+  { name:'Workday', ticker:'WDAY', claimed:'Not disclosed — Flex Credits model', usage:'Early stage. No AI-specific metrics disclosed.', real:'Minimal', flags:'Growth decelerating from 20%+ to 15-17%. No visible AI impact on revenue trajectory.', growth:'15-17%', prevGrowth:'20%+' },
+];
+
+// Top consumers
+const TOP_CONSUMERS = [
+  { co:'Cursor (Anysphere)', hq:'US', type:'AI Dev Tool', tokens:'~1T/day', prov:'Anthropic, OpenAI', ev:'$1B+ ARR, $29.3B val, 1M+ DAU' },
+  { co:'Portkey.ai', hq:'US/India', type:'AI Gateway', tokens:'1T+/day', prov:'Multi (40+)', ev:'24K+ orgs, $180M+ AI spend managed' },
+  { co:'Perplexity', hq:'US', type:'AI Search', tokens:'~300B/day', prov:'Multi', ev:'780M queries/mo, $200M ARR, Trillion Token Club' },
+  { co:'Replit', hq:'US', type:'AI Dev Tool', tokens:'~300B/day', prov:'Multi', ev:'$240-265M rev, $9B val, 50M+ users' },
+  { co:'OpenRouter', hq:'US', type:'AI Gateway', tokens:'280B/day', prov:'All (400+)', ev:'8.4T tokens/mo, 100T+/year' },
+  { co:'Canva', hq:'Australia', type:'Design', tokens:'~200B/day', prov:'OpenAI', ev:'265M MAU, 800M AI uses/mo, Trillion Token Club' },
+  { co:'Wrtn Technologies', hq:'Korea', type:'Consumer AI', tokens:'~200B/day', prov:'OpenAI, Anthropic', ev:'6.5M MAU, free GPT-5, ~$100M ARR' },
+  { co:'Duolingo', hq:'US', type:'EdTech', tokens:'~150B/day', prov:'OpenAI (#1)', ev:'47.7M DAU, ~100% AI content gen' },
+  { co:'Monica AI', hq:'China/SG', type:'Consumer AI', tokens:'~150B/day', prov:'OpenAI, Anthropic, Google', ev:'10M+ users, Manus $100M ARR' },
+  { co:'Notion AI', hq:'US', type:'Productivity', tokens:'~150B/day', prov:'Anthropic, OpenAI', ev:'10M+ AI users' },
+  { co:'Cognition (Devin)', hq:'US', type:'AI Dev Tool', tokens:'~100B+/day', prov:'OpenAI, Anthropic', ev:'Windsurf 100B+/day, $155M ARR, $10.2B val' },
+  { co:'Harvey AI', hq:'US', type:'Legal AI', tokens:'~100B/day', prov:'OpenAI', ev:'$190M ARR, 100K+ lawyers, $11B val' },
+  { co:'Klarna', hq:'Sweden', type:'Fintech', tokens:'~100B/day', prov:'OpenAI', ev:'AI agent = 700 human agents' },
+  { co:'BLACKBOX.AI', hq:'US', type:'AI Dev Tool', tokens:'~100B/day', prov:'OpenAI, Anthropic, Google', ev:'20M+ devs, $31.7M rev' },
+  { co:'MiniMax', hq:'China', type:'AI Platform', tokens:'~80B/day', prov:'Own + Anthropic', ev:'212M users, HKEX IPO, $150M+ cloud' },
+  { co:'Salesforce Einstein', hq:'US', type:'Ent SaaS', tokens:'~10T/day*', prov:'OpenAI, own', ev:'2T+ predictions/wk (*mostly ML, not LLM)' },
+  { co:'Yellow.ai', hq:'India', type:'Enterprise AI', tokens:'~50B/day', prov:'OpenAI, Google', ev:'1,300+ clients, $79.5M rev' },
+  { co:'Grab', hq:'Singapore', type:'Super-app', tokens:'~40B/day', prov:'OpenAI', ev:'42M+ MAU, OpenAI strategic partner' },
+  { co:'Sea/Shopee', hq:'Singapore', type:'E-commerce', tokens:'~30B/day', prov:'OpenAI, Google', ev:'OpenAI strategic MOU, $13B+ rev' },
+  { co:'Kakao', hq:'Korea', type:'Messaging', tokens:'~30B/day', prov:'OpenAI (GPT-5)', ev:'53M MAU, GPT-5 in KakaoTalk' },
+];
+
+// Models
+const MODELS = [
+  { model:'GPT-4o mini', prov:'OpenAI', tokens:'~80T', inP:'$0.15', outP:'$0.60', use:'Chat, agents, coding', trend:'↑↑' },
+  { model:'GPT-4o', prov:'OpenAI', tokens:'~55T', inP:'$2.50', outP:'$10.00', use:'Enterprise, complex tasks', trend:'→' },
+  { model:'GPT-4.1 mini', prov:'OpenAI', tokens:'~40T', inP:'$0.40', outP:'$1.60', use:'Coding, agents', trend:'↑↑↑' },
+  { model:'Gemini 2.0 Flash', prov:'Google', tokens:'~35T', inP:'$0.10', outP:'$0.40', use:'High-volume, agents', trend:'↑↑↑' },
+  { model:'Claude 3.5 Sonnet', prov:'Anthropic', tokens:'~30T', inP:'$3.00', outP:'$15.00', use:'Coding, analysis', trend:'→' },
+  { model:'Claude Sonnet 4', prov:'Anthropic', tokens:'~25T', inP:'$3.00', outP:'$15.00', use:'Coding, enterprise', trend:'↑↑' },
+  { model:'Llama 3.1 405B', prov:'Meta', tokens:'~25T', inP:'Self-host', outP:'Self-host', use:'On-prem enterprise', trend:'→' },
+  { model:'Llama 4 Scout', prov:'Meta', tokens:'~20T', inP:'Self-host', outP:'Self-host', use:'Agents, coding', trend:'↑↑↑' },
+  { model:'Gemini 2.5 Pro', prov:'Google', tokens:'~20T', inP:'$1.25', outP:'$10.00', use:'Reasoning, analysis', trend:'↑↑' },
+  { model:'DeepSeek R1', prov:'DeepSeek', tokens:'~18T', inP:'$0.55', outP:'$2.19', use:'Reasoning, math', trend:'↑↑' },
+  { model:'GPT-5', prov:'OpenAI', tokens:'~15T', inP:'$5.00', outP:'$20.00', use:'Frontier reasoning', trend:'↑↑↑' },
+  { model:'DeepSeek V3', prov:'DeepSeek', tokens:'~12T', inP:'$0.27', outP:'$1.10', use:'General, coding', trend:'↑' },
+  { model:'Mistral Large', prov:'Mistral', tokens:'~8T', inP:'$2.00', outP:'$6.00', use:'Enterprise, multilingual', trend:'↑' },
+  { model:'Grok 4', prov:'xAI', tokens:'~7T', inP:'$3.00', outP:'$15.00', use:'Reasoning, X integration', trend:'↑↑' },
+  { model:'Claude Opus 4', prov:'Anthropic', tokens:'~5T', inP:'$15.00', outP:'$75.00', use:'Complex agents, coding', trend:'↑' },
+];
+
+// ============================================================
+// FILTER STATE
+// ============================================================
+const filters = { providers: [], regions: [], industries: [], useCases: [] };
+const charts = {};
+
+// ============================================================
+// FILTER ENGINE
+// ============================================================
+function getFilteredProviderData() {
+  const activeProviders = filters.providers.length > 0
+    ? filters.providers : Object.keys(PROVIDERS);
+
+  const result = {};
+  activeProviders.forEach(p => {
+    let t = PROVIDERS[p].tokens, r = PROVIDERS[p].rev;
+    if (filters.regions.length > 0) {
+      const s = filters.regions.reduce((a, rg) => a + (CROSS_WEIGHTS[p]?.regions?.[rg] || 0), 0);
+      t *= s; r *= s;
+    }
+    if (filters.industries.length > 0) {
+      const s = filters.industries.reduce((a, ind) => a + (CROSS_WEIGHTS[p]?.industries?.[ind] || 0), 0);
+      t *= s; r *= s;
+    }
+    if (filters.useCases.length > 0) {
+      const s = filters.useCases.reduce((a, uc) => a + (CROSS_WEIGHTS[p]?.useCases?.[uc] || 0), 0);
+      t *= s; r *= s;
+    }
+    result[p] = { tokens: t, rev: r, color: PROVIDERS[p].color, growth: PROVIDERS[p].growth };
+  });
+  return result;
+}
+
+function getFilteredDimensionData(dimObj, dimKey) {
+  const activeProviders = filters.providers.length > 0
+    ? filters.providers : Object.keys(PROVIDERS);
+  const totalTokens = activeProviders.reduce((a, p) => a + PROVIDERS[p].tokens, 0);
+
+  const result = {};
+  Object.keys(dimObj).forEach(key => {
+    let weighted = 0;
+    activeProviders.forEach(p => {
+      const w = CROSS_WEIGHTS[p]?.[dimKey]?.[key] || 0;
+      weighted += PROVIDERS[p].tokens * w;
+    });
+    // Apply other dimension filters
+    let scale = 1;
+    if (dimKey !== 'regions' && filters.regions.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => {
+        filters.regions.forEach(r => { s += CROSS_WEIGHTS[p]?.regions?.[r] || 0; });
+      });
+      scale *= s / activeProviders.length;
+    }
+    if (dimKey !== 'industries' && filters.industries.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => {
+        filters.industries.forEach(i => { s += CROSS_WEIGHTS[p]?.industries?.[i] || 0; });
+      });
+      scale *= s / activeProviders.length;
+    }
+    if (dimKey !== 'useCases' && filters.useCases.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => {
+        filters.useCases.forEach(u => { s += CROSS_WEIGHTS[p]?.useCases?.[u] || 0; });
+      });
+      scale *= s / activeProviders.length;
+    }
+    result[key] = { tokens: weighted * scale, color: dimObj[key].color };
+  });
+  return result;
+}
+
+// ============================================================
+// BUILD FILTER BAR
+// ============================================================
+function buildFilterBar() {
+  const bar = document.getElementById('filter-bar');
+  const dims = [
+    { key: 'providers', label: 'Provider', items: Object.keys(PROVIDERS), color: 'var(--accent)' },
+    { key: 'regions', label: 'Region', items: Object.keys(REGIONS), color: 'var(--accent2)' },
+    { key: 'industries', label: 'Industry', items: Object.keys(INDUSTRIES), color: 'var(--green)' },
+    { key: 'useCases', label: 'Use Case', items: Object.keys(USE_CASES), color: 'var(--orange)' },
+  ];
+
+  dims.forEach(d => {
+    const group = document.createElement('div');
+    group.className = 'filter-group';
+    group.innerHTML = `<span class="filter-label">${d.label}</span>`;
+
+    d.items.forEach(item => {
+      const pill = document.createElement('button');
+      pill.className = 'filter-pill';
+      pill.textContent = item;
+      pill.dataset.dim = d.key;
+      pill.dataset.value = item;
+      pill.onclick = () => toggleFilter(d.key, item, pill);
+      group.appendChild(pill);
+    });
+
+    const reset = document.createElement('button');
+    reset.className = 'filter-reset';
+    reset.textContent = '✕ Clear';
+    reset.onclick = () => clearFilter(d.key);
+    group.appendChild(reset);
+
+    bar.appendChild(group);
+  });
+}
+
+function toggleFilter(dim, value, pill) {
+  const idx = filters[dim].indexOf(value);
+  if (idx >= 0) { filters[dim].splice(idx, 1); pill.classList.remove('active'); }
+  else { filters[dim].push(value); pill.classList.add('active'); }
+  updateAll();
+}
+
+function clearFilter(dim) {
+  filters[dim] = [];
+  document.querySelectorAll(`.filter-pill[data-dim="${dim}"]`).forEach(p => p.classList.remove('active'));
+  updateAll();
+}
+
+// ============================================================
+// CHART.JS DARK THEME DEFAULTS
+// ============================================================
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,sans-serif';
+
+const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+const noGrid = { display: false };
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function updateHeroStats() {
+  const data = getFilteredProviderData();
+  const totalTokens = Object.values(data).reduce((a, d) => a + d.tokens, 0);
+  const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
+  const provCount = Object.keys(data).length;
+  const hasFilters = Object.values(filters).some(f => f.length > 0);
+
+  document.getElementById('hero-stats').innerHTML = `
+    <div class="hero-stat">
+      <div class="label">Est. Tokens / Day</div>
+      <div class="value" style="color:var(--accent);">~${Math.round(totalTokens)}T</div>
+      <div class="detail">${hasFilters ? 'filtered view' : 'all providers combined'}</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Annualized Revenue</div>
+      <div class="value" style="color:var(--green);">$${totalRev.toFixed(1)}B</div>
+      <div class="detail">${hasFilters ? 'filtered view' : 'model provider revenue'}</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Active Providers</div>
+      <div class="value" style="color:var(--accent2);">${provCount}</div>
+      <div class="detail">tracked in this dashboard</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Price Deflation</div>
+      <div class="value" style="color:var(--orange);">~10x/yr</div>
+      <div class="detail">frontier-equivalent cost (ARK Invest)</div>
+    </div>
+  `;
+}
+
+function updateProviderChart() {
+  const data = getFilteredProviderData();
+  const labels = Object.keys(data);
+  const tokenVals = labels.map(l => data[l].tokens);
+  const revVals = labels.map(l => data[l].rev);
+  const colors = labels.map(l => data[l].color);
+
+  if (charts.provider) {
+    charts.provider.data.labels = labels;
+    charts.provider.data.datasets[0].data = tokenVals;
+    charts.provider.data.datasets[0].backgroundColor = colors.map(c => c + 'cc');
+    charts.provider.data.datasets[1].data = revVals;
+    charts.provider.data.datasets[1].backgroundColor = colors.map(c => c + '55');
+    charts.provider.update('active');
+    return;
+  }
+
+  charts.provider = new Chart(document.getElementById('chart-provider'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Tokens (T/day)', data: tokenVals, backgroundColor: colors.map(c => c + 'cc'), yAxisID: 'y', borderRadius: 4, order: 1 },
+        { label: 'Revenue ($B/yr)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      onClick: (e, els) => {
+        if (els.length > 0) {
+          const label = charts.provider.data.labels[els[0].index];
+          const pill = document.querySelector(`.filter-pill[data-dim="providers"][data-value="${label}"]`);
+          if (pill) pill.click();
+        }
+      },
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.dataset.yAxisID === 'y' ? `${ctx.parsed.y.toFixed(0)}T tokens/day` : `$${ctx.parsed.y.toFixed(1)}B/yr`
+          }
+        }
+      },
+      scales: {
+        y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid },
+        y1: { position: 'right', title: { display: true, text: 'Revenue ($B/yr)' }, grid: noGrid },
+        x: { grid: noGrid }
+      }
+    }
+  });
+}
+
+function updateDemandChart() {
+  const data = getFilteredProviderData();
+  const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
+
+  // Estimate demand type split (revenue only)
+  const consumerSubs = totalRev * 0.42;
+  const apiDev = totalRev * 0.25;
+  const entPlatform = totalRev * 0.23;
+  const cloudChannel = totalRev * 0.10;
+
+  const labels = ['Consumer Subs', 'API / Developer', 'Enterprise Platform', 'Cloud Channel'];
+  const values = [consumerSubs, apiDev, entPlatform, cloudChannel];
+  const colors = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
+
+  if (charts.demand) {
+    charts.demand.data.datasets[0].data = values;
+    charts.demand.update('active');
+    return;
+  }
+
+  charts.demand = new Chart(document.getElementById('chart-demand'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: colors.map(c => c + 'bb'), borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => `$${Math.abs(ctx.parsed.x).toFixed(1)}B` } }
+      },
+      scales: {
+        x: { title: { display: true, text: '$B annualized' }, grid: darkGrid },
+        y: { grid: noGrid }
+      }
+    }
+  });
+}
+
+function updateBizConsumerChart() {
+  const data = getFilteredProviderData();
+  const labels = Object.keys(data).filter(p => data[p].rev > 0);
+  const consumerVals = labels.map(l => data[l].rev * (PROVIDERS[l].consumerPct / 100));
+  const bizVals = labels.map(l => data[l].rev * (PROVIDERS[l].bizPct / 100));
+
+  if (charts.bizConsumer) {
+    charts.bizConsumer.data.labels = labels;
+    charts.bizConsumer.data.datasets[0].data = consumerVals;
+    charts.bizConsumer.data.datasets[1].data = bizVals;
+    charts.bizConsumer.update('active');
+    return;
+  }
+
+  charts.bizConsumer = new Chart(document.getElementById('chart-biz-consumer'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Consumer', data: consumerVals, backgroundColor: '#f59e0bbb', borderRadius: 4 },
+        { label: 'Business/API', data: bizVals, backgroundColor: '#10b981bb', borderRadius: 4 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12 } },
+        tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y.toFixed(1)}B` } }
+      },
+      scales: {
+        x: { stacked: true, grid: noGrid },
+        y: { stacked: true, title: { display: true, text: '$B annualized' }, grid: darkGrid }
+      }
+    }
+  });
+}
+
+function updateDimensionChart(canvasId, chartKey, dimObj, dimKey, chartType) {
+  const data = getFilteredDimensionData(dimObj, dimKey);
+  const labels = Object.keys(data);
+  const values = labels.map(l => data[l].tokens);
+  const colors = labels.map(l => data[l].color + 'cc');
+
+  // Highlight active filters
+  const activeInDim = filters[dimKey === 'regions' ? 'regions' : dimKey] || [];
+  const borderColors = labels.map(l =>
+    activeInDim.includes(l) ? '#ffffff' : 'transparent'
+  );
+  const borderWidths = labels.map(l => activeInDim.includes(l) ? 3 : 0);
+
+  if (charts[chartKey]) {
+    charts[chartKey].data.labels = labels;
+    charts[chartKey].data.datasets[0].data = values;
+    charts[chartKey].data.datasets[0].backgroundColor = colors;
+    charts[chartKey].data.datasets[0].borderColor = borderColors;
+    charts[chartKey].data.datasets[0].borderWidth = borderWidths;
+    charts[chartKey].update('active');
+    return;
+  }
+
+  charts[chartKey] = new Chart(document.getElementById(canvasId), {
+    type: chartType,
+    data: {
+      labels,
+      datasets: [{ data: values, backgroundColor: colors, borderColor: borderColors, borderWidth: borderWidths, borderRadius: chartType === 'bar' ? 4 : 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      ...(chartType === 'bar' ? { indexAxis: 'y' } : {}),
+      onClick: (e, els) => {
+        if (els.length > 0) {
+          const fKey = dimKey === 'regions' ? 'regions' : dimKey;
+          const label = charts[chartKey].data.labels[els[0].index];
+          const pill = document.querySelector(`.filter-pill[data-dim="${fKey}"][data-value="${label}"]`);
+          if (pill) pill.click();
+        }
+      },
+      plugins: {
+        legend: { display: chartType === 'doughnut', position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } },
+        tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed.toFixed ? ctx.parsed.toFixed(0) : (ctx.parsed.y || ctx.parsed).toFixed(0)}T tokens/day` } }
+      },
+      scales: chartType === 'bar' ? {
+        x: { title: { display: true, text: 'T tokens/day' }, grid: darkGrid },
+        y: { grid: noGrid }
+      } : undefined,
+    }
+  });
+}
+
+function renderDemandMatrix() {
+  const t = document.getElementById('demand-matrix');
+  const m = DEMAND_MATRIX;
+  let html = '<thead><tr><th></th>';
+  m.columns.forEach((c, i) => {
+    html += `<th><div style="font-size:13px;font-weight:700;">${c}</div><div style="font-size:10px;opacity:0.7;margin-top:2px;">${m.colSubs[i]}</div></th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  m.rows.forEach(row => {
+    html += `<tr><td style="background:#1a2332;color:white;font-weight:700;font-size:13px;">${row.segment}</td>`;
+    row.cells.forEach(cell => {
+      const rgb = cell.color === '#10b981' ? '16,185,129' : cell.color === '#f59e0b' ? '249,159,11' : cell.color === '#ef4444' ? '239,68,68' : cell.color === '#3b82f6' ? '59,130,246' : '71,85,105';
+      html += `<td style="background:rgba(${rgb},0.06);">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+          <span class="matrix-cell-rev" style="color:${cell.color};">${cell.rev}</span>
+          <span class="matrix-cell-conv" style="background:rgba(${rgb},0.15);color:${cell.color};">${cell.conv} tokens</span>
+        </div>
+        <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">${cell.ex}</div>
+        <div style="font-size:10px;color:var(--text-dim);opacity:0.8;font-style:italic;">${cell.note}</div>
+      </td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+function renderEnterpriseTable() {
+  const t = document.getElementById('enterprise-table');
+  let html = '<thead><tr><th>Company</th><th>Claimed AI Revenue</th><th>Actual Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Red Flags</th></tr></thead><tbody>';
+  ENTERPRISE_REALITY.forEach(c => {
+    html += `<tr>
+      <td><strong>${c.name}</strong> <span style="color:var(--text-dim);font-size:11px;">${c.ticker}</span></td>
+      <td style="font-size:12px;">${c.claimed}</td>
+      <td style="font-size:12px;color:var(--orange);">${c.usage}</td>
+      <td style="font-size:12px;color:var(--green);font-weight:600;">${c.real}</td>
+      <td style="font-size:12px;"><span style="color:var(--red);">${c.growth || '—'}</span> <span style="color:var(--text-dim);font-size:10px;">← was ${c.prevGrowth || '—'}</span></td>
+      <td style="font-size:11px;color:var(--text-dim);">${c.flags}</td>
+    </tr>`;
+  });
+  html += '</tbody>';
+
+  // Add the key finding
+  html += `<tr><td colspan="6" style="padding:16px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;">
+    <strong style="color:var(--red);">Key Finding:</strong> <span style="color:var(--text-dim);font-size:12px;">Not a single major enterprise SaaS vendor has demonstrably accelerated its top-line growth rate due to AI. Revenue attribution is deliberately opaque — SKU upgrades are counted as "AI revenue," legacy ML is relabeled, and AI is bundled free into higher tiers. If AI were truly driving incremental demand, growth would be accelerating. Instead it's decelerating across the board.</span>
+  </td></tr>`;
+
+  t.innerHTML = html;
+}
+
+function updateConsumerTable() {
+  const t = document.getElementById('consumer-table');
+  const label = document.getElementById('consumer-filter-label');
+
+  let filtered = TOP_CONSUMERS;
+  if (filters.providers.length > 0) {
+    filtered = filtered.filter(c => filters.providers.some(p => c.prov.includes(p.split('/')[0]) || c.prov.includes(p.split(' ')[0])));
+    label.textContent = `— filtered by: ${filters.providers.join(', ')}`;
+  } else {
+    label.textContent = '';
+  }
+
+  let html = '<thead><tr><th>Company</th><th>HQ</th><th>Type</th><th>Est. Tokens/Day</th><th>Provider(s)</th><th>Evidence</th></tr></thead><tbody>';
+  filtered.forEach(c => {
+    html += `<tr>
+      <td><strong>${c.co}</strong></td>
+      <td>${c.hq}</td>
+      <td style="font-size:11px;">${c.type}</td>
+      <td style="font-weight:600;color:var(--accent);">${c.tokens}</td>
+      <td style="font-size:11px;">${c.prov}</td>
+      <td style="font-size:11px;color:var(--text-dim);">${c.ev}</td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+function renderModelTable() {
+  const t = document.getElementById('model-table');
+  let filtered = MODELS;
+  if (filters.providers.length > 0) {
+    filtered = filtered.filter(m => {
+      return filters.providers.some(p => p.startsWith(m.prov) || m.prov.startsWith(p.split('/')[0]) || m.prov === 'Meta' && p.includes('Meta'));
+    });
+  }
+
+  let html = '<thead><tr><th>Model</th><th>Provider</th><th>Est. Tokens/Day</th><th>Input $/1M</th><th>Output $/1M</th><th>Primary Use</th><th>Trend</th></tr></thead><tbody>';
+  filtered.forEach(m => {
+    const badge = m.prov === 'OpenAI' ? 'badge-openai' : m.prov === 'Anthropic' ? 'badge-anthropic' : m.prov === 'Google' ? 'badge-google' : m.prov === 'Meta' ? 'badge-meta' : 'badge-deepseek';
+    html += `<tr>
+      <td><strong>${m.model}</strong></td>
+      <td><span class="badge ${badge}">${m.prov}</span></td>
+      <td style="font-weight:600;">${m.tokens}</td>
+      <td>${m.inP}</td>
+      <td>${m.outP}</td>
+      <td style="font-size:11px;">${m.use}</td>
+      <td>${m.trend}</td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+// ============================================================
+// UPDATE ALL
+// ============================================================
+function updateAll() {
+  updateHeroStats();
+  updateProviderChart();
+  updateDemandChart();
+  updateBizConsumerChart();
+  updateDimensionChart('chart-region', 'region', REGIONS, 'regions', 'bar');
+  updateDimensionChart('chart-industry', 'industry', INDUSTRIES, 'industries', 'doughnut');
+  updateDimensionChart('chart-usecase', 'usecase', USE_CASES, 'useCases', 'doughnut');
+  updateConsumerTable();
+  renderModelTable();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildFilterBar();
+updateAll();
+renderDemandMatrix();
+renderEnterpriseTable();
+</script>
+</body>
+</html>

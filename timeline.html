@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Market Time Machine — Global AI Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; }
+
+  .slider-area { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:24px; text-align:center; }
+  .quarter-label { font-size:36px; font-weight:800; margin-bottom:4px; }
+  .quarter-sub { font-size:14px; color:var(--text-dim); margin-bottom:16px; }
+  input[type=range] { width:100%; max-width:800px; height:8px; -webkit-appearance:none; background:var(--card-border); border-radius:4px; outline:none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--accent); cursor:grab; border:3px solid white; }
+  .tick-labels { display:flex; justify-content:space-between; max-width:800px; margin:8px auto 0; font-size:10px; color:var(--text-dim); }
+  .play-btn { margin-top:12px; padding:8px 24px; background:var(--accent); color:white; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+  .play-btn:hover { background:#2563eb; }
+
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .chart-wrap { height:300px; position:relative; }
+
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:24px; font-weight:800; margin:4px 0; }
+
+  .event-card { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.15); border-radius:8px; padding:16px; margin-top:16px; }
+  .event-card h3 { font-size:14px; margin-bottom:8px; color:var(--accent); }
+  .event-card p { font-size:12px; color:var(--text-dim); line-height:1.6; }
+
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .grid-2 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="counter.html">Live Counter</a>
+  <a href="sankey.html">Follow the $</a>
+  <a href="calculator.html">Shelfware Calculator</a>
+  <a href="timeline.html" class="active">Time Machine</a>
+  <a href="feed.html">Weekly Feed</a>
+  <a href="openrouter.html">Live Pricing</a>
+</nav>
+
+<div class="container">
+  <h1>AI Market Time Machine</h1>
+  <div class="sub">Drag the slider to watch the AI market evolve quarter by quarter. Hit Play for the full animation.</div>
+
+  <div class="slider-area">
+    <div class="quarter-label" id="q-label">Q1 2024</div>
+    <div class="quarter-sub" id="q-sub"></div>
+    <input type="range" id="slider" min="0" max="8" value="0" step="1">
+    <div class="tick-labels" id="tick-labels"></div>
+    <button class="play-btn" id="play-btn" onclick="playAnimation()">▶ Play Animation</button>
+  </div>
+
+  <div class="hero-grid">
+    <div class="hero-stat"><div class="label">Total Tokens/Day</div><div class="value" style="color:var(--accent);" id="h-tokens"></div></div>
+    <div class="hero-stat"><div class="label">Total Revenue</div><div class="value" style="color:var(--green);" id="h-rev"></div></div>
+    <div class="hero-stat"><div class="label">Top Provider</div><div class="value" style="color:var(--orange);" id="h-top"></div></div>
+    <div class="hero-stat"><div class="label">Frontier Price</div><div class="value" style="color:var(--red);" id="h-price"></div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Provider Revenue ($B annualized)</h2>
+      <div class="chart-wrap"><canvas id="chart-rev"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Token Volume (T/day)</h2>
+      <div class="chart-wrap"><canvas id="chart-tokens"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Frontier Output Price ($/1M tokens)</h2>
+    <div class="chart-wrap"><canvas id="chart-price"></canvas></div>
+  </div>
+
+  <div class="event-card" id="event-card"></div>
+</div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+
+const QUARTERS = [
+  { q:'Q1 2024', date:'Jan-Mar 2024' },
+  { q:'Q2 2024', date:'Apr-Jun 2024' },
+  { q:'Q3 2024', date:'Jul-Sep 2024' },
+  { q:'Q4 2024', date:'Oct-Dec 2024' },
+  { q:'Q1 2025', date:'Jan-Mar 2025' },
+  { q:'Q2 2025', date:'Apr-Jun 2025' },
+  { q:'Q3 2025', date:'Jul-Sep 2025' },
+  { q:'Q4 2025', date:'Oct-Dec 2025' },
+  { q:'Q1 2026', date:'Jan-Mar 2026' },
+];
+
+// Provider data per quarter [OpenAI, Anthropic, Google, DeepSeek, Mistral, xAI, Others]
+const PROV_NAMES = ['OpenAI','Anthropic','Google','DeepSeek','Mistral','xAI','Others'];
+const PROV_COLORS = ['#10a37f','#d97706','#4285f4','#a78bfa','#f97316','#e2e8f0','#475569'];
+
+const REV_DATA = [
+  [3.4, 0.2, 0.5, 0, 0.05, 0, 0.3],    // Q1'24
+  [4.5, 0.5, 0.8, 0, 0.1, 0, 0.4],      // Q2'24
+  [5.5, 1.0, 1.2, 0, 0.15, 0.1, 0.5],   // Q3'24
+  [7.0, 2.0, 1.8, 0.05, 0.2, 0.2, 0.6], // Q4'24
+  [9.0, 4.0, 2.2, 0.1, 0.3, 0.3, 0.8],  // Q1'25
+  [11.0, 6.5, 2.8, 0.15, 0.35, 0.4, 1.0],// Q2'25
+  [13.0, 9.0, 3.2, 0.2, 0.38, 0.45, 1.4],// Q3'25
+  [15.0, 11.5, 3.8, 0.25, 0.4, 0.48, 1.7],// Q4'25
+  [16.8, 14.0, 4.2, 0.3, 0.4, 0.5, 2.0], // Q1'26
+];
+
+const TOKEN_DATA = [
+  [40, 5, 15, 0, 1, 0, 5],      // Q1'24 ~66T
+  [60, 12, 25, 0, 2, 1, 8],     // Q2'24 ~108T
+  [90, 25, 40, 2, 4, 2, 10],    // Q3'24 ~173T
+  [130, 45, 60, 8, 6, 4, 14],   // Q4'24 ~267T
+  [170, 70, 75, 15, 8, 6, 16],  // Q1'25 ~360T
+  [200, 95, 90, 20, 10, 8, 18], // Q2'25 ~441T
+  [225, 115, 100, 24, 12, 9, 20],// Q3'25 ~505T
+  [250, 135, 110, 27, 14, 11, 22],// Q4'25 ~569T
+  [270, 150, 120, 30, 15, 12, 23],// Q1'26 ~620T → ~680T
+];
+
+// Frontier output price per 1M tokens
+const PRICE_DATA = [
+  { openai: 30, anthropic: 75, google: 21 },   // Q1'24 (GPT-4, Claude 3 Opus, Gemini Pro)
+  { openai: 15, anthropic: 15, google: 5 },     // Q2'24 (GPT-4o, Sonnet 3.5, Gemini 1.5)
+  { openai: 0.6, anthropic: 15, google: 0.4 },  // Q3'24 (4o-mini, still Sonnet, Flash)
+  { openai: 10, anthropic: 4, google: 0.4 },    // Q4'24 (o1, Haiku 3.5)
+  { openai: 10, anthropic: 15, google: 10 },     // Q1'25 (o1, Sonnet 3.7, Gemini 2 Pro)
+  { openai: 1.6, anthropic: 15, google: 0.4 },   // Q2'25 (4.1-mini, Sonnet 3.7, Flash 2)
+  { openai: 10, anthropic: 15, google: 10 },      // Q3'25 (o3, Sonnet 4, Gemini 2.5)
+  { openai: 10, anthropic: 15, google: 10 },      // Q4'25
+  { openai: 20, anthropic: 75, google: 10 },      // Q1'26 (GPT-5, Opus 4, Gemini 2.5)
+];
+
+const EVENTS = [
+  { title:'The GPT-4 Era', text:'OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). API market nascent. Frontier model costs $30-75/M output tokens.' },
+  { title:'GPT-4o + Claude 3.5 Sonnet Launch', text:'Two game-changing launches in one quarter. GPT-4o halves OpenAI\'s prices. Claude 3.5 Sonnet disrupts coding market. Anthropic triples to $500M.' },
+  { title:'The Mini Revolution', text:'GPT-4o mini launches at $0.60/M output — 99.5% cheaper than GPT-4 a year earlier. Token volumes explode. Developers flood in.' },
+  { title:'Anthropic Breaks Out', text:'Anthropic hits $2B ARR. AWS Bedrock sees 4.7x growth. Enterprise deals accelerate. DeepSeek appears on the radar.' },
+  { title:'DeepSeek Shock + Anthropic 4x', text:'DeepSeek R1 launches in January — disrupts pricing globally. Anthropic quadruples to $4B. The Coding Wars begin. Enterprise SaaS vendors scramble to add "AI."' },
+  { title:'The Enterprise AI Mirage', text:'M365 Copilot hits 15M seats but 35.8% usage. Salesforce launches Agentforce. ServiceNow scales Now Assist. AI revenue booked ≠ AI actually used.' },
+  { title:'Anthropic Takes Enterprise', text:'Anthropic captures 40% of enterprise LLM spend, up from 12%. Coding tools (Cursor, Windsurf) drive massive Claude consumption.' },
+  { title:'The AI Native Explosion', text:'Cursor hits $1B ARR. Harvey at $190M. Cognition/Windsurf at $155M. AI natives are the fastest-growing software category in history.' },
+  { title:'Today: Two Markets Diverge', text:'The market has split: AI natives converting 80-100% of revenue to tokens vs. traditional SaaS at 10-20%. Anthropic approaches OpenAI in revenue. The "shelfware gap" is the defining metric.' },
+];
+
+// Build tick labels
+const tickContainer = document.getElementById('tick-labels');
+QUARTERS.forEach(q => { tickContainer.innerHTML += `<span>${q.q}</span>`; });
+
+// Charts
+let chartRev, chartTokens, chartPrice;
+const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+
+function initCharts() {
+  chartRev = new Chart(document.getElementById('chart-rev'), {
+    type: 'bar',
+    data: { labels: PROV_NAMES, datasets: [{ data: REV_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y.toFixed(1)}B` } } }, scales: { y: { max: 18, grid: darkGrid, title: { display: true, text: '$B' } }, x: { grid: { display: false } } } }
+  });
+
+  chartTokens = new Chart(document.getElementById('chart-tokens'), {
+    type: 'bar',
+    data: { labels: PROV_NAMES, datasets: [{ data: TOKEN_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.parsed.y}T/day` } } }, scales: { y: { max: 300, grid: darkGrid, title: { display: true, text: 'T/day' } }, x: { grid: { display: false } } } }
+  });
+
+  chartPrice = new Chart(document.getElementById('chart-price'), {
+    type: 'line',
+    data: {
+      labels: QUARTERS.map(q => q.q),
+      datasets: [
+        { label: 'OpenAI', data: PRICE_DATA.map(p => p.openai), borderColor: '#10a37f', backgroundColor: '#10a37f33', fill: false, tension: 0.3, pointRadius: 4 },
+        { label: 'Anthropic', data: PRICE_DATA.map(p => p.anthropic), borderColor: '#d97706', backgroundColor: '#d9770633', fill: false, tension: 0.3, pointRadius: 4 },
+        { label: 'Google', data: PRICE_DATA.map(p => p.google), borderColor: '#4285f4', backgroundColor: '#4285f433', fill: false, tension: 0.3, pointRadius: 4 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y}/M tokens` } } },
+      scales: { y: { type: 'logarithmic', grid: darkGrid, title: { display: true, text: '$/1M output tokens (log)' } }, x: { grid: { display: false } } }
+    }
+  });
+}
+
+function updateToQuarter(idx) {
+  const q = QUARTERS[idx];
+  document.getElementById('q-label').textContent = q.q;
+  document.getElementById('q-sub').textContent = q.date;
+
+  const revs = REV_DATA[idx];
+  const toks = TOKEN_DATA[idx];
+  const totalRev = revs.reduce((a, b) => a + b, 0);
+  const totalTok = toks.reduce((a, b) => a + b, 0);
+  const topIdx = revs.indexOf(Math.max(...revs));
+
+  document.getElementById('h-tokens').textContent = `~${totalTok}T`;
+  document.getElementById('h-rev').textContent = `$${totalRev.toFixed(1)}B`;
+  document.getElementById('h-top').textContent = PROV_NAMES[topIdx];
+  const price = PRICE_DATA[idx];
+  document.getElementById('h-price').textContent = `$${Math.min(price.openai, price.anthropic, price.google)}/M`;
+
+  chartRev.data.datasets[0].data = revs;
+  chartRev.update('active');
+  chartTokens.data.datasets[0].data = toks;
+  chartTokens.update('active');
+
+  // Highlight current quarter on price chart
+  chartPrice.options.plugins.annotation = undefined; // simplified — just update
+
+  const ev = EVENTS[idx];
+  document.getElementById('event-card').innerHTML = `<h3>${ev.title}</h3><p>${ev.text}</p>`;
+}
+
+// Slider
+document.getElementById('slider').addEventListener('input', function() {
+  updateToQuarter(parseInt(this.value));
+});
+
+// Play animation
+let playing = false;
+function playAnimation() {
+  if (playing) return;
+  playing = true;
+  const btn = document.getElementById('play-btn');
+  const slider = document.getElementById('slider');
+  btn.textContent = '⏸ Playing...';
+  slider.value = 0;
+  updateToQuarter(0);
+
+  let i = 0;
+  const interval = setInterval(() => {
+    i++;
+    if (i >= QUARTERS.length) {
+      clearInterval(interval);
+      playing = false;
+      btn.textContent = '▶ Play Again';
+      return;
+    }
+    slider.value = i;
+    updateToQuarter(i);
+  }, 1500);
+}
+
+// Init
+initCharts();
+updateToQuarter(0);
+</script>
+</body>
+</html>

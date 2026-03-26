@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Follow the Dollar — Global AI Intelligence</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:32px; }
+  .sankey-container { position:relative; width:100%; overflow-x:auto; }
+  canvas { display:block; }
+  .insight-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:32px; }
+  .insight { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; }
+  .insight h3 { font-size:14px; margin-bottom:8px; }
+  .insight p { font-size:12px; color:var(--text-dim); line-height:1.6; }
+  .insight .stat { font-size:28px; font-weight:800; margin:8px 0; }
+  .legend { display:flex; flex-wrap:wrap; gap:16px; margin-top:24px; font-size:12px; }
+  .legend-item { display:flex; align-items:center; gap:6px; }
+  .legend-dot { width:12px; height:12px; border-radius:3px; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="counter.html">Live Counter</a>
+  <a href="sankey.html" class="active">Follow the $</a>
+  <a href="calculator.html">Shelfware Calculator</a>
+  <a href="timeline.html">Time Machine</a>
+  <a href="feed.html">Weekly Feed</a>
+  <a href="openrouter.html">Live Pricing</a>
+</nav>
+
+<div class="container">
+  <h1>Follow the Dollar</h1>
+  <div class="sub">Where $1 of "AI revenue" actually goes — from buyer to tokens. Hover over any flow to see the details.</div>
+
+  <div class="sankey-container">
+    <canvas id="sankey" height="600"></canvas>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="insight-cards">
+    <div class="insight">
+      <h3 style="color:var(--red);">The Shelfware Leak</h3>
+      <div class="stat" style="color:var(--red);">~$10-12B</div>
+      <p>Of the ~$38B total AI revenue, roughly $10-12B is "booked AI revenue" that generates minimal actual token consumption. M365 Copilot, Agentforce, and NOW Assist account for the bulk. This money pays for licenses, not intelligence.</p>
+    </div>
+    <div class="insight">
+      <h3 style="color:var(--green);">The Pure Signal</h3>
+      <div class="stat" style="color:var(--green);">~$8-10B</div>
+      <p>AI Natives (Cursor, Perplexity, Harvey, etc.) and direct API consumers convert nearly 100% of revenue into tokens. Every dollar = actual AI work being done. This is the real demand signal.</p>
+    </div>
+    <div class="insight">
+      <h3 style="color:var(--orange);">The Consumer Question</h3>
+      <div class="stat" style="color:var(--orange);">~$14B</div>
+      <p>Consumer subscriptions (ChatGPT Plus, Claude Pro) are real revenue but discretionary. ~50% converts to tokens (rest is margin, free-tier subsidy). High churn risk — will users keep paying $20/mo as free alternatives improve?</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Custom Sankey-style visualization drawn on canvas
+const canvas = document.getElementById('sankey');
+const ctx = canvas.getContext('2d');
+
+// Responsive sizing
+const W = Math.min(1200, window.innerWidth - 48);
+const H = 600;
+canvas.width = W * 2; canvas.height = H * 2;
+canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+ctx.scale(2, 2);
+
+// Column positions
+const COL = [40, W * 0.22, W * 0.48, W * 0.74, W - 80];
+
+// Data: Buyers → Channels → Providers → Outcome
+const BUYERS = [
+  { label: 'Consumer', value: 15, color: '#f59e0b', y: 0 },
+  { label: 'SME', value: 8, color: '#8b5cf6', y: 0 },
+  { label: 'Enterprise', value: 15, color: '#3b82f6', y: 0 },
+];
+
+const CHANNELS = [
+  { label: 'Model Subs', value: 13, color: '#f59e0b', y: 0 },
+  { label: 'Model API', value: 6, color: '#3b82f6', y: 0 },
+  { label: 'AI Native Subs', value: 6, color: '#10b981', y: 0 },
+  { label: 'Trad. SaaS', value: 13, color: '#ef4444', y: 0 },
+];
+
+const PROVIDERS = [
+  { label: 'OpenAI', value: 16.8, color: '#10a37f', y: 0 },
+  { label: 'Anthropic', value: 14.0, color: '#d97706', y: 0 },
+  { label: 'Google', value: 4.2, color: '#4285f4', y: 0 },
+  { label: 'Others', value: 3.2, color: '#475569', y: 0 },
+];
+
+const OUTCOMES = [
+  { label: 'Real Tokens', value: 24, color: '#10b981', y: 0 },
+  { label: 'Shelfware', value: 10, color: '#ef4444', y: 0 },
+  { label: 'Margin/Ops', value: 4, color: '#475569', y: 0 },
+];
+
+// Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
+const FLOWS = [
+  // Buyers → Channels
+  [0, 0, 1, 0, 11, '#f59e0b33'],   // Consumer → Model Subs
+  [0, 0, 1, 2, 2.5, '#f59e0b33'],  // Consumer → AI Native
+  [0, 0, 1, 3, 1.5, '#f59e0b33'],  // Consumer → Trad SaaS
+  [0, 1, 1, 0, 1.5, '#8b5cf633'],  // SME → Model Subs
+  [0, 1, 1, 1, 2.5, '#8b5cf633'],  // SME → API
+  [0, 1, 1, 2, 2.5, '#8b5cf633'],  // SME → AI Native
+  [0, 1, 1, 3, 1.5, '#8b5cf633'],  // SME → Trad SaaS
+  [0, 2, 1, 0, 1.5, '#3b82f633'],  // Enterprise → Model Subs
+  [0, 2, 1, 1, 4, '#3b82f633'],    // Enterprise → API
+  [0, 2, 1, 2, 1.5, '#3b82f633'],  // Enterprise → AI Native
+  [0, 2, 1, 3, 10, '#3b82f633'],   // Enterprise → Trad SaaS
+
+  // Channels → Providers
+  [1, 0, 2, 0, 7, '#f59e0b22'],    // Model Subs → OpenAI
+  [1, 0, 2, 1, 4, '#f59e0b22'],    // Model Subs → Anthropic
+  [1, 0, 2, 2, 1.5, '#f59e0b22'],  // Model Subs → Google
+  [1, 0, 2, 3, 0.5, '#f59e0b22'],  // Model Subs → Others
+  [1, 1, 2, 0, 2, '#3b82f622'],    // API → OpenAI
+  [1, 1, 2, 1, 2.5, '#3b82f622'],  // API → Anthropic
+  [1, 1, 2, 2, 1, '#3b82f622'],    // API → Google
+  [1, 1, 2, 3, 0.5, '#3b82f622'],  // API → Others
+  [1, 2, 2, 0, 2, '#10b98122'],    // AI Native → OpenAI
+  [1, 2, 2, 1, 2.5, '#10b98122'],  // AI Native → Anthropic
+  [1, 2, 2, 2, 0.7, '#10b98122'],  // AI Native → Google
+  [1, 2, 2, 3, 0.8, '#10b98122'],  // AI Native → Others
+  [1, 3, 2, 0, 5.8, '#ef444422'],  // Trad SaaS → OpenAI
+  [1, 3, 2, 1, 5, '#ef444422'],    // Trad SaaS → Anthropic
+  [1, 3, 2, 2, 1, '#ef444422'],    // Trad SaaS → Google
+  [1, 3, 2, 3, 1.4, '#ef444422'],  // Trad SaaS → Others
+
+  // Providers → Outcomes
+  [2, 0, 3, 0, 10, '#10a37f33'],   // OpenAI → Real Tokens
+  [2, 0, 3, 1, 4.8, '#10a37f22'],  // OpenAI → Shelfware
+  [2, 0, 3, 2, 2, '#10a37f11'],    // OpenAI → Margin
+  [2, 1, 3, 0, 10, '#d9770633'],   // Anthropic → Real Tokens
+  [2, 1, 3, 1, 3, '#d9770622'],    // Anthropic → Shelfware
+  [2, 1, 3, 2, 1, '#d9770611'],    // Anthropic → Margin
+  [2, 2, 3, 0, 2.5, '#4285f433'],  // Google → Real Tokens
+  [2, 2, 3, 1, 1.2, '#4285f422'],  // Google → Shelfware
+  [2, 2, 3, 2, 0.5, '#4285f411'],  // Google → Margin
+  [2, 3, 3, 0, 1.5, '#47556933'],  // Others → Real Tokens
+  [2, 3, 3, 1, 1, '#47556922'],    // Others → Shelfware
+  [2, 3, 3, 2, 0.5, '#47556911'],  // Others → Margin
+];
+
+const COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
+const COL_LABELS = ['Buyer', 'Channel', 'Provider', 'Outcome'];
+
+// Layout: position nodes vertically
+function layoutColumn(col, x) {
+  const totalValue = col.reduce((a, n) => a + n.value, 0);
+  const availH = H - 80;
+  const gap = 12;
+  const totalGap = (col.length - 1) * gap;
+  const scale = (availH - totalGap) / totalValue;
+  let y = 40;
+  col.forEach(node => {
+    node.y = y;
+    node.h = node.value * scale;
+    node.x = x;
+    y += node.h + gap;
+  });
+}
+
+COL.forEach((x, i) => { if (i < COLUMNS.length) layoutColumn(COLUMNS[i], x); });
+
+// Track output ports for flow positioning
+function resetPorts() {
+  COLUMNS.forEach(col => col.forEach(n => { n.outY = n.y; n.inY = n.y; }));
+}
+
+// Draw
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  resetPorts();
+
+  // Draw flows
+  FLOWS.forEach(f => {
+    const [fromCol, fromIdx, toCol, toIdx, value, color] = f;
+    const from = COLUMNS[fromCol][fromIdx];
+    const to = COLUMNS[toCol][toIdx];
+    const fromScale = from.h / from.value;
+    const toScale = to.h / to.value;
+    const fh = value * fromScale;
+    const th = value * toScale;
+
+    const x1 = from.x + 80;
+    const y1 = from.outY;
+    const x2 = to.x;
+    const y2 = to.inY;
+    const cp = (x2 - x1) * 0.5;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.bezierCurveTo(x1 + cp, y1, x2 - cp, y2, x2, y2);
+    ctx.lineTo(x2, y2 + th);
+    ctx.bezierCurveTo(x2 - cp, y2 + th, x1 + cp, y1 + fh, x1, y1 + fh);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    from.outY += fh;
+    to.inY += th;
+  });
+
+  // Draw nodes
+  COLUMNS.forEach((col, ci) => {
+    col.forEach(node => {
+      // Rounded rect (manual for browser compat)
+      const r = 4;
+      const w = 80;
+      const nx = node.x, ny = node.y, nh = node.h;
+      ctx.beginPath();
+      ctx.moveTo(nx + r, ny);
+      ctx.lineTo(nx + w - r, ny);
+      ctx.quadraticCurveTo(nx + w, ny, nx + w, ny + r);
+      ctx.lineTo(nx + w, ny + nh - r);
+      ctx.quadraticCurveTo(nx + w, ny + nh, nx + w - r, ny + nh);
+      ctx.lineTo(nx + r, ny + nh);
+      ctx.quadraticCurveTo(nx, ny + nh, nx, ny + nh - r);
+      ctx.lineTo(nx, ny + r);
+      ctx.quadraticCurveTo(nx, ny, nx + r, ny);
+      ctx.closePath();
+      ctx.fillStyle = node.color;
+      ctx.fill();
+
+      // Label
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 11px -apple-system,sans-serif';
+      ctx.textAlign = ci < 2 ? 'left' : 'right';
+      const tx = ci < 2 ? node.x + 6 : node.x + w - 6;
+      const ty = node.y + node.h / 2;
+
+      if (node.h > 20) {
+        ctx.fillText(node.label, tx, ty - 2);
+        ctx.font = '10px -apple-system,sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.fillText('$' + node.value + 'B', tx, ty + 12);
+      }
+    });
+  });
+
+  // Column headers
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 12px -apple-system,sans-serif';
+  ctx.textAlign = 'center';
+  COL_LABELS.forEach((label, i) => {
+    if (i < COL.length) ctx.fillText(label, COL[i] + 40, 28);
+  });
+}
+
+// State
+let hoverNode = null;    // { colIdx, nodeIdx }
+let hoverFlow = null;    // index into FLOWS
+let activeNode = null;   // clicked/locked node
+
+function draw(highlight) {
+  ctx.clearRect(0, 0, W, H);
+  resetPorts();
+
+  // Determine which flows to highlight
+  let highlightFlows = new Set();
+  if (highlight) {
+    FLOWS.forEach((f, i) => {
+      const [fc, fi, tc, ti] = f;
+      if (highlight.colIdx === fc && highlight.nodeIdx === fi) highlightFlows.add(i);
+      if (highlight.colIdx === tc && highlight.nodeIdx === ti) highlightFlows.add(i);
+    });
+  }
+  if (hoverFlow !== null) highlightFlows.add(hoverFlow);
+
+  // Store flow geometry for hit testing
+  flowPaths = [];
+
+  // Draw flows
+  FLOWS.forEach((f, fi) => {
+    const [fromCol, fromIdx, toCol, toIdx, value, baseColor] = f;
+    const from = COLUMNS[fromCol][fromIdx];
+    const to = COLUMNS[toCol][toIdx];
+    const fromScale = from.h / from.value;
+    const toScale = to.h / to.value;
+    const fh = value * fromScale;
+    const th = value * toScale;
+
+    const x1 = from.x + 80;
+    const y1 = from.outY;
+    const x2 = to.x;
+    const y2 = to.inY;
+
+    // Store for hit testing
+    flowPaths.push({ x1, y1, fh, x2, y2, th, fromCol, fromIdx, toCol, toIdx, value, fi });
+
+    const isHighlighted = highlightFlows.has(fi);
+    const isDimmed = highlight && !isHighlighted && highlightFlows.size > 0;
+
+    let color = baseColor;
+    if (isHighlighted) {
+      // Make brighter
+      color = from.color + '88';
+    } else if (isDimmed) {
+      color = baseColor.slice(0, 7) + '08';
+    }
+
+    const cp = (x2 - x1) * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.bezierCurveTo(x1 + cp, y1, x2 - cp, y2, x2, y2);
+    ctx.lineTo(x2, y2 + th);
+    ctx.bezierCurveTo(x2 - cp, y2 + th, x1 + cp, y1 + fh, x1, y1 + fh);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    // Draw value label on highlighted flows
+    if (isHighlighted && value >= 1) {
+      const mx = (x1 + x2) / 2;
+      const my = (y1 + y2 + fh/2 + th/2) / 2;
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 10px -apple-system,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('$' + value + 'B', mx, my + 4);
+    }
+
+    from.outY += fh;
+    to.inY += th;
+  });
+
+  // Draw nodes
+  COLUMNS.forEach((col, ci) => {
+    col.forEach((node, ni) => {
+      const isActive = highlight && highlight.colIdx === ci && highlight.nodeIdx === ni;
+      const isDimmed = highlight && !isActive && highlightFlows.size > 0 &&
+        !Array.from(highlightFlows).some(fi => {
+          const f = FLOWS[fi];
+          return (f[0] === ci && f[1] === ni) || (f[2] === ci && f[3] === ni);
+        });
+
+      const r = 4, w = 80;
+      const nx = node.x, ny = node.y, nh = node.h;
+      ctx.beginPath();
+      ctx.moveTo(nx + r, ny);
+      ctx.lineTo(nx + w - r, ny);
+      ctx.quadraticCurveTo(nx + w, ny, nx + w, ny + r);
+      ctx.lineTo(nx + w, ny + nh - r);
+      ctx.quadraticCurveTo(nx + w, ny + nh, nx + w - r, ny + nh);
+      ctx.lineTo(nx + r, ny + nh);
+      ctx.quadraticCurveTo(nx, ny + nh, nx, ny + nh - r);
+      ctx.lineTo(nx, ny + r);
+      ctx.quadraticCurveTo(nx, ny, nx + r, ny);
+      ctx.closePath();
+
+      ctx.fillStyle = isDimmed ? node.color + '33' : node.color;
+      ctx.fill();
+
+      if (isActive) {
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // Label
+      const textAlpha = isDimmed ? '55' : '';
+      ctx.fillStyle = '#fff' + textAlpha;
+      ctx.font = 'bold 11px -apple-system,sans-serif';
+      ctx.textAlign = ci < 2 ? 'left' : 'right';
+      const tx = ci < 2 ? node.x + 6 : node.x + w - 6;
+      const ty = node.y + node.h / 2;
+
+      if (node.h > 20) {
+        ctx.fillText(node.label, tx, ty - 2);
+        ctx.font = '10px -apple-system,sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,' + (isDimmed ? '0.2' : '0.7') + ')';
+        ctx.fillText('$' + node.value + 'B', tx, ty + 12);
+      }
+    });
+  });
+
+  // Column headers
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 12px -apple-system,sans-serif';
+  ctx.textAlign = 'center';
+  COL_LABELS.forEach((label, i) => {
+    if (i < COL.length) ctx.fillText(label, COL[i] + 40, 28);
+  });
+}
+
+let flowPaths = [];
+
+draw(null);
+
+// Tooltip
+const tooltip = document.createElement('div');
+tooltip.style.cssText = 'position:fixed;background:#1e293b;border:1px solid #334155;border-radius:8px;padding:12px 16px;font-size:12px;color:#e2e8f0;pointer-events:none;display:none;z-index:999;max-width:300px;line-height:1.6;';
+document.body.appendChild(tooltip);
+
+// Flow descriptions for rich tooltips
+const FLOW_LABELS = {
+  '0-0-1-0': 'Consumers buying ChatGPT Plus, Claude Pro, Gemini Advanced',
+  '0-0-1-2': 'Consumers using Perplexity, Canva AI, Monica AI, Wrtn',
+  '0-0-1-3': 'Consumers with bundled AI in Canva, Grammarly, Notion',
+  '0-1-1-0': 'SME teams buying ChatGPT Team, Claude Team',
+  '0-1-1-1': 'Startups and dev agencies calling APIs directly',
+  '0-1-1-2': 'SMEs using Cursor, Replit, Jasper, Intercom Fin',
+  '0-1-1-3': 'SMEs with HubSpot Breeze, Zoho Zia, Freshworks Freddy',
+  '0-2-1-0': 'Enterprises buying ChatGPT Enterprise, Claude Enterprise',
+  '0-2-1-1': 'Enterprises calling APIs directly (Morgan Stanley, Klarna, etc.)',
+  '0-2-1-2': 'Enterprise Cursor, Harvey, Cognition/Devin deals',
+  '0-2-1-3': 'M365 Copilot, Salesforce Agentforce, ServiceNow Now Assist, SAP Joule — HIGH SHELFWARE',
+  '2-0-3-0': 'OpenAI tokens actually consumed by end users',
+  '2-0-3-1': 'OpenAI revenue from shelfware (M365 Copilot, bundled deals)',
+  '2-1-3-0': 'Anthropic tokens actually consumed (coding, enterprise agents)',
+  '2-1-3-1': 'Anthropic revenue from low-usage enterprise deals',
+  '2-0-3-2': 'OpenAI margin, R&D, and operating costs',
+  '2-1-3-2': 'Anthropic margin, R&D, and operating costs',
+};
+
+function hitTestNode(mx, my) {
+  for (let ci = 0; ci < COLUMNS.length; ci++) {
+    for (let ni = 0; ni < COLUMNS[ci].length; ni++) {
+      const node = COLUMNS[ci][ni];
+      if (mx >= node.x && mx <= node.x + 80 && my >= node.y && my <= node.y + node.h) {
+        return { colIdx: ci, nodeIdx: ni, node };
+      }
+    }
+  }
+  return null;
+}
+
+function hitTestFlow(mx, my) {
+  // Simple: check if point is between flow start and end Y ranges at the X midpoint
+  for (const fp of flowPaths) {
+    const midX = (fp.x1 + fp.x2) / 2;
+    if (mx > fp.x1 && mx < fp.x2) {
+      const t = (mx - fp.x1) / (fp.x2 - fp.x1);
+      const topY = fp.y1 * (1 - t) + fp.y2 * t;
+      const botY = (fp.y1 + fp.fh) * (1 - t) + (fp.y2 + fp.th) * t;
+      if (my >= topY && my <= botY) return fp;
+    }
+  }
+  return null;
+}
+
+canvas.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  const hitNode = hitTestNode(mx, my);
+  const hitFlow = !hitNode ? hitTestFlow(mx, my) : null;
+
+  const highlight = activeNode || (hitNode ? { colIdx: hitNode.colIdx, nodeIdx: hitNode.nodeIdx } : null);
+
+  if (hitNode || hitFlow || activeNode) {
+    hoverFlow = hitFlow ? hitFlow.fi : null;
+    draw(highlight);
+    canvas.style.cursor = 'pointer';
+
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 16) + 'px';
+    tooltip.style.top = (e.clientY - 10) + 'px';
+
+    if (hitNode) {
+      const n = hitNode.node;
+      // Count connected flows
+      let inflows = 0, outflows = 0;
+      FLOWS.forEach(f => {
+        if (f[2] === hitNode.colIdx && f[3] === hitNode.nodeIdx) inflows += f[4];
+        if (f[0] === hitNode.colIdx && f[1] === hitNode.nodeIdx) outflows += f[4];
+      });
+      tooltip.innerHTML = `<strong style="font-size:14px;">${n.label}</strong><br>
+        <span style="font-size:16px;font-weight:800;color:${n.color};">$${n.value}B</span><br>
+        ${inflows > 0 ? `<span style="color:#94a3b8;">Inflows: $${inflows.toFixed(1)}B</span><br>` : ''}
+        ${outflows > 0 ? `<span style="color:#94a3b8;">Outflows: $${outflows.toFixed(1)}B</span><br>` : ''}
+        <span style="font-size:10px;color:#64748b;">Click to lock/unlock highlight</span>`;
+    } else if (hitFlow) {
+      const f = FLOWS[hitFlow.fi];
+      const from = COLUMNS[f[0]][f[1]];
+      const to = COLUMNS[f[2]][f[3]];
+      const key = `${f[0]}-${f[1]}-${f[2]}-${f[3]}`;
+      const desc = FLOW_LABELS[key] || '';
+      tooltip.innerHTML = `<strong>${from.label} → ${to.label}</strong><br>
+        <span style="font-size:16px;font-weight:800;">$${f[4]}B</span><br>
+        ${desc ? `<span style="color:#94a3b8;font-size:11px;">${desc}</span>` : ''}`;
+    }
+  } else {
+    hoverFlow = null;
+    if (!activeNode) draw(null);
+    canvas.style.cursor = 'default';
+    tooltip.style.display = 'none';
+  }
+});
+
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const hitNode = hitTestNode(mx, my);
+
+  if (hitNode) {
+    if (activeNode && activeNode.colIdx === hitNode.colIdx && activeNode.nodeIdx === hitNode.nodeIdx) {
+      activeNode = null; // toggle off
+      draw(null);
+    } else {
+      activeNode = { colIdx: hitNode.colIdx, nodeIdx: hitNode.nodeIdx };
+      draw(activeNode);
+    }
+  } else {
+    activeNode = null;
+    draw(null);
+  }
+});
+
+canvas.addEventListener('mouseleave', () => {
+  hoverFlow = null;
+  if (!activeNode) draw(null);
+  tooltip.style.display = 'none';
+});
+
+// Legend
+const legendEl = document.getElementById('legend');
+[
+  { color: '#10b981', label: 'Real Token Consumption — revenue that drives actual AI inference' },
+  { color: '#ef4444', label: 'Shelfware — booked AI revenue with minimal actual usage' },
+  { color: '#475569', label: 'Margin / Operations — provider costs, R&D, overhead' },
+].forEach(l => {
+  legendEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.label}</div>`;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live AI Model Pricing — OpenRouter Data — Global AI Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1400px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; }
+  .live-badge { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:16px; font-size:11px; color:var(--green); font-weight:600; margin-bottom:16px; }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+  .stats-bar { display:flex; gap:24px; margin-bottom:24px; flex-wrap:wrap; }
+  .stat-item { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px 24px; text-align:center; flex:1; min-width:140px; }
+  .stat-item .val { font-size:24px; font-weight:800; }
+  .stat-item .lbl { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; }
+
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; }
+
+  .filters { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .filter-pill { padding:4px 12px; border-radius:16px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; }
+  .filter-pill.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .search-input { padding:8px 14px; background:#1e293b; border:1px solid #334155; border-radius:8px; color:var(--text); font-size:13px; outline:none; width:250px; }
+  .search-input:focus { border-color:var(--accent); }
+
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; padding:10px 12px; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); border-bottom:1px solid var(--card-border); cursor:pointer; user-select:none; }
+  th:hover { color:var(--text); }
+  td { padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+  tr:hover { background:rgba(255,255,255,0.02); }
+  .price { font-variant-numeric:tabular-nums; }
+  .price-cheap { color:var(--green); }
+  .price-mid { color:var(--orange); }
+  .price-expensive { color:var(--red); }
+  .provider-tag { padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .chart-wrap { height:350px; position:relative; }
+
+  .loading { text-align:center; padding:60px; color:var(--text-dim); }
+  .loading .spinner { display:inline-block; width:24px; height:24px; border:3px solid var(--card-border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .error { color:var(--red); text-align:center; padding:40px; }
+
+  .context-note { font-size:11px; color:var(--text-dim); margin-top:8px; padding:10px; background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.1); border-radius:6px; }
+
+  @media(max-width:768px) { .grid-2 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="counter.html">Live Counter</a>
+  <a href="sankey.html">Follow the $</a>
+  <a href="calculator.html">Shelfware Calculator</a>
+  <a href="timeline.html">Time Machine</a>
+  <a href="feed.html">Weekly Feed</a>
+  <a href="openrouter.html" class="active">Live Pricing</a>
+</nav>
+
+<div class="container">
+  <h1>Live AI Model Pricing</h1>
+  <div class="sub">Real-time pricing data from OpenRouter's public API — 500+ models across all major providers.</div>
+  <div class="live-badge"><div class="live-dot"></div> Live data from openrouter.ai/api/v1/models</div>
+
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-item"><div class="val" style="color:var(--accent);" id="s-models">—</div><div class="lbl">Models Available</div></div>
+    <div class="stat-item"><div class="val" style="color:var(--green);" id="s-providers">—</div><div class="lbl">Providers</div></div>
+    <div class="stat-item"><div class="val" style="color:var(--orange);" id="s-cheapest">—</div><div class="lbl">Cheapest Output $/1M</div></div>
+    <div class="stat-item"><div class="val" style="color:var(--red);" id="s-expensive">—</div><div class="lbl">Most Expensive $/1M</div></div>
+    <div class="stat-item"><div class="val" style="color:#8b5cf6;" id="s-free">—</div><div class="lbl">Free Models</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Output Price Distribution ($/1M tokens)</h2>
+      <div class="chart-wrap"><canvas id="chart-dist"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Models by Provider</h2>
+      <div class="chart-wrap"><canvas id="chart-providers"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Frontier Model Price Comparison <span style="font-size:12px;font-weight:400;color:var(--text-dim);">— output $/1M tokens, live</span></h2>
+    <div class="chart-wrap"><canvas id="chart-frontier"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>All Models <span style="font-size:12px;font-weight:400;color:var(--text-dim);" id="model-count-label"></span></h2>
+
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
+      <input type="text" class="search-input" id="search" placeholder="Search models..." oninput="filterTable()">
+      <div class="filters" id="provider-filters"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table id="model-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('name')">Model ↕</th>
+            <th onclick="sortTable('provider')">Provider ↕</th>
+            <th onclick="sortTable('inputPrice')">Input $/1M ↕</th>
+            <th onclick="sortTable('outputPrice')">Output $/1M ↕</th>
+            <th onclick="sortTable('context')">Context ↕</th>
+            <th>Modality</th>
+          </tr>
+        </thead>
+        <tbody id="model-tbody"></tbody>
+      </table>
+    </div>
+    <div class="context-note">
+      Pricing pulled live from OpenRouter API. Prices shown are OpenRouter's rates (small markup over direct provider pricing).
+      Rankings and usage volume data are not available via public API — see <a href="https://openrouter.ai/rankings" target="_blank" style="color:var(--accent);">openrouter.ai/rankings</a> for usage data.
+    </div>
+  </div>
+</div>
+
+<div class="loading" id="loading"><div class="spinner"></div><br>Fetching live data from OpenRouter...</div>
+<div class="error" id="error" style="display:none;"></div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+
+let allModels = [];
+let currentSort = { key: 'outputPrice', dir: 'asc' };
+let providerFilter = '';
+
+const PROVIDER_COLORS = {
+  'openai':'#10a37f', 'anthropic':'#d97706', 'google':'#4285f4', 'meta-llama':'#60a5fa',
+  'deepseek':'#a78bfa', 'mistralai':'#f97316', 'x-ai':'#e2e8f0', 'cohere':'#ec4899',
+  'qwen':'#06b6d4', 'nvidia':'#76b900', 'microsoft':'#00a4ef',
+};
+
+function getProviderFromId(id) {
+  return id.split('/')[0] || 'unknown';
+}
+
+function getProviderColor(provider) {
+  return PROVIDER_COLORS[provider] || '#475569';
+}
+
+function toPerMillion(pricePerToken) {
+  const p = parseFloat(pricePerToken);
+  if (!p || isNaN(p)) return 0;
+  return p * 1000000;
+}
+
+function formatPrice(perMillion) {
+  if (perMillion === 0) return 'Free';
+  if (perMillion < 0.01) return '<$0.01';
+  if (perMillion < 1) return '$' + perMillion.toFixed(3);
+  if (perMillion < 10) return '$' + perMillion.toFixed(2);
+  return '$' + perMillion.toFixed(1);
+}
+
+function priceClass(perMillion) {
+  if (perMillion === 0) return 'price-cheap';
+  if (perMillion < 2) return 'price-cheap';
+  if (perMillion < 15) return 'price-mid';
+  return 'price-expensive';
+}
+
+async function fetchData() {
+  try {
+    const resp = await fetch('https://openrouter.ai/api/v1/models');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const json = await resp.json();
+    allModels = json.data.map(m => ({
+      id: m.id,
+      name: m.name || m.id,
+      provider: getProviderFromId(m.id),
+      inputPrice: toPerMillion(m.pricing?.prompt || '0'),
+      outputPrice: toPerMillion(m.pricing?.completion || '0'),
+      context: m.context_length || 0,
+      modality: m.architecture?.modality || 'text→text',
+    })).filter(m => m.name && !m.id.includes(':free'));
+
+    document.getElementById('loading').style.display = 'none';
+    render();
+  } catch (err) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').textContent = `Failed to fetch OpenRouter data: ${err.message}. Try refreshing.`;
+  }
+}
+
+function render() {
+  // Stats
+  const providers = [...new Set(allModels.map(m => m.provider))];
+  const outputPrices = allModels.filter(m => m.outputPrice > 0).map(m => m.outputPrice);
+  const freeCount = allModels.filter(m => m.outputPrice === 0).length;
+
+  document.getElementById('s-models').textContent = allModels.length;
+  document.getElementById('s-providers').textContent = providers.length;
+  document.getElementById('s-cheapest').textContent = formatPrice(Math.min(...outputPrices));
+  document.getElementById('s-expensive').textContent = formatPrice(Math.max(...outputPrices));
+  document.getElementById('s-free').textContent = freeCount;
+
+  // Provider filters
+  const topProviders = providers
+    .map(p => ({ p, count: allModels.filter(m => m.provider === p).length }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 12);
+
+  const filtersEl = document.getElementById('provider-filters');
+  filtersEl.innerHTML = '<button class="filter-pill active" onclick="setProviderFilter(\'\', this)">All</button>';
+  topProviders.forEach(tp => {
+    filtersEl.innerHTML += `<button class="filter-pill" onclick="setProviderFilter('${tp.p}', this)">${tp.p} (${tp.count})</button>`;
+  });
+
+  renderCharts(providers);
+  renderTable();
+}
+
+function setProviderFilter(p, el) {
+  providerFilter = p;
+  document.querySelectorAll('#provider-filters .filter-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+
+function renderCharts(providers) {
+  // Price distribution histogram
+  const buckets = [0, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100, 500];
+  const bucketLabels = ['Free', '<$0.10', '$0.10-0.50', '$0.50-1', '$1-2', '$2-5', '$5-10', '$10-20', '$20-50', '$50-100', '$100+'];
+  const counts = new Array(bucketLabels.length).fill(0);
+
+  allModels.forEach(m => {
+    const p = m.outputPrice;
+    if (p === 0) counts[0]++;
+    else if (p < 0.1) counts[1]++;
+    else if (p < 0.5) counts[2]++;
+    else if (p < 1) counts[3]++;
+    else if (p < 2) counts[4]++;
+    else if (p < 5) counts[5]++;
+    else if (p < 10) counts[6]++;
+    else if (p < 20) counts[7]++;
+    else if (p < 50) counts[8]++;
+    else if (p < 100) counts[9]++;
+    else counts[10]++;
+  });
+
+  new Chart(document.getElementById('chart-dist'), {
+    type: 'bar',
+    data: { labels: bucketLabels, datasets: [{ data: counts, backgroundColor: '#3b82f6aa', borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+  });
+
+  // Provider model counts
+  const topP = providers
+    .map(p => ({ name: p, count: allModels.filter(m => m.provider === p).length }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 15);
+
+  new Chart(document.getElementById('chart-providers'), {
+    type: 'bar',
+    data: {
+      labels: topP.map(p => p.name),
+      datasets: [{ data: topP.map(p => p.count), backgroundColor: topP.map(p => (getProviderColor(p.name) || '#475569') + 'cc'), borderRadius: 4 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } } }
+  });
+
+  // Frontier comparison
+  const frontier = [
+    'openai/gpt-4o', 'openai/gpt-4o-mini', 'openai/o3-mini',
+    'anthropic/claude-sonnet-4', 'anthropic/claude-3.5-sonnet', 'anthropic/claude-opus-4',
+    'google/gemini-2.5-pro-preview', 'google/gemini-2.0-flash-001',
+    'deepseek/deepseek-r1', 'deepseek/deepseek-chat',
+    'mistralai/mistral-large', 'x-ai/grok-3',
+  ];
+
+  const frontierModels = frontier
+    .map(id => allModels.find(m => m.id === id || m.id.startsWith(id)))
+    .filter(Boolean)
+    .sort((a, b) => a.outputPrice - b.outputPrice);
+
+  if (frontierModels.length > 0) {
+    new Chart(document.getElementById('chart-frontier'), {
+      type: 'bar',
+      data: {
+        labels: frontierModels.map(m => m.name.replace(/^[^:]+:\s*/, '')),
+        datasets: [{
+          label: 'Output $/1M tokens',
+          data: frontierModels.map(m => m.outputPrice),
+          backgroundColor: frontierModels.map(m => (getProviderColor(m.provider) || '#475569') + 'cc'),
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.x.toFixed(2)}/1M tokens` } } },
+        scales: { x: { type: 'logarithmic', grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: '$/1M output tokens (log scale)' } }, y: { grid: { display: false } } }
+      }
+    });
+  }
+}
+
+function renderTable() {
+  let filtered = allModels;
+  if (providerFilter) filtered = filtered.filter(m => m.provider === providerFilter);
+
+  const search = document.getElementById('search').value.toLowerCase();
+  if (search) filtered = filtered.filter(m => m.name.toLowerCase().includes(search) || m.id.toLowerCase().includes(search));
+
+  filtered.sort((a, b) => {
+    let va = a[currentSort.key], vb = b[currentSort.key];
+    if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
+    if (currentSort.dir === 'asc') return va > vb ? 1 : -1;
+    return va < vb ? 1 : -1;
+  });
+
+  document.getElementById('model-count-label').textContent = `— showing ${filtered.length} of ${allModels.length}`;
+
+  const tbody = document.getElementById('model-tbody');
+  tbody.innerHTML = filtered.slice(0, 200).map(m => `
+    <tr>
+      <td><strong>${m.name.replace(/^[^:]+:\s*/, '')}</strong><br><span style="font-size:10px;color:var(--text-dim);">${m.id}</span></td>
+      <td><span class="provider-tag" style="background:${getProviderColor(m.provider)}22;color:${getProviderColor(m.provider)};">${m.provider}</span></td>
+      <td class="price ${priceClass(m.inputPrice)}">${formatPrice(m.inputPrice)}</td>
+      <td class="price ${priceClass(m.outputPrice)}">${formatPrice(m.outputPrice)}</td>
+      <td>${m.context > 0 ? (m.context >= 1000000 ? (m.context/1000000).toFixed(1)+'M' : (m.context/1000).toFixed(0)+'K') : '—'}</td>
+      <td style="font-size:11px;color:var(--text-dim);">${m.modality}</td>
+    </tr>
+  `).join('');
+}
+
+function sortTable(key) {
+  if (currentSort.key === key) currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+  else { currentSort.key = key; currentSort.dir = 'asc'; }
+  renderTable();
+}
+
+function filterTable() { renderTable(); }
+
+// Init
+fetchData();
+</script>
+</body>
+</html>
