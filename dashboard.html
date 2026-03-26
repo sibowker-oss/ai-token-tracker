@@ -89,6 +89,52 @@
     .grid-2, .grid-3 { grid-template-columns:1fr; }
     .filter-group { flex-wrap:wrap; }
   }
+
+  /* Mobile responsive */
+  @media(max-width:768px) {
+    /* Nav pills */
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+
+    .container { padding:16px 12px; }
+    header h1 { font-size:22px; }
+    header p { font-size:12px; }
+
+    /* Hero stats: 2 columns */
+    .hero-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+    .hero-stat { padding:14px 10px; }
+    .hero-stat .value { font-size:22px; }
+    .hero-stat .label { font-size:10px; }
+
+    /* Filter bar */
+    .filter-bar { padding:8px 0; }
+    .filter-label { font-size:10px; min-width:55px; }
+    .filter-pill { font-size:10px; padding:6px 10px; min-height:44px; display:inline-flex; align-items:center; }
+    .filter-reset { font-size:9px; padding:6px 8px; min-height:44px; display:inline-flex; align-items:center; }
+
+    /* Grid layouts: single column */
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+
+    /* Charts: full width, min height */
+    .chart-wrap, .chart-wrap-tall { min-height:250px; height:300px; }
+
+    /* Cards */
+    .card { padding:14px; margin-bottom:14px; }
+    .card h2 { font-size:14px; }
+
+    /* Demand matrix table: horizontal scroll, smaller font */
+    .matrix-table { font-size:11px; }
+    .matrix-table th { padding:8px 6px; font-size:10px; }
+    .matrix-table td { padding:8px 6px; font-size:11px; }
+    .matrix-cell-rev { font-size:14px; }
+
+    /* Detail tables: smaller font */
+    table.detail th { padding:6px 8px; font-size:10px; }
+    table.detail td { padding:6px 8px; font-size:11px; }
+
+    /* Ensure tables don't overflow */
+    .card > div[style*="overflow-x"] { -webkit-overflow-scrolling:touch; }
+  }
 </style>
 </head>
 <body>
@@ -157,7 +203,9 @@
 <!-- ===== ENTERPRISE REALITY CHECK ===== -->
 <div class="card">
   <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">— Booked revenue vs. actual token consumption</span></h2>
-  <table class="detail" id="enterprise-table"></table>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="detail" id="enterprise-table"></table>
+  </div>
 </div>
 
 <!-- ===== TOP CONSUMERS ===== -->

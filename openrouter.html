@@ -52,7 +52,39 @@
 
   .context-note { font-size:11px; color:var(--text-dim); margin-top:8px; padding:10px; background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.1); border-radius:6px; }
 
-  @media(max-width:768px) { .grid-2 { grid-template-columns:1fr; } }
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+
+    /* Stats bar: wrap to 2-3 columns */
+    .stats-bar { gap:10px; }
+    .stat-item { min-width:calc(50% - 10px); flex:1 1 calc(50% - 10px); padding:12px 10px; }
+    .stat-item .val { font-size:18px; }
+    .stat-item .lbl { font-size:10px; }
+
+    /* Grid-2: single column */
+    .grid-2 { grid-template-columns:1fr; }
+    .chart-wrap { min-height:250px; height:280px; }
+
+    /* Cards */
+    .card { padding:14px; }
+    .card h2 { font-size:14px; }
+
+    /* Table: smaller font, horizontal scroll handled by overflow-x wrapper */
+    table th { padding:8px 6px; font-size:10px; }
+    table td { padding:6px; font-size:11px; }
+
+    /* Search + filters: stack vertically */
+    .search-filters-wrap { flex-direction:column !important; }
+    .search-input { width:100%; }
+    .filters { flex-wrap:wrap; }
+    .filter-pill { font-size:10px; padding:6px 10px; min-height:44px; display:inline-flex; align-items:center; }
+
+    .context-note { font-size:10px; }
+  }
 </style>
 </head>
 <body>
@@ -97,7 +129,7 @@
   <div class="card">
     <h2>All Models <span style="font-size:12px;font-weight:400;color:var(--text-dim);" id="model-count-label"></span></h2>
 
-    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
+    <div class="search-filters-wrap" style="display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
       <input type="text" class="search-input" id="search" placeholder="Search models..." oninput="filterTable()">
       <div class="filters" id="provider-filters"></div>
     </div>

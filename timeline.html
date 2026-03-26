@@ -38,7 +38,38 @@
   .event-card h3 { font-size:14px; margin-bottom:8px; color:var(--accent); }
   .event-card p { font-size:12px; color:var(--text-dim); line-height:1.6; }
 
-  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .grid-2 { grid-template-columns:1fr; } }
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+
+    /* Hero stats: 2 columns */
+    .hero-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+    .hero-stat { padding:12px 10px; }
+    .hero-stat .value { font-size:20px; }
+    .hero-stat .label { font-size:10px; }
+
+    /* Charts: single column, full width */
+    .grid-2 { grid-template-columns:1fr; }
+    .chart-wrap { min-height:250px; height:280px; }
+    .card { padding:14px; }
+    .card h2 { font-size:14px; }
+
+    /* Slider: full width */
+    .slider-area { padding:16px 12px; }
+    .quarter-label { font-size:28px; }
+    .quarter-sub { font-size:12px; }
+    input[type=range] { width:100%; max-width:100%; }
+    .tick-labels { max-width:100%; font-size:8px; }
+    .play-btn { min-height:44px; padding:10px 20px; }
+
+    /* Event card: full width */
+    .event-card { padding:14px; }
+    .event-card h3 { font-size:13px; }
+    .event-card p { font-size:11px; }
+  }
 </style>
 </head>
 <body>

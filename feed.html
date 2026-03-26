@@ -43,6 +43,34 @@
 
   .archive-link { text-align:center; margin-top:24px; }
   .archive-link a { color:var(--accent); font-size:13px; }
+
+  /* Mobile responsive */
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+
+    /* Feed items: full width, less padding */
+    .feed-item { padding:14px; margin-bottom:12px; }
+    .feed-title { font-size:15px; }
+    .feed-body { font-size:12px; }
+    .feed-impact { font-size:11px; padding:8px 12px; }
+    .feed-tag { font-size:9px; padding:3px 8px; }
+    .feed-date { font-size:10px; }
+
+    /* Week header */
+    .week-header { flex-direction:column; align-items:flex-start; gap:4px; }
+    .week-header h2 { font-size:18px; }
+
+    /* Subscribe box: input + button stack vertically */
+    .subscribe-box { padding:20px 16px; }
+    .subscribe-box h3 { font-size:16px; }
+    .subscribe-box p { font-size:12px; }
+    .subscribe-box input { width:100%; border-radius:8px; margin-bottom:8px; }
+    .subscribe-box button { width:100%; border-radius:8px; min-height:44px; }
+  }
 </style>
 </head>
 <body>

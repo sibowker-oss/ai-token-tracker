@@ -40,6 +40,35 @@
   .compare { margin-top:20px; }
   .compare h3 { font-size:14px; margin-bottom:12px; color:var(--text-dim); }
   .compare-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:13px; }
+
+  /* Mobile responsive */
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+    .card { padding:16px; }
+
+    /* Form inputs: full width */
+    select, input[type=number] { width:100%; font-size:16px; padding:12px 14px; }
+    .btn { padding:14px 24px; font-size:14px; min-height:44px; }
+
+    /* Result grid: 2 columns then single */
+    .result-grid { grid-template-columns:1fr 1fr; gap:10px; }
+    .result-box { padding:14px; }
+    .result-box .value { font-size:24px; }
+    .result-box .label { font-size:10px; }
+    .result-box .detail { font-size:11px; }
+
+    /* Compare rows: stack */
+    .compare-row { flex-direction:column; gap:4px; font-size:12px; }
+    .compare h3 { font-size:13px; }
+
+    .verdict h3 { font-size:14px; }
+    .verdict p { font-size:12px; }
+    .waste-bar { height:36px; }
+  }
 </style>
 </head>
 <body>

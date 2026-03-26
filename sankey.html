@@ -23,6 +23,22 @@
   .legend { display:flex; flex-wrap:wrap; gap:16px; margin-top:24px; font-size:12px; }
   .legend-item { display:flex; align-items:center; gap:6px; }
   .legend-dot { width:12px; height:12px; border-radius:3px; }
+
+  /* Mobile responsive */
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+    .sankey-container { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .insight-cards { grid-template-columns:1fr; }
+    .insight .stat { font-size:22px; }
+    .insight h3 { font-size:13px; }
+    .insight p { font-size:11px; }
+    .insight { padding:16px; }
+    .legend { font-size:11px; }
+  }
 </style>
 </head>
 <body>
@@ -70,8 +86,9 @@ const canvas = document.getElementById('sankey');
 const ctx = canvas.getContext('2d');
 
 // Responsive sizing
-const W = Math.min(1200, window.innerWidth - 48);
-const H = 600;
+const isMobile = window.innerWidth < 768;
+const W = isMobile ? Math.max(600, window.innerWidth - 24) : Math.min(1200, window.innerWidth - 48);
+const H = isMobile ? 400 : 600;
 canvas.width = W * 2; canvas.height = H * 2;
 canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 ctx.scale(2, 2);
