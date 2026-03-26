@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Workforce Impact Model — Global AI Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --pink:#ec4899; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:32px; line-height:1.7; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; }
+  .chart-wrap { height:380px; position:relative; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; text-align:center; }
+  .hero-stat .label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:26px; font-weight:800; margin:4px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); }
+
+  /* Slider controls */
+  .controls { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+  .control { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px; }
+  .control label { font-size:12px; font-weight:600; display:block; margin-bottom:6px; }
+  .control input[type=range] { width:100%; margin:4px 0; }
+  .control .ticks { display:flex; justify-content:space-between; font-size:9px; color:var(--text-dim); }
+  .control select { width:100%; padding:8px; background:#1e293b; border:1px solid #334155; border-radius:6px; color:var(--text); font-size:13px; }
+
+  /* Sector table */
+  .sector-table { width:100%; border-collapse:collapse; }
+  .sector-table th { text-align:left; padding:10px; font-size:11px; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--card-border); }
+  .sector-table td { padding:10px; font-size:12px; border-bottom:1px solid rgba(255,255,255,0.03); }
+  .sector-table tr:hover { background:rgba(255,255,255,0.02); }
+
+  /* Impact meter */
+  .impact-meter { height:24px; border-radius:4px; overflow:hidden; display:flex; margin:4px 0; }
+  .impact-meter div { height:100%; transition:width 0.3s; }
+
+  .callout { padding:16px; border-radius:10px; margin-top:20px; }
+  .callout h3 { font-size:14px; margin-bottom:6px; }
+  .callout p { font-size:12px; line-height:1.7; }
+
+  .case-study { background:rgba(255,255,255,0.02); border:1px solid var(--card-border); border-radius:8px; padding:14px; margin-bottom:10px; }
+  .case-study .company { font-weight:700; font-size:14px; }
+  .case-study .stat { font-size:20px; font-weight:800; margin:4px 0; }
+  .case-study .detail { font-size:11px; color:var(--text-dim); }
+
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .grid-2,.controls { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="sankey.html">Follow the $</a>
+  <a href="calculator.html">Shelfware Calculator</a>
+  <a href="timeline.html">Time Machine</a>
+  <a href="feed.html">Weekly Feed</a>
+  <a href="openrouter.html">Live Pricing</a>
+  <a href="capex.html">Capex Gap</a>
+  <a href="estimator.html">Token Estimator</a>
+  <a href="workforce.html" class="active">Workforce Impact</a>
+</nav>
+
+<div class="container">
+  <h1>If the Capex Pays Off, Who Loses Their Job?</h1>
+  <div class="sub">
+    The AI industry needs $500B-$1T in annual revenue by 2030 to justify the infrastructure investment.
+    That money comes from enterprise budgets. The biggest line item in every enterprise budget is people.
+    This model works backwards from the revenue requirement to show the workforce implications.
+  </div>
+
+  <!-- GLOBAL MODEL -->
+  <div class="controls">
+    <div class="control">
+      <label>Global AI Revenue by 2030: <span id="v-rev2030" style="color:var(--green);">$500B</span></label>
+      <input type="range" id="s-rev2030" min="100" max="1500" value="500" step="50" oninput="updateModel()">
+      <div class="ticks"><span>$100B (bear)</span><span>$500B (base)</span><span>$1.5T (bull)</span></div>
+    </div>
+    <div class="control">
+      <label>Avg Fully-Loaded Employee Cost: <span id="v-empcost" style="color:var(--orange);">$100K</span></label>
+      <input type="range" id="s-empcost" min="40" max="250" value="100" step="10" oninput="updateModel()">
+      <div class="ticks"><span>$40K (offshore)</span><span>$100K (blended)</span><span>$250K (US tech)</span></div>
+    </div>
+    <div class="control">
+      <label>AI Task Replacement Rate: <span id="v-replace" style="color:var(--accent);">30%</span></label>
+      <input type="range" id="s-replace" min="5" max="80" value="30" step="5" oninput="updateModel()">
+      <div class="ticks"><span>5% (Acemoglu)</span><span>30% (McKinsey)</span><span>80% (AGI bull)</span></div>
+    </div>
+    <div class="control">
+      <label>% of AI Revenue Displacing Labor (vs. new value): <span id="v-displpct" style="color:var(--red);">60%</span></label>
+      <input type="range" id="s-displpct" min="20" max="90" value="60" step="5" oninput="updateModel()">
+      <div class="ticks"><span>20% (mostly new)</span><span>60% (mostly replacement)</span><span>90% (pure substitution)</span></div>
+    </div>
+  </div>
+
+  <div class="hero-grid" id="hero-stats"></div>
+
+  <!-- BY SECTOR -->
+  <div class="card">
+    <h2>Workforce Impact by Sector</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">
+      Each sector has different AI penetration rates, employee costs, and task automation potential.
+      These estimates show how the global AI revenue target distributes across industries.
+    </p>
+    <div style="overflow-x:auto;">
+      <table class="sector-table" id="sector-table">
+        <thead>
+          <tr>
+            <th>Sector</th>
+            <th>AI Spend Share</th>
+            <th>Sector AI Revenue</th>
+            <th>Avg Employee Cost</th>
+            <th>Roles Restructured</th>
+            <th>% of Sector Workforce</th>
+            <th>Displacement Risk</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Roles Restructured by Sector</h2>
+      <div class="chart-wrap"><canvas id="chart-sectors"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>AI Revenue vs. Headcount Equivalent</h2>
+      <div class="chart-wrap"><canvas id="chart-trajectory"></canvas></div>
+    </div>
+  </div>
+
+  <!-- COMPANY CALCULATOR -->
+  <div class="card" style="border-color:var(--accent);">
+    <h2>Company-Level Calculator</h2>
+    <p style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">Enter any company's details to see the implied workforce impact of their AI spending.</p>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px;">
+      <div>
+        <label style="font-size:11px; color:var(--text-dim);">Company Revenue ($B/yr)</label>
+        <input type="number" id="c-rev" value="10" min="0.1" step="0.1" style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:var(--text);font-size:14px;" oninput="updateCompany()">
+      </div>
+      <div>
+        <label style="font-size:11px; color:var(--text-dim);">AI Spend (% of revenue)</label>
+        <input type="number" id="c-aipct" value="1" min="0.1" max="20" step="0.1" style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:var(--text);font-size:14px;" oninput="updateCompany()">
+      </div>
+      <div>
+        <label style="font-size:11px; color:var(--text-dim);">Headcount</label>
+        <input type="number" id="c-head" value="50000" min="100" step="100" style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:var(--text);font-size:14px;" oninput="updateCompany()">
+      </div>
+      <div>
+        <label style="font-size:11px; color:var(--text-dim);">Sector</label>
+        <select id="c-sector" style="width:100%;padding:8px;background:#1e293b;border:1px solid #334155;border-radius:6px;color:var(--text);font-size:13px;" onchange="updateCompany()">
+          <option value="tech">Technology</option>
+          <option value="finance">Financial Services</option>
+          <option value="health">Healthcare</option>
+          <option value="retail">Retail & E-commerce</option>
+          <option value="services">Professional Services</option>
+          <option value="mfg">Manufacturing</option>
+          <option value="media">Media & Entertainment</option>
+          <option value="gov">Government & Education</option>
+        </select>
+      </div>
+    </div>
+    <div id="company-result" style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px;"></div>
+    <div id="company-detail" style="margin-top:16px;"></div>
+  </div>
+
+  <!-- REAL EXAMPLES -->
+  <div class="card">
+    <h2>Already Happening: Real-World Examples</h2>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px;" id="case-studies">
+    </div>
+  </div>
+
+  <!-- THE UNCOMFORTABLE TRUTH -->
+  <div class="callout" style="background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2);">
+    <h3 style="color:var(--red);">The Uncomfortable Math</h3>
+    <p style="color:var(--text-dim);">
+      If AI revenue reaches $500B by 2030 and 60% of that displaces labor, that's $300B/year in human work
+      replaced by tokens. At a blended $100K/employee, that's <strong>3 million full-time equivalent roles</strong> globally.
+      At the bull case ($1T revenue, 80% displacement), it's <strong>8+ million roles</strong>.
+      <br><br>
+      The paradox: the only way the $250B+ capex investment pays off is if AI becomes
+      good enough to replace substantial human work at scale. The investors <em>need</em> workforce displacement
+      to earn their returns. The capex gap isn't a technology problem — it's a bet that AI will
+      eliminate enough jobs, fast enough, to justify the infrastructure.
+      <br><br>
+      Or: the capex doesn't pay off, the bubble deflates, and fewer jobs are displaced.
+      You can't have it both ways.
+    </p>
+  </div>
+
+  <div class="callout" style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); margin-top:16px;">
+    <h3 style="color:var(--green);">The Counter-Argument: New Value, Not Just Substitution</h3>
+    <p style="color:var(--text-dim);">
+      Not all AI spend displaces labor. Some creates entirely new capabilities:
+      personalized education at scale, drug discovery acceleration, real-time translation,
+      accessibility tools, creative augmentation. If 40% of AI revenue creates <em>new</em> value
+      rather than substituting existing work, the displacement numbers shrink significantly.
+      <br><br>
+      History also shows that automation creates new job categories that didn't exist before.
+      ATMs didn't eliminate bank tellers — banks opened more branches and tellers shifted to advisory roles.
+      The question is whether the transition happens fast enough for workers to adapt, and whether
+      the new roles pay as well as the displaced ones.
+    </p>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+
+// Sector data
+const SECTORS = [
+  { name:'Customer Service / BPO', share:0.15, avgCost:55, workforce:20, taskReplace:0.60, color:'#ef4444' },
+  { name:'Software & IT', share:0.25, avgCost:150, workforce:30, taskReplace:0.40, color:'#3b82f6' },
+  { name:'Financial Services', share:0.14, avgCost:130, workforce:15, taskReplace:0.35, color:'#10b981' },
+  { name:'Marketing & Content', share:0.10, avgCost:80, workforce:8, taskReplace:0.55, color:'#ec4899' },
+  { name:'Legal & Compliance', share:0.06, avgCost:160, workforce:5, taskReplace:0.40, color:'#8b5cf6' },
+  { name:'Healthcare', share:0.08, avgCost:90, workforce:25, taskReplace:0.15, color:'#06b6d4' },
+  { name:'Retail & E-commerce', share:0.08, avgCost:60, workforce:18, taskReplace:0.30, color:'#f59e0b' },
+  { name:'Manufacturing', share:0.05, avgCost:70, workforce:22, taskReplace:0.20, color:'#14b8a6' },
+  { name:'Education', share:0.04, avgCost:65, workforce:12, taskReplace:0.25, color:'#a78bfa' },
+  { name:'Other', share:0.05, avgCost:80, workforce:30, taskReplace:0.20, color:'#475569' },
+];
+
+// Case studies
+const CASES = [
+  { company:'Klarna', stat:'700 agents replaced', detail:'AI assistant doing the work of 700 human agents within 1 month. Feb 2024. Saving $40M/year.', color:'#f59e0b' },
+  { company:'Duolingo', stat:'~25% of contractors cut', detail:'Replaced contract content creators with GPT-4. Content now "close to 100% automatically" generated.', color:'#10b981' },
+  { company:'Dropbox', stat:'16% layoff', detail:'500 employees laid off in 2023, citing AI enabling smaller teams to do more. "AI era requires different skills."', color:'#3b82f6' },
+  { company:'Chegg', stat:'Stock -99% from peak', detail:'AI tutoring (ChatGPT) destroyed demand for human tutors. Revenue collapsed. Market cap: $14B→$100M.', color:'#ef4444' },
+  { company:'GitHub Copilot', stat:'46% of new code', detail:'46% of code on GitHub now AI-generated. 55% acceptance rate. Developers write prompts, not code.', color:'#8b5cf6' },
+  { company:'Cursor', stat:'$1B ARR in 12 months', detail:'AI code editor hit $1B faster than any SaaS product in history. Each user replaces hours of manual coding daily.', color:'#d97706' },
+];
+
+let sectorChart = null;
+let trajectoryChart = null;
+
+function updateModel() {
+  const rev2030 = parseInt(document.getElementById('s-rev2030').value);
+  const empCost = parseInt(document.getElementById('s-empcost').value);
+  const replaceRate = parseInt(document.getElementById('s-replace').value) / 100;
+  const displPct = parseInt(document.getElementById('s-displpct').value) / 100;
+
+  document.getElementById('v-rev2030').textContent = '$' + rev2030 + 'B';
+  document.getElementById('v-empcost').textContent = '$' + empCost + 'K';
+  document.getElementById('v-replace').textContent = (replaceRate * 100).toFixed(0) + '%';
+  document.getElementById('v-displpct').textContent = (displPct * 100).toFixed(0) + '%';
+
+  const laborDisplacement = rev2030 * displPct; // $B going to replace labor
+  const headcountEquiv = (laborDisplacement * 1e9) / (empCost * 1000); // people
+  const rolesRestructured = headcountEquiv / replaceRate; // more people affected partially
+  const globalWorkforce = 3.3e9; // ~3.3B global workforce
+  const pctWorkforce = (rolesRestructured / globalWorkforce * 100);
+
+  document.getElementById('hero-stats').innerHTML = `
+    <div class="hero-stat">
+      <div class="label">AI Revenue (2030)</div>
+      <div class="value" style="color:var(--green);">$${rev2030}B</div>
+      <div class="detail">global, all channels</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Labor Displacement $</div>
+      <div class="value" style="color:var(--red);">$${laborDisplacement.toFixed(0)}B</div>
+      <div class="detail">${(displPct*100).toFixed(0)}% of revenue replaces human work</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">FTE Equivalent</div>
+      <div class="value" style="color:var(--orange);">${(headcountEquiv/1e6).toFixed(1)}M</div>
+      <div class="detail">full-time roles worth of work</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Roles Restructured</div>
+      <div class="value" style="color:var(--accent);">${(rolesRestructured/1e6).toFixed(1)}M</div>
+      <div class="detail">${pctWorkforce.toFixed(2)}% of global workforce</div>
+    </div>
+  `;
+
+  // Sector table
+  const tbody = document.querySelector('#sector-table tbody');
+  tbody.innerHTML = '';
+  const sectorLabels = [];
+  const sectorValues = [];
+
+  SECTORS.forEach(s => {
+    const sectorRev = rev2030 * s.share;
+    const sectorDispl = sectorRev * displPct;
+    const sectorFTE = (sectorDispl * 1e9) / (s.avgCost * 1000);
+    const sectorRoles = sectorFTE / s.taskReplace;
+    const sectorWorkforceM = s.workforce; // millions
+    const pctOfSector = (sectorRoles / (sectorWorkforceM * 1e6) * 100);
+    const risk = pctOfSector > 5 ? 'high' : pctOfSector > 2 ? 'medium' : 'low';
+    const riskColor = risk === 'high' ? 'var(--red)' : risk === 'medium' ? 'var(--orange)' : 'var(--green)';
+
+    sectorLabels.push(s.name);
+    sectorValues.push(sectorRoles / 1e6);
+
+    tbody.innerHTML += `<tr>
+      <td><strong>${s.name}</strong></td>
+      <td>${(s.share * 100).toFixed(0)}%</td>
+      <td style="color:var(--green);font-weight:600;">$${sectorRev.toFixed(0)}B</td>
+      <td>$${s.avgCost}K</td>
+      <td style="font-weight:600;">${(sectorRoles/1e6).toFixed(2)}M</td>
+      <td>
+        <div class="impact-meter">
+          <div style="width:${Math.min(pctOfSector * 10, 100)}%;background:${riskColor};"></div>
+          <div style="width:${100 - Math.min(pctOfSector * 10, 100)}%;background:rgba(255,255,255,0.05);"></div>
+        </div>
+        <span style="font-size:11px;">${pctOfSector.toFixed(1)}%</span>
+      </td>
+      <td style="color:${riskColor};font-weight:600;text-transform:uppercase;font-size:11px;">${risk}</td>
+    </tr>`;
+  });
+
+  // Sector chart
+  if (sectorChart) {
+    sectorChart.data.labels = sectorLabels;
+    sectorChart.data.datasets[0].data = sectorValues;
+    sectorChart.update('active');
+  } else {
+    sectorChart = new Chart(document.getElementById('chart-sectors'), {
+      type: 'bar',
+      data: {
+        labels: sectorLabels,
+        datasets: [{ data: sectorValues, backgroundColor: SECTORS.map(s => s.color + 'bb'), borderRadius: 4 }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.parsed.x.toFixed(2)}M roles restructured` } } },
+        scales: { x: { title: { display: true, text: 'Millions of roles' }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } }
+      }
+    });
+  }
+
+  // Trajectory chart: revenue growth over time → implied headcount
+  const years = ['2024','2025','2026','2027','2028','2029','2030','2031','2032'];
+  const revBase = 10; // $10B in 2024
+  const revTarget = rev2030;
+  const cagr = Math.pow(revTarget / revBase, 1/6) - 1; // 2024→2030
+
+  const revByYear = years.map((y, i) => revBase * Math.pow(1 + cagr, i));
+  const fteByYear = revByYear.map(r => (r * displPct * 1e9) / (empCost * 1000) / 1e6);
+
+  if (trajectoryChart) {
+    trajectoryChart.data.datasets[0].data = revByYear;
+    trajectoryChart.data.datasets[1].data = fteByYear;
+    trajectoryChart.update('active');
+  } else {
+    trajectoryChart = new Chart(document.getElementById('chart-trajectory'), {
+      type: 'line',
+      data: {
+        labels: years,
+        datasets: [
+          { label: 'AI Revenue ($B)', data: revByYear, borderColor: '#10b981', backgroundColor: '#10b98122', fill: true, tension: 0.3, yAxisID: 'y' },
+          { label: 'FTE Equivalent (M)', data: fteByYear, borderColor: '#ef4444', backgroundColor: '#ef444422', fill: true, tension: 0.3, yAxisID: 'y1' },
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'top', labels: { boxWidth: 12 } } },
+        scales: {
+          y: { position: 'left', title: { display: true, text: 'Revenue ($B)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+          y1: { position: 'right', title: { display: true, text: 'FTE Equivalent (M)' }, grid: { display: false } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  updateCompany();
+}
+
+// Sector task replacement rates for company calculator
+const SECTOR_RATES = {
+  tech: { replace: 0.40, avgCost: 150, label: 'Technology' },
+  finance: { replace: 0.35, avgCost: 130, label: 'Financial Services' },
+  health: { replace: 0.15, avgCost: 90, label: 'Healthcare' },
+  retail: { replace: 0.30, avgCost: 60, label: 'Retail' },
+  services: { replace: 0.45, avgCost: 120, label: 'Professional Services' },
+  mfg: { replace: 0.20, avgCost: 70, label: 'Manufacturing' },
+  media: { replace: 0.50, avgCost: 85, label: 'Media & Entertainment' },
+  gov: { replace: 0.15, avgCost: 75, label: 'Government & Education' },
+};
+
+function updateCompany() {
+  const rev = parseFloat(document.getElementById('c-rev').value) || 10;
+  const aiPct = parseFloat(document.getElementById('c-aipct').value) || 1;
+  const headcount = parseInt(document.getElementById('c-head').value) || 50000;
+  const sectorKey = document.getElementById('c-sector').value;
+  const sector = SECTOR_RATES[sectorKey];
+  const displPct = parseInt(document.getElementById('s-displpct').value) / 100;
+
+  const aiSpend = rev * (aiPct / 100); // $B
+  const laborDispl = aiSpend * displPct * 1e9; // $
+  const empCost = sector.avgCost * 1000; // $
+  const fteEquiv = laborDispl / empCost;
+  const rolesAffected = fteEquiv / sector.replace;
+  const pctHeadcount = (rolesAffected / headcount * 100);
+  const costPerTaskHour = (aiSpend * 1e9) / (headcount * 2080 * sector.replace); // $/hr for AI-replaceable tasks
+  const humanCostPerHour = empCost / 2080;
+  const breakeven = costPerTaskHour < humanCostPerHour;
+
+  document.getElementById('company-result').innerHTML = `
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:10px;text-transform:uppercase;color:var(--text-dim);">Annual AI Spend</div>
+      <div style="font-size:22px;font-weight:800;color:var(--green);">$${(aiSpend * 1000).toFixed(0)}M</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:10px;text-transform:uppercase;color:var(--text-dim);">FTE Equivalent</div>
+      <div style="font-size:22px;font-weight:800;color:var(--orange);">${fteEquiv.toFixed(0)}</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:10px;text-transform:uppercase;color:var(--text-dim);">Roles Restructured</div>
+      <div style="font-size:22px;font-weight:800;color:var(--red);">${rolesAffected.toFixed(0)}</div>
+      <div style="font-size:10px;color:var(--text-dim);">${pctHeadcount.toFixed(1)}% of headcount</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.02);border:1px solid var(--card-border);border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:10px;text-transform:uppercase;color:var(--text-dim);">AI vs Human Cost/Hr</div>
+      <div style="font-size:22px;font-weight:800;color:${breakeven ? 'var(--green)' : 'var(--red)'};">$${costPerTaskHour.toFixed(1)} vs $${humanCostPerHour.toFixed(0)}</div>
+      <div style="font-size:10px;color:var(--text-dim);">${breakeven ? 'AI is cheaper' : 'Humans still cheaper'}</div>
+    </div>
+  `;
+
+  document.getElementById('company-detail').innerHTML = `
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.7;padding:12px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.1);border-radius:6px;">
+      <strong>For a ${sector.label} company with $${rev}B revenue and ${headcount.toLocaleString()} employees:</strong><br>
+      Spending ${aiPct}% of revenue on AI ($${(aiSpend * 1000).toFixed(0)}M/yr) at ${(displPct*100)}% labor displacement implies
+      <strong>${fteEquiv.toFixed(0)} FTE-equivalents</strong> of human work being done by AI.
+      In ${sector.label}, where AI can automate ~${(sector.replace*100)}% of tasks per role,
+      this affects <strong>${rolesAffected.toFixed(0)} roles</strong> (${pctHeadcount.toFixed(1)}% of workforce).
+      ${pctHeadcount > 10 ? '<br><span style="color:var(--red);font-weight:600;">⚠️ This level of displacement would be organizationally transformative and is likely to face significant resistance.</span>' : ''}
+      ${pctHeadcount > 5 && pctHeadcount <= 10 ? '<br><span style="color:var(--orange);">At 5-10% displacement, this is material but manageable through natural attrition and role evolution.</span>' : ''}
+      ${pctHeadcount <= 5 ? '<br><span style="color:var(--green);">At <5% displacement, this is absorbable through natural attrition — consistent with current adoption levels.</span>' : ''}
+    </div>
+  `;
+}
+
+// Case studies
+function renderCaseStudies() {
+  const container = document.getElementById('case-studies');
+  CASES.forEach(c => {
+    container.innerHTML += `
+      <div class="case-study">
+        <div class="company" style="color:${c.color};">${c.company}</div>
+        <div class="stat" style="color:${c.color};">${c.stat}</div>
+        <div class="detail">${c.detail}</div>
+      </div>`;
+  });
+}
+
+renderCaseStudies();
+updateModel();
+</script>
+</body>
+</html>
