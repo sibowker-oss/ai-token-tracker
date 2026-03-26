@@ -39,6 +39,7 @@
   .filter-pill.active[data-dim="regions"] { background:var(--accent2); border-color:var(--accent2); }
   .filter-pill.active[data-dim="industries"] { background:var(--green); border-color:var(--green); }
   .filter-pill.active[data-dim="useCases"] { background:var(--orange); border-color:var(--orange); }
+  .filter-pill.active[data-dim="demandTypes"] { background:var(--pink); border-color:var(--pink); }
   .filter-reset { padding:4px 10px; border-radius:16px; border:1px solid rgba(239,68,68,0.3); background:transparent; color:var(--red); font-size:10px; cursor:pointer; }
 
   /* Cards */
@@ -295,19 +296,19 @@ const DEMAND_MATRIX = {
   rows: [
     { segment: 'Consumer', cells: [
       { rev: '~$10-12B', conv: '50%', color: '#f59e0b', ex: 'ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced', note: 'Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk.' },
-      { rev: '~$0.5B', conv: '100%', color: '#3b82f6', ex: 'Hobbyist devs, indie hackers, students using API keys', note: 'Small but pure. Every cent = tokens.' },
+      { rev: '~$0.5B', conv: '100%', color: '#10b981', ex: 'Hobbyist devs, indie hackers, students using API keys', note: 'Small but pure. Every cent = tokens.' },
       { rev: '~$2-3B', conv: '90%', color: '#10b981', ex: 'Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier', note: 'Real usage. AI native absorbs API cost.' },
       { rev: '~$1-2B', conv: '15%', color: '#ef4444', ex: 'Canva AI features, Grammarly, Notion AI, Adobe Firefly', note: 'AI bundled into consumer SaaS. Low incremental token usage.' },
     ]},
     { segment: 'SME', cells: [
       { rev: '~$1-2B', conv: '60%', color: '#f59e0b', ex: 'ChatGPT Team ($25/user), Claude Team', note: 'Growing. Usage varies widely across seats.' },
-      { rev: '~$2-3B', conv: '100%', color: '#3b82f6', ex: 'Startups on APIs, dev agencies, Vercel AI SDK users', note: 'Pure demand. Retool: avg $50K-$500K/yr. Fastest growing.' },
+      { rev: '~$2-3B', conv: '100%', color: '#10b981', ex: 'Startups on APIs, dev agencies, Vercel AI SDK users', note: 'Pure demand. Retool: avg $50K-$500K/yr. Fastest growing.' },
       { rev: '~$2-3B', conv: '85%', color: '#10b981', ex: 'Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin', note: 'Strong PMF. SMEs adopt AI natives faster than SaaS AI.' },
       { rev: '~$2-3B', conv: '15%', color: '#ef4444', ex: 'HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI', note: 'Feature checkbox on renewal, low actual activation.' },
     ]},
     { segment: 'Enterprise', cells: [
       { rev: '~$1-2B', conv: '45%', color: '#f59e0b', ex: 'ChatGPT Enterprise ($60+/user), Claude for Enterprise', note: 'Standalone AI subs — higher activation, users chose to buy it.' },
-      { rev: '~$3-5B', conv: '100%', color: '#3b82f6', ex: 'Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys', note: 'LARGEST FUTURE TAM. Small today but 100% real. Goldman: →$50-80B by 2028.' },
+      { rev: '~$3-5B', conv: '100%', color: '#10b981', ex: 'Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys', note: 'LARGEST FUTURE TAM. Small today but 100% real. Goldman: →$50-80B by 2028.' },
       { rev: '~$1-2B', conv: '80%', color: '#10b981', ex: 'Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI', note: 'Real usage — AI natives solving specific enterprise workflows.' },
       { rev: '~$12-15B', conv: '10-20%', color: '#ef4444', ex: 'M365 Copilot ($5.4B), SF Agentforce ($800M), NOW Assist ($500M), GitHub Copilot ($2B+)', note: 'HIGHEST REV, LOWEST TOKENS. 35.8% M365 active; <20% NOW. Bundling, shelfware, 360 deals.' },
     ]},
@@ -369,7 +370,27 @@ const MODELS = [
 // ============================================================
 // FILTER STATE
 // ============================================================
-const filters = { providers: [], regions: [], industries: [], useCases: [] };
+const filters = { providers: [], regions: [], industries: [], useCases: [], demandTypes: [] };
+
+// Demand type definitions and cross-weights per provider
+const DEMAND_TYPES = {
+  'Consumer Subs':      { pct: 0.42, color: '#f59e0b' },
+  'API / Developer':    { pct: 0.25, color: '#10b981' },
+  'Enterprise Platform':{ pct: 0.23, color: '#3b82f6' },
+  'Cloud Channel':      { pct: 0.10, color: '#8b5cf6' },
+};
+
+// How each provider's revenue splits across demand types
+const DEMAND_WEIGHTS = {
+  'OpenAI':        { 'Consumer Subs': 0.55, 'API / Developer': 0.15, 'Enterprise Platform': 0.15, 'Cloud Channel': 0.15 },
+  'Anthropic':     { 'Consumer Subs': 0.20, 'API / Developer': 0.35, 'Enterprise Platform': 0.25, 'Cloud Channel': 0.20 },
+  'Google/Gemini': { 'Consumer Subs': 0.35, 'API / Developer': 0.20, 'Enterprise Platform': 0.20, 'Cloud Channel': 0.25 },
+  'Meta (open)':   { 'Consumer Subs': 0.10, 'API / Developer': 0.50, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.10 },
+  'DeepSeek':      { 'Consumer Subs': 0.40, 'API / Developer': 0.40, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.10 },
+  'Mistral':       { 'Consumer Subs': 0.10, 'API / Developer': 0.35, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.25 },
+  'xAI':           { 'Consumer Subs': 0.70, 'API / Developer': 0.15, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.05 },
+  'Others':        { 'Consumer Subs': 0.30, 'API / Developer': 0.30, 'Enterprise Platform': 0.20, 'Cloud Channel': 0.20 },
+};
 const charts = {};
 
 // ============================================================
@@ -392,6 +413,10 @@ function getFilteredProviderData() {
     }
     if (filters.useCases.length > 0) {
       const s = filters.useCases.reduce((a, uc) => a + (CROSS_WEIGHTS[p]?.useCases?.[uc] || 0), 0);
+      t *= s; r *= s;
+    }
+    if (filters.demandTypes.length > 0) {
+      const s = filters.demandTypes.reduce((a, dt) => a + (DEMAND_WEIGHTS[p]?.[dt] || 0), 0);
       t *= s; r *= s;
     }
     result[p] = { tokens: t, rev: r, color: PROVIDERS[p].color, growth: PROVIDERS[p].growth };
@@ -434,6 +459,13 @@ function getFilteredDimensionData(dimObj, dimKey) {
       });
       scale *= s / activeProviders.length;
     }
+    if (filters.demandTypes.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => {
+        filters.demandTypes.forEach(dt => { s += DEMAND_WEIGHTS[p]?.[dt] || 0; });
+      });
+      scale *= s / activeProviders.length;
+    }
     result[key] = { tokens: weighted * scale, color: dimObj[key].color };
   });
   return result;
@@ -449,6 +481,7 @@ function buildFilterBar() {
     { key: 'regions', label: 'Region', items: Object.keys(REGIONS), color: 'var(--accent2)' },
     { key: 'industries', label: 'Industry', items: Object.keys(INDUSTRIES), color: 'var(--green)' },
     { key: 'useCases', label: 'Use Case', items: Object.keys(USE_CASES), color: 'var(--orange)' },
+    { key: 'demandTypes', label: 'Demand Type', items: Object.keys(DEMAND_TYPES), color: 'var(--pink)' },
   ];
 
   dims.forEach(d => {
@@ -603,6 +636,8 @@ function updateDemandChart() {
 
   if (charts.demand) {
     charts.demand.data.datasets[0].data = values;
+    charts.demand.data.datasets[0].borderColor = labels.map(l => filters.demandTypes.includes(l) ? '#ffffff' : 'transparent');
+    charts.demand.data.datasets[0].borderWidth = labels.map(l => filters.demandTypes.includes(l) ? 3 : 0);
     charts.demand.update('active');
     return;
   }
@@ -611,13 +646,20 @@ function updateDemandChart() {
     type: 'bar',
     data: {
       labels,
-      datasets: [{ data: values, backgroundColor: colors.map(c => c + 'bb'), borderRadius: 4 }]
+      datasets: [{ data: values, backgroundColor: colors.map(c => c + 'bb'), borderRadius: 4, borderColor: labels.map(l => filters.demandTypes.includes(l) ? '#ffffff' : 'transparent'), borderWidth: labels.map(l => filters.demandTypes.includes(l) ? 3 : 0) }]
     },
     options: {
       responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      onClick: (e, els) => {
+        if (els.length > 0) {
+          const label = charts.demand.data.labels[els[0].index];
+          const pill = document.querySelector(`.filter-pill[data-dim="demandTypes"][data-value="${label}"]`);
+          if (pill) pill.click();
+        }
+      },
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => `$${Math.abs(ctx.parsed.x).toFixed(1)}B` } }
+        tooltip: { callbacks: { label: ctx => `$${Math.abs(ctx.parsed.x).toFixed(1)}B — click to filter` } }
       },
       scales: {
         x: { title: { display: true, text: '$B annualized' }, grid: darkGrid },
