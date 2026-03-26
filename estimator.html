@@ -182,11 +182,12 @@ const CONSUMER = [
 ];
 
 const API = [
-  { sdk:'openai (PyPI+npm)', downloads:25000000, divider:15, calls:50, tokens:2000 },
-  { sdk:'anthropic (PyPI+npm)', downloads:8000000, divider:15, calls:40, tokens:3000 },
-  { sdk:'google-genai (PyPI+npm)', downloads:5000000, divider:15, calls:30, tokens:2000 },
-  { sdk:'langchain (PyPI+npm)', downloads:12000000, divider:20, calls:30, tokens:2500 },
-  { sdk:'litellm (proxy)', downloads:3000000, divider:10, calls:100, tokens:2000 },
+  { sdk:'openai (PyPI 224M + npm 68M)', downloads:291000000, divider:15, calls:50, tokens:2000 },
+  { sdk:'anthropic (PyPI 77M + npm 36M)', downloads:113000000, divider:15, calls:40, tokens:3000 },
+  { sdk:'langchain (PyPI 99M + npm 15M)', downloads:114000000, divider:20, calls:30, tokens:2500 },
+  { sdk:'litellm proxy (PyPI 97M)', downloads:97000000, divider:10, calls:100, tokens:2000 },
+  { sdk:'Vercel AI SDK (npm 42M)', downloads:42000000, divider:15, calls:40, tokens:2000 },
+  { sdk:'google-genai (PyPI 17M + npm 10M)', downloads:27000000, divider:15, calls:30, tokens:2000 },
 ];
 
 const CODING = [
@@ -199,11 +200,12 @@ const CODING = [
 ];
 
 const OSS = [
-  { model:'Llama 3.x family', downloads:15000000, activePct:0.001, tokensPerDay:50000000, note:'Most downloaded. vllm/Ollama deployment.' },
-  { model:'DeepSeek family', downloads:5000000, activePct:0.002, tokensPerDay:80000000, note:'High engagement per deploy. Coding focus.' },
-  { model:'Mistral family', downloads:3000000, activePct:0.001, tokensPerDay:40000000, note:'European enterprise focus.' },
-  { model:'Qwen family', downloads:4000000, activePct:0.001, tokensPerDay:60000000, note:'Chinese market. High engagement.' },
-  { model:'Gemma family', downloads:2000000, activePct:0.001, tokensPerDay:30000000, note:'Smaller models, edge deployment.' },
+  { model:'Llama 3.x family', downloads:9348000, activePct:0.001, tokensPerDay:50000000, note:'8B: 8.3M + 70B: 1.1M downloads (HF, 30d). vllm/Ollama.' },
+  { model:'DeepSeek family', downloads:1867000, activePct:0.002, tokensPerDay:80000000, note:'R1: 1.87M downloads (HF, 30d). High engagement.' },
+  { model:'Mistral family', downloads:2202000, activePct:0.001, tokensPerDay:40000000, note:'7B-Instruct: 2.2M downloads (HF, 30d).' },
+  { model:'Qwen family', downloads:744000, activePct:0.001, tokensPerDay:60000000, note:'72B-Instruct: 744K downloads (HF, 30d).' },
+  { model:'Gemma family', downloads:276000, activePct:0.001, tokensPerDay:30000000, note:'9B-it: 276K downloads (HF, 30d).' },
+  { model:'vllm + Ollama infra', downloads:9400000, activePct:0.0005, tokensPerDay:100000000, note:'vllm: 7.4M PyPI + Ollama: 1.9M npm. Inference engines.' },
 ];
 
 // ============================================================
