@@ -97,9 +97,6 @@
   <a href="calculator.html" style="color:#94a3b8;text-decoration:none;">Shelfware Calculator</a>
   <a href="timeline.html" style="color:#94a3b8;text-decoration:none;">Time Machine</a>
   <a href="feed.html" style="color:#94a3b8;text-decoration:none;">Weekly Feed</a>
-  <a href="capex.html">Capex Gap</a>
-  <a href="estimator.html">Token Estimator</a>
-  <a href="workforce.html">Workforce Impact</a>
 </nav>
 <div class="container">
 
@@ -182,11 +179,12 @@
   <h2>Methodology & Sources</h2>
   <p style="font-size:12px; color:var(--text-dim); line-height:1.7;">
     <strong>Provider revenue:</strong> OpenAI ($16.8B ARR est. Q1'26 — WSJ, Bloomberg); Anthropic ($14B ARR Mar'26 — SaaStr); Google Cloud AI ("billions" — Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
-    <strong>Token volumes:</strong> Back-calculated from revenue ÷ blended model pricing. OpenRouter (8.4T tokens/month — openrouter.ai/state-of-ai). Portkey (1T+/day — company disclosure).<br>
-    <strong>Geographic splits:</strong> Stanford HAI AI Index 2024, IDC Worldwide AI Spending Guide, SlashData developer populations.<br>
-    <strong>Industry/Use case:</strong> Gartner AI Use Case Survey 2024, McKinsey Global AI Survey 2024, Stack Overflow Dev Survey 2024.<br>
-    <strong>Enterprise reality:</strong> Salesforce Q3 FY26 earnings, ServiceNow Q4 FY25 earnings, Microsoft Q2 FY25 earnings, Recon Analytics, Gartner, MIT Research.<br>
-    <strong>Demand matrix:</strong> Synthesized from a16z Enterprise GenAI report, Barclays AI research, The Information, Retool State of AI 2024.<br>
+    <strong>Token volumes:</strong> Triangulated from 4 independent methods: (1) Revenue ÷ blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv × 30-50% utilization — SemiAnalysis), (3) Bottom-up user × session × token estimation, (4) SDK download proxies (openai PyPI: 224M/month, anthropic: 77M/month — pypistats.org, Mar 2026). Previous estimate of ~680T/day revised down to ~565T based on GPU utilization cross-check.<br>
+    <strong>Self-hosted tokens:</strong> Not included in provider totals. Llama 3.1 8B: 8.3M HuggingFace downloads/30d. vllm: 7.4M PyPI downloads/month. Estimated ~80-120T/day of inference happening outside API providers — real usage generating zero revenue.<br>
+    <strong>Skeptical cross-checks:</strong> Sequoia "$200B question" capex gap (David Cahn, Sep 2024). Goldman Sachs "Too much spend, too little benefit" (Jun 2024). UBS: 4.4% of US adults use AI daily. ChatGPT Day-30 retention: 10-15% (Sensor Tower). GPU utilization 30-50% (SemiAnalysis). 85% AI projects fail (RAND/Gartner).<br>
+    <strong>Enterprise reality:</strong> Growth deceleration data from earnings calls (SF: 18%→8-9%, NOW: 25%→20%, MSFT M365: stable, WDAY: 20%→15-17%). SKU bundling analysis from UpperEdge. M365 Copilot usage 30-40% (Gartner, Directions on Microsoft).<br>
+    <strong>Geographic/Industry:</strong> Stanford HAI AI Index 2024, IDC, SlashData, Gartner AI Use Case Survey 2024, McKinsey Global AI Survey 2024.<br>
+    <strong>Live data:</strong> OpenRouter pricing via public API (openrouter.ai/api/v1/models). PyPI/npm download stats from pypistats.org and api.npmjs.org. HuggingFace model downloads via API.<br>
     <strong>Cross-dimensional weights:</strong> Editorial estimates for filtering. Filtered views show directional splits, not precise figures.
   </p>
 </div>
@@ -200,15 +198,25 @@
 // DATA MODEL
 // ============================================================
 
+// TOKEN ESTIMATES: Cross-checked against multiple signals:
+// - Revenue ÷ blended pricing (primary method)
+// - GPU capacity ceiling: ~4.5M H100-equiv × 50% utilization × 2500 tok/sec = ~490T/day max
+// - Bottom-up: ChatGPT 300M WAU × 6 sessions × 4K tokens = ~100T/month consumer alone
+// - OpenRouter: 8.4T tokens/month through their platform (small sample)
+// - SemiAnalysis: GPU utilization 30-50%, suggesting actual throughput well below capacity
+// - Self-hosted (Llama 8.3M downloads/30d, vllm 7.4M PyPI/month) adds ~50-100T/day invisible tokens
+// NET: Provider-served tokens likely ~400-500T/day, not 680T. Previous estimate was too high.
+// Self-hosted adds ~80-120T/day on top, for ~500-600T total including open-source.
+
 const PROVIDERS = {
-  'OpenAI':        { tokens: 270, rev: 16.8, color: '#10a37f', growth: '+180% YoY', consumerPct: 60, bizPct: 40 },
-  'Anthropic':     { tokens: 150, rev: 14.0, color: '#d97706', growth: '14x in 14mo', consumerPct: 35, bizPct: 65 },
-  'Google/Gemini': { tokens: 120, rev: 4.2,  color: '#4285f4', growth: '14x in \'24', consumerPct: 40, bizPct: 60 },
-  'Meta (open)':   { tokens: 60,  rev: 0,    color: '#60a5fa', growth: '+400% YoY', consumerPct: 0, bizPct: 0 },
-  'DeepSeek':      { tokens: 30,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
+  'OpenAI':        { tokens: 200, rev: 16.8, color: '#10a37f', growth: '+180% YoY', consumerPct: 60, bizPct: 40 },
+  'Anthropic':     { tokens: 110, rev: 14.0, color: '#d97706', growth: '14x in 14mo', consumerPct: 35, bizPct: 65 },
+  'Google/Gemini': { tokens: 90,  rev: 4.2,  color: '#4285f4', growth: '14x in \'24', consumerPct: 40, bizPct: 60 },
+  'Meta (open)':   { tokens: 80,  rev: 0,    color: '#60a5fa', growth: '+400% YoY', consumerPct: 0, bizPct: 0 },
+  'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
   'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80 },
-  'xAI':           { tokens: 12,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
-  'Others':        { tokens: 23,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60 },
+  'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
+  'Others':        { tokens: 20,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60 },
 };
 
 const REGIONS = {
@@ -632,10 +640,11 @@ function updateDemandChart() {
   const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
 
   // Estimate demand type split (revenue only)
-  const consumerSubs = totalRev * 0.42;
-  const apiDev = totalRev * 0.25;
-  const entPlatform = totalRev * 0.23;
-  const cloudChannel = totalRev * 0.10;
+  // Adjusted: enterprise platform down (shelfware), API/dev up (real growth signal)
+  const consumerSubs = totalRev * 0.40;
+  const apiDev = totalRev * 0.28;
+  const entPlatform = totalRev * 0.20;
+  const cloudChannel = totalRev * 0.12;
 
   const labels = ['Consumer Subs', 'API / Developer', 'Enterprise Platform', 'Cloud Channel'];
   const values = [consumerSubs, apiDev, entPlatform, cloudChannel];
