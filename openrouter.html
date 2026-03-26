@@ -445,7 +445,7 @@ function renderCharts(models, providers) {
       options: {
         responsive: true, maintainAspectRatio: false, indexAxis: 'y',
         plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.x.toFixed(2)}/1M tokens` } } },
-        scales: { x: { type: 'logarithmic', grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: '$/1M output tokens (log scale)' } }, y: { grid: { display: false } } }
+        scales: { x: { type: 'logarithmic', grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: '$/1M output tokens (log scale)' } }, y: { grid: { display: false }, ticks: { autoSkip: false } } }
       }
     });
   }
