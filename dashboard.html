@@ -216,7 +216,10 @@ const PROVIDERS = {
   'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50 },
   'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80 },
   'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30 },
-  'Self-Hosted OSS':{ tokens: 100, rev: 0,    color: '#8b5cf6', growth: '+300% YoY', consumerPct: 0, bizPct: 0 },
+  'Self-Hosted OSS':{ tokens: 100, rev: 4.0,   color: '#8b5cf6', growth: '+300% YoY', consumerPct: 5, bizPct: 95 },
+  // Rev: ~$4B est. inference platform spend (Together ~$150M, Fireworks ~$75M, CoreWeave AI inference ~$1B,
+  // Lambda ~$300M, Groq ~$50M, plus enterprise GPU cloud spend allocated to OSS inference ~$2.5B).
+  // This revenue goes to INFRASTRUCTURE providers, not model makers. The model IP is free.
   'Others':        { tokens: 20,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60 },
 };
 
