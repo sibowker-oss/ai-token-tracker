@@ -507,9 +507,12 @@ function getFilteredProviderData() {
 }
 
 function getFilteredDimensionData(dimObj, dimKey) {
-  const activeProviders = filters.providers.length > 0
+  let activeProviders = filters.providers.length > 0
     ? filters.providers : Object.keys(PROVIDERS);
-  const totalTokens = activeProviders.reduce((a, p) => a + PROVIDERS[p].tokens, 0);
+  if (modelTypeFilter !== 'all') {
+    activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
+  }
+  const totalTokens = activeProviders.reduce((a, p) => a + (PROVIDERS[p]?.tokens || 0), 0);
 
   const result = {};
   Object.keys(dimObj).forEach(key => {
@@ -574,7 +577,7 @@ function buildFilterBar() {
       modelTypeFilter = label.toLowerCase();
       document.querySelectorAll('.filter-pill[data-dim="modelType"]').forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
-      renderAll();
+      updateAll();
     };
     mtGroup.appendChild(pill);
   });
@@ -645,7 +648,7 @@ function updateHeroStats() {
   const totalTokens = Object.values(data).reduce((a, d) => a + d.tokens, 0);
   const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
   const provCount = Object.keys(data).length;
-  const hasFilters = Object.values(filters).some(f => f.length > 0);
+  const hasFilters = Object.values(filters).some(f => f.length > 0) || modelTypeFilter !== 'all';
 
   const bearTokens = Math.round(totalTokens * 0.4);
   const bullTokens = Math.round(totalTokens * 1.8);
@@ -925,11 +928,20 @@ function updateConsumerTable() {
   const label = document.getElementById('consumer-filter-label');
 
   let filtered = TOP_CONSUMERS;
+
+  // Model type filter: match companies by their provider list
+  if (modelTypeFilter !== 'all') {
+    const openProvs = ['Meta', 'DeepSeek', 'Mistral', 'Llama', 'Qwen', 'OSS', 'open'];
+    const frontierProvs = ['OpenAI', 'Anthropic', 'Google', 'xAI'];
+    const matchProvs = modelTypeFilter === 'open' ? openProvs : frontierProvs;
+    filtered = filtered.filter(c => matchProvs.some(p => c.prov.includes(p)));
+  }
+
   if (filters.providers.length > 0) {
     filtered = filtered.filter(c => filters.providers.some(p => c.prov.includes(p.split('/')[0]) || c.prov.includes(p.split(' ')[0])));
     label.textContent = `— filtered by: ${filters.providers.join(', ')}`;
   } else {
-    label.textContent = '';
+    label.textContent = modelTypeFilter !== 'all' ? `— showing ${modelTypeFilter} models` : '';
   }
 
   let html = '<thead><tr><th>Company</th><th>HQ</th><th>Type</th><th>Est. Tokens/Day</th><th>Provider(s)</th><th>Evidence</th></tr></thead><tbody>';
@@ -950,6 +962,17 @@ function updateConsumerTable() {
 function renderModelTable() {
   const t = document.getElementById('model-table');
   let filtered = MODELS;
+
+  // Model type filter
+  if (modelTypeFilter !== 'all') {
+    const openProviders = ['Meta', 'DeepSeek', 'Mistral'];
+    if (modelTypeFilter === 'open') {
+      filtered = filtered.filter(m => openProviders.includes(m.prov));
+    } else {
+      filtered = filtered.filter(m => !openProviders.includes(m.prov));
+    }
+  }
+
   if (filters.providers.length > 0) {
     filtered = filtered.filter(m => {
       return filters.providers.some(p => p.startsWith(m.prov) || m.prov.startsWith(p.split('/')[0]) || m.prov === 'Meta' && p.includes('Meta'));
@@ -986,6 +1009,8 @@ function updateAll() {
   updateDimensionChart('chart-usecase', 'usecase', USE_CASES, 'useCases', 'doughnut');
   updateConsumerTable();
   renderModelTable();
+  renderDemandMatrix();
+  renderEnterpriseTable();
 }
 
 // ============================================================
