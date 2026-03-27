@@ -114,10 +114,10 @@ const CHANNELS = [
 ];
 
 const PROVIDERS = [
-  { label: 'OpenAI', value: 22.5, color: '#10a37f', y: 0 },
-  { label: 'Anthropic', value: 18, color: '#d97706', y: 0 },
-  { label: 'Google', value: 4.5, color: '#4285f4', y: 0 },
-  { label: 'Inf. Platforms', value: 5, color: '#8b5cf6', y: 0 },
+  { label: 'OpenAI', value: 20, color: '#10a37f', y: 0 },
+  { label: 'Anthropic', value: 15.8, color: '#d97706', y: 0 },
+  { label: 'Google', value: 4.2, color: '#4285f4', y: 0 },
+  { label: 'Inf. Platforms', value: 6, color: '#8b5cf6', y: 0 },
 ];
 
 // Where the money ACTUALLY goes — $38B revenue + $12B VC = $50B total
@@ -126,6 +126,7 @@ const OUTCOMES = [
   { label: 'GPU/Compute', value: 28, color: '#10b981', y: 0 },
   { label: 'Model R&D', value: 12, color: '#3b82f6', y: 0 },
   { label: 'Ops/People', value: 10, color: '#f59e0b', y: 0 },
+  { label: 'SaaS Margins', value: 4, color: '#94a3b8', y: 0 },
 ];
 
 // Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
@@ -163,23 +164,24 @@ const FLOWS = [
   [1, 2, 2, 2, 1, '#10b98122'],     // AI Native → Google
   [1, 2, 2, 3, 0.5, '#10b98122'],   // AI Native → Inf. Platforms
   [1, 3, 2, 3, 2.5, '#8b5cf622'],   // Inf. Platforms ch → Inf. Platforms prov
-  [1, 4, 2, 0, 5, '#ef444422'],     // Trad SaaS → OpenAI
-  [1, 4, 2, 1, 2, '#ef444422'],     // Trad SaaS → Anthropic
-  [1, 4, 2, 2, 0.5, '#ef444422'],   // Trad SaaS → Google
+  [1, 4, 2, 0, 2.5, '#ef444422'],   // Trad SaaS → OpenAI (actual inference cost)
+  [1, 4, 2, 1, 0.8, '#ef444422'],   // Trad SaaS → Anthropic
+  [1, 4, 2, 2, 0.2, '#ef444422'],   // Trad SaaS → Google
+  [1, 4, 3, 3, 4, '#94a3b822'],     // Trad SaaS → SaaS Margins (MSFT, SF, NOW keep this)
 
-  // Providers → Cost Destinations ($50B, zero margins)
-  [2, 0, 3, 0, 13, '#10a37f33'],    // OpenAI → GPU/Compute
-  [2, 0, 3, 1, 5.5, '#10a37f22'],   // OpenAI → Model R&D
-  [2, 0, 3, 2, 4, '#10a37f11'],     // OpenAI → Ops/People
-  [2, 1, 3, 0, 10, '#d9770633'],    // Anthropic → GPU/Compute
-  [2, 1, 3, 1, 4.5, '#d9770622'],   // Anthropic → Model R&D
-  [2, 1, 3, 2, 3.5, '#d9770611'],   // Anthropic → Ops/People
-  [2, 2, 3, 0, 2.5, '#4285f433'],   // Google → GPU/Compute
+  // Providers → Cost Destinations (zero margins for frontier)
+  [2, 0, 3, 0, 11.5, '#10a37f33'],  // OpenAI → GPU/Compute
+  [2, 0, 3, 1, 5, '#10a37f22'],     // OpenAI → Model R&D
+  [2, 0, 3, 2, 3.5, '#10a37f11'],   // OpenAI → Ops/People
+  [2, 1, 3, 0, 8.5, '#d9770633'],   // Anthropic → GPU/Compute
+  [2, 1, 3, 1, 4, '#d9770622'],     // Anthropic → Model R&D
+  [2, 1, 3, 2, 3.3, '#d9770611'],   // Anthropic → Ops/People
+  [2, 2, 3, 0, 2.2, '#4285f433'],   // Google → GPU/Compute
   [2, 2, 3, 1, 1, '#4285f422'],     // Google → R&D
   [2, 2, 3, 2, 1, '#4285f411'],     // Google → Ops
-  [2, 3, 3, 0, 2.5, '#8b5cf633'],   // Inf. Platforms → GPU/Compute
+  [2, 3, 3, 0, 3.8, '#8b5cf633'],   // Inf. Platforms → GPU/Compute
   [2, 3, 3, 1, 1, '#8b5cf622'],     // Inf. Platforms → R&D
-  [2, 3, 3, 2, 1.5, '#8b5cf611'],   // Inf. Platforms → Ops
+  [2, 3, 3, 2, 1.2, '#8b5cf611'],   // Inf. Platforms → Ops
 ];
 
 const COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
