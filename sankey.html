@@ -53,7 +53,7 @@
 
 <div class="container">
   <h1>Follow the Dollar</h1>
-  <div class="sub">$38B in AI revenue + $12B in VC subsidy = $50B flowing through the system. Most ends up at NVIDIA. Margins are near zero. Hover to explore.</div>
+  <div class="sub">$36B in AI revenue + $12B in VC subsidy = $48B flowing through the system. Most ends up at NVIDIA. Only Trad SaaS vendors make margin. Hover to explore.</div>
 
   <div class="sankey-container">
     <canvas id="sankey" height="600"></canvas>
@@ -64,18 +64,18 @@
   <div class="insight-cards">
     <div class="insight">
       <h3 style="color:var(--green);">GPU/Compute Wins</h3>
-      <div class="stat" style="color:var(--green);">~$22B</div>
-      <p>~58% of all AI revenue flows straight to GPU infrastructure — NVIDIA, cloud providers, and data centers. They're the real winner regardless of which model or app prevails.</p>
+      <div class="stat" style="color:var(--green);">~$25B</div>
+      <p>~52% of all AI spending flows straight to GPU infrastructure — NVIDIA, cloud providers, and data centers. They're the real winner regardless of which model or app prevails.</p>
     </div>
     <div class="insight">
       <h3 style="color:var(--red);">The VC Life Support</h3>
       <div class="stat" style="color:var(--red);">~$12B</div>
-      <p>The AI industry spends ~$50B but earns ~$38B. Investors cover the ~$12B gap. OpenAI alone lost ~$5B in 2024. This subsidy funds the free tiers, price wars, and hiring that fuel growth — but it can't last forever.</p>
+      <p>The AI industry spends ~$48B but earns ~$36B. Investors cover the ~$12B gap. OpenAI alone lost ~$5B in 2024. This subsidy funds the free tiers, price wars, and hiring that fuel growth — but it can't last forever.</p>
     </div>
     <div class="insight">
       <h3 style="color:var(--orange);">Zero Margins</h3>
       <div class="stat" style="color:var(--orange);">~$0</div>
-      <p>After compute, R&D, and ops — there's nothing left. Every frontier provider is operating at a loss, subsidised by investors betting on future scale economics. Google absorbs losses within Alphabet. The only profitable players are NVIDIA and the cloud providers.</p>
+      <p>Frontier model providers (OpenAI, Anthropic) have zero margins — every dollar goes to compute, R&D, or people. The only AI players making real margin are the Trad SaaS vendors (MSFT, SF, NOW) who charge $30/seat and pay $2-5 in inference. They're selling shovels in a gold rush they don't participate in.</p>
     </div>
   </div>
 </div>
@@ -96,12 +96,12 @@ ctx.scale(2, 2);
 // Column positions
 const COL = [40, W * 0.22, W * 0.48, W * 0.74, W - 80];
 
-// Revenue flows: ~$38B from buyers + ~$12B VC subsidy = ~$50B total into the system
-// Consumer $14, SME $8, Enterprise $16
+// Revenue: ~$36B from customers + ~$12B VC = ~$48B total
+// Consumer $14, SME $8, Enterprise $14
 const BUYERS = [
   { label: 'Consumer', value: 14, color: '#f59e0b', y: 0 },
   { label: 'SME', value: 8, color: '#8b5cf6', y: 0 },
-  { label: 'Enterprise', value: 16, color: '#3b82f6', y: 0 },
+  { label: 'Enterprise', value: 14, color: '#3b82f6', y: 0 },
   { label: 'VC/Investors', value: 12, color: '#dc2626', y: 0 },
 ];
 
@@ -109,29 +109,28 @@ const CHANNELS = [
   { label: 'Model Subs', value: 13, color: '#f59e0b', y: 0 },
   { label: 'Model API', value: 8, color: '#3b82f6', y: 0 },
   { label: 'AI Native', value: 7, color: '#10b981', y: 0 },
-  { label: 'Inf. Platforms', value: 2.5, color: '#8b5cf6', y: 0 },
-  { label: 'Trad. SaaS', value: 7.5, color: '#ef4444', y: 0 },
+  { label: 'Inf. Platforms', value: 3, color: '#8b5cf6', y: 0 },
+  { label: 'Trad. SaaS', value: 5, color: '#ef4444', y: 0 },
 ];
 
 const PROVIDERS = [
-  { label: 'OpenAI', value: 20, color: '#10a37f', y: 0 },
-  { label: 'Anthropic', value: 15.8, color: '#d97706', y: 0 },
-  { label: 'Google', value: 4.2, color: '#4285f4', y: 0 },
-  { label: 'Inf. Platforms', value: 6, color: '#8b5cf6', y: 0 },
+  { label: 'OpenAI', value: 19.5, color: '#10a37f', y: 0 },
+  { label: 'Anthropic', value: 15.5, color: '#d97706', y: 0 },
+  { label: 'Google', value: 4, color: '#4285f4', y: 0 },
+  { label: 'Inf. Platforms', value: 5.7, color: '#8b5cf6', y: 0 },
 ];
 
-// Where the money ACTUALLY goes — $38B revenue + $12B VC = $50B total
-// No margins — frontier providers are all loss-making
+// Where $48B actually goes — zero margins for frontier providers
 const OUTCOMES = [
-  { label: 'GPU/Compute', value: 28, color: '#10b981', y: 0 },
-  { label: 'Model R&D', value: 12, color: '#3b82f6', y: 0 },
-  { label: 'Ops/People', value: 10, color: '#f59e0b', y: 0 },
-  { label: 'SaaS Margins', value: 4, color: '#94a3b8', y: 0 },
+  { label: 'GPU/Compute', value: 25, color: '#10b981', y: 0 },
+  { label: 'Model R&D', value: 10, color: '#3b82f6', y: 0 },
+  { label: 'Ops/People', value: 9.9, color: '#f59e0b', y: 0 },
+  { label: 'SaaS Margins', value: 3.5, color: '#94a3b8', y: 0 },
 ];
 
 // Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
 const FLOWS = [
-  // Buyers → Channels (customer revenue: $38B)
+  // Buyers → Channels ($36B customer revenue)
   [0, 0, 1, 0, 10.5, '#f59e0b33'],  // Consumer → Model Subs
   [0, 0, 1, 1, 0.5, '#f59e0b33'],   // Consumer → API
   [0, 0, 1, 2, 2.5, '#f59e0b33'],   // Consumer → AI Native
@@ -139,15 +138,15 @@ const FLOWS = [
   [0, 1, 1, 0, 1.5, '#8b5cf633'],   // SME → Model Subs
   [0, 1, 1, 1, 2, '#8b5cf633'],     // SME → API
   [0, 1, 1, 2, 2, '#8b5cf633'],     // SME → AI Native
-  [0, 1, 1, 3, 2.25, '#8b5cf633'],  // SME → Inf. Platforms (90%)
-  [0, 1, 1, 4, 1, '#8b5cf633'],     // SME → Trad SaaS
+  [0, 1, 1, 3, 2.7, '#8b5cf633'],   // SME → Inf. Platforms (90%)
+  [0, 1, 1, 4, 0.5, '#8b5cf633'],   // SME → Trad SaaS (small)
   [0, 2, 1, 0, 1, '#3b82f633'],     // Enterprise → Model Subs
   [0, 2, 1, 1, 5.5, '#3b82f633'],   // Enterprise → API
   [0, 2, 1, 2, 2.5, '#3b82f633'],   // Enterprise → AI Native
-  [0, 2, 1, 3, 0.25, '#3b82f633'],  // Enterprise → Inf. Platforms (10%)
-  [0, 2, 1, 4, 6, '#3b82f633'],     // Enterprise → Trad SaaS
+  [0, 2, 1, 3, 0.3, '#3b82f633'],   // Enterprise → Inf. Platforms (10%)
+  [0, 2, 1, 4, 4, '#3b82f633'],     // Enterprise → Trad SaaS
 
-  // VC/Investors bypass channels → go DIRECT to providers ($12B)
+  // VC/Investors → DIRECT to providers ($12B, bypasses channels)
   [0, 3, 2, 0, 5, '#dc262633'],     // VC → OpenAI
   [0, 3, 2, 1, 4, '#dc262633'],     // VC → Anthropic
   [0, 3, 2, 3, 3, '#dc262633'],     // VC → Inf. Platforms
@@ -163,25 +162,29 @@ const FLOWS = [
   [1, 2, 2, 1, 3, '#10b98122'],     // AI Native → Anthropic
   [1, 2, 2, 2, 1, '#10b98122'],     // AI Native → Google
   [1, 2, 2, 3, 0.5, '#10b98122'],   // AI Native → Inf. Platforms
-  [1, 3, 2, 3, 2.5, '#8b5cf622'],   // Inf. Platforms ch → Inf. Platforms prov
-  [1, 4, 2, 0, 2.5, '#ef444422'],   // Trad SaaS → OpenAI (actual inference cost)
-  [1, 4, 2, 1, 0.8, '#ef444422'],   // Trad SaaS → Anthropic
-  [1, 4, 2, 2, 0.2, '#ef444422'],   // Trad SaaS → Google
-  [1, 4, 3, 3, 4, '#94a3b822'],     // Trad SaaS → SaaS Margins (MSFT, SF, NOW keep this)
+  [1, 3, 2, 3, 3, '#8b5cf622'],     // Inf. Platforms ch → Inf. Platforms prov
+
+  // Trad SaaS: mostly skips providers → goes to SaaS Margins
+  // Small share to providers for actual inference, tiny bit to Inf. Platforms
+  [1, 4, 2, 0, 0.8, '#ef444422'],   // Trad SaaS → OpenAI (actual inference)
+  [1, 4, 2, 1, 0.3, '#ef444422'],   // Trad SaaS → Anthropic
+  [1, 4, 2, 3, 0.2, '#ef444422'],   // Trad SaaS → Inf. Platforms (some use open models)
+  [1, 4, 3, 3, 3.5, '#94a3b822'],   // Trad SaaS → SaaS Margins (MSFT/SF/NOW keep most)
+  [1, 4, 3, 2, 0.2, '#ef444411'],   // Trad SaaS → Ops (their own AI ops costs)
 
   // Providers → Cost Destinations (zero margins for frontier)
-  [2, 0, 3, 0, 11.5, '#10a37f33'],  // OpenAI → GPU/Compute
+  [2, 0, 3, 0, 11, '#10a37f33'],    // OpenAI → GPU/Compute
   [2, 0, 3, 1, 5, '#10a37f22'],     // OpenAI → Model R&D
   [2, 0, 3, 2, 3.5, '#10a37f11'],   // OpenAI → Ops/People
   [2, 1, 3, 0, 8.5, '#d9770633'],   // Anthropic → GPU/Compute
-  [2, 1, 3, 1, 4, '#d9770622'],     // Anthropic → Model R&D
-  [2, 1, 3, 2, 3.3, '#d9770611'],   // Anthropic → Ops/People
-  [2, 2, 3, 0, 2.2, '#4285f433'],   // Google → GPU/Compute
+  [2, 1, 3, 1, 3.5, '#d9770622'],   // Anthropic → Model R&D
+  [2, 1, 3, 2, 3.5, '#d9770611'],   // Anthropic → Ops/People
+  [2, 2, 3, 0, 2, '#4285f433'],     // Google → GPU/Compute
   [2, 2, 3, 1, 1, '#4285f422'],     // Google → R&D
   [2, 2, 3, 2, 1, '#4285f411'],     // Google → Ops
-  [2, 3, 3, 0, 3.8, '#8b5cf633'],   // Inf. Platforms → GPU/Compute
-  [2, 3, 3, 1, 1, '#8b5cf622'],     // Inf. Platforms → R&D
-  [2, 3, 3, 2, 1.2, '#8b5cf611'],   // Inf. Platforms → Ops
+  [2, 3, 3, 0, 3.5, '#8b5cf633'],   // Inf. Platforms → GPU/Compute
+  [2, 3, 3, 1, 0.5, '#8b5cf622'],   // Inf. Platforms → R&D
+  [2, 3, 3, 2, 1.7, '#8b5cf611'],   // Inf. Platforms → Ops (incl VC burn)
 ];
 
 const COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
