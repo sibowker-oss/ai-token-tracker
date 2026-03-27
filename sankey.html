@@ -124,8 +124,8 @@ const PROVIDERS = [
 const OUTCOMES = [
   { label: 'GPU/Compute', value: 25, color: '#10b981', y: 0 },
   { label: 'Model R&D', value: 10, color: '#3b82f6', y: 0 },
-  { label: 'Ops/People', value: 9.9, color: '#f59e0b', y: 0 },
-  { label: 'SaaS Margins', value: 3.5, color: '#94a3b8', y: 0 },
+  { label: 'Ops/People', value: 9.6, color: '#f59e0b', y: 0 },
+  { label: 'Margin', value: 3.8, color: '#94a3b8', y: 0 },
 ];
 
 // Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
@@ -169,7 +169,7 @@ const FLOWS = [
   [1, 4, 2, 0, 0.8, '#ef444422'],   // Trad SaaS → OpenAI (actual inference)
   [1, 4, 2, 1, 0.3, '#ef444422'],   // Trad SaaS → Anthropic
   [1, 4, 2, 3, 0.2, '#ef444422'],   // Trad SaaS → Inf. Platforms (some use open models)
-  [1, 4, 3, 3, 3.5, '#94a3b822'],   // Trad SaaS → SaaS Margins (MSFT/SF/NOW keep most)
+  [1, 4, 3, 3, 3.5, '#94a3b822'],   // Trad SaaS → Margin (MSFT/SF/NOW keep most)
   [1, 4, 3, 2, 0.2, '#ef444411'],   // Trad SaaS → Ops (their own AI ops costs)
 
   // Providers → Cost Destinations (zero margins for frontier)
@@ -184,7 +184,8 @@ const FLOWS = [
   [2, 2, 3, 2, 1, '#4285f411'],     // Google → Ops
   [2, 3, 3, 0, 3.5, '#8b5cf633'],   // Inf. Platforms → GPU/Compute
   [2, 3, 3, 1, 0.5, '#8b5cf622'],   // Inf. Platforms → R&D
-  [2, 3, 3, 2, 1.7, '#8b5cf611'],   // Inf. Platforms → Ops (incl VC burn)
+  [2, 3, 3, 2, 1.4, '#8b5cf611'],   // Inf. Platforms → Ops
+  [2, 3, 3, 3, 0.3, '#8b5cf611'],   // Inf. Platforms → Margin (thin, ~5%)
 ];
 
 const COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
@@ -229,11 +230,14 @@ function draw() {
     const fh = value * fromScale;
     const th = value * toScale;
 
-    const x1 = from.x + 80;
+    const nodeW = 80;
+    const x1 = from.x + nodeW;
     const y1 = from.outY;
     const x2 = to.x;
     const y2 = to.inY;
-    const cp = (x2 - x1) * 0.5;
+    // Wider bezier for flows that skip columns
+    const colSpan = toCol - fromCol;
+    const cp = colSpan > 1 ? (x2 - x1) * 0.35 : (x2 - x1) * 0.5;
 
     ctx.beginPath();
     ctx.moveTo(x1, y1);
@@ -327,7 +331,8 @@ function draw(highlight) {
     const fh = value * fromScale;
     const th = value * toScale;
 
-    const x1 = from.x + 80;
+    const nodeW = 80;
+    const x1 = from.x + nodeW;
     const y1 = from.outY;
     const x2 = to.x;
     const y2 = to.inY;
@@ -346,7 +351,8 @@ function draw(highlight) {
       color = baseColor.slice(0, 7) + '08';
     }
 
-    const cp = (x2 - x1) * 0.5;
+    const colSpan = toCol - fromCol;
+    const cp = colSpan > 1 ? (x2 - x1) * 0.35 : (x2 - x1) * 0.5;
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.bezierCurveTo(x1 + cp, y1, x2 - cp, y2, x2, y2);
