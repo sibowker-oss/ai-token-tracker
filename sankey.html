@@ -121,7 +121,8 @@ ctx.scale(2, 2);
 
 // Column positions
 const nw = 80; // node width
-const COL = [0, (W - nw) * 0.25, (W - nw) * 0.5, (W - nw) * 0.75, W - nw];
+const gap = (W - nw) / 3; // equal spacing so col1 left=0, col4 right=W
+const COL = [0, gap, gap * 2, W - nw];
 
 // 2025 ACTUAL REVENUE (not exit ARR)
 // $19B customer revenue + $9B VC subsidy = $28B total system
