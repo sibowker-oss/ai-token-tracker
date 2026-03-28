@@ -59,10 +59,44 @@
     <canvas id="sankey" height="600"></canvas>
   </div>
 
-  <div class="legend" id="legend"></div>
+  <!-- IaaS / Open Models note -->
+  <div style="display:flex; align-items:flex-start; gap:10px; margin-top:20px; padding:14px 18px; background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); border-radius:10px;">
+    <div style="width:14px; height:14px; min-width:14px; border-radius:3px; background:#8b5cf6; margin-top:2px;"></div>
+    <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;"><strong style="color:#8b5cf6;">IaaS Providers</strong> (Together, Fireworks, Groq) are the primary commercial channel for <strong>open-weight models</strong> (Llama, Mixtral, DeepSeek). Revenue from open models flows through IaaS providers — not the model creators. Meta, Mistral and DeepSeek don't directly monetise inference for their open releases.</p>
+  </div>
+
+  <!-- VC definition -->
+  <div style="display:flex; align-items:flex-start; gap:10px; margin-top:12px; padding:14px 18px; background:rgba(220,38,38,0.08); border:1px solid rgba(220,38,38,0.2); border-radius:10px;">
+    <div style="width:14px; height:14px; min-width:14px; border-radius:3px; background:#dc2626; margin-top:2px;"></div>
+    <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;"><strong style="color:#dc2626;">VC/Investor subsidy ($12B)</strong> is purely the gap between what customers spend on AI and the published, calculated and estimated operating expense to provide that service. It excludes training compute capex, data centre construction, and GPU procurement — which are funded separately and dwarf customer revenue.</p>
+  </div>
+
+  <!-- The real economics -->
+  <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:20px; margin-top:16px;">
+    <h3 style="color:var(--green); font-size:16px; margin-bottom:12px;">The Real Economics</h3>
+    <p style="font-size:13px; color:var(--text-dim); margin-bottom:16px;">Strip away the VC subsidy and the Trad SaaS revenue that ends up as margin (not token consumption), and the picture becomes stark:</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;">
+      <div style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--green);">~$12B</div>
+        <div style="font-size:12px; color:var(--text-dim);">True AI revenue</div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">Subs + API + Tokens actually consumed</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--red);">~$13B</div>
+        <div style="font-size:12px; color:var(--text-dim);">Inference costs to serve it</div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">The variable cost of running these models</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--red);">-$1B</div>
+        <div style="font-size:12px; color:var(--text-dim);">Gross margin on real AI</div>
+        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">Before a single engineer is paid</div>
+      </div>
+    </div>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:16px; font-style:italic;">Even ignoring people costs, R&D, and SG&A — the core AI inference business loses money at the gross margin level. Every token served costs more than customers pay for it. The $2.3B of "margin" in the system belongs entirely to Trad SaaS vendors reselling AI features, not to the companies building the models.</p>
+  </div>
 
   <!-- What's NOT in this chart -->
-  <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:12px; padding:20px; margin-top:24px;">
+  <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:12px; padding:20px; margin-top:16px;">
     <h3 style="color:var(--red); font-size:16px; margin-bottom:12px;">What's NOT in this chart</h3>
     <p style="font-size:13px; color:var(--text-dim); margin-bottom:12px;">This diagram only shows the <strong>customer revenue dollar flow</strong>. The AI industry's total investment is dramatically larger:</p>
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px;">
@@ -88,7 +122,7 @@
 
   <div class="insight-cards">
     <div class="insight">
-      <h3 style="color:var(--green);">Inference COGS Dominates</h3>
+      <h3 style="color:var(--green);">Inference Costs Dominate</h3>
       <div class="stat" style="color:var(--green);">~$13B</div>
       <p>47% of all AI spending flows to inference compute — the variable cost of serving models to customers. NVIDIA and the cloud providers capture this regardless of which model wins.</p>
     </div>
@@ -137,9 +171,9 @@ const BUYERS = [
 const CHANNELS = [
   { label: 'Model Subs', value: 4.5, color: '#f59e0b', y: 0 },
   { label: 'Model API', value: 3, color: '#3b82f6', y: 0 },
-  { label: 'Cloud Channel', value: 2, color: '#06b6d4', y: 0 },
-  { label: 'AI Native', value: 3, color: '#10b981', y: 0 },
-  { label: 'Inf. Platforms', value: 0.3, color: '#8b5cf6', y: 0 },
+  { label: 'Hyperscalers', value: 2, color: '#06b6d4', y: 0 },
+  { label: 'AI Native Apps', value: 3, color: '#10b981', y: 0 },
+  { label: 'IaaS', value: 0.3, color: '#8b5cf6', y: 0 },
   { label: 'Trad. SaaS', value: 2.8, color: '#ef4444', y: 0 },
 ];
 
@@ -147,20 +181,20 @@ const CHANNELS = [
 const PROVIDERS = [
   { label: 'OpenAI', value: 12, color: '#10a37f', y: 0 },      // 6.0 cust + 6.0 VC
   { label: 'Anthropic', value: 9.7, color: '#d97706', y: 0 },   // 4.5 cust + 5.2 VC
-  { label: 'Inf. Platforms', value: 0.8, color: '#8b5cf6', y: 0 }, // 0.5 cust + 0.3 VC
+  { label: 'IaaS', value: 0.8, color: '#8b5cf6', y: 0 },           // 0.5 cust + 0.3 VC
   { label: 'Google', value: 2.5, color: '#4285f4', y: 0 },      // 2.0 cust + 0.5 VC
 ];
 
 // Where $27.6B goes — zero margins for frontier, SaaS + Cloud keep margin
 const OUTCOMES = [
-  { label: 'Inference COGS', value: 13, color: '#10b981', y: 0 },
-  { label: 'People & SG&A', value: 12.3, color: '#f59e0b', y: 0 },
+  { label: 'Inference', value: 13, color: '#10b981', y: 0 },
+  { label: 'People/SG&A', value: 12.3, color: '#f59e0b', y: 0 },
   { label: 'Margin', value: 2.3, color: '#94a3b8', y: 0 },
 ];
 
 // Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
-// Channel indices: 0=Subs, 1=API, 2=Cloud, 3=Native, 4=Inf, 5=SaaS
-// Provider indices: 0=OpenAI, 1=Anthropic, 2=Inf.Platforms, 3=Google
+// Channel indices: 0=Subs, 1=API, 2=Hyperscalers, 3=AI Native Apps, 4=IaaS, 5=SaaS
+// Provider indices: 0=OpenAI, 1=Anthropic, 2=IaaS, 3=Google
 const FLOWS = [
   // Buyers → Channels ($15.6B customer revenue)
   [0, 0, 1, 0, 2.5, '#f59e0b33'],   // Consumer → Model Subs (ChatGPT Plus, Claude Pro, Gemini)
@@ -255,6 +289,25 @@ function layoutColumn(col, x) {
 
 COL.forEach((x, i) => { if (i < COLUMNS.length) layoutColumn(COLUMNS[i], x); });
 
+// Helper: draw text wrapped within maxW, returns number of lines drawn
+function drawWrappedText(ctx, text, x, y, maxW, lineH) {
+  const words = text.split(' ');
+  let line = '';
+  let lines = 0;
+  for (let i = 0; i < words.length; i++) {
+    const test = line + (line ? ' ' : '') + words[i];
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x, y + lines * lineH);
+      line = words[i];
+      lines++;
+    } else {
+      line = test;
+    }
+  }
+  ctx.fillText(line, x, y + lines * lineH);
+  return lines + 1;
+}
+
 // Track output ports for flow positioning
 function resetPorts() {
   COLUMNS.forEach(col => col.forEach(n => { n.outY = n.y; n.inY = n.y; }));
@@ -319,18 +372,21 @@ function draw() {
       ctx.fillStyle = node.color;
       ctx.fill();
 
-      // Label
+      // Label (wrapped to fit within node width)
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 11px -apple-system,sans-serif';
       ctx.textAlign = ci < 2 ? 'left' : 'right';
       const tx = ci < 2 ? node.x + 6 : node.x + w - 6;
-      const ty = node.y + node.h / 2;
+      const maxLabelW = w - 12;
 
       if (node.h > 20) {
-        ctx.fillText(node.label, tx, ty - 2);
+        const labelLines = Math.ceil(ctx.measureText(node.label).width / maxLabelW);
+        const totalH = labelLines * 12 + 14; // label lines + value line
+        const startY = node.y + (node.h - totalH) / 2 + 10;
+        const nLines = drawWrappedText(ctx, node.label, tx, startY, maxLabelW, 12);
         ctx.font = '10px -apple-system,sans-serif';
         ctx.fillStyle = 'rgba(255,255,255,0.7)';
-        ctx.fillText('$' + node.value + 'B', tx, ty + 12);
+        ctx.fillText('$' + node.value + 'B', tx, startY + nLines * 12 + 2);
       }
     });
   });
@@ -455,19 +511,22 @@ function draw(highlight) {
         ctx.stroke();
       }
 
-      // Label
+      // Label (wrapped to fit within node width)
       const textAlpha = isDimmed ? '55' : '';
       ctx.fillStyle = '#fff' + textAlpha;
       ctx.font = 'bold 11px -apple-system,sans-serif';
       ctx.textAlign = ci < 2 ? 'left' : 'right';
       const tx = ci < 2 ? node.x + 6 : node.x + w - 6;
-      const ty = node.y + node.h / 2;
+      const maxLabelW = w - 12;
 
       if (node.h > 20) {
-        ctx.fillText(node.label, tx, ty - 2);
+        const labelLines = Math.ceil(ctx.measureText(node.label).width / maxLabelW);
+        const totalH = labelLines * 12 + 14;
+        const startY = node.y + (node.h - totalH) / 2 + 10;
+        const nLines = drawWrappedText(ctx, node.label, tx, startY, maxLabelW, 12);
         ctx.font = '10px -apple-system,sans-serif';
         ctx.fillStyle = 'rgba(255,255,255,' + (isDimmed ? '0.2' : '0.7') + ')';
-        ctx.fillText('$' + node.value + 'B', tx, ty + 12);
+        ctx.fillText('$' + node.value + 'B', tx, startY + nLines * 12 + 2);
       }
     });
   });
@@ -613,15 +672,7 @@ canvas.addEventListener('mouseleave', () => {
   tooltip.style.display = 'none';
 });
 
-// Legend
-const legendEl = document.getElementById('legend');
-[
-  { color: '#10b981', label: 'Real Token Consumption — revenue that drives actual AI inference' },
-  { color: '#ef4444', label: 'Shelfware — booked AI revenue with minimal actual usage' },
-  { color: '#475569', label: 'Margin / Operations — provider costs, R&D, overhead' },
-].forEach(l => {
-  legendEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${l.color}"></div>${l.label}</div>`;
-});
+// Legend removed — replaced with inline callout boxes in HTML
 </script>
 </body>
 </html>
