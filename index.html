@@ -152,7 +152,7 @@
 
 <header>
   <h1>Global AI Token Usage Estimator</h1>
-  <p>Directional estimates from public filings, earnings calls, press reports & developer surveys — March 2026</p>
+  <p>Directional estimates from public filings, earnings calls, press reports &amp; developer surveys &mdash; March 2026<br><span style="font-size:11px;color:#f59e0b;">All revenue figures are annualized run rate (ARR), not actual collected revenue. See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual 2025 collected.</span></p>
 </header>
 
 <!-- ===== FILTER BAR ===== -->
@@ -163,13 +163,13 @@
 
 <!-- ===== MAIN CHARTS ===== -->
 <div class="card">
-  <h2>Token Volume & Revenue by Provider <span class="sub">— click bars to filter</span></h2>
+  <h2>Token Volume &amp; ARR by Provider <span class="sub">&mdash; click bars to filter</span></h2>
   <div class="chart-wrap"><canvas id="chart-provider"></canvas></div>
 </div>
 
 <div class="grid-2">
   <div class="card">
-    <h2>Revenue by Demand Type</h2>
+    <h2>ARR by Demand Type</h2>
     <div class="chart-wrap"><canvas id="chart-demand"></canvas></div>
   </div>
   <div class="card">
@@ -196,7 +196,7 @@
 
 <!-- ===== DEMAND MATRIX ===== -->
 <div class="card">
-  <h2>Token Demand Quality Matrix <span class="sub">— who buys × how they buy. Not all "$1 of AI revenue" is equal.</span></h2>
+  <h2>Token Demand Quality Matrix <span class="sub">&mdash; who buys &times; how they buy. Actual 2025 collected revenue (from <a href="sankey.html" style="color:var(--accent);">Sankey</a>). Not all "$1 of AI revenue" is equal.</span></h2>
   <div style="overflow-x:auto;">
     <table class="matrix-table" id="demand-matrix"></table>
   </div>
@@ -204,7 +204,7 @@
 
 <!-- ===== ENTERPRISE REALITY CHECK ===== -->
 <div class="card">
-  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">— Booked revenue vs. actual token consumption</span></h2>
+  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">&mdash; Booked ARR vs. actual token consumption</span></h2>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <table class="detail" id="enterprise-table"></table>
   </div>
@@ -220,7 +220,7 @@
 
 <!-- ===== MODEL PRICING ===== -->
 <div class="card">
-  <h2>Model Pricing & Estimated Volume</h2>
+  <h2>Model Pricing &amp; Estimated Volume</h2>
   <div style="overflow-x:auto;">
     <table class="detail" id="model-table"></table>
   </div>
@@ -228,256 +228,113 @@
 
 <!-- ===== METHODOLOGY ===== -->
 <div class="card" style="background:rgba(59,130,246,0.05); border-color:rgba(59,130,246,0.2);">
-  <h2>Methodology & Sources</h2>
+  <h2>Methodology &amp; Sources</h2>
   <p style="font-size:12px; color:var(--text-dim); line-height:1.7;">
-    <strong>Provider revenue:</strong> OpenAI ($16.8B ARR est. Q1'26 — WSJ, Bloomberg); Anthropic ($14B ARR Mar'26 — SaaStr); Google Cloud AI ("billions" — Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
-    <strong>Token volumes:</strong> Triangulated from 4 independent methods: (1) Revenue ÷ blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv × 30-50% utilization — SemiAnalysis), (3) Bottom-up user × session × token estimation, (4) SDK download proxies (openai PyPI: 224M/month, anthropic: 78M/month — pypistats.org, Mar 2026). Previous estimate of ~680T/day revised down to ~565T based on GPU utilization cross-check.<br>
-    <strong>Self-hosted tokens:</strong> Not included in provider totals. Llama 3.1 8B: 8.5M HuggingFace downloads/30d. vllm: 7.5M PyPI downloads/month. Estimated ~80-120T/day of inference happening outside API providers — real usage generating zero revenue.<br>
+    <strong>Provider revenue:</strong> OpenAI ($16.8B ARR est. Q1'26 &mdash; WSJ, Bloomberg); Anthropic ($14B ARR Mar'26 &mdash; SaaStr); Google Cloud AI ("billions" &mdash; Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
+    <strong>Token volumes:</strong> Triangulated from 4 independent methods: (1) Revenue &divide; blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv &times; 30-50% utilization &mdash; SemiAnalysis), (3) Bottom-up user &times; session &times; token estimation, (4) SDK download proxies (openai PyPI: 224M/month, anthropic: 79M/month &mdash; pypistats.org, Mar 2026). Previous estimate of ~680T/day revised down to ~565T based on GPU utilization cross-check.<br>
+    <strong>Self-hosted tokens:</strong> Not included in provider totals. Llama 3.1 8B: 8.5M HuggingFace downloads/30d. vllm: 7.7M PyPI downloads/month. Estimated ~80-120T/day of inference happening outside API providers &mdash; real usage generating zero revenue.<br>
     <strong>Skeptical cross-checks:</strong> Sequoia "$200B question" capex gap (David Cahn, Sep 2024). Goldman Sachs "Too much spend, too little benefit" (Jun 2024). UBS: 4.4% of US adults use AI daily. ChatGPT Day-30 retention: 10-15% (Sensor Tower). GPU utilization 30-50% (SemiAnalysis). 85% AI projects fail (RAND/Gartner).<br>
-    <strong>Enterprise reality (2+ sources per claim):</strong> M365 Copilot 15M seats (Microsoft Q2 FY26 earnings). 35.8% usage (Recon Analytics, 150K respondents — NOT Gartner). Only 5% past pilot (Gartner 2025, 187 respondents). 70% tried, 8% kept choosing (Recon Analytics). SF Agentforce $800M ARR (SF Q4 FY26 earnings), ~50% deals free (derived from SF quarterly deal counts). NOW $600M ACV (NOW Q4 2025 earnings), Pro Plus premium 30-60% (UpperEdge). GitHub Copilot 4.7M subs (MSFT earnings). COGS cross-check: CRM gross margin flat 77% = minimal AI COGS. NOW -1.7pp. MSFT cloud -3pp. Full analysis: enterprise-saas-ai-sku-analysis.md.<br>
+    <strong>Enterprise reality (2+ sources per claim):</strong> M365 Copilot 15M seats (Microsoft Q2 FY26 earnings). 35.8% usage (Recon Analytics, 150K respondents &mdash; NOT Gartner). Only 5% past pilot (Gartner 2025, 187 respondents). 70% tried, 8% kept choosing (Recon Analytics). SF Agentforce $800M ARR (SF Q4 FY26 earnings), ~50% deals free (derived from SF quarterly deal counts). NOW $600M ACV (NOW Q4 2025 earnings), Pro Plus premium 30-60% (UpperEdge). GitHub Copilot 4.7M subs (MSFT earnings). COGS cross-check: CRM gross margin flat 77% = minimal AI COGS. NOW -1.7pp. MSFT cloud -3pp. Full analysis: enterprise-saas-ai-sku-analysis.md.<br>
     <strong>Geographic/Industry:</strong> Stanford HAI AI Index 2024, IDC, SlashData, Gartner AI Use Case Survey 2024, McKinsey Global AI Survey 2024.<br>
     <strong>Live data:</strong> OpenRouter pricing via public API (openrouter.ai/api/v1/models). PyPI/npm download stats from pypistats.org and api.npmjs.org. HuggingFace model downloads via API.<br>
     <strong>Cross-dimensional weights:</strong> Editorial estimates for filtering. Filtered views show directional splits, not precise figures.
   </p>
 </div>
 
-<footer>Global AI Token Usage Estimator v2.0 — APAC AI Intelligence Project — Data as of March 2026<br>Estimates are directional. Not investment advice.</footer>
+<footer id="footer-text">Global AI Token Usage Estimator v2.0 &mdash; APAC AI Intelligence Project &mdash; Data as of March 2026<br>Estimates are directional. Not investment advice.</footer>
 
 </div>
 
 <script>
 // ============================================================
-// DATA MODEL
+// DATA — loaded from site-data.json
 // ============================================================
-
-// TOKEN ESTIMATES: Cross-checked against multiple signals:
-// - Revenue ÷ blended pricing (primary method)
-// - GPU capacity ceiling: ~4.5M H100-equiv × 50% utilization × 2500 tok/sec = ~490T/day max
-// - Bottom-up: ChatGPT 300M WAU × 6 sessions × 4K tokens = ~100T/month consumer alone
-// - OpenRouter: 8.4T tokens/month through their platform (small sample)
-// - SemiAnalysis: GPU utilization 30-50%, suggesting actual throughput well below capacity
-// - Self-hosted (Llama 8.3M downloads/30d, vllm 7.4M PyPI/month) adds ~50-100T/day invisible tokens
-// NET: Provider-served tokens likely ~400-500T/day, not 680T. Previous estimate was too high.
-// Self-hosted adds ~80-120T/day on top, for ~500-600T total including open-source.
-
-const PROVIDERS = {
-  'OpenAI':        { tokens: 200, rev: 16.8, color: '#10a37f', growth: '+180% YoY', consumerPct: 60, bizPct: 40, modelType: 'frontier' },
-  'Anthropic':     { tokens: 110, rev: 14.0, color: '#d97706', growth: '14x in 14mo', consumerPct: 35, bizPct: 65, modelType: 'frontier' },
-  'Google/Gemini': { tokens: 90,  rev: 4.2,  color: '#4285f4', growth: '14x in \'24', consumerPct: 40, bizPct: 60, modelType: 'frontier' },
-  'Meta':          { tokens: 80,  rev: 0,    color: '#60a5fa', growth: '+400% YoY', consumerPct: 0, bizPct: 0, modelType: 'open' },
-  'DeepSeek':      { tokens: 40,  rev: 0.3,  color: '#a78bfa', growth: '+800% YoY', consumerPct: 50, bizPct: 50, modelType: 'open' },
-  'Mistral':       { tokens: 15,  rev: 0.4,  color: '#f97316', growth: '+250% YoY', consumerPct: 20, bizPct: 80, modelType: 'frontier' },
-  'xAI':           { tokens: 10,  rev: 0.5,  color: '#e2e8f0', growth: '+500% YoY', consumerPct: 70, bizPct: 30, modelType: 'frontier' },
-  // Open model inference (~100T tokens/day) is NOT listed as a separate provider.
-  // Those tokens are already counted under Meta (80T), DeepSeek (40T), Mistral (15T).
-  // The inference revenue (~$1.1B) flows through Together, Fireworks, Groq, etc. and
-  // sits within the Model API column of the demand matrix (~80% frontier, ~20% open).
-  // See the Live Pricing page for open vs frontier gateway breakdowns.
-  'Others':        { tokens: 20,  rev: 2.0,  color: '#475569', growth: '+150% YoY', consumerPct: 40, bizPct: 60, modelType: 'open' },
-};
-
-const REGIONS = {
-  'North America': { pct: 40, color: '#3b82f6', growth: '+160% YoY' },
-  'Asia-Pacific':  { pct: 30, color: '#8b5cf6', growth: '+280% YoY' },
-  'Europe':        { pct: 18, color: '#06b6d4', growth: '+140% YoY' },
-  'Middle East':   { pct: 5,  color: '#f59e0b', growth: '+350% YoY' },
-  'Latin America': { pct: 4,  color: '#10b981', growth: '+200% YoY' },
-  'Africa':        { pct: 3,  color: '#ec4899', growth: '+300% YoY' },
-};
-
-const INDUSTRIES = {
-  'Software & Tech':       { pct: 33, color: '#3b82f6' },
-  'Financial Services':    { pct: 16, color: '#10b981' },
-  'Healthcare':            { pct: 9,  color: '#ef4444' },
-  'Retail & E-commerce':   { pct: 9,  color: '#f59e0b' },
-  'Marketing & Ads':       { pct: 8,  color: '#ec4899' },
-  'Customer Service':      { pct: 7,  color: '#06b6d4' },
-  'Education':             { pct: 5,  color: '#14b8a6' },
-  'Manufacturing':         { pct: 4,  color: '#8b5cf6' },
-  'Legal & Gov & Other':   { pct: 9,  color: '#475569' },
-};
-
-const USE_CASES = {
-  'Coding & Dev Tools':  { pct: 28, color: '#8b5cf6' },
-  'Chat & Assistants':   { pct: 27, color: '#3b82f6' },
-  'Content & Writing':   { pct: 15, color: '#f59e0b' },
-  'Enterprise Agents':   { pct: 10, color: '#10b981' },
-  'Search & RAG':        { pct: 10, color: '#06b6d4' },
-  'Data Analysis':       { pct: 7,  color: '#ef4444' },
-  'Other':               { pct: 5,  color: '#475569' },
-};
-
-// Cross-weights: how each provider's tokens distribute across dimensions
-const CROSS_WEIGHTS = {
-  'OpenAI': {
-    regions:    { 'North America': .45, 'Asia-Pacific': .25, 'Europe': .18, 'Middle East': .05, 'Latin America': .04, 'Africa': .03 },
-    industries: { 'Software & Tech': .30, 'Financial Services': .12, 'Healthcare': .08, 'Retail & E-commerce': .12, 'Marketing & Ads': .10, 'Customer Service': .08, 'Education': .07, 'Manufacturing': .04, 'Legal & Gov & Other': .09 },
-    useCases:   { 'Coding & Dev Tools': .25, 'Chat & Assistants': .35, 'Content & Writing': .15, 'Enterprise Agents': .08, 'Search & RAG': .07, 'Data Analysis': .05, 'Other': .05 },
-  },
-  'Anthropic': {
-    regions:    { 'North America': .50, 'Asia-Pacific': .22, 'Europe': .18, 'Middle East': .04, 'Latin America': .03, 'Africa': .03 },
-    industries: { 'Software & Tech': .45, 'Financial Services': .18, 'Healthcare': .06, 'Retail & E-commerce': .05, 'Marketing & Ads': .04, 'Customer Service': .05, 'Education': .03, 'Manufacturing': .03, 'Legal & Gov & Other': .11 },
-    useCases:   { 'Coding & Dev Tools': .45, 'Chat & Assistants': .20, 'Content & Writing': .08, 'Enterprise Agents': .12, 'Search & RAG': .05, 'Data Analysis': .06, 'Other': .04 },
-  },
-  'Google/Gemini': {
-    regions:    { 'North America': .35, 'Asia-Pacific': .30, 'Europe': .20, 'Middle East': .06, 'Latin America': .05, 'Africa': .04 },
-    industries: { 'Software & Tech': .30, 'Financial Services': .10, 'Healthcare': .12, 'Retail & E-commerce': .10, 'Marketing & Ads': .10, 'Customer Service': .08, 'Education': .08, 'Manufacturing': .04, 'Legal & Gov & Other': .08 },
-    useCases:   { 'Coding & Dev Tools': .20, 'Chat & Assistants': .30, 'Content & Writing': .15, 'Enterprise Agents': .10, 'Search & RAG': .12, 'Data Analysis': .08, 'Other': .05 },
-  },
-  'Meta': {
-    regions:    { 'North America': .35, 'Asia-Pacific': .30, 'Europe': .20, 'Middle East': .05, 'Latin America': .05, 'Africa': .05 },
-    industries: { 'Software & Tech': .45, 'Financial Services': .15, 'Healthcare': .08, 'Retail & E-commerce': .08, 'Marketing & Ads': .05, 'Customer Service': .05, 'Education': .04, 'Manufacturing': .05, 'Legal & Gov & Other': .05 },
-    useCases:   { 'Coding & Dev Tools': .35, 'Chat & Assistants': .25, 'Content & Writing': .10, 'Enterprise Agents': .12, 'Search & RAG': .08, 'Data Analysis': .05, 'Other': .05 },
-  },
-  'DeepSeek': {
-    regions:    { 'North America': .20, 'Asia-Pacific': .55, 'Europe': .15, 'Middle East': .04, 'Latin America': .03, 'Africa': .03 },
-    industries: { 'Software & Tech': .50, 'Financial Services': .10, 'Healthcare': .05, 'Retail & E-commerce': .08, 'Marketing & Ads': .05, 'Customer Service': .05, 'Education': .07, 'Manufacturing': .05, 'Legal & Gov & Other': .05 },
-    useCases:   { 'Coding & Dev Tools': .40, 'Chat & Assistants': .30, 'Content & Writing': .08, 'Enterprise Agents': .05, 'Search & RAG': .07, 'Data Analysis': .07, 'Other': .03 },
-  },
-  'Mistral': {
-    regions:    { 'North America': .25, 'Asia-Pacific': .15, 'Europe': .45, 'Middle East': .06, 'Latin America': .05, 'Africa': .04 },
-    industries: { 'Software & Tech': .40, 'Financial Services': .20, 'Healthcare': .08, 'Retail & E-commerce': .06, 'Marketing & Ads': .05, 'Customer Service': .05, 'Education': .04, 'Manufacturing': .05, 'Legal & Gov & Other': .07 },
-    useCases:   { 'Coding & Dev Tools': .30, 'Chat & Assistants': .25, 'Content & Writing': .12, 'Enterprise Agents': .15, 'Search & RAG': .08, 'Data Analysis': .06, 'Other': .04 },
-  },
-  'xAI': {
-    regions:    { 'North America': .55, 'Asia-Pacific': .15, 'Europe': .18, 'Middle East': .05, 'Latin America': .04, 'Africa': .03 },
-    industries: { 'Software & Tech': .35, 'Financial Services': .10, 'Healthcare': .05, 'Retail & E-commerce': .05, 'Marketing & Ads': .10, 'Customer Service': .05, 'Education': .05, 'Manufacturing': .03, 'Legal & Gov & Other': .22 },
-    useCases:   { 'Coding & Dev Tools': .15, 'Chat & Assistants': .50, 'Content & Writing': .15, 'Enterprise Agents': .05, 'Search & RAG': .05, 'Data Analysis': .05, 'Other': .05 },
-  },
-  // Open Models removed — tokens already counted under Meta, DeepSeek, Mistral.
-  // Inference provider revenue (~$1.1B) sits within Model API column of demand matrix.
-  'Others': {
-    regions:    { 'North America': .30, 'Asia-Pacific': .35, 'Europe': .20, 'Middle East': .06, 'Latin America': .05, 'Africa': .04 },
-    industries: { 'Software & Tech': .35, 'Financial Services': .15, 'Healthcare': .10, 'Retail & E-commerce': .10, 'Marketing & Ads': .05, 'Customer Service': .08, 'Education': .05, 'Manufacturing': .05, 'Legal & Gov & Other': .07 },
-    useCases:   { 'Coding & Dev Tools': .25, 'Chat & Assistants': .30, 'Content & Writing': .15, 'Enterprise Agents': .10, 'Search & RAG': .08, 'Data Analysis': .07, 'Other': .05 },
-  },
-};
-
-// Demand matrix data
-const DEMAND_MATRIX = {
-  columns: ['AI Model Subs', 'Model API', 'AI Native Subs', 'Traditional SaaS Subs'],
-  colSubs: [
-    'ChatGPT Plus, Claude Pro, Gemini Advanced',
-    'Direct API calls to OpenAI, Anthropic, Google',
-    'Cursor, Perplexity, Jasper, Harvey',
-    'M365 Copilot, SF Agentforce, NOW Assist, Canva AI',
-  ],
-  rows: [
-    { segment: 'Consumer', cells: [
-      { rev: '~$10-12B', conv: '50%', color: '#f59e0b', ex: 'ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced', note: 'Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk.' },
-      { rev: '~$0.5B', conv: '100%', color: '#10b981', ex: 'Hobbyist devs, indie hackers, students using API keys', note: 'Small but pure. Every cent = tokens. ~95% frontier, ~5% open models.' },
-      { rev: '~$2-3B', conv: '90%', color: '#10b981', ex: 'Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier', note: 'Real usage. AI native absorbs API cost.' },
-      { rev: '~$0.5-1B', conv: '15%', color: '#ef4444', ex: 'Canva AI features, Grammarly, Notion AI, Adobe Firefly', note: 'AI bundled free into consumer SaaS tiers. Retention play, not revenue driver. Adobe Firefly: growth flat at 10-11%.' },
-    ]},
-    { segment: 'SME', cells: [
-      { rev: '~$1-2B', conv: '60%', color: '#f59e0b', ex: 'ChatGPT Team ($25/user), Claude Team', note: 'Growing. Usage varies widely across seats.' },
-      { rev: '~$2-3B', conv: '100%', color: '#10b981', ex: 'Startups on APIs, dev agencies, Vercel AI SDK users', note: 'Pure demand. ~65% frontier, ~35% open (AI natives buying Together/Fireworks inference). Fastest growing.' },
-      { rev: '~$2-3B', conv: '85%', color: '#10b981', ex: 'Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin', note: 'Strong PMF. SMEs adopt AI natives faster than SaaS AI.' },
-      { rev: '~$1-2B', conv: '15%', color: '#ef4444', ex: 'HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI', note: 'Feature checkbox on renewal, low activation. HubSpot Breeze: no separate revenue disclosed = immaterial.' },
-    ]},
-    { segment: 'Enterprise', cells: [
-      { rev: '~$1-2B', conv: '45%', color: '#f59e0b', ex: 'ChatGPT Enterprise ($60+/user), Claude for Enterprise', note: 'Standalone AI subs — higher activation, users chose to buy it.' },
-      { rev: '~$3-5B', conv: '100%', color: '#10b981', ex: 'Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys', note: 'LARGEST FUTURE TAM. Small today but 100% real. ~95% frontier, ~5% open. Goldman: →$50-80B by 2028.' },
-      { rev: '~$1-2B', conv: '80%', color: '#10b981', ex: 'Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI', note: 'Real usage — AI natives solving specific enterprise workflows.' },
-      { rev: '~$5-7B real (~$15B claimed)', conv: '10-20%', color: '#ef4444', ex: 'M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B — the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real — cleanest reporter)', note: 'COGS test: SF inference est. $6-12M on $800M "AI rev" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration.' },
-    ]},
-  ]
-};
-
-// Enterprise Reality data
-// Enterprise Reality: verified with 2+ sources per claim (see enterprise-saas-ai-sku-analysis.md)
-// Total claimed: ~$52B. Total real incremental: ~$9-13B. Inflation: 4-5x.
-// ZERO of top 10 vendors show growth acceleration from AI.
-const ENTERPRISE_REALITY = [
-  { name:'Salesforce', ticker:'CRM', claimed:'$800M Agentforce ARR (within $2.9B "AI+Data" that includes Informatica acquisition)', usage:'~50% of 29K deals are free/seeded. COGS test: inference cost est. $6-12M/yr on $800M = 98%+ "AI margin"', real:'~$250-350M real GenAI (rest is Data Cloud, Informatica, legacy Einstein)', flags:'$2.9B bundles Informatica ($1.5B acq.) + Data 360 + Agentforce. Gross margin flat at 77% = minimal AI COGS. AWU metric criticized as vanity metric. <2% of $41.5B revenue.', growth:'8-9%', prevGrowth:'18%' },
-  { name:'ServiceNow', ticker:'NOW', claimed:'$600M+ Now Assist ACV (verified, Q4 2025 earnings)', usage:'Pro Plus premium est. 30-60% (UpperEdge). COGS test: inference cost est. $15-50M/yr = 92-97% "AI margin"', real:'~$400-500M (cleanest reporter — AI is a genuine premium SKU)', flags:'Most honest of the group. But Pro Plus bundles non-AI features. Gross margin down 1.7pp (79.2→77.5%) — slight AI cost impact. Hidden consumption-based "assists" fees.', growth:'20-21%', prevGrowth:'25%' },
-  { name:'M365 Copilot', ticker:'MSFT', claimed:'15M seats × $30/mo = $5.4B list (verified, MSFT Q2 FY26 earnings)', usage:'35.8% active (Recon Analytics, 150K respondents). Only 5% of orgs past pilot (Gartner). 70% tried, only 8% kept choosing it.', real:'~$2.5-3.5B net (40-60% discounting per Citi/JPM). Cloud margin down 3pp (72→69%) — real AI infra cost.', flags:'3.3% of 450M installed base after 2 years. Market share FELL 18.8%→11.5% (Recon Analytics Jul→Jan). Auto-installing. Morgan Stanley: "wall of sorry."', growth:'12-15%', prevGrowth:'15%' },
-  { name:'GitHub Copilot', ticker:'MSFT', claimed:'4.7M paid subs (verified, MSFT earnings). GitHub total $2B ARR — Copilot est. $1-2.3B', usage:'42% market share of AI coding. 27-30% acceptance rate (not 55% — that was task speed). Lost $20/user/mo in 2023 (WSJ).', real:'$1-2.3B — the ONE product where AI IS the product', flags:'Genuinely works. But facing Cursor ($1B ARR), open-source alternatives. Microsoft added Anthropic models "at great expense to margins" (SemiAnalysis). Usage caps introduced mid-2025.', growth:'75% subs YoY', prevGrowth:'N/A' },
-  { name:'SAP', ticker:'SAP', claimed:'"2/3 of deals include AI" — Joule bundled free in RISE/GROW', usage:'No separate metering. No AI revenue disclosed = immaterial.', real:'~$0-200M. Like saying "100% of iPhones include Siri"', flags:'Cloud growth (23%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT AI. No analyst attributes growth to Joule.', growth:'8-9%', prevGrowth:'8%' },
-  { name:'Adobe', ticker:'ADBE', claimed:'Firefly ~$400-500M, AI-first ARR $250M', usage:'75% of Fortune 500 "adopted" but free tier inflates. Some cannibalizes stock photo revenue.', real:'~$200-300M incremental', flags:'Growth completely flat at 10-11% pre AND post AI. Firefly has moved the needle zero on top-line growth.', growth:'10-11%', prevGrowth:'10-11%' },
-  { name:'Workday', ticker:'WDAY', claimed:'Not disclosed — "growing demand for AI SKUs"', usage:'No AI metric = immaterial. Flex Credits model.', real:'~$0-100M', flags:'Growth crashing: 21%→13%. AI has zero visible impact.', growth:'13%', prevGrowth:'21%' },
-];
-
-// Top consumers
-const TOP_CONSUMERS = [
-  { co:'Portkey.ai', hq:'US/India', type:'AI Gateway', tokens:'1.9T/day', prov:'Multi (40+)', ev:'Live dashboard: $1.3M/day spend, $475M/yr managed. 35%/wk growth. Gateway passthrough (not additive to provider totals).', conf:'High' },
-  { co:'GitHub Copilot', hq:'US', type:'AI Dev Tool', tokens:'~1T/day', prov:'OpenAI, Anthropic', ev:'4.7M paid subs, margin-negative (MSFT subsidises), $1-2.3B ARR. Revenue÷price: 1.4-4.1T. Bottom-up: 471-800B. Midpoint ~1T.', conf:'Med' },
-  { co:'Cursor (Anysphere)', hq:'US', type:'AI Dev Tool', tokens:'~800B/day', prov:'Anthropic, OpenAI', ev:'$1B+ ARR, 40-60% COGS ratio. Revenue÷price: 1-1.6T. Bottom-up: 400-800B. COGS: 680-980B. Midpoint ~800B.', conf:'Med-High' },
-  { co:'OpenRouter', hq:'US', type:'AI Gateway', tokens:'280B/day', prov:'All (400+)', ev:'Self-reported 8.4T/mo. Most reliable figure — transparent platform with public pricing. Gateway passthrough.', conf:'High' },
-  { co:'Perplexity', hq:'US', type:'AI Search', tokens:'~200B/day', prov:'Multi', ev:'780M queries/mo, $200M ARR. Revenue÷price: ~220B. Bottom-up: 91-130B (but multi-step pipelines inflate). COGS: 220-290B.', conf:'Med' },
-  { co:'Replit', hq:'US', type:'AI Dev Tool', tokens:'~150B/day', prov:'Multi', ev:'$240-265M rev but only ~60% AI-related. 50M registered ≠ DAU (likely <2M). Revenue÷price: 260-310B. COGS: ~192B. Bottom-up much lower.', conf:'Low-Med' },
-  { co:'Cognition (Devin)', hq:'US', type:'AI Dev Tool', tokens:'~125B/day', prov:'OpenAI, Anthropic', ev:'$155M ARR combined. Agent sessions burn 50-200K tokens each. Revenue÷price: 178-212B. COGS: ~148B.', conf:'Med' },
-  { co:'Duolingo', hq:'US', type:'EdTech', tokens:'~100B/day', prov:'OpenAI (#1)', ev:'47.7M DAU but most exercises pre-generated. $10-30M/yr AI spend (margin compression data). At $0.30-0.50/M: 110-183B.', conf:'Med' },
-  { co:'MiniMax', hq:'China', type:'AI Platform', tokens:'~100B/day', prov:'Own + Anthropic', ev:'$150M+ cloud spend, own models. Hard to decompose training vs inference. 212M cumulative (not DAU). Wide range.', conf:'Low' },
-  { co:'Canva', hq:'Australia', type:'Design', tokens:'~75B/day', prov:'OpenAI', ev:'800M AI uses/mo but most are tiny interactions (~1K tokens). "Trillion Token Club" = cumulative, not daily. COGS: 85-170B.', conf:'Low-Med' },
-  { co:'Notion AI', hq:'US', type:'Productivity', tokens:'~75B/day', prov:'Anthropic, OpenAI', ev:'10M "AI users" but active AI DAU likely ~1M. $10/user/mo add-on. Revenue÷price: 137-171B. COGS: ~106B.', conf:'Low-Med' },
-  { co:'Wrtn Technologies', hq:'Korea', type:'Consumer AI', tokens:'~50B/day', prov:'OpenAI, Anthropic', ev:'6.5M MAU, free GPT-5. Revenue÷price: 68-96B. Bottom-up: 9-32B. 200B/day would exceed entire $100M ARR.', conf:'Low' },
-  { co:'BLACKBOX.AI', hq:'US', type:'AI Dev Tool', tokens:'~50B/day', prov:'OpenAI, Anthropic, Google', ev:'$31.7M rev, 20M registered (not DAU). Revenue÷price: 107-172B. Bottom-up: 10-23B. Midpoint of financial methods.', conf:'Low' },
-  { co:'Harvey AI', hq:'US', type:'Legal AI', tokens:'~45B/day', prov:'OpenAI', ev:'$190M ARR, 100K lawyers but DAU ~30-40K. Frontier-heavy = expensive per token. Revenue÷price: 58-73B. COGS: ~50B.', conf:'Med' },
-  { co:'Monica AI', hq:'China/SG', type:'Consumer AI', tokens:'~45B/day', prov:'OpenAI, Anthropic, Google', ev:'10M registered (not DAU, likely 300-500K). $100M ARR (Manus). Revenue÷price: 68-82B. Bottom-up: 8-15B.', conf:'Low' },
-  { co:'Yellow.ai', hq:'India', type:'Enterprise AI', tokens:'~25B/day', prov:'OpenAI, Google', ev:'1,300+ clients, $79.5M rev. Many conversations are rule-based, not LLM. Revenue÷price: 131-175B. Bottom-up: 8-20B.', conf:'Low-Med' },
-  { co:'Klarna', hq:'Sweden', type:'Fintech', tokens:'~20B/day', prov:'OpenAI', ev:'"700 agents replaced" = $21-28M equivalent, but AI spend much less. CS interactions are short (~2K tokens). Bottom-up: 0.7-30B.', conf:'Low-Med' },
-  { co:'Grab', hq:'Singapore', type:'Super-app', tokens:'~20B/day', prov:'OpenAI', ev:'42M+ MAU but most "AI" is traditional ML (matching, fraud), not LLM. LLM-specific: CS chatbot + internal tools.', conf:'Low' },
-  { co:'Sea/Shopee', hq:'Singapore', type:'E-commerce', tokens:'~20B/day', prov:'OpenAI, Google', ev:'OpenAI strategic MOU is forward-looking. Current LLM deployment: CS + product descriptions. $13B total rev.', conf:'Low' },
-  { co:'Kakao', hq:'Korea', type:'Messaging', tokens:'~20B/day', prov:'OpenAI (GPT-5)', ev:'53M MAU but AI feature adoption maybe 5-10%. Revenue÷price: 27-68B. Bottom-up: 4.5-22B.', conf:'Low-Med' },
-  { co:'Salesforce Agentforce', hq:'US', type:'Ent SaaS', tokens:'~15B/day', prov:'OpenAI, own', ev:'$800M claimed but bundled/relabeled. Realistic: 5-20K active agents × 100 interactions × 3K tokens. Inference maybe $20-50M/yr.', conf:'Low' },
-];
-
-// Models
-const MODELS = [
-  { model:'GPT-4o mini', prov:'OpenAI', tokens:'~80T', inP:'$0.15', outP:'$0.60', use:'Chat, agents, coding', trend:'↑↑' },
-  { model:'GPT-4o', prov:'OpenAI', tokens:'~55T', inP:'$2.50', outP:'$10.00', use:'Enterprise, complex tasks', trend:'→' },
-  { model:'GPT-4.1 mini', prov:'OpenAI', tokens:'~40T', inP:'$0.40', outP:'$1.60', use:'Coding, agents', trend:'↑↑↑' },
-  { model:'Gemini 2.0 Flash', prov:'Google', tokens:'~35T', inP:'$0.10', outP:'$0.40', use:'High-volume, agents', trend:'↑↑↑' },
-  { model:'Claude 3.5 Sonnet', prov:'Anthropic', tokens:'~30T', inP:'$3.00', outP:'$15.00', use:'Coding, analysis', trend:'→' },
-  { model:'Claude Sonnet 4', prov:'Anthropic', tokens:'~25T', inP:'$3.00', outP:'$15.00', use:'Coding, enterprise', trend:'↑↑' },
-  { model:'Llama 3.1 405B', prov:'Meta', tokens:'~25T', inP:'Self-host', outP:'Self-host', use:'On-prem enterprise', trend:'→' },
-  { model:'Llama 4 Scout', prov:'Meta', tokens:'~20T', inP:'Self-host', outP:'Self-host', use:'Agents, coding', trend:'↑↑↑' },
-  { model:'Gemini 2.5 Pro', prov:'Google', tokens:'~20T', inP:'$1.25', outP:'$10.00', use:'Reasoning, analysis', trend:'↑↑' },
-  { model:'DeepSeek R1', prov:'DeepSeek', tokens:'~18T', inP:'$0.55', outP:'$2.19', use:'Reasoning, math', trend:'↑↑' },
-  { model:'GPT-5', prov:'OpenAI', tokens:'~15T', inP:'$5.00', outP:'$20.00', use:'Frontier reasoning', trend:'↑↑↑' },
-  { model:'DeepSeek V3', prov:'DeepSeek', tokens:'~12T', inP:'$0.27', outP:'$1.10', use:'General, coding', trend:'↑' },
-  { model:'Mistral Large', prov:'Mistral', tokens:'~8T', inP:'$2.00', outP:'$6.00', use:'Enterprise, multilingual', trend:'↑' },
-  { model:'Grok 4', prov:'xAI', tokens:'~7T', inP:'$3.00', outP:'$15.00', use:'Reasoning, X integration', trend:'↑↑' },
-  { model:'Claude Opus 4', prov:'Anthropic', tokens:'~5T', inP:'$15.00', outP:'$75.00', use:'Complex agents, coding', trend:'↑' },
-];
+let PROVIDERS, REGIONS, INDUSTRIES, USE_CASES, CROSS_WEIGHTS;
+let DEMAND_MATRIX, ENTERPRISE_REALITY, TOP_CONSUMERS, MODELS;
+let DEMAND_TYPES, DEMAND_WEIGHTS;
+let SANKEY_BC_FLOWS = {}; // buyer→channel flow lookup from Sankey
 
 // ============================================================
 // FILTER STATE
 // ============================================================
 const filters = { providers: [], regions: [], industries: [], useCases: [], demandTypes: [] };
-let modelTypeFilter = 'all'; // 'all', 'frontier', 'open'
-
-// Demand type definitions and cross-weights per provider
-const DEMAND_TYPES = {
-  'Consumer Subs':      { pct: 0.42, color: '#f59e0b' },
-  'API / Developer':    { pct: 0.25, color: '#10b981' },
-  'Enterprise Platform':{ pct: 0.23, color: '#3b82f6' },
-  'Cloud Channel':      { pct: 0.10, color: '#8b5cf6' },
-};
-
-// How each provider's revenue splits across demand types
-const DEMAND_WEIGHTS = {
-  'OpenAI':        { 'Consumer Subs': 0.55, 'API / Developer': 0.15, 'Enterprise Platform': 0.15, 'Cloud Channel': 0.15 },
-  'Anthropic':     { 'Consumer Subs': 0.20, 'API / Developer': 0.35, 'Enterprise Platform': 0.25, 'Cloud Channel': 0.20 },
-  'Google/Gemini': { 'Consumer Subs': 0.35, 'API / Developer': 0.20, 'Enterprise Platform': 0.20, 'Cloud Channel': 0.25 },
-  'Meta':   { 'Consumer Subs': 0.10, 'API / Developer': 0.50, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.10 },
-  'DeepSeek':      { 'Consumer Subs': 0.40, 'API / Developer': 0.40, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.10 },
-  'Mistral':       { 'Consumer Subs': 0.10, 'API / Developer': 0.35, 'Enterprise Platform': 0.30, 'Cloud Channel': 0.25 },
-  'xAI':           { 'Consumer Subs': 0.70, 'API / Developer': 0.15, 'Enterprise Platform': 0.10, 'Cloud Channel': 0.05 },
-  // Open Models removed — revenue sits within Model API column
-  'Others':        { 'Consumer Subs': 0.30, 'API / Developer': 0.30, 'Enterprise Platform': 0.20, 'Cloud Channel': 0.20 },
-};
+let modelTypeFilter = 'all';
 const charts = {};
+
+// ============================================================
+// ASYNC LOADER
+// ============================================================
+async function loadDashboardData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load site-data.json: ' + resp.status);
+    const all = await resp.json();
+    const d = all.dashboard;
+
+    PROVIDERS        = d.providers;
+    REGIONS          = d.regions;
+    INDUSTRIES       = d.industries;
+    USE_CASES        = d.useCases;
+    CROSS_WEIGHTS    = d.crossWeights;
+    DEMAND_MATRIX    = d.demandMatrix;
+    ENTERPRISE_REALITY = d.enterpriseReality;
+    TOP_CONSUMERS    = d.topConsumers;
+    MODELS           = d.models;
+    DEMAND_TYPES     = d.demandTypes;
+    DEMAND_WEIGHTS   = d.demandWeights;
+
+    // Build buyer→channel flow lookup from Sankey for Demand Matrix
+    if (all.sankey && all.sankey.flows) {
+      SANKEY_BC_FLOWS = {};
+      all.sankey.flows.forEach(f => {
+        // buyer→channel flows: fromCol=0, toCol=1
+        if (f[0] === 0 && f[2] === 1) {
+          const key = f[1] + ',' + f[3]; // buyerIdx,channelIdx
+          SANKEY_BC_FLOWS[key] = (SANKEY_BC_FLOWS[key] || 0) + f[4];
+        }
+      });
+      console.log('Sankey buyer→channel flows loaded for demand matrix:', Object.keys(SANKEY_BC_FLOWS).length, 'flows');
+    }
+
+    // Show data timestamp from meta.generatedAt
+    if (all.meta && all.meta.generatedAt) {
+      const ts = all.meta.generatedAt.split('T')[0];
+      const footer = document.getElementById('footer-text');
+      if (footer) {
+        footer.innerHTML = 'Data: ' + ts + ' &nbsp;|&nbsp; ' + footer.innerHTML;
+      }
+    }
+
+  } catch(e) {
+    console.warn('site-data.json not found or invalid, dashboard cannot render:', e);
+    document.getElementById('hero-stats').innerHTML = '<div class="hero-stat" style="grid-column:1/-1;"><div class="label" style="color:var(--red);">Failed to load site-data.json</div></div>';
+    return;
+  }
+
+  // ============================================================
+  // CHART.JS DARK THEME DEFAULTS
+  // ============================================================
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.borderColor = '#1e293b';
+  Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,sans-serif';
+
+  // ============================================================
+  // INIT — everything below runs after data loads
+  // ============================================================
+  buildFilterBar();
+  updateAll();
+}
 
 // ============================================================
 // FILTER ENGINE
 // ============================================================
+const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+const noGrid = { display: false };
+
 function getFilteredProviderData() {
   let activeProviders = filters.providers.length > 0
     ? filters.providers : Object.keys(PROVIDERS);
 
-  // Apply model type filter
   if (modelTypeFilter !== 'all') {
     activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
   }
@@ -512,7 +369,6 @@ function getFilteredDimensionData(dimObj, dimKey) {
   if (modelTypeFilter !== 'all') {
     activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
   }
-  const totalTokens = activeProviders.reduce((a, p) => a + (PROVIDERS[p]?.tokens || 0), 0);
 
   const result = {};
   Object.keys(dimObj).forEach(key => {
@@ -521,34 +377,25 @@ function getFilteredDimensionData(dimObj, dimKey) {
       const w = CROSS_WEIGHTS[p]?.[dimKey]?.[key] || 0;
       weighted += PROVIDERS[p].tokens * w;
     });
-    // Apply other dimension filters
     let scale = 1;
     if (dimKey !== 'regions' && filters.regions.length > 0) {
       let s = 0;
-      activeProviders.forEach(p => {
-        filters.regions.forEach(r => { s += CROSS_WEIGHTS[p]?.regions?.[r] || 0; });
-      });
+      activeProviders.forEach(p => { filters.regions.forEach(r => { s += CROSS_WEIGHTS[p]?.regions?.[r] || 0; }); });
       scale *= s / activeProviders.length;
     }
     if (dimKey !== 'industries' && filters.industries.length > 0) {
       let s = 0;
-      activeProviders.forEach(p => {
-        filters.industries.forEach(i => { s += CROSS_WEIGHTS[p]?.industries?.[i] || 0; });
-      });
+      activeProviders.forEach(p => { filters.industries.forEach(i => { s += CROSS_WEIGHTS[p]?.industries?.[i] || 0; }); });
       scale *= s / activeProviders.length;
     }
     if (dimKey !== 'useCases' && filters.useCases.length > 0) {
       let s = 0;
-      activeProviders.forEach(p => {
-        filters.useCases.forEach(u => { s += CROSS_WEIGHTS[p]?.useCases?.[u] || 0; });
-      });
+      activeProviders.forEach(p => { filters.useCases.forEach(u => { s += CROSS_WEIGHTS[p]?.useCases?.[u] || 0; }); });
       scale *= s / activeProviders.length;
     }
     if (filters.demandTypes.length > 0) {
       let s = 0;
-      activeProviders.forEach(p => {
-        filters.demandTypes.forEach(dt => { s += DEMAND_WEIGHTS[p]?.[dt] || 0; });
-      });
+      activeProviders.forEach(p => { filters.demandTypes.forEach(dt => { s += DEMAND_WEIGHTS[p]?.[dt] || 0; }); });
       scale *= s / activeProviders.length;
     }
     result[key] = { tokens: weighted * scale, color: dimObj[key].color };
@@ -562,7 +409,6 @@ function getFilteredDimensionData(dimObj, dimKey) {
 function buildFilterBar() {
   const bar = document.getElementById('filter-bar');
 
-  // Model type toggle (special — not a multi-select filter)
   const mtGroup = document.createElement('div');
   mtGroup.className = 'filter-group';
   mtGroup.innerHTML = '<span class="filter-label">Model Type</span>';
@@ -572,7 +418,6 @@ function buildFilterBar() {
     pill.textContent = label;
     pill.dataset.dim = 'modelType';
     pill.dataset.value = label.toLowerCase();
-    pill.style.cssText = label === 'All' ? '' : '';
     pill.onclick = () => {
       modelTypeFilter = label.toLowerCase();
       document.querySelectorAll('.filter-pill[data-dim="modelType"]').forEach(p => p.classList.remove('active'));
@@ -584,18 +429,17 @@ function buildFilterBar() {
   bar.appendChild(mtGroup);
 
   const dims = [
-    { key: 'providers', label: 'Provider', items: Object.keys(PROVIDERS), color: 'var(--accent)' },
-    { key: 'regions', label: 'Region', items: Object.keys(REGIONS), color: 'var(--accent2)' },
-    { key: 'industries', label: 'Industry', items: Object.keys(INDUSTRIES), color: 'var(--green)' },
-    { key: 'useCases', label: 'Use Case', items: Object.keys(USE_CASES), color: 'var(--orange)' },
-    { key: 'demandTypes', label: 'Demand Type', items: Object.keys(DEMAND_TYPES), color: 'var(--pink)' },
+    { key: 'providers', label: 'Provider', items: Object.keys(PROVIDERS) },
+    { key: 'regions', label: 'Region', items: Object.keys(REGIONS) },
+    { key: 'industries', label: 'Industry', items: Object.keys(INDUSTRIES) },
+    { key: 'useCases', label: 'Use Case', items: Object.keys(USE_CASES) },
+    { key: 'demandTypes', label: 'Demand Type', items: Object.keys(DEMAND_TYPES) },
   ];
 
   dims.forEach(d => {
     const group = document.createElement('div');
     group.className = 'filter-group';
-    group.innerHTML = `<span class="filter-label">${d.label}</span>`;
-
+    group.innerHTML = '<span class="filter-label">' + d.label + '</span>';
     d.items.forEach(item => {
       const pill = document.createElement('button');
       pill.className = 'filter-pill';
@@ -605,13 +449,11 @@ function buildFilterBar() {
       pill.onclick = () => toggleFilter(d.key, item, pill);
       group.appendChild(pill);
     });
-
     const reset = document.createElement('button');
     reset.className = 'filter-reset';
-    reset.textContent = '✕ Clear';
+    reset.textContent = '\u2715 Clear';
     reset.onclick = () => clearFilter(d.key);
     group.appendChild(reset);
-
     bar.appendChild(group);
   });
 }
@@ -625,19 +467,9 @@ function toggleFilter(dim, value, pill) {
 
 function clearFilter(dim) {
   filters[dim] = [];
-  document.querySelectorAll(`.filter-pill[data-dim="${dim}"]`).forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.filter-pill[data-dim="' + dim + '"]').forEach(p => p.classList.remove('active'));
   updateAll();
 }
-
-// ============================================================
-// CHART.JS DARK THEME DEFAULTS
-// ============================================================
-Chart.defaults.color = '#94a3b8';
-Chart.defaults.borderColor = '#1e293b';
-Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,sans-serif';
-
-const darkGrid = { color: 'rgba(255,255,255,0.05)' };
-const noGrid = { display: false };
 
 // ============================================================
 // RENDER FUNCTIONS
@@ -648,35 +480,16 @@ function updateHeroStats() {
   const totalTokens = Object.values(data).reduce((a, d) => a + d.tokens, 0);
   const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
   const provCount = Object.keys(data).length;
-  const hasFilters = Object.values(filters).some(f => f.length > 0) || modelTypeFilter !== 'all';
-
   const bearTokens = Math.round(totalTokens * 0.4);
   const bullTokens = Math.round(totalTokens * 1.8);
   const bearRev = (totalRev * 0.6).toFixed(1);
   const bullRev = (totalRev * 1.2).toFixed(1);
 
-  document.getElementById('hero-stats').innerHTML = `
-    <div class="hero-stat">
-      <div class="label">Est. Tokens / Day</div>
-      <div class="value" style="color:var(--accent);">~${Math.round(totalTokens)}T</div>
-      <div class="detail" style="font-size:10px;">Bear: ${bearTokens}T · Bull: ${bullTokens}T</div>
-    </div>
-    <div class="hero-stat">
-      <div class="label">Annualized Revenue</div>
-      <div class="value" style="color:var(--green);">$${totalRev.toFixed(1)}B</div>
-      <div class="detail" style="font-size:10px;">Bear: $${bearRev}B · Bull: $${bullRev}B</div>
-    </div>
-    <div class="hero-stat">
-      <div class="label">Active Providers</div>
-      <div class="value" style="color:var(--accent2);">${provCount}</div>
-      <div class="detail">tracked in this dashboard</div>
-    </div>
-    <div class="hero-stat">
-      <div class="label">Price Deflation</div>
-      <div class="value" style="color:var(--orange);">~10x/yr</div>
-      <div class="detail">frontier-equivalent cost (ARK Invest)</div>
-    </div>
-  `;
+  document.getElementById('hero-stats').innerHTML =
+    '<div class="hero-stat"><div class="label">Est. Tokens / Day</div><div class="value" style="color:var(--accent);">~' + Math.round(totalTokens) + 'T</div><div class="detail" style="font-size:10px;">Bear: ' + bearTokens + 'T \u00b7 Bull: ' + bullTokens + 'T</div></div>' +
+    '<div class="hero-stat"><div class="label">Combined ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail" style="font-size:10px;">Bear: $' + bearRev + 'B \u00b7 Bull: $' + bullRev + 'B</div></div>' +
+    '<div class="hero-stat"><div class="label">Active Providers</div><div class="value" style="color:var(--accent2);">' + provCount + '</div><div class="detail">tracked in this dashboard</div></div>' +
+    '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">frontier-equivalent cost (ARK Invest)</div></div>';
 }
 
 function updateProviderChart() {
@@ -702,7 +515,7 @@ function updateProviderChart() {
       labels,
       datasets: [
         { label: 'Tokens (T/day)', data: tokenVals, backgroundColor: colors.map(c => c + 'cc'), yAxisID: 'y', borderRadius: 4, order: 1 },
-        { label: 'Revenue ($B/yr)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
+        { label: 'ARR ($B)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
       ]
     },
     options: {
@@ -711,21 +524,17 @@ function updateProviderChart() {
       onClick: (e, els) => {
         if (els.length > 0) {
           const label = charts.provider.data.labels[els[0].index];
-          const pill = document.querySelector(`.filter-pill[data-dim="providers"][data-value="${label}"]`);
+          const pill = document.querySelector('.filter-pill[data-dim="providers"][data-value="' + label + '"]');
           if (pill) pill.click();
         }
       },
       plugins: {
         legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } },
-        tooltip: {
-          callbacks: {
-            label: ctx => ctx.dataset.yAxisID === 'y' ? `${ctx.parsed.y.toFixed(0)}T tokens/day` : `$${ctx.parsed.y.toFixed(1)}B/yr`
-          }
-        }
+        tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR' } }
       },
       scales: {
         y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid },
-        y1: { position: 'right', title: { display: true, text: 'Revenue ($B/yr)' }, grid: noGrid },
+        y1: { position: 'right', title: { display: true, text: 'ARR ($B)' }, grid: noGrid },
         x: { grid: noGrid }
       }
     }
@@ -735,15 +544,10 @@ function updateProviderChart() {
 function updateDemandChart() {
   const data = getFilteredProviderData();
   const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
-
-  // Estimate demand type split (revenue only)
-  // Revised: Traditional SaaS much smaller than claimed (~$5-7B real of ~$15B claimed)
-  // Enterprise SaaS = ~3.5-5% of $250B enterprise SaaS market (Gartner)
   const consumerSubs = totalRev * 0.38;
   const apiDev = totalRev * 0.30;
   const entPlatform = totalRev * 0.18;
   const cloudChannel = totalRev * 0.14;
-
   const labels = ['Consumer Subs', 'API / Developer', 'Enterprise Platform', 'Cloud Channel'];
   const values = [consumerSubs, apiDev, entPlatform, cloudChannel];
   const colors = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
@@ -758,27 +562,12 @@ function updateDemandChart() {
 
   charts.demand = new Chart(document.getElementById('chart-demand'), {
     type: 'bar',
-    data: {
-      labels,
-      datasets: [{ data: values, backgroundColor: colors.map(c => c + 'bb'), borderRadius: 4, borderColor: labels.map(l => filters.demandTypes.includes(l) ? '#ffffff' : 'transparent'), borderWidth: labels.map(l => filters.demandTypes.includes(l) ? 3 : 0) }]
-    },
+    data: { labels, datasets: [{ data: values, backgroundColor: colors.map(c => c + 'bb'), borderRadius: 4, borderColor: labels.map(l => filters.demandTypes.includes(l) ? '#ffffff' : 'transparent'), borderWidth: labels.map(l => filters.demandTypes.includes(l) ? 3 : 0) }] },
     options: {
       responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-      onClick: (e, els) => {
-        if (els.length > 0) {
-          const label = charts.demand.data.labels[els[0].index];
-          const pill = document.querySelector(`.filter-pill[data-dim="demandTypes"][data-value="${label}"]`);
-          if (pill) pill.click();
-        }
-      },
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: ctx => `$${Math.abs(ctx.parsed.x).toFixed(1)}B — click to filter` } }
-      },
-      scales: {
-        x: { title: { display: true, text: '$B annualized' }, grid: darkGrid },
-        y: { grid: noGrid }
-      }
+      onClick: (e, els) => { if (els.length > 0) { const label = charts.demand.data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="demandTypes"][data-value="' + label + '"]'); if (pill) pill.click(); } },
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + Math.abs(ctx.parsed.x).toFixed(1) + 'B ARR \u2014 click to filter' } } },
+      scales: { x: { title: { display: true, text: '$B ARR' }, grid: darkGrid }, y: { grid: noGrid } }
     }
   });
 }
@@ -799,23 +588,14 @@ function updateBizConsumerChart() {
 
   charts.bizConsumer = new Chart(document.getElementById('chart-biz-consumer'), {
     type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        { label: 'Consumer', data: consumerVals, backgroundColor: '#f59e0bbb', borderRadius: 4 },
-        { label: 'Business/API', data: bizVals, backgroundColor: '#10b981bb', borderRadius: 4 },
-      ]
-    },
+    data: { labels, datasets: [
+      { label: 'Consumer', data: consumerVals, backgroundColor: '#f59e0bbb', borderRadius: 4 },
+      { label: 'Business/API', data: bizVals, backgroundColor: '#10b981bb', borderRadius: 4 },
+    ] },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'top', labels: { boxWidth: 12 } },
-        tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y.toFixed(1)}B` } }
-      },
-      scales: {
-        x: { stacked: true, grid: noGrid },
-        y: { stacked: true, title: { display: true, text: '$B annualized' }, grid: darkGrid }
-      }
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } },
+      scales: { x: { stacked: true, grid: noGrid }, y: { stacked: true, title: { display: true, text: '$B ARR' }, grid: darkGrid } }
     }
   });
 }
@@ -825,12 +605,8 @@ function updateDimensionChart(canvasId, chartKey, dimObj, dimKey, chartType) {
   const labels = Object.keys(data);
   const values = labels.map(l => data[l].tokens);
   const colors = labels.map(l => data[l].color + 'cc');
-
-  // Highlight active filters
   const activeInDim = filters[dimKey === 'regions' ? 'regions' : dimKey] || [];
-  const borderColors = labels.map(l =>
-    activeInDim.includes(l) ? '#ffffff' : 'transparent'
-  );
+  const borderColors = labels.map(l => activeInDim.includes(l) ? '#ffffff' : 'transparent');
   const borderWidths = labels.map(l => activeInDim.includes(l) ? 3 : 0);
 
   if (charts[chartKey]) {
@@ -845,29 +621,16 @@ function updateDimensionChart(canvasId, chartKey, dimObj, dimKey, chartType) {
 
   charts[chartKey] = new Chart(document.getElementById(canvasId), {
     type: chartType,
-    data: {
-      labels,
-      datasets: [{ data: values, backgroundColor: colors, borderColor: borderColors, borderWidth: borderWidths, borderRadius: chartType === 'bar' ? 4 : 0 }]
-    },
+    data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: borderColors, borderWidth: borderWidths, borderRadius: chartType === 'bar' ? 4 : 0 }] },
     options: {
       responsive: true, maintainAspectRatio: false,
       ...(chartType === 'bar' ? { indexAxis: 'y' } : {}),
-      onClick: (e, els) => {
-        if (els.length > 0) {
-          const fKey = dimKey === 'regions' ? 'regions' : dimKey;
-          const label = charts[chartKey].data.labels[els[0].index];
-          const pill = document.querySelector(`.filter-pill[data-dim="${fKey}"][data-value="${label}"]`);
-          if (pill) pill.click();
-        }
-      },
+      onClick: (e, els) => { if (els.length > 0) { const fKey = dimKey === 'regions' ? 'regions' : dimKey; const label = charts[chartKey].data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="' + fKey + '"][data-value="' + label + '"]'); if (pill) pill.click(); } },
       plugins: {
         legend: { display: chartType === 'doughnut', position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } },
-        tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed.toFixed ? ctx.parsed.toFixed(0) : (ctx.parsed.y || ctx.parsed).toFixed(0)}T tokens/day` } }
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + (ctx.parsed.toFixed ? ctx.parsed.toFixed(0) : (ctx.parsed.y || ctx.parsed).toFixed(0)) + 'T tokens/day' } }
       },
-      scales: chartType === 'bar' ? {
-        x: { title: { display: true, text: 'T tokens/day' }, grid: darkGrid },
-        y: { grid: noGrid }
-      } : undefined,
+      scales: chartType === 'bar' ? { x: { title: { display: true, text: 'T tokens/day' }, grid: darkGrid }, y: { grid: noGrid } } : undefined,
     }
   });
 }
@@ -875,61 +638,86 @@ function updateDimensionChart(canvasId, chartKey, dimObj, dimKey, chartType) {
 function renderDemandMatrix() {
   const t = document.getElementById('demand-matrix');
   const m = DEMAND_MATRIX;
+  const hasSankey = Object.keys(SANKEY_BC_FLOWS).length > 0;
+  const chMap = m.sankeyChannelMap || [[0],[1,2,4],[3],[5]];
+  const bMap = m.sankeyBuyerMap || { Consumer: 0, SME: 1, Enterprise: 2 };
+
+  // Column headers with totals
+  let colTotals = new Array(m.columns.length).fill(0);
+  let grandTotal = 0;
+
+  // Pre-compute all cell values from Sankey
+  const cellValues = [];
+  m.rows.forEach((row, ri) => {
+    const rowVals = [];
+    const buyerIdx = bMap[row.segment];
+    row.cells.forEach((cell, ci) => {
+      let val = 0;
+      if (hasSankey && buyerIdx !== undefined) {
+        chMap[ci].forEach(ch => { val += SANKEY_BC_FLOWS[buyerIdx + ',' + ch] || 0; });
+      }
+      rowVals.push(val);
+      colTotals[ci] += val;
+      grandTotal += val;
+    });
+    cellValues.push(rowVals);
+  });
+
   let html = '<thead><tr><th></th>';
   m.columns.forEach((c, i) => {
-    html += `<th><div style="font-size:13px;font-weight:700;">${c}</div><div style="font-size:10px;opacity:0.7;margin-top:2px;">${m.colSubs[i]}</div></th>`;
+    const colTotal = hasSankey ? '<div style="font-size:11px;color:var(--green);margin-top:2px;">$' + colTotals[i].toFixed(1) + 'B collected</div>' : '';
+    html += '<th><div style="font-size:13px;font-weight:700;">' + c + '</div><div style="font-size:10px;opacity:0.7;margin-top:2px;">' + m.colSubs[i] + '</div>' + colTotal + '</th>';
   });
   html += '</tr></thead><tbody>';
 
-  m.rows.forEach(row => {
-    html += `<tr><td style="background:#1a2332;color:white;font-weight:700;font-size:13px;">${row.segment}</td>`;
-    row.cells.forEach(cell => {
+  m.rows.forEach((row, ri) => {
+    const rowTotal = cellValues[ri].reduce((a, b) => a + b, 0);
+    html += '<tr><td style="background:#1a2332;color:white;font-weight:700;font-size:13px;">' + row.segment + '<div style="font-size:10px;font-weight:400;color:var(--green);margin-top:4px;">$' + rowTotal.toFixed(1) + 'B total</div></td>';
+    row.cells.forEach((cell, ci) => {
+      const val = cellValues[ri][ci];
       const rgb = cell.color === '#10b981' ? '16,185,129' : cell.color === '#f59e0b' ? '249,159,11' : cell.color === '#ef4444' ? '239,68,68' : cell.color === '#3b82f6' ? '59,130,246' : '71,85,105';
-      html += `<td style="background:rgba(${rgb},0.06);">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
-          <span class="matrix-cell-rev" style="color:${cell.color};">${cell.rev}</span>
-          <span class="matrix-cell-conv" style="background:rgba(${rgb},0.15);color:${cell.color};">${cell.conv} tokens</span>
-        </div>
-        <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">${cell.ex}</div>
-        <div style="font-size:10px;color:var(--text-dim);opacity:0.8;font-style:italic;">${cell.note}</div>
-      </td>`;
+      // Primary: Sankey-derived actual collected. Secondary: ARR estimate for context
+      const revDisplay = hasSankey ? '$' + val.toFixed(1) + 'B' : (cell.arrEstimate || '—');
+      const arrRef = cell.arrEstimate ? '<span style="font-size:10px;color:var(--text-dim);margin-left:6px;" title="ARR estimate">(ARR: ' + cell.arrEstimate + ')</span>' : '';
+      html += '<td style="background:rgba(' + rgb + ',0.06);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex-wrap:wrap;">' +
+          '<span class="matrix-cell-rev" style="color:' + cell.color + ';">' + revDisplay + '</span>' + arrRef +
+          '<span class="matrix-cell-conv" style="background:rgba(' + rgb + ',0.15);color:' + cell.color + ';">' + cell.conv + ' tokens</span>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">' + cell.ex + '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);opacity:0.8;font-style:italic;">' + cell.note + '</div></td>';
     });
     html += '</tr>';
   });
+
+  // Totals row
+  html += '<tr><td style="background:#1a2332;color:var(--green);font-weight:700;font-size:13px;">TOTAL<div style="font-size:10px;font-weight:400;margin-top:4px;">$' + grandTotal.toFixed(1) + 'B</div></td>';
+  colTotals.forEach((ct, i) => {
+    const pct = grandTotal > 0 ? Math.round(ct / grandTotal * 100) : 0;
+    html += '<td style="background:rgba(16,185,129,0.08);text-align:center;font-weight:700;color:var(--green);font-size:14px;">$' + ct.toFixed(1) + 'B<div style="font-size:10px;font-weight:400;color:var(--text-dim);">' + pct + '% of total</div></td>';
+  });
+  html += '</tr>';
+
   html += '</tbody>';
   t.innerHTML = html;
 }
 
 function renderEnterpriseTable() {
   const t = document.getElementById('enterprise-table');
-  let html = '<thead><tr><th>Company</th><th>Claimed AI Revenue</th><th>Actual Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Red Flags</th></tr></thead><tbody>';
+  let html = '<thead><tr><th>Company</th><th>Claimed AI ARR</th><th>Actual Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Red Flags</th></tr></thead><tbody>';
   ENTERPRISE_REALITY.forEach(c => {
-    html += `<tr>
-      <td><strong>${c.name}</strong> <span style="color:var(--text-dim);font-size:11px;">${c.ticker}</span></td>
-      <td style="font-size:12px;">${c.claimed}</td>
-      <td style="font-size:12px;color:var(--orange);">${c.usage}</td>
-      <td style="font-size:12px;color:var(--green);font-weight:600;">${c.real}</td>
-      <td style="font-size:12px;"><span style="color:var(--red);">${c.growth || '—'}</span> <span style="color:var(--text-dim);font-size:10px;">← was ${c.prevGrowth || '—'}</span></td>
-      <td style="font-size:11px;color:var(--text-dim);">${c.flags}</td>
-    </tr>`;
+    html += '<tr><td><strong>' + c.name + '</strong> <span style="color:var(--text-dim);font-size:11px;">' + c.ticker + '</span></td><td style="font-size:12px;">' + c.claimed + '</td><td style="font-size:12px;color:var(--orange);">' + c.usage + '</td><td style="font-size:12px;color:var(--green);font-weight:600;">' + c.real + '</td><td style="font-size:12px;"><span style="color:var(--red);">' + (c.growth || '\u2014') + '</span> <span style="color:var(--text-dim);font-size:10px;">\u2190 was ' + (c.prevGrowth || '\u2014') + '</span></td><td style="font-size:11px;color:var(--text-dim);">' + c.flags + '</td></tr>';
   });
   html += '</tbody>';
-
-  // Add the key finding
-  html += `<tr><td colspan="6" style="padding:16px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;">
-    <strong style="color:var(--red);">Key Finding:</strong> <span style="color:var(--text-dim);font-size:12px;">Not a single major enterprise SaaS vendor has demonstrably accelerated its top-line growth rate due to AI. Revenue attribution is deliberately opaque — SKU upgrades are counted as "AI revenue," legacy ML is relabeled, and AI is bundled free into higher tiers. If AI were truly driving incremental demand, growth would be accelerating. Instead it's decelerating across the board.</span>
-  </td></tr>`;
-
+  html += '<tr><td colspan="6" style="padding:16px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;"><strong style="color:var(--red);">Key Finding:</strong> <span style="color:var(--text-dim);font-size:12px;">Not a single major enterprise SaaS vendor has demonstrably accelerated its top-line growth rate due to AI. Revenue attribution is deliberately opaque \u2014 SKU upgrades are counted as "AI revenue," legacy ML is relabeled, and AI is bundled free into higher tiers. If AI were truly driving incremental demand, growth would be accelerating. Instead it\u2019s decelerating across the board.</span></td></tr>';
   t.innerHTML = html;
 }
 
 function updateConsumerTable() {
   const t = document.getElementById('consumer-table');
   const label = document.getElementById('consumer-filter-label');
-
   let filtered = TOP_CONSUMERS;
 
-  // Model type filter: match companies by their provider list
   if (modelTypeFilter !== 'all') {
     const openProvs = ['Meta', 'DeepSeek', 'Mistral', 'Llama', 'Qwen', 'OSS', 'open'];
     const frontierProvs = ['OpenAI', 'Anthropic', 'Google', 'xAI'];
@@ -939,21 +727,14 @@ function updateConsumerTable() {
 
   if (filters.providers.length > 0) {
     filtered = filtered.filter(c => filters.providers.some(p => c.prov.includes(p.split('/')[0]) || c.prov.includes(p.split(' ')[0])));
-    label.textContent = `— filtered by: ${filters.providers.join(', ')}`;
+    label.textContent = '\u2014 filtered by: ' + filters.providers.join(', ');
   } else {
-    label.textContent = modelTypeFilter !== 'all' ? `— showing ${modelTypeFilter} models` : '';
+    label.textContent = modelTypeFilter !== 'all' ? '\u2014 showing ' + modelTypeFilter + ' models' : '';
   }
 
   let html = '<thead><tr><th>Company</th><th>HQ</th><th>Type</th><th>Est. Tokens/Day</th><th>Provider(s)</th><th>Evidence</th></tr></thead><tbody>';
   filtered.forEach(c => {
-    html += `<tr>
-      <td><strong>${c.co}</strong></td>
-      <td>${c.hq}</td>
-      <td style="font-size:11px;">${c.type}</td>
-      <td style="font-weight:600;color:var(--accent);">${c.tokens}</td>
-      <td style="font-size:11px;">${c.prov}</td>
-      <td style="font-size:11px;color:var(--text-dim);">${c.ev}</td>
-    </tr>`;
+    html += '<tr><td><strong>' + c.co + '</strong></td><td>' + c.hq + '</td><td style="font-size:11px;">' + c.type + '</td><td style="font-weight:600;color:var(--accent);">' + c.tokens + '</td><td style="font-size:11px;">' + c.prov + '</td><td style="font-size:11px;color:var(--text-dim);">' + c.ev + '</td></tr>';
   });
   html += '</tbody>';
   t.innerHTML = html;
@@ -963,34 +744,20 @@ function renderModelTable() {
   const t = document.getElementById('model-table');
   let filtered = MODELS;
 
-  // Model type filter
   if (modelTypeFilter !== 'all') {
     const openProviders = ['Meta', 'DeepSeek', 'Mistral'];
-    if (modelTypeFilter === 'open') {
-      filtered = filtered.filter(m => openProviders.includes(m.prov));
-    } else {
-      filtered = filtered.filter(m => !openProviders.includes(m.prov));
-    }
+    if (modelTypeFilter === 'open') { filtered = filtered.filter(m => openProviders.includes(m.prov)); }
+    else { filtered = filtered.filter(m => !openProviders.includes(m.prov)); }
   }
 
   if (filters.providers.length > 0) {
-    filtered = filtered.filter(m => {
-      return filters.providers.some(p => p.startsWith(m.prov) || m.prov.startsWith(p.split('/')[0]) || m.prov === 'Meta' && p.includes('Meta'));
-    });
+    filtered = filtered.filter(m => filters.providers.some(p => p.startsWith(m.prov) || m.prov.startsWith(p.split('/')[0]) || m.prov === 'Meta' && p.includes('Meta')));
   }
 
   let html = '<thead><tr><th>Model</th><th>Provider</th><th>Est. Tokens/Day</th><th>Input $/1M</th><th>Output $/1M</th><th>Primary Use</th><th>Trend</th></tr></thead><tbody>';
   filtered.forEach(m => {
     const badge = m.prov === 'OpenAI' ? 'badge-openai' : m.prov === 'Anthropic' ? 'badge-anthropic' : m.prov === 'Google' ? 'badge-google' : m.prov === 'Meta' ? 'badge-meta' : 'badge-deepseek';
-    html += `<tr>
-      <td><strong>${m.model}</strong></td>
-      <td><span class="badge ${badge}">${m.prov}</span></td>
-      <td style="font-weight:600;">${m.tokens}</td>
-      <td>${m.inP}</td>
-      <td>${m.outP}</td>
-      <td style="font-size:11px;">${m.use}</td>
-      <td>${m.trend}</td>
-    </tr>`;
+    html += '<tr><td><strong>' + m.model + '</strong></td><td><span class="badge ' + badge + '">' + m.prov + '</span></td><td style="font-weight:600;">' + m.tokens + '</td><td>' + m.inP + '</td><td>' + m.outP + '</td><td style="font-size:11px;">' + m.use + '</td><td>' + m.trend + '</td></tr>';
   });
   html += '</tbody>';
   t.innerHTML = html;
@@ -1014,12 +781,9 @@ function updateAll() {
 }
 
 // ============================================================
-// INIT
+// KICK OFF
 // ============================================================
-buildFilterBar();
-updateAll();
-renderDemandMatrix();
-renderEnterpriseTable();
+loadDashboardData();
 </script>
 </body>
 </html>
