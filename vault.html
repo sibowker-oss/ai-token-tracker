@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intel Vault — Private Reference Data</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  /* Top bar */
+  .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); }
+  .topbar h1 { font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; }
+  .topbar h1 span { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; }
+  .topbar-actions { display:flex; gap:8px; }
+  .topbar-actions button { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
+  .topbar-actions button:hover { background:#1e293b; color:var(--text); }
+  .topbar-actions button.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  .container { max-width:1200px; margin:0 auto; padding:24px; }
+
+  /* Tabs */
+  .tabs { display:flex; gap:4px; margin-bottom:24px; }
+  .tab { padding:10px 20px; border-radius:8px; border:none; background:transparent; color:var(--text-dim); font-size:13px; font-weight:500; cursor:pointer; transition:all 0.15s; }
+  .tab:hover { background:rgba(255,255,255,0.05); color:var(--text); }
+  .tab.active { background:var(--accent); color:white; font-weight:600; }
+
+  /* Search */
+  .search-bar { position:relative; margin-bottom:20px; }
+  .search-bar input { width:100%; padding:12px 16px 12px 40px; background:var(--card); border:1px solid var(--card-border); border-radius:10px; color:var(--text); font-size:14px; outline:none; transition:border-color 0.2s; }
+  .search-bar input:focus { border-color:var(--accent); }
+  .search-bar input::placeholder { color:var(--text-dim); }
+  .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-dim); font-size:14px; }
+
+  /* Filters */
+  .filters { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+  .filter-chip { padding:5px 12px; border-radius:20px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .filter-chip:hover { border-color:var(--text-dim); color:var(--text); }
+  .filter-chip.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  /* Stats bar */
+  .stats-bar { display:flex; gap:24px; margin-bottom:20px; font-size:12px; color:var(--text-dim); }
+  .stats-bar strong { color:var(--text); }
+
+  /* Data point cards */
+  .dp-list { display:flex; flex-direction:column; gap:12px; }
+  .dp-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px 20px; cursor:pointer; transition:all 0.15s; }
+  .dp-card:hover { border-color:var(--accent); }
+  .dp-card.expanded { border-color:var(--accent); }
+  .dp-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .dp-claim { font-size:14px; font-weight:600; line-height:1.5; flex:1; }
+  .dp-value { font-size:18px; font-weight:800; color:var(--accent); white-space:nowrap; }
+  .dp-meta { display:flex; gap:12px; margin-top:8px; font-size:11px; color:var(--text-dim); flex-wrap:wrap; }
+  .dp-meta-item { display:flex; align-items:center; gap:4px; }
+  .dp-tags { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+  .dp-tag { padding:2px 8px; border-radius:10px; background:rgba(59,130,246,0.1); color:var(--accent); font-size:10px; }
+  .dp-detail { margin-top:16px; padding-top:16px; border-top:1px solid var(--card-border); display:none; }
+  .dp-card.expanded .dp-detail { display:block; }
+  .dp-detail-row { display:flex; gap:12px; margin-bottom:10px; font-size:12px; }
+  .dp-detail-label { color:var(--text-dim); min-width:100px; flex-shrink:0; }
+  .dp-detail-value { color:var(--text); line-height:1.6; }
+  .dp-detail-value a { color:var(--accent); text-decoration:none; word-break:break-all; }
+  .dp-detail-value a:hover { text-decoration:underline; }
+
+  /* Confidence badges */
+  .badge { padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; }
+  .badge-verified { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-estimated { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .badge-speculative { background:rgba(239,68,68,0.15); color:var(--red); }
+  .badge-unverified { background:rgba(139,92,246,0.15); color:var(--purple); }
+
+  /* Page badges */
+  .page-badge { padding:2px 8px; border-radius:10px; font-size:10px; background:rgba(139,92,246,0.15); color:var(--purple); cursor:pointer; }
+  .page-badge:hover { background:rgba(139,92,246,0.25); }
+
+  /* Source type badges */
+  .src-badge { padding:2px 8px; border-radius:10px; font-size:10px; font-weight:500; }
+  .src-sworn-affidavit { background:rgba(16,185,129,0.15); color:var(--green); }
+  .src-leaked-internal { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .src-reporting { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .src-official { background:rgba(16,185,129,0.15); color:var(--green); }
+  .src-platform-data { background:rgba(6,182,212,0.15); color:#06b6d4; }
+  .src-calculation { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .src-estimate { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .src-earnings-aggregation { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .src-observation { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+
+  /* Form */
+  .form-section { display:none; }
+  .form-section.active { display:block; }
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group { display:flex; flex-direction:column; gap:4px; }
+  .form-group.full { grid-column:1/-1; }
+  .form-group label { font-size:11px; color:var(--text-dim); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+  .form-group input, .form-group select, .form-group textarea { padding:10px 12px; background:var(--card); border:1px solid var(--card-border); border-radius:8px; color:var(--text); font-size:13px; font-family:inherit; outline:none; transition:border-color 0.2s; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color:var(--accent); }
+  .form-group textarea { min-height:80px; resize:vertical; }
+  .form-group select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+  .form-actions { display:flex; gap:8px; margin-top:20px; }
+  .btn { padding:10px 20px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .btn-primary { background:var(--accent); color:white; }
+  .btn-primary:hover { background:#2563eb; }
+  .btn-secondary { background:var(--card); color:var(--text-dim); border:1px solid var(--card-border); }
+  .btn-secondary:hover { color:var(--text); background:#1e293b; }
+  .btn-danger { background:rgba(239,68,68,0.15); color:var(--red); }
+  .btn-danger:hover { background:rgba(239,68,68,0.25); }
+
+  /* Audit view */
+  .audit-page { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:16px; }
+  .audit-page h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
+  .audit-page .audit-stats { display:flex; gap:16px; font-size:12px; color:var(--text-dim); margin-bottom:12px; }
+  .audit-page .audit-stats span { display:flex; align-items:center; gap:4px; }
+  .audit-item { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+  .audit-item:last-child { border-bottom:none; }
+  .audit-item .claim { flex:1; color:var(--text); }
+  .audit-item .val { font-weight:700; color:var(--accent); min-width:60px; text-align:right; }
+
+  /* Toast notification */
+  .toast { position:fixed; bottom:24px; right:24px; background:var(--green); color:white; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; opacity:0; transform:translateY(10px); transition:all 0.3s; z-index:1000; pointer-events:none; }
+  .toast.show { opacity:1; transform:translateY(0); }
+
+  /* Export dropdown */
+  .export-menu { position:relative; display:inline-block; }
+  .export-dropdown { position:absolute; top:100%; right:0; margin-top:4px; background:var(--card); border:1px solid var(--card-border); border-radius:8px; padding:4px; min-width:160px; display:none; z-index:100; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+  .export-dropdown.show { display:block; }
+  .export-dropdown button { display:block; width:100%; padding:8px 12px; border:none; background:none; color:var(--text-dim); font-size:12px; text-align:left; cursor:pointer; border-radius:6px; }
+  .export-dropdown button:hover { background:rgba(255,255,255,0.05); color:var(--text); }
+
+  /* Empty state */
+  .empty-state { text-align:center; padding:60px 20px; color:var(--text-dim); }
+  .empty-state .icon { font-size:48px; margin-bottom:16px; opacity:0.3; }
+  .empty-state p { font-size:14px; }
+
+  /* Mobile */
+  @media(max-width:768px) {
+    .topbar { flex-direction:column; gap:12px; align-items:flex-start; }
+    .container { padding:16px; }
+    .form-grid { grid-template-columns:1fr; }
+    .dp-header { flex-direction:column; }
+    .dp-value { font-size:16px; }
+    .stats-bar { flex-direction:column; gap:8px; }
+    .filters { gap:6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Intel Vault <span>Private</span></h1>
+  <div class="topbar-actions">
+    <div class="export-menu">
+      <button onclick="toggleExport()" id="exportBtn">Export</button>
+      <div class="export-dropdown" id="exportDropdown">
+        <button onclick="exportJSON()">Download JSON</button>
+        <button onclick="exportCSV()">Download CSV</button>
+        <button onclick="exportMarkdown()">Copy as Markdown</button>
+      </div>
+    </div>
+    <button onclick="importData()">Import</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+  </div>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('search')">Search & Browse</button>
+    <button class="tab" onclick="switchTab('submit')">Add Data Point</button>
+    <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
+  </div>
+
+  <!-- SEARCH VIEW -->
+  <div id="view-search" class="view-section">
+    <div class="search-bar">
+      <span class="search-icon">&#x1F50D;</span>
+      <input type="text" id="searchInput" placeholder="Search claims, sources, tags, notes..." oninput="renderList()">
+    </div>
+
+    <div class="filters" id="filterBar"></div>
+
+    <div class="stats-bar" id="statsBar"></div>
+
+    <div class="dp-list" id="dpList"></div>
+  </div>
+
+  <!-- SUBMIT VIEW -->
+  <div id="view-submit" class="view-section" style="display:none;">
+    <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px;">
+      <h2 style="font-size:18px; margin-bottom:20px;">Add New Data Point</h2>
+      <form id="dpForm" onsubmit="return submitDP(event)">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Claim / Assertion</label>
+            <input type="text" id="f-claim" required placeholder="e.g. Anthropic 2025 collected revenue ~$4.5B">
+          </div>
+          <div class="form-group">
+            <label>Value</label>
+            <input type="number" id="f-value" step="any" placeholder="4.5">
+          </div>
+          <div class="form-group">
+            <label>Unit</label>
+            <input type="text" id="f-unit" placeholder="$B, %, months, ratio...">
+          </div>
+          <div class="form-group full">
+            <label>Source URL</label>
+            <input type="url" id="f-url" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>Source Type</label>
+            <select id="f-sourceType">
+              <option value="reporting">Reporting</option>
+              <option value="official">Official / Press Release</option>
+              <option value="sworn-affidavit">Sworn Affidavit / Filing</option>
+              <option value="leaked-internal">Leaked Internal</option>
+              <option value="earnings-aggregation">Earnings Call / 10-K</option>
+              <option value="platform-data">Platform Data</option>
+              <option value="calculation">Our Calculation</option>
+              <option value="estimate">Estimate</option>
+              <option value="observation">Observation</option>
+              <option value="scraper">Scraper (auto)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Source Author</label>
+            <input type="text" id="f-author" placeholder="e.g. The Information, Ed Zitron">
+          </div>
+          <div class="form-group">
+            <label>Confidence</label>
+            <select id="f-confidence">
+              <option value="verified">Verified</option>
+              <option value="estimated" selected>Estimated</option>
+              <option value="speculative">Speculative</option>
+              <option value="unverified">Unverified (review)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date of Claim</label>
+            <input type="date" id="f-dateOfClaim">
+          </div>
+          <div class="form-group full">
+            <label>Used On (pages, comma-separated)</label>
+            <input type="text" id="f-usedOn" placeholder="sankey, dashboard, calculator">
+          </div>
+          <div class="form-group full">
+            <label>Tags (comma-separated)</label>
+            <input type="text" id="f-tags" placeholder="revenue, anthropic, 2025, actual-collected">
+          </div>
+          <div class="form-group full">
+            <label>Notes / Reasoning</label>
+            <textarea id="f-notes" placeholder="Cross-references, methodology, caveats..."></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Save Data Point</button>
+          <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AUDIT VIEW -->
+  <div id="view-audit" class="view-section" style="display:none;">
+    <div id="auditContent"></div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA LAYER — localStorage backed, seed from vault-data.json
+// ============================================================
+const STORAGE_KEY = 'intel-vault-data';
+
+let vaultData = { meta: { version: '1.0', lastUpdated: new Date().toISOString().slice(0,10) }, dataPoints: [] };
+
+// Active filters
+let activeFilters = { confidence: null, sourceType: null, page: null, tag: null };
+
+// Load from localStorage or seed from JSON
+async function initData() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    try {
+      vaultData = JSON.parse(stored);
+    } catch(e) {
+      console.error('Failed to parse stored data, reseeding...');
+      await seedFromJSON();
+    }
+  } else {
+    await seedFromJSON();
+  }
+  renderAll();
+}
+
+async function seedFromJSON() {
+  try {
+    const resp = await fetch('vault-data.json');
+    if (resp.ok) {
+      vaultData = await resp.json();
+      saveData();
+    }
+  } catch(e) {
+    console.warn('Could not load vault-data.json, starting empty');
+  }
+}
+
+function saveData() {
+  vaultData.meta.lastUpdated = new Date().toISOString().slice(0,10);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(vaultData));
+}
+
+// ============================================================
+// SEARCH & FILTER
+// ============================================================
+function getFilteredPoints() {
+  const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+  return vaultData.dataPoints.filter(dp => {
+    // Text search
+    if (query) {
+      const haystack = [
+        dp.claim, dp.sourceAuthor, dp.sourceUrl, dp.notes,
+        ...(dp.tags || []), ...(dp.usedOn || []),
+        dp.sourceType, dp.confidence, dp.unit || ''
+      ].join(' ').toLowerCase();
+      if (!haystack.includes(query)) return false;
+    }
+    // Filters
+    if (activeFilters.confidence && dp.confidence !== activeFilters.confidence) return false;
+    if (activeFilters.sourceType && dp.sourceType !== activeFilters.sourceType) return false;
+    if (activeFilters.page && !(dp.usedOn || []).includes(activeFilters.page)) return false;
+    if (activeFilters.tag && !(dp.tags || []).includes(activeFilters.tag)) return false;
+    return true;
+  });
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderAll() {
+  renderFilters();
+  renderList();
+  renderAudit();
+}
+
+function renderFilters() {
+  // Collect all unique values
+  const confidences = new Set();
+  const sourceTypes = new Set();
+  const pages = new Set();
+  const tags = new Set();
+  vaultData.dataPoints.forEach(dp => {
+    if (dp.confidence) confidences.add(dp.confidence);
+    if (dp.sourceType) sourceTypes.add(dp.sourceType);
+    (dp.usedOn || []).forEach(p => pages.add(p));
+    (dp.tags || []).forEach(t => tags.add(t));
+  });
+
+  const bar = document.getElementById('filterBar');
+  let html = '';
+
+  // Confidence
+  ['verified','estimated','speculative','unverified'].forEach(c => {
+    if (confidences.has(c)) {
+      html += `<button class="filter-chip${activeFilters.confidence===c?' active':''}" onclick="toggleFilter('confidence','${c}')">${c}</button>`;
+    }
+  });
+
+  // Source types
+  [...sourceTypes].sort().forEach(s => {
+    html += `<button class="filter-chip${activeFilters.sourceType===s?' active':''}" onclick="toggleFilter('sourceType','${s}')">${s.replace(/-/g,' ')}</button>`;
+  });
+
+  // Pages
+  [...pages].sort().forEach(p => {
+    html += `<button class="filter-chip${activeFilters.page===p?' active':''}" onclick="toggleFilter('page','${p}')" style="border-color:rgba(139,92,246,0.3);color:${activeFilters.page===p?'white':'var(--purple)'};${activeFilters.page===p?'background:var(--purple);':''}">page: ${p}</button>`;
+  });
+
+  bar.innerHTML = html;
+}
+
+function toggleFilter(type, value) {
+  activeFilters[type] = activeFilters[type] === value ? null : value;
+  renderFilters();
+  renderList();
+}
+
+function renderList() {
+  const filtered = getFilteredPoints();
+  const total = vaultData.dataPoints.length;
+
+  // Stats
+  const verified = filtered.filter(d => d.confidence === 'verified').length;
+  const estimated = filtered.filter(d => d.confidence === 'estimated').length;
+  const speculative = filtered.filter(d => d.confidence === 'speculative').length;
+  document.getElementById('statsBar').innerHTML = `
+    <span>Showing <strong>${filtered.length}</strong> of ${total} data points</span>
+    <span><strong style="color:var(--green)">${verified}</strong> verified</span>
+    <span><strong style="color:var(--orange)">${estimated}</strong> estimated</span>
+    <span><strong style="color:var(--red)">${speculative}</strong> speculative</span>
+  `;
+
+  const list = document.getElementById('dpList');
+  if (filtered.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">&#x1F50D;</div><p>No data points match your search</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(dp => `
+    <div class="dp-card" id="card-${dp.id}" onclick="toggleCard('${dp.id}')">
+      <div class="dp-header">
+        <div class="dp-claim">${highlightMatch(dp.claim)}</div>
+        <div class="dp-value">${dp.value !== null ? dp.value + (dp.unit ? ' ' + dp.unit : '') : dp.unit || '—'}</div>
+      </div>
+      <div class="dp-meta">
+        <span class="dp-meta-item"><span class="badge badge-${dp.confidence}">${dp.confidence}</span></span>
+        <span class="dp-meta-item"><span class="src-badge src-${dp.sourceType}">${(dp.sourceType||'').replace(/-/g,' ')}</span></span>
+        <span class="dp-meta-item" style="color:var(--text-dim)">${dp.sourceAuthor || '—'}</span>
+        ${(dp.usedOn||[]).map(p => `<span class="page-badge">${p}</span>`).join('')}
+      </div>
+      <div class="dp-tags">${(dp.tags||[]).map(t => `<span class="dp-tag">${t}</span>`).join('')}</div>
+      <div class="dp-detail">
+        ${dp.sourceUrl ? `<div class="dp-detail-row"><div class="dp-detail-label">Source URL</div><div class="dp-detail-value"><a href="${dp.sourceUrl}" target="_blank">${dp.sourceUrl}</a></div></div>` : ''}
+        <div class="dp-detail-row"><div class="dp-detail-label">Date of Claim</div><div class="dp-detail-value">${dp.dateOfClaim || '—'}</div></div>
+        <div class="dp-detail-row"><div class="dp-detail-label">Date Added</div><div class="dp-detail-value">${dp.dateAdded || '—'}</div></div>
+        <div class="dp-detail-row"><div class="dp-detail-label">Notes</div><div class="dp-detail-value">${dp.notes || '—'}</div></div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-secondary" onclick="event.stopPropagation(); editDP('${dp.id}')">Edit</button>
+          <button class="btn btn-danger" onclick="event.stopPropagation(); deleteDP('${dp.id}')">Delete</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function highlightMatch(text) {
+  const query = (document.getElementById('searchInput')?.value || '').trim();
+  if (!query) return text;
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  return text.replace(re, '<mark style="background:rgba(59,130,246,0.3);color:var(--text);border-radius:2px;padding:0 2px;">$1</mark>');
+}
+
+function toggleCard(id) {
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.toggle('expanded');
+}
+
+// ============================================================
+// AUDIT VIEW
+// ============================================================
+function renderAudit() {
+  const pages = {};
+  vaultData.dataPoints.forEach(dp => {
+    (dp.usedOn || []).forEach(page => {
+      if (!pages[page]) pages[page] = [];
+      pages[page].push(dp);
+    });
+  });
+
+  const container = document.getElementById('auditContent');
+  if (Object.keys(pages).length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">&#x1F4CB;</div><p>No pages with data points yet</p></div>`;
+    return;
+  }
+
+  container.innerHTML = Object.entries(pages).sort((a,b) => b[1].length - a[1].length).map(([page, dps]) => {
+    const verified = dps.filter(d => d.confidence === 'verified').length;
+    const stale = dps.filter(d => {
+      if (!d.dateOfClaim) return true;
+      const age = (Date.now() - new Date(d.dateOfClaim).getTime()) / (1000*60*60*24);
+      return age > 180;
+    }).length;
+
+    return `
+      <div class="audit-page">
+        <h3>${page}.html</h3>
+        <div class="audit-stats">
+          <span><strong>${dps.length}</strong> data points</span>
+          <span style="color:var(--green)"><strong>${verified}</strong> verified</span>
+          <span style="color:${stale > 0 ? 'var(--orange)' : 'var(--text-dim)'}"><strong>${stale}</strong> stale (>6 months)</span>
+        </div>
+        ${dps.map(dp => `
+          <div class="audit-item">
+            <span class="badge badge-${dp.confidence}" style="flex-shrink:0">${dp.confidence}</span>
+            <span class="claim">${dp.claim}</span>
+            <span class="val">${dp.value !== null ? dp.value + (dp.unit ? ' ' + dp.unit : '') : '—'}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// SUBMIT / EDIT
+// ============================================================
+let editingId = null;
+
+function submitDP(e) {
+  e.preventDefault();
+
+  const dp = {
+    id: editingId || 'dp-' + String(Date.now()).slice(-6) + '-' + Math.random().toString(36).slice(2,5),
+    claim: document.getElementById('f-claim').value.trim(),
+    value: document.getElementById('f-value').value ? parseFloat(document.getElementById('f-value').value) : null,
+    unit: document.getElementById('f-unit').value.trim() || null,
+    sourceUrl: document.getElementById('f-url').value.trim() || '',
+    sourceType: document.getElementById('f-sourceType').value,
+    sourceAuthor: document.getElementById('f-author').value.trim() || '',
+    confidence: document.getElementById('f-confidence').value,
+    dateOfClaim: document.getElementById('f-dateOfClaim').value || '',
+    dateAdded: new Date().toISOString().slice(0,10),
+    usedOn: document.getElementById('f-usedOn').value.split(',').map(s=>s.trim()).filter(Boolean),
+    tags: document.getElementById('f-tags').value.split(',').map(s=>s.trim()).filter(Boolean),
+    notes: document.getElementById('f-notes').value.trim() || ''
+  };
+
+  if (editingId) {
+    const idx = vaultData.dataPoints.findIndex(d => d.id === editingId);
+    if (idx >= 0) {
+      dp.dateAdded = vaultData.dataPoints[idx].dateAdded; // preserve original add date
+      vaultData.dataPoints[idx] = dp;
+    }
+    editingId = null;
+  } else {
+    vaultData.dataPoints.push(dp);
+  }
+
+  saveData();
+  clearForm();
+  showToast(editingId ? 'Data point updated' : 'Data point saved');
+  renderAll();
+  switchTab('search');
+}
+
+function editDP(id) {
+  const dp = vaultData.dataPoints.find(d => d.id === id);
+  if (!dp) return;
+
+  editingId = id;
+  document.getElementById('f-claim').value = dp.claim || '';
+  document.getElementById('f-value').value = dp.value ?? '';
+  document.getElementById('f-unit').value = dp.unit || '';
+  document.getElementById('f-url').value = dp.sourceUrl || '';
+  document.getElementById('f-sourceType').value = dp.sourceType || 'estimate';
+  document.getElementById('f-author').value = dp.sourceAuthor || '';
+  document.getElementById('f-confidence').value = dp.confidence || 'estimated';
+  document.getElementById('f-dateOfClaim').value = dp.dateOfClaim || '';
+  document.getElementById('f-usedOn').value = (dp.usedOn || []).join(', ');
+  document.getElementById('f-tags').value = (dp.tags || []).join(', ');
+  document.getElementById('f-notes').value = dp.notes || '';
+
+  switchTab('submit');
+}
+
+function deleteDP(id) {
+  if (!confirm('Delete this data point?')) return;
+  vaultData.dataPoints = vaultData.dataPoints.filter(d => d.id !== id);
+  saveData();
+  showToast('Data point deleted');
+  renderAll();
+}
+
+function clearForm() {
+  document.getElementById('dpForm').reset();
+  editingId = null;
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    const tabs = ['search','submit','audit'];
+    t.classList.toggle('active', tabs[i] === name);
+  });
+  ['search','submit','audit'].forEach(v => {
+    document.getElementById('view-' + v).style.display = v === name ? 'block' : 'none';
+  });
+  if (name === 'audit') renderAudit();
+}
+
+// ============================================================
+// EXPORT / IMPORT
+// ============================================================
+function toggleExport() {
+  document.getElementById('exportDropdown').classList.toggle('show');
+}
+
+// Close export dropdown on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.export-menu')) {
+    document.getElementById('exportDropdown').classList.remove('show');
+  }
+});
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(vaultData, null, 2)], { type: 'application/json' });
+  downloadBlob(blob, `intel-vault-${vaultData.meta.lastUpdated}.json`);
+  document.getElementById('exportDropdown').classList.remove('show');
+  showToast('JSON exported');
+}
+
+function exportCSV() {
+  const headers = ['id','claim','value','unit','sourceUrl','sourceType','sourceAuthor','confidence','dateOfClaim','dateAdded','usedOn','tags','notes'];
+  const rows = vaultData.dataPoints.map(dp =>
+    headers.map(h => {
+      let v = dp[h];
+      if (Array.isArray(v)) v = v.join('; ');
+      if (v === null || v === undefined) v = '';
+      return '"' + String(v).replace(/"/g, '""') + '"';
+    }).join(',')
+  );
+  const csv = headers.join(',') + '\n' + rows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  downloadBlob(blob, `intel-vault-${vaultData.meta.lastUpdated}.csv`);
+  document.getElementById('exportDropdown').classList.remove('show');
+  showToast('CSV exported');
+}
+
+function exportMarkdown() {
+  const filtered = getFilteredPoints();
+  const lines = ['# Intel Vault — Data Points', '', `*Exported ${new Date().toISOString().slice(0,10)} — ${filtered.length} data points*`, ''];
+  filtered.forEach(dp => {
+    lines.push(`### ${dp.claim}`);
+    if (dp.value !== null) lines.push(`**Value:** ${dp.value} ${dp.unit || ''}`);
+    lines.push(`**Confidence:** ${dp.confidence} | **Source:** ${dp.sourceAuthor || '—'} (${(dp.sourceType||'').replace(/-/g,' ')})`);
+    if (dp.sourceUrl) lines.push(`**URL:** ${dp.sourceUrl}`);
+    if (dp.notes) lines.push(`> ${dp.notes}`);
+    lines.push('');
+  });
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    showToast('Markdown copied to clipboard');
+  });
+  document.getElementById('exportDropdown').classList.remove('show');
+}
+
+function downloadBlob(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importData() {
+  document.getElementById('importFile').click();
+}
+
+function handleImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (imported.dataPoints && Array.isArray(imported.dataPoints)) {
+        // Merge: add new, skip duplicates by ID
+        let added = 0;
+        imported.dataPoints.forEach(dp => {
+          if (!vaultData.dataPoints.find(d => d.id === dp.id)) {
+            vaultData.dataPoints.push(dp);
+            added++;
+          }
+        });
+        saveData();
+        renderAll();
+        showToast(`Imported ${added} new data points (${imported.dataPoints.length - added} duplicates skipped)`);
+      } else {
+        showToast('Invalid file format');
+      }
+    } catch(err) {
+      showToast('Failed to parse import file');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============================================================
+// KEYBOARD SHORTCUTS
+// ============================================================
+document.addEventListener('keydown', e => {
+  // Cmd/Ctrl+K → focus search
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    switchTab('search');
+    document.getElementById('searchInput').focus();
+  }
+  // Escape → clear search
+  if (e.key === 'Escape') {
+    const input = document.getElementById('searchInput');
+    if (document.activeElement === input) {
+      input.value = '';
+      renderList();
+    }
+  }
+});
+
+// ============================================================
+// RESEED — force reload from JSON (destructive, for dev)
+// ============================================================
+function reseedVault() {
+  if (!confirm('This will replace ALL local data with vault-data.json. Continue?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+// Boot
+initData();
+</script>
+
+</body>
+</html>
