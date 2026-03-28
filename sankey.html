@@ -177,117 +177,8 @@ const nw = 80; // node width
 const gap = (W - nw) / 3; // equal spacing so col1 left=0, col4 right=W
 const COL = [0, gap, gap * 2, W - nw];
 
-// 2025 ACTUAL REVENUE COLLECTED (not exit ARR)
-// Sources: Anthropic sworn affidavit ($5B cumulative ever), Zitron/Microsoft docs, The Information
-// $15.6B customer revenue + $12B VC operating subsidy = $27.6B total system
-const BUYERS = [
-  { label: 'Consumer', value: 4.5, color: '#f59e0b', y: 0 },
-  { label: 'SME', value: 3, color: '#8b5cf6', y: 0 },
-  { label: 'Enterprise', value: 8.1, color: '#3b82f6', y: 0 },
-  { label: 'VC/Investors', value: 12, color: '#dc2626', y: 0 },
-];
-
-const CHANNELS = [
-  { label: 'Model Subs', value: 4.5, color: '#f59e0b', y: 0 },
-  { label: 'Model API', value: 3, color: '#3b82f6', y: 0 },
-  { label: 'Hyperscalers', value: 2, color: '#06b6d4', y: 0 },
-  { label: 'AI Native Apps', value: 3, color: '#10b981', y: 0 },
-  { label: 'IaaS & Agg.', value: 0.3, color: '#8b5cf6', y: 0 },
-  { label: 'Trad. SaaS', value: 2.8, color: '#ef4444', y: 0 },
-];
-
-// Provider order: 0=OpenAI, 1=Anthropic, 2=Inf.Platforms, 3=Google
-const PROVIDERS = [
-  { label: 'OpenAI', value: 12, color: '#10a37f', y: 0 },      // 6.0 cust + 6.0 VC
-  { label: 'Anthropic', value: 9.7, color: '#d97706', y: 0 },   // 4.5 cust + 5.2 VC
-  { label: 'IaaS', value: 0.8, color: '#8b5cf6', y: 0 },           // 0.5 cust + 0.3 VC
-  { label: 'Google', value: 2.5, color: '#4285f4', y: 0 },      // 2.0 cust + 0.5 VC
-];
-
-// Where $27.6B goes — zero margins for frontier, SaaS + Cloud keep margin
-const OUTCOMES = [
-  { label: 'Inference', value: 13, color: '#10b981', y: 0 },
-  { label: 'People/SG&A', value: 12.45, color: '#f59e0b', y: 0 },
-  { label: 'Margin', value: 2.15, color: '#94a3b8', y: 0 },
-];
-
-// Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
-// Channel indices: 0=Subs, 1=API, 2=Hyperscalers, 3=AI Native Apps, 4=IaaS, 5=SaaS
-// Provider indices: 0=OpenAI, 1=Anthropic, 2=IaaS, 3=Google
-const FLOWS = [
-  // Buyers → Channels ($15.6B customer revenue)
-  [0, 0, 1, 0, 2.5, '#f59e0b33'],   // Consumer → Model Subs (ChatGPT Plus, Claude Pro, Gemini)
-  [0, 0, 1, 1, 0.1, '#f59e0b33'],   // Consumer → API (hobbyist devs)
-  [0, 0, 1, 3, 1.5, '#f59e0b33'],   // Consumer → AI Native (Perplexity Pro, etc)
-  [0, 0, 1, 5, 0.4, '#f59e0b33'],   // Consumer → Trad SaaS
-  [0, 1, 1, 0, 0.8, '#8b5cf633'],   // SME → Model Subs (ChatGPT Team)
-  [0, 1, 1, 1, 0.5, '#8b5cf633'],   // SME → API (direct)
-  [0, 1, 1, 2, 0.2, '#8b5cf633'],   // SME → Cloud Channel
-  [0, 1, 1, 3, 1, '#8b5cf633'],     // SME → AI Native (Cursor Pro)
-  [0, 1, 1, 4, 0.15, '#8b5cf633'],  // SME → Inf. Platforms
-  [0, 1, 1, 5, 0.35, '#8b5cf633'],  // SME → Trad SaaS
-  [0, 2, 1, 0, 1.2, '#3b82f633'],   // Enterprise → Model Subs (ChatGPT Enterprise seats)
-  [0, 2, 1, 1, 2.4, '#3b82f633'],   // Enterprise → API (direct)
-  [0, 2, 1, 2, 1.8, '#3b82f633'],   // Enterprise → Cloud Channel (Bedrock, Azure OAI, Vertex)
-  [0, 2, 1, 3, 0.5, '#3b82f633'],   // Enterprise → AI Native (Harvey, Cursor Ent)
-  [0, 2, 1, 4, 0.15, '#3b82f633'],  // Enterprise → Inf. Platforms
-  [0, 2, 1, 5, 2.05, '#3b82f633'],  // Enterprise → Trad SaaS (M365 Copilot, NOW Assist etc)
-
-  // VC/Investors → DIRECT to providers ($12B operating subsidy, bypasses channels)
-  [0, 3, 2, 0, 6, '#dc262633'],     // VC → OpenAI
-  [0, 3, 2, 1, 5.2, '#dc262633'],   // VC → Anthropic
-  [0, 3, 2, 2, 0.3, '#dc262633'],   // VC → Inf. Platforms
-  [0, 3, 2, 3, 0.5, '#dc262633'],   // VC → Google (Alphabet subsidy)
-
-  // Channels → Providers
-  // Model Subs (4.5B) → providers
-  [1, 0, 2, 0, 2.8, '#f59e0b22'],   // Model Subs → OpenAI (ChatGPT dominates subs)
-  [1, 0, 2, 1, 0.8, '#f59e0b22'],   // Model Subs → Anthropic (Claude Pro/Team)
-  [1, 0, 2, 3, 0.9, '#f59e0b22'],   // Model Subs → Google (Gemini subs)
-
-  // Direct API (3B) → providers
-  [1, 1, 2, 0, 1.2, '#3b82f622'],   // API → OpenAI
-  [1, 1, 2, 1, 1.4, '#3b82f622'],   // API → Anthropic (Claude API strong)
-  [1, 1, 2, 3, 0.4, '#3b82f622'],   // API → Google
-
-  // Cloud Channel (2B) → providers (~80%) + margin (~20%)
-  [1, 2, 2, 0, 0.4, '#06b6d422'],   // Cloud → OpenAI (Azure OpenAI passthrough)
-  [1, 2, 2, 1, 0.9, '#06b6d422'],   // Cloud → Anthropic (Bedrock — largest)
-  [1, 2, 2, 3, 0.3, '#06b6d422'],   // Cloud → Google (Vertex)
-  [1, 2, 3, 2, 0.4, '#06b6d411'],   // Cloud → Margin (AWS/Azure/GCP keep ~20%)
-
-  // AI Native (3B) → providers
-  [1, 3, 2, 0, 1.1, '#10b98122'],   // AI Native → OpenAI
-  [1, 3, 2, 1, 1.3, '#10b98122'],   // AI Native → Anthropic (Cursor etc heavy Claude usage)
-  [1, 3, 2, 3, 0.4, '#10b98122'],   // AI Native → Google
-  [1, 3, 2, 2, 0.2, '#10b98122'],   // AI Native → Inf. Platforms
-
-  // Inf. Platforms (0.3B) → Inf provider
-  [1, 4, 2, 2, 0.3, '#8b5cf622'],   // Inf. Platforms ch → Inf. Platforms prov
-
-  // Trad SaaS (2.8B): mostly skips providers → margin
-  [1, 5, 2, 0, 0.5, '#ef444422'],   // Trad SaaS → OpenAI (inference cost)
-  [1, 5, 2, 1, 0.1, '#ef444422'],   // Trad SaaS → Anthropic
-  [1, 5, 3, 2, 1.75, '#94a3b822'],  // Trad SaaS → Margin (MSFT/SF/NOW keep this)
-  [1, 5, 3, 1, 0.45, '#ef444411'],  // Trad SaaS → People/Ops (their AI teams)
-
-  // Providers → Cost Destinations (balanced: in = out)
-  // OpenAI: 12 in → 12 out
-  [2, 0, 3, 0, 7.2, '#10a37f33'],   // OpenAI → Inference COGS (60%)
-  [2, 0, 3, 1, 4.8, '#10a37f11'],   // OpenAI → People & SG&A (40%)
-  // Anthropic: 9.7 in → 9.7 out (Zitron: $5.2B loss on $4.5B rev)
-  [2, 1, 3, 0, 4.2, '#d9770633'],   // Anthropic → Inference COGS (43%)
-  [2, 1, 3, 1, 5.5, '#d9770611'],   // Anthropic → People & SG&A (57%)
-  // Inf. Platforms: 0.8 in → 0.8 out
-  [2, 2, 3, 0, 0.4, '#8b5cf633'],   // Inf. Platforms → Inference (50%)
-  [2, 2, 3, 1, 0.4, '#8b5cf611'],   // Inf. Platforms → People & SG&A (thin GM consumed by ops)
-  // Google: 2.5 in → 2.5 out
-  [2, 3, 3, 0, 1.2, '#4285f433'],   // Google → Inference COGS (48%)
-  [2, 3, 3, 1, 1.3, '#4285f411'],   // Google → People & SG&A (52%)
-];
-
-const COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
-const COL_LABELS = ['Who Pays', 'Channel', 'Provider', 'Where It Goes'];
+// Data loaded from site-data.json (single source of truth)
+let BUYERS, CHANNELS, PROVIDERS, OUTCOMES, FLOWS, COLUMNS, COL_LABELS;
 
 // Layout: position nodes vertically
 function layoutColumn(col, x) {
@@ -305,7 +196,34 @@ function layoutColumn(col, x) {
   });
 }
 
-COL.forEach((x, i) => { if (i < COLUMNS.length) layoutColumn(COLUMNS[i], x); });
+async function loadSankeyData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load');
+    const all = await resp.json();
+    const s = all.sankey;
+
+    // Add y:0 to all nodes (layout state, computed later)
+    BUYERS = s.buyers.map(n => ({...n, y: 0}));
+    CHANNELS = s.channels.map(n => ({...n, y: 0}));
+    PROVIDERS = s.providers.map(n => ({...n, y: 0}));
+    OUTCOMES = s.outcomes.map(n => ({...n, y: 0}));
+    FLOWS = s.flows; // Already in [fromCol, fromIdx, toCol, toIdx, value, color] format
+    COL_LABELS = s.colLabels;
+
+    // Show data timestamp
+    const ts = all.meta?.generatedAt;
+    if (ts) {
+      const dateLabel = document.querySelector('.sub');
+      if (dateLabel) dateLabel.innerHTML += ` <span style="font-size:11px;color:#64748b;margin-left:8px;">Data: ${ts.slice(0,10)}</span>`;
+    }
+  } catch(e) {
+    console.warn('site-data.json not found, check deployment');
+    return;
+  }
+
+  COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
+  COL.forEach((x, i) => { if (i < COLUMNS.length) layoutColumn(COLUMNS[i], x); });
 
 // Helper: draw text wrapped within maxW, returns number of lines drawn
 function drawWrappedText(ctx, text, x, y, maxW, lineH) {
@@ -691,6 +609,11 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 // Legend removed — replaced with inline callout boxes in HTML
+
+} // end loadSankeyData()
+
+// Boot
+loadSankeyData();
 </script>
 </body>
 </html>

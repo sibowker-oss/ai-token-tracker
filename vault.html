@@ -242,7 +242,8 @@
     <div class="export-menu">
       <button onclick="toggleExport()" id="exportBtn">Export</button>
       <div class="export-dropdown" id="exportDropdown">
-        <button onclick="exportJSON()">Download JSON</button>
+        <button onclick="exportSiteData()" style="color:var(--green);font-weight:600;">Export Site Data</button>
+        <button onclick="exportJSON()">Download Vault JSON</button>
         <button onclick="exportCSV()">Download CSV</button>
         <button onclick="exportMarkdown()">Copy as Markdown</button>
       </div>
@@ -1753,6 +1754,95 @@ document.addEventListener('click', e => {
     document.getElementById('exportDropdown').classList.remove('show');
   }
 });
+
+function exportSiteData() {
+  // Load current site-data.json as template, then patch with consensus values
+  fetch('site-data.json?v=' + Date.now()).then(r => r.json()).then(template => {
+    const groups = getMetricGroups();
+
+    // Mapping: metricKey → how to patch site-data.json
+    // Each entry: { path: function that patches the template, rebalance: optional }
+    const METRIC_MAP = {
+      'anthropic-revenue-2025': (val) => {
+        // Anthropic customer revenue portion (provider value = customer + VC)
+        const oldCust = 4.5; // original customer revenue
+        const diff = val - oldCust;
+        template.sankey.providers[1].value += diff; // adjust total provider
+        // Update totalCustomerRevenue
+        template.sankey.totalCustomerRevenue += diff;
+        template.sankey.totalSystem += diff;
+      },
+      'openai-revenue-2025': (val) => {
+        const oldCust = 6.0;
+        const diff = val - oldCust;
+        template.sankey.providers[0].value += diff;
+        template.sankey.totalCustomerRevenue += diff;
+        template.sankey.totalSystem += diff;
+      },
+      'anthropic-loss-2025': (val) => {
+        // VC subsidy to Anthropic — find the VC→Anthropic flow
+        const flow = template.sankey.flows.find(f => f[0]===0 && f[1]===3 && f[2]===2 && f[3]===1);
+        if (flow) {
+          const oldVC = flow[4];
+          const diff = val - oldVC;
+          flow[4] = val;
+          // Adjust VC/Investors buyer total
+          template.sankey.buyers[3].value += diff;
+          // Adjust Anthropic provider total
+          template.sankey.providers[1].value += diff;
+          template.sankey.totalVCSubsidy += diff;
+          template.sankey.totalSystem += diff;
+        }
+      },
+      'openai-loss-2025': (val) => {
+        const flow = template.sankey.flows.find(f => f[0]===0 && f[1]===3 && f[2]===2 && f[3]===0);
+        if (flow) {
+          const oldVC = flow[4];
+          const diff = val - oldVC;
+          flow[4] = val;
+          template.sankey.buyers[3].value += diff;
+          template.sankey.providers[0].value += diff;
+          template.sankey.totalVCSubsidy += diff;
+          template.sankey.totalSystem += diff;
+        }
+      },
+      'total-inference-cost-2025': (val) => {
+        template.sankey.outcomes[0].value = val;
+      },
+    };
+
+    // Apply consensus values
+    let patchCount = 0;
+    Object.entries(groups).forEach(([key, dps]) => {
+      const consensus = calcConsensus(dps);
+      if (consensus.weightedAvg !== null && METRIC_MAP[key]) {
+        METRIC_MAP[key](consensus.weightedAvg);
+        patchCount++;
+      }
+    });
+
+    // Rebalance outcomes (People/SG&A = totalSystem - Inference - Margin)
+    const totalSystem = template.sankey.totalSystem;
+    const inference = template.sankey.outcomes[0].value;
+    const margin = template.sankey.outcomes[2].value;
+    template.sankey.outcomes[1].value = Math.round((totalSystem - inference - margin) * 100) / 100;
+
+    // Update meta
+    template.meta.generatedAt = new Date().toISOString();
+    template.meta.source = 'Intel Vault export (consensus-weighted)';
+    template.meta.consensusMetrics = patchCount;
+    template.meta.acceptedPoints = vaultData.dataPoints.filter(d => d.status === 'accepted').length;
+
+    // Download
+    const blob = new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
+    downloadBlob(blob, 'site-data.json');
+    document.getElementById('exportDropdown').classList.remove('show');
+    showToast(`Site data exported — ${patchCount} consensus values applied`);
+  }).catch(err => {
+    showToast('Error: could not load site-data.json template');
+    console.error(err);
+  });
+}
 
 function exportJSON() {
   const blob = new Blob([JSON.stringify(vaultData, null, 2)], { type: 'application/json' });

@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "generatedAt": "2026-03-28T06:30:00Z",
+    "source": "vault-data.json (manual seed)",
+    "acceptedPoints": 25,
+    "consensusMetrics": 4,
+    "notes": "Initial template — matches current hardcoded Sankey values. Vault exportSiteData() will override with consensus values."
+  },
+
+  "sankey": {
+    "title": "2025 Actual Revenue Collected",
+    "totalCustomerRevenue": 15.6,
+    "totalVCSubsidy": 12,
+    "totalSystem": 27.6,
+    "colLabels": ["Who Pays", "Channel", "Provider", "Where It Goes"],
+
+    "buyers": [
+      { "label": "Consumer", "value": 4.5, "color": "#f59e0b" },
+      { "label": "SME", "value": 3, "color": "#8b5cf6" },
+      { "label": "Enterprise", "value": 8.1, "color": "#3b82f6" },
+      { "label": "VC/Investors", "value": 12, "color": "#dc2626" }
+    ],
+    "channels": [
+      { "label": "Model Subs", "value": 4.5, "color": "#f59e0b" },
+      { "label": "Model API", "value": 3, "color": "#3b82f6" },
+      { "label": "Hyperscalers", "value": 2, "color": "#06b6d4" },
+      { "label": "AI Native Apps", "value": 3, "color": "#10b981" },
+      { "label": "IaaS & Agg.", "value": 0.3, "color": "#8b5cf6" },
+      { "label": "Trad. SaaS", "value": 2.8, "color": "#ef4444" }
+    ],
+    "providers": [
+      { "label": "OpenAI", "value": 12, "color": "#10a37f" },
+      { "label": "Anthropic", "value": 9.7, "color": "#d97706" },
+      { "label": "IaaS", "value": 0.8, "color": "#8b5cf6" },
+      { "label": "Google", "value": 2.5, "color": "#4285f4" }
+    ],
+    "outcomes": [
+      { "label": "Inference", "value": 13, "color": "#10b981" },
+      { "label": "People/SG&A", "value": 12.45, "color": "#f59e0b" },
+      { "label": "Margin", "value": 2.15, "color": "#94a3b8" }
+    ],
+
+    "flows": [
+      [0,0, 1,0, 2.5, "#f59e0b33"],
+      [0,0, 1,1, 0.1, "#f59e0b33"],
+      [0,0, 1,3, 1.5, "#f59e0b33"],
+      [0,0, 1,5, 0.4, "#f59e0b33"],
+      [0,1, 1,0, 0.8, "#8b5cf633"],
+      [0,1, 1,1, 0.5, "#8b5cf633"],
+      [0,1, 1,2, 0.2, "#8b5cf633"],
+      [0,1, 1,3, 1, "#8b5cf633"],
+      [0,1, 1,4, 0.15, "#8b5cf633"],
+      [0,1, 1,5, 0.35, "#8b5cf633"],
+      [0,2, 1,0, 1.2, "#3b82f633"],
+      [0,2, 1,1, 2.4, "#3b82f633"],
+      [0,2, 1,2, 1.8, "#3b82f633"],
+      [0,2, 1,3, 0.5, "#3b82f633"],
+      [0,2, 1,4, 0.15, "#3b82f633"],
+      [0,2, 1,5, 2.05, "#3b82f633"],
+      [0,3, 2,0, 6, "#dc262633"],
+      [0,3, 2,1, 5.2, "#dc262633"],
+      [0,3, 2,2, 0.3, "#dc262633"],
+      [0,3, 2,3, 0.5, "#dc262633"],
+      [1,0, 2,0, 2.8, "#f59e0b22"],
+      [1,0, 2,1, 0.8, "#f59e0b22"],
+      [1,0, 2,3, 0.9, "#f59e0b22"],
+      [1,1, 2,0, 1.2, "#3b82f622"],
+      [1,1, 2,1, 1.4, "#3b82f622"],
+      [1,1, 2,3, 0.4, "#3b82f622"],
+      [1,2, 2,0, 0.4, "#06b6d422"],
+      [1,2, 2,1, 0.9, "#06b6d422"],
+      [1,2, 2,3, 0.3, "#06b6d422"],
+      [1,2, 3,2, 0.4, "#06b6d411"],
+      [1,3, 2,0, 1.1, "#10b98122"],
+      [1,3, 2,1, 1.3, "#10b98122"],
+      [1,3, 2,3, 0.4, "#10b98122"],
+      [1,3, 2,2, 0.2, "#10b98122"],
+      [1,4, 2,2, 0.3, "#8b5cf622"],
+      [1,5, 2,0, 0.5, "#ef444422"],
+      [1,5, 2,1, 0.1, "#ef444422"],
+      [1,5, 3,2, 1.75, "#94a3b822"],
+      [1,5, 3,1, 0.45, "#ef444411"],
+      [2,0, 3,0, 7.2, "#10a37f33"],
+      [2,0, 3,1, 4.8, "#10a37f11"],
+      [2,1, 3,0, 4.2, "#d9770633"],
+      [2,1, 3,1, 5.5, "#d9770611"],
+      [2,2, 3,0, 0.4, "#8b5cf633"],
+      [2,2, 3,1, 0.4, "#8b5cf611"],
+      [2,3, 3,0, 1.2, "#4285f433"],
+      [2,3, 3,1, 1.3, "#4285f411"]
+    ]
+  }
+}
