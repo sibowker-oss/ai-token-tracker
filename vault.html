@@ -494,6 +494,147 @@ function calcConsensus(dataPoints) {
 }
 
 // ============================================================
+// ARR → ACTUAL REVENUE CONVERSION
+// ============================================================
+const SEGMENT_FACTORS = {
+  api:        { label: 'API / Usage',    factor: 1.00, desc: 'Collected as consumed, no lag' },
+  consumer:   { label: 'Consumer Subs',  factor: 0.95, desc: 'Monthly billing, ~5-8% monthly churn' },
+  sme:        { label: 'SME',            factor: 0.90, desc: 'Monthly/annual mix, moderate churn' },
+  enterprise: { label: 'Enterprise',     factor: 0.80, desc: 'Annual contracts, long sales cycles, ramp periods' },
+};
+
+// Known company revenue profiles (segment mix + NRR)
+const COMPANY_PROFILES = {
+  anthropic: {
+    label: 'Anthropic',
+    segments: { api: 0.70, consumer: 0.15, enterprise: 0.15 },
+    nrr: 1.50,  // 7x growth in $100K+ customers
+    notes: 'Sacra: 70-75% API, 10-15% subs. 300K+ biz customers.'
+  },
+  openai: {
+    label: 'OpenAI',
+    segments: { consumer: 0.40, sme: 0.20, enterprise: 0.25, api: 0.15 },
+    nrr: 1.30,
+    notes: 'ChatGPT Plus dominates consumer. Enterprise via Azure partnership. API growing.'
+  },
+  google: {
+    label: 'Google (AI)',
+    segments: { consumer: 0.50, enterprise: 0.30, api: 0.20 },
+    nrr: 1.20,
+    notes: 'Gemini consumer + Vertex enterprise. Bundled with Workspace.'
+  },
+  generic: {
+    label: 'Generic AI Company',
+    segments: { api: 0.40, consumer: 0.20, sme: 0.20, enterprise: 0.20 },
+    nrr: 1.15,
+    notes: 'Default profile when company not specified'
+  }
+};
+
+function convertARRtoRevenue(endingARR, startingARR, companyKey, quarterlySnapshots) {
+  const profile = COMPANY_PROFILES[companyKey] || COMPANY_PROFILES.generic;
+
+  // Step 1: Growth-adjusted base revenue
+  let baseRevenue;
+  let method;
+
+  if (quarterlySnapshots && quarterlySnapshots.length === 4) {
+    // Best method: quarterly interpolation
+    baseRevenue = quarterlySnapshots.reduce((sum, qARR) => sum + qARR * 0.25, 0);
+    method = 'quarterly';
+  } else if (startingARR && startingARR > 0 && endingARR > startingARR) {
+    const ratio = endingARR / startingARR;
+    if (ratio > 1.5) {
+      // Hyper-growth: logarithmic mean
+      baseRevenue = (endingARR - startingARR) / Math.log(ratio);
+      method = 'log-mean';
+    } else {
+      // Moderate growth: simple average
+      baseRevenue = (startingARR + endingARR) / 2;
+      method = 'simple-avg';
+    }
+  } else {
+    // Only ending ARR known — very rough, apply 60% haircut for fast-growth
+    baseRevenue = endingARR * 0.6;
+    method = 'ending-only';
+  }
+
+  // Step 2: Segment collection factors
+  let blendedFactor = 0;
+  Object.entries(profile.segments).forEach(([seg, share]) => {
+    const segData = SEGMENT_FACTORS[seg];
+    if (segData) blendedFactor += share * segData.factor;
+  });
+  const segmentAdjusted = baseRevenue * blendedFactor;
+
+  // Step 3: Net Revenue Retention boost
+  let nrrBoost = 1.0;
+  if (profile.nrr > 1.0) {
+    nrrBoost = 1.0 + (profile.nrr - 1.0) * 0.25;
+  } else {
+    nrrBoost = profile.nrr;
+  }
+  const finalEstimate = segmentAdjusted * nrrBoost;
+
+  // Step 4: Confidence band
+  const low = finalEstimate * 0.85;
+  const high = finalEstimate * 1.15;
+
+  return {
+    endingARR,
+    startingARR: startingARR || null,
+    method,
+    baseRevenue: Math.round(baseRevenue * 100) / 100,
+    blendedFactor: Math.round(blendedFactor * 1000) / 1000,
+    nrrBoost: Math.round(nrrBoost * 1000) / 1000,
+    estimate: Math.round(finalEstimate * 100) / 100,
+    low: Math.round(low * 100) / 100,
+    high: Math.round(high * 100) / 100,
+    profile: profile.label,
+    segments: profile.segments,
+    notes: profile.notes
+  };
+}
+
+// Auto-detect ARR in data points and create converted companion
+function autoConvertARR(dp) {
+  if (!dp.unit || !dp.unit.toLowerCase().includes('arr')) return null;
+  if (dp.value === null || dp.value === undefined) return null;
+
+  // Try to identify the company from tags or claim
+  let companyKey = 'generic';
+  const text = (dp.claim + ' ' + (dp.tags || []).join(' ')).toLowerCase();
+  if (text.includes('anthropic') || text.includes('claude')) companyKey = 'anthropic';
+  else if (text.includes('openai') || text.includes('chatgpt')) companyKey = 'openai';
+  else if (text.includes('google') || text.includes('gemini')) companyKey = 'google';
+
+  // Try to find starting ARR from existing data
+  let startingARR = null;
+  const year = dp.claim.match(/20\d{2}/);
+  if (year) {
+    // Look for earlier ARR data for same company
+    const candidates = vaultData.dataPoints.filter(d =>
+      d.id !== dp.id &&
+      d.value && d.unit && d.unit.toLowerCase().includes('arr') &&
+      (d.claim + ' ' + (d.tags || []).join(' ')).toLowerCase().includes(companyKey) &&
+      d.dateOfClaim && d.dateOfClaim < (dp.dateOfClaim || '9999')
+    ).sort((a, b) => (a.dateOfClaim || '').localeCompare(b.dateOfClaim || ''));
+
+    if (candidates.length > 0) {
+      startingARR = candidates[0].value;
+    }
+  }
+
+  const conversion = convertARRtoRevenue(dp.value, startingARR, companyKey);
+
+  return {
+    ...conversion,
+    companyKey,
+    sourceDP: dp.id
+  };
+}
+
+// ============================================================
 // INIT
 // ============================================================
 async function initData() {
@@ -708,6 +849,7 @@ function renderList() {
         <div class="dp-detail-row"><div class="dp-detail-label">Date of Claim</div><div class="dp-detail-value">${dp.dateOfClaim || '—'}</div></div>
         <div class="dp-detail-row"><div class="dp-detail-label">Date Added</div><div class="dp-detail-value">${dp.dateAdded || '—'}</div></div>
         <div class="dp-detail-row"><div class="dp-detail-label">Notes</div><div class="dp-detail-value">${dp.notes || '—'}</div></div>
+        ${renderARRConversion(dp)}
         <div style="margin-top:12px; display:flex; gap:8px;">
           <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editDP('${dp.id}')">Edit</button>
           <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteDP('${dp.id}')">Delete</button>
@@ -893,6 +1035,7 @@ function renderReviewItem(dp) {
         </div>
       ` : '<div style="font-size:11px; color:var(--cyan); margin-bottom:6px;">NEW data point</div>'}
       ${dp.notes ? `<div class="review-item-notes">${dp.notes}</div>` : ''}
+      ${renderARRConversion(dp)}
       <div class="review-item-actions">
         <button class="btn ${decision==='accept'?'btn-green':'btn-secondary'} btn-sm" onclick="setDecision('${dp.id}','accept')">Accept</button>
         <button class="btn ${decision==='reject'?'btn-danger':'btn-secondary'} btn-sm" onclick="setDecision('${dp.id}','reject')">Reject</button>
@@ -900,6 +1043,84 @@ function renderReviewItem(dp) {
       </div>
     </div>
   `;
+}
+
+function renderARRConversion(dp) {
+  const conv = autoConvertARR(dp);
+  if (!conv) return '';
+
+  return `
+    <div style="background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.2); border-radius:8px; padding:12px; margin-bottom:10px;">
+      <div style="font-size:11px; font-weight:700; color:var(--cyan); margin-bottom:6px;">ARR → Revenue Conversion (${conv.profile})</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:8px;">
+        <div style="text-align:center;">
+          <div style="font-size:18px; font-weight:800; color:var(--orange);">${conv.low}B</div>
+          <div style="font-size:10px; color:var(--text-dim);">Low</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:22px; font-weight:800; color:var(--green);">$${conv.estimate}B</div>
+          <div style="font-size:10px; color:var(--text-dim);">Mid estimate</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:18px; font-weight:800; color:var(--orange);">${conv.high}B</div>
+          <div style="font-size:10px; color:var(--text-dim);">High</div>
+        </div>
+      </div>
+      <div style="font-size:10px; color:var(--text-dim); line-height:1.6;">
+        Method: ${conv.method} &middot; Base: $${conv.baseRevenue}B &middot; Segment blend: ${conv.blendedFactor} &middot; NRR boost: ${conv.nrrBoost}x
+        ${conv.startingARR ? ` &middot; Starting ARR: $${conv.startingARR}B` : ' &middot; No starting ARR found'}
+      </div>
+      <div style="margin-top:8px;">
+        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); createRevenueFromARR('${dp.id}')" style="border-color:rgba(6,182,212,0.3); color:var(--cyan);">Create revenue estimate from this ARR</button>
+      </div>
+    </div>
+  `;
+}
+
+function createRevenueFromARR(dpId) {
+  const dp = vaultData.dataPoints.find(d => d.id === dpId);
+  if (!dp) return;
+
+  const conv = autoConvertARR(dp);
+  if (!conv) return;
+
+  // Check if we already created one
+  const existing = vaultData.dataPoints.find(d => d.notes && d.notes.includes('Converted from ARR: ' + dpId));
+  if (existing) {
+    showToast('Revenue estimate already exists: ' + existing.id);
+    return;
+  }
+
+  // Determine year/period from original claim
+  const yearMatch = dp.claim.match(/(20\d{2})/);
+  const year = yearMatch ? yearMatch[1] : '2026';
+  const company = conv.companyKey.charAt(0).toUpperCase() + conv.companyKey.slice(1);
+
+  const newDP = {
+    id: 'conv-' + String(Date.now()).slice(-6) + '-' + Math.random().toString(36).slice(2,5),
+    claim: `${company} ${year} estimated collected revenue ~$${conv.estimate}B (converted from $${dp.value}B ARR)`,
+    value: conv.estimate,
+    unit: '$B',
+    sourceUrl: dp.sourceUrl || '',
+    sourceType: 'calculation',
+    sourceAuthor: 'Intel Vault (ARR conversion)',
+    confidence: 'estimated',
+    dateOfClaim: dp.dateOfClaim || '',
+    dateAdded: new Date().toISOString().slice(0,10),
+    usedOn: dp.usedOn || [],
+    tags: [...(dp.tags || []).filter(t => t !== 'ARR' && t !== 'email-import'), 'actual-collected', 'arr-converted'],
+    notes: `Converted from ARR: ${dpId}. Method: ${conv.method}. Base: $${conv.baseRevenue}B × segment blend ${conv.blendedFactor} × NRR ${conv.nrrBoost} = $${conv.estimate}B. Band: $${conv.low}B – $${conv.high}B. Profile: ${conv.profile}.`,
+    status: 'pending',
+    replaces: null,
+    metricKey: dp.metricKey || null,
+    sourceWeightOverride: null,
+    arrConversion: conv  // Store the full conversion details
+  };
+
+  vaultData.dataPoints.push(newDP);
+  saveData();
+  renderAll();
+  showToast(`Revenue estimate created: $${conv.estimate}B from $${dp.value}B ARR`);
 }
 
 function setDecision(id, decision) {
