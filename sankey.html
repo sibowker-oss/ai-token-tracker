@@ -53,7 +53,7 @@
 
 <div class="container">
   <h1>Follow the Dollar</h1>
-  <div class="sub">2025 actual revenue (not exit ARR). $19B customer revenue + $9B VC subsidy = $28B flowing through the system. Most ends up at NVIDIA. Only Trad SaaS vendors make margin. Hover to explore.</div>
+  <div class="sub">2025 actual revenue collected (not exit ARR). $15.6B customer revenue + $12B VC operating subsidy = $27.6B flowing through the system. Sources: Anthropic sworn affidavit, Microsoft internal docs (Zitron), The Information. Hover to explore.</div>
 
   <div class="sankey-container">
     <canvas id="sankey" height="600"></canvas>
@@ -79,7 +79,7 @@
         <div style="font-size:11px; color:var(--text-dim);">Total VC into AI (2025)</div>
       </div>
       <div style="text-align:center;">
-        <div style="font-size:24px; font-weight:800; color:var(--text);">$19B</div>
+        <div style="font-size:24px; font-weight:800; color:var(--text);">$15.6B</div>
         <div style="font-size:11px; color:var(--text-dim);">Actual customer revenue (this chart)</div>
       </div>
     </div>
@@ -89,13 +89,13 @@
   <div class="insight-cards">
     <div class="insight">
       <h3 style="color:var(--green);">Inference COGS Dominates</h3>
-      <div class="stat" style="color:var(--green);">~$15B</div>
-      <p>53% of all AI spending flows to inference compute — the variable cost of serving models to customers. NVIDIA and the cloud providers capture this regardless of which model wins.</p>
+      <div class="stat" style="color:var(--green);">~$13B</div>
+      <p>47% of all AI spending flows to inference compute — the variable cost of serving models to customers. NVIDIA and the cloud providers capture this regardless of which model wins.</p>
     </div>
     <div class="insight">
       <h3 style="color:var(--red);">VC Keeps The Lights On</h3>
-      <div class="stat" style="color:var(--red);">~$9B</div>
-      <p>The AI industry earned $19B but spent $28B. Investors covered the $9B gap. OpenAI lost ~$4.5B, Anthropic ~$3.5B. This subsidises free tiers, price wars, and the talent arms race.</p>
+      <div class="stat" style="color:var(--red);">~$12B</div>
+      <p>The AI industry earned $15.6B but spent $27.6B. Investors covered the $12B operating gap. OpenAI lost ~$6B, Anthropic ~$5.2B. This subsidises free tiers, price wars, and the talent arms race.</p>
     </div>
     <div class="insight">
       <h3 style="color:var(--orange);">Only SaaS Makes Money</h3>
@@ -124,114 +124,114 @@ const nw = 80; // node width
 const gap = (W - nw) / 3; // equal spacing so col1 left=0, col4 right=W
 const COL = [0, gap, gap * 2, W - nw];
 
-// 2025 ACTUAL REVENUE (not exit ARR)
-// $19B customer revenue + $9B VC subsidy = $28B total system
+// 2025 ACTUAL REVENUE COLLECTED (not exit ARR)
+// Sources: Anthropic sworn affidavit ($5B cumulative ever), Zitron/Microsoft docs, The Information
+// $15.6B customer revenue + $12B VC operating subsidy = $27.6B total system
 const BUYERS = [
-  { label: 'Consumer', value: 6.5, color: '#f59e0b', y: 0 },
-  { label: 'SME', value: 3.5, color: '#8b5cf6', y: 0 },
-  { label: 'Enterprise', value: 9, color: '#3b82f6', y: 0 },
-  { label: 'VC/Investors', value: 9, color: '#dc2626', y: 0 },
+  { label: 'Consumer', value: 4.5, color: '#f59e0b', y: 0 },
+  { label: 'SME', value: 3, color: '#8b5cf6', y: 0 },
+  { label: 'Enterprise', value: 8.1, color: '#3b82f6', y: 0 },
+  { label: 'VC/Investors', value: 12, color: '#dc2626', y: 0 },
 ];
 
 const CHANNELS = [
-  { label: 'Model Subs', value: 6, color: '#f59e0b', y: 0 },
-  { label: 'Model API', value: 3.5, color: '#3b82f6', y: 0 },     // Direct API only
-  { label: 'Cloud Channel', value: 2.5, color: '#06b6d4', y: 0 },  // Bedrock, Vertex, Azure OAI
-  { label: 'AI Native', value: 4, color: '#10b981', y: 0 },
-  { label: 'Inf. Platforms', value: 0.2, color: '#8b5cf6', y: 0 },
+  { label: 'Model Subs', value: 4.5, color: '#f59e0b', y: 0 },
+  { label: 'Model API', value: 3, color: '#3b82f6', y: 0 },
+  { label: 'Cloud Channel', value: 2, color: '#06b6d4', y: 0 },
+  { label: 'AI Native', value: 3, color: '#10b981', y: 0 },
+  { label: 'Inf. Platforms', value: 0.3, color: '#8b5cf6', y: 0 },
   { label: 'Trad. SaaS', value: 2.8, color: '#ef4444', y: 0 },
 ];
 
 // Provider order: 0=OpenAI, 1=Anthropic, 2=Inf.Platforms, 3=Google
 const PROVIDERS = [
-  { label: 'OpenAI', value: 11.9, color: '#10a37f', y: 0 },    // 7.4 ch + 4.5 VC
-  { label: 'Anthropic', value: 9.9, color: '#d97706', y: 0 },   // 6.4 ch + 3.5 VC
-  { label: 'Inf. Platforms', value: 0.95, color: '#8b5cf6', y: 0 }, // 0.45 ch + 0.5 VC
-  { label: 'Google', value: 2.5, color: '#4285f4', y: 0 },      // 2.0 ch + 0.5 VC
+  { label: 'OpenAI', value: 12, color: '#10a37f', y: 0 },      // 6.0 cust + 6.0 VC
+  { label: 'Anthropic', value: 9.7, color: '#d97706', y: 0 },   // 4.5 cust + 5.2 VC
+  { label: 'Inf. Platforms', value: 0.8, color: '#8b5cf6', y: 0 }, // 0.5 cust + 0.3 VC
+  { label: 'Google', value: 2.5, color: '#4285f4', y: 0 },      // 2.0 cust + 0.5 VC
 ];
 
-// Where $28B goes — zero margins for frontier, SaaS + Cloud keep margin
+// Where $27.6B goes — zero margins for frontier, SaaS + Cloud keep margin
 const OUTCOMES = [
-  { label: 'Inference COGS', value: 14.75, color: '#10b981', y: 0 },
-  { label: 'People & SG&A', value: 10.85, color: '#f59e0b', y: 0 },
-  { label: 'Margin', value: 2.4, color: '#94a3b8', y: 0 },
+  { label: 'Inference COGS', value: 13, color: '#10b981', y: 0 },
+  { label: 'People & SG&A', value: 12.3, color: '#f59e0b', y: 0 },
+  { label: 'Margin', value: 2.3, color: '#94a3b8', y: 0 },
 ];
 
 // Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
 // Channel indices: 0=Subs, 1=API, 2=Cloud, 3=Native, 4=Inf, 5=SaaS
 // Provider indices: 0=OpenAI, 1=Anthropic, 2=Inf.Platforms, 3=Google
 const FLOWS = [
-  // Buyers → Channels ($19B customer revenue)
-  [0, 0, 1, 0, 4.5, '#f59e0b33'],   // Consumer → Model Subs
-  [0, 0, 1, 1, 0.2, '#f59e0b33'],   // Consumer → API (hobbyist devs)
+  // Buyers → Channels ($15.6B customer revenue)
+  [0, 0, 1, 0, 2.5, '#f59e0b33'],   // Consumer → Model Subs (ChatGPT Plus, Claude Pro, Gemini)
+  [0, 0, 1, 1, 0.1, '#f59e0b33'],   // Consumer → API (hobbyist devs)
   [0, 0, 1, 3, 1.5, '#f59e0b33'],   // Consumer → AI Native (Perplexity Pro, etc)
-  [0, 0, 1, 5, 0.3, '#f59e0b33'],   // Consumer → Trad SaaS
+  [0, 0, 1, 5, 0.4, '#f59e0b33'],   // Consumer → Trad SaaS
   [0, 1, 1, 0, 0.8, '#8b5cf633'],   // SME → Model Subs (ChatGPT Team)
-  [0, 1, 1, 1, 0.7, '#8b5cf633'],   // SME → API (direct)
-  [0, 1, 1, 2, 0.3, '#8b5cf633'],   // SME → Cloud Channel (via Bedrock/Vertex)
+  [0, 1, 1, 1, 0.5, '#8b5cf633'],   // SME → API (direct)
+  [0, 1, 1, 2, 0.2, '#8b5cf633'],   // SME → Cloud Channel
   [0, 1, 1, 3, 1, '#8b5cf633'],     // SME → AI Native (Cursor Pro)
-  [0, 1, 1, 4, 0.18, '#8b5cf633'],  // SME → Inf. Platforms
-  [0, 1, 1, 5, 0.5, '#8b5cf633'],   // SME → Trad SaaS
-  [0, 2, 1, 0, 0.7, '#3b82f633'],   // Enterprise → Model Subs (ChatGPT Enterprise)
-  [0, 2, 1, 1, 2.3, '#3b82f633'],   // Enterprise → API (direct)
-  [0, 2, 1, 2, 2.2, '#3b82f633'],   // Enterprise → Cloud Channel (Bedrock, Azure OAI, Vertex)
-  [0, 2, 1, 3, 1.5, '#3b82f633'],   // Enterprise → AI Native (Harvey, Cursor Ent)
-  [0, 2, 1, 4, 0.02, '#3b82f633'],  // Enterprise → Inf. Platforms (tiny)
-  [0, 2, 1, 5, 2, '#3b82f633'],     // Enterprise → Trad SaaS
+  [0, 1, 1, 4, 0.15, '#8b5cf633'],  // SME → Inf. Platforms
+  [0, 1, 1, 5, 0.35, '#8b5cf633'],  // SME → Trad SaaS
+  [0, 2, 1, 0, 1.2, '#3b82f633'],   // Enterprise → Model Subs (ChatGPT Enterprise seats)
+  [0, 2, 1, 1, 2.4, '#3b82f633'],   // Enterprise → API (direct)
+  [0, 2, 1, 2, 1.8, '#3b82f633'],   // Enterprise → Cloud Channel (Bedrock, Azure OAI, Vertex)
+  [0, 2, 1, 3, 0.5, '#3b82f633'],   // Enterprise → AI Native (Harvey, Cursor Ent)
+  [0, 2, 1, 4, 0.15, '#3b82f633'],  // Enterprise → Inf. Platforms
+  [0, 2, 1, 5, 2.05, '#3b82f633'],  // Enterprise → Trad SaaS (M365 Copilot, NOW Assist etc)
 
-  // VC/Investors → DIRECT to providers ($9B, bypasses channels)
-  [0, 3, 2, 0, 4.5, '#dc262633'],   // VC → OpenAI
-  [0, 3, 2, 1, 3.5, '#dc262633'],   // VC → Anthropic
-  [0, 3, 2, 2, 0.5, '#dc262633'],   // VC → Inf. Platforms
+  // VC/Investors → DIRECT to providers ($12B operating subsidy, bypasses channels)
+  [0, 3, 2, 0, 6, '#dc262633'],     // VC → OpenAI
+  [0, 3, 2, 1, 5.2, '#dc262633'],   // VC → Anthropic
+  [0, 3, 2, 2, 0.3, '#dc262633'],   // VC → Inf. Platforms
   [0, 3, 2, 3, 0.5, '#dc262633'],   // VC → Google (Alphabet subsidy)
 
   // Channels → Providers
-  // Model Subs (6B) → providers
-  [1, 0, 2, 0, 3.7, '#f59e0b22'],   // Model Subs → OpenAI
-  [1, 0, 2, 1, 1.3, '#f59e0b22'],   // Model Subs → Anthropic
-  [1, 0, 2, 3, 1, '#f59e0b22'],     // Model Subs → Google
+  // Model Subs (4.5B) → providers
+  [1, 0, 2, 0, 2.8, '#f59e0b22'],   // Model Subs → OpenAI (ChatGPT dominates subs)
+  [1, 0, 2, 1, 0.8, '#f59e0b22'],   // Model Subs → Anthropic (Claude Pro/Team)
+  [1, 0, 2, 3, 0.9, '#f59e0b22'],   // Model Subs → Google (Gemini subs)
 
-  // Direct API (3.5B) → providers
-  [1, 1, 2, 0, 1.3, '#3b82f622'],   // API → OpenAI
-  [1, 1, 2, 1, 1.8, '#3b82f622'],   // API → Anthropic
+  // Direct API (3B) → providers
+  [1, 1, 2, 0, 1.2, '#3b82f622'],   // API → OpenAI
+  [1, 1, 2, 1, 1.4, '#3b82f622'],   // API → Anthropic (Claude API strong)
   [1, 1, 2, 3, 0.4, '#3b82f622'],   // API → Google
 
-  // Cloud Channel (2.5B) → providers (~80%) + margin (~20%)
-  [1, 2, 2, 0, 0.5, '#06b6d422'],   // Cloud → OpenAI (Azure OpenAI passthrough)
-  [1, 2, 2, 1, 1.2, '#06b6d422'],   // Cloud → Anthropic (Bedrock — largest)
+  // Cloud Channel (2B) → providers (~80%) + margin (~20%)
+  [1, 2, 2, 0, 0.4, '#06b6d422'],   // Cloud → OpenAI (Azure OpenAI passthrough)
+  [1, 2, 2, 1, 0.9, '#06b6d422'],   // Cloud → Anthropic (Bedrock — largest)
   [1, 2, 2, 3, 0.3, '#06b6d422'],   // Cloud → Google (Vertex)
-  [1, 2, 3, 2, 0.5, '#06b6d411'],   // Cloud → Margin (AWS/Azure/GCP keep ~20%)
+  [1, 2, 3, 2, 0.4, '#06b6d411'],   // Cloud → Margin (AWS/Azure/GCP keep ~20%)
 
-  // AI Native (4B) → providers
-  [1, 3, 2, 0, 1.5, '#10b98122'],   // AI Native → OpenAI
-  [1, 3, 2, 1, 2, '#10b98122'],     // AI Native → Anthropic
-  [1, 3, 2, 3, 0.3, '#10b98122'],   // AI Native → Google
+  // AI Native (3B) → providers
+  [1, 3, 2, 0, 1.1, '#10b98122'],   // AI Native → OpenAI
+  [1, 3, 2, 1, 1.3, '#10b98122'],   // AI Native → Anthropic (Cursor etc heavy Claude usage)
+  [1, 3, 2, 3, 0.4, '#10b98122'],   // AI Native → Google
   [1, 3, 2, 2, 0.2, '#10b98122'],   // AI Native → Inf. Platforms
 
-  // Inf. Platforms (0.2B) → Inf provider
-  [1, 4, 2, 2, 0.2, '#8b5cf622'],   // Inf. Platforms ch → Inf. Platforms prov
+  // Inf. Platforms (0.3B) → Inf provider
+  [1, 4, 2, 2, 0.3, '#8b5cf622'],   // Inf. Platforms ch → Inf. Platforms prov
 
   // Trad SaaS (2.8B): mostly skips providers → margin
-  [1, 5, 2, 0, 0.4, '#ef444422'],   // Trad SaaS → OpenAI (inference cost)
+  [1, 5, 2, 0, 0.5, '#ef444422'],   // Trad SaaS → OpenAI (inference cost)
   [1, 5, 2, 1, 0.1, '#ef444422'],   // Trad SaaS → Anthropic
-  [1, 5, 2, 2, 0.05, '#ef444422'],  // Trad SaaS → Inf. Platforms
-  [1, 5, 3, 2, 1.8, '#94a3b822'],   // Trad SaaS → Margin (MSFT/SF/NOW keep this)
+  [1, 5, 3, 2, 1.75, '#94a3b822'],  // Trad SaaS → Margin (MSFT/SF/NOW keep this)
   [1, 5, 3, 1, 0.45, '#ef444411'],  // Trad SaaS → People/Ops (their AI teams)
 
   // Providers → Cost Destinations (balanced: in = out)
-  // OpenAI: 11.9 in → 11.9 out (33% gross margin)
+  // OpenAI: 12 in → 12 out
   [2, 0, 3, 0, 7.2, '#10a37f33'],   // OpenAI → Inference COGS (60%)
-  [2, 0, 3, 1, 4.7, '#10a37f11'],   // OpenAI → People & SG&A (40%)
-  // Anthropic: 9.9 in → 9.9 out (~40% gross margin)
-  [2, 1, 3, 0, 5.5, '#d9770633'],   // Anthropic → Inference COGS (56%)
-  [2, 1, 3, 1, 4.4, '#d9770611'],   // Anthropic → People & SG&A (44%)
-  // Inf. Platforms: 0.95 in → 0.95 out
-  [2, 2, 3, 0, 0.65, '#8b5cf633'],  // Inf. Platforms → Inference COGS (68%)
-  [2, 2, 3, 1, 0.2, '#8b5cf611'],   // Inf. Platforms → People & SG&A
-  [2, 2, 3, 2, 0.1, '#8b5cf611'],   // Inf. Platforms → Margin (~5%)
+  [2, 0, 3, 1, 4.8, '#10a37f11'],   // OpenAI → People & SG&A (40%)
+  // Anthropic: 9.7 in → 9.7 out (Zitron: $5.2B loss on $4.5B rev)
+  [2, 1, 3, 0, 4.2, '#d9770633'],   // Anthropic → Inference COGS (43%)
+  [2, 1, 3, 1, 5.5, '#d9770611'],   // Anthropic → People & SG&A (57%)
+  // Inf. Platforms: 0.8 in → 0.8 out
+  [2, 2, 3, 0, 0.4, '#8b5cf633'],   // Inf. Platforms → Inference COGS (50%)
+  [2, 2, 3, 1, 0.25, '#8b5cf611'],  // Inf. Platforms → People & SG&A
+  [2, 2, 3, 2, 0.15, '#8b5cf611'],  // Inf. Platforms → Margin
   // Google: 2.5 in → 2.5 out
-  [2, 3, 3, 0, 1.4, '#4285f433'],   // Google → Inference COGS (56%)
-  [2, 3, 3, 1, 1.1, '#4285f411'],   // Google → People & SG&A (44%)
+  [2, 3, 3, 0, 1.2, '#4285f433'],   // Google → Inference COGS (48%)
+  [2, 3, 3, 1, 1.3, '#4285f411'],   // Google → People & SG&A (52%)
 ];
 
 const COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
