@@ -112,7 +112,7 @@ const ctx = canvas.getContext('2d');
 
 // Responsive sizing
 const isMobile = window.innerWidth < 768;
-const W = isMobile ? Math.max(600, window.innerWidth - 24) : Math.min(1600, window.innerWidth - 48);
+const W = isMobile ? Math.max(600, window.innerWidth - 24) : Math.min(1200, window.innerWidth - 48);
 const H = isMobile ? 400 : 600;
 canvas.width = W * 2; canvas.height = H * 2;
 canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
