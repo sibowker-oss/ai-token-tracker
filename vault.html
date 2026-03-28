@@ -384,8 +384,38 @@ async function initData() {
   } else {
     await seedFromJSON();
   }
+  // Check for new items in the email inbox drop zone
+  await checkInbox();
   renderAll();
   updateTabBadges();
+}
+
+async function checkInbox() {
+  try {
+    const resp = await fetch('vault-inbox.json?t=' + Date.now());
+    if (!resp.ok) return;
+    const inbox = await resp.json();
+    if (!inbox.items || !Array.isArray(inbox.items) || inbox.items.length === 0) return;
+
+    let imported = 0;
+    inbox.items.forEach(item => {
+      // Skip if already imported (by ID)
+      if (vaultData.dataPoints.find(d => d.id === item.id)) return;
+      // Ensure pending status
+      item.status = item.status || 'pending';
+      vaultData.dataPoints.push(item);
+      imported++;
+    });
+
+    if (imported > 0) {
+      saveData();
+      showToast(`${imported} new item${imported > 1 ? 's' : ''} from email inbox`);
+      // Auto-switch to review tab if we have new items
+      setTimeout(() => switchTab('review'), 500);
+    }
+  } catch(e) {
+    // vault-inbox.json doesn't exist yet — that's fine
+  }
 }
 
 async function seedFromJSON() {
