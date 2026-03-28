@@ -112,14 +112,15 @@ const ctx = canvas.getContext('2d');
 
 // Responsive sizing
 const isMobile = window.innerWidth < 768;
-const W = isMobile ? Math.max(600, window.innerWidth - 24) : Math.min(1200, window.innerWidth - 48);
+const W = isMobile ? Math.max(600, window.innerWidth - 24) : Math.min(1600, window.innerWidth - 48);
 const H = isMobile ? 400 : 600;
 canvas.width = W * 2; canvas.height = H * 2;
 canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 ctx.scale(2, 2);
 
 // Column positions
-const COL = [40, W * 0.22, W * 0.48, W * 0.74, W - 80];
+const pad = 80;
+const COL = [pad, pad + (W - 2*pad) * 0.25, pad + (W - 2*pad) * 0.5, pad + (W - 2*pad) * 0.75, W - pad];
 
 // 2025 ACTUAL REVENUE (not exit ARR)
 // $19B customer revenue + $9B VC subsidy = $28B total system
