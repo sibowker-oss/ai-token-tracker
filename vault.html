@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Intel Vault — Private Reference Data</title>
 <style>
-  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
@@ -16,15 +16,15 @@
   .topbar-actions { display:flex; gap:8px; }
   .topbar-actions button { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
   .topbar-actions button:hover { background:#1e293b; color:var(--text); }
-  .topbar-actions button.active { background:var(--accent); color:white; border-color:var(--accent); }
 
   .container { max-width:1200px; margin:0 auto; padding:24px; }
 
   /* Tabs */
-  .tabs { display:flex; gap:4px; margin-bottom:24px; }
-  .tab { padding:10px 20px; border-radius:8px; border:none; background:transparent; color:var(--text-dim); font-size:13px; font-weight:500; cursor:pointer; transition:all 0.15s; }
+  .tabs { display:flex; gap:4px; margin-bottom:24px; flex-wrap:wrap; }
+  .tab { padding:10px 20px; border-radius:8px; border:none; background:transparent; color:var(--text-dim); font-size:13px; font-weight:500; cursor:pointer; transition:all 0.15s; position:relative; }
   .tab:hover { background:rgba(255,255,255,0.05); color:var(--text); }
   .tab.active { background:var(--accent); color:white; font-weight:600; }
+  .tab .tab-badge { position:absolute; top:4px; right:4px; background:var(--red); color:white; font-size:9px; font-weight:700; padding:1px 5px; border-radius:8px; min-width:16px; text-align:center; }
 
   /* Search */
   .search-bar { position:relative; margin-bottom:20px; }
@@ -48,10 +48,12 @@
   .dp-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px 20px; cursor:pointer; transition:all 0.15s; }
   .dp-card:hover { border-color:var(--accent); }
   .dp-card.expanded { border-color:var(--accent); }
+  .dp-card.status-pending { border-left:3px solid var(--orange); }
+  .dp-card.status-superseded { opacity:0.5; }
   .dp-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
   .dp-claim { font-size:14px; font-weight:600; line-height:1.5; flex:1; }
   .dp-value { font-size:18px; font-weight:800; color:var(--accent); white-space:nowrap; }
-  .dp-meta { display:flex; gap:12px; margin-top:8px; font-size:11px; color:var(--text-dim); flex-wrap:wrap; }
+  .dp-meta { display:flex; gap:12px; margin-top:8px; font-size:11px; color:var(--text-dim); flex-wrap:wrap; align-items:center; }
   .dp-meta-item { display:flex; align-items:center; gap:4px; }
   .dp-tags { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
   .dp-tag { padding:2px 8px; border-radius:10px; background:rgba(59,130,246,0.1); color:var(--accent); font-size:10px; }
@@ -70,6 +72,14 @@
   .badge-speculative { background:rgba(239,68,68,0.15); color:var(--red); }
   .badge-unverified { background:rgba(139,92,246,0.15); color:var(--purple); }
 
+  /* Status badges */
+  .status-badge { padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; }
+  .status-pending { background:rgba(245,158,11,0.2); color:var(--orange); }
+  .status-accepted { background:rgba(16,185,129,0.15); color:var(--green); }
+  .status-rejected { background:rgba(239,68,68,0.15); color:var(--red); }
+  .status-deferred { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .status-superseded { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+
   /* Page badges */
   .page-badge { padding:2px 8px; border-radius:10px; font-size:10px; background:rgba(139,92,246,0.15); color:var(--purple); cursor:pointer; }
   .page-badge:hover { background:rgba(139,92,246,0.25); }
@@ -85,10 +95,9 @@
   .src-estimate { background:rgba(245,158,11,0.15); color:var(--orange); }
   .src-earnings-aggregation { background:rgba(59,130,246,0.15); color:var(--accent); }
   .src-observation { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .src-scraper { background:rgba(6,182,212,0.15); color:var(--cyan); }
 
   /* Form */
-  .form-section { display:none; }
-  .form-section.active { display:block; }
   .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .form-group { display:flex; flex-direction:column; gap:4px; }
   .form-group.full { grid-column:1/-1; }
@@ -101,10 +110,13 @@
   .btn { padding:10px 20px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
   .btn-primary { background:var(--accent); color:white; }
   .btn-primary:hover { background:#2563eb; }
+  .btn-green { background:var(--green); color:white; }
+  .btn-green:hover { background:#059669; }
   .btn-secondary { background:var(--card); color:var(--text-dim); border:1px solid var(--card-border); }
   .btn-secondary:hover { color:var(--text); background:#1e293b; }
   .btn-danger { background:rgba(239,68,68,0.15); color:var(--red); }
   .btn-danger:hover { background:rgba(239,68,68,0.25); }
+  .btn-sm { padding:6px 12px; font-size:11px; }
 
   /* Audit view */
   .audit-page { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:16px; }
@@ -115,6 +127,41 @@
   .audit-item:last-child { border-bottom:none; }
   .audit-item .claim { flex:1; color:var(--text); }
   .audit-item .val { font-weight:700; color:var(--accent); min-width:60px; text-align:right; }
+
+  /* Review view */
+  .review-summary { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .review-summary h2 { font-size:18px; margin-bottom:4px; }
+  .review-summary .review-date { font-size:12px; color:var(--text-dim); margin-bottom:16px; }
+  .review-stats { display:flex; gap:20px; margin-bottom:16px; flex-wrap:wrap; }
+  .review-stat { text-align:center; }
+  .review-stat .num { font-size:28px; font-weight:800; }
+  .review-stat .label { font-size:11px; color:var(--text-dim); }
+  .review-actions-bar { display:flex; gap:8px; flex-wrap:wrap; }
+
+  .review-group { background:var(--card); border:1px solid var(--card-border); border-radius:12px; margin-bottom:16px; overflow:hidden; }
+  .review-group-header { padding:14px 20px; background:rgba(255,255,255,0.02); border-bottom:1px solid var(--card-border); display:flex; justify-content:space-between; align-items:center; }
+  .review-group-header h3 { font-size:14px; font-weight:700; }
+  .review-group-header .count { font-size:12px; color:var(--text-dim); }
+
+  .review-item { padding:16px 20px; border-bottom:1px solid rgba(255,255,255,0.03); }
+  .review-item:last-child { border-bottom:none; }
+  .review-item.decided { opacity:0.6; }
+  .review-item-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
+  .review-item-claim { font-size:14px; font-weight:600; flex:1; line-height:1.5; }
+  .review-item-value { font-size:16px; font-weight:800; color:var(--accent); white-space:nowrap; }
+  .review-item-meta { display:flex; gap:8px; align-items:center; font-size:11px; color:var(--text-dim); margin-bottom:8px; flex-wrap:wrap; }
+  .review-item-change { background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.15); border-radius:8px; padding:8px 12px; font-size:12px; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .review-item-change .old-val { color:var(--text-dim); text-decoration:line-through; }
+  .review-item-change .arrow { color:var(--orange); }
+  .review-item-change .new-val { color:var(--green); font-weight:700; }
+  .review-item-notes { font-size:12px; color:var(--text-dim); line-height:1.6; margin-bottom:10px; }
+  .review-item-actions { display:flex; gap:6px; }
+
+  /* Changelog / newsletter preview */
+  .changelog-section { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-top:20px; }
+  .changelog-section h3 { font-size:16px; margin-bottom:12px; }
+  .changelog-preview { background:rgba(0,0,0,0.3); border:1px solid var(--card-border); border-radius:8px; padding:20px; font-size:13px; line-height:1.8; color:var(--text-dim); white-space:pre-wrap; font-family:inherit; max-height:400px; overflow-y:auto; }
+  .changelog-actions { display:flex; gap:8px; margin-top:12px; }
 
   /* Toast notification */
   .toast { position:fixed; bottom:24px; right:24px; background:var(--green); color:white; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; opacity:0; transform:translateY(10px); transition:all 0.3s; z-index:1000; pointer-events:none; }
@@ -130,17 +177,20 @@
   /* Empty state */
   .empty-state { text-align:center; padding:60px 20px; color:var(--text-dim); }
   .empty-state .icon { font-size:48px; margin-bottom:16px; opacity:0.3; }
-  .empty-state p { font-size:14px; }
+  .empty-state p { font-size:14px; margin-bottom:8px; }
+  .empty-state .hint { font-size:12px; }
 
   /* Mobile */
   @media(max-width:768px) {
     .topbar { flex-direction:column; gap:12px; align-items:flex-start; }
     .container { padding:16px; }
     .form-grid { grid-template-columns:1fr; }
-    .dp-header { flex-direction:column; }
-    .dp-value { font-size:16px; }
+    .dp-header, .review-item-header { flex-direction:column; }
+    .dp-value, .review-item-value { font-size:16px; }
     .stats-bar { flex-direction:column; gap:8px; }
     .filters { gap:6px; }
+    .review-stats { gap:12px; }
+    .review-stat .num { font-size:22px; }
   }
 </style>
 </head>
@@ -163,9 +213,10 @@
 </div>
 
 <div class="container">
-  <div class="tabs">
+  <div class="tabs" id="tabBar">
     <button class="tab active" onclick="switchTab('search')">Search & Browse</button>
     <button class="tab" onclick="switchTab('submit')">Add Data Point</button>
+    <button class="tab" onclick="switchTab('review')">Weekly Review</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
   </div>
 
@@ -175,18 +226,15 @@
       <span class="search-icon">&#x1F50D;</span>
       <input type="text" id="searchInput" placeholder="Search claims, sources, tags, notes..." oninput="renderList()">
     </div>
-
     <div class="filters" id="filterBar"></div>
-
     <div class="stats-bar" id="statsBar"></div>
-
     <div class="dp-list" id="dpList"></div>
   </div>
 
   <!-- SUBMIT VIEW -->
   <div id="view-submit" class="view-section" style="display:none;">
     <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px;">
-      <h2 style="font-size:18px; margin-bottom:20px;">Add New Data Point</h2>
+      <h2 id="formTitle" style="font-size:18px; margin-bottom:20px;">Add New Data Point</h2>
       <form id="dpForm" onsubmit="return submitDP(event)">
         <div class="form-grid">
           <div class="form-group full">
@@ -237,6 +285,19 @@
             <label>Date of Claim</label>
             <input type="date" id="f-dateOfClaim">
           </div>
+          <div class="form-group">
+            <label>Replaces (existing data point ID)</label>
+            <select id="f-replaces">
+              <option value="">— New data point (no replacement) —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="f-status">
+              <option value="pending">Pending Review</option>
+              <option value="accepted">Accepted (live)</option>
+            </select>
+          </div>
           <div class="form-group full">
             <label>Used On (pages, comma-separated)</label>
             <input type="text" id="f-usedOn" placeholder="sankey, dashboard, calculator">
@@ -251,11 +312,16 @@
           </div>
         </div>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Save Data Point</button>
+          <button type="submit" class="btn btn-primary" id="formSubmitBtn">Save Data Point</button>
           <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear</button>
         </div>
       </form>
     </div>
+  </div>
+
+  <!-- REVIEW VIEW -->
+  <div id="view-review" class="view-section" style="display:none;">
+    <div id="reviewContent"></div>
   </div>
 
   <!-- AUDIT VIEW -->
@@ -269,29 +335,42 @@
 
 <script>
 // ============================================================
-// DATA LAYER — localStorage backed, seed from vault-data.json
+// DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
+const TABS = ['search','submit','review','audit'];
 
-let vaultData = { meta: { version: '1.0', lastUpdated: new Date().toISOString().slice(0,10) }, dataPoints: [] };
+let vaultData = {
+  meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
+  dataPoints: [],
+  changelog: []  // { date, weekOf, entries: [{dpId, action, claim, oldValue, newValue, source}], newsletterDraft, published }
+};
 
-// Active filters
 let activeFilters = { confidence: null, sourceType: null, page: null, tag: null };
+let reviewDecisions = {}; // dpId → 'accept' | 'reject' | 'defer'
 
-// Load from localStorage or seed from JSON
+// ============================================================
+// INIT
+// ============================================================
 async function initData() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     try {
-      vaultData = JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      vaultData = parsed;
+      if (!vaultData.changelog) vaultData.changelog = [];
+      // Migrate: add status to existing data points that lack it
+      vaultData.dataPoints.forEach(dp => {
+        if (!dp.status) dp.status = 'accepted';
+      });
     } catch(e) {
-      console.error('Failed to parse stored data, reseeding...');
       await seedFromJSON();
     }
   } else {
     await seedFromJSON();
   }
   renderAll();
+  updateTabBadges();
 }
 
 async function seedFromJSON() {
@@ -299,6 +378,9 @@ async function seedFromJSON() {
     const resp = await fetch('vault-data.json');
     if (resp.ok) {
       vaultData = await resp.json();
+      if (!vaultData.changelog) vaultData.changelog = [];
+      // All seeded data points are accepted (they're live)
+      vaultData.dataPoints.forEach(dp => { dp.status = 'accepted'; });
       saveData();
     }
   } catch(e) {
@@ -309,6 +391,24 @@ async function seedFromJSON() {
 function saveData() {
   vaultData.meta.lastUpdated = new Date().toISOString().slice(0,10);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(vaultData));
+  updateTabBadges();
+}
+
+function getPendingCount() {
+  return vaultData.dataPoints.filter(d => d.status === 'pending').length;
+}
+
+function updateTabBadges() {
+  const count = getPendingCount();
+  const reviewTab = document.querySelectorAll('.tab')[2]; // Review tab
+  const existing = reviewTab.querySelector('.tab-badge');
+  if (existing) existing.remove();
+  if (count > 0) {
+    const badge = document.createElement('span');
+    badge.className = 'tab-badge';
+    badge.textContent = count;
+    reviewTab.appendChild(badge);
+  }
 }
 
 // ============================================================
@@ -317,16 +417,16 @@ function saveData() {
 function getFilteredPoints() {
   const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
   return vaultData.dataPoints.filter(dp => {
-    // Text search
+    // Hide superseded by default in search
+    if (dp.status === 'superseded' || dp.status === 'rejected') return false;
     if (query) {
       const haystack = [
         dp.claim, dp.sourceAuthor, dp.sourceUrl, dp.notes,
         ...(dp.tags || []), ...(dp.usedOn || []),
-        dp.sourceType, dp.confidence, dp.unit || ''
+        dp.sourceType, dp.confidence, dp.unit || '', dp.status || ''
       ].join(' ').toLowerCase();
       if (!haystack.includes(query)) return false;
     }
-    // Filters
     if (activeFilters.confidence && dp.confidence !== activeFilters.confidence) return false;
     if (activeFilters.sourceType && dp.sourceType !== activeFilters.sourceType) return false;
     if (activeFilters.page && !(dp.usedOn || []).includes(activeFilters.page)) return false;
@@ -342,41 +442,34 @@ function renderAll() {
   renderFilters();
   renderList();
   renderAudit();
+  renderReview();
+  populateReplacesDropdown();
 }
 
 function renderFilters() {
-  // Collect all unique values
   const confidences = new Set();
   const sourceTypes = new Set();
   const pages = new Set();
-  const tags = new Set();
   vaultData.dataPoints.forEach(dp => {
+    if (dp.status === 'superseded' || dp.status === 'rejected') return;
     if (dp.confidence) confidences.add(dp.confidence);
     if (dp.sourceType) sourceTypes.add(dp.sourceType);
     (dp.usedOn || []).forEach(p => pages.add(p));
-    (dp.tags || []).forEach(t => tags.add(t));
   });
 
   const bar = document.getElementById('filterBar');
   let html = '';
-
-  // Confidence
   ['verified','estimated','speculative','unverified'].forEach(c => {
     if (confidences.has(c)) {
       html += `<button class="filter-chip${activeFilters.confidence===c?' active':''}" onclick="toggleFilter('confidence','${c}')">${c}</button>`;
     }
   });
-
-  // Source types
   [...sourceTypes].sort().forEach(s => {
     html += `<button class="filter-chip${activeFilters.sourceType===s?' active':''}" onclick="toggleFilter('sourceType','${s}')">${s.replace(/-/g,' ')}</button>`;
   });
-
-  // Pages
   [...pages].sort().forEach(p => {
     html += `<button class="filter-chip${activeFilters.page===p?' active':''}" onclick="toggleFilter('page','${p}')" style="border-color:rgba(139,92,246,0.3);color:${activeFilters.page===p?'white':'var(--purple)'};${activeFilters.page===p?'background:var(--purple);':''}">page: ${p}</button>`;
   });
-
   bar.innerHTML = html;
 }
 
@@ -388,14 +481,15 @@ function toggleFilter(type, value) {
 
 function renderList() {
   const filtered = getFilteredPoints();
-  const total = vaultData.dataPoints.length;
-
-  // Stats
+  const total = vaultData.dataPoints.filter(d => d.status !== 'superseded' && d.status !== 'rejected').length;
+  const pending = filtered.filter(d => d.status === 'pending').length;
   const verified = filtered.filter(d => d.confidence === 'verified').length;
   const estimated = filtered.filter(d => d.confidence === 'estimated').length;
   const speculative = filtered.filter(d => d.confidence === 'speculative').length;
+
   document.getElementById('statsBar').innerHTML = `
-    <span>Showing <strong>${filtered.length}</strong> of ${total} data points</span>
+    <span>Showing <strong>${filtered.length}</strong> of ${total}</span>
+    ${pending ? `<span><strong style="color:var(--orange)">${pending}</strong> pending</span>` : ''}
     <span><strong style="color:var(--green)">${verified}</strong> verified</span>
     <span><strong style="color:var(--orange)">${estimated}</strong> estimated</span>
     <span><strong style="color:var(--red)">${speculative}</strong> speculative</span>
@@ -407,13 +501,16 @@ function renderList() {
     return;
   }
 
-  list.innerHTML = filtered.map(dp => `
-    <div class="dp-card" id="card-${dp.id}" onclick="toggleCard('${dp.id}')">
+  list.innerHTML = filtered.map(dp => {
+    const statusClass = dp.status === 'pending' ? ' status-pending' : dp.status === 'superseded' ? ' status-superseded' : '';
+    return `
+    <div class="dp-card${statusClass}" id="card-${dp.id}" onclick="toggleCard('${dp.id}')">
       <div class="dp-header">
         <div class="dp-claim">${highlightMatch(dp.claim)}</div>
-        <div class="dp-value">${dp.value !== null ? dp.value + (dp.unit ? ' ' + dp.unit : '') : dp.unit || '—'}</div>
+        <div class="dp-value">${dp.value !== null && dp.value !== undefined ? dp.value + (dp.unit ? ' ' + dp.unit : '') : dp.unit || '—'}</div>
       </div>
       <div class="dp-meta">
+        ${dp.status === 'pending' ? '<span class="status-badge status-pending">pending</span>' : ''}
         <span class="dp-meta-item"><span class="badge badge-${dp.confidence}">${dp.confidence}</span></span>
         <span class="dp-meta-item"><span class="src-badge src-${dp.sourceType}">${(dp.sourceType||'').replace(/-/g,' ')}</span></span>
         <span class="dp-meta-item" style="color:var(--text-dim)">${dp.sourceAuthor || '—'}</span>
@@ -421,17 +518,23 @@ function renderList() {
       </div>
       <div class="dp-tags">${(dp.tags||[]).map(t => `<span class="dp-tag">${t}</span>`).join('')}</div>
       <div class="dp-detail">
+        ${dp.replaces ? `<div class="dp-detail-row"><div class="dp-detail-label">Replaces</div><div class="dp-detail-value">${getReplacesLabel(dp.replaces)}</div></div>` : ''}
         ${dp.sourceUrl ? `<div class="dp-detail-row"><div class="dp-detail-label">Source URL</div><div class="dp-detail-value"><a href="${dp.sourceUrl}" target="_blank">${dp.sourceUrl}</a></div></div>` : ''}
         <div class="dp-detail-row"><div class="dp-detail-label">Date of Claim</div><div class="dp-detail-value">${dp.dateOfClaim || '—'}</div></div>
         <div class="dp-detail-row"><div class="dp-detail-label">Date Added</div><div class="dp-detail-value">${dp.dateAdded || '—'}</div></div>
         <div class="dp-detail-row"><div class="dp-detail-label">Notes</div><div class="dp-detail-value">${dp.notes || '—'}</div></div>
         <div style="margin-top:12px; display:flex; gap:8px;">
-          <button class="btn btn-secondary" onclick="event.stopPropagation(); editDP('${dp.id}')">Edit</button>
-          <button class="btn btn-danger" onclick="event.stopPropagation(); deleteDP('${dp.id}')">Delete</button>
+          <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); editDP('${dp.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteDP('${dp.id}')">Delete</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
+}
+
+function getReplacesLabel(id) {
+  const dp = vaultData.dataPoints.find(d => d.id === id);
+  return dp ? `${dp.claim} (${dp.value !== null ? dp.value + ' ' + (dp.unit||'') : '—'})` : id;
 }
 
 function highlightMatch(text) {
@@ -447,11 +550,401 @@ function toggleCard(id) {
 }
 
 // ============================================================
+// REVIEW VIEW
+// ============================================================
+function renderReview() {
+  const container = document.getElementById('reviewContent');
+  const pending = vaultData.dataPoints.filter(d => d.status === 'pending');
+
+  if (pending.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">&#x2705;</div>
+        <p>No pending data points to review</p>
+        <p class="hint">Add new data points with status "Pending Review" and they'll appear here for your weekly review.</p>
+      </div>
+      ${renderChangelogHistory()}
+    `;
+    return;
+  }
+
+  // Group pending by page
+  const byPage = {};
+  const noPage = [];
+  pending.forEach(dp => {
+    const pages = dp.usedOn || [];
+    if (pages.length === 0) {
+      noPage.push(dp);
+    } else {
+      pages.forEach(p => {
+        if (!byPage[p]) byPage[p] = [];
+        byPage[p].push(dp);
+      });
+    }
+  });
+
+  // Count decisions
+  const decided = pending.filter(d => reviewDecisions[d.id]).length;
+  const accepted = pending.filter(d => reviewDecisions[d.id] === 'accept').length;
+  const rejected = pending.filter(d => reviewDecisions[d.id] === 'reject').length;
+  const deferred = pending.filter(d => reviewDecisions[d.id] === 'defer').length;
+
+  // Impact: find replacements
+  const updates = pending.filter(d => d.replaces && reviewDecisions[d.id] === 'accept');
+  const newPoints = pending.filter(d => !d.replaces && reviewDecisions[d.id] === 'accept');
+
+  let html = `
+    <div class="review-summary">
+      <h2>Weekly Review</h2>
+      <div class="review-date">Week of ${new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })}</div>
+      <div class="review-stats">
+        <div class="review-stat">
+          <div class="num" style="color:var(--orange)">${pending.length}</div>
+          <div class="label">Pending</div>
+        </div>
+        <div class="review-stat">
+          <div class="num" style="color:var(--green)">${accepted}</div>
+          <div class="label">Accepted</div>
+        </div>
+        <div class="review-stat">
+          <div class="num" style="color:var(--red)">${rejected}</div>
+          <div class="label">Rejected</div>
+        </div>
+        <div class="review-stat">
+          <div class="num" style="color:var(--text-dim)">${deferred}</div>
+          <div class="label">Deferred</div>
+        </div>
+        <div class="review-stat">
+          <div class="num" style="color:var(--text-dim)">${pending.length - decided}</div>
+          <div class="label">Undecided</div>
+        </div>
+      </div>
+
+      ${updates.length > 0 ? `
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px; color:var(--text-dim); margin-bottom:6px; font-weight:600;">Impact Preview (accepted updates):</div>
+          ${updates.map(dp => {
+            const old = vaultData.dataPoints.find(d => d.id === dp.replaces);
+            if (!old) return '';
+            return `<div style="font-size:12px; color:var(--text-dim); padding:2px 0;">&bull; ${old.claim.slice(0,60)}...: <span style="text-decoration:line-through">${old.value} ${old.unit||''}</span> <span style="color:var(--orange)">&rarr;</span> <span style="color:var(--green); font-weight:700">${dp.value} ${dp.unit||''}</span></div>`;
+          }).join('')}
+        </div>
+      ` : ''}
+
+      <div class="review-actions-bar">
+        <button class="btn btn-secondary btn-sm" onclick="bulkDecision('accept')">Accept All</button>
+        <button class="btn btn-secondary btn-sm" onclick="bulkDecision('reject')">Reject All</button>
+        <button class="btn btn-secondary btn-sm" onclick="bulkDecision(null)">Reset All</button>
+        ${decided > 0 ? `<button class="btn btn-green btn-sm" onclick="applyDecisions()">Apply ${accepted} accepted, ${rejected} rejected</button>` : ''}
+        ${accepted > 0 ? `<button class="btn btn-primary btn-sm" onclick="generateNewsletter()">Generate Newsletter</button>` : ''}
+      </div>
+    </div>
+  `;
+
+  // Render groups
+  const renderGroup = (title, items) => {
+    if (items.length === 0) return '';
+    return `
+      <div class="review-group">
+        <div class="review-group-header">
+          <h3>${title}</h3>
+          <span class="count">${items.length} change${items.length > 1 ? 's' : ''}</span>
+        </div>
+        ${items.map(dp => renderReviewItem(dp)).join('')}
+      </div>
+    `;
+  };
+
+  Object.entries(byPage).sort().forEach(([page, items]) => {
+    // Deduplicate (a dp may appear in multiple pages)
+    const unique = items.filter((dp, i) => items.findIndex(d => d.id === dp.id) === i);
+    html += renderGroup(`${page}.html`, unique);
+  });
+  if (noPage.length > 0) {
+    html += renderGroup('Unassigned', noPage);
+  }
+
+  // Changelog preview if decisions made
+  if (accepted > 0) {
+    html += renderChangelogPreview();
+  }
+
+  // Past changelogs
+  html += renderChangelogHistory();
+
+  container.innerHTML = html;
+}
+
+function renderReviewItem(dp) {
+  const decision = reviewDecisions[dp.id] || null;
+  const decidedClass = decision ? ' decided' : '';
+  const old = dp.replaces ? vaultData.dataPoints.find(d => d.id === dp.replaces) : null;
+
+  return `
+    <div class="review-item${decidedClass}" id="review-${dp.id}">
+      <div class="review-item-header">
+        <div class="review-item-claim">${dp.claim}</div>
+        <div class="review-item-value">${dp.value !== null && dp.value !== undefined ? dp.value + ' ' + (dp.unit||'') : dp.unit || '—'}</div>
+      </div>
+      <div class="review-item-meta">
+        <span class="badge badge-${dp.confidence}">${dp.confidence}</span>
+        <span class="src-badge src-${dp.sourceType}">${(dp.sourceType||'').replace(/-/g,' ')}</span>
+        <span>${dp.sourceAuthor || '—'}</span>
+        ${dp.sourceUrl ? `<a href="${dp.sourceUrl}" target="_blank" style="color:var(--accent);font-size:11px;" onclick="event.stopPropagation()">source</a>` : ''}
+        ${decision ? `<span class="status-badge status-${decision === 'accept' ? 'accepted' : decision === 'reject' ? 'rejected' : 'deferred'}">${decision}ed</span>` : ''}
+      </div>
+      ${old ? `
+        <div class="review-item-change">
+          <span style="color:var(--text-dim); font-size:11px;">Updates:</span>
+          <span class="old-val">${old.value} ${old.unit||''}</span>
+          <span class="arrow">&rarr;</span>
+          <span class="new-val">${dp.value} ${dp.unit||''}</span>
+          <span style="color:var(--text-dim); font-size:11px; margin-left:auto;">(${old.claim.slice(0,50)}...)</span>
+        </div>
+      ` : '<div style="font-size:11px; color:var(--cyan); margin-bottom:6px;">NEW data point</div>'}
+      ${dp.notes ? `<div class="review-item-notes">${dp.notes}</div>` : ''}
+      <div class="review-item-actions">
+        <button class="btn ${decision==='accept'?'btn-green':'btn-secondary'} btn-sm" onclick="setDecision('${dp.id}','accept')">Accept</button>
+        <button class="btn ${decision==='reject'?'btn-danger':'btn-secondary'} btn-sm" onclick="setDecision('${dp.id}','reject')">Reject</button>
+        <button class="btn ${decision==='defer'?'btn-primary':'btn-secondary'} btn-sm" onclick="setDecision('${dp.id}','defer')">Defer</button>
+      </div>
+    </div>
+  `;
+}
+
+function setDecision(id, decision) {
+  if (reviewDecisions[id] === decision) {
+    delete reviewDecisions[id]; // toggle off
+  } else {
+    reviewDecisions[id] = decision;
+  }
+  renderReview();
+}
+
+function bulkDecision(decision) {
+  const pending = vaultData.dataPoints.filter(d => d.status === 'pending');
+  if (decision === null) {
+    reviewDecisions = {};
+  } else {
+    pending.forEach(d => { reviewDecisions[d.id] = decision; });
+  }
+  renderReview();
+}
+
+// ============================================================
+// APPLY DECISIONS
+// ============================================================
+function applyDecisions() {
+  const pending = vaultData.dataPoints.filter(d => d.status === 'pending');
+  const entries = [];
+  let acceptedCount = 0;
+  let rejectedCount = 0;
+  let deferredCount = 0;
+
+  pending.forEach(dp => {
+    const decision = reviewDecisions[dp.id];
+    if (!decision) return;
+
+    if (decision === 'accept') {
+      dp.status = 'accepted';
+      // If it replaces another, mark old as superseded
+      if (dp.replaces) {
+        const old = vaultData.dataPoints.find(d => d.id === dp.replaces);
+        if (old) {
+          old.status = 'superseded';
+          entries.push({
+            dpId: dp.id,
+            action: 'updated',
+            claim: dp.claim,
+            oldValue: old.value !== null ? `${old.value} ${old.unit||''}`.trim() : '—',
+            newValue: dp.value !== null ? `${dp.value} ${dp.unit||''}`.trim() : '—',
+            source: dp.sourceAuthor || dp.sourceType
+          });
+        }
+      } else {
+        entries.push({
+          dpId: dp.id,
+          action: 'added',
+          claim: dp.claim,
+          oldValue: null,
+          newValue: dp.value !== null ? `${dp.value} ${dp.unit||''}`.trim() : '—',
+          source: dp.sourceAuthor || dp.sourceType
+        });
+      }
+      acceptedCount++;
+    } else if (decision === 'reject') {
+      dp.status = 'rejected';
+      rejectedCount++;
+    } else if (decision === 'defer') {
+      // Keep as pending
+      deferredCount++;
+    }
+  });
+
+  // Create changelog entry
+  if (entries.length > 0) {
+    vaultData.changelog.push({
+      date: new Date().toISOString().slice(0, 10),
+      weekOf: getWeekOf(),
+      entries: entries,
+      newsletterDraft: generateNewsletterText(entries),
+      published: false
+    });
+  }
+
+  reviewDecisions = {};
+  saveData();
+  renderAll();
+  showToast(`Applied: ${acceptedCount} accepted, ${rejectedCount} rejected, ${deferredCount} deferred`);
+}
+
+function getWeekOf() {
+  const now = new Date();
+  const mon = new Date(now);
+  mon.setDate(mon.getDate() - (mon.getDay() || 7) + 1);
+  return mon.toISOString().slice(0, 10);
+}
+
+// ============================================================
+// CHANGELOG & NEWSLETTER
+// ============================================================
+function generateNewsletterText(entries) {
+  if (!entries || entries.length === 0) return '';
+  const lines = [];
+  lines.push(`Data Updates — Week of ${new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })}`);
+  lines.push('');
+
+  const updates = entries.filter(e => e.action === 'updated');
+  const adds = entries.filter(e => e.action === 'added');
+
+  if (updates.length > 0) {
+    lines.push('REVISED ESTIMATES');
+    updates.forEach(e => {
+      lines.push(`  ${e.claim}`);
+      lines.push(`    ${e.oldValue} \u2192 ${e.newValue}  (Source: ${e.source})`);
+    });
+    lines.push('');
+  }
+
+  if (adds.length > 0) {
+    lines.push('NEW DATA POINTS');
+    adds.forEach(e => {
+      lines.push(`  ${e.claim}: ${e.newValue}`);
+      lines.push(`    Source: ${e.source}`);
+    });
+    lines.push('');
+  }
+
+  lines.push(`${entries.length} data point${entries.length > 1 ? 's' : ''} updated this week.`);
+  return lines.join('\n');
+}
+
+function renderChangelogPreview() {
+  const pending = vaultData.dataPoints.filter(d => d.status === 'pending');
+  const accepted = pending.filter(d => reviewDecisions[d.id] === 'accept');
+  if (accepted.length === 0) return '';
+
+  const entries = accepted.map(dp => {
+    const old = dp.replaces ? vaultData.dataPoints.find(d => d.id === dp.replaces) : null;
+    return {
+      dpId: dp.id,
+      action: old ? 'updated' : 'added',
+      claim: dp.claim,
+      oldValue: old ? `${old.value} ${old.unit||''}`.trim() : null,
+      newValue: dp.value !== null ? `${dp.value} ${dp.unit||''}`.trim() : '—',
+      source: dp.sourceAuthor || dp.sourceType
+    };
+  });
+
+  const draft = generateNewsletterText(entries);
+
+  return `
+    <div class="changelog-section">
+      <h3>Newsletter Preview</h3>
+      <div class="changelog-preview">${escapeHtml(draft)}</div>
+      <div class="changelog-actions">
+        <button class="btn btn-secondary btn-sm" onclick="copyNewsletter()">Copy to Clipboard</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderChangelogHistory() {
+  if (!vaultData.changelog || vaultData.changelog.length === 0) return '';
+
+  const sorted = [...vaultData.changelog].sort((a,b) => b.date.localeCompare(a.date));
+  return `
+    <div style="margin-top:32px;">
+      <h3 style="font-size:16px; margin-bottom:12px; color:var(--text-dim);">Past Reviews</h3>
+      ${sorted.map((cl, i) => `
+        <div class="review-group" style="margin-bottom:12px;">
+          <div class="review-group-header" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none'" style="cursor:pointer;">
+            <h3>${cl.weekOf ? 'Week of ' + cl.weekOf : cl.date}</h3>
+            <span class="count">${cl.entries.length} change${cl.entries.length > 1 ? 's' : ''} ${cl.published ? '<span style="color:var(--green);">&bull; published</span>' : ''}</span>
+          </div>
+          <div style="display:none; padding:16px 20px;">
+            ${cl.entries.map(e => `
+              <div style="padding:4px 0; font-size:12px; border-bottom:1px solid rgba(255,255,255,0.03);">
+                <span class="badge ${e.action === 'updated' ? 'badge-estimated' : 'badge-verified'}" style="margin-right:8px;">${e.action}</span>
+                ${e.claim}
+                ${e.oldValue ? ` <span style="text-decoration:line-through; color:var(--text-dim);">${e.oldValue}</span> <span style="color:var(--orange);">&rarr;</span> <span style="color:var(--green); font-weight:700;">${e.newValue}</span>` : ` <span style="color:var(--green); font-weight:700;">${e.newValue}</span>`}
+              </div>
+            `).join('')}
+            ${cl.newsletterDraft ? `
+              <div style="margin-top:12px;">
+                <button class="btn btn-secondary btn-sm" onclick="copyText(\`${escapeBackticks(cl.newsletterDraft)}\`)">Copy Newsletter Draft</button>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function generateNewsletter() {
+  const pending = vaultData.dataPoints.filter(d => d.status === 'pending');
+  const accepted = pending.filter(d => reviewDecisions[d.id] === 'accept');
+  const entries = accepted.map(dp => {
+    const old = dp.replaces ? vaultData.dataPoints.find(d => d.id === dp.replaces) : null;
+    return {
+      action: old ? 'updated' : 'added',
+      claim: dp.claim,
+      oldValue: old ? `${old.value} ${old.unit||''}`.trim() : null,
+      newValue: dp.value !== null ? `${dp.value} ${dp.unit||''}`.trim() : '—',
+      source: dp.sourceAuthor || dp.sourceType
+    };
+  });
+  const text = generateNewsletterText(entries);
+  navigator.clipboard.writeText(text).then(() => showToast('Newsletter draft copied'));
+}
+
+function copyNewsletter() {
+  const el = document.querySelector('.changelog-preview');
+  if (el) {
+    navigator.clipboard.writeText(el.textContent).then(() => showToast('Copied'));
+  }
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast('Copied'));
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function escapeBackticks(s) {
+  return s.replace(/`/g, '\\`').replace(/\$/g, '\\$');
+}
+
+// ============================================================
 // AUDIT VIEW
 // ============================================================
 function renderAudit() {
   const pages = {};
   vaultData.dataPoints.forEach(dp => {
+    if (dp.status === 'superseded' || dp.status === 'rejected') return;
     (dp.usedOn || []).forEach(page => {
       if (!pages[page]) pages[page] = [];
       pages[page].push(dp);
@@ -466,6 +959,7 @@ function renderAudit() {
 
   container.innerHTML = Object.entries(pages).sort((a,b) => b[1].length - a[1].length).map(([page, dps]) => {
     const verified = dps.filter(d => d.confidence === 'verified').length;
+    const pendingCount = dps.filter(d => d.status === 'pending').length;
     const stale = dps.filter(d => {
       if (!d.dateOfClaim) return true;
       const age = (Date.now() - new Date(d.dateOfClaim).getTime()) / (1000*60*60*24);
@@ -478,13 +972,15 @@ function renderAudit() {
         <div class="audit-stats">
           <span><strong>${dps.length}</strong> data points</span>
           <span style="color:var(--green)"><strong>${verified}</strong> verified</span>
-          <span style="color:${stale > 0 ? 'var(--orange)' : 'var(--text-dim)'}"><strong>${stale}</strong> stale (>6 months)</span>
+          ${pendingCount ? `<span style="color:var(--orange)"><strong>${pendingCount}</strong> pending</span>` : ''}
+          <span style="color:${stale > 0 ? 'var(--orange)' : 'var(--text-dim)'}"><strong>${stale}</strong> stale (&gt;6mo)</span>
         </div>
         ${dps.map(dp => `
           <div class="audit-item">
             <span class="badge badge-${dp.confidence}" style="flex-shrink:0">${dp.confidence}</span>
+            ${dp.status === 'pending' ? '<span class="status-badge status-pending" style="flex-shrink:0">pending</span>' : ''}
             <span class="claim">${dp.claim}</span>
-            <span class="val">${dp.value !== null ? dp.value + (dp.unit ? ' ' + dp.unit : '') : '—'}</span>
+            <span class="val">${dp.value !== null && dp.value !== undefined ? dp.value + (dp.unit ? ' ' + dp.unit : '') : '—'}</span>
           </div>
         `).join('')}
       </div>
@@ -496,6 +992,17 @@ function renderAudit() {
 // SUBMIT / EDIT
 // ============================================================
 let editingId = null;
+
+function populateReplacesDropdown() {
+  const sel = document.getElementById('f-replaces');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— New data point (no replacement) —</option>';
+  vaultData.dataPoints.filter(d => d.status === 'accepted').forEach(dp => {
+    const label = `${dp.id}: ${dp.claim.slice(0,60)}${dp.claim.length > 60 ? '...' : ''} (${dp.value !== null ? dp.value + ' ' + (dp.unit||'') : '—'})`;
+    sel.innerHTML += `<option value="${dp.id}">${label}</option>`;
+  });
+  if (current) sel.value = current;
+}
 
 function submitDP(e) {
   e.preventDefault();
@@ -513,13 +1020,15 @@ function submitDP(e) {
     dateAdded: new Date().toISOString().slice(0,10),
     usedOn: document.getElementById('f-usedOn').value.split(',').map(s=>s.trim()).filter(Boolean),
     tags: document.getElementById('f-tags').value.split(',').map(s=>s.trim()).filter(Boolean),
-    notes: document.getElementById('f-notes').value.trim() || ''
+    notes: document.getElementById('f-notes').value.trim() || '',
+    status: document.getElementById('f-status').value,
+    replaces: document.getElementById('f-replaces').value || null
   };
 
   if (editingId) {
     const idx = vaultData.dataPoints.findIndex(d => d.id === editingId);
     if (idx >= 0) {
-      dp.dateAdded = vaultData.dataPoints[idx].dateAdded; // preserve original add date
+      dp.dateAdded = vaultData.dataPoints[idx].dateAdded;
       vaultData.dataPoints[idx] = dp;
     }
     editingId = null;
@@ -528,10 +1037,11 @@ function submitDP(e) {
   }
 
   saveData();
+  const wasPending = dp.status === 'pending';
   clearForm();
-  showToast(editingId ? 'Data point updated' : 'Data point saved');
+  showToast(wasPending ? 'Data point queued for review' : 'Data point saved');
   renderAll();
-  switchTab('search');
+  switchTab(wasPending ? 'review' : 'search');
 }
 
 function editDP(id) {
@@ -550,7 +1060,11 @@ function editDP(id) {
   document.getElementById('f-usedOn').value = (dp.usedOn || []).join(', ');
   document.getElementById('f-tags').value = (dp.tags || []).join(', ');
   document.getElementById('f-notes').value = dp.notes || '';
+  document.getElementById('f-status').value = dp.status || 'pending';
+  document.getElementById('f-replaces').value = dp.replaces || '';
 
+  document.getElementById('formTitle').textContent = 'Edit Data Point';
+  document.getElementById('formSubmitBtn').textContent = 'Update Data Point';
   switchTab('submit');
 }
 
@@ -564,6 +1078,9 @@ function deleteDP(id) {
 
 function clearForm() {
   document.getElementById('dpForm').reset();
+  document.getElementById('f-status').value = 'pending';
+  document.getElementById('formTitle').textContent = 'Add New Data Point';
+  document.getElementById('formSubmitBtn').textContent = 'Save Data Point';
   editingId = null;
 }
 
@@ -572,13 +1089,15 @@ function clearForm() {
 // ============================================================
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach((t, i) => {
-    const tabs = ['search','submit','audit'];
-    t.classList.toggle('active', tabs[i] === name);
+    t.classList.toggle('active', TABS[i] === name);
   });
-  ['search','submit','audit'].forEach(v => {
-    document.getElementById('view-' + v).style.display = v === name ? 'block' : 'none';
+  TABS.forEach(v => {
+    const el = document.getElementById('view-' + v);
+    if (el) el.style.display = v === name ? 'block' : 'none';
   });
   if (name === 'audit') renderAudit();
+  if (name === 'review') renderReview();
+  if (name === 'submit') populateReplacesDropdown();
 }
 
 // ============================================================
@@ -588,7 +1107,6 @@ function toggleExport() {
   document.getElementById('exportDropdown').classList.toggle('show');
 }
 
-// Close export dropdown on outside click
 document.addEventListener('click', e => {
   if (!e.target.closest('.export-menu')) {
     document.getElementById('exportDropdown').classList.remove('show');
@@ -603,7 +1121,7 @@ function exportJSON() {
 }
 
 function exportCSV() {
-  const headers = ['id','claim','value','unit','sourceUrl','sourceType','sourceAuthor','confidence','dateOfClaim','dateAdded','usedOn','tags','notes'];
+  const headers = ['id','claim','value','unit','sourceUrl','sourceType','sourceAuthor','confidence','dateOfClaim','dateAdded','usedOn','tags','notes','status','replaces'];
   const rows = vaultData.dataPoints.map(dp =>
     headers.map(h => {
       let v = dp[h];
@@ -625,14 +1143,12 @@ function exportMarkdown() {
   filtered.forEach(dp => {
     lines.push(`### ${dp.claim}`);
     if (dp.value !== null) lines.push(`**Value:** ${dp.value} ${dp.unit || ''}`);
-    lines.push(`**Confidence:** ${dp.confidence} | **Source:** ${dp.sourceAuthor || '—'} (${(dp.sourceType||'').replace(/-/g,' ')})`);
+    lines.push(`**Confidence:** ${dp.confidence} | **Source:** ${dp.sourceAuthor || '—'} (${(dp.sourceType||'').replace(/-/g,' ')}) | **Status:** ${dp.status || 'accepted'}`);
     if (dp.sourceUrl) lines.push(`**URL:** ${dp.sourceUrl}`);
     if (dp.notes) lines.push(`> ${dp.notes}`);
     lines.push('');
   });
-  navigator.clipboard.writeText(lines.join('\n')).then(() => {
-    showToast('Markdown copied to clipboard');
-  });
+  navigator.clipboard.writeText(lines.join('\n')).then(() => showToast('Markdown copied'));
   document.getElementById('exportDropdown').classList.remove('show');
 }
 
@@ -644,9 +1160,7 @@ function downloadBlob(blob, name) {
   URL.revokeObjectURL(a.href);
 }
 
-function importData() {
-  document.getElementById('importFile').click();
-}
+function importData() { document.getElementById('importFile').click(); }
 
 function handleImport(e) {
   const file = e.target.files[0];
@@ -656,17 +1170,17 @@ function handleImport(e) {
     try {
       const imported = JSON.parse(ev.target.result);
       if (imported.dataPoints && Array.isArray(imported.dataPoints)) {
-        // Merge: add new, skip duplicates by ID
         let added = 0;
         imported.dataPoints.forEach(dp => {
           if (!vaultData.dataPoints.find(d => d.id === dp.id)) {
+            if (!dp.status) dp.status = 'pending'; // imported data defaults to pending
             vaultData.dataPoints.push(dp);
             added++;
           }
         });
         saveData();
         renderAll();
-        showToast(`Imported ${added} new data points (${imported.dataPoints.length - added} duplicates skipped)`);
+        showToast(`Imported ${added} new data points (${imported.dataPoints.length - added} skipped)`);
       } else {
         showToast('Invalid file format');
       }
@@ -679,7 +1193,7 @@ function handleImport(e) {
 }
 
 // ============================================================
-// TOAST
+// TOAST & KEYBOARD
 // ============================================================
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -688,28 +1202,20 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// ============================================================
-// KEYBOARD SHORTCUTS
-// ============================================================
 document.addEventListener('keydown', e => {
-  // Cmd/Ctrl+K → focus search
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
     e.preventDefault();
     switchTab('search');
     document.getElementById('searchInput').focus();
   }
-  // Escape → clear search
   if (e.key === 'Escape') {
     const input = document.getElementById('searchInput');
-    if (document.activeElement === input) {
-      input.value = '';
-      renderList();
-    }
+    if (document.activeElement === input) { input.value = ''; renderList(); }
   }
 });
 
 // ============================================================
-// RESEED — force reload from JSON (destructive, for dev)
+// RESEED
 // ============================================================
 function reseedVault() {
   if (!confirm('This will replace ALL local data with vault-data.json. Continue?')) return;
