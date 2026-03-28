@@ -152,7 +152,7 @@
 
 <header>
   <h1>Global AI Token Usage Estimator</h1>
-  <p>Directional estimates from public filings, earnings calls, press reports &amp; developer surveys &mdash; March 2026</p>
+  <p>Directional estimates from public filings, earnings calls, press reports &amp; developer surveys &mdash; March 2026<br><span style="font-size:11px;color:#f59e0b;">All revenue figures are annualized run rate (ARR), not actual collected revenue. See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual 2025 collected.</span></p>
 </header>
 
 <!-- ===== FILTER BAR ===== -->
@@ -163,13 +163,13 @@
 
 <!-- ===== MAIN CHARTS ===== -->
 <div class="card">
-  <h2>Token Volume &amp; Revenue by Provider <span class="sub">&mdash; click bars to filter</span></h2>
+  <h2>Token Volume &amp; ARR by Provider <span class="sub">&mdash; click bars to filter</span></h2>
   <div class="chart-wrap"><canvas id="chart-provider"></canvas></div>
 </div>
 
 <div class="grid-2">
   <div class="card">
-    <h2>Revenue by Demand Type</h2>
+    <h2>ARR by Demand Type</h2>
     <div class="chart-wrap"><canvas id="chart-demand"></canvas></div>
   </div>
   <div class="card">
@@ -196,7 +196,7 @@
 
 <!-- ===== DEMAND MATRIX ===== -->
 <div class="card">
-  <h2>Token Demand Quality Matrix <span class="sub">&mdash; who buys &times; how they buy. Not all "$1 of AI revenue" is equal.</span></h2>
+  <h2>Token Demand Quality Matrix <span class="sub">&mdash; who buys &times; how they buy. Actual 2025 collected revenue (from <a href="sankey.html" style="color:var(--accent);">Sankey</a>). Not all "$1 of AI revenue" is equal.</span></h2>
   <div style="overflow-x:auto;">
     <table class="matrix-table" id="demand-matrix"></table>
   </div>
@@ -204,7 +204,7 @@
 
 <!-- ===== ENTERPRISE REALITY CHECK ===== -->
 <div class="card">
-  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">&mdash; Booked revenue vs. actual token consumption</span></h2>
+  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">&mdash; Booked ARR vs. actual token consumption</span></h2>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <table class="detail" id="enterprise-table"></table>
   </div>
@@ -252,6 +252,7 @@
 let PROVIDERS, REGIONS, INDUSTRIES, USE_CASES, CROSS_WEIGHTS;
 let DEMAND_MATRIX, ENTERPRISE_REALITY, TOP_CONSUMERS, MODELS;
 let DEMAND_TYPES, DEMAND_WEIGHTS;
+let SANKEY_BC_FLOWS = {}; // buyer→channel flow lookup from Sankey
 
 // ============================================================
 // FILTER STATE
@@ -281,6 +282,19 @@ async function loadDashboardData() {
     MODELS           = d.models;
     DEMAND_TYPES     = d.demandTypes;
     DEMAND_WEIGHTS   = d.demandWeights;
+
+    // Build buyer→channel flow lookup from Sankey for Demand Matrix
+    if (all.sankey && all.sankey.flows) {
+      SANKEY_BC_FLOWS = {};
+      all.sankey.flows.forEach(f => {
+        // buyer→channel flows: fromCol=0, toCol=1
+        if (f[0] === 0 && f[2] === 1) {
+          const key = f[1] + ',' + f[3]; // buyerIdx,channelIdx
+          SANKEY_BC_FLOWS[key] = (SANKEY_BC_FLOWS[key] || 0) + f[4];
+        }
+      });
+      console.log('Sankey buyer→channel flows loaded for demand matrix:', Object.keys(SANKEY_BC_FLOWS).length, 'flows');
+    }
 
     // Show data timestamp from meta.generatedAt
     if (all.meta && all.meta.generatedAt) {
@@ -473,7 +487,7 @@ function updateHeroStats() {
 
   document.getElementById('hero-stats').innerHTML =
     '<div class="hero-stat"><div class="label">Est. Tokens / Day</div><div class="value" style="color:var(--accent);">~' + Math.round(totalTokens) + 'T</div><div class="detail" style="font-size:10px;">Bear: ' + bearTokens + 'T \u00b7 Bull: ' + bullTokens + 'T</div></div>' +
-    '<div class="hero-stat"><div class="label">Annualized Revenue</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail" style="font-size:10px;">Bear: $' + bearRev + 'B \u00b7 Bull: $' + bullRev + 'B</div></div>' +
+    '<div class="hero-stat"><div class="label">Combined ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail" style="font-size:10px;">Bear: $' + bearRev + 'B \u00b7 Bull: $' + bullRev + 'B</div></div>' +
     '<div class="hero-stat"><div class="label">Active Providers</div><div class="value" style="color:var(--accent2);">' + provCount + '</div><div class="detail">tracked in this dashboard</div></div>' +
     '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">frontier-equivalent cost (ARK Invest)</div></div>';
 }
@@ -501,7 +515,7 @@ function updateProviderChart() {
       labels,
       datasets: [
         { label: 'Tokens (T/day)', data: tokenVals, backgroundColor: colors.map(c => c + 'cc'), yAxisID: 'y', borderRadius: 4, order: 1 },
-        { label: 'Revenue ($B/yr)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
+        { label: 'ARR ($B)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
       ]
     },
     options: {
@@ -516,11 +530,11 @@ function updateProviderChart() {
       },
       plugins: {
         legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } },
-        tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B/yr' } }
+        tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR' } }
       },
       scales: {
         y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid },
-        y1: { position: 'right', title: { display: true, text: 'Revenue ($B/yr)' }, grid: noGrid },
+        y1: { position: 'right', title: { display: true, text: 'ARR ($B)' }, grid: noGrid },
         x: { grid: noGrid }
       }
     }
@@ -552,8 +566,8 @@ function updateDemandChart() {
     options: {
       responsive: true, maintainAspectRatio: false, indexAxis: 'y',
       onClick: (e, els) => { if (els.length > 0) { const label = charts.demand.data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="demandTypes"][data-value="' + label + '"]'); if (pill) pill.click(); } },
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + Math.abs(ctx.parsed.x).toFixed(1) + 'B \u2014 click to filter' } } },
-      scales: { x: { title: { display: true, text: '$B annualized' }, grid: darkGrid }, y: { grid: noGrid } }
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + Math.abs(ctx.parsed.x).toFixed(1) + 'B ARR \u2014 click to filter' } } },
+      scales: { x: { title: { display: true, text: '$B ARR' }, grid: darkGrid }, y: { grid: noGrid } }
     }
   });
 }
@@ -581,7 +595,7 @@ function updateBizConsumerChart() {
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } },
-      scales: { x: { stacked: true, grid: noGrid }, y: { stacked: true, title: { display: true, text: '$B annualized' }, grid: darkGrid } }
+      scales: { x: { stacked: true, grid: noGrid }, y: { stacked: true, title: { display: true, text: '$B ARR' }, grid: darkGrid } }
     }
   });
 }
@@ -624,24 +638,73 @@ function updateDimensionChart(canvasId, chartKey, dimObj, dimKey, chartType) {
 function renderDemandMatrix() {
   const t = document.getElementById('demand-matrix');
   const m = DEMAND_MATRIX;
+  const hasSankey = Object.keys(SANKEY_BC_FLOWS).length > 0;
+  const chMap = m.sankeyChannelMap || [[0],[1,2,4],[3],[5]];
+  const bMap = m.sankeyBuyerMap || { Consumer: 0, SME: 1, Enterprise: 2 };
+
+  // Column headers with totals
+  let colTotals = new Array(m.columns.length).fill(0);
+  let grandTotal = 0;
+
+  // Pre-compute all cell values from Sankey
+  const cellValues = [];
+  m.rows.forEach((row, ri) => {
+    const rowVals = [];
+    const buyerIdx = bMap[row.segment];
+    row.cells.forEach((cell, ci) => {
+      let val = 0;
+      if (hasSankey && buyerIdx !== undefined) {
+        chMap[ci].forEach(ch => { val += SANKEY_BC_FLOWS[buyerIdx + ',' + ch] || 0; });
+      }
+      rowVals.push(val);
+      colTotals[ci] += val;
+      grandTotal += val;
+    });
+    cellValues.push(rowVals);
+  });
+
   let html = '<thead><tr><th></th>';
-  m.columns.forEach((c, i) => { html += '<th><div style="font-size:13px;font-weight:700;">' + c + '</div><div style="font-size:10px;opacity:0.7;margin-top:2px;">' + m.colSubs[i] + '</div></th>'; });
+  m.columns.forEach((c, i) => {
+    const colTotal = hasSankey ? '<div style="font-size:11px;color:var(--green);margin-top:2px;">$' + colTotals[i].toFixed(1) + 'B collected</div>' : '';
+    html += '<th><div style="font-size:13px;font-weight:700;">' + c + '</div><div style="font-size:10px;opacity:0.7;margin-top:2px;">' + m.colSubs[i] + '</div>' + colTotal + '</th>';
+  });
   html += '</tr></thead><tbody>';
-  m.rows.forEach(row => {
-    html += '<tr><td style="background:#1a2332;color:white;font-weight:700;font-size:13px;">' + row.segment + '</td>';
-    row.cells.forEach(cell => {
+
+  m.rows.forEach((row, ri) => {
+    const rowTotal = cellValues[ri].reduce((a, b) => a + b, 0);
+    html += '<tr><td style="background:#1a2332;color:white;font-weight:700;font-size:13px;">' + row.segment + '<div style="font-size:10px;font-weight:400;color:var(--green);margin-top:4px;">$' + rowTotal.toFixed(1) + 'B total</div></td>';
+    row.cells.forEach((cell, ci) => {
+      const val = cellValues[ri][ci];
       const rgb = cell.color === '#10b981' ? '16,185,129' : cell.color === '#f59e0b' ? '249,159,11' : cell.color === '#ef4444' ? '239,68,68' : cell.color === '#3b82f6' ? '59,130,246' : '71,85,105';
-      html += '<td style="background:rgba(' + rgb + ',0.06);"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;"><span class="matrix-cell-rev" style="color:' + cell.color + ';">' + cell.rev + '</span><span class="matrix-cell-conv" style="background:rgba(' + rgb + ',0.15);color:' + cell.color + ';">' + cell.conv + ' tokens</span></div><div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">' + cell.ex + '</div><div style="font-size:10px;color:var(--text-dim);opacity:0.8;font-style:italic;">' + cell.note + '</div></td>';
+      // Primary: Sankey-derived actual collected. Secondary: ARR estimate for context
+      const revDisplay = hasSankey ? '$' + val.toFixed(1) + 'B' : (cell.arrEstimate || '—');
+      const arrRef = cell.arrEstimate ? '<span style="font-size:10px;color:var(--text-dim);margin-left:6px;" title="ARR estimate">(ARR: ' + cell.arrEstimate + ')</span>' : '';
+      html += '<td style="background:rgba(' + rgb + ',0.06);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex-wrap:wrap;">' +
+          '<span class="matrix-cell-rev" style="color:' + cell.color + ';">' + revDisplay + '</span>' + arrRef +
+          '<span class="matrix-cell-conv" style="background:rgba(' + rgb + ',0.15);color:' + cell.color + ';">' + cell.conv + ' tokens</span>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">' + cell.ex + '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);opacity:0.8;font-style:italic;">' + cell.note + '</div></td>';
     });
     html += '</tr>';
   });
+
+  // Totals row
+  html += '<tr><td style="background:#1a2332;color:var(--green);font-weight:700;font-size:13px;">TOTAL<div style="font-size:10px;font-weight:400;margin-top:4px;">$' + grandTotal.toFixed(1) + 'B</div></td>';
+  colTotals.forEach((ct, i) => {
+    const pct = grandTotal > 0 ? Math.round(ct / grandTotal * 100) : 0;
+    html += '<td style="background:rgba(16,185,129,0.08);text-align:center;font-weight:700;color:var(--green);font-size:14px;">$' + ct.toFixed(1) + 'B<div style="font-size:10px;font-weight:400;color:var(--text-dim);">' + pct + '% of total</div></td>';
+  });
+  html += '</tr>';
+
   html += '</tbody>';
   t.innerHTML = html;
 }
 
 function renderEnterpriseTable() {
   const t = document.getElementById('enterprise-table');
-  let html = '<thead><tr><th>Company</th><th>Claimed AI Revenue</th><th>Actual Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Red Flags</th></tr></thead><tbody>';
+  let html = '<thead><tr><th>Company</th><th>Claimed AI ARR</th><th>Actual Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Red Flags</th></tr></thead><tbody>';
   ENTERPRISE_REALITY.forEach(c => {
     html += '<tr><td><strong>' + c.name + '</strong> <span style="color:var(--text-dim);font-size:11px;">' + c.ticker + '</span></td><td style="font-size:12px;">' + c.claimed + '</td><td style="font-size:12px;color:var(--orange);">' + c.usage + '</td><td style="font-size:12px;color:var(--green);font-weight:600;">' + c.real + '</td><td style="font-size:12px;"><span style="color:var(--red);">' + (c.growth || '\u2014') + '</span> <span style="color:var(--text-dim);font-size:10px;">\u2190 was ' + (c.prevGrowth || '\u2014') + '</span></td><td style="font-size:11px;color:var(--text-dim);">' + c.flags + '</td></tr>';
   });

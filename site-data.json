@@ -176,24 +176,26 @@
         "Cursor, Perplexity, Jasper, Harvey",
         "M365 Copilot, SF Agentforce, NOW Assist, Canva AI"
       ],
+      "sankeyChannelMap": [[0], [1, 2, 4], [3], [5]],
+      "sankeyBuyerMap": { "Consumer": 0, "SME": 1, "Enterprise": 2 },
       "rows": [
         { "segment": "Consumer", "cells": [
-          { "rev": "~$10-12B", "conv": "50%", "color": "#f59e0b", "ex": "ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced", "note": "Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk." },
-          { "rev": "~$0.5B", "conv": "100%", "color": "#10b981", "ex": "Hobbyist devs, indie hackers, students using API keys", "note": "Small but pure. Every cent = tokens. ~95% frontier, ~5% open models." },
-          { "rev": "~$2-3B", "conv": "90%", "color": "#10b981", "ex": "Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier", "note": "Real usage. AI native absorbs API cost." },
-          { "rev": "~$0.5-1B", "conv": "15%", "color": "#ef4444", "ex": "Canva AI features, Grammarly, Notion AI, Adobe Firefly", "note": "AI bundled free into consumer SaaS tiers. Retention play, not revenue driver. Adobe Firefly: growth flat at 10-11%." }
+          { "arrEstimate": "~$10-12B", "conv": "50%", "color": "#f59e0b", "ex": "ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced", "note": "Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk." },
+          { "arrEstimate": "~$0.5B", "conv": "100%", "color": "#10b981", "ex": "Hobbyist devs, indie hackers, students using API keys", "note": "Small but pure. Every cent = tokens. ~95% frontier, ~5% open models." },
+          { "arrEstimate": "~$2-3B", "conv": "90%", "color": "#10b981", "ex": "Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier", "note": "Real usage. AI native absorbs API cost." },
+          { "arrEstimate": "~$0.5-1B", "conv": "15%", "color": "#ef4444", "ex": "Canva AI features, Grammarly, Notion AI, Adobe Firefly", "note": "AI bundled free into consumer SaaS tiers. Retention play, not revenue driver. Adobe Firefly: growth flat at 10-11%." }
         ]},
         { "segment": "SME", "cells": [
-          { "rev": "~$1-2B", "conv": "60%", "color": "#f59e0b", "ex": "ChatGPT Team ($25/user), Claude Team", "note": "Growing. Usage varies widely across seats." },
-          { "rev": "~$2-3B", "conv": "100%", "color": "#10b981", "ex": "Startups on APIs, dev agencies, Vercel AI SDK users", "note": "Pure demand. ~65% frontier, ~35% open (AI natives buying Together/Fireworks inference). Fastest growing." },
-          { "rev": "~$2-3B", "conv": "85%", "color": "#10b981", "ex": "Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin", "note": "Strong PMF. SMEs adopt AI natives faster than SaaS AI." },
-          { "rev": "~$1-2B", "conv": "15%", "color": "#ef4444", "ex": "HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI", "note": "Feature checkbox on renewal, low activation. HubSpot Breeze: no separate revenue disclosed = immaterial." }
+          { "arrEstimate": "~$1-2B", "conv": "60%", "color": "#f59e0b", "ex": "ChatGPT Team ($25/user), Claude Team", "note": "Growing. Usage varies widely across seats." },
+          { "arrEstimate": "~$2-3B", "conv": "100%", "color": "#10b981", "ex": "Startups on APIs, dev agencies, Vercel AI SDK users", "note": "Pure demand. ~65% frontier, ~35% open (AI natives buying Together/Fireworks inference). Fastest growing." },
+          { "arrEstimate": "~$2-3B", "conv": "85%", "color": "#10b981", "ex": "Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin", "note": "Strong PMF. SMEs adopt AI natives faster than SaaS AI." },
+          { "arrEstimate": "~$1-2B", "conv": "15%", "color": "#ef4444", "ex": "HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI", "note": "Feature checkbox on renewal, low activation. HubSpot Breeze: no separate revenue disclosed = immaterial." }
         ]},
         { "segment": "Enterprise", "cells": [
-          { "rev": "~$1-2B", "conv": "45%", "color": "#f59e0b", "ex": "ChatGPT Enterprise ($60+/user), Claude for Enterprise", "note": "Standalone AI subs — higher activation, users chose to buy it." },
-          { "rev": "~$3-5B", "conv": "100%", "color": "#10b981", "ex": "Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys", "note": "LARGEST FUTURE TAM. Small today but 100% real. ~95% frontier, ~5% open. Goldman: ->$50-80B by 2028." },
-          { "rev": "~$1-2B", "conv": "80%", "color": "#10b981", "ex": "Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI", "note": "Real usage — AI natives solving specific enterprise workflows." },
-          { "rev": "~$5-7B real (~$15B claimed)", "conv": "10-20%", "color": "#ef4444", "ex": "M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B — the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real — cleanest reporter)", "note": "COGS test: SF inference est. $6-12M on $800M \"AI rev\" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration." }
+          { "arrEstimate": "~$1-2B", "conv": "45%", "color": "#f59e0b", "ex": "ChatGPT Enterprise ($60+/user), Claude for Enterprise", "note": "Standalone AI subs — higher activation, users chose to buy it." },
+          { "arrEstimate": "~$3-5B", "conv": "100%", "color": "#10b981", "ex": "Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys", "note": "LARGEST FUTURE TAM. Small today but 100% real. ~95% frontier, ~5% open. Goldman: ->$50-80B by 2028." },
+          { "arrEstimate": "~$1-2B", "conv": "80%", "color": "#10b981", "ex": "Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI", "note": "Real usage — AI natives solving specific enterprise workflows." },
+          { "arrEstimate": "~$5-7B real (~$15B claimed)", "conv": "10-20%", "color": "#ef4444", "ex": "M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B — the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real — cleanest reporter)", "note": "COGS test: SF inference est. $6-12M on $800M \"AI rev\" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration." }
         ]}
       ]
     },
