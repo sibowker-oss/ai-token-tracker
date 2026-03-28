@@ -163,6 +163,31 @@
   .changelog-preview { background:rgba(0,0,0,0.3); border:1px solid var(--card-border); border-radius:8px; padding:20px; font-size:13px; line-height:1.8; color:var(--text-dim); white-space:pre-wrap; font-family:inherit; max-height:400px; overflow-y:auto; }
   .changelog-actions { display:flex; gap:8px; margin-top:12px; }
 
+  /* Credibility score bar */
+  .cred-bar { display:inline-flex; align-items:center; gap:6px; }
+  .cred-track { width:48px; height:6px; background:rgba(255,255,255,0.08); border-radius:3px; overflow:hidden; }
+  .cred-fill { height:100%; border-radius:3px; transition:width 0.3s; }
+  .cred-label { font-size:10px; font-weight:700; min-width:28px; }
+  .cred-high .cred-fill { background:var(--green); }
+  .cred-high .cred-label { color:var(--green); }
+  .cred-med .cred-fill { background:var(--orange); }
+  .cred-med .cred-label { color:var(--orange); }
+  .cred-low .cred-fill { background:var(--red); }
+  .cred-low .cred-label { color:var(--red); }
+
+  /* Consensus view */
+  .consensus-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; margin-bottom:16px; overflow:hidden; }
+  .consensus-header { padding:16px 20px; border-bottom:1px solid var(--card-border); }
+  .consensus-header h3 { font-size:14px; font-weight:700; margin-bottom:4px; }
+  .consensus-result { display:flex; align-items:center; gap:16px; padding:12px 20px; background:rgba(16,185,129,0.04); border-bottom:1px solid var(--card-border); }
+  .consensus-value { font-size:24px; font-weight:800; color:var(--green); }
+  .consensus-range { font-size:12px; color:var(--text-dim); }
+  .consensus-source { padding:10px 20px; border-bottom:1px solid rgba(255,255,255,0.03); display:flex; align-items:center; gap:12px; font-size:12px; }
+  .consensus-source:last-child { border-bottom:none; }
+  .consensus-source .cs-val { font-weight:700; color:var(--accent); min-width:60px; }
+  .consensus-source .cs-author { flex:1; color:var(--text-dim); }
+  .consensus-source .cs-weight { min-width:40px; text-align:right; }
+
   /* Publish queue */
   .publish-queue { background:linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.08)); border:2px solid rgba(16,185,129,0.3); border-radius:12px; padding:24px; margin-bottom:20px; }
   .publish-queue h2 { font-size:18px; margin-bottom:4px; color:var(--green); }
@@ -232,6 +257,7 @@
     <button class="tab active" onclick="switchTab('search')">Search & Browse</button>
     <button class="tab" onclick="switchTab('submit')">Add Data Point</button>
     <button class="tab" onclick="switchTab('review')">Weekly Review</button>
+    <button class="tab" onclick="switchTab('consensus')">Consensus</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
   </div>
 
@@ -313,6 +339,14 @@
               <option value="accepted">Accepted (live)</option>
             </select>
           </div>
+          <div class="form-group">
+            <label>Metric Key (for consensus grouping)</label>
+            <input type="text" id="f-metricKey" placeholder="e.g. anthropic-revenue-2025">
+            </div>
+          <div class="form-group">
+            <label>Credibility Override (0-1, blank = auto)</label>
+            <input type="number" id="f-weightOverride" step="0.01" min="0" max="1" placeholder="Auto-calculated">
+          </div>
           <div class="form-group full">
             <label>Used On (pages, comma-separated)</label>
             <input type="text" id="f-usedOn" placeholder="sankey, dashboard, calculator">
@@ -339,6 +373,14 @@
     <div id="reviewContent"></div>
   </div>
 
+  <!-- CONSENSUS VIEW -->
+  <div id="view-consensus" class="view-section" style="display:none;">
+    <div style="margin-bottom:16px;">
+      <p style="font-size:13px; color:var(--text-dim); line-height:1.6;">When multiple sources report different numbers for the same metric, the <strong style="color:var(--text);">weighted consensus</strong> shows the best estimate based on source credibility. Assign a <strong style="color:var(--cyan);">metric key</strong> to data points to group them (e.g. <code style="color:var(--cyan);">anthropic-revenue-2025</code>).</p>
+    </div>
+    <div id="consensusContent"></div>
+  </div>
+
   <!-- AUDIT VIEW -->
   <div id="view-audit" class="view-section" style="display:none;">
     <div id="auditContent"></div>
@@ -353,7 +395,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','submit','review','audit'];
+const TABS = ['search','submit','review','consensus','audit'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -363,6 +405,93 @@ let vaultData = {
 
 let activeFilters = { confidence: null, sourceType: null, page: null, tag: null };
 let reviewDecisions = {}; // dpId → 'accept' | 'reject' | 'defer'
+
+// ============================================================
+// SOURCE CREDIBILITY SCORING
+// ============================================================
+const SOURCE_WEIGHTS = {
+  'sec-filing':          0.95,  // IPO prospectus, 10-K, 10-Q
+  'sworn-affidavit':     0.95,  // Court filings under oath
+  'earnings-aggregation':0.85,  // Earnings calls, investor presentations
+  'official':            0.75,  // Company press releases (not under oath)
+  'leaked-internal':     0.80,  // Verified internal documents
+  'platform-data':       0.80,  // Direct platform stats (OpenRouter, etc.)
+  'reporting':           0.70,  // Tier 1 journalism (The Information, Bloomberg)
+  'calculation':         0.55,  // Our derived calculations
+  'estimate':            0.45,  // Analyst estimates
+  'observation':         0.45,  // General observations
+  'scraper':             0.30,  // Auto-scraped, unverified
+};
+
+const CONFIDENCE_MODIFIERS = {
+  'verified':    1.0,
+  'estimated':   0.8,
+  'speculative': 0.5,
+  'unverified':  0.3,
+};
+
+function getEffectiveWeight(dp) {
+  // User override takes precedence
+  if (dp.sourceWeightOverride !== undefined && dp.sourceWeightOverride !== null) {
+    return dp.sourceWeightOverride;
+  }
+  const base = SOURCE_WEIGHTS[dp.sourceType] || 0.5;
+  const mod = CONFIDENCE_MODIFIERS[dp.confidence] || 0.5;
+  return Math.round(base * mod * 100) / 100;
+}
+
+function getCredClass(weight) {
+  if (weight >= 0.65) return 'cred-high';
+  if (weight >= 0.35) return 'cred-med';
+  return 'cred-low';
+}
+
+function renderCredBar(dp) {
+  const w = getEffectiveWeight(dp);
+  const pct = Math.round(w * 100);
+  const cls = getCredClass(w);
+  return `<span class="cred-bar ${cls}" title="Source credibility: ${pct}%"><span class="cred-track"><span class="cred-fill" style="width:${pct}%"></span></span><span class="cred-label">${pct}%</span></span>`;
+}
+
+// ============================================================
+// CONSENSUS CALCULATION
+// ============================================================
+function getMetricGroups() {
+  // Group accepted data points by metricKey
+  const groups = {};
+  vaultData.dataPoints.forEach(dp => {
+    if (!dp.metricKey || dp.status === 'rejected' || dp.status === 'superseded') return;
+    if (dp.value === null || dp.value === undefined) return;
+    if (!groups[dp.metricKey]) groups[dp.metricKey] = [];
+    groups[dp.metricKey].push(dp);
+  });
+  // Only return groups with 2+ sources
+  const result = {};
+  Object.entries(groups).forEach(([key, dps]) => {
+    if (dps.length >= 2) result[key] = dps;
+  });
+  return result;
+}
+
+function calcConsensus(dataPoints) {
+  let weightedSum = 0;
+  let totalWeight = 0;
+  let min = Infinity, max = -Infinity;
+  dataPoints.forEach(dp => {
+    const w = getEffectiveWeight(dp);
+    weightedSum += dp.value * w;
+    totalWeight += w;
+    if (dp.value < min) min = dp.value;
+    if (dp.value > max) max = dp.value;
+  });
+  return {
+    weightedAvg: totalWeight > 0 ? Math.round(weightedSum / totalWeight * 100) / 100 : null,
+    min, max,
+    spread: max - min,
+    sources: dataPoints.length,
+    totalWeight
+  };
+}
 
 // ============================================================
 // INIT
@@ -496,6 +625,7 @@ function renderAll() {
   renderList();
   renderAudit();
   renderReview();
+  renderConsensus();
   populateReplacesDropdown();
 }
 
@@ -564,9 +694,11 @@ function renderList() {
       </div>
       <div class="dp-meta">
         ${dp.status === 'pending' ? '<span class="status-badge status-pending">pending</span>' : ''}
+        ${renderCredBar(dp)}
         <span class="dp-meta-item"><span class="badge badge-${dp.confidence}">${dp.confidence}</span></span>
         <span class="dp-meta-item"><span class="src-badge src-${dp.sourceType}">${(dp.sourceType||'').replace(/-/g,' ')}</span></span>
         <span class="dp-meta-item" style="color:var(--text-dim)">${dp.sourceAuthor || '—'}</span>
+        ${dp.metricKey ? `<span class="dp-tag" style="background:rgba(6,182,212,0.15);color:var(--cyan);">${dp.metricKey}</span>` : ''}
         ${(dp.usedOn||[]).map(p => `<span class="page-badge">${p}</span>`).join('')}
       </div>
       <div class="dp-tags">${(dp.tags||[]).map(t => `<span class="dp-tag">${t}</span>`).join('')}</div>
@@ -744,6 +876,7 @@ function renderReviewItem(dp) {
         <div class="review-item-value">${dp.value !== null && dp.value !== undefined ? dp.value + ' ' + (dp.unit||'') : dp.unit || '—'}</div>
       </div>
       <div class="review-item-meta">
+        ${renderCredBar(dp)}
         <span class="badge badge-${dp.confidence}">${dp.confidence}</span>
         <span class="src-badge src-${dp.sourceType}">${(dp.sourceType||'').replace(/-/g,' ')}</span>
         <span>${dp.sourceAuthor || '—'}</span>
@@ -1186,6 +1319,59 @@ function renderAudit() {
 }
 
 // ============================================================
+// CONSENSUS VIEW
+// ============================================================
+function renderConsensus() {
+  const container = document.getElementById('consensusContent');
+  const groups = getMetricGroups();
+  const keys = Object.keys(groups).sort();
+
+  if (keys.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">&#x2696;</div>
+        <p>No metrics with multiple sources yet</p>
+        <p class="hint">Add a <strong>metric key</strong> (e.g. "anthropic-revenue-2025") to data points that measure the same thing. When 2+ sources share a key, the weighted consensus appears here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = keys.map(key => {
+    const dps = groups[key];
+    const consensus = calcConsensus(dps);
+    const unit = dps[0].unit || '';
+
+    return `
+      <div class="consensus-card">
+        <div class="consensus-header">
+          <h3 style="color:var(--cyan)">${key}</h3>
+          <div style="font-size:12px; color:var(--text-dim);">${dps.length} sources &middot; spread: ${consensus.spread.toFixed(2)} ${unit}</div>
+        </div>
+        <div class="consensus-result">
+          <div>
+            <div style="font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Weighted Consensus</div>
+            <div class="consensus-value">${consensus.weightedAvg} ${unit}</div>
+          </div>
+          <div class="consensus-range">
+            <div>Low: ${consensus.min} ${unit}</div>
+            <div>High: ${consensus.max} ${unit}</div>
+          </div>
+        </div>
+        ${dps.sort((a,b) => getEffectiveWeight(b) - getEffectiveWeight(a)).map(dp => `
+          <div class="consensus-source">
+            ${renderCredBar(dp)}
+            <span class="cs-val">${dp.value} ${dp.unit||''}</span>
+            <span class="cs-author">${dp.sourceAuthor || dp.sourceType} ${dp.status === 'pending' ? '<span class="status-badge status-pending" style="margin-left:4px;">pending</span>' : ''}</span>
+            <span style="font-size:10px; color:var(--text-dim);">${dp.dateOfClaim || '—'}</span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================================
 // SUBMIT / EDIT
 // ============================================================
 let editingId = null;
@@ -1219,7 +1405,9 @@ function submitDP(e) {
     tags: document.getElementById('f-tags').value.split(',').map(s=>s.trim()).filter(Boolean),
     notes: document.getElementById('f-notes').value.trim() || '',
     status: document.getElementById('f-status').value,
-    replaces: document.getElementById('f-replaces').value || null
+    replaces: document.getElementById('f-replaces').value || null,
+    metricKey: document.getElementById('f-metricKey').value.trim() || null,
+    sourceWeightOverride: document.getElementById('f-weightOverride').value ? parseFloat(document.getElementById('f-weightOverride').value) : null
   };
 
   if (editingId) {
@@ -1259,6 +1447,8 @@ function editDP(id) {
   document.getElementById('f-notes').value = dp.notes || '';
   document.getElementById('f-status').value = dp.status || 'pending';
   document.getElementById('f-replaces').value = dp.replaces || '';
+  document.getElementById('f-metricKey').value = dp.metricKey || '';
+  document.getElementById('f-weightOverride').value = dp.sourceWeightOverride ?? '';
 
   document.getElementById('formTitle').textContent = 'Edit Data Point';
   document.getElementById('formSubmitBtn').textContent = 'Update Data Point';
@@ -1276,6 +1466,8 @@ function deleteDP(id) {
 function clearForm() {
   document.getElementById('dpForm').reset();
   document.getElementById('f-status').value = 'pending';
+  document.getElementById('f-metricKey').value = '';
+  document.getElementById('f-weightOverride').value = '';
   document.getElementById('formTitle').textContent = 'Add New Data Point';
   document.getElementById('formSubmitBtn').textContent = 'Save Data Point';
   editingId = null;
@@ -1294,6 +1486,7 @@ function switchTab(name) {
   });
   if (name === 'audit') renderAudit();
   if (name === 'review') renderReview();
+  if (name === 'consensus') renderConsensus();
   if (name === 'submit') populateReplacesDropdown();
 }
 

@@ -33,7 +33,8 @@
       "tags": ["revenue", "anthropic", "actual-collected", "2025", "sacra", "email-import"],
       "notes": "Sacra confirms our existing $4.5B figure for Anthropic 2025 revenue. Cross-referenced with The Information reporting. Validates current Sankey number.",
       "status": "pending",
-      "replaces": null
+      "replaces": null,
+      "metricKey": "anthropic-revenue-2025"
     },
     {
       "id": "email-20260328-c3z",
@@ -84,7 +85,8 @@
       "tags": ["losses", "anthropic", "cash-burn", "2025", "sacra", "email-import"],
       "notes": "Anthropic burned ~$3B in 2025 (down from $5.6B prior year). Our Sankey had $5.2B operating loss. $3B cash burn is lower — may reflect different accounting (cash vs operating loss). $80B cloud infra costs projected through 2029.",
       "status": "pending",
-      "replaces": "dp-006"
+      "replaces": "dp-006",
+      "metricKey": "anthropic-loss-2025"
     },
     {
       "id": "email-20260328-f6u",

@@ -18,7 +18,8 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "Sworn court affidavit — highest confidence. This is cumulative collected revenue, not ARR. Used to calibrate Anthropic's 2025 collected revenue estimate.",
-      "tags": ["revenue", "anthropic", "actual-collected", "court-filing", "2025"]
+      "tags": ["revenue", "anthropic", "actual-collected", "court-filing", "2025"],
+      "metricKey": "anthropic-revenue-2025"
     },
     {
       "id": "dp-002",
@@ -33,7 +34,8 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "The Information reporting. Cross-checked against sworn affidavit: if cumulative ever is $5B, then 2025 collected could be $3.5-4.5B depending on ramp. We used $4.5B as the Sankey provider inflow from customers.",
-      "tags": ["revenue", "anthropic", "actual-collected", "the-information", "2025"]
+      "tags": ["revenue", "anthropic", "actual-collected", "the-information", "2025"],
+      "metricKey": "anthropic-revenue-2025"
     },
     {
       "id": "dp-003",
