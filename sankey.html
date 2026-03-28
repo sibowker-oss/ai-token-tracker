@@ -119,8 +119,8 @@ canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 ctx.scale(2, 2);
 
 // Column positions
-const pad = 80;
-const COL = [pad, pad + (W - 2*pad) * 0.25, pad + (W - 2*pad) * 0.5, pad + (W - 2*pad) * 0.75, W - pad];
+const nw = 80; // node width
+const COL = [0, (W - nw) * 0.25, (W - nw) * 0.5, (W - nw) * 0.75, W - nw];
 
 // 2025 ACTUAL REVENUE (not exit ARR)
 // $19B customer revenue + $9B VC subsidy = $28B total system
