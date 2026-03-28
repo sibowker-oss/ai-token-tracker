@@ -38,6 +38,8 @@
   .event-card h3 { font-size:14px; margin-bottom:8px; color:var(--accent); }
   .event-card p { font-size:12px; color:var(--text-dim); line-height:1.6; }
 
+  .data-timestamp { font-size:11px; color:var(--text-dim); text-align:right; margin-bottom:12px; opacity:0.7; }
+
   @media(max-width:768px) {
     nav { padding:8px 12px !important; gap:6px !important; }
     nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
@@ -85,13 +87,14 @@
 <div class="container">
   <h1>AI Market Time Machine</h1>
   <div class="sub">Drag the slider to watch the AI market evolve quarter by quarter. Hit Play for the full animation.</div>
+  <div class="data-timestamp" id="data-timestamp"></div>
 
   <div class="slider-area">
     <div class="quarter-label" id="q-label">Q1 2024</div>
     <div class="quarter-sub" id="q-sub"></div>
     <input type="range" id="slider" min="0" max="8" value="0" step="1">
     <div class="tick-labels" id="tick-labels"></div>
-    <button class="play-btn" id="play-btn" onclick="playAnimation()">▶ Play Animation</button>
+    <button class="play-btn" id="play-btn" onclick="playAnimation()">&#9654; Play Animation</button>
   </div>
 
   <div class="hero-grid">
@@ -124,91 +127,65 @@
 Chart.defaults.color = '#94a3b8';
 Chart.defaults.borderColor = '#1e293b';
 
-const QUARTERS = [
-  { q:'Q1 2024', date:'Jan-Mar 2024' },
-  { q:'Q2 2024', date:'Apr-Jun 2024' },
-  { q:'Q3 2024', date:'Jul-Sep 2024' },
-  { q:'Q4 2024', date:'Oct-Dec 2024' },
-  { q:'Q1 2025', date:'Jan-Mar 2025' },
-  { q:'Q2 2025', date:'Apr-Jun 2025' },
-  { q:'Q3 2025', date:'Jul-Sep 2025' },
-  { q:'Q4 2025', date:'Oct-Dec 2025' },
-  { q:'Q1 2026', date:'Jan-Mar 2026' },
-];
-
-// Provider data per quarter [OpenAI, Anthropic, Google, DeepSeek, Mistral, xAI, Open Models, Others]
-const PROV_NAMES = ['OpenAI','Anthropic','Google','DeepSeek','Mistral','xAI','Open Models','Others'];
-const PROV_COLORS = ['#10a37f','#d97706','#4285f4','#a78bfa','#f97316','#e2e8f0','#8b5cf6','#475569'];
-
-const REV_DATA = [
-  [3.4, 0.2, 0.5, 0, 0.05, 0, 0.2, 0.3],    // Q1'24
-  [4.5, 0.5, 0.8, 0, 0.1, 0, 0.3, 0.4],      // Q2'24
-  [5.5, 1.0, 1.2, 0, 0.15, 0.1, 0.5, 0.5],   // Q3'24
-  [7.0, 2.0, 1.8, 0.05, 0.2, 0.2, 0.8, 0.6], // Q4'24
-  [9.0, 4.0, 2.2, 0.1, 0.3, 0.3, 1.2, 0.8],  // Q1'25
-  [11.0, 6.5, 2.8, 0.15, 0.35, 0.4, 1.5, 1.0],// Q2'25
-  [13.0, 9.0, 3.2, 0.2, 0.38, 0.45, 1.8, 1.4],// Q3'25
-  [15.0, 11.5, 3.8, 0.25, 0.4, 0.48, 2.2, 1.7],// Q4'25
-  [16.8, 14.0, 4.2, 0.3, 0.4, 0.5, 2.5, 2.0], // Q1'26
-];
-
-const TOKEN_DATA = [
-  [35, 4, 12, 0, 1, 0, 8, 4],        // Q1'24 — Llama 2 era, early OSS
-  [50, 10, 20, 0, 2, 1, 12, 6],      // Q2'24 — Llama 3 launches
-  [70, 20, 30, 2, 3, 2, 20, 8],      // Q3'24 — Llama 3.1, OSS takes off
-  [95, 35, 45, 5, 5, 3, 30, 10],     // Q4'24 — Qwen, Mistral growing
-  [120, 50, 55, 12, 7, 5, 45, 12],   // Q1'25 — DeepSeek R1 shock, OSS surges
-  [145, 70, 65, 18, 9, 7, 60, 14],   // Q2'25 — vllm adoption explodes
-  [165, 85, 75, 25, 11, 8, 75, 16],  // Q3'25
-  [185, 100, 82, 32, 13, 9, 88, 18], // Q4'25
-  [200, 110, 90, 40, 15, 10, 100, 20],// Q1'26 — matches recalibrated dashboard
-];
-
-// Blended price per 1M tokens (70% input + 30% output) for most-used model per provider each quarter
-// This reflects what customers actually pay on average, not list price for the newest model
-const PRICE_DATA = [
-  { openai: 27.0, anthropic: 22.5, google: 6.8, open: 1.5 },  // Q1'24: Llama 2 70B on Together ~$0.9/$1.8
-  { openai: 5.8, anthropic: 6.6, google: 2.6, open: 1.0 },   // Q2'24: Llama 3 70B cheaper, competition
-  { openai: 2.5, anthropic: 6.6, google: 0.9, open: 0.7 },   // Q3'24: Llama 3.1, vllm efficiency gains
-  { openai: 2.0, anthropic: 4.8, google: 0.8, open: 0.5 },   // Q4'24: scale + competition drives down
-  { openai: 1.8, anthropic: 4.5, google: 0.7, open: 0.3 },   // Q1'25: DeepSeek V3 at $0.27in/$1.10out
-  { openai: 1.5, anthropic: 4.2, google: 0.5, open: 0.25 },  // Q2'25: race to bottom on inference
-  { openai: 1.3, anthropic: 6.6, google: 0.5, open: 0.20 },  // Q3'25: Llama 4, more efficient serving
-  { openai: 1.2, anthropic: 5.5, google: 0.5, open: 0.18 },  // Q4'25
-  { openai: 1.5, anthropic: 5.8, google: 0.6, open: 0.15 },  // Q1'26: open models approaching free
-];
-
-const EVENTS = [
-  { title:'The GPT-4 Era', text:'OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche.' },
-  { title:'GPT-4o + Claude 3.5 Sonnet + Llama 3', text:'Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast.' },
-  { title:'The Mini Revolution', text:'GPT-4o mini at $0.60/M output — 99.5% cheaper than GPT-4. But Llama 3.1 launches too, and it\'s free. vllm adoption surges as self-hosting becomes viable at scale.' },
-  { title:'Open Source Inflection', text:'Llama 3.1, Qwen 2, Mistral grow fast. Open models now ~15% of global tokens. Enterprises start self-hosting for data sovereignty and cost. The "invisible token" economy emerges.' },
-  { title:'DeepSeek Shock', text:'DeepSeek R1 matches GPT-4o at 1/10th the price — and it\'s open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?' },
-  { title:'The Enterprise AI Mirage', text:'M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked ≠ used. Meanwhile open models quietly grow — banks, governments, sovereign clouds all deploying Llama/Qwen.' },
-  { title:'Anthropic Takes Enterprise, OSS Takes Volume', text:'Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story — 80T tokens/day with almost no model-layer revenue.' },
-  { title:'The AI Native Explosion', text:'Cursor $1B ARR, Harvey $190M, Cognition $155M. Many AI natives use a mix of frontier AND open models, routing by cost/quality. litellm hits 97M downloads/month.' },
-  { title:'Today: Three Markets', text:'Frontier APIs (OpenAI/Anthropic) win on quality. Open models (Llama/DeepSeek) win on cost and sovereignty. Traditional SaaS AI (Salesforce/Microsoft) wins on... marketing. The revenue gap between tokens served and tokens paid for keeps widening.' },
-];
-
-// Build tick labels
-const tickContainer = document.getElementById('tick-labels');
-QUARTERS.forEach(q => { tickContainer.innerHTML += `<span>${q.q}</span>`; });
-
-// Charts
+// Module-level variables populated from site-data.json
+let QUARTERS, PROV_NAMES, PROV_COLORS, REV_DATA, TOKEN_DATA, PRICE_DATA, EVENTS;
 let chartRev, chartTokens, chartPrice;
 const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+
+async function loadTimelineData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load site-data.json');
+    const all = await resp.json();
+    const t = all.timeline;
+
+    // Assign constants from JSON — exact same shapes as the old hardcoded data
+    QUARTERS = t.quarters;
+    PROV_NAMES = t.providerNames;
+    PROV_COLORS = t.providerColors;
+    REV_DATA = t.revData;
+    TOKEN_DATA = t.tokenData;
+    PRICE_DATA = t.priceData;
+    EVENTS = t.events;
+
+    // Show data timestamp
+    if (all.meta && all.meta.generatedAt) {
+      const ts = new Date(all.meta.generatedAt);
+      document.getElementById('data-timestamp').textContent =
+        'Data updated: ' + ts.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) +
+        ' ' + ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+    }
+  } catch(e) {
+    console.warn('site-data.json not found, timeline cannot load:', e.message);
+    document.querySelector('.container').innerHTML +=
+      '<div style="color:#ef4444;text-align:center;padding:40px;">Failed to load timeline data from site-data.json</div>';
+    return;
+  }
+
+  // Set slider max based on loaded data
+  const slider = document.getElementById('slider');
+  slider.max = QUARTERS.length - 1;
+
+  // Build tick labels
+  const tickContainer = document.getElementById('tick-labels');
+  QUARTERS.forEach(q => { tickContainer.innerHTML += '<span>' + q.q + '</span>'; });
+
+  // Init charts and show first quarter
+  initCharts();
+  updateToQuarter(0);
+}
 
 function initCharts() {
   chartRev = new Chart(document.getElementById('chart-rev'), {
     type: 'bar',
     data: { labels: PROV_NAMES, datasets: [{ data: REV_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y.toFixed(1)}B` } } }, scales: { y: { max: 18, grid: darkGrid, title: { display: true, text: '$B' } }, x: { grid: { display: false } } } }
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } }, scales: { y: { max: 18, grid: darkGrid, title: { display: true, text: '$B' } }, x: { grid: { display: false } } } }
   });
 
   chartTokens = new Chart(document.getElementById('chart-tokens'), {
     type: 'bar',
     data: { labels: PROV_NAMES, datasets: [{ data: TOKEN_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.parsed.y}T/day` } } }, scales: { y: { max: 300, grid: darkGrid, title: { display: true, text: 'T/day' } }, x: { grid: { display: false } } } }
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + 'T/day' } } }, scales: { y: { max: 300, grid: darkGrid, title: { display: true, text: 'T/day' } }, x: { grid: { display: false } } } }
   });
 
   chartPrice = new Chart(document.getElementById('chart-price'), {
@@ -224,7 +201,7 @@ function initCharts() {
     },
     options: {
       responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
-      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.y}/M tokens` } } },
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + '/M tokens' } } },
       scales: { y: { type: 'logarithmic', grid: darkGrid, title: { display: true, text: '$/1M output tokens (log)' } }, x: { grid: { display: false } } }
     }
   });
@@ -241,11 +218,11 @@ function updateToQuarter(idx) {
   const totalTok = toks.reduce((a, b) => a + b, 0);
   const topIdx = revs.indexOf(Math.max(...revs));
 
-  document.getElementById('h-tokens').textContent = `~${totalTok}T`;
-  document.getElementById('h-rev').textContent = `$${totalRev.toFixed(1)}B`;
+  document.getElementById('h-tokens').textContent = '~' + totalTok + 'T';
+  document.getElementById('h-rev').textContent = '$' + totalRev.toFixed(1) + 'B';
   document.getElementById('h-top').textContent = PROV_NAMES[topIdx];
   const price = PRICE_DATA[idx];
-  document.getElementById('h-price').textContent = `$${price.open.toFixed(2)} open / $${Math.min(price.openai, price.anthropic, price.google).toFixed(1)} frontier`;
+  document.getElementById('h-price').textContent = '$' + price.open.toFixed(2) + ' open / $' + Math.min(price.openai, price.anthropic, price.google).toFixed(1) + ' frontier';
 
   chartRev.data.datasets[0].data = revs;
   chartRev.update('active');
@@ -256,7 +233,7 @@ function updateToQuarter(idx) {
   chartPrice.options.plugins.annotation = undefined; // simplified — just update
 
   const ev = EVENTS[idx];
-  document.getElementById('event-card').innerHTML = `<h3>${ev.title}</h3><p>${ev.text}</p>`;
+  document.getElementById('event-card').innerHTML = '<h3>' + ev.title + '</h3><p>' + ev.text + '</p>';
 }
 
 // Slider
@@ -267,11 +244,11 @@ document.getElementById('slider').addEventListener('input', function() {
 // Play animation
 let playing = false;
 function playAnimation() {
-  if (playing) return;
+  if (playing || !QUARTERS) return;
   playing = true;
   const btn = document.getElementById('play-btn');
   const slider = document.getElementById('slider');
-  btn.textContent = '⏸ Playing...';
+  btn.textContent = '\u23F8 Playing...';
   slider.value = 0;
   updateToQuarter(0);
 
@@ -281,7 +258,7 @@ function playAnimation() {
     if (i >= QUARTERS.length) {
       clearInterval(interval);
       playing = false;
-      btn.textContent = '▶ Play Again';
+      btn.textContent = '\u25B6 Play Again';
       return;
     }
     slider.value = i;
@@ -289,9 +266,8 @@ function playAnimation() {
   }, 1500);
 }
 
-// Init
-initCharts();
-updateToQuarter(0);
+// Load data and initialize
+loadTimelineData();
 </script>
 </body>
 </html>

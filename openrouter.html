@@ -488,54 +488,50 @@ function sortTable(key) {
 
 function filterTable() { renderTable(); }
 
-// === Gateway Insights ===
-const PORTKEY_DATA = {
-  totalTokens: 1.9e12, totalRequests: 151.8e6, totalSpend: 1300000, weeklyGrowth: '~35%',
-  updated: '2026-03-27',
-  models: [
-    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:284.8e9, spend:333700, share:15.0, type:'frontier' },
-    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:262.1e9, spend:198400, share:13.8, type:'frontier' },
-    { name:'Gemini 2.5 Flash', provider:'Google', tokens:241.5e9, spend:72200, share:12.7, type:'frontier' },
-    { name:'GPT-5-mini', provider:'OpenAI', tokens:198.3e9, spend:89400, share:10.4, type:'frontier' },
-    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:176.2e9, spend:42100, share:9.3, type:'frontier' },
-    { name:'GPT-4o', provider:'OpenAI', tokens:152.7e9, spend:168500, share:8.0, type:'frontier' },
-    { name:'DeepSeek R1', provider:'DeepSeek', tokens:141.9e9, spend:38200, share:7.5, type:'open' },
-    { name:'Gemini 2.5 Pro', provider:'Google', tokens:118.4e9, spend:112800, share:6.2, type:'frontier' },
-    { name:'Llama 3.1 70B', provider:'Meta', tokens:97.6e9, spend:28600, share:5.1, type:'open' },
-    { name:'GPT-5', provider:'OpenAI', tokens:86.2e9, spend:142300, share:4.5, type:'frontier' },
-    { name:'Qwen 2.5 72B', provider:'Qwen', tokens:52.1e9, spend:15600, share:2.7, type:'open' },
-    { name:'Mistral Large', provider:'Mistral', tokens:41.8e9, spend:25100, share:2.2, type:'frontier' },
-    { name:'Llama 3.1 8B', provider:'Meta', tokens:38.4e9, spend:1900, share:2.0, type:'open' },
-    { name:'DeepSeek V3', provider:'DeepSeek', tokens:35.7e9, spend:9600, share:1.9, type:'open' },
-    { name:'Gemma 2 9B', provider:'Google', tokens:21.3e9, spend:1100, share:1.1, type:'open' },
-  ]
-};
-
-const OPENROUTER_DATA = {
-  totalTokens: 280e9, totalRequests: 25e6, totalSpend: 224000,
-  models: [
-    { name:'Claude Sonnet 4.6', provider:'Anthropic', tokens:47.6e9, spend:42800, share:17.0, type:'frontier' },
-    { name:'Gemini 2.5 Flash', provider:'Google', tokens:39.2e9, spend:11800, share:14.0, type:'frontier' },
-    { name:'DeepSeek R1', provider:'DeepSeek', tokens:33.6e9, spend:9100, share:12.0, type:'open' },
-    { name:'GPT-4o-mini', provider:'OpenAI', tokens:28.0e9, spend:4200, share:10.0, type:'frontier' },
-    { name:'Claude Haiku 3.5', provider:'Anthropic', tokens:25.2e9, spend:6000, share:9.0, type:'frontier' },
-    { name:'Llama 3.1 8B', provider:'Meta', tokens:22.4e9, spend:1100, share:8.0, type:'open' },
-    { name:'GPT-4o', provider:'OpenAI', tokens:19.6e9, spend:21600, share:7.0, type:'frontier' },
-    { name:'Mistral Large', provider:'Mistral', tokens:14.0e9, spend:8400, share:5.0, type:'frontier' },
-    { name:'Claude Opus 4.6', provider:'Anthropic', tokens:11.2e9, spend:13100, share:4.0, type:'frontier' },
-    { name:'Qwen 2.5 72B', provider:'Qwen', tokens:8.4e9, spend:2500, share:3.0, type:'open' },
-    { name:'DeepSeek V3', provider:'DeepSeek', tokens:7.0e9, spend:1900, share:2.5, type:'open' },
-    { name:'Llama 3.1 70B', provider:'Meta', tokens:5.6e9, spend:1700, share:2.0, type:'open' },
-    { name:'Gemma 2 9B', provider:'Google', tokens:4.2e9, spend:210, share:1.5, type:'open' },
-    { name:'Phi-3 Mini', provider:'Microsoft', tokens:3.1e9, spend:160, share:1.1, type:'open' },
-  ]
-};
-
-const GW_PROVIDER_COLORS = { 'Anthropic':'#d97706', 'OpenAI':'#10a37f', 'Google':'#4285f4', 'DeepSeek':'#a78bfa', 'Meta':'#60a5fa', 'Mistral':'#f97316', 'Qwen':'#06b6d4', 'Microsoft':'#00a4ef' };
+// === Gateway Insights (loaded from site-data.json) ===
+let PORTKEY_DATA = null;
+let OPENROUTER_DATA = null;
+let GW_PROVIDER_COLORS = {};
 
 let gatewayChart = null;
 let gatewayView = 'both';
 let modelTypeFilter = 'all';
+let gatewayLoaded = false;
+
+async function loadGatewayData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load site-data.json');
+    const all = await resp.json();
+    const g = all.gateway;
+    if (!g) throw new Error('No gateway section in site-data.json');
+
+    GW_PROVIDER_COLORS = g.providerColors || {};
+
+    PORTKEY_DATA = {
+      totalTokens: g.portkey.totalTokens,
+      totalRequests: g.portkey.totalRequests,
+      totalSpend: g.portkey.totalSpend,
+      weeklyGrowth: g.portkey.weeklyGrowth,
+      updated: g.updated,
+      models: g.portkey.models
+    };
+
+    OPENROUTER_DATA = {
+      totalTokens: g.openrouter.totalTokens,
+      totalRequests: g.openrouter.totalRequests,
+      totalSpend: g.openrouter.totalSpend,
+      models: g.openrouter.models
+    };
+
+    gatewayLoaded = true;
+    console.log('Gateway data loaded from site-data.json (updated: ' + g.updated + ')');
+  } catch(e) {
+    console.warn('Gateway data: site-data.json not found or missing gateway section, gateway charts disabled.', e);
+    return;
+  }
+  renderGateway();
+}
 
 function setGatewayView(view) {
   gatewayView = view;
@@ -566,6 +562,7 @@ function fmtB(n) { return n >= 1e12 ? (n/1e12).toFixed(1)+'T' : n >= 1e9 ? (n/1e
 function fmtUSD(n) { return n >= 1e6 ? '$'+(n/1e6).toFixed(1)+'M' : '$'+(n/1e3).toFixed(0)+'K'; }
 
 function renderGateway() {
+  if (!gatewayLoaded || !PORTKEY_DATA || !OPENROUTER_DATA) return;
   const p = PORTKEY_DATA, o = OPENROUTER_DATA;
   const showP = gatewayView !== 'openrouter', showO = gatewayView !== 'portkey';
 
@@ -672,10 +669,10 @@ function renderGateway() {
   });
 }
 
-// Init gateway
-renderGateway();
+// Init gateway from site-data.json
+loadGatewayData();
 
-// Init OpenRouter live data
+// Init OpenRouter live data (separate API fetch — untouched)
 fetchData();
 </script>
 </body>
