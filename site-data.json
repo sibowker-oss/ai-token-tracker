@@ -262,5 +262,163 @@
       "xAI":           { "Consumer Subs": 0.70, "API / Developer": 0.15, "Enterprise Platform": 0.10, "Cloud Channel": 0.05 },
       "Others":        { "Consumer Subs": 0.30, "API / Developer": 0.30, "Enterprise Platform": 0.20, "Cloud Channel": 0.20 }
     }
+  },
+  "calculator": {
+    "updatedAt": "2026-03-28",
+    "productGroups": [
+      {
+        "label": "Traditional SaaS AI (High Shelfware Risk)",
+        "products": [
+          { "key": "m365cop",    "name": "Microsoft 365 Copilot",  "cost": 30,   "activeRate": 0.358, "tokenConv": 0.15, "category": "trad",     "source": "Gartner: 35.8% active usage; only 3.3% of M365 base",                                          "perConvo": false },
+          { "key": "sfagent",    "name": "Salesforce Agentforce",   "cost": 2,    "activeRate": 0.12,  "tokenConv": 0.10, "category": "trad",     "source": "~12% of customers have deals; community reports minimal usage",                                "perConvo": true  },
+          { "key": "nowassist",  "name": "ServiceNow Now Assist",   "cost": 15,   "activeRate": 0.20,  "tokenConv": 0.15, "category": "trad",     "source": "<20% of licensed Fulfillers actively use AI features",                                          "perConvo": false },
+          { "key": "sapjoule",   "name": "SAP Joule",               "cost": 10,   "activeRate": 0.10,  "tokenConv": 0.08, "category": "trad",     "source": "\"Ninefold growth\" from undisclosed base. No separate AI SKU.",                                "perConvo": false },
+          { "key": "wdayillum",  "name": "Workday Illuminate",      "cost": 8,    "activeRate": 0.08,  "tokenConv": 0.05, "category": "trad",     "source": "Early stage. MIT: only 5% see real AI ROI.",                                                    "perConvo": false }
+        ]
+      },
+      {
+        "label": "AI Model Subscriptions (Medium Shelfware Risk)",
+        "products": [
+          { "key": "chatgptent",  "name": "ChatGPT Enterprise",          "cost": 60,  "activeRate": 0.45, "tokenConv": 0.40, "category": "modelsub", "source": "Higher activation than bundled SaaS — users chose to buy it",                               "perConvo": false },
+          { "key": "chatgptteam", "name": "ChatGPT Team",                "cost": 25,  "activeRate": 0.55, "tokenConv": 0.50, "category": "modelsub", "source": "Team leads buy it intentionally. Moderate activation.",                                      "perConvo": false },
+          { "key": "claudeent",   "name": "Claude for Enterprise",       "cost": 30,  "activeRate": 0.50, "tokenConv": 0.45, "category": "modelsub", "source": "Enterprise API-heavy. Higher activation than average.",                                      "perConvo": false },
+          { "key": "ghcopilot",   "name": "GitHub Copilot Business",     "cost": 19,  "activeRate": 0.65, "tokenConv": 0.60, "category": "modelsub", "source": "55% code acceptance rate. Devs actively use it.",                                           "perConvo": false },
+          { "key": "geminient",   "name": "Gemini for Google Workspace", "cost": 20,  "activeRate": 0.30, "tokenConv": 0.20, "category": "modelsub", "source": "Bundled into Workspace. Lower activation than standalone AI.",                               "perConvo": false }
+        ]
+      },
+      {
+        "label": "AI Native Products (Low Shelfware Risk)",
+        "products": [
+          { "key": "cursor",      "name": "Cursor Business",        "cost": 40,   "activeRate": 0.85, "tokenConv": 0.85, "category": "native", "source": "Every keystroke = API call. Power users consume $5K/mo retail.",                                  "perConvo": false },
+          { "key": "perplexity",  "name": "Perplexity Enterprise",  "cost": 40,   "activeRate": 0.75, "tokenConv": 0.90, "category": "native", "source": "Search = tokens. 780M queries/month platform-wide.",                                              "perConvo": false },
+          { "key": "intercom",    "name": "Intercom Fin",           "cost": 0.99, "activeRate": 0.90, "tokenConv": 0.95, "category": "native", "source": "$0.99/resolution. Each resolution = multiple LLM calls.",                                          "perConvo": true  },
+          { "key": "harvey",      "name": "Harvey",                 "cost": 100,  "activeRate": 0.80, "tokenConv": 0.80, "category": "native", "source": "Legal doc analysis = massive context windows. $190M ARR.",                                          "perConvo": false },
+          { "key": "replit",      "name": "Replit Teams",           "cost": 25,   "activeRate": 0.70, "tokenConv": 0.75, "category": "native", "source": "Code generation is the product. Gross margin swings with LLM costs.",                              "perConvo": false }
+        ]
+      }
+    ],
+    "alternatives": [
+      { "name": "Cursor Business seats",           "cost": 40,  "conv": 0.85 },
+      { "name": "Claude Enterprise seats",         "cost": 30,  "conv": 0.45 },
+      { "name": "Direct API spend (100% tokens)",  "cost": 1,   "conv": 1.0  },
+      { "name": "Perplexity Enterprise seats",     "cost": 40,  "conv": 0.90 },
+      { "name": "GitHub Copilot Business seats",   "cost": 19,  "conv": 0.60 }
+    ]
+  },
+  "timeline": {
+    "quarters": [
+      { "q": "Q1 2024", "date": "Jan-Mar 2024" },
+      { "q": "Q2 2024", "date": "Apr-Jun 2024" },
+      { "q": "Q3 2024", "date": "Jul-Sep 2024" },
+      { "q": "Q4 2024", "date": "Oct-Dec 2024" },
+      { "q": "Q1 2025", "date": "Jan-Mar 2025" },
+      { "q": "Q2 2025", "date": "Apr-Jun 2025" },
+      { "q": "Q3 2025", "date": "Jul-Sep 2025" },
+      { "q": "Q4 2025", "date": "Oct-Dec 2025" },
+      { "q": "Q1 2026", "date": "Jan-Mar 2026" }
+    ],
+    "providerNames":  ["OpenAI", "Anthropic", "Google", "DeepSeek", "Mistral", "xAI", "Open Models", "Others"],
+    "providerColors": ["#10a37f", "#d97706", "#4285f4", "#a78bfa", "#f97316", "#e2e8f0", "#8b5cf6", "#475569"],
+    "revData": [
+      [3.4,  0.2,  0.5,  0,    0.05, 0,    0.2,  0.3 ],
+      [4.5,  0.5,  0.8,  0,    0.1,  0,    0.3,  0.4 ],
+      [5.5,  1.0,  1.2,  0,    0.15, 0.1,  0.5,  0.5 ],
+      [7.0,  2.0,  1.8,  0.05, 0.2,  0.2,  0.8,  0.6 ],
+      [9.0,  4.0,  2.2,  0.1,  0.3,  0.3,  1.2,  0.8 ],
+      [11.0, 6.5,  2.8,  0.15, 0.35, 0.4,  1.5,  1.0 ],
+      [13.0, 9.0,  3.2,  0.2,  0.38, 0.45, 1.8,  1.4 ],
+      [15.0, 11.5, 3.8,  0.25, 0.4,  0.48, 2.2,  1.7 ],
+      [16.8, 14.0, 4.2,  0.3,  0.4,  0.5,  2.5,  2.0 ]
+    ],
+    "tokenData": [
+      [35,  4,   12, 0,  1,  0,  8,   4 ],
+      [50,  10,  20, 0,  2,  1,  12,  6 ],
+      [70,  20,  30, 2,  3,  2,  20,  8 ],
+      [95,  35,  45, 5,  5,  3,  30,  10],
+      [120, 50,  55, 12, 7,  5,  45,  12],
+      [145, 70,  65, 18, 9,  7,  60,  14],
+      [165, 85,  75, 25, 11, 8,  75,  16],
+      [185, 100, 82, 32, 13, 9,  88,  18],
+      [200, 110, 90, 40, 15, 10, 100, 20]
+    ],
+    "priceData": [
+      { "openai": 27.0, "anthropic": 22.5, "google": 6.8,  "open": 1.50 },
+      { "openai": 5.8,  "anthropic": 6.6,  "google": 2.6,  "open": 1.00 },
+      { "openai": 2.5,  "anthropic": 6.6,  "google": 0.9,  "open": 0.70 },
+      { "openai": 2.0,  "anthropic": 4.8,  "google": 0.8,  "open": 0.50 },
+      { "openai": 1.8,  "anthropic": 4.5,  "google": 0.7,  "open": 0.30 },
+      { "openai": 1.5,  "anthropic": 4.2,  "google": 0.5,  "open": 0.25 },
+      { "openai": 1.3,  "anthropic": 6.6,  "google": 0.5,  "open": 0.20 },
+      { "openai": 1.2,  "anthropic": 5.5,  "google": 0.5,  "open": 0.18 },
+      { "openai": 1.5,  "anthropic": 5.8,  "google": 0.6,  "open": 0.15 }
+    ],
+    "events": [
+      { "title": "The GPT-4 Era",                             "text": "OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche." },
+      { "title": "GPT-4o + Claude 3.5 Sonnet + Llama 3",     "text": "Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast." },
+      { "title": "The Mini Revolution",                       "text": "GPT-4o mini at $0.60/M output — 99.5% cheaper than GPT-4. But Llama 3.1 launches too, and it's free. vllm adoption surges as self-hosting becomes viable at scale." },
+      { "title": "Open Source Inflection",                    "text": "Llama 3.1, Qwen 2, Mistral grow fast. Open models now ~15% of global tokens. Enterprises start self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges." },
+      { "title": "DeepSeek Shock",                            "text": "DeepSeek R1 matches GPT-4o at 1/10th the price — and it's open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?" },
+      { "title": "The Enterprise AI Mirage",                  "text": "M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked ≠ used. Meanwhile open models quietly grow — banks, governments, sovereign clouds all deploying Llama/Qwen." },
+      { "title": "Anthropic Takes Enterprise, OSS Takes Volume", "text": "Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story — 80T tokens/day with almost no model-layer revenue." },
+      { "title": "The AI Native Explosion",                   "text": "Cursor $1B ARR, Harvey $190M, Cognition $155M. Many AI natives use a mix of frontier AND open models, routing by cost/quality. litellm hits 97M downloads/month." },
+      { "title": "Today: Three Markets",                      "text": "Frontier APIs (OpenAI/Anthropic) win on quality. Open models (Llama/DeepSeek) win on cost and sovereignty. Traditional SaaS AI (Salesforce/Microsoft) wins on... marketing. The revenue gap between tokens served and tokens paid for keeps widening." }
+    ]
+  },
+  "gateway": {
+    "updated": "2026-03-28",
+    "providerColors": {
+      "Anthropic":  "#d97706",
+      "OpenAI":     "#10a37f",
+      "Google":     "#4285f4",
+      "DeepSeek":   "#a78bfa",
+      "Meta":       "#60a5fa",
+      "Mistral":    "#f97316",
+      "Qwen":       "#06b6d4",
+      "Microsoft":  "#00a4ef"
+    },
+    "portkey": {
+      "totalTokens":   1900000000000,
+      "totalRequests": 151800000,
+      "totalSpend":    1300000,
+      "weeklyGrowth":  "~35%",
+      "models": [
+        { "name": "Claude Opus 4.6",    "provider": "Anthropic", "tokens": 284800000000, "spend": 333700, "share": 15.0, "type": "frontier" },
+        { "name": "Claude Sonnet 4.6",  "provider": "Anthropic", "tokens": 262100000000, "spend": 198400, "share": 13.8, "type": "frontier" },
+        { "name": "Gemini 2.5 Flash",   "provider": "Google",    "tokens": 241500000000, "spend":  72200, "share": 12.7, "type": "frontier" },
+        { "name": "GPT-5-mini",         "provider": "OpenAI",    "tokens": 198300000000, "spend":  89400, "share": 10.4, "type": "frontier" },
+        { "name": "Claude Haiku 3.5",   "provider": "Anthropic", "tokens": 176200000000, "spend":  42100, "share":  9.3, "type": "frontier" },
+        { "name": "GPT-4o",             "provider": "OpenAI",    "tokens": 152700000000, "spend": 168500, "share":  8.0, "type": "frontier" },
+        { "name": "DeepSeek R1",        "provider": "DeepSeek",  "tokens": 141900000000, "spend":  38200, "share":  7.5, "type": "open"     },
+        { "name": "Gemini 2.5 Pro",     "provider": "Google",    "tokens": 118400000000, "spend": 112800, "share":  6.2, "type": "frontier" },
+        { "name": "Llama 3.1 70B",      "provider": "Meta",      "tokens":  97600000000, "spend":  28600, "share":  5.1, "type": "open"     },
+        { "name": "GPT-5",              "provider": "OpenAI",    "tokens":  86200000000, "spend": 142300, "share":  4.5, "type": "frontier" },
+        { "name": "Qwen 2.5 72B",       "provider": "Qwen",      "tokens":  52100000000, "spend":  15600, "share":  2.7, "type": "open"     },
+        { "name": "Mistral Large",      "provider": "Mistral",   "tokens":  41800000000, "spend":  25100, "share":  2.2, "type": "frontier" },
+        { "name": "Llama 3.1 8B",       "provider": "Meta",      "tokens":  38400000000, "spend":   1900, "share":  2.0, "type": "open"     },
+        { "name": "DeepSeek V3",        "provider": "DeepSeek",  "tokens":  35700000000, "spend":   9600, "share":  1.9, "type": "open"     },
+        { "name": "Gemma 2 9B",         "provider": "Google",    "tokens":  21300000000, "spend":   1100, "share":  1.1, "type": "open"     }
+      ]
+    },
+    "openrouter": {
+      "totalTokens":   280000000000,
+      "totalRequests":  25000000,
+      "totalSpend":      224000,
+      "models": [
+        { "name": "Claude Sonnet 4.6",  "provider": "Anthropic", "tokens":  47600000000, "spend": 42800, "share": 17.0, "type": "frontier" },
+        { "name": "Gemini 2.5 Flash",   "provider": "Google",    "tokens":  39200000000, "spend": 11800, "share": 14.0, "type": "frontier" },
+        { "name": "DeepSeek R1",        "provider": "DeepSeek",  "tokens":  33600000000, "spend":  9100, "share": 12.0, "type": "open"     },
+        { "name": "GPT-4o-mini",        "provider": "OpenAI",    "tokens":  28000000000, "spend":  4200, "share": 10.0, "type": "frontier" },
+        { "name": "Claude Haiku 3.5",   "provider": "Anthropic", "tokens":  25200000000, "spend":  6000, "share":  9.0, "type": "frontier" },
+        { "name": "Llama 3.1 8B",       "provider": "Meta",      "tokens":  22400000000, "spend":  1100, "share":  8.0, "type": "open"     },
+        { "name": "GPT-4o",             "provider": "OpenAI",    "tokens":  19600000000, "spend": 21600, "share":  7.0, "type": "frontier" },
+        { "name": "Mistral Large",      "provider": "Mistral",   "tokens":  14000000000, "spend":  8400, "share":  5.0, "type": "frontier" },
+        { "name": "Claude Opus 4.6",    "provider": "Anthropic", "tokens":  11200000000, "spend": 13100, "share":  4.0, "type": "frontier" },
+        { "name": "Qwen 2.5 72B",       "provider": "Qwen",      "tokens":   8400000000, "spend":  2500, "share":  3.0, "type": "open"     },
+        { "name": "DeepSeek V3",        "provider": "DeepSeek",  "tokens":   7000000000, "spend":  1900, "share":  2.5, "type": "open"     },
+        { "name": "Llama 3.1 70B",      "provider": "Meta",      "tokens":   5600000000, "spend":  1700, "share":  2.0, "type": "open"     },
+        { "name": "Gemma 2 9B",         "provider": "Google",    "tokens":   4200000000, "spend":   210, "share":  1.5, "type": "open"     },
+        { "name": "Phi-3 Mini",         "provider": "Microsoft", "tokens":   3100000000, "spend":   160, "share":  1.1, "type": "open"     }
+      ]
+    }
   }
 }
