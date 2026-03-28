@@ -92,7 +92,7 @@
         <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">Before a single engineer is paid</div>
       </div>
     </div>
-    <p style="font-size:12px; color:var(--text-dim); margin-top:16px; font-style:italic;">Even ignoring people costs, R&D, and SG&A — the core AI inference business loses money at the gross margin level. Every token served costs more than customers pay for it. The $2.3B of "margin" in the system belongs entirely to Trad SaaS vendors reselling AI features, not to the companies building the models.</p>
+    <p style="font-size:12px; color:var(--text-dim); margin-top:16px; font-style:italic;">Even ignoring people costs, R&D, and SG&A — the core AI inference business loses money at the gross margin level. Every token served costs more than customers pay for it. The $2.15B of "margin" in the system belongs entirely to Trad SaaS vendors and hyperscaler cloud fees — not to the companies building the models.</p>
 
     <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(16,185,129,0.15);">
       <h4 style="color:var(--green); font-size:14px; margin-bottom:8px;">This is unsustainable. Only three things fix it:</h4>
@@ -103,7 +103,7 @@
         </div>
         <div style="background:rgba(139,92,246,0.06); border-radius:8px; padding:14px;">
           <div style="font-size:13px; font-weight:700; color:#8b5cf6; margin-bottom:6px;">2. Shift to open models</div>
-          <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;">Open models (Llama, DeepSeek, Qwen) run at ~30% gross margin via IaaS providers vs negative for closed models. They're 5-10x cheaper per token, the fastest-growing segment (1.2B Llama downloads, 61% of OpenRouter token volume), and trail frontier by just ~3 months. A shift of <strong>~21%</strong> of workloads to open models reaches system breakeven — without any hardware cost reduction.</p>
+          <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;">Open models (Llama, DeepSeek, Qwen) via IaaS providers have a thin but positive gross margin on inference (est. 15-35%, vs negative for closed models). No IaaS provider has operating margin yet — the GM is consumed by people and ops. But they're 5-10x cheaper per token, the fastest-growing segment (1.2B Llama downloads, 61% of OpenRouter token volume), and trail frontier by just ~3 months. A shift of <strong>~20-30%</strong> of workloads to open models reaches system breakeven — without any hardware cost reduction.</p>
         </div>
         <div style="background:rgba(239,68,68,0.06); border-radius:8px; padding:14px;">
           <div style="font-size:13px; font-weight:700; color:var(--red); margin-bottom:6px;">3. Prices go up substantially</div>
@@ -152,8 +152,8 @@
     </div>
     <div class="insight">
       <h3 style="color:var(--orange);">Only SaaS Makes Money</h3>
-      <div class="stat" style="color:var(--orange);">$2.3B</div>
-      <p>The only margin in the entire system comes from Trad SaaS vendors (Microsoft, Salesforce, ServiceNow) who charge $30/seat and pay $2-5 in actual inference. Frontier providers have zero margin. They're loss-making on every token.</p>
+      <div class="stat" style="color:var(--orange);">$2.15B</div>
+      <p>The only margin in the entire system comes from Trad SaaS vendors (Microsoft, Salesforce, ServiceNow) and hyperscaler cloud margins. Frontier providers and IaaS providers have zero operating margin — IaaS has a thin positive gross margin on inference, but it's entirely consumed by people and ops costs.</p>
     </div>
   </div>
 </div>
@@ -207,8 +207,8 @@ const PROVIDERS = [
 // Where $27.6B goes — zero margins for frontier, SaaS + Cloud keep margin
 const OUTCOMES = [
   { label: 'Inference', value: 13, color: '#10b981', y: 0 },
-  { label: 'People/SG&A', value: 12.3, color: '#f59e0b', y: 0 },
-  { label: 'Margin', value: 2.3, color: '#94a3b8', y: 0 },
+  { label: 'People/SG&A', value: 12.45, color: '#f59e0b', y: 0 },
+  { label: 'Margin', value: 2.15, color: '#94a3b8', y: 0 },
 ];
 
 // Flows: [fromCol, fromIdx, toCol, toIdx, value, color]
@@ -279,9 +279,8 @@ const FLOWS = [
   [2, 1, 3, 0, 4.2, '#d9770633'],   // Anthropic → Inference COGS (43%)
   [2, 1, 3, 1, 5.5, '#d9770611'],   // Anthropic → People & SG&A (57%)
   // Inf. Platforms: 0.8 in → 0.8 out
-  [2, 2, 3, 0, 0.4, '#8b5cf633'],   // Inf. Platforms → Inference COGS (50%)
-  [2, 2, 3, 1, 0.25, '#8b5cf611'],  // Inf. Platforms → People & SG&A
-  [2, 2, 3, 2, 0.15, '#8b5cf611'],  // Inf. Platforms → Margin
+  [2, 2, 3, 0, 0.4, '#8b5cf633'],   // Inf. Platforms → Inference (50%)
+  [2, 2, 3, 1, 0.4, '#8b5cf611'],   // Inf. Platforms → People & SG&A (thin GM consumed by ops)
   // Google: 2.5 in → 2.5 out
   [2, 3, 3, 0, 1.2, '#4285f433'],   // Google → Inference COGS (48%)
   [2, 3, 3, 1, 1.3, '#4285f411'],   // Google → People & SG&A (52%)
