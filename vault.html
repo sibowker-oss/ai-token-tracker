@@ -163,6 +163,21 @@
   .changelog-preview { background:rgba(0,0,0,0.3); border:1px solid var(--card-border); border-radius:8px; padding:20px; font-size:13px; line-height:1.8; color:var(--text-dim); white-space:pre-wrap; font-family:inherit; max-height:400px; overflow-y:auto; }
   .changelog-actions { display:flex; gap:8px; margin-top:12px; }
 
+  /* Publish queue */
+  .publish-queue { background:linear-gradient(135deg, rgba(16,185,129,0.08), rgba(59,130,246,0.08)); border:2px solid rgba(16,185,129,0.3); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .publish-queue h2 { font-size:18px; margin-bottom:4px; color:var(--green); }
+  .publish-queue .pq-sub { font-size:12px; color:var(--text-dim); margin-bottom:16px; }
+  .publish-page { background:var(--card); border:1px solid var(--card-border); border-radius:10px; margin-bottom:12px; overflow:hidden; }
+  .publish-page-header { padding:12px 16px; background:rgba(255,255,255,0.02); border-bottom:1px solid var(--card-border); display:flex; justify-content:space-between; align-items:center; }
+  .publish-page-header h3 { font-size:14px; font-weight:700; }
+  .publish-item { padding:10px 16px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:13px; display:flex; align-items:center; gap:10px; }
+  .publish-item:last-child { border-bottom:none; }
+  .publish-item .pi-action { flex-shrink:0; }
+  .publish-item .pi-claim { flex:1; }
+  .publish-item .pi-change { text-align:right; white-space:nowrap; }
+  .publish-brief { background:rgba(0,0,0,0.3); border:1px solid var(--card-border); border-radius:8px; padding:16px; font-size:12px; line-height:1.8; color:var(--text); white-space:pre-wrap; font-family:'SF Mono',Monaco,monospace; max-height:500px; overflow-y:auto; margin-top:16px; }
+  .publish-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+
   /* Toast notification */
   .toast { position:fixed; bottom:24px; right:24px; background:var(--green); color:white; padding:12px 20px; border-radius:10px; font-size:13px; font-weight:600; opacity:0; transform:translateY(10px); transition:all 0.3s; z-index:1000; pointer-events:none; }
   .toast.show { opacity:1; transform:translateY(0); }
@@ -398,15 +413,23 @@ function getPendingCount() {
   return vaultData.dataPoints.filter(d => d.status === 'pending').length;
 }
 
+function getUnpublishedCount() {
+  return (vaultData.changelog || []).filter(cl => !cl.published).reduce((sum, cl) => sum + cl.entries.length, 0);
+}
+
 function updateTabBadges() {
-  const count = getPendingCount();
+  const pendingCount = getPendingCount();
+  const unpubCount = getUnpublishedCount();
+  const total = pendingCount + unpubCount;
   const reviewTab = document.querySelectorAll('.tab')[2]; // Review tab
   const existing = reviewTab.querySelector('.tab-badge');
   if (existing) existing.remove();
-  if (count > 0) {
+  if (total > 0) {
     const badge = document.createElement('span');
     badge.className = 'tab-badge';
-    badge.textContent = count;
+    badge.textContent = total;
+    // Green badge if only unpublished (ready to go), red if pending review
+    if (pendingCount === 0 && unpubCount > 0) badge.style.background = 'var(--green)';
     reviewTab.appendChild(badge);
   }
 }
@@ -556,8 +579,12 @@ function renderReview() {
   const container = document.getElementById('reviewContent');
   const pending = vaultData.dataPoints.filter(d => d.status === 'pending');
 
+  // Show publish queue for any unpublished changelogs
+  const publishQueueHtml = renderPublishQueue();
+
   if (pending.length === 0) {
     container.innerHTML = `
+      ${publishQueueHtml}
       <div class="empty-state">
         <div class="icon">&#x2705;</div>
         <p>No pending data points to review</p>
@@ -593,7 +620,7 @@ function renderReview() {
   const updates = pending.filter(d => d.replaces && reviewDecisions[d.id] === 'accept');
   const newPoints = pending.filter(d => !d.replaces && reviewDecisions[d.id] === 'accept');
 
-  let html = `
+  let html = publishQueueHtml + `
     <div class="review-summary">
       <h2>Weekly Review</h2>
       <div class="review-date">Week of ${new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })}</div>
@@ -758,7 +785,10 @@ function applyDecisions() {
             claim: dp.claim,
             oldValue: old.value !== null ? `${old.value} ${old.unit||''}`.trim() : '—',
             newValue: dp.value !== null ? `${dp.value} ${dp.unit||''}`.trim() : '—',
-            source: dp.sourceAuthor || dp.sourceType
+            source: dp.sourceAuthor || dp.sourceType,
+            sourceUrl: dp.sourceUrl || '',
+            usedOn: dp.usedOn || [],
+            notes: dp.notes || ''
           });
         }
       } else {
@@ -768,7 +798,10 @@ function applyDecisions() {
           claim: dp.claim,
           oldValue: null,
           newValue: dp.value !== null ? `${dp.value} ${dp.unit||''}`.trim() : '—',
-          source: dp.sourceAuthor || dp.sourceType
+          source: dp.sourceAuthor || dp.sourceType,
+          sourceUrl: dp.sourceUrl || '',
+          usedOn: dp.usedOn || [],
+          notes: dp.notes || ''
         });
       }
       acceptedCount++;
@@ -900,6 +933,140 @@ function renderChangelogHistory() {
       `).join('')}
     </div>
   `;
+}
+
+// ============================================================
+// PUBLISH QUEUE
+// ============================================================
+function renderPublishQueue() {
+  if (!vaultData.changelog || vaultData.changelog.length === 0) return '';
+  const unpublished = vaultData.changelog.filter(cl => !cl.published);
+  if (unpublished.length === 0) return '';
+
+  // Collect all entries from unpublished changelogs, grouped by page
+  const byPage = {};
+  const allEntries = [];
+  unpublished.forEach(cl => {
+    cl.entries.forEach(e => {
+      allEntries.push(e);
+      const pages = e.usedOn || ['unassigned'];
+      pages.forEach(p => {
+        if (!byPage[p]) byPage[p] = [];
+        byPage[p].push(e);
+      });
+    });
+  });
+
+  if (allEntries.length === 0) return '';
+
+  const pageCount = Object.keys(byPage).length;
+
+  let html = `
+    <div class="publish-queue">
+      <h2>Ready to Publish</h2>
+      <div class="pq-sub">${allEntries.length} accepted change${allEntries.length > 1 ? 's' : ''} across ${pageCount} page${pageCount > 1 ? 's' : ''} — review below, then copy the update brief to implement.</div>
+  `;
+
+  // Render per-page groups
+  Object.entries(byPage).sort().forEach(([page, entries]) => {
+    html += `
+      <div class="publish-page">
+        <div class="publish-page-header">
+          <h3>${page === 'unassigned' ? 'No page assigned' : page + '.html'}</h3>
+          <span style="font-size:12px; color:var(--text-dim);">${entries.length} update${entries.length > 1 ? 's' : ''}</span>
+        </div>
+        ${entries.map(e => `
+          <div class="publish-item">
+            <span class="pi-action"><span class="badge ${e.action === 'updated' ? 'badge-estimated' : 'badge-verified'}">${e.action}</span></span>
+            <span class="pi-claim">${e.claim}</span>
+            <span class="pi-change">${e.oldValue ? `<span style="text-decoration:line-through;color:var(--text-dim);">${e.oldValue}</span> <span style="color:var(--orange);">&rarr;</span> ` : ''}<span style="color:var(--green);font-weight:700;">${e.newValue}</span></span>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  });
+
+  // Generate the update brief
+  const brief = generateUpdateBrief(byPage, unpublished);
+
+  html += `
+    <div class="publish-actions">
+      <button class="btn btn-green btn-sm" onclick="togglePublishBrief()">Show Update Brief</button>
+      <button class="btn btn-primary btn-sm" onclick="copyUpdateBrief()">Copy Update Brief</button>
+      <button class="btn btn-secondary btn-sm" onclick="copyNewsletterFromQueue()">Copy Newsletter Draft</button>
+      <button class="btn btn-secondary btn-sm" onclick="markAllPublished()">Mark as Published</button>
+    </div>
+    <div id="publishBrief" style="display:none;">
+      <div class="publish-brief" id="publishBriefText">${escapeHtml(brief)}</div>
+    </div>
+  </div>
+  `;
+
+  return html;
+}
+
+function generateUpdateBrief(byPage, changelogs) {
+  const lines = [];
+  lines.push('=== INTEL VAULT — UPDATE BRIEF ===');
+  lines.push(`Generated: ${new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric', year:'numeric' })}`);
+  lines.push(`Changes: ${Object.values(byPage).flat().length} data points across ${Object.keys(byPage).length} pages`);
+  lines.push('');
+
+  Object.entries(byPage).sort().forEach(([page, entries]) => {
+    lines.push(`--- ${page === 'unassigned' ? 'UNASSIGNED' : page.toUpperCase() + '.HTML'} ---`);
+    lines.push('');
+    entries.forEach(e => {
+      if (e.action === 'updated') {
+        lines.push(`UPDATE: ${e.claim}`);
+        lines.push(`  Old value: ${e.oldValue}`);
+        lines.push(`  New value: ${e.newValue}`);
+        lines.push(`  Source: ${e.source}${e.sourceUrl ? ' — ' + e.sourceUrl : ''}`);
+        if (e.notes) lines.push(`  Notes: ${e.notes}`);
+      } else {
+        lines.push(`NEW: ${e.claim}`);
+        lines.push(`  Value: ${e.newValue}`);
+        lines.push(`  Source: ${e.source}${e.sourceUrl ? ' — ' + e.sourceUrl : ''}`);
+        if (e.notes) lines.push(`  Notes: ${e.notes}`);
+      }
+      lines.push('');
+    });
+  });
+
+  // Newsletter section
+  const allEntries = Object.values(byPage).flat();
+  lines.push('--- NEWSLETTER DRAFT ---');
+  lines.push('');
+  lines.push(generateNewsletterText(allEntries));
+
+  return lines.join('\n');
+}
+
+function togglePublishBrief() {
+  const el = document.getElementById('publishBrief');
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function copyUpdateBrief() {
+  const el = document.getElementById('publishBriefText');
+  if (el) {
+    navigator.clipboard.writeText(el.textContent).then(() => showToast('Update brief copied — paste into a Claude session to implement'));
+  }
+}
+
+function copyNewsletterFromQueue() {
+  const unpublished = (vaultData.changelog || []).filter(cl => !cl.published);
+  const drafts = unpublished.map(cl => cl.newsletterDraft).filter(Boolean);
+  if (drafts.length > 0) {
+    navigator.clipboard.writeText(drafts.join('\n\n---\n\n')).then(() => showToast('Newsletter draft copied'));
+  }
+}
+
+function markAllPublished() {
+  if (!confirm('Mark all changes as published? This moves them to the Past Reviews archive.')) return;
+  (vaultData.changelog || []).forEach(cl => { cl.published = true; });
+  saveData();
+  renderReview();
+  showToast('All changes marked as published');
 }
 
 function generateNewsletter() {
