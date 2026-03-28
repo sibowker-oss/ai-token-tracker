@@ -50,7 +50,8 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "Zitron obtained Microsoft internal docs showing $454.7M H1 2024 revenue share from OpenAI. At 20% rev share → ~$2.27B OpenAI H1 revenue. Annualised with growth → $6B 2025 collected estimate.",
-      "tags": ["revenue", "openai", "microsoft", "leaked", "zitron", "2024", "actual-collected"]
+      "tags": ["revenue", "openai", "microsoft", "leaked", "zitron", "2024", "actual-collected"],
+      "metricKey": "openai-revenue-2024"
     },
     {
       "id": "dp-004",
@@ -65,7 +66,8 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "Derived from Zitron's H1 2024 data ($2.27B H1) + reported growth trajectory. NOT the $12.7B exit ARR figure widely reported. Actual collected likely $5-7B range. $6B is mid-estimate. Total OpenAI inflow on Sankey is $12B ($6B customer + $6B VC).",
-      "tags": ["revenue", "openai", "actual-collected", "calculation", "2025"]
+      "tags": ["revenue", "openai", "actual-collected", "calculation", "2025"],
+      "metricKey": "openai-revenue-2025"
     },
     {
       "id": "dp-005",
@@ -80,6 +82,7 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "Multiple reports indicate OpenAI losing ~$5-6B annually. Used $6B as VC subsidy in Sankey (VC/Investors → OpenAI flow).",
+      "metricKey": "openai-loss-2025",
       "tags": ["losses", "openai", "operating-loss", "vc-subsidy", "2025"]
     },
     {
@@ -95,7 +98,8 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "Anthropic total system cost estimated at $9.7B (inference + people/SG&A). Customer revenue $4.5B. Gap = $5.2B funded by VC rounds (Amazon, Google, etc). Sankey: VC → Anthropic = $5.2B.",
-      "tags": ["losses", "anthropic", "operating-loss", "vc-subsidy", "2025"]
+      "tags": ["losses", "anthropic", "operating-loss", "vc-subsidy", "2025"],
+      "metricKey": "anthropic-loss-2025"
     },
     {
       "id": "dp-007",
@@ -110,7 +114,8 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "Sum of all customer flows: Consumer $4.5B + SME $3B + Enterprise $8.1B = $15.6B. This is actual collected revenue for inference services, NOT ARR and NOT including training capex.",
-      "tags": ["revenue", "total-market", "actual-collected", "calculation", "2025"]
+      "tags": ["revenue", "total-market", "actual-collected", "calculation", "2025"],
+      "metricKey": "total-ai-revenue-2025"
     },
     {
       "id": "dp-008",
@@ -140,7 +145,8 @@
       "dateAdded": "2026-03-28",
       "usedOn": ["sankey"],
       "notes": "Sum of all provider → Inference flows: OpenAI $7.2B (60%) + Anthropic $4.2B (43%) + IaaS $0.4B (50%) + Google $1.2B (48%) = $13B. NVIDIA captures majority of this via GPU pricing.",
-      "tags": ["inference", "costs", "nvidia", "calculation", "2025"]
+      "tags": ["inference", "costs", "nvidia", "calculation", "2025"],
+      "metricKey": "total-inference-cost-2025"
     },
     {
       "id": "dp-010",

@@ -531,31 +531,45 @@ const COMPANY_PROFILES = {
   }
 };
 
-function convertARRtoRevenue(endingARR, startingARR, companyKey, quarterlySnapshots) {
+// ARR reporting method haircuts
+// How was the ARR figure calculated? This materially affects accuracy.
+const ARR_METHODS = {
+  'monthly':    { factor: 1.00, label: 'Monthly × 12', desc: 'Calendar month revenue × 12. Standard, most reliable.' },
+  'quarterly':  { factor: 0.98, label: 'Quarterly × 4', desc: 'Calendar quarter × 4. Slight smoothing benefit.' },
+  'best-period':{ factor: 0.88, label: 'Best period × 12', desc: 'Cherry-picked best 4-week period × 12. Inflates 10-15% (confirmed by Zitron for OpenAI).' },
+  'unknown':    { factor: 0.93, label: 'Unknown method', desc: 'Company hasn\'t disclosed method. Apply moderate haircut.' },
+};
+
+function convertARRtoRevenue(endingARR, startingARR, companyKey, quarterlySnapshots, arrMethod) {
   const profile = COMPANY_PROFILES[companyKey] || COMPANY_PROFILES.generic;
+  const arrAdj = ARR_METHODS[arrMethod || 'unknown'];
+
+  // Step 0: Apply ARR reporting method haircut to the ending ARR itself
+  const adjustedEndingARR = endingARR * arrAdj.factor;
+  const adjustedStartingARR = startingARR ? startingARR * arrAdj.factor : null;
 
   // Step 1: Growth-adjusted base revenue
   let baseRevenue;
   let method;
 
   if (quarterlySnapshots && quarterlySnapshots.length === 4) {
-    // Best method: quarterly interpolation
+    // Best method: quarterly interpolation (already in real terms, no ARR haircut needed)
     baseRevenue = quarterlySnapshots.reduce((sum, qARR) => sum + qARR * 0.25, 0);
     method = 'quarterly';
-  } else if (startingARR && startingARR > 0 && endingARR > startingARR) {
-    const ratio = endingARR / startingARR;
+  } else if (adjustedStartingARR && adjustedStartingARR > 0 && adjustedEndingARR > adjustedStartingARR) {
+    const ratio = adjustedEndingARR / adjustedStartingARR;
     if (ratio > 1.5) {
       // Hyper-growth: logarithmic mean
-      baseRevenue = (endingARR - startingARR) / Math.log(ratio);
+      baseRevenue = (adjustedEndingARR - adjustedStartingARR) / Math.log(ratio);
       method = 'log-mean';
     } else {
       // Moderate growth: simple average
-      baseRevenue = (startingARR + endingARR) / 2;
+      baseRevenue = (adjustedStartingARR + adjustedEndingARR) / 2;
       method = 'simple-avg';
     }
   } else {
     // Only ending ARR known — very rough, apply 60% haircut for fast-growth
-    baseRevenue = endingARR * 0.6;
+    baseRevenue = adjustedEndingARR * 0.6;
     method = 'ending-only';
   }
 
@@ -583,6 +597,9 @@ function convertARRtoRevenue(endingARR, startingARR, companyKey, quarterlySnapsh
   return {
     endingARR,
     startingARR: startingARR || null,
+    arrMethod: arrAdj.label,
+    arrHaircut: arrAdj.factor,
+    adjustedEndingARR: Math.round(adjustedEndingARR * 100) / 100,
     method,
     baseRevenue: Math.round(baseRevenue * 100) / 100,
     blendedFactor: Math.round(blendedFactor * 1000) / 1000,
@@ -625,11 +642,23 @@ function autoConvertARR(dp) {
     }
   }
 
-  const conversion = convertARRtoRevenue(dp.value, startingARR, companyKey);
+  // Detect ARR reporting method from notes/tags
+  let arrMethod = 'unknown';
+  const allText = (dp.notes + ' ' + dp.claim + ' ' + (dp.tags || []).join(' ')).toLowerCase();
+  if (allText.includes('best period') || allText.includes('best-period') || allText.includes('cherry-pick') || allText.includes('peak-4wk') || allText.includes('4-week')) {
+    arrMethod = 'best-period';
+  } else if (allText.includes('monthly')) {
+    arrMethod = 'monthly';
+  } else if (allText.includes('quarterly')) {
+    arrMethod = 'quarterly';
+  }
+
+  const conversion = convertARRtoRevenue(dp.value, startingARR, companyKey, null, arrMethod);
 
   return {
     ...conversion,
     companyKey,
+    arrMethodDetected: arrMethod,
     sourceDP: dp.id
   };
 }
@@ -1067,8 +1096,9 @@ function renderARRConversion(dp) {
         </div>
       </div>
       <div style="font-size:10px; color:var(--text-dim); line-height:1.6;">
-        Method: ${conv.method} &middot; Base: $${conv.baseRevenue}B &middot; Segment blend: ${conv.blendedFactor} &middot; NRR boost: ${conv.nrrBoost}x
-        ${conv.startingARR ? ` &middot; Starting ARR: $${conv.startingARR}B` : ' &middot; No starting ARR found'}
+        ARR method: <strong>${conv.arrMethod}</strong> (${conv.arrHaircut < 1 ? '-' + Math.round((1 - conv.arrHaircut) * 100) + '% haircut' : 'no haircut'})
+        &middot; Growth calc: ${conv.method} &middot; Base: $${conv.baseRevenue}B &middot; Segments: ${conv.blendedFactor} &middot; NRR: ${conv.nrrBoost}x
+        ${conv.startingARR ? ` &middot; Start ARR: $${conv.startingARR}B` : ''}
       </div>
       <div style="margin-top:8px;">
         <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); createRevenueFromARR('${dp.id}')" style="border-color:rgba(6,182,212,0.3); color:var(--cyan);">Create revenue estimate from this ARR</button>
