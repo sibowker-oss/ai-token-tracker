@@ -11,258 +11,1504 @@
     "totalCustomerRevenue": 17.47,
     "totalVCSubsidy": 9.8,
     "totalSystem": 27.27,
-    "colLabels": ["Who Pays", "Channel", "Provider", "Where It Goes"],
+    "colLabels": [
+      "Who Pays",
+      "Channel",
+      "Provider",
+      "Where It Goes"
+    ],
     "buyers": [
-      { "label": "Consumer", "value": 5.16, "color": "#f59e0b" },
-      { "label": "SME", "value": 3.37, "color": "#8b5cf6" },
-      { "label": "Enterprise", "value": 8.94, "color": "#3b82f6" },
-      { "label": "VC/Investors", "value": 9.8, "color": "#dc2626" }
+      {
+        "label": "Consumer",
+        "value": 5.16,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "SME",
+        "value": 3.37,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Enterprise",
+        "value": 8.94,
+        "color": "#3b82f6"
+      },
+      {
+        "label": "VC/Investors",
+        "value": 9.8,
+        "color": "#dc2626"
+      }
     ],
     "channels": [
-      { "label": "Model Subs", "value": 5.31, "color": "#f59e0b" },
-      { "label": "Model API", "value": 3.4, "color": "#3b82f6" },
-      { "label": "Hyperscalers", "value": 2.15, "color": "#06b6d4" },
-      { "label": "AI Native Apps", "value": 3.36, "color": "#10b981" },
-      { "label": "IaaS & Agg.", "value": 0.3, "color": "#8b5cf6" },
-      { "label": "Trad. SaaS", "value": 2.94, "color": "#ef4444" }
+      {
+        "label": "Model Subs",
+        "value": 5.31,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Model API",
+        "value": 3.4,
+        "color": "#3b82f6"
+      },
+      {
+        "label": "Hyperscalers",
+        "value": 2.15,
+        "color": "#06b6d4"
+      },
+      {
+        "label": "AI Native Apps",
+        "value": 3.36,
+        "color": "#10b981"
+      },
+      {
+        "label": "IaaS & Agg.",
+        "value": 0.3,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Trad. SaaS",
+        "value": 2.94,
+        "color": "#ef4444"
+      }
     ],
     "providers": [
-      { "label": "OpenAI", "value": 13.65, "color": "#10a37f" },
-      { "label": "Anthropic", "value": 7.71, "color": "#d97706" },
-      { "label": "IaaS", "value": 0.8, "color": "#8b5cf6" },
-      { "label": "Google", "value": 2.5, "color": "#4285f4" }
+      {
+        "label": "OpenAI",
+        "value": 13.65,
+        "color": "#10a37f"
+      },
+      {
+        "label": "Anthropic",
+        "value": 7.71,
+        "color": "#d97706"
+      },
+      {
+        "label": "IaaS",
+        "value": 0.8,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Google",
+        "value": 2.5,
+        "color": "#4285f4"
+      }
     ],
     "outcomes": [
-      { "label": "Inference", "value": 14.03, "color": "#10b981" },
-      { "label": "People/SG&A", "value": 11.08, "color": "#f59e0b" },
-      { "label": "Margin", "value": 2.15, "color": "#94a3b8" }
+      {
+        "label": "Inference",
+        "value": 14.03,
+        "color": "#10b981"
+      },
+      {
+        "label": "People/SG&A",
+        "value": 11.08,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Margin",
+        "value": 2.15,
+        "color": "#94a3b8"
+      }
     ],
     "flows": [
-      [0,0, 1,0, 2.95, "#f59e0b33"],
-      [0,0, 1,1, 0.11, "#f59e0b33"],
-      [0,0, 1,3, 1.68, "#f59e0b33"],
-      [0,0, 1,5, 0.42, "#f59e0b33"],
-      [0,1, 1,0, 0.94, "#8b5cf633"],
-      [0,1, 1,1, 0.57, "#8b5cf633"],
-      [0,1, 1,2, 0.22, "#8b5cf633"],
-      [0,1, 1,3, 1.12, "#8b5cf633"],
-      [0,1, 1,4, 0.15, "#8b5cf633"],
-      [0,1, 1,5, 0.37, "#8b5cf633"],
-      [0,2, 1,0, 1.42, "#3b82f633"],
-      [0,2, 1,1, 2.72, "#3b82f633"],
-      [0,2, 1,2, 1.94, "#3b82f633"],
-      [0,2, 1,3, 0.56, "#3b82f633"],
-      [0,2, 1,4, 0.15, "#3b82f633"],
-      [0,2, 1,5, 2.15, "#3b82f633"],
-      [0,3, 2,0, 6, "#dc262633"],
-      [0,3, 2,1, 3, "#dc262633"],
-      [0,3, 2,2, 0.3, "#dc262633"],
-      [0,3, 2,3, 0.5, "#dc262633"],
-      [1,0, 2,0, 3.57, "#f59e0b22"],
-      [1,0, 2,1, 0.84, "#f59e0b22"],
-      [1,0, 2,3, 0.9, "#f59e0b22"],
-      [1,1, 2,0, 1.53, "#3b82f622"],
-      [1,1, 2,1, 1.47, "#3b82f622"],
-      [1,1, 2,3, 0.4, "#3b82f622"],
-      [1,2, 2,0, 0.51, "#06b6d422"],
-      [1,2, 2,1, 0.94, "#06b6d422"],
-      [1,2, 2,3, 0.3, "#06b6d422"],
-      [1,2, 3,2, 0.4, "#06b6d411"],
-      [1,3, 2,0, 1.4, "#10b98122"],
-      [1,3, 2,1, 1.36, "#10b98122"],
-      [1,3, 2,3, 0.4, "#10b98122"],
-      [1,3, 2,2, 0.2, "#10b98122"],
-      [1,4, 2,2, 0.3, "#8b5cf622"],
-      [1,5, 2,0, 0.64, "#ef444422"],
-      [1,5, 2,1, 0.1, "#ef444422"],
-      [1,5, 3,2, 1.75, "#94a3b822"],
-      [1,5, 3,1, 0.45, "#ef444411"],
-      [2,0, 3,0, 8.19, "#10a37f33"],
-      [2,0, 3,1, 5.46, "#10a37f11"],
-      [2,1, 3,0, 4.24, "#d9770633"],
-      [2,1, 3,1, 3.47, "#d9770611"],
-      [2,2, 3,0, 0.4, "#8b5cf633"],
-      [2,2, 3,1, 0.4, "#8b5cf611"],
-      [2,3, 3,0, 1.2, "#4285f433"],
-      [2,3, 3,1, 1.3, "#4285f411"]
+      [
+        0,
+        0,
+        1,
+        0,
+        2.95,
+        "#f59e0b33"
+      ],
+      [
+        0,
+        0,
+        1,
+        1,
+        0.11,
+        "#f59e0b33"
+      ],
+      [
+        0,
+        0,
+        1,
+        3,
+        1.68,
+        "#f59e0b33"
+      ],
+      [
+        0,
+        0,
+        1,
+        5,
+        0.42,
+        "#f59e0b33"
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        0.94,
+        "#8b5cf633"
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        0.57,
+        "#8b5cf633"
+      ],
+      [
+        0,
+        1,
+        1,
+        2,
+        0.22,
+        "#8b5cf633"
+      ],
+      [
+        0,
+        1,
+        1,
+        3,
+        1.12,
+        "#8b5cf633"
+      ],
+      [
+        0,
+        1,
+        1,
+        4,
+        0.15,
+        "#8b5cf633"
+      ],
+      [
+        0,
+        1,
+        1,
+        5,
+        0.37,
+        "#8b5cf633"
+      ],
+      [
+        0,
+        2,
+        1,
+        0,
+        1.42,
+        "#3b82f633"
+      ],
+      [
+        0,
+        2,
+        1,
+        1,
+        2.72,
+        "#3b82f633"
+      ],
+      [
+        0,
+        2,
+        1,
+        2,
+        1.94,
+        "#3b82f633"
+      ],
+      [
+        0,
+        2,
+        1,
+        3,
+        0.56,
+        "#3b82f633"
+      ],
+      [
+        0,
+        2,
+        1,
+        4,
+        0.15,
+        "#3b82f633"
+      ],
+      [
+        0,
+        2,
+        1,
+        5,
+        2.15,
+        "#3b82f633"
+      ],
+      [
+        0,
+        3,
+        2,
+        0,
+        6,
+        "#dc262633"
+      ],
+      [
+        0,
+        3,
+        2,
+        1,
+        3,
+        "#dc262633"
+      ],
+      [
+        0,
+        3,
+        2,
+        2,
+        0.3,
+        "#dc262633"
+      ],
+      [
+        0,
+        3,
+        2,
+        3,
+        0.5,
+        "#dc262633"
+      ],
+      [
+        1,
+        0,
+        2,
+        0,
+        3.57,
+        "#f59e0b22"
+      ],
+      [
+        1,
+        0,
+        2,
+        1,
+        0.84,
+        "#f59e0b22"
+      ],
+      [
+        1,
+        0,
+        2,
+        3,
+        0.9,
+        "#f59e0b22"
+      ],
+      [
+        1,
+        1,
+        2,
+        0,
+        1.53,
+        "#3b82f622"
+      ],
+      [
+        1,
+        1,
+        2,
+        1,
+        1.47,
+        "#3b82f622"
+      ],
+      [
+        1,
+        1,
+        2,
+        3,
+        0.4,
+        "#3b82f622"
+      ],
+      [
+        1,
+        2,
+        2,
+        0,
+        0.51,
+        "#06b6d422"
+      ],
+      [
+        1,
+        2,
+        2,
+        1,
+        0.94,
+        "#06b6d422"
+      ],
+      [
+        1,
+        2,
+        2,
+        3,
+        0.3,
+        "#06b6d422"
+      ],
+      [
+        1,
+        2,
+        3,
+        2,
+        0.4,
+        "#06b6d411"
+      ],
+      [
+        1,
+        3,
+        2,
+        0,
+        1.4,
+        "#10b98122"
+      ],
+      [
+        1,
+        3,
+        2,
+        1,
+        1.36,
+        "#10b98122"
+      ],
+      [
+        1,
+        3,
+        2,
+        3,
+        0.4,
+        "#10b98122"
+      ],
+      [
+        1,
+        3,
+        2,
+        2,
+        0.2,
+        "#10b98122"
+      ],
+      [
+        1,
+        4,
+        2,
+        2,
+        0.3,
+        "#8b5cf622"
+      ],
+      [
+        1,
+        5,
+        2,
+        0,
+        0.64,
+        "#ef444422"
+      ],
+      [
+        1,
+        5,
+        2,
+        1,
+        0.1,
+        "#ef444422"
+      ],
+      [
+        1,
+        5,
+        3,
+        2,
+        1.75,
+        "#94a3b822"
+      ],
+      [
+        1,
+        5,
+        3,
+        1,
+        0.45,
+        "#ef444411"
+      ],
+      [
+        2,
+        0,
+        3,
+        0,
+        8.19,
+        "#10a37f33"
+      ],
+      [
+        2,
+        0,
+        3,
+        1,
+        5.46,
+        "#10a37f11"
+      ],
+      [
+        2,
+        1,
+        3,
+        0,
+        4.24,
+        "#d9770633"
+      ],
+      [
+        2,
+        1,
+        3,
+        1,
+        3.47,
+        "#d9770611"
+      ],
+      [
+        2,
+        2,
+        3,
+        0,
+        0.4,
+        "#8b5cf633"
+      ],
+      [
+        2,
+        2,
+        3,
+        1,
+        0.4,
+        "#8b5cf611"
+      ],
+      [
+        2,
+        3,
+        3,
+        0,
+        1.2,
+        "#4285f433"
+      ],
+      [
+        2,
+        3,
+        3,
+        1,
+        1.3,
+        "#4285f411"
+      ]
     ]
   },
   "dashboard": {
     "providers": {
-      "OpenAI":        { "tokens": 200, "rev": 16.8, "color": "#10a37f", "growth": "+180% YoY", "consumerPct": 60, "bizPct": 40, "modelType": "frontier" },
-      "Anthropic":     { "tokens": 110, "rev": 14.0, "color": "#d97706", "growth": "14x in 14mo", "consumerPct": 35, "bizPct": 65, "modelType": "frontier" },
-      "Google/Gemini": { "tokens": 90,  "rev": 4.2,  "color": "#4285f4", "growth": "14x in '24", "consumerPct": 40, "bizPct": 60, "modelType": "frontier" },
-      "Meta":          { "tokens": 80,  "rev": 0,    "color": "#60a5fa", "growth": "+400% YoY", "consumerPct": 0, "bizPct": 0, "modelType": "open" },
-      "DeepSeek":      { "tokens": 40,  "rev": 0.3,  "color": "#a78bfa", "growth": "+800% YoY", "consumerPct": 50, "bizPct": 50, "modelType": "open" },
-      "Mistral":       { "tokens": 15,  "rev": 0.4,  "color": "#f97316", "growth": "+250% YoY", "consumerPct": 20, "bizPct": 80, "modelType": "frontier" },
-      "xAI":           { "tokens": 10,  "rev": 0.5,  "color": "#e2e8f0", "growth": "+500% YoY", "consumerPct": 70, "bizPct": 30, "modelType": "frontier" },
-      "Others":        { "tokens": 130, "rev": 2.0,  "color": "#475569", "growth": "+86% YoY",  "consumerPct": 20, "bizPct": 80, "modelType": "open" }
+      "OpenAI": {
+        "tokens": 200,
+        "rev": 16.8,
+        "color": "#10a37f",
+        "growth": "+180% YoY",
+        "consumerPct": 60,
+        "bizPct": 40,
+        "modelType": "frontier"
+      },
+      "Anthropic": {
+        "tokens": 110,
+        "rev": 14.0,
+        "color": "#d97706",
+        "growth": "14x in 14mo",
+        "consumerPct": 35,
+        "bizPct": 65,
+        "modelType": "frontier"
+      },
+      "Google/Gemini": {
+        "tokens": 90,
+        "rev": 4.2,
+        "color": "#4285f4",
+        "growth": "14x in '24",
+        "consumerPct": 40,
+        "bizPct": 60,
+        "modelType": "frontier"
+      },
+      "Meta": {
+        "tokens": 80,
+        "rev": 0,
+        "color": "#60a5fa",
+        "growth": "+400% YoY",
+        "consumerPct": 0,
+        "bizPct": 0,
+        "modelType": "open"
+      },
+      "DeepSeek": {
+        "tokens": 40,
+        "rev": 0.3,
+        "color": "#a78bfa",
+        "growth": "+800% YoY",
+        "consumerPct": 50,
+        "bizPct": 50,
+        "modelType": "open"
+      },
+      "Mistral": {
+        "tokens": 15,
+        "rev": 0.4,
+        "color": "#f97316",
+        "growth": "+250% YoY",
+        "consumerPct": 20,
+        "bizPct": 80,
+        "modelType": "frontier"
+      },
+      "xAI": {
+        "tokens": 10,
+        "rev": 0.5,
+        "color": "#e2e8f0",
+        "growth": "+500% YoY",
+        "consumerPct": 70,
+        "bizPct": 30,
+        "modelType": "frontier"
+      },
+      "Others": {
+        "tokens": 130,
+        "rev": 2.0,
+        "color": "#475569",
+        "growth": "+86% YoY",
+        "consumerPct": 20,
+        "bizPct": 80,
+        "modelType": "open"
+      }
     },
     "regions": {
-      "North America": { "pct": 40, "color": "#3b82f6", "growth": "+160% YoY" },
-      "Asia-Pacific":  { "pct": 30, "color": "#8b5cf6", "growth": "+280% YoY" },
-      "Europe":        { "pct": 18, "color": "#06b6d4", "growth": "+140% YoY" },
-      "Middle East":   { "pct": 5,  "color": "#f59e0b", "growth": "+350% YoY" },
-      "Latin America": { "pct": 4,  "color": "#10b981", "growth": "+200% YoY" },
-      "Africa":        { "pct": 3,  "color": "#ec4899", "growth": "+300% YoY" }
+      "North America": {
+        "pct": 40,
+        "color": "#3b82f6",
+        "growth": "+160% YoY"
+      },
+      "Asia-Pacific": {
+        "pct": 30,
+        "color": "#8b5cf6",
+        "growth": "+280% YoY"
+      },
+      "Europe": {
+        "pct": 18,
+        "color": "#06b6d4",
+        "growth": "+140% YoY"
+      },
+      "Middle East": {
+        "pct": 5,
+        "color": "#f59e0b",
+        "growth": "+350% YoY"
+      },
+      "Latin America": {
+        "pct": 4,
+        "color": "#10b981",
+        "growth": "+200% YoY"
+      },
+      "Africa": {
+        "pct": 3,
+        "color": "#ec4899",
+        "growth": "+300% YoY"
+      }
     },
     "industries": {
-      "Software & Tech":       { "pct": 33, "color": "#3b82f6" },
-      "Financial Services":    { "pct": 16, "color": "#10b981" },
-      "Healthcare":            { "pct": 9,  "color": "#ef4444" },
-      "Retail & E-commerce":   { "pct": 9,  "color": "#f59e0b" },
-      "Marketing & Ads":       { "pct": 8,  "color": "#ec4899" },
-      "Customer Service":      { "pct": 7,  "color": "#06b6d4" },
-      "Education":             { "pct": 5,  "color": "#14b8a6" },
-      "Manufacturing":         { "pct": 4,  "color": "#8b5cf6" },
-      "Legal & Gov & Other":   { "pct": 9,  "color": "#475569" }
+      "Software & Tech": {
+        "pct": 33,
+        "color": "#3b82f6"
+      },
+      "Financial Services": {
+        "pct": 16,
+        "color": "#10b981"
+      },
+      "Healthcare": {
+        "pct": 9,
+        "color": "#ef4444"
+      },
+      "Retail & E-commerce": {
+        "pct": 9,
+        "color": "#f59e0b"
+      },
+      "Marketing & Ads": {
+        "pct": 8,
+        "color": "#ec4899"
+      },
+      "Customer Service": {
+        "pct": 7,
+        "color": "#06b6d4"
+      },
+      "Education": {
+        "pct": 5,
+        "color": "#14b8a6"
+      },
+      "Manufacturing": {
+        "pct": 4,
+        "color": "#8b5cf6"
+      },
+      "Legal & Gov & Other": {
+        "pct": 9,
+        "color": "#475569"
+      }
     },
     "useCases": {
-      "Coding & Dev Tools":  { "pct": 28, "color": "#8b5cf6" },
-      "Chat & Assistants":   { "pct": 27, "color": "#3b82f6" },
-      "Content & Writing":   { "pct": 15, "color": "#f59e0b" },
-      "Enterprise Agents":   { "pct": 10, "color": "#10b981" },
-      "Search & RAG":        { "pct": 10, "color": "#06b6d4" },
-      "Data Analysis":       { "pct": 7,  "color": "#ef4444" },
-      "Other":               { "pct": 5,  "color": "#475569" }
+      "Coding & Dev Tools": {
+        "pct": 28,
+        "color": "#8b5cf6"
+      },
+      "Chat & Assistants": {
+        "pct": 27,
+        "color": "#3b82f6"
+      },
+      "Content & Writing": {
+        "pct": 15,
+        "color": "#f59e0b"
+      },
+      "Enterprise Agents": {
+        "pct": 10,
+        "color": "#10b981"
+      },
+      "Search & RAG": {
+        "pct": 10,
+        "color": "#06b6d4"
+      },
+      "Data Analysis": {
+        "pct": 7,
+        "color": "#ef4444"
+      },
+      "Other": {
+        "pct": 5,
+        "color": "#475569"
+      }
     },
     "crossWeights": {
       "OpenAI": {
-        "regions":    { "North America": 0.45, "Asia-Pacific": 0.25, "Europe": 0.18, "Middle East": 0.05, "Latin America": 0.04, "Africa": 0.03 },
-        "industries": { "Software & Tech": 0.30, "Financial Services": 0.12, "Healthcare": 0.08, "Retail & E-commerce": 0.12, "Marketing & Ads": 0.10, "Customer Service": 0.08, "Education": 0.07, "Manufacturing": 0.04, "Legal & Gov & Other": 0.09 },
-        "useCases":   { "Coding & Dev Tools": 0.25, "Chat & Assistants": 0.35, "Content & Writing": 0.15, "Enterprise Agents": 0.08, "Search & RAG": 0.07, "Data Analysis": 0.05, "Other": 0.05 }
+        "regions": {
+          "North America": 0.45,
+          "Asia-Pacific": 0.25,
+          "Europe": 0.18,
+          "Middle East": 0.05,
+          "Latin America": 0.04,
+          "Africa": 0.03
+        },
+        "industries": {
+          "Software & Tech": 0.3,
+          "Financial Services": 0.12,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.1,
+          "Customer Service": 0.08,
+          "Education": 0.07,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.35,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.08,
+          "Search & RAG": 0.07,
+          "Data Analysis": 0.05,
+          "Other": 0.05
+        }
       },
       "Anthropic": {
-        "regions":    { "North America": 0.50, "Asia-Pacific": 0.22, "Europe": 0.18, "Middle East": 0.04, "Latin America": 0.03, "Africa": 0.03 },
-        "industries": { "Software & Tech": 0.45, "Financial Services": 0.18, "Healthcare": 0.06, "Retail & E-commerce": 0.05, "Marketing & Ads": 0.04, "Customer Service": 0.05, "Education": 0.03, "Manufacturing": 0.03, "Legal & Gov & Other": 0.11 },
-        "useCases":   { "Coding & Dev Tools": 0.45, "Chat & Assistants": 0.20, "Content & Writing": 0.08, "Enterprise Agents": 0.12, "Search & RAG": 0.05, "Data Analysis": 0.06, "Other": 0.04 }
+        "regions": {
+          "North America": 0.5,
+          "Asia-Pacific": 0.22,
+          "Europe": 0.18,
+          "Middle East": 0.04,
+          "Latin America": 0.03,
+          "Africa": 0.03
+        },
+        "industries": {
+          "Software & Tech": 0.45,
+          "Financial Services": 0.18,
+          "Healthcare": 0.06,
+          "Retail & E-commerce": 0.05,
+          "Marketing & Ads": 0.04,
+          "Customer Service": 0.05,
+          "Education": 0.03,
+          "Manufacturing": 0.03,
+          "Legal & Gov & Other": 0.11
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.45,
+          "Chat & Assistants": 0.2,
+          "Content & Writing": 0.08,
+          "Enterprise Agents": 0.12,
+          "Search & RAG": 0.05,
+          "Data Analysis": 0.06,
+          "Other": 0.04
+        }
       },
       "Google/Gemini": {
-        "regions":    { "North America": 0.35, "Asia-Pacific": 0.30, "Europe": 0.20, "Middle East": 0.06, "Latin America": 0.05, "Africa": 0.04 },
-        "industries": { "Software & Tech": 0.30, "Financial Services": 0.10, "Healthcare": 0.12, "Retail & E-commerce": 0.10, "Marketing & Ads": 0.10, "Customer Service": 0.08, "Education": 0.08, "Manufacturing": 0.04, "Legal & Gov & Other": 0.08 },
-        "useCases":   { "Coding & Dev Tools": 0.20, "Chat & Assistants": 0.30, "Content & Writing": 0.15, "Enterprise Agents": 0.10, "Search & RAG": 0.12, "Data Analysis": 0.08, "Other": 0.05 }
+        "regions": {
+          "North America": 0.35,
+          "Asia-Pacific": 0.3,
+          "Europe": 0.2,
+          "Middle East": 0.06,
+          "Latin America": 0.05,
+          "Africa": 0.04
+        },
+        "industries": {
+          "Software & Tech": 0.3,
+          "Financial Services": 0.1,
+          "Healthcare": 0.12,
+          "Retail & E-commerce": 0.1,
+          "Marketing & Ads": 0.1,
+          "Customer Service": 0.08,
+          "Education": 0.08,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.08
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.2,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.12,
+          "Data Analysis": 0.08,
+          "Other": 0.05
+        }
       },
       "Meta": {
-        "regions":    { "North America": 0.35, "Asia-Pacific": 0.30, "Europe": 0.20, "Middle East": 0.05, "Latin America": 0.05, "Africa": 0.05 },
-        "industries": { "Software & Tech": 0.45, "Financial Services": 0.15, "Healthcare": 0.08, "Retail & E-commerce": 0.08, "Marketing & Ads": 0.05, "Customer Service": 0.05, "Education": 0.04, "Manufacturing": 0.05, "Legal & Gov & Other": 0.05 },
-        "useCases":   { "Coding & Dev Tools": 0.35, "Chat & Assistants": 0.25, "Content & Writing": 0.10, "Enterprise Agents": 0.12, "Search & RAG": 0.08, "Data Analysis": 0.05, "Other": 0.05 }
+        "regions": {
+          "North America": 0.35,
+          "Asia-Pacific": 0.3,
+          "Europe": 0.2,
+          "Middle East": 0.05,
+          "Latin America": 0.05,
+          "Africa": 0.05
+        },
+        "industries": {
+          "Software & Tech": 0.45,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.08,
+          "Marketing & Ads": 0.05,
+          "Customer Service": 0.05,
+          "Education": 0.04,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.35,
+          "Chat & Assistants": 0.25,
+          "Content & Writing": 0.1,
+          "Enterprise Agents": 0.12,
+          "Search & RAG": 0.08,
+          "Data Analysis": 0.05,
+          "Other": 0.05
+        }
       },
       "DeepSeek": {
-        "regions":    { "North America": 0.20, "Asia-Pacific": 0.55, "Europe": 0.15, "Middle East": 0.04, "Latin America": 0.03, "Africa": 0.03 },
-        "industries": { "Software & Tech": 0.50, "Financial Services": 0.10, "Healthcare": 0.05, "Retail & E-commerce": 0.08, "Marketing & Ads": 0.05, "Customer Service": 0.05, "Education": 0.07, "Manufacturing": 0.05, "Legal & Gov & Other": 0.05 },
-        "useCases":   { "Coding & Dev Tools": 0.40, "Chat & Assistants": 0.30, "Content & Writing": 0.08, "Enterprise Agents": 0.05, "Search & RAG": 0.07, "Data Analysis": 0.07, "Other": 0.03 }
+        "regions": {
+          "North America": 0.2,
+          "Asia-Pacific": 0.55,
+          "Europe": 0.15,
+          "Middle East": 0.04,
+          "Latin America": 0.03,
+          "Africa": 0.03
+        },
+        "industries": {
+          "Software & Tech": 0.5,
+          "Financial Services": 0.1,
+          "Healthcare": 0.05,
+          "Retail & E-commerce": 0.08,
+          "Marketing & Ads": 0.05,
+          "Customer Service": 0.05,
+          "Education": 0.07,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.4,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.08,
+          "Enterprise Agents": 0.05,
+          "Search & RAG": 0.07,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
       },
       "Mistral": {
-        "regions":    { "North America": 0.25, "Asia-Pacific": 0.15, "Europe": 0.45, "Middle East": 0.06, "Latin America": 0.05, "Africa": 0.04 },
-        "industries": { "Software & Tech": 0.40, "Financial Services": 0.20, "Healthcare": 0.08, "Retail & E-commerce": 0.06, "Marketing & Ads": 0.05, "Customer Service": 0.05, "Education": 0.04, "Manufacturing": 0.05, "Legal & Gov & Other": 0.07 },
-        "useCases":   { "Coding & Dev Tools": 0.30, "Chat & Assistants": 0.25, "Content & Writing": 0.12, "Enterprise Agents": 0.15, "Search & RAG": 0.08, "Data Analysis": 0.06, "Other": 0.04 }
+        "regions": {
+          "North America": 0.25,
+          "Asia-Pacific": 0.15,
+          "Europe": 0.45,
+          "Middle East": 0.06,
+          "Latin America": 0.05,
+          "Africa": 0.04
+        },
+        "industries": {
+          "Software & Tech": 0.4,
+          "Financial Services": 0.2,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.06,
+          "Marketing & Ads": 0.05,
+          "Customer Service": 0.05,
+          "Education": 0.04,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.07
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.3,
+          "Chat & Assistants": 0.25,
+          "Content & Writing": 0.12,
+          "Enterprise Agents": 0.15,
+          "Search & RAG": 0.08,
+          "Data Analysis": 0.06,
+          "Other": 0.04
+        }
       },
       "xAI": {
-        "regions":    { "North America": 0.55, "Asia-Pacific": 0.15, "Europe": 0.18, "Middle East": 0.05, "Latin America": 0.04, "Africa": 0.03 },
-        "industries": { "Software & Tech": 0.35, "Financial Services": 0.10, "Healthcare": 0.05, "Retail & E-commerce": 0.05, "Marketing & Ads": 0.10, "Customer Service": 0.05, "Education": 0.05, "Manufacturing": 0.03, "Legal & Gov & Other": 0.22 },
-        "useCases":   { "Coding & Dev Tools": 0.15, "Chat & Assistants": 0.50, "Content & Writing": 0.15, "Enterprise Agents": 0.05, "Search & RAG": 0.05, "Data Analysis": 0.05, "Other": 0.05 }
+        "regions": {
+          "North America": 0.55,
+          "Asia-Pacific": 0.15,
+          "Europe": 0.18,
+          "Middle East": 0.05,
+          "Latin America": 0.04,
+          "Africa": 0.03
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.1,
+          "Healthcare": 0.05,
+          "Retail & E-commerce": 0.05,
+          "Marketing & Ads": 0.1,
+          "Customer Service": 0.05,
+          "Education": 0.05,
+          "Manufacturing": 0.03,
+          "Legal & Gov & Other": 0.22
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.15,
+          "Chat & Assistants": 0.5,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.05,
+          "Search & RAG": 0.05,
+          "Data Analysis": 0.05,
+          "Other": 0.05
+        }
       },
       "Others": {
-        "regions":    { "North America": 0.30, "Asia-Pacific": 0.35, "Europe": 0.20, "Middle East": 0.06, "Latin America": 0.05, "Africa": 0.04 },
-        "industries": { "Software & Tech": 0.35, "Financial Services": 0.15, "Healthcare": 0.10, "Retail & E-commerce": 0.10, "Marketing & Ads": 0.05, "Customer Service": 0.08, "Education": 0.05, "Manufacturing": 0.05, "Legal & Gov & Other": 0.07 },
-        "useCases":   { "Coding & Dev Tools": 0.25, "Chat & Assistants": 0.30, "Content & Writing": 0.15, "Enterprise Agents": 0.10, "Search & RAG": 0.08, "Data Analysis": 0.07, "Other": 0.05 }
+        "regions": {
+          "North America": 0.3,
+          "Asia-Pacific": 0.35,
+          "Europe": 0.2,
+          "Middle East": 0.06,
+          "Latin America": 0.05,
+          "Africa": 0.04
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.1,
+          "Retail & E-commerce": 0.1,
+          "Marketing & Ads": 0.05,
+          "Customer Service": 0.08,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.07
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.08,
+          "Data Analysis": 0.07,
+          "Other": 0.05
+        }
       }
     },
     "demandMatrix": {
-      "columns": ["AI Model Subs", "Model API", "AI Native Subs", "Traditional SaaS Subs"],
+      "columns": [
+        "AI Model Subs",
+        "Model API",
+        "AI Native Subs",
+        "Traditional SaaS Subs"
+      ],
       "colSubs": [
         "ChatGPT Plus, Claude Pro, Gemini Advanced",
         "Direct API calls to OpenAI, Anthropic, Google",
         "Cursor, Perplexity, Jasper, Harvey",
         "M365 Copilot, SF Agentforce, NOW Assist, Canva AI"
       ],
-      "sankeyChannelMap": [[0], [1, 2, 4], [3], [5]],
-      "sankeyBuyerMap": { "Consumer": 0, "SME": 1, "Enterprise": 2 },
+      "sankeyChannelMap": [
+        [
+          0
+        ],
+        [
+          1,
+          2,
+          4
+        ],
+        [
+          3
+        ],
+        [
+          5
+        ]
+      ],
+      "sankeyBuyerMap": {
+        "Consumer": 0,
+        "SME": 1,
+        "Enterprise": 2
+      },
       "rows": [
-        { "segment": "Consumer", "cells": [
-          { "arrEstimate": "~$10-12B", "conv": "50%", "color": "#f59e0b", "ex": "ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced", "note": "Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk." },
-          { "arrEstimate": "~$0.5B", "conv": "100%", "color": "#10b981", "ex": "Hobbyist devs, indie hackers, students using API keys", "note": "Small but pure. Every cent = tokens. ~95% frontier, ~5% open models." },
-          { "arrEstimate": "~$2-3B", "conv": "90%", "color": "#10b981", "ex": "Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier", "note": "Real usage. AI native absorbs API cost." },
-          { "arrEstimate": "~$0.5-1B", "conv": "15%", "color": "#ef4444", "ex": "Canva AI features, Grammarly, Notion AI, Adobe Firefly", "note": "AI bundled free into consumer SaaS tiers. Retention play, not revenue driver. Adobe Firefly: growth flat at 10-11%." }
-        ]},
-        { "segment": "SME", "cells": [
-          { "arrEstimate": "~$1-2B", "conv": "60%", "color": "#f59e0b", "ex": "ChatGPT Team ($25/user), Claude Team", "note": "Growing. Usage varies widely across seats." },
-          { "arrEstimate": "~$2-3B", "conv": "100%", "color": "#10b981", "ex": "Startups on APIs, dev agencies, Vercel AI SDK users", "note": "Pure demand. ~65% frontier, ~35% open (AI natives buying Together/Fireworks inference). Fastest growing." },
-          { "arrEstimate": "~$2-3B", "conv": "85%", "color": "#10b981", "ex": "Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin", "note": "Strong PMF. SMEs adopt AI natives faster than SaaS AI." },
-          { "arrEstimate": "~$1-2B", "conv": "15%", "color": "#ef4444", "ex": "HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI", "note": "Feature checkbox on renewal, low activation. HubSpot Breeze: no separate revenue disclosed = immaterial." }
-        ]},
-        { "segment": "Enterprise", "cells": [
-          { "arrEstimate": "~$1-2B", "conv": "45%", "color": "#f59e0b", "ex": "ChatGPT Enterprise ($60+/user), Claude for Enterprise", "note": "Standalone AI subs — higher activation, users chose to buy it." },
-          { "arrEstimate": "~$3-5B", "conv": "100%", "color": "#10b981", "ex": "Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys", "note": "LARGEST FUTURE TAM. Small today but 100% real. ~95% frontier, ~5% open. Goldman: ->$50-80B by 2028." },
-          { "arrEstimate": "~$1-2B", "conv": "80%", "color": "#10b981", "ex": "Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI", "note": "Real usage — AI natives solving specific enterprise workflows." },
-          { "arrEstimate": "~$5-7B real (~$15B claimed)", "conv": "10-20%", "color": "#ef4444", "ex": "M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B — the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real — cleanest reporter)", "note": "COGS test: SF inference est. $6-12M on $800M \"AI rev\" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration." }
-        ]}
+        {
+          "segment": "Consumer",
+          "cells": [
+            {
+              "arrEstimate": "~$10-12B",
+              "conv": "50%",
+              "color": "#f59e0b",
+              "ex": "ChatGPT Plus ($20/mo, ~11M subs), Claude Pro, Gemini Advanced",
+              "note": "Largest revenue pool but discretionary. Heavy free-tier subsidy. High churn risk."
+            },
+            {
+              "arrEstimate": "~$0.5B",
+              "conv": "100%",
+              "color": "#10b981",
+              "ex": "Hobbyist devs, indie hackers, students using API keys",
+              "note": "Small but pure. Every cent = tokens. ~95% frontier, ~5% open models."
+            },
+            {
+              "arrEstimate": "~$2-3B",
+              "conv": "90%",
+              "color": "#10b981",
+              "ex": "Perplexity Pro, Canva Free/Pro, Monica AI, Wrtn free tier",
+              "note": "Real usage. AI native absorbs API cost."
+            },
+            {
+              "arrEstimate": "~$0.5-1B",
+              "conv": "15%",
+              "color": "#ef4444",
+              "ex": "Canva AI features, Grammarly, Notion AI, Adobe Firefly",
+              "note": "AI bundled free into consumer SaaS tiers. Retention play, not revenue driver. Adobe Firefly: growth flat at 10-11%."
+            }
+          ]
+        },
+        {
+          "segment": "SME",
+          "cells": [
+            {
+              "arrEstimate": "~$1-2B",
+              "conv": "60%",
+              "color": "#f59e0b",
+              "ex": "ChatGPT Team ($25/user), Claude Team",
+              "note": "Growing. Usage varies widely across seats."
+            },
+            {
+              "arrEstimate": "~$2-3B",
+              "conv": "100%",
+              "color": "#10b981",
+              "ex": "Startups on APIs, dev agencies, Vercel AI SDK users",
+              "note": "Pure demand. ~65% frontier, ~35% open (AI natives buying Together/Fireworks inference). Fastest growing."
+            },
+            {
+              "arrEstimate": "~$2-3B",
+              "conv": "85%",
+              "color": "#10b981",
+              "ex": "Cursor Pro/Biz, Replit Teams, Jasper Biz, Intercom Fin",
+              "note": "Strong PMF. SMEs adopt AI natives faster than SaaS AI."
+            },
+            {
+              "arrEstimate": "~$1-2B",
+              "conv": "15%",
+              "color": "#ef4444",
+              "ex": "HubSpot Breeze, Zoho Zia, Freshworks Freddy, Canva Teams AI",
+              "note": "Feature checkbox on renewal, low activation. HubSpot Breeze: no separate revenue disclosed = immaterial."
+            }
+          ]
+        },
+        {
+          "segment": "Enterprise",
+          "cells": [
+            {
+              "arrEstimate": "~$1-2B",
+              "conv": "45%",
+              "color": "#f59e0b",
+              "ex": "ChatGPT Enterprise ($60+/user), Claude for Enterprise",
+              "note": "Standalone AI subs \u2014 higher activation, users chose to buy it."
+            },
+            {
+              "arrEstimate": "~$3-5B",
+              "conv": "100%",
+              "color": "#10b981",
+              "ex": "Morgan Stanley, Klarna, Stripe, JPMorgan, Razorpay, Infosys",
+              "note": "LARGEST FUTURE TAM. Small today but 100% real. ~95% frontier, ~5% open. Goldman: ->$50-80B by 2028."
+            },
+            {
+              "arrEstimate": "~$1-2B",
+              "conv": "80%",
+              "color": "#10b981",
+              "ex": "Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI",
+              "note": "Real usage \u2014 AI natives solving specific enterprise workflows."
+            },
+            {
+              "arrEstimate": "~$5-7B real (~$15B claimed)",
+              "conv": "10-20%",
+              "color": "#ef4444",
+              "ex": "M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B \u2014 the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real \u2014 cleanest reporter)",
+              "note": "COGS test: SF inference est. $6-12M on $800M \"AI rev\" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration."
+            }
+          ]
+        }
       ]
     },
     "enterpriseReality": [
-      { "name": "Salesforce", "ticker": "CRM", "claimed": "$800M Agentforce ARR (within $2.9B \"AI+Data\" that includes Informatica acquisition)", "usage": "~50% of 29K deals are free/seeded. COGS test: inference cost est. $6-12M/yr on $800M = 98%+ \"AI margin\"", "real": "~$250-350M real GenAI (rest is Data Cloud, Informatica, legacy Einstein)", "flags": "$2.9B bundles Informatica ($1.5B acq.) + Data 360 + Agentforce. Gross margin flat at 77% = minimal AI COGS. AWU metric criticized as vanity metric. <2% of $41.5B revenue.", "growth": "8-9%", "prevGrowth": "18%" },
-      { "name": "ServiceNow", "ticker": "NOW", "claimed": "$600M+ Now Assist ACV (verified, Q4 2025 earnings)", "usage": "Pro Plus premium est. 30-60% (UpperEdge). COGS test: inference cost est. $15-50M/yr = 92-97% \"AI margin\"", "real": "~$400-500M (cleanest reporter — AI is a genuine premium SKU)", "flags": "Most honest of the group. But Pro Plus bundles non-AI features. Gross margin down 1.7pp (79.2->77.5%) — slight AI cost impact. Hidden consumption-based \"assists\" fees.", "growth": "20-21%", "prevGrowth": "25%" },
-      { "name": "M365 Copilot", "ticker": "MSFT", "claimed": "15M seats x $30/mo = $5.4B list (verified, MSFT Q2 FY26 earnings)", "usage": "35.8% active (Recon Analytics, 150K respondents). Only 5% of orgs past pilot (Gartner). 70% tried, only 8% kept choosing it.", "real": "~$2.5-3.5B net (40-60% discounting per Citi/JPM). Cloud margin down 3pp (72->69%) — real AI infra cost.", "flags": "3.3% of 450M installed base after 2 years. Market share FELL 18.8%->11.5% (Recon Analytics Jul->Jan). Auto-installing. Morgan Stanley: \"wall of sorry.\"", "growth": "12-15%", "prevGrowth": "15%" },
-      { "name": "GitHub Copilot", "ticker": "MSFT", "claimed": "4.7M paid subs (verified, MSFT earnings). GitHub total $2B ARR — Copilot est. $1-2.3B", "usage": "42% market share of AI coding. 27-30% acceptance rate (not 55% — that was task speed). Lost $20/user/mo in 2023 (WSJ).", "real": "$1-2.3B — the ONE product where AI IS the product", "flags": "Genuinely works. But facing Cursor ($1B ARR), open-source alternatives. Microsoft added Anthropic models \"at great expense to margins\" (SemiAnalysis). Usage caps introduced mid-2025.", "growth": "75% subs YoY", "prevGrowth": "N/A" },
-      { "name": "SAP", "ticker": "SAP", "claimed": "\"2/3 of deals include AI\" — Joule bundled free in RISE/GROW", "usage": "No separate metering. No AI revenue disclosed = immaterial.", "real": "~$0-200M. Like saying \"100% of iPhones include Siri\"", "flags": "Cloud growth (23%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT AI. No analyst attributes growth to Joule.", "growth": "8-9%", "prevGrowth": "8%" },
-      { "name": "Adobe", "ticker": "ADBE", "claimed": "Firefly ~$400-500M, AI-first ARR $250M", "usage": "75% of Fortune 500 \"adopted\" but free tier inflates. Some cannibalizes stock photo revenue.", "real": "~$200-300M incremental", "flags": "Growth completely flat at 10-11% pre AND post AI. Firefly has moved the needle zero on top-line growth.", "growth": "10-11%", "prevGrowth": "10-11%" },
-      { "name": "Workday", "ticker": "WDAY", "claimed": "Not disclosed — \"growing demand for AI SKUs\"", "usage": "No AI metric = immaterial. Flex Credits model.", "real": "~$0-100M", "flags": "Growth crashing: 21%->13%. AI has zero visible impact.", "growth": "13%", "prevGrowth": "21%" }
+      {
+        "name": "Salesforce",
+        "ticker": "CRM",
+        "claimed": "$800M Agentforce ARR (within $2.9B \"AI+Data\" that includes Informatica acquisition)",
+        "usage": "~50% of 29K deals are free/seeded. COGS test: inference cost est. $6-12M/yr on $800M = 98%+ \"AI margin\"",
+        "real": "~$250-350M real GenAI (rest is Data Cloud, Informatica, legacy Einstein)",
+        "flags": "$2.9B bundles Informatica ($1.5B acq.) + Data 360 + Agentforce. Gross margin flat at 77% = minimal AI COGS. AWU metric criticized as vanity metric. <2% of $41.5B revenue.",
+        "growth": "8-9%",
+        "prevGrowth": "18%"
+      },
+      {
+        "name": "ServiceNow",
+        "ticker": "NOW",
+        "claimed": "$600M+ Now Assist ACV (verified, Q4 2025 earnings)",
+        "usage": "Pro Plus premium est. 30-60% (UpperEdge). COGS test: inference cost est. $15-50M/yr = 92-97% \"AI margin\"",
+        "real": "~$400-500M (cleanest reporter \u2014 AI is a genuine premium SKU)",
+        "flags": "Most honest of the group. But Pro Plus bundles non-AI features. Gross margin down 1.7pp (79.2->77.5%) \u2014 slight AI cost impact. Hidden consumption-based \"assists\" fees.",
+        "growth": "20-21%",
+        "prevGrowth": "25%"
+      },
+      {
+        "name": "M365 Copilot",
+        "ticker": "MSFT",
+        "claimed": "15M seats x $30/mo = $5.4B list (verified, MSFT Q2 FY26 earnings)",
+        "usage": "35.8% active (Recon Analytics, 150K respondents). Only 5% of orgs past pilot (Gartner). 70% tried, only 8% kept choosing it.",
+        "real": "~$2.5-3.5B net (40-60% discounting per Citi/JPM). Cloud margin down 3pp (72->69%) \u2014 real AI infra cost.",
+        "flags": "3.3% of 450M installed base after 2 years. Market share FELL 18.8%->11.5% (Recon Analytics Jul->Jan). Auto-installing. Morgan Stanley: \"wall of sorry.\"",
+        "growth": "12-15%",
+        "prevGrowth": "15%"
+      },
+      {
+        "name": "GitHub Copilot",
+        "ticker": "MSFT",
+        "claimed": "4.7M paid subs (verified, MSFT earnings). GitHub total $2B ARR \u2014 Copilot est. $1-2.3B",
+        "usage": "42% market share of AI coding. 27-30% acceptance rate (not 55% \u2014 that was task speed). Lost $20/user/mo in 2023 (WSJ).",
+        "real": "$1-2.3B \u2014 the ONE product where AI IS the product",
+        "flags": "Genuinely works. But facing Cursor ($1B ARR), open-source alternatives. Microsoft added Anthropic models \"at great expense to margins\" (SemiAnalysis). Usage caps introduced mid-2025.",
+        "growth": "75% subs YoY",
+        "prevGrowth": "N/A"
+      },
+      {
+        "name": "SAP",
+        "ticker": "SAP",
+        "claimed": "\"2/3 of deals include AI\" \u2014 Joule bundled free in RISE/GROW",
+        "usage": "No separate metering. No AI revenue disclosed = immaterial.",
+        "real": "~$0-200M. Like saying \"100% of iPhones include Siri\"",
+        "flags": "Cloud growth (23%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT AI. No analyst attributes growth to Joule.",
+        "growth": "8-9%",
+        "prevGrowth": "8%"
+      },
+      {
+        "name": "Adobe",
+        "ticker": "ADBE",
+        "claimed": "Firefly ~$400-500M, AI-first ARR $250M",
+        "usage": "75% of Fortune 500 \"adopted\" but free tier inflates. Some cannibalizes stock photo revenue.",
+        "real": "~$200-300M incremental",
+        "flags": "Growth completely flat at 10-11% pre AND post AI. Firefly has moved the needle zero on top-line growth.",
+        "growth": "10-11%",
+        "prevGrowth": "10-11%"
+      },
+      {
+        "name": "Workday",
+        "ticker": "WDAY",
+        "claimed": "Not disclosed \u2014 \"growing demand for AI SKUs\"",
+        "usage": "No AI metric = immaterial. Flex Credits model.",
+        "real": "~$0-100M",
+        "flags": "Growth crashing: 21%->13%. AI has zero visible impact.",
+        "growth": "13%",
+        "prevGrowth": "21%"
+      }
     ],
     "topConsumers": [
-      { "co": "Portkey.ai", "hq": "US/India", "type": "AI Gateway", "tokens": "1.9T/day", "prov": "Multi (40+)", "ev": "Live dashboard: $1.3M/day spend, $475M/yr managed. 35%/wk growth. Gateway passthrough (not additive to provider totals).", "conf": "High" },
-      { "co": "GitHub Copilot", "hq": "US", "type": "AI Dev Tool", "tokens": "~1T/day", "prov": "OpenAI, Anthropic", "ev": "4.7M paid subs, margin-negative (MSFT subsidises), $1-2.3B ARR. Revenue/price: 1.4-4.1T. Bottom-up: 471-800B. Midpoint ~1T.", "conf": "Med" },
-      { "co": "Cursor (Anysphere)", "hq": "US", "type": "AI Dev Tool", "tokens": "~800B/day", "prov": "Anthropic, OpenAI", "ev": "$1B+ ARR, 40-60% COGS ratio. Revenue/price: 1-1.6T. Bottom-up: 400-800B. COGS: 680-980B. Midpoint ~800B.", "conf": "Med-High" },
-      { "co": "OpenRouter", "hq": "US", "type": "AI Gateway", "tokens": "280B/day", "prov": "All (400+)", "ev": "Self-reported 8.4T/mo. Most reliable figure — transparent platform with public pricing. Gateway passthrough.", "conf": "High" },
-      { "co": "Perplexity", "hq": "US", "type": "AI Search", "tokens": "~200B/day", "prov": "Multi", "ev": "780M queries/mo, $200M ARR. Revenue/price: ~220B. Bottom-up: 91-130B (but multi-step pipelines inflate). COGS: 220-290B.", "conf": "Med" },
-      { "co": "Replit", "hq": "US", "type": "AI Dev Tool", "tokens": "~150B/day", "prov": "Multi", "ev": "$240-265M rev but only ~60% AI-related. 50M registered != DAU (likely <2M). Revenue/price: 260-310B. COGS: ~192B. Bottom-up much lower.", "conf": "Low-Med" },
-      { "co": "Cognition (Devin)", "hq": "US", "type": "AI Dev Tool", "tokens": "~125B/day", "prov": "OpenAI, Anthropic", "ev": "$155M ARR combined. Agent sessions burn 50-200K tokens each. Revenue/price: 178-212B. COGS: ~148B.", "conf": "Med" },
-      { "co": "Duolingo", "hq": "US", "type": "EdTech", "tokens": "~100B/day", "prov": "OpenAI (#1)", "ev": "47.7M DAU but most exercises pre-generated. $10-30M/yr AI spend (margin compression data). At $0.30-0.50/M: 110-183B.", "conf": "Med" },
-      { "co": "MiniMax", "hq": "China", "type": "AI Platform", "tokens": "~100B/day", "prov": "Own + Anthropic", "ev": "$150M+ cloud spend, own models. Hard to decompose training vs inference. 212M cumulative (not DAU). Wide range.", "conf": "Low" },
-      { "co": "Canva", "hq": "Australia", "type": "Design", "tokens": "~75B/day", "prov": "OpenAI", "ev": "800M AI uses/mo but most are tiny interactions (~1K tokens). \"Trillion Token Club\" = cumulative, not daily. COGS: 85-170B.", "conf": "Low-Med" },
-      { "co": "Notion AI", "hq": "US", "type": "Productivity", "tokens": "~75B/day", "prov": "Anthropic, OpenAI", "ev": "10M \"AI users\" but active AI DAU likely ~1M. $10/user/mo add-on. Revenue/price: 137-171B. COGS: ~106B.", "conf": "Low-Med" },
-      { "co": "Wrtn Technologies", "hq": "Korea", "type": "Consumer AI", "tokens": "~50B/day", "prov": "OpenAI, Anthropic", "ev": "6.5M MAU, free GPT-5. Revenue/price: 68-96B. Bottom-up: 9-32B. 200B/day would exceed entire $100M ARR.", "conf": "Low" },
-      { "co": "BLACKBOX.AI", "hq": "US", "type": "AI Dev Tool", "tokens": "~50B/day", "prov": "OpenAI, Anthropic, Google", "ev": "$31.7M rev, 20M registered (not DAU). Revenue/price: 107-172B. Bottom-up: 10-23B. Midpoint of financial methods.", "conf": "Low" },
-      { "co": "Harvey AI", "hq": "US", "type": "Legal AI", "tokens": "~45B/day", "prov": "OpenAI", "ev": "$190M ARR, 100K lawyers but DAU ~30-40K. Frontier-heavy = expensive per token. Revenue/price: 58-73B. COGS: ~50B.", "conf": "Med" },
-      { "co": "Monica AI", "hq": "China/SG", "type": "Consumer AI", "tokens": "~45B/day", "prov": "OpenAI, Anthropic, Google", "ev": "10M registered (not DAU, likely 300-500K). $100M ARR (Manus). Revenue/price: 68-82B. Bottom-up: 8-15B.", "conf": "Low" },
-      { "co": "Yellow.ai", "hq": "India", "type": "Enterprise AI", "tokens": "~25B/day", "prov": "OpenAI, Google", "ev": "1,300+ clients, $79.5M rev. Many conversations are rule-based, not LLM. Revenue/price: 131-175B. Bottom-up: 8-20B.", "conf": "Low-Med" },
-      { "co": "Klarna", "hq": "Sweden", "type": "Fintech", "tokens": "~20B/day", "prov": "OpenAI", "ev": "\"700 agents replaced\" = $21-28M equivalent, but AI spend much less. CS interactions are short (~2K tokens). Bottom-up: 0.7-30B.", "conf": "Low-Med" },
-      { "co": "Grab", "hq": "Singapore", "type": "Super-app", "tokens": "~20B/day", "prov": "OpenAI", "ev": "42M+ MAU but most \"AI\" is traditional ML (matching, fraud), not LLM. LLM-specific: CS chatbot + internal tools.", "conf": "Low" },
-      { "co": "Sea/Shopee", "hq": "Singapore", "type": "E-commerce", "tokens": "~20B/day", "prov": "OpenAI, Google", "ev": "OpenAI strategic MOU is forward-looking. Current LLM deployment: CS + product descriptions. $13B total rev.", "conf": "Low" },
-      { "co": "Kakao", "hq": "Korea", "type": "Messaging", "tokens": "~20B/day", "prov": "OpenAI (GPT-5)", "ev": "53M MAU but AI feature adoption maybe 5-10%. Revenue/price: 27-68B. Bottom-up: 4.5-22B.", "conf": "Low-Med" },
-      { "co": "Salesforce Agentforce", "hq": "US", "type": "Ent SaaS", "tokens": "~15B/day", "prov": "OpenAI, own", "ev": "$800M claimed but bundled/relabeled. Realistic: 5-20K active agents x 100 interactions x 3K tokens. Inference maybe $20-50M/yr.", "conf": "Low" }
+      {
+        "co": "Portkey.ai",
+        "hq": "US/India",
+        "type": "AI Gateway",
+        "tokens": "1.9T/day",
+        "prov": "Multi (40+)",
+        "ev": "Live dashboard: $1.3M/day spend, $475M/yr managed. 35%/wk growth. Gateway passthrough (not additive to provider totals).",
+        "conf": "High"
+      },
+      {
+        "co": "GitHub Copilot",
+        "hq": "US",
+        "type": "AI Dev Tool",
+        "tokens": "~1T/day",
+        "prov": "OpenAI, Anthropic",
+        "ev": "4.7M paid subs, margin-negative (MSFT subsidises), $1-2.3B ARR. Revenue/price: 1.4-4.1T. Bottom-up: 471-800B. Midpoint ~1T.",
+        "conf": "Med"
+      },
+      {
+        "co": "Cursor (Anysphere)",
+        "hq": "US",
+        "type": "AI Dev Tool",
+        "tokens": "~800B/day",
+        "prov": "Anthropic, OpenAI",
+        "ev": "$1B+ ARR, 40-60% COGS ratio. Revenue/price: 1-1.6T. Bottom-up: 400-800B. COGS: 680-980B. Midpoint ~800B.",
+        "conf": "Med-High"
+      },
+      {
+        "co": "OpenRouter",
+        "hq": "US",
+        "type": "AI Gateway",
+        "tokens": "280B/day",
+        "prov": "All (400+)",
+        "ev": "Self-reported 8.4T/mo. Most reliable figure \u2014 transparent platform with public pricing. Gateway passthrough.",
+        "conf": "High"
+      },
+      {
+        "co": "Perplexity",
+        "hq": "US",
+        "type": "AI Search",
+        "tokens": "~200B/day",
+        "prov": "Multi",
+        "ev": "780M queries/mo, $200M ARR. Revenue/price: ~220B. Bottom-up: 91-130B (but multi-step pipelines inflate). COGS: 220-290B.",
+        "conf": "Med"
+      },
+      {
+        "co": "Replit",
+        "hq": "US",
+        "type": "AI Dev Tool",
+        "tokens": "~150B/day",
+        "prov": "Multi",
+        "ev": "$240-265M rev but only ~60% AI-related. 50M registered != DAU (likely <2M). Revenue/price: 260-310B. COGS: ~192B. Bottom-up much lower.",
+        "conf": "Low-Med"
+      },
+      {
+        "co": "Cognition (Devin)",
+        "hq": "US",
+        "type": "AI Dev Tool",
+        "tokens": "~125B/day",
+        "prov": "OpenAI, Anthropic",
+        "ev": "$155M ARR combined. Agent sessions burn 50-200K tokens each. Revenue/price: 178-212B. COGS: ~148B.",
+        "conf": "Med"
+      },
+      {
+        "co": "Duolingo",
+        "hq": "US",
+        "type": "EdTech",
+        "tokens": "~100B/day",
+        "prov": "OpenAI (#1)",
+        "ev": "47.7M DAU but most exercises pre-generated. $10-30M/yr AI spend (margin compression data). At $0.30-0.50/M: 110-183B.",
+        "conf": "Med"
+      },
+      {
+        "co": "MiniMax",
+        "hq": "China",
+        "type": "AI Platform",
+        "tokens": "~100B/day",
+        "prov": "Own + Anthropic",
+        "ev": "$150M+ cloud spend, own models. Hard to decompose training vs inference. 212M cumulative (not DAU). Wide range.",
+        "conf": "Low"
+      },
+      {
+        "co": "Canva",
+        "hq": "Australia",
+        "type": "Design",
+        "tokens": "~75B/day",
+        "prov": "OpenAI",
+        "ev": "800M AI uses/mo but most are tiny interactions (~1K tokens). \"Trillion Token Club\" = cumulative, not daily. COGS: 85-170B.",
+        "conf": "Low-Med"
+      },
+      {
+        "co": "Notion AI",
+        "hq": "US",
+        "type": "Productivity",
+        "tokens": "~75B/day",
+        "prov": "Anthropic, OpenAI",
+        "ev": "10M \"AI users\" but active AI DAU likely ~1M. $10/user/mo add-on. Revenue/price: 137-171B. COGS: ~106B.",
+        "conf": "Low-Med"
+      },
+      {
+        "co": "Wrtn Technologies",
+        "hq": "Korea",
+        "type": "Consumer AI",
+        "tokens": "~50B/day",
+        "prov": "OpenAI, Anthropic",
+        "ev": "6.5M MAU, free GPT-5. Revenue/price: 68-96B. Bottom-up: 9-32B. 200B/day would exceed entire $100M ARR.",
+        "conf": "Low"
+      },
+      {
+        "co": "BLACKBOX.AI",
+        "hq": "US",
+        "type": "AI Dev Tool",
+        "tokens": "~50B/day",
+        "prov": "OpenAI, Anthropic, Google",
+        "ev": "$31.7M rev, 20M registered (not DAU). Revenue/price: 107-172B. Bottom-up: 10-23B. Midpoint of financial methods.",
+        "conf": "Low"
+      },
+      {
+        "co": "Harvey AI",
+        "hq": "US",
+        "type": "Legal AI",
+        "tokens": "~45B/day",
+        "prov": "OpenAI",
+        "ev": "$190M ARR, 100K lawyers but DAU ~30-40K. Frontier-heavy = expensive per token. Revenue/price: 58-73B. COGS: ~50B.",
+        "conf": "Med"
+      },
+      {
+        "co": "Monica AI",
+        "hq": "China/SG",
+        "type": "Consumer AI",
+        "tokens": "~45B/day",
+        "prov": "OpenAI, Anthropic, Google",
+        "ev": "10M registered (not DAU, likely 300-500K). $100M ARR (Manus). Revenue/price: 68-82B. Bottom-up: 8-15B.",
+        "conf": "Low"
+      },
+      {
+        "co": "Yellow.ai",
+        "hq": "India",
+        "type": "Enterprise AI",
+        "tokens": "~25B/day",
+        "prov": "OpenAI, Google",
+        "ev": "1,300+ clients, $79.5M rev. Many conversations are rule-based, not LLM. Revenue/price: 131-175B. Bottom-up: 8-20B.",
+        "conf": "Low-Med"
+      },
+      {
+        "co": "Klarna",
+        "hq": "Sweden",
+        "type": "Fintech",
+        "tokens": "~20B/day",
+        "prov": "OpenAI",
+        "ev": "\"700 agents replaced\" = $21-28M equivalent, but AI spend much less. CS interactions are short (~2K tokens). Bottom-up: 0.7-30B.",
+        "conf": "Low-Med"
+      },
+      {
+        "co": "Grab",
+        "hq": "Singapore",
+        "type": "Super-app",
+        "tokens": "~20B/day",
+        "prov": "OpenAI",
+        "ev": "42M+ MAU but most \"AI\" is traditional ML (matching, fraud), not LLM. LLM-specific: CS chatbot + internal tools.",
+        "conf": "Low"
+      },
+      {
+        "co": "Sea/Shopee",
+        "hq": "Singapore",
+        "type": "E-commerce",
+        "tokens": "~20B/day",
+        "prov": "OpenAI, Google",
+        "ev": "OpenAI strategic MOU is forward-looking. Current LLM deployment: CS + product descriptions. $13B total rev.",
+        "conf": "Low"
+      },
+      {
+        "co": "Kakao",
+        "hq": "Korea",
+        "type": "Messaging",
+        "tokens": "~20B/day",
+        "prov": "OpenAI (GPT-5)",
+        "ev": "53M MAU but AI feature adoption maybe 5-10%. Revenue/price: 27-68B. Bottom-up: 4.5-22B.",
+        "conf": "Low-Med"
+      },
+      {
+        "co": "Salesforce Agentforce",
+        "hq": "US",
+        "type": "Ent SaaS",
+        "tokens": "~15B/day",
+        "prov": "OpenAI, own",
+        "ev": "$800M claimed but bundled/relabeled. Realistic: 5-20K active agents x 100 interactions x 3K tokens. Inference maybe $20-50M/yr.",
+        "conf": "Low"
+      }
     ],
     "models": [
-      { "model": "GPT-4o mini", "prov": "OpenAI", "tokens": "~80T", "inP": "$0.15", "outP": "$0.60", "use": "Chat, agents, coding", "trend": "\u2191\u2191" },
-      { "model": "GPT-4o", "prov": "OpenAI", "tokens": "~55T", "inP": "$2.50", "outP": "$10.00", "use": "Enterprise, complex tasks", "trend": "\u2192" },
-      { "model": "GPT-4.1 mini", "prov": "OpenAI", "tokens": "~40T", "inP": "$0.40", "outP": "$1.60", "use": "Coding, agents", "trend": "\u2191\u2191\u2191" },
-      { "model": "Gemini 2.0 Flash", "prov": "Google", "tokens": "~35T", "inP": "$0.10", "outP": "$0.40", "use": "High-volume, agents", "trend": "\u2191\u2191\u2191" },
-      { "model": "Claude 3.5 Sonnet", "prov": "Anthropic", "tokens": "~30T", "inP": "$3.00", "outP": "$15.00", "use": "Coding, analysis", "trend": "\u2192" },
-      { "model": "Claude Sonnet 4", "prov": "Anthropic", "tokens": "~25T", "inP": "$3.00", "outP": "$15.00", "use": "Coding, enterprise", "trend": "\u2191\u2191" },
-      { "model": "Llama 3.1 405B", "prov": "Meta", "tokens": "~25T", "inP": "Self-host", "outP": "Self-host", "use": "On-prem enterprise", "trend": "\u2192" },
-      { "model": "Llama 4 Scout", "prov": "Meta", "tokens": "~20T", "inP": "Self-host", "outP": "Self-host", "use": "Agents, coding", "trend": "\u2191\u2191\u2191" },
-      { "model": "Gemini 2.5 Pro", "prov": "Google", "tokens": "~20T", "inP": "$1.25", "outP": "$10.00", "use": "Reasoning, analysis", "trend": "\u2191\u2191" },
-      { "model": "DeepSeek R1", "prov": "DeepSeek", "tokens": "~18T", "inP": "$0.55", "outP": "$2.19", "use": "Reasoning, math", "trend": "\u2191\u2191" },
-      { "model": "GPT-5", "prov": "OpenAI", "tokens": "~15T", "inP": "$5.00", "outP": "$20.00", "use": "Frontier reasoning", "trend": "\u2191\u2191\u2191" },
-      { "model": "DeepSeek V3", "prov": "DeepSeek", "tokens": "~12T", "inP": "$0.27", "outP": "$1.10", "use": "General, coding", "trend": "\u2191" },
-      { "model": "Mistral Large", "prov": "Mistral", "tokens": "~8T", "inP": "$2.00", "outP": "$6.00", "use": "Enterprise, multilingual", "trend": "\u2191" },
-      { "model": "Grok 4", "prov": "xAI", "tokens": "~7T", "inP": "$3.00", "outP": "$15.00", "use": "Reasoning, X integration", "trend": "\u2191\u2191" },
-      { "model": "Claude Opus 4", "prov": "Anthropic", "tokens": "~5T", "inP": "$15.00", "outP": "$75.00", "use": "Complex agents, coding", "trend": "\u2191" }
+      {
+        "model": "GPT-4o mini",
+        "prov": "OpenAI",
+        "tokens": "~80T",
+        "inP": "$0.15",
+        "outP": "$0.60",
+        "use": "Chat, agents, coding",
+        "trend": "\u2191\u2191"
+      },
+      {
+        "model": "GPT-4o",
+        "prov": "OpenAI",
+        "tokens": "~55T",
+        "inP": "$2.50",
+        "outP": "$10.00",
+        "use": "Enterprise, complex tasks",
+        "trend": "\u2192"
+      },
+      {
+        "model": "GPT-4.1 mini",
+        "prov": "OpenAI",
+        "tokens": "~40T",
+        "inP": "$0.40",
+        "outP": "$1.60",
+        "use": "Coding, agents",
+        "trend": "\u2191\u2191\u2191"
+      },
+      {
+        "model": "Gemini 2.0 Flash",
+        "prov": "Google",
+        "tokens": "~35T",
+        "inP": "$0.10",
+        "outP": "$0.40",
+        "use": "High-volume, agents",
+        "trend": "\u2191\u2191\u2191"
+      },
+      {
+        "model": "Claude 3.5 Sonnet",
+        "prov": "Anthropic",
+        "tokens": "~30T",
+        "inP": "$3.00",
+        "outP": "$15.00",
+        "use": "Coding, analysis",
+        "trend": "\u2192"
+      },
+      {
+        "model": "Claude Sonnet 4",
+        "prov": "Anthropic",
+        "tokens": "~25T",
+        "inP": "$3.00",
+        "outP": "$15.00",
+        "use": "Coding, enterprise",
+        "trend": "\u2191\u2191"
+      },
+      {
+        "model": "Llama 3.1 405B",
+        "prov": "Meta",
+        "tokens": "~25T",
+        "inP": "Self-host",
+        "outP": "Self-host",
+        "use": "On-prem enterprise",
+        "trend": "\u2192"
+      },
+      {
+        "model": "Llama 4 Scout",
+        "prov": "Meta",
+        "tokens": "~20T",
+        "inP": "Self-host",
+        "outP": "Self-host",
+        "use": "Agents, coding",
+        "trend": "\u2191\u2191\u2191"
+      },
+      {
+        "model": "Gemini 2.5 Pro",
+        "prov": "Google",
+        "tokens": "~20T",
+        "inP": "$1.25",
+        "outP": "$10.00",
+        "use": "Reasoning, analysis",
+        "trend": "\u2191\u2191"
+      },
+      {
+        "model": "DeepSeek R1",
+        "prov": "DeepSeek",
+        "tokens": "~18T",
+        "inP": "$0.55",
+        "outP": "$2.19",
+        "use": "Reasoning, math",
+        "trend": "\u2191\u2191"
+      },
+      {
+        "model": "GPT-5",
+        "prov": "OpenAI",
+        "tokens": "~15T",
+        "inP": "$5.00",
+        "outP": "$20.00",
+        "use": "Frontier reasoning",
+        "trend": "\u2191\u2191\u2191"
+      },
+      {
+        "model": "DeepSeek V3",
+        "prov": "DeepSeek",
+        "tokens": "~12T",
+        "inP": "$0.27",
+        "outP": "$1.10",
+        "use": "General, coding",
+        "trend": "\u2191"
+      },
+      {
+        "model": "Mistral Large",
+        "prov": "Mistral",
+        "tokens": "~8T",
+        "inP": "$2.00",
+        "outP": "$6.00",
+        "use": "Enterprise, multilingual",
+        "trend": "\u2191"
+      },
+      {
+        "model": "Grok 4",
+        "prov": "xAI",
+        "tokens": "~7T",
+        "inP": "$3.00",
+        "outP": "$15.00",
+        "use": "Reasoning, X integration",
+        "trend": "\u2191\u2191"
+      },
+      {
+        "model": "Claude Opus 4",
+        "prov": "Anthropic",
+        "tokens": "~5T",
+        "inP": "$15.00",
+        "outP": "$75.00",
+        "use": "Complex agents, coding",
+        "trend": "\u2191"
+      }
     ],
     "demandTypes": {
-      "Consumer Subs":       { "pct": 0.42, "color": "#f59e0b" },
-      "API / Developer":     { "pct": 0.25, "color": "#10b981" },
-      "Enterprise Platform": { "pct": 0.23, "color": "#3b82f6" },
-      "Cloud Channel":       { "pct": 0.10, "color": "#8b5cf6" }
+      "Consumer Subs": {
+        "pct": 0.42,
+        "color": "#f59e0b"
+      },
+      "API / Developer": {
+        "pct": 0.25,
+        "color": "#10b981"
+      },
+      "Enterprise Platform": {
+        "pct": 0.23,
+        "color": "#3b82f6"
+      },
+      "Cloud Channel": {
+        "pct": 0.1,
+        "color": "#8b5cf6"
+      }
     },
     "demandWeights": {
-      "OpenAI":        { "Consumer Subs": 0.55, "API / Developer": 0.15, "Enterprise Platform": 0.15, "Cloud Channel": 0.15 },
-      "Anthropic":     { "Consumer Subs": 0.20, "API / Developer": 0.35, "Enterprise Platform": 0.25, "Cloud Channel": 0.20 },
-      "Google/Gemini": { "Consumer Subs": 0.35, "API / Developer": 0.20, "Enterprise Platform": 0.20, "Cloud Channel": 0.25 },
-      "Meta":          { "Consumer Subs": 0.10, "API / Developer": 0.50, "Enterprise Platform": 0.30, "Cloud Channel": 0.10 },
-      "DeepSeek":      { "Consumer Subs": 0.40, "API / Developer": 0.40, "Enterprise Platform": 0.10, "Cloud Channel": 0.10 },
-      "Mistral":       { "Consumer Subs": 0.10, "API / Developer": 0.35, "Enterprise Platform": 0.30, "Cloud Channel": 0.25 },
-      "xAI":           { "Consumer Subs": 0.70, "API / Developer": 0.15, "Enterprise Platform": 0.10, "Cloud Channel": 0.05 },
-      "Others":        { "Consumer Subs": 0.30, "API / Developer": 0.30, "Enterprise Platform": 0.20, "Cloud Channel": 0.20 }
+      "OpenAI": {
+        "Consumer Subs": 0.55,
+        "API / Developer": 0.15,
+        "Enterprise Platform": 0.15,
+        "Cloud Channel": 0.15
+      },
+      "Anthropic": {
+        "Consumer Subs": 0.2,
+        "API / Developer": 0.35,
+        "Enterprise Platform": 0.25,
+        "Cloud Channel": 0.2
+      },
+      "Google/Gemini": {
+        "Consumer Subs": 0.35,
+        "API / Developer": 0.2,
+        "Enterprise Platform": 0.2,
+        "Cloud Channel": 0.25
+      },
+      "Meta": {
+        "Consumer Subs": 0.1,
+        "API / Developer": 0.5,
+        "Enterprise Platform": 0.3,
+        "Cloud Channel": 0.1
+      },
+      "DeepSeek": {
+        "Consumer Subs": 0.4,
+        "API / Developer": 0.4,
+        "Enterprise Platform": 0.1,
+        "Cloud Channel": 0.1
+      },
+      "Mistral": {
+        "Consumer Subs": 0.1,
+        "API / Developer": 0.35,
+        "Enterprise Platform": 0.3,
+        "Cloud Channel": 0.25
+      },
+      "xAI": {
+        "Consumer Subs": 0.7,
+        "API / Developer": 0.15,
+        "Enterprise Platform": 0.1,
+        "Cloud Channel": 0.05
+      },
+      "Others": {
+        "Consumer Subs": 0.3,
+        "API / Developer": 0.3,
+        "Enterprise Platform": 0.2,
+        "Cloud Channel": 0.2
+      }
     }
   },
   "calculator": {
@@ -271,155 +1517,792 @@
       {
         "label": "Traditional SaaS AI (High Shelfware Risk)",
         "products": [
-          { "key": "m365cop",    "name": "Microsoft 365 Copilot",  "cost": 30,   "activeRate": 0.358, "tokenConv": 0.15, "category": "trad",     "source": "Gartner: 35.8% active usage; only 3.3% of M365 base",                                          "perConvo": false },
-          { "key": "sfagent",    "name": "Salesforce Agentforce",   "cost": 2,    "activeRate": 0.12,  "tokenConv": 0.10, "category": "trad",     "source": "~12% of customers have deals; community reports minimal usage",                                "perConvo": true  },
-          { "key": "nowassist",  "name": "ServiceNow Now Assist",   "cost": 15,   "activeRate": 0.20,  "tokenConv": 0.15, "category": "trad",     "source": "<20% of licensed Fulfillers actively use AI features",                                          "perConvo": false },
-          { "key": "sapjoule",   "name": "SAP Joule",               "cost": 10,   "activeRate": 0.10,  "tokenConv": 0.08, "category": "trad",     "source": "\"Ninefold growth\" from undisclosed base. No separate AI SKU.",                                "perConvo": false },
-          { "key": "wdayillum",  "name": "Workday Illuminate",      "cost": 8,    "activeRate": 0.08,  "tokenConv": 0.05, "category": "trad",     "source": "Early stage. MIT: only 5% see real AI ROI.",                                                    "perConvo": false }
+          {
+            "key": "m365cop",
+            "name": "Microsoft 365 Copilot",
+            "cost": 30,
+            "activeRate": 0.358,
+            "tokenConv": 0.15,
+            "category": "trad",
+            "source": "Gartner: 35.8% active usage; only 3.3% of M365 base",
+            "perConvo": false
+          },
+          {
+            "key": "sfagent",
+            "name": "Salesforce Agentforce",
+            "cost": 2,
+            "activeRate": 0.12,
+            "tokenConv": 0.1,
+            "category": "trad",
+            "source": "~12% of customers have deals; community reports minimal usage",
+            "perConvo": true
+          },
+          {
+            "key": "nowassist",
+            "name": "ServiceNow Now Assist",
+            "cost": 15,
+            "activeRate": 0.2,
+            "tokenConv": 0.15,
+            "category": "trad",
+            "source": "<20% of licensed Fulfillers actively use AI features",
+            "perConvo": false
+          },
+          {
+            "key": "sapjoule",
+            "name": "SAP Joule",
+            "cost": 10,
+            "activeRate": 0.1,
+            "tokenConv": 0.08,
+            "category": "trad",
+            "source": "\"Ninefold growth\" from undisclosed base. No separate AI SKU.",
+            "perConvo": false
+          },
+          {
+            "key": "wdayillum",
+            "name": "Workday Illuminate",
+            "cost": 8,
+            "activeRate": 0.08,
+            "tokenConv": 0.05,
+            "category": "trad",
+            "source": "Early stage. MIT: only 5% see real AI ROI.",
+            "perConvo": false
+          }
         ]
       },
       {
         "label": "AI Model Subscriptions (Medium Shelfware Risk)",
         "products": [
-          { "key": "chatgptent",  "name": "ChatGPT Enterprise",          "cost": 60,  "activeRate": 0.45, "tokenConv": 0.40, "category": "modelsub", "source": "Higher activation than bundled SaaS — users chose to buy it",                               "perConvo": false },
-          { "key": "chatgptteam", "name": "ChatGPT Team",                "cost": 25,  "activeRate": 0.55, "tokenConv": 0.50, "category": "modelsub", "source": "Team leads buy it intentionally. Moderate activation.",                                      "perConvo": false },
-          { "key": "claudeent",   "name": "Claude for Enterprise",       "cost": 30,  "activeRate": 0.50, "tokenConv": 0.45, "category": "modelsub", "source": "Enterprise API-heavy. Higher activation than average.",                                      "perConvo": false },
-          { "key": "ghcopilot",   "name": "GitHub Copilot Business",     "cost": 19,  "activeRate": 0.65, "tokenConv": 0.60, "category": "modelsub", "source": "55% code acceptance rate. Devs actively use it.",                                           "perConvo": false },
-          { "key": "geminient",   "name": "Gemini for Google Workspace", "cost": 20,  "activeRate": 0.30, "tokenConv": 0.20, "category": "modelsub", "source": "Bundled into Workspace. Lower activation than standalone AI.",                               "perConvo": false }
+          {
+            "key": "chatgptent",
+            "name": "ChatGPT Enterprise",
+            "cost": 60,
+            "activeRate": 0.45,
+            "tokenConv": 0.4,
+            "category": "modelsub",
+            "source": "Higher activation than bundled SaaS \u2014 users chose to buy it",
+            "perConvo": false
+          },
+          {
+            "key": "chatgptteam",
+            "name": "ChatGPT Team",
+            "cost": 25,
+            "activeRate": 0.55,
+            "tokenConv": 0.5,
+            "category": "modelsub",
+            "source": "Team leads buy it intentionally. Moderate activation.",
+            "perConvo": false
+          },
+          {
+            "key": "claudeent",
+            "name": "Claude for Enterprise",
+            "cost": 30,
+            "activeRate": 0.5,
+            "tokenConv": 0.45,
+            "category": "modelsub",
+            "source": "Enterprise API-heavy. Higher activation than average.",
+            "perConvo": false
+          },
+          {
+            "key": "ghcopilot",
+            "name": "GitHub Copilot Business",
+            "cost": 19,
+            "activeRate": 0.65,
+            "tokenConv": 0.6,
+            "category": "modelsub",
+            "source": "55% code acceptance rate. Devs actively use it.",
+            "perConvo": false
+          },
+          {
+            "key": "geminient",
+            "name": "Gemini for Google Workspace",
+            "cost": 20,
+            "activeRate": 0.3,
+            "tokenConv": 0.2,
+            "category": "modelsub",
+            "source": "Bundled into Workspace. Lower activation than standalone AI.",
+            "perConvo": false
+          }
         ]
       },
       {
         "label": "AI Native Products (Low Shelfware Risk)",
         "products": [
-          { "key": "cursor",      "name": "Cursor Business",        "cost": 40,   "activeRate": 0.85, "tokenConv": 0.85, "category": "native", "source": "Every keystroke = API call. Power users consume $5K/mo retail.",                                  "perConvo": false },
-          { "key": "perplexity",  "name": "Perplexity Enterprise",  "cost": 40,   "activeRate": 0.75, "tokenConv": 0.90, "category": "native", "source": "Search = tokens. 780M queries/month platform-wide.",                                              "perConvo": false },
-          { "key": "intercom",    "name": "Intercom Fin",           "cost": 0.99, "activeRate": 0.90, "tokenConv": 0.95, "category": "native", "source": "$0.99/resolution. Each resolution = multiple LLM calls.",                                          "perConvo": true  },
-          { "key": "harvey",      "name": "Harvey",                 "cost": 100,  "activeRate": 0.80, "tokenConv": 0.80, "category": "native", "source": "Legal doc analysis = massive context windows. $190M ARR.",                                          "perConvo": false },
-          { "key": "replit",      "name": "Replit Teams",           "cost": 25,   "activeRate": 0.70, "tokenConv": 0.75, "category": "native", "source": "Code generation is the product. Gross margin swings with LLM costs.",                              "perConvo": false }
+          {
+            "key": "cursor",
+            "name": "Cursor Business",
+            "cost": 40,
+            "activeRate": 0.85,
+            "tokenConv": 0.85,
+            "category": "native",
+            "source": "Every keystroke = API call. Power users consume $5K/mo retail.",
+            "perConvo": false
+          },
+          {
+            "key": "perplexity",
+            "name": "Perplexity Enterprise",
+            "cost": 40,
+            "activeRate": 0.75,
+            "tokenConv": 0.9,
+            "category": "native",
+            "source": "Search = tokens. 780M queries/month platform-wide.",
+            "perConvo": false
+          },
+          {
+            "key": "intercom",
+            "name": "Intercom Fin",
+            "cost": 0.99,
+            "activeRate": 0.9,
+            "tokenConv": 0.95,
+            "category": "native",
+            "source": "$0.99/resolution. Each resolution = multiple LLM calls.",
+            "perConvo": true
+          },
+          {
+            "key": "harvey",
+            "name": "Harvey",
+            "cost": 100,
+            "activeRate": 0.8,
+            "tokenConv": 0.8,
+            "category": "native",
+            "source": "Legal doc analysis = massive context windows. $190M ARR.",
+            "perConvo": false
+          },
+          {
+            "key": "replit",
+            "name": "Replit Teams",
+            "cost": 25,
+            "activeRate": 0.7,
+            "tokenConv": 0.75,
+            "category": "native",
+            "source": "Code generation is the product. Gross margin swings with LLM costs.",
+            "perConvo": false
+          }
         ]
       }
     ],
     "alternatives": [
-      { "name": "Cursor Business seats",           "cost": 40,  "conv": 0.85 },
-      { "name": "Claude Enterprise seats",         "cost": 30,  "conv": 0.45 },
-      { "name": "Direct API spend (100% tokens)",  "cost": 1,   "conv": 1.0  },
-      { "name": "Perplexity Enterprise seats",     "cost": 40,  "conv": 0.90 },
-      { "name": "GitHub Copilot Business seats",   "cost": 19,  "conv": 0.60 }
+      {
+        "name": "Cursor Business seats",
+        "cost": 40,
+        "conv": 0.85
+      },
+      {
+        "name": "Claude Enterprise seats",
+        "cost": 30,
+        "conv": 0.45
+      },
+      {
+        "name": "Direct API spend (100% tokens)",
+        "cost": 1,
+        "conv": 1.0
+      },
+      {
+        "name": "Perplexity Enterprise seats",
+        "cost": 40,
+        "conv": 0.9
+      },
+      {
+        "name": "GitHub Copilot Business seats",
+        "cost": 19,
+        "conv": 0.6
+      }
     ]
   },
   "timeline": {
     "quarters": [
-      { "q": "Q1 2024", "date": "Jan-Mar 2024" },
-      { "q": "Q2 2024", "date": "Apr-Jun 2024" },
-      { "q": "Q3 2024", "date": "Jul-Sep 2024" },
-      { "q": "Q4 2024", "date": "Oct-Dec 2024" },
-      { "q": "Q1 2025", "date": "Jan-Mar 2025" },
-      { "q": "Q2 2025", "date": "Apr-Jun 2025" },
-      { "q": "Q3 2025", "date": "Jul-Sep 2025" },
-      { "q": "Q4 2025", "date": "Oct-Dec 2025" },
-      { "q": "Q1 2026", "date": "Jan-Mar 2026" }
+      {
+        "q": "Q1 2024",
+        "date": "Jan-Mar 2024"
+      },
+      {
+        "q": "Q2 2024",
+        "date": "Apr-Jun 2024"
+      },
+      {
+        "q": "Q3 2024",
+        "date": "Jul-Sep 2024"
+      },
+      {
+        "q": "Q4 2024",
+        "date": "Oct-Dec 2024"
+      },
+      {
+        "q": "Q1 2025",
+        "date": "Jan-Mar 2025"
+      },
+      {
+        "q": "Q2 2025",
+        "date": "Apr-Jun 2025"
+      },
+      {
+        "q": "Q3 2025",
+        "date": "Jul-Sep 2025"
+      },
+      {
+        "q": "Q4 2025",
+        "date": "Oct-Dec 2025"
+      },
+      {
+        "q": "Q1 2026",
+        "date": "Jan-Mar 2026"
+      }
     ],
-    "providerNames":  ["OpenAI", "Anthropic", "Google", "DeepSeek", "Mistral", "xAI", "Open Models", "Others"],
-    "providerColors": ["#10a37f", "#d97706", "#4285f4", "#a78bfa", "#f97316", "#e2e8f0", "#8b5cf6", "#475569"],
+    "providerNames": [
+      "OpenAI",
+      "Anthropic",
+      "Google",
+      "DeepSeek",
+      "Mistral",
+      "xAI",
+      "Meta",
+      "Others"
+    ],
+    "providerColors": [
+      "#10a37f",
+      "#d97706",
+      "#4285f4",
+      "#a78bfa",
+      "#f97316",
+      "#e2e8f0",
+      "#60a5fa",
+      "#475569"
+    ],
     "revData": [
-      [3.4,  0.2,  0.5,  0,    0.05, 0,    0.2,  0.3 ],
-      [4.5,  0.5,  0.8,  0,    0.1,  0,    0.3,  0.4 ],
-      [5.5,  1.0,  1.2,  0,    0.15, 0.1,  0.5,  0.5 ],
-      [7.0,  2.0,  1.8,  0.05, 0.2,  0.2,  0.8,  0.6 ],
-      [9.0,  4.0,  2.2,  0.1,  0.3,  0.3,  1.2,  0.8 ],
-      [11.0, 6.5,  2.8,  0.15, 0.35, 0.4,  1.5,  1.0 ],
-      [13.0, 9.0,  3.2,  0.2,  0.38, 0.45, 1.8,  1.4 ],
-      [15.0, 11.5, 3.8,  0.25, 0.4,  0.48, 2.2,  1.7 ],
-      [16.8, 14.0, 4.2,  0.3,  0.4,  0.5,  2.5,  2.0 ]
+      [
+        3.4,
+        0.2,
+        0.5,
+        0,
+        0.05,
+        0,
+        0.0,
+        0.5
+      ],
+      [
+        4.5,
+        0.5,
+        0.8,
+        0,
+        0.1,
+        0,
+        0.0,
+        0.7
+      ],
+      [
+        5.5,
+        1.0,
+        1.2,
+        0,
+        0.15,
+        0.1,
+        0.0,
+        1.0
+      ],
+      [
+        7.0,
+        2.0,
+        1.8,
+        0.05,
+        0.2,
+        0.2,
+        0.0,
+        1.4
+      ],
+      [
+        9.0,
+        4.0,
+        2.2,
+        0.1,
+        0.3,
+        0.3,
+        0.0,
+        2.0
+      ],
+      [
+        11.0,
+        6.5,
+        2.8,
+        0.15,
+        0.35,
+        0.4,
+        0.0,
+        2.5
+      ],
+      [
+        13.0,
+        9.0,
+        3.2,
+        0.2,
+        0.38,
+        0.45,
+        0.0,
+        3.2
+      ],
+      [
+        15.0,
+        11.5,
+        3.8,
+        0.25,
+        0.4,
+        0.48,
+        0.0,
+        3.9
+      ],
+      [
+        16.8,
+        14.0,
+        4.2,
+        0.3,
+        0.4,
+        0.5,
+        0.0,
+        4.5
+      ]
     ],
     "tokenData": [
-      [35,  4,   12, 0,  1,  0,  8,   10],
-      [50,  10,  20, 0,  2,  1,  12,  18],
-      [70,  20,  30, 2,  3,  2,  20,  35],
-      [95,  35,  45, 5,  5,  3,  30,  50],
-      [120, 50,  55, 12, 7,  5,  45,  70],
-      [145, 70,  65, 18, 9,  7,  60,  95],
-      [165, 85,  75, 25, 11, 8,  75,  110],
-      [185, 100, 82, 32, 13, 9,  88,  120],
-      [200, 110, 90, 40, 15, 10, 100, 130]
+      [
+        35,
+        4,
+        12,
+        0,
+        1,
+        0,
+        8,
+        10
+      ],
+      [
+        50,
+        10,
+        20,
+        0,
+        2,
+        1,
+        12,
+        18
+      ],
+      [
+        70,
+        20,
+        30,
+        2,
+        3,
+        2,
+        20,
+        35
+      ],
+      [
+        95,
+        35,
+        45,
+        5,
+        5,
+        3,
+        30,
+        50
+      ],
+      [
+        120,
+        50,
+        55,
+        12,
+        7,
+        5,
+        45,
+        70
+      ],
+      [
+        145,
+        70,
+        65,
+        18,
+        9,
+        7,
+        60,
+        95
+      ],
+      [
+        165,
+        85,
+        75,
+        25,
+        11,
+        8,
+        75,
+        110
+      ],
+      [
+        185,
+        100,
+        82,
+        32,
+        13,
+        9,
+        88,
+        120
+      ],
+      [
+        200,
+        110,
+        90,
+        40,
+        15,
+        10,
+        100,
+        130
+      ]
     ],
     "priceData": [
-      { "openai": 27.0, "anthropic": 22.5, "google": 6.8,  "open": 1.50 },
-      { "openai": 5.8,  "anthropic": 6.6,  "google": 2.6,  "open": 1.00 },
-      { "openai": 2.5,  "anthropic": 6.6,  "google": 0.9,  "open": 0.70 },
-      { "openai": 2.0,  "anthropic": 4.8,  "google": 0.8,  "open": 0.50 },
-      { "openai": 1.8,  "anthropic": 4.5,  "google": 0.7,  "open": 0.30 },
-      { "openai": 1.5,  "anthropic": 4.2,  "google": 0.5,  "open": 0.25 },
-      { "openai": 1.3,  "anthropic": 6.6,  "google": 0.5,  "open": 0.20 },
-      { "openai": 1.2,  "anthropic": 5.5,  "google": 0.5,  "open": 0.18 },
-      { "openai": 1.5,  "anthropic": 5.8,  "google": 0.6,  "open": 0.15 }
+      {
+        "openai": 27.0,
+        "anthropic": 22.5,
+        "google": 6.8,
+        "open": 1.5
+      },
+      {
+        "openai": 5.8,
+        "anthropic": 6.6,
+        "google": 2.6,
+        "open": 1.0
+      },
+      {
+        "openai": 2.5,
+        "anthropic": 6.6,
+        "google": 0.9,
+        "open": 0.7
+      },
+      {
+        "openai": 2.0,
+        "anthropic": 4.8,
+        "google": 0.8,
+        "open": 0.5
+      },
+      {
+        "openai": 1.8,
+        "anthropic": 4.5,
+        "google": 0.7,
+        "open": 0.3
+      },
+      {
+        "openai": 1.5,
+        "anthropic": 4.2,
+        "google": 0.5,
+        "open": 0.25
+      },
+      {
+        "openai": 1.3,
+        "anthropic": 6.6,
+        "google": 0.5,
+        "open": 0.2
+      },
+      {
+        "openai": 1.2,
+        "anthropic": 5.5,
+        "google": 0.5,
+        "open": 0.18
+      },
+      {
+        "openai": 1.5,
+        "anthropic": 5.8,
+        "google": 0.6,
+        "open": 0.15
+      }
     ],
     "events": [
-      { "title": "The GPT-4 Era",                             "text": "OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche." },
-      { "title": "GPT-4o + Claude 3.5 Sonnet + Llama 3",     "text": "Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast." },
-      { "title": "The Mini Revolution",                       "text": "GPT-4o mini at $0.60/M output — 99.5% cheaper than GPT-4. But Llama 3.1 405B launches in July, closing the frontier quality gap. vLLM Docker pulls accelerate. Self-hosting becomes viable at enterprise scale." },
-      { "title": "Open Source Inflection",                    "text": "Llama 3.1, Qwen 2.5, DeepSeek V2.5 all strong. Self-hosted tokens now ~9% of global volume. Enterprises self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges." },
-      { "title": "DeepSeek Shock",                            "text": "DeepSeek R1 matches GPT-4o at 1/10th the price — and it's open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?" },
-      { "title": "The Enterprise AI Mirage",                  "text": "M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked ≠ used. Meanwhile open models quietly grow — banks, governments, sovereign clouds all deploying Llama/Qwen." },
-      { "title": "Anthropic Takes Enterprise, OSS Takes Volume", "text": "Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story — 80T tokens/day with almost no model-layer revenue." },
-      { "title": "The AI Native Explosion",                   "text": "Cursor $1B ARR, Harvey $190M, Cognition $155M. Many AI natives use a mix of frontier AND open models, routing by cost/quality. litellm hits 97M downloads/month." },
-      { "title": "Today: Three Markets",                      "text": "Frontier APIs (OpenAI/Anthropic) win on quality. Open models (Llama/DeepSeek) win on cost and sovereignty. Traditional SaaS AI (Salesforce/Microsoft) wins on... marketing. The revenue gap between tokens served and tokens paid for keeps widening." }
+      {
+        "title": "The GPT-4 Era",
+        "text": "OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche."
+      },
+      {
+        "title": "GPT-4o + Claude 3.5 Sonnet + Llama 3",
+        "text": "Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast."
+      },
+      {
+        "title": "The Mini Revolution",
+        "text": "GPT-4o mini at $0.60/M output \u2014 99.5% cheaper than GPT-4. But Llama 3.1 405B launches in July, closing the frontier quality gap. vLLM Docker pulls accelerate. Self-hosting becomes viable at enterprise scale."
+      },
+      {
+        "title": "Open Source Inflection",
+        "text": "Llama 3.1, Qwen 2.5, DeepSeek V2.5 all strong. Self-hosted tokens now ~9% of global volume. Enterprises self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges."
+      },
+      {
+        "title": "DeepSeek Shock",
+        "text": "DeepSeek R1 matches GPT-4o at 1/10th the price \u2014 and it's open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?"
+      },
+      {
+        "title": "The Enterprise AI Mirage",
+        "text": "M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked \u2260 used. Meanwhile open models quietly grow \u2014 banks, governments, sovereign clouds all deploying Llama/Qwen."
+      },
+      {
+        "title": "Anthropic Takes Enterprise, OSS Takes Volume",
+        "text": "Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story \u2014 80T tokens/day with almost no model-layer revenue."
+      },
+      {
+        "title": "The AI Native Explosion",
+        "text": "Cursor $1B ARR, Harvey $190M, Cognition $155M. Many AI natives use a mix of frontier AND open models, routing by cost/quality. litellm hits 97M downloads/month."
+      },
+      {
+        "title": "Today: Three Markets",
+        "text": "Frontier APIs (OpenAI/Anthropic) win on quality. Open models (Llama/DeepSeek) win on cost and sovereignty. Traditional SaaS AI (Salesforce/Microsoft) wins on... marketing. The revenue gap between tokens served and tokens paid for keeps widening."
+      }
     ]
   },
   "gateway": {
     "updated": "2026-03-28",
     "providerColors": {
-      "Anthropic":  "#d97706",
-      "OpenAI":     "#10a37f",
-      "Google":     "#4285f4",
-      "DeepSeek":   "#a78bfa",
-      "Meta":       "#60a5fa",
-      "Mistral":    "#f97316",
-      "Qwen":       "#06b6d4",
-      "Microsoft":  "#00a4ef"
+      "Anthropic": "#d97706",
+      "OpenAI": "#10a37f",
+      "Google": "#4285f4",
+      "DeepSeek": "#a78bfa",
+      "Meta": "#60a5fa",
+      "Mistral": "#f97316",
+      "Qwen": "#06b6d4",
+      "Microsoft": "#00a4ef"
     },
     "portkey": {
-      "totalTokens":   1900000000000,
+      "totalTokens": 1900000000000,
       "totalRequests": 151800000,
-      "totalSpend":    1300000,
-      "weeklyGrowth":  "~35%",
+      "totalSpend": 1300000,
+      "weeklyGrowth": "~35%",
       "models": [
-        { "name": "Claude Opus 4.6",    "provider": "Anthropic", "tokens": 284800000000, "spend": 333700, "share": 15.0, "type": "frontier" },
-        { "name": "Claude Sonnet 4.6",  "provider": "Anthropic", "tokens": 262100000000, "spend": 198400, "share": 13.8, "type": "frontier" },
-        { "name": "Gemini 2.5 Flash",   "provider": "Google",    "tokens": 241500000000, "spend":  72200, "share": 12.7, "type": "frontier" },
-        { "name": "GPT-5-mini",         "provider": "OpenAI",    "tokens": 198300000000, "spend":  89400, "share": 10.4, "type": "frontier" },
-        { "name": "Claude Haiku 3.5",   "provider": "Anthropic", "tokens": 176200000000, "spend":  42100, "share":  9.3, "type": "frontier" },
-        { "name": "GPT-4o",             "provider": "OpenAI",    "tokens": 152700000000, "spend": 168500, "share":  8.0, "type": "frontier" },
-        { "name": "DeepSeek R1",        "provider": "DeepSeek",  "tokens": 141900000000, "spend":  38200, "share":  7.5, "type": "open"     },
-        { "name": "Gemini 2.5 Pro",     "provider": "Google",    "tokens": 118400000000, "spend": 112800, "share":  6.2, "type": "frontier" },
-        { "name": "Llama 3.1 70B",      "provider": "Meta",      "tokens":  97600000000, "spend":  28600, "share":  5.1, "type": "open"     },
-        { "name": "GPT-5",              "provider": "OpenAI",    "tokens":  86200000000, "spend": 142300, "share":  4.5, "type": "frontier" },
-        { "name": "Qwen 2.5 72B",       "provider": "Qwen",      "tokens":  52100000000, "spend":  15600, "share":  2.7, "type": "open"     },
-        { "name": "Mistral Large",      "provider": "Mistral",   "tokens":  41800000000, "spend":  25100, "share":  2.2, "type": "frontier" },
-        { "name": "Llama 3.1 8B",       "provider": "Meta",      "tokens":  38400000000, "spend":   1900, "share":  2.0, "type": "open"     },
-        { "name": "DeepSeek V3",        "provider": "DeepSeek",  "tokens":  35700000000, "spend":   9600, "share":  1.9, "type": "open"     },
-        { "name": "Gemma 2 9B",         "provider": "Google",    "tokens":  21300000000, "spend":   1100, "share":  1.1, "type": "open"     }
+        {
+          "name": "Claude Opus 4.6",
+          "provider": "Anthropic",
+          "tokens": 284800000000,
+          "spend": 333700,
+          "share": 15.0,
+          "type": "frontier"
+        },
+        {
+          "name": "Claude Sonnet 4.6",
+          "provider": "Anthropic",
+          "tokens": 262100000000,
+          "spend": 198400,
+          "share": 13.8,
+          "type": "frontier"
+        },
+        {
+          "name": "Gemini 2.5 Flash",
+          "provider": "Google",
+          "tokens": 241500000000,
+          "spend": 72200,
+          "share": 12.7,
+          "type": "frontier"
+        },
+        {
+          "name": "GPT-5-mini",
+          "provider": "OpenAI",
+          "tokens": 198300000000,
+          "spend": 89400,
+          "share": 10.4,
+          "type": "frontier"
+        },
+        {
+          "name": "Claude Haiku 3.5",
+          "provider": "Anthropic",
+          "tokens": 176200000000,
+          "spend": 42100,
+          "share": 9.3,
+          "type": "frontier"
+        },
+        {
+          "name": "GPT-4o",
+          "provider": "OpenAI",
+          "tokens": 152700000000,
+          "spend": 168500,
+          "share": 8.0,
+          "type": "frontier"
+        },
+        {
+          "name": "DeepSeek R1",
+          "provider": "DeepSeek",
+          "tokens": 141900000000,
+          "spend": 38200,
+          "share": 7.5,
+          "type": "open"
+        },
+        {
+          "name": "Gemini 2.5 Pro",
+          "provider": "Google",
+          "tokens": 118400000000,
+          "spend": 112800,
+          "share": 6.2,
+          "type": "frontier"
+        },
+        {
+          "name": "Llama 3.1 70B",
+          "provider": "Meta",
+          "tokens": 97600000000,
+          "spend": 28600,
+          "share": 5.1,
+          "type": "open"
+        },
+        {
+          "name": "GPT-5",
+          "provider": "OpenAI",
+          "tokens": 86200000000,
+          "spend": 142300,
+          "share": 4.5,
+          "type": "frontier"
+        },
+        {
+          "name": "Qwen 2.5 72B",
+          "provider": "Qwen",
+          "tokens": 52100000000,
+          "spend": 15600,
+          "share": 2.7,
+          "type": "open"
+        },
+        {
+          "name": "Mistral Large",
+          "provider": "Mistral",
+          "tokens": 41800000000,
+          "spend": 25100,
+          "share": 2.2,
+          "type": "frontier"
+        },
+        {
+          "name": "Llama 3.1 8B",
+          "provider": "Meta",
+          "tokens": 38400000000,
+          "spend": 1900,
+          "share": 2.0,
+          "type": "open"
+        },
+        {
+          "name": "DeepSeek V3",
+          "provider": "DeepSeek",
+          "tokens": 35700000000,
+          "spend": 9600,
+          "share": 1.9,
+          "type": "open"
+        },
+        {
+          "name": "Gemma 2 9B",
+          "provider": "Google",
+          "tokens": 21300000000,
+          "spend": 1100,
+          "share": 1.1,
+          "type": "open"
+        }
       ]
     },
     "openrouter": {
-      "totalTokens":   280000000000,
-      "totalRequests":  25000000,
-      "totalSpend":      224000,
+      "totalTokens": 280000000000,
+      "totalRequests": 25000000,
+      "totalSpend": 224000,
       "models": [
-        { "name": "Claude Sonnet 4.6",  "provider": "Anthropic", "tokens":  47600000000, "spend": 42800, "share": 17.0, "type": "frontier" },
-        { "name": "Gemini 2.5 Flash",   "provider": "Google",    "tokens":  39200000000, "spend": 11800, "share": 14.0, "type": "frontier" },
-        { "name": "DeepSeek R1",        "provider": "DeepSeek",  "tokens":  33600000000, "spend":  9100, "share": 12.0, "type": "open"     },
-        { "name": "GPT-4o-mini",        "provider": "OpenAI",    "tokens":  28000000000, "spend":  4200, "share": 10.0, "type": "frontier" },
-        { "name": "Claude Haiku 3.5",   "provider": "Anthropic", "tokens":  25200000000, "spend":  6000, "share":  9.0, "type": "frontier" },
-        { "name": "Llama 3.1 8B",       "provider": "Meta",      "tokens":  22400000000, "spend":  1100, "share":  8.0, "type": "open"     },
-        { "name": "GPT-4o",             "provider": "OpenAI",    "tokens":  19600000000, "spend": 21600, "share":  7.0, "type": "frontier" },
-        { "name": "Mistral Large",      "provider": "Mistral",   "tokens":  14000000000, "spend":  8400, "share":  5.0, "type": "frontier" },
-        { "name": "Claude Opus 4.6",    "provider": "Anthropic", "tokens":  11200000000, "spend": 13100, "share":  4.0, "type": "frontier" },
-        { "name": "Qwen 2.5 72B",       "provider": "Qwen",      "tokens":   8400000000, "spend":  2500, "share":  3.0, "type": "open"     },
-        { "name": "DeepSeek V3",        "provider": "DeepSeek",  "tokens":   7000000000, "spend":  1900, "share":  2.5, "type": "open"     },
-        { "name": "Llama 3.1 70B",      "provider": "Meta",      "tokens":   5600000000, "spend":  1700, "share":  2.0, "type": "open"     },
-        { "name": "Gemma 2 9B",         "provider": "Google",    "tokens":   4200000000, "spend":   210, "share":  1.5, "type": "open"     },
-        { "name": "Phi-3 Mini",         "provider": "Microsoft", "tokens":   3100000000, "spend":   160, "share":  1.1, "type": "open"     }
+        {
+          "name": "Claude Sonnet 4.6",
+          "provider": "Anthropic",
+          "tokens": 47600000000,
+          "spend": 42800,
+          "share": 17.0,
+          "type": "frontier"
+        },
+        {
+          "name": "Gemini 2.5 Flash",
+          "provider": "Google",
+          "tokens": 39200000000,
+          "spend": 11800,
+          "share": 14.0,
+          "type": "frontier"
+        },
+        {
+          "name": "DeepSeek R1",
+          "provider": "DeepSeek",
+          "tokens": 33600000000,
+          "spend": 9100,
+          "share": 12.0,
+          "type": "open"
+        },
+        {
+          "name": "GPT-4o-mini",
+          "provider": "OpenAI",
+          "tokens": 28000000000,
+          "spend": 4200,
+          "share": 10.0,
+          "type": "frontier"
+        },
+        {
+          "name": "Claude Haiku 3.5",
+          "provider": "Anthropic",
+          "tokens": 25200000000,
+          "spend": 6000,
+          "share": 9.0,
+          "type": "frontier"
+        },
+        {
+          "name": "Llama 3.1 8B",
+          "provider": "Meta",
+          "tokens": 22400000000,
+          "spend": 1100,
+          "share": 8.0,
+          "type": "open"
+        },
+        {
+          "name": "GPT-4o",
+          "provider": "OpenAI",
+          "tokens": 19600000000,
+          "spend": 21600,
+          "share": 7.0,
+          "type": "frontier"
+        },
+        {
+          "name": "Mistral Large",
+          "provider": "Mistral",
+          "tokens": 14000000000,
+          "spend": 8400,
+          "share": 5.0,
+          "type": "frontier"
+        },
+        {
+          "name": "Claude Opus 4.6",
+          "provider": "Anthropic",
+          "tokens": 11200000000,
+          "spend": 13100,
+          "share": 4.0,
+          "type": "frontier"
+        },
+        {
+          "name": "Qwen 2.5 72B",
+          "provider": "Qwen",
+          "tokens": 8400000000,
+          "spend": 2500,
+          "share": 3.0,
+          "type": "open"
+        },
+        {
+          "name": "DeepSeek V3",
+          "provider": "DeepSeek",
+          "tokens": 7000000000,
+          "spend": 1900,
+          "share": 2.5,
+          "type": "open"
+        },
+        {
+          "name": "Llama 3.1 70B",
+          "provider": "Meta",
+          "tokens": 5600000000,
+          "spend": 1700,
+          "share": 2.0,
+          "type": "open"
+        },
+        {
+          "name": "Gemma 2 9B",
+          "provider": "Google",
+          "tokens": 4200000000,
+          "spend": 210,
+          "share": 1.5,
+          "type": "open"
+        },
+        {
+          "name": "Phi-3 Mini",
+          "provider": "Microsoft",
+          "tokens": 3100000000,
+          "spend": 160,
+          "share": 1.1,
+          "type": "open"
+        }
       ]
     }
   }
