@@ -1,0 +1,36 @@
+name: Daily Signal Scrape & Dashboard Update
+
+on:
+  schedule:
+    - cron: '3 21 * * *'  # 7:03am AEST (UTC+10)
+  workflow_dispatch:       # manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Install dependencies
+        run: pip install youtube-transcript-api
+
+      - name: Run signal scraper
+        run: python scripts/scrape_signals.py
+
+      - name: Run auto-update (dashboard + site-data.json)
+        run: python scripts/auto_update.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A data/ site-data.json dashboard.html index.html
+          git diff --cached --quiet || git commit -m "Auto-update: signal scrape $(date +%Y-%m-%d)"
+          git push

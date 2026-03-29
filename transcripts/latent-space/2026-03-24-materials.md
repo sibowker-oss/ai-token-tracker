@@ -3,6 +3,7 @@
 **Source:** Latent Space  
 **Date:** 2026-03-24  
 **URL:** https://www.latent.space/p/materials  
+**Tier:** 1  
 
 ---
 

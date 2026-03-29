@@ -1,0 +1,33 @@
+name: Weekly Company Enrichment & Newsletter
+
+on:
+  schedule:
+    - cron: '13 23 * * 1'  # Monday 9:13am AEST (UTC+10)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  enrich-and-newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Run company enrichment
+        run: python scripts/enrich.py --all
+
+      - name: Generate newsletter
+        run: python scripts/newsletter.py --format html
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add companies.json companies/ newsletters/ data/
+          git diff --cached --quiet || git commit -m "Weekly enrichment + newsletter $(date +%Y-%m-%d)"
+          git push
