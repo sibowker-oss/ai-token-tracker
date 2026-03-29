@@ -1,19 +1,19 @@
 {
   "date": "2026-03-29",
-  "timestamp": "2026-03-29T07:00:23.645572",
+  "timestamp": "2026-03-29T14:59:44.520547",
   "pypi": {
-    "openai": 224305409,
-    "anthropic": 78780747,
-    "langchain-core": 99950634,
-    "litellm": 95835692,
-    "google-generativeai": 17067993,
-    "vllm": 7704817,
-    "transformers": 125297403,
-    "ollama": 10303924,
-    "mistralai": 14811457,
-    "cohere": 21696262,
-    "together": 4732272,
-    "groq": 12860199
+    "openai": 221606769,
+    "anthropic": 78108288,
+    "langchain-core": 98832168,
+    "litellm": 94783775,
+    "google-generativeai": 16897264,
+    "vllm": 7809508,
+    "transformers": 124060929,
+    "ollama": 10248336,
+    "mistralai": 14611887,
+    "cohere": 21928929,
+    "together": 4809630,
+    "groq": 12758633
   },
   "npm": {
     "openai": 68807323,
@@ -37,20 +37,44 @@
     "google/gemma-2-9b-it": 273940
   },
   "openrouter": {
-    "total_models": 347,
+    "total_models": 345,
     "providers": 56,
-    "free_models": 27,
+    "free_models": 25,
     "min_output_price_per_m": -1000000.0,
     "max_output_price_per_m": 600.0,
     "median_output_price_per_m": 1.2
   },
+  "github": {
+    "ollama": {
+      "total_downloads": 1837581,
+      "latest_tag": "v0.18.3"
+    },
+    "vllm": {
+      "total_downloads": 30503,
+      "latest_tag": "v0.18.0"
+    },
+    "llama_cpp": {
+      "total_downloads": 5143,
+      "latest_tag": "b8575"
+    },
+    "tgi": {
+      "total_downloads": 0,
+      "latest_tag": "v3.3.7"
+    }
+  },
+  "docker": {
+    "vllm": 16349435
+  },
   "derived": {
-    "openai_total": 293112732,
-    "anthropic_total": 116247790,
-    "google_total": 27296809,
-    "anthropic_openai_ratio": 0.397,
-    "self_hosted_total": 19974819,
+    "openai_total": 290414092,
+    "anthropic_total": 115575331,
+    "google_total": 27126080,
+    "anthropic_openai_ratio": 0.398,
+    "self_hosted_sdk": 20023922,
+    "self_hosted_github": 1873227,
+    "self_hosted_docker": 16349435,
+    "self_hosted_total": 38246584,
     "hf_total_downloads": 15920919,
-    "litellm_downloads": 95835692
+    "litellm_downloads": 94783775
   }
 }

@@ -54,6 +54,8 @@ def update_dashboard(signals):
     pypi = signals.get('pypi', {})
     npm = signals.get('npm', {})
     hf = signals.get('huggingface', {})
+    github = signals.get('github', {})
+    docker = signals.get('docker', {})
     date = signals.get('date', 'unknown')
 
     # Update methodology section with latest SDK numbers
@@ -88,6 +90,27 @@ def update_dashboard(signals):
         if re.search(old_pattern, html):
             html = re.sub(old_pattern, new_text, html)
             changes.append(f"vllm: {vllm_m}M PyPI downloads")
+
+    # Update Ollama GitHub release downloads (binary installs — stronger signal than PyPI)
+    ollama_gh = (github.get('ollama') or {}).get('total_downloads', 0)
+    if ollama_gh:
+        old_pattern = r'Ollama: [\d.]+M binary downloads'
+        ollama_m = round(ollama_gh / 1e6, 1)
+        new_text = f'Ollama: {ollama_m}M binary downloads'
+        if re.search(old_pattern, html):
+            html = re.sub(old_pattern, new_text, html)
+            changes.append(f"Ollama binary downloads: {ollama_m}M")
+
+    # Update Docker Hub container pulls (production deployment signal)
+    docker_vllm = docker.get('vllm', 0) or 0
+    docker_tgi = docker.get('tgi', 0) or 0
+    if docker_vllm or docker_tgi:
+        old_pattern = r'vLLM \+ TGI containers: [\d.]+M pulls'
+        total_m = round((docker_vllm + docker_tgi) / 1e6, 1)
+        new_text = f'vLLM + TGI containers: {total_m}M pulls'
+        if re.search(old_pattern, html):
+            html = re.sub(old_pattern, new_text, html)
+            changes.append(f"Container pulls: {total_m}M")
 
     # Update date in footer
     old_footer = r'Data as of \w+ \d{4}'
@@ -127,7 +150,7 @@ def git_commit_push(date):
     subprocess.run(['git', 'add', 'data/', 'dashboard.html', 'index.html'], check=True)
 
     # Commit
-    msg = f"Auto-update: signal scrape {date}\n\nAutomated daily data refresh from PyPI, npm, HuggingFace, OpenRouter.\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
+    msg = f"Auto-update: signal scrape {date}\n\nAutomated daily data refresh from PyPI, npm, HuggingFace, OpenRouter, GitHub releases, Docker Hub.\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
     subprocess.run(['git', 'commit', '-m', msg], check=True)
 
     # Push

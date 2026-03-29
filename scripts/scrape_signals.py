@@ -8,6 +8,8 @@ Sources:
 - npm download stats (openai, @anthropic-ai/sdk, ai, etc.)
 - HuggingFace model download counts (Llama, DeepSeek, Mistral, etc.)
 - OpenRouter model count and pricing
+- GitHub release download counts (Ollama, vLLM, llama.cpp — binary installs)
+- Docker Hub pull counts (vLLM, text-generation-inference — container deployments)
 
 Run: python3 scripts/scrape_signals.py
 Output: data/signals_YYYY-MM-DD.json + data/signals_latest.json
@@ -96,6 +98,63 @@ def scrape_huggingface():
             results[model_id] = None
     return results
 
+def scrape_github():
+    """Fetch release download counts for key self-hosted AI tools from GitHub API.
+
+    Uses unauthenticated API (60 req/hr limit) — we make ~3 calls, well within budget.
+    Captures binary install counts, which are more representative of actual deployments
+    than PyPI package downloads (which include CI, scripted installs, etc.).
+    """
+    repos = [
+        ('ollama/ollama', 'ollama'),
+        ('vllm-project/vllm', 'vllm'),
+        ('ggml-org/llama.cpp', 'llama_cpp'),
+        ('huggingface/text-generation-inference', 'tgi'),
+    ]
+    results = {}
+    print("\n🐙 GitHub release downloads:")
+    for repo, key in repos:
+        data = fetch_json(f'https://api.github.com/repos/{repo}/releases?per_page=5')
+        if not data:
+            results[key] = None
+            continue
+        total_downloads = 0
+        latest_tag = None
+        for release in data:
+            if release.get('prerelease') or release.get('draft'):
+                continue
+            if latest_tag is None:
+                latest_tag = release.get('tag_name', 'unknown')
+            for asset in release.get('assets', []):
+                total_downloads += asset.get('download_count', 0)
+        results[key] = {'total_downloads': total_downloads, 'latest_tag': latest_tag}
+        print(f"  {key}: {total_downloads:,} total release downloads (latest: {latest_tag})")
+    return results
+
+
+def scrape_docker_hub():
+    """Fetch container pull counts from Docker Hub for key AI inference runtimes.
+
+    Container pulls are a strong signal for enterprise/production self-hosted deployments —
+    organisations running vLLM in production almost always use the official Docker image.
+    Note: TGI is tracked via GitHub releases (hosted on ghcr.io, not Docker Hub).
+    """
+    images = [
+        ('vllm/vllm-openai', 'vllm'),
+    ]
+    results = {}
+    print("\n🐳 Docker Hub pulls:")
+    for image, key in images:
+        data = fetch_json(f'https://hub.docker.com/v2/repositories/{image}/')
+        if data and 'pull_count' in data:
+            count = data['pull_count']
+            results[key] = count
+            print(f"  {key}: {count:,} pulls")
+        else:
+            results[key] = None
+    return results
+
+
 def scrape_openrouter():
     """Fetch model count and pricing summary from OpenRouter."""
     print("\n🔀 OpenRouter:")
@@ -132,9 +191,18 @@ def scrape_openrouter():
     print(f"  Output $/1M: min ${result['min_output_price_per_m']:.3f}, median ${result['median_output_price_per_m']:.2f}, max ${result['max_output_price_per_m']:.1f}")
     return result
 
-def compute_derived(pypi, npm, hf):
-    """Compute derived signals from raw data."""
+def compute_derived(pypi, npm, hf, github=None, docker=None):
+    """Compute derived signals from raw data.
+
+    self_hosted_total now incorporates four channels:
+      1. PyPI vllm + ollama (Python SDK installs / CI)
+      2. npm ollama (JS SDK installs)
+      3. GitHub release binary downloads for Ollama, vLLM, llama.cpp
+      4. Docker Hub pulls for vLLM and TGI container images
+    """
     derived = {}
+    github = github or {}
+    docker = docker or {}
 
     # Combined SDK downloads (PyPI + npm)
     if pypi.get('openai') and npm.get('openai'):
@@ -148,11 +216,25 @@ def compute_derived(pypi, npm, hf):
     if derived.get('openai_total') and derived.get('anthropic_total'):
         derived['anthropic_openai_ratio'] = round(derived['anthropic_total'] / derived['openai_total'], 3)
 
-    # Self-hosted signal (vllm + ollama downloads)
-    vllm = pypi.get('vllm', 0) or 0
+    # Self-hosted signal — SDK layer (PyPI + npm)
+    vllm_pypi = pypi.get('vllm', 0) or 0
     ollama_py = pypi.get('ollama', 0) or 0
     ollama_npm = npm.get('ollama', 0) or 0
-    derived['self_hosted_total'] = vllm + ollama_py + ollama_npm
+    derived['self_hosted_sdk'] = vllm_pypi + ollama_py + ollama_npm
+
+    # Self-hosted signal — binary installs (GitHub release downloads)
+    gh_ollama = (github.get('ollama') or {}).get('total_downloads', 0) or 0
+    gh_vllm = (github.get('vllm') or {}).get('total_downloads', 0) or 0
+    gh_llama_cpp = (github.get('llama_cpp') or {}).get('total_downloads', 0) or 0
+    gh_tgi = (github.get('tgi') or {}).get('total_downloads', 0) or 0
+    derived['self_hosted_github'] = gh_ollama + gh_vllm + gh_llama_cpp + gh_tgi
+
+    # Self-hosted signal — container deployments (Docker Hub; TGI is on ghcr.io so tracked via GitHub releases)
+    docker_vllm = docker.get('vllm', 0) or 0
+    derived['self_hosted_docker'] = docker_vllm
+
+    # Composite self-hosted total (all channels)
+    derived['self_hosted_total'] = derived['self_hosted_sdk'] + derived['self_hosted_github'] + derived['self_hosted_docker']
 
     # Total HF downloads as open-source adoption signal
     hf_total = sum(v for v in hf.values() if v)
@@ -175,7 +257,9 @@ def main():
     npm = scrape_npm()
     hf = scrape_huggingface()
     openrouter = scrape_openrouter()
-    derived = compute_derived(pypi, npm, hf)
+    github = scrape_github()
+    docker = scrape_docker_hub()
+    derived = compute_derived(pypi, npm, hf, github, docker)
 
     result = {
         'date': today,
@@ -184,6 +268,8 @@ def main():
         'npm': npm,
         'huggingface': hf,
         'openrouter': openrouter,
+        'github': github,
+        'docker': docker,
         'derived': derived,
     }
 
