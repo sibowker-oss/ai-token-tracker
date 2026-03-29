@@ -217,24 +217,30 @@ def compute_derived(pypi, npm, hf, github=None, docker=None):
         derived['anthropic_openai_ratio'] = round(derived['anthropic_total'] / derived['openai_total'], 3)
 
     # Self-hosted signal — SDK layer (PyPI + npm)
+    # Basis: monthly download rate. Inflated by CI/CD; best read as developer adoption velocity.
     vllm_pypi = pypi.get('vllm', 0) or 0
     ollama_py = pypi.get('ollama', 0) or 0
     ollama_npm = npm.get('ollama', 0) or 0
     derived['self_hosted_sdk'] = vllm_pypi + ollama_py + ollama_npm
+    derived['self_hosted_sdk_basis'] = 'monthly_rate'
 
     # Self-hosted signal — binary installs (GitHub release downloads)
+    # Basis: cumulative downloads across last 5 releases (NOT a monthly rate).
+    # Ollama is the cleanest signal here — actual human installer downloads.
     gh_ollama = (github.get('ollama') or {}).get('total_downloads', 0) or 0
     gh_vllm = (github.get('vllm') or {}).get('total_downloads', 0) or 0
     gh_llama_cpp = (github.get('llama_cpp') or {}).get('total_downloads', 0) or 0
     gh_tgi = (github.get('tgi') or {}).get('total_downloads', 0) or 0
     derived['self_hosted_github'] = gh_ollama + gh_vllm + gh_llama_cpp + gh_tgi
+    derived['self_hosted_github_basis'] = 'cumulative_last_5_releases'
 
-    # Self-hosted signal — container deployments (Docker Hub; TGI is on ghcr.io so tracked via GitHub releases)
+    # Self-hosted signal — container deployments (Docker Hub)
+    # Basis: all-time cumulative pull count (NOT a monthly rate).
+    # Inflated by CI/CD re-pulls; use as enterprise deployment floor, not volume.
+    # TGI tracked via GitHub releases (hosted on ghcr.io, not Docker Hub).
     docker_vllm = docker.get('vllm', 0) or 0
     derived['self_hosted_docker'] = docker_vllm
-
-    # Composite self-hosted total (all channels)
-    derived['self_hosted_total'] = derived['self_hosted_sdk'] + derived['self_hosted_github'] + derived['self_hosted_docker']
+    derived['self_hosted_docker_basis'] = 'cumulative_alltime'
 
     # Total HF downloads as open-source adoption signal
     hf_total = sum(v for v in hf.values() if v)
