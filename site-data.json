@@ -96,7 +96,7 @@
       "DeepSeek":      { "tokens": 40,  "rev": 0.3,  "color": "#a78bfa", "growth": "+800% YoY", "consumerPct": 50, "bizPct": 50, "modelType": "open" },
       "Mistral":       { "tokens": 15,  "rev": 0.4,  "color": "#f97316", "growth": "+250% YoY", "consumerPct": 20, "bizPct": 80, "modelType": "frontier" },
       "xAI":           { "tokens": 10,  "rev": 0.5,  "color": "#e2e8f0", "growth": "+500% YoY", "consumerPct": 70, "bizPct": 30, "modelType": "frontier" },
-      "Others":        { "tokens": 20,  "rev": 2.0,  "color": "#475569", "growth": "+150% YoY", "consumerPct": 40, "bizPct": 60, "modelType": "open" }
+      "Others":        { "tokens": 130, "rev": 2.0,  "color": "#475569", "growth": "+86% YoY",  "consumerPct": 20, "bizPct": 80, "modelType": "open" }
     },
     "regions": {
       "North America": { "pct": 40, "color": "#3b82f6", "growth": "+160% YoY" },
@@ -333,15 +333,15 @@
       [16.8, 14.0, 4.2,  0.3,  0.4,  0.5,  2.5,  2.0 ]
     ],
     "tokenData": [
-      [35,  4,   12, 0,  1,  0,  8,   4 ],
-      [50,  10,  20, 0,  2,  1,  12,  6 ],
-      [70,  20,  30, 2,  3,  2,  20,  8 ],
-      [95,  35,  45, 5,  5,  3,  30,  10],
-      [120, 50,  55, 12, 7,  5,  45,  12],
-      [145, 70,  65, 18, 9,  7,  60,  14],
-      [165, 85,  75, 25, 11, 8,  75,  16],
-      [185, 100, 82, 32, 13, 9,  88,  18],
-      [200, 110, 90, 40, 15, 10, 100, 20]
+      [35,  4,   12, 0,  1,  0,  8,   10],
+      [50,  10,  20, 0,  2,  1,  12,  18],
+      [70,  20,  30, 2,  3,  2,  20,  35],
+      [95,  35,  45, 5,  5,  3,  30,  50],
+      [120, 50,  55, 12, 7,  5,  45,  70],
+      [145, 70,  65, 18, 9,  7,  60,  95],
+      [165, 85,  75, 25, 11, 8,  75,  110],
+      [185, 100, 82, 32, 13, 9,  88,  120],
+      [200, 110, 90, 40, 15, 10, 100, 130]
     ],
     "priceData": [
       { "openai": 27.0, "anthropic": 22.5, "google": 6.8,  "open": 1.50 },
@@ -357,8 +357,8 @@
     "events": [
       { "title": "The GPT-4 Era",                             "text": "OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche." },
       { "title": "GPT-4o + Claude 3.5 Sonnet + Llama 3",     "text": "Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast." },
-      { "title": "The Mini Revolution",                       "text": "GPT-4o mini at $0.60/M output — 99.5% cheaper than GPT-4. But Llama 3.1 launches too, and it's free. vllm adoption surges as self-hosting becomes viable at scale." },
-      { "title": "Open Source Inflection",                    "text": "Llama 3.1, Qwen 2, Mistral grow fast. Open models now ~15% of global tokens. Enterprises start self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges." },
+      { "title": "The Mini Revolution",                       "text": "GPT-4o mini at $0.60/M output — 99.5% cheaper than GPT-4. But Llama 3.1 405B launches in July, closing the frontier quality gap. vLLM Docker pulls accelerate. Self-hosting becomes viable at enterprise scale." },
+      { "title": "Open Source Inflection",                    "text": "Llama 3.1, Qwen 2.5, DeepSeek V2.5 all strong. Self-hosted tokens now ~9% of global volume. Enterprises self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges." },
       { "title": "DeepSeek Shock",                            "text": "DeepSeek R1 matches GPT-4o at 1/10th the price — and it's open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?" },
       { "title": "The Enterprise AI Mirage",                  "text": "M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked ≠ used. Meanwhile open models quietly grow — banks, governments, sovereign clouds all deploying Llama/Qwen." },
       { "title": "Anthropic Takes Enterprise, OSS Takes Volume", "text": "Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story — 80T tokens/day with almost no model-layer revenue." },

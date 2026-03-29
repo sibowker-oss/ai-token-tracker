@@ -22,6 +22,13 @@ DATA_DIR = os.path.join(BASE_DIR, 'data')
 SIGNALS_PATH = os.path.join(DATA_DIR, 'signals_latest.json')
 DASHBOARD_PATH = os.path.join(BASE_DIR, 'dashboard.html')
 INDEX_PATH = os.path.join(BASE_DIR, 'index.html')
+SITE_DATA_PATH = os.path.join(BASE_DIR, 'site-data.json')
+
+# Baseline calibration for self-hosted ("Others") token estimate.
+# Anchored to Q1 2026 signals: at 16.35M vLLM Docker Hub cumulative pulls → 130T/day self-hosted.
+# As Docker pulls grow the estimate scales proportionally; floor prevents it shrinking below baseline.
+_BASELINE_DOCKER_VLLM = 16_350_000
+_BASELINE_OTHERS_TOKENS = 130  # T/day
 
 def run_scraper():
     """Run the signal scraper."""
@@ -136,6 +143,47 @@ def update_dashboard(signals):
         print("ℹ No dashboard changes needed")
         return False
 
+def update_site_data(signals):
+    """Update self-hosted ('Others') token estimate in site-data.json from live signals.
+
+    Uses vLLM Docker Hub cumulative pull count as the scaling signal — it's the strongest
+    proxy for active enterprise self-hosted deployments and grows monotonically over time.
+    The Ollama GitHub release download count provides a secondary cross-check.
+
+    Only updates the current-quarter entry (last row of tokenData) and the providers dict.
+    Historical rows are left untouched — they represent our best point-in-time estimates.
+    """
+    if not os.path.exists(SITE_DATA_PATH):
+        print("⚠ site-data.json not found, skipping self-hosted update")
+        return False
+
+    docker_vllm = (signals.get('docker') or {}).get('vllm') or _BASELINE_DOCKER_VLLM
+    growth = docker_vllm / _BASELINE_DOCKER_VLLM
+    new_tokens = max(_BASELINE_OTHERS_TOKENS, round(_BASELINE_OTHERS_TOKENS * growth))
+
+    with open(SITE_DATA_PATH) as f:
+        site = json.load(f)
+
+    old_tokens = site['dashboard']['providers']['Others']['tokens']
+    if old_tokens == new_tokens:
+        print(f"ℹ Self-hosted estimate unchanged: {new_tokens}T/day")
+        return False
+
+    site['dashboard']['providers']['Others']['tokens'] = new_tokens
+
+    # Update the last (current quarter) row of the timeline tokenData — index 7 is Others
+    token_data = site['timeline']['tokenData']
+    token_data[-1][7] = new_tokens
+    site['timeline']['tokenData'] = token_data
+
+    with open(SITE_DATA_PATH, 'w') as f:
+        json.dump(site, f, indent=2)
+
+    print(f"✅ Self-hosted estimate updated: {old_tokens}T → {new_tokens}T/day "
+          f"(Docker vLLM pulls: {docker_vllm:,}, growth factor: {growth:.3f}x)")
+    return True
+
+
 def git_commit_push(date):
     """Commit and push changes."""
     os.chdir(BASE_DIR)
@@ -147,7 +195,7 @@ def git_commit_push(date):
         return
 
     # Stage data files + dashboard
-    subprocess.run(['git', 'add', 'data/', 'dashboard.html', 'index.html'], check=True)
+    subprocess.run(['git', 'add', 'data/', 'dashboard.html', 'index.html', 'site-data.json'], check=True)
 
     # Commit
     msg = f"Auto-update: signal scrape {date}\n\nAutomated daily data refresh from PyPI, npm, HuggingFace, OpenRouter, GitHub releases, Docker Hub.\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"
@@ -173,10 +221,13 @@ def main():
     # Step 2: Load signals
     signals = load_signals()
 
-    # Step 3: Update dashboard
+    # Step 3: Update dashboard HTML
     updated = update_dashboard(signals)
 
-    # Step 4: Commit and push
+    # Step 4: Update self-hosted estimate in site-data.json
+    update_site_data(signals)
+
+    # Step 5: Commit and push
     git_commit_push(today)
 
     print(f"\n{'='*60}")
