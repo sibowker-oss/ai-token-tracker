@@ -17,6 +17,7 @@ Output: data/signals_YYYY-MM-DD.json + data/signals_latest.json
 
 import json
 import os
+import re
 import sys
 from datetime import datetime
 from urllib.request import urlopen, Request
@@ -191,6 +192,102 @@ def scrape_openrouter():
     print(f"  Output $/1M: min ${result['min_output_price_per_m']:.3f}, median ${result['median_output_price_per_m']:.2f}, max ${result['max_output_price_per_m']:.1f}")
     return result
 
+
+def scrape_openrouter_rankings():
+    """Fetch weekly token volume by provider from the OpenRouter rankings page.
+
+    The rankings page is a Next.js App Router app — data lives in RSC
+    self.__next_f.push() script chunks, not in a public JSON API.
+
+    The time-series chart chunk contains entries like:
+      {"x": "2026-03-22", "ys": {"google": 2959651689841, "anthropic": 2859450564998, ...}}
+
+    We take the second-to-last entry (most recent COMPLETE week) and sum all
+    provider token counts.  The last entry is the current in-progress week.
+
+    GMV is estimated using a blended output price of $0.15/M tokens — a
+    conservative estimate given the mix of cheap (minimax, stepfun, xiaomi)
+    and expensive (anthropic, openai) models.  OpenRouter's take rate is ~10%.
+    """
+    OPENROUTER_TAKE_RATE = 0.10
+    BLENDED_PRICE_PER_M = 0.15  # $/M tokens, conservative blended estimate
+
+    print("\n📊 OpenRouter rankings (weekly token volume):")
+    try:
+        req = Request(
+            'https://openrouter.ai/rankings',
+            headers={'User-Agent': 'Mozilla/5.0 (compatible; AI-Token-Tracker/1.0)'},
+        )
+        with urlopen(req, timeout=20) as resp:
+            html = resp.read().decode('utf-8', errors='replace')
+    except Exception as e:
+        print(f"  ⚠ Failed to fetch rankings page: {e}")
+        return None
+
+    # Extract all RSC push chunks — the chart data is a JSON-encoded string
+    chunks_raw = re.findall(
+        r'self\.__next_f\.push\(\[1,(.*?)\]\)</script>', html, re.DOTALL
+    )
+
+    # Find the provider-level time-series chart chunk.
+    # The page contains multiple {x, ys} series: one aggregated by provider
+    # (keys like "google", "anthropic") and several by model
+    # (keys like "google/gemini-2.0-flash-001").  We search all chunks and
+    # collect the series whose ys keys contain no "/" (provider-level).
+    data_points = []
+    for raw in chunks_raw:
+        try:
+            decoded = json.loads(raw)
+        except Exception:
+            continue
+        if not isinstance(decoded, str):
+            continue
+        if '"x":"20' not in decoded or '"ys":{' not in decoded:
+            continue
+        pts = re.findall(r'\{"x":"([\d-]+)","ys":\{([^}]+)\}\}', decoded)
+        provider_pts = [
+            (d, ys) for d, ys in pts
+            if not re.search(r'"[^"]+/[^"]+":', ys)
+        ]
+        if len(provider_pts) > len(data_points):
+            data_points = provider_pts  # keep the longest provider-level series
+
+    if len(data_points) < 2:
+        print(f"  ⚠ Could not locate provider-level time-series data ({len(data_points)} pts)")
+        return None
+
+    # Use second-to-last = most recent complete week (last entry is partial)
+    week_date, ys_raw = data_points[-2]
+    providers = {}
+    for m in re.finditer(r'"([^"]+)":(\d+)', ys_raw):
+        providers[m.group(1)] = int(m.group(2))
+
+    weekly_tokens_total = sum(providers.values())
+    gmv_usd = weekly_tokens_total / 1e6 * BLENDED_PRICE_PER_M
+    arr_estimate_usd = gmv_usd * 52 * OPENROUTER_TAKE_RATE
+
+    top_providers = sorted(providers.items(), key=lambda x: -x[1])[:5]
+
+    result = {
+        'week_date': week_date,
+        'weekly_tokens_total': weekly_tokens_total,
+        'weekly_tokens_total_T': round(weekly_tokens_total / 1e12, 2),
+        'weekly_gmv_usd': round(gmv_usd),
+        'arr_estimate_usd': round(arr_estimate_usd),
+        'blended_price_per_m_usd': BLENDED_PRICE_PER_M,
+        'take_rate': OPENROUTER_TAKE_RATE,
+        'top_providers': {k: v for k, v in top_providers},
+        'total_providers_in_week': len(providers),
+    }
+
+    print(f"  Week: {week_date}")
+    print(f"  Total tokens: {weekly_tokens_total/1e12:.2f}T")
+    print(f"  Est. GMV: ${gmv_usd/1e6:.1f}M/week (@ ${BLENDED_PRICE_PER_M}/M blended)")
+    print(f"  Est. ARR (10% take): ${arr_estimate_usd/1e6:.1f}M")
+    print(f"  Top providers: {', '.join(f'{k} ({v/1e9:.1f}B)' for k,v in top_providers)}")
+    return result
+
+
 def compute_derived(pypi, npm, hf, github=None, docker=None):
     """Compute derived signals from raw data.
 
@@ -263,6 +360,7 @@ def main():
     npm = scrape_npm()
     hf = scrape_huggingface()
     openrouter = scrape_openrouter()
+    openrouter_rankings = scrape_openrouter_rankings()
     github = scrape_github()
     docker = scrape_docker_hub()
     derived = compute_derived(pypi, npm, hf, github, docker)
@@ -274,6 +372,7 @@ def main():
         'npm': npm,
         'huggingface': hf,
         'openrouter': openrouter,
+        'openrouter_rankings': openrouter_rankings,
         'github': github,
         'docker': docker,
         'derived': derived,

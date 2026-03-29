@@ -1,30 +1,30 @@
 {
   "date": "2026-03-29",
-  "timestamp": "2026-03-29T15:07:44.576857",
+  "timestamp": "2026-03-29T16:35:03.800734",
   "pypi": {
-    "openai": 221606769,
+    "openai": null,
     "anthropic": 78108288,
     "langchain-core": 98832168,
     "litellm": 94783775,
     "google-generativeai": 16897264,
     "vllm": 7809508,
-    "transformers": 124060929,
-    "ollama": 10248336,
+    "transformers": null,
+    "ollama": null,
     "mistralai": 14611887,
-    "cohere": 21928929,
-    "together": 4809630,
+    "cohere": null,
+    "together": null,
     "groq": 12758633
   },
   "npm": {
-    "openai": 68807323,
-    "@anthropic-ai/sdk": 37467043,
-    "@langchain/core": 15046183,
-    "ai": 42924076,
-    "@google/generative-ai": 10228816,
-    "ollama": 1966078,
-    "@mistralai/mistralai": 10213149,
-    "cohere-ai": 1799613,
-    "groq-sdk": 2651124
+    "openai": 67735298,
+    "@anthropic-ai/sdk": 37366126,
+    "@langchain/core": 14748817,
+    "ai": 42154502,
+    "@google/generative-ai": 10122063,
+    "ollama": 1953951,
+    "@mistralai/mistralai": 10118315,
+    "cohere-ai": 1771091,
+    "groq-sdk": 2630667
   },
   "huggingface": {
     "meta-llama/Llama-3.1-8B-Instruct": 8465943,
@@ -44,17 +44,34 @@
     "max_output_price_per_m": 600.0,
     "median_output_price_per_m": 1.2
   },
+  "openrouter_rankings": {
+    "week_date": "2026-03-22",
+    "weekly_tokens_total": 22383976845920,
+    "weekly_tokens_total_T": 22.38,
+    "weekly_gmv_usd": 3357597,
+    "arr_estimate_usd": 17459502,
+    "blended_price_per_m_usd": 0.15,
+    "take_rate": 0.1,
+    "top_providers": {
+      "xiaomi": 4426892032251,
+      "google": 2959651689841,
+      "anthropic": 2859450564998,
+      "others": 2425600923652,
+      "minimax": 2231918225429
+    },
+    "total_providers_in_week": 10
+  },
   "github": {
     "ollama": {
-      "total_downloads": 1839983,
+      "total_downloads": 1861388,
       "latest_tag": "v0.18.3"
     },
     "vllm": {
-      "total_downloads": 30506,
+      "total_downloads": 30568,
       "latest_tag": "v0.18.0"
     },
     "llama_cpp": {
-      "total_downloads": 5222,
+      "total_downloads": 5962,
       "latest_tag": "b8575"
     },
     "tgi": {
@@ -63,18 +80,16 @@
     }
   },
   "docker": {
-    "vllm": 16349895
+    "vllm": 16353034
   },
   "derived": {
-    "openai_total": 290414092,
-    "anthropic_total": 115575331,
-    "google_total": 27126080,
-    "anthropic_openai_ratio": 0.398,
-    "self_hosted_sdk": 20023922,
+    "anthropic_total": 115474414,
+    "google_total": 27019327,
+    "self_hosted_sdk": 9763459,
     "self_hosted_sdk_basis": "monthly_rate",
-    "self_hosted_github": 1875711,
+    "self_hosted_github": 1897918,
     "self_hosted_github_basis": "cumulative_last_5_releases",
-    "self_hosted_docker": 16349895,
+    "self_hosted_docker": 16353034,
     "self_hosted_docker_basis": "cumulative_alltime",
     "hf_total_downloads": 15920919,
     "litellm_downloads": 94783775

@@ -161,3 +161,77 @@ After doing this, you may fix the identity used for this commit with:
 ✅ Auto-update complete — 2026-03-28
 ============================================================
 
+[main c1206b5] Auto-update: signal scrape 2026-03-29
+ 6 files changed, 357 insertions(+), 461 deletions(-)
+ create mode 100644 data/signals_2026-03-29.json
+
+============================================================
+🤖 AI Token Tracker Auto-Update — 2026-03-29
+============================================================
+
+🔍 Running signal scraper...
+🔍 AI Signal Scraper — 2026-03-29
+==================================================
+📦 PyPI downloads (last month):
+  openai: 224,305,409
+  anthropic: 78,780,747
+  langchain-core: 99,950,634
+  litellm: 95,835,692
+  google-generativeai: 17,067,993
+  vllm: 7,704,817
+  transformers: 125,297,403
+  ollama: 10,303,924
+  mistralai: 14,811,457
+  cohere: 21,696,262
+  together: 4,732,272
+  groq: 12,860,199
+
+📦 npm downloads (last month):
+  openai: 68,807,323
+  @anthropic-ai/sdk: 37,467,043
+  @langchain/core: 15,046,183
+  ai: 42,924,076
+  @google/generative-ai: 10,228,816
+  ollama: 1,966,078
+  @mistralai/mistralai: 10,213,149
+  cohere-ai: 1,799,613
+  groq-sdk: 2,651,124
+
+🤗 HuggingFace model downloads (30d):
+  Llama-3.1-8B-Instruct: 8,465,943
+  Llama-3.1-70B-Instruct: 1,051,044
+  Llama-4-Scout-17B-16E-Instruct: 256,666
+  DeepSeek-R1: 2,197,585
+  DeepSeek-V3: 823,329
+  Mistral-7B-Instruct-v0.3: 2,179,285
+  Qwen2.5-72B-Instruct: 673,127
+  gemma-2-9b-it: 273,940
+
+🔀 OpenRouter:
+  Models: 347, Providers: 56, Free: 27
+  Output $/1M: min $-1000000.000, median $1.20, max $600.0
+
+📊 Derived signals:
+  openai_total: 293,112,732
+  anthropic_total: 116,247,790
+  google_total: 27,296,809
+  anthropic_openai_ratio: 0.397
+  self_hosted_total: 19,974,819
+  hf_total_downloads: 15,920,919
+  litellm_downloads: 95,835,692
+
+✅ Saved to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_2026-03-29.json
+✅ Updated /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_latest.json
+✅ Appended to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_history.jsonl
+
+✅ Dashboard updated with 3 changes:
+   • SDK downloads: openai 224M, anthropic 79M
+   • Llama 3.1 8B: 8.5M HF downloads
+   • vllm: 7.7M PyPI downloads
+⚠ Push failed: fatal: could not read Username for 'https://github.com': Device not configured
+
+
+============================================================
+✅ Auto-update complete — 2026-03-29
+============================================================
+
