@@ -31,7 +31,7 @@ CHUNK_SIZE = 40_000
 
 SYSTEM_PROMPT = """You are a financial data extraction assistant specialising in the AI industry.
 
-Your task: read a podcast transcript and extract structured data points that are relevant to tracking AI provider revenue, token volumes, infrastructure economics, and enterprise adoption.
+Your task: read a podcast transcript and extract structured data points relevant to tracking AI provider revenue, token volumes, infrastructure economics, and enterprise adoption.
 
 For each concrete claim found, output a JSON object with these fields:
 - "claim": verbatim or lightly paraphrased quote (1-2 sentences)
@@ -44,15 +44,21 @@ For each concrete claim found, output a JSON object with these fields:
 - "time_period": when this applies (e.g. "Q1 2026", "2025", "as of March 2026")
 - "confidence": "high" | "medium" | "low"
 - "speaker": name of speaker making the claim, or null
-- "is_primary_source": true if speaker has direct knowledge, false if citing another source
-- "original_source_cited": name of the original source if speaker is citing someone else, or null
+- "is_primary_source": true if the speaker has direct first-hand knowledge (e.g. a founder discussing their own company), false if they are citing or repeating something heard elsewhere
+- "original_source_cited": name of the original source if the speaker is citing someone else (e.g. "Bloomberg", "WSJ", "earnings call"), or null
+- "weight": the appropriate weight for incorporating this claim into a data model. Use exactly one of:
+    "authoritative" — speaker has direct first-hand knowledge of this specific metric (e.g. CEO on their own ARR)
+    "corroborating" — speaker cites a specific named primary source (earnings call, official filing, named report); the claim can be traced back to something verifiable
+    "indicative" — speaker is sharing market colour, repeating heard figures, or estimating; useful for triangulation but should not override primary data
 
 Rules:
 - Only extract claims with specific numbers or percentages — skip vague statements
-- If a claim is clearly speculation or a prediction, set confidence to "low"
-- If the speaker explicitly says they heard it from another source, set is_primary_source to false
+- If a claim is speculation or a prediction, set confidence to "low" and weight to "indicative"
+- A speaker citing "I read that X" or "someone told me Y" is always weight "indicative" even if confident-sounding
+- A speaker saying "our ARR is X" about their own company is weight "authoritative"
+- A speaker saying "per their earnings call, X" with a named source is weight "corroborating"
 - Do not hallucinate — if a number isn't stated, don't estimate it
-- Return a JSON array of claim objects, or an empty array [] if no relevant claims found
+- Return a JSON array of claim objects, or [] if no relevant claims found
 - Return ONLY the JSON array, no other text"""
 
 
@@ -159,13 +165,17 @@ def extract_from_transcript(filepath, client):
             if not isinstance(claims, list):
                 claims = []
 
-            # Enrich each claim with source metadata
+            # Enrich each claim with source metadata and type
             for claim in claims:
+                claim['source_type'] = 'podcast_discussion'
                 claim['source_podcast'] = meta['source']
                 claim['source_date'] = meta['date']
                 claim['source_url'] = meta['url']
                 claim['source_episode'] = meta['title']
                 claim['extracted_at'] = datetime.now().isoformat()
+                # Ensure weight field exists; default to indicative if model omitted it
+                if 'weight' not in claim:
+                    claim['weight'] = 'indicative'
 
             if len(chunks) > 1:
                 print(f"{len(claims)} claim(s)")
@@ -250,17 +260,32 @@ def main():
     print(f"\n✅ {len(all_claims)} claim(s) written to {output_path}")
     print(f"   Total in today's queue: {len(combined)}")
 
-    # Print summary by category
+    # Print summary by category and weight
     cats = {}
+    weights = {'authoritative': 0, 'corroborating': 0, 'indicative': 0}
     for c in all_claims:
-        cat = c.get('category', 'other')
-        cats[cat] = cats.get(cat, 0) + 1
+        cats[c.get('category', 'other')] = cats.get(c.get('category', 'other'), 0) + 1
+        w = c.get('weight', 'indicative')
+        weights[w] = weights.get(w, 0) + 1
+
     print("\nBy category:")
     for cat, n in sorted(cats.items(), key=lambda x: -x[1]):
         print(f"  {cat}: {n}")
 
-    print(f"\n📋 Review queue: {output_path}")
-    print("   Edit/approve claims, then incorporate into site-data.json manually.")
+    print("\nBy weight:")
+    for w, n in weights.items():
+        print(f"  {w}: {n}")
+
+    print(f"""
+📋 Review queue: {output_path}
+
+Incorporation rules:
+  authoritative  → can set/update a data point directly (speaker has first-hand knowledge)
+  corroborating  → use to raise confidence on an existing point, or add if no primary source exists
+  indicative     → triangulation only; never override an authoritative/corroborating source
+                   flag in site-data.json notes as 'podcast discussion' if used
+
+All claims require human review before incorporation into site-data.json.""")
 
 
 if __name__ == '__main__':
