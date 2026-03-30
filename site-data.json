@@ -1500,6 +1500,32 @@
         "lastUpdated": "2026-03-30"
       },
       {
+        "co": "Lovable",
+        "hq": "Sweden",
+        "type": "AI App Builder",
+        "tokens": "~100B/day",
+        "prov": "Anthropic, OpenAI",
+        "ev": "Lean AI Leaderboard. $400M ARR, 40 employees. Triangulated: COGS method ($8-12M/mo API spend at $2-3/M = 3-5T/mo = 100-170B/day), user method (100K DAU \u00d7 10-15 prompts \u00d7 50K tokens = 60-90B/day). Central estimate ~100B/day.",
+        "conf": "Low-Med",
+        "founded": 2023,
+        "category": "ai-application",
+        "subcategory": "app-builder",
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "tokensNumeric": 100000000000,
+        "arr": "~$400M",
+        "arrNumeric": 400000000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://lovable.dev",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
         "co": "Canva",
         "hq": "Australia",
         "type": "Design",
@@ -1630,6 +1656,31 @@
         "lastUpdated": "2026-03-30"
       },
       {
+        "co": "ElevenLabs",
+        "hq": "US/UK",
+        "type": "Voice AI",
+        "tokens": "~60B/day",
+        "prov": "Own",
+        "ev": "Forbes AI 50. $330M ARR, own models. Voice gen is compute-intensive. At 25-30% COGS ratio: ~$80-100M/yr compute = ~60B/day equivalent.",
+        "conf": "Med",
+        "founded": 2022,
+        "category": "ai-application",
+        "subcategory": "voice",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 60000000000,
+        "arr": "~$330M",
+        "arrNumeric": 330000000,
+        "valuation": "$3.3B",
+        "valuationNumeric": 3300000000,
+        "totalFunding": "$180M+",
+        "status": "private",
+        "website": "https://elevenlabs.io",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
         "co": "Wrtn Technologies",
         "hq": "Korea",
         "type": "Consumer AI",
@@ -1656,31 +1707,53 @@
         "lastUpdated": "2026-03-30"
       },
       {
-        "co": "BLACKBOX.AI",
+        "co": "micro1",
         "hq": "US",
-        "type": "AI Dev Tool",
+        "type": "AI Training Data",
         "tokens": "~50B/day",
-        "prov": "OpenAI, Anthropic, Google",
-        "ev": "$31.7M rev, 20M registered (not DAU). Revenue/price: 107-172B. Bottom-up: 10-23B. Midpoint of financial methods.",
-        "conf": "Low",
+        "prov": "Own",
+        "ev": "Lean AI Leaderboard. $250M ARR, 80 employees, profitable. AI training data at scale. High token throughput for data generation/labeling.",
+        "conf": "Med",
         "founded": 2022,
-        "category": "ai-application",
-        "subcategory": "coding",
+        "category": "ai-infrastructure",
+        "subcategory": "data",
         "providers": [
-          "openai",
-          "anthropic",
-          "google"
+          "own"
         ],
         "tokensNumeric": 50000000000,
-        "arr": "$31.7M",
-        "arrNumeric": 31700000,
+        "arr": "$250M",
+        "arrNumeric": 250000000,
         "valuation": null,
         "valuationNumeric": null,
         "totalFunding": null,
         "status": "private",
-        "website": "https://blackbox.ai",
-        "employeeCount": null,
+        "website": "https://micro1.ai",
+        "employeeCount": 80,
         "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Midjourney",
+        "hq": "US",
+        "type": "Image Gen",
+        "tokens": "~50B/day",
+        "prov": "Own",
+        "ev": "Forbes AI 50. ~$300-500M ARR, self-funded, profitable, ~50 employees. Own image gen models. At 15-20% COGS: ~$50-80M compute = ~50B/day equivalent.",
+        "conf": "Med",
+        "founded": 2021,
+        "category": "ai-application",
+        "subcategory": "image-gen",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 50000000000,
+        "arr": "~$300M",
+        "arrNumeric": 300000000,
+        "valuation": "~$10B (est)",
+        "valuationNumeric": 10000000000,
+        "totalFunding": "$0 (self-funded)",
+        "status": "private",
+        "website": "https://midjourney.com",
+        "employeeCount": 50
       },
       {
         "co": "Harvey AI",
@@ -1942,6 +2015,33 @@
         "lastUpdated": "2026-03-30"
       },
       {
+        "co": "BLACKBOX.AI",
+        "hq": "US",
+        "type": "AI Dev Tool",
+        "tokens": "~20B/day",
+        "prov": "OpenAI, Anthropic, Google",
+        "ev": "OpenRouter monthly (1.1T/mo = ~37B/day via OpenRouter alone). But $31.7M rev means ~20B/day total is more realistic at 35% COGS.",
+        "conf": "Low",
+        "founded": 2022,
+        "category": "ai-application",
+        "subcategory": "coding",
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": "$31.7M",
+        "arrNumeric": 31700000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://blackbox.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
         "co": "Klarna",
         "hq": "Sweden",
         "type": "Fintech",
@@ -2043,32 +2143,6 @@
         "lastUpdated": "2026-03-30"
       },
       {
-        "co": "Lovable",
-        "hq": "Sweden",
-        "type": "AI App Builder",
-        "tokens": "~20B/day",
-        "prov": "Anthropic, OpenAI",
-        "ev": "$400M ARR (per 20VC). AI-powered app builder \u2014 every generation = heavy token use.",
-        "conf": "Low-Med",
-        "founded": 2023,
-        "category": "ai-application",
-        "subcategory": "app-builder",
-        "providers": [
-          "anthropic",
-          "openai"
-        ],
-        "tokensNumeric": 20000000000,
-        "arr": "~$400M",
-        "arrNumeric": 400000000,
-        "valuation": null,
-        "valuationNumeric": null,
-        "totalFunding": null,
-        "status": "private",
-        "website": "https://lovable.dev",
-        "employeeCount": null,
-        "lastUpdated": "2026-03-30"
-      },
-      {
         "co": "Sierra AI",
         "hq": "US",
         "type": "Customer Agents",
@@ -2145,31 +2219,6 @@
         "lastUpdated": "2026-03-30"
       },
       {
-        "co": "micro1",
-        "hq": "US",
-        "type": "AI Training Data",
-        "tokens": "~20B/day",
-        "prov": "Own",
-        "ev": "Lean AI Leaderboard. $250M ARR, 80 employees ($3.1M/employee), profitable. AI training data at scale.",
-        "conf": "Med",
-        "founded": 2022,
-        "category": "ai-infrastructure",
-        "subcategory": "data",
-        "providers": [
-          "own"
-        ],
-        "tokensNumeric": 20000000000,
-        "arr": "$250M",
-        "arrNumeric": 250000000,
-        "valuation": null,
-        "valuationNumeric": null,
-        "totalFunding": null,
-        "status": "private",
-        "website": "https://micro1.ai",
-        "employeeCount": 80,
-        "lastUpdated": "2026-03-30"
-      },
-      {
         "co": "Salesforce Agentforce",
         "hq": "US",
         "type": "Ent SaaS",
@@ -2192,31 +2241,6 @@
         "status": "public",
         "website": "https://salesforce.com",
         "employeeCount": 73000,
-        "lastUpdated": "2026-03-30"
-      },
-      {
-        "co": "ElevenLabs",
-        "hq": "US/UK",
-        "type": "Voice AI",
-        "tokens": "~15B/day",
-        "prov": "Own",
-        "ev": "TTS + voice cloning. Own models. $330M ARR. Enterprise + consumer.",
-        "conf": "Med",
-        "founded": 2022,
-        "category": "ai-application",
-        "subcategory": "voice",
-        "providers": [
-          "own"
-        ],
-        "tokensNumeric": 15000000000,
-        "arr": "~$330M",
-        "arrNumeric": 330000000,
-        "valuation": "$3.3B",
-        "valuationNumeric": 3300000000,
-        "totalFunding": "$180M+",
-        "status": "private",
-        "website": "https://elevenlabs.io",
-        "employeeCount": null,
         "lastUpdated": "2026-03-30"
       },
       {
@@ -2322,30 +2346,6 @@
         "website": "https://github.com/RooVetGit/Roo-Cline",
         "employeeCount": null,
         "lastUpdated": "2026-03-30"
-      },
-      {
-        "co": "Midjourney",
-        "hq": "US",
-        "type": "Image Gen",
-        "tokens": "~10B/day",
-        "prov": "Own",
-        "ev": "Self-funded, profitable. ~$300M ARR. Own models, Discord-first then web app. Image tokens counted differently.",
-        "conf": "Med",
-        "founded": 2021,
-        "category": "ai-application",
-        "subcategory": "image-gen",
-        "providers": [
-          "own"
-        ],
-        "tokensNumeric": 10000000000,
-        "arr": "~$300M",
-        "arrNumeric": 300000000,
-        "valuation": "~$10B (est)",
-        "valuationNumeric": 10000000000,
-        "totalFunding": "$0 (self-funded)",
-        "status": "private",
-        "website": "https://midjourney.com",
-        "employeeCount": 50
       },
       {
         "co": "Captions",
