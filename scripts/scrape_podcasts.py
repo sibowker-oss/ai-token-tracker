@@ -10,8 +10,10 @@ Tier 1 (full transcripts on the web):
 Tier 2 (YouTube auto-captions):
   - BG2Pod (@Bg2Pod)
 
-Tier 3 (deferred — needs STT/Whisper):
-  - 20VC (audio-only on Libsyn, YouTube channel is clips only)
+Tier 3 (local Whisper STT from RSS audio):
+  - 20VC (audio-only on Libsyn)
+  - SaaStr Podcast
+  - Cognitive Revolution
 
 Saves raw transcripts as markdown to:
   transcripts/{source}/{YYYY-MM-DD}-{slug}.md
@@ -20,7 +22,9 @@ Tracks seen episodes in transcripts/.seen to avoid re-fetching.
 
 Run: python3 scripts/scrape_podcasts.py [--limit N] [--source SOURCE|all]
 
-Requires: youtube-transcript-api (pip install youtube-transcript-api) for Tier 2 sources.
+Requires:
+  - youtube-transcript-api (pip install youtube-transcript-api) for Tier 2
+  - openai-whisper + ffmpeg (pip install openai-whisper) for Tier 3
 """
 
 import argparse
@@ -81,11 +85,34 @@ SOURCES = {
         'extractor': 'youtube_captions',
         'youtube_channel_id': 'UC-yRDvpR99LUc5l7i7jLzew',
     },
-    # 20VC: YouTube channel posts short clips (not full episodes), so
-    # auto-captions don't work. Full episodes are audio-only on Libsyn.
-    # Requires STT (Whisper) — deferred to Phase 3.
-    # RSS: https://rss.libsyn.com/shows/61840/destinations/240976.xml
-    # YouTube channel: UCf0PBRjhf0rF8fWBIxTuoWA
+    # ----- Tier 3: audio-only (Whisper STT) -----
+    '20vc': {
+        'label': '20VC',
+        'dir': '20vc',
+        'tier': 3,
+        'discovery': 'rss',
+        'rss': 'https://rss.libsyn.com/shows/61840/destinations/240976.xml',
+        'skip_title_patterns': [],
+        'extractor': 'whisper_stt',
+    },
+    'saastr': {
+        'label': 'SaaStr Podcast',
+        'dir': 'saastr',
+        'tier': 3,
+        'discovery': 'rss',
+        'rss': 'https://feeds.simplecast.com/4MvgQ73R',
+        'skip_title_patterns': [],
+        'extractor': 'whisper_stt',
+    },
+    'cognitive-revolution': {
+        'label': 'Cognitive Revolution',
+        'dir': 'cognitive-revolution',
+        'tier': 3,
+        'discovery': 'rss',
+        'rss': 'https://feeds.megaphone.fm/RINTP3108857801',
+        'skip_title_patterns': [],
+        'extractor': 'whisper_stt',
+    },
 }
 
 
@@ -422,12 +449,69 @@ def extract_youtube_captions(ep, cfg):
         return None
 
 
+def extract_whisper_stt(ep, cfg):
+    """Download MP3 from RSS enclosure and transcribe with local Whisper.
+
+    Uses the 'base.en' model (~140MB, fast on Apple Silicon).
+    Downloads audio to a temp file, transcribes, then deletes the temp file.
+    """
+    audio_url = ep.get('audio_url', '')
+    if not audio_url:
+        print("    ⚠ No audio URL in RSS enclosure")
+        return None
+
+    try:
+        import whisper
+    except ImportError:
+        print("    ⚠ openai-whisper not installed. Run: pip install openai-whisper")
+        return None
+
+    import tempfile
+
+    # Download audio to temp file
+    print(f"    Downloading audio...", end=' ', flush=True)
+    try:
+        req = Request(audio_url, headers={
+            'User-Agent': 'Mozilla/5.0 (compatible; PodcastTranscriptBot/1.0)',
+        })
+        with urlopen(req, timeout=120) as resp:
+            audio_data = resp.read()
+        print(f"{len(audio_data) / 1e6:.1f}MB")
+    except (URLError, HTTPError) as e:
+        print(f"\n    ⚠ Audio download failed: {e}")
+        return None
+
+    # Write to temp file
+    suffix = '.mp3' if '.mp3' in audio_url else '.m4a'
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        tmp.write(audio_data)
+        tmp_path = tmp.name
+
+    try:
+        # Transcribe with Whisper (base.en is a good speed/quality tradeoff)
+        print(f"    Transcribing with Whisper (base.en)...", flush=True)
+        model = whisper.load_model('base.en')
+        result = model.transcribe(tmp_path, fp16=False, verbose=False)
+        text = result.get('text', '').strip()
+        print(f"    Transcribed: {len(text):,} chars")
+        return text
+    except Exception as e:
+        print(f"    ⚠ Whisper transcription failed: {e}")
+        return None
+    finally:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+
+
 # Map extractor names to functions
 EXTRACTORS = {
     'substack_html': extract_substack_html,
     'acquired_html': extract_acquired_html,
     'happyscribe_html': extract_happyscribe_html,
     'youtube_captions': extract_youtube_captions,
+    'whisper_stt': extract_whisper_stt,
 }
 
 # Map discovery methods to functions
@@ -513,7 +597,7 @@ def scrape_source(source_key, limit=5, seen=None):
 
 def main():
     parser = argparse.ArgumentParser(description='Scrape podcast transcripts')
-    source_choices = ['all', 'tier1', 'tier2'] + list(SOURCES.keys())
+    source_choices = ['all', 'tier1', 'tier2', 'tier3'] + list(SOURCES.keys())
     parser.add_argument('--source', default='all', choices=source_choices,
                         help='Which source to scrape (default: all)')
     parser.add_argument('--limit', type=int, default=5,
@@ -529,10 +613,9 @@ def main():
 
     if args.source == 'all':
         sources = list(SOURCES.keys())
-    elif args.source == 'tier1':
-        sources = [k for k, v in SOURCES.items() if v['tier'] == 1]
-    elif args.source == 'tier2':
-        sources = [k for k, v in SOURCES.items() if v['tier'] == 2]
+    elif args.source in ('tier1', 'tier2', 'tier3'):
+        tier_num = int(args.source[-1])
+        sources = [k for k, v in SOURCES.items() if v['tier'] == tier_num]
     else:
         sources = [args.source]
 

@@ -6,9 +6,10 @@ from transcript files produced by scrape_podcasts.py.
 Reads:  transcripts/{source}/*.md
 Writes: data-updates/{YYYY-MM-DD}-candidates.json
 
-Run: python3 scripts/extract_claims.py [--transcript path/to/file.md] [--all]
+Run: python3 scripts/extract_claims.py [--transcript path/to/file.md] [--all] [--auto-pr]
 
 Requires: ANTHROPIC_API_KEY environment variable
+Optional: gh CLI (for --auto-pr)
 """
 
 import argparse
@@ -16,6 +17,7 @@ import glob
 import json
 import os
 import re
+import subprocess
 import sys
 from datetime import datetime
 
@@ -23,6 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TRANSCRIPT_DIR = os.path.join(BASE_DIR, 'transcripts')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 PROCESSED_FILE = os.path.join(OUTPUT_DIR, '.processed')
+SITE_DATA_PATH = os.path.join(BASE_DIR, 'site-data.json')
 
 # Claude model to use for extraction
 MODEL = 'claude-sonnet-4-6'
@@ -191,11 +194,169 @@ def extract_from_transcript(filepath, client):
     return all_claims
 
 
+def deduplicate_claims(claims):
+    """Flag claims that match existing data in site-data.json.
+
+    Adds a 'dedup_status' field to each claim:
+      'new'       — no matching entity+metric found in site-data.json
+      'confirms'  — matches an existing value (same entity, metric, similar value)
+      'conflicts' — matches entity+metric but value differs significantly (>10%)
+      'stale'     — claim's time_period is older than the data we already have
+
+    Does not remove claims — just annotates them for the reviewer.
+    """
+    if not os.path.exists(SITE_DATA_PATH):
+        for c in claims:
+            c['dedup_status'] = 'new'
+        return claims
+
+    with open(SITE_DATA_PATH) as f:
+        site_data = json.load(f)
+
+    # Build a lookup of known provider data from dashboard section
+    known = {}  # {normalised_entity: {metric: value}}
+    providers = site_data.get('dashboard', {}).get('providers', {})
+    for name, data in providers.items():
+        key = name.lower().strip()
+        known[key] = {}
+        if 'rev' in data:
+            known[key]['ARR'] = data['rev'] * 1e9  # stored in $B
+        if 'tokens' in data:
+            known[key]['tokens/day'] = data['tokens'] * 1e12  # stored in T
+
+    for claim in claims:
+        entity = (claim.get('entity') or '').lower().strip()
+        metric = (claim.get('metric') or '').lower().strip()
+        value = claim.get('value')
+
+        if entity not in known or not value:
+            claim['dedup_status'] = 'new'
+            continue
+
+        entity_data = known[entity]
+        # Try to match metric
+        matched_metric = None
+        for km in entity_data:
+            if km.lower() in metric or metric in km.lower():
+                matched_metric = km
+                break
+
+        if not matched_metric:
+            claim['dedup_status'] = 'new'
+            continue
+
+        existing_value = entity_data[matched_metric]
+        if existing_value == 0:
+            claim['dedup_status'] = 'new'
+            continue
+
+        ratio = value / existing_value
+        if 0.9 <= ratio <= 1.1:
+            claim['dedup_status'] = 'confirms'
+            claim['dedup_note'] = f"Matches existing {matched_metric}={existing_value:.0f}"
+        else:
+            claim['dedup_status'] = 'conflicts'
+            claim['dedup_note'] = (
+                f"Differs from existing {matched_metric}: "
+                f"claim={value:.0f} vs current={existing_value:.0f} "
+                f"({ratio:.1%} of current)"
+            )
+
+    return claims
+
+
+def generate_auto_pr(claims, today):
+    """Create a GitHub PR with high-value claims for review.
+
+    Only includes claims that are:
+      - weight: authoritative or corroborating
+      - dedup_status: new or conflicts (i.e. something to act on)
+      - confidence: high or medium
+    """
+    actionable = [
+        c for c in claims
+        if c.get('weight') in ('authoritative', 'corroborating')
+        and c.get('dedup_status') in ('new', 'conflicts')
+        and c.get('confidence') in ('high', 'medium')
+    ]
+
+    if not actionable:
+        print("\n📋 No actionable claims for auto-PR (need authoritative/corroborating + new/conflicts + high/medium confidence)")
+        return
+
+    print(f"\n🔀 Generating PR with {len(actionable)} actionable claim(s)...")
+
+    # Write the candidates file
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    pr_file = os.path.join(OUTPUT_DIR, f'{today}-pr-candidates.json')
+    with open(pr_file, 'w') as f:
+        json.dump(actionable, f, indent=2)
+
+    # Build PR body
+    body_lines = ["## Podcast Data Point Candidates\n"]
+    body_lines.append(f"Extracted {len(actionable)} actionable claim(s) from podcast transcripts.\n")
+    body_lines.append("### Claims\n")
+    for c in actionable:
+        status = c.get('dedup_status', 'new')
+        icon = '🆕' if status == 'new' else '⚠️'
+        body_lines.append(
+            f"- {icon} **{c.get('entity', '?')}** — {c.get('metric', '?')}: "
+            f"{c.get('value_display', c.get('value', '?'))} "
+            f"({c.get('time_period', '?')}) "
+            f"[{c.get('weight', '?')}, {c.get('confidence', '?')}]"
+        )
+        body_lines.append(f"  - Source: {c.get('source_podcast', '?')} — {c.get('source_episode', '?')[:60]}")
+        if c.get('dedup_note'):
+            body_lines.append(f"  - ⚠️ {c['dedup_note']}")
+    body_lines.append("\n### Review Instructions\n")
+    body_lines.append("1. Check each claim against primary sources")
+    body_lines.append("2. Update `site-data.json` if the data point is valid")
+    body_lines.append("3. Merge this PR to record the candidates\n")
+    body_lines.append("🤖 Generated by `extract_claims.py --auto-pr`")
+
+    branch_name = f"podcast-claims-{today}"
+    pr_title = f"Podcast claims: {len(actionable)} data points ({today})"
+    pr_body = '\n'.join(body_lines)
+
+    try:
+        # Create branch, commit, push, and open PR
+        subprocess.run(['git', 'checkout', '-b', branch_name], check=True, cwd=BASE_DIR,
+                       capture_output=True)
+        subprocess.run(['git', 'add', pr_file], check=True, cwd=BASE_DIR,
+                       capture_output=True)
+        subprocess.run(
+            ['git', 'commit', '-m', f'Podcast claims: {len(actionable)} candidates ({today})'],
+            check=True, cwd=BASE_DIR, capture_output=True
+        )
+        subprocess.run(['git', 'push', '-u', 'origin', branch_name], check=True, cwd=BASE_DIR,
+                       capture_output=True)
+
+        result = subprocess.run(
+            ['gh', 'pr', 'create', '--title', pr_title, '--body', pr_body],
+            check=True, cwd=BASE_DIR, capture_output=True, text=True
+        )
+        pr_url = result.stdout.strip()
+        print(f"  ✅ PR created: {pr_url}")
+
+        # Switch back to main
+        subprocess.run(['git', 'checkout', 'main'], check=True, cwd=BASE_DIR,
+                       capture_output=True)
+    except subprocess.CalledProcessError as e:
+        print(f"  ⚠ PR creation failed: {e}")
+        print(f"    stderr: {e.stderr}")
+        # Try to get back to main
+        subprocess.run(['git', 'checkout', 'main'], cwd=BASE_DIR, capture_output=True)
+    except FileNotFoundError:
+        print("  ⚠ 'gh' CLI not found. Install: brew install gh")
+
+
 def main():
     parser = argparse.ArgumentParser(description='Extract claims from podcast transcripts')
     parser.add_argument('--transcript', help='Process a single transcript file')
     parser.add_argument('--all', action='store_true', help='Re-process already-processed files')
     parser.add_argument('--dry-run', action='store_true', help='Show files to process without running')
+    parser.add_argument('--auto-pr', action='store_true',
+                        help='Auto-create a GitHub PR with actionable claims')
     args = parser.parse_args()
 
     api_key = os.environ.get('ANTHROPIC_API_KEY')
@@ -243,6 +404,9 @@ def main():
         print("\nNo claims extracted.")
         return
 
+    # Deduplicate against existing site-data.json
+    all_claims = deduplicate_claims(all_claims)
+
     # Save to review queue
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output_path = os.path.join(OUTPUT_DIR, f'{today}-candidates.json')
@@ -276,6 +440,22 @@ def main():
     for w, n in weights.items():
         print(f"  {w}: {n}")
 
+    # Dedup summary
+    dedup_stats = {}
+    for c in all_claims:
+        s = c.get('dedup_status', 'unknown')
+        dedup_stats[s] = dedup_stats.get(s, 0) + 1
+    print("\nDedup status:")
+    for s, n in sorted(dedup_stats.items()):
+        print(f"  {s}: {n}")
+
+    # Show conflicts
+    conflicts = [c for c in all_claims if c.get('dedup_status') == 'conflicts']
+    if conflicts:
+        print("\n⚠ Conflicts with existing data:")
+        for c in conflicts:
+            print(f"  {c.get('entity')}: {c.get('dedup_note')}")
+
     print(f"""
 📋 Review queue: {output_path}
 
@@ -286,6 +466,10 @@ Incorporation rules:
                    flag in site-data.json notes as 'podcast discussion' if used
 
 All claims require human review before incorporation into site-data.json.""")
+
+    # Auto-PR if requested
+    if args.auto_pr:
+        generate_auto_pr(all_claims, today)
 
 
 if __name__ == '__main__':
