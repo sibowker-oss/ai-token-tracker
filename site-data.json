@@ -1122,7 +1122,26 @@
         "tokens": "1.9T/day",
         "prov": "OpenAI, Anthropic, Google, Meta (40+)",
         "ev": "Live dashboard: $1.3M/day spend, $475M/yr managed. 35%/wk growth. Gateway passthrough (not additive to provider totals).",
-        "conf": "High"
+        "conf": "High",
+        "founded": 2023,
+        "category": "ai-infrastructure",
+        "subcategory": "gateway",
+        "providers": [
+          "openai",
+          "anthropic",
+          "google",
+          "meta"
+        ],
+        "tokensNumeric": 1900000000000,
+        "arr": "~$475M managed (gateway)",
+        "arrNumeric": null,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": "$18M",
+        "status": "private",
+        "website": "https://portkey.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "GitHub Copilot",
@@ -1131,7 +1150,24 @@
         "tokens": "~1T/day",
         "prov": "OpenAI, Anthropic",
         "ev": "4.7M paid subs, margin-negative (MSFT subsidises), $1-2.3B ARR. Revenue/price: 1.4-4.1T. Bottom-up: 471-800B. Midpoint ~1T.",
-        "conf": "Med"
+        "conf": "Med",
+        "founded": 2021,
+        "category": "ai-application",
+        "subcategory": "coding",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 1000000000000,
+        "arr": "$1-2.3B",
+        "arrNumeric": 1650000000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "subsidiary",
+        "website": "https://github.com/features/copilot",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Cursor (Anysphere)",
@@ -1140,7 +1176,24 @@
         "tokens": "~800B/day",
         "prov": "Anthropic, OpenAI",
         "ev": "$1B+ ARR, 40-60% COGS ratio. Revenue/price: 1-1.6T. Bottom-up: 400-800B. COGS: 680-980B. Midpoint ~800B.",
-        "conf": "Med-High"
+        "conf": "Med-High",
+        "founded": 2022,
+        "category": "ai-application",
+        "subcategory": "coding",
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "tokensNumeric": 800000000000,
+        "arr": "$1B+",
+        "arrNumeric": 1000000000,
+        "valuation": "$10B+",
+        "valuationNumeric": 10000000000,
+        "totalFunding": "$900M+",
+        "status": "private",
+        "website": "https://cursor.com",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "OpenRouter",
@@ -1149,7 +1202,28 @@
         "tokens": "280B/day",
         "prov": "All (400+)",
         "ev": "Self-reported 8.4T/mo. Most reliable figure \u2014 transparent platform with public pricing. Gateway passthrough.",
-        "conf": "High"
+        "conf": "High",
+        "founded": 2023,
+        "category": "ai-infrastructure",
+        "subcategory": "gateway",
+        "providers": [
+          "openai",
+          "anthropic",
+          "google",
+          "meta",
+          "deepseek",
+          "mistral"
+        ],
+        "tokensNumeric": 280000000000,
+        "arr": "~$17.5M",
+        "arrNumeric": 17500000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://openrouter.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Perplexity",
@@ -1158,7 +1232,26 @@
         "tokens": "~200B/day",
         "prov": "OpenAI, Anthropic, Mistral, Meta",
         "ev": "780M queries/mo, $200M ARR. Revenue/price: ~220B. Bottom-up: 91-130B (but multi-step pipelines inflate). COGS: 220-290B.",
-        "conf": "Med"
+        "conf": "Med",
+        "founded": 2022,
+        "category": "ai-application",
+        "subcategory": "search",
+        "providers": [
+          "openai",
+          "anthropic",
+          "mistral",
+          "meta"
+        ],
+        "tokensNumeric": 200000000000,
+        "arr": "$200M",
+        "arrNumeric": 200000000,
+        "valuation": "$18B",
+        "valuationNumeric": 18000000000,
+        "totalFunding": "$900M+",
+        "status": "private",
+        "website": "https://perplexity.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Replit",
@@ -1167,7 +1260,25 @@
         "tokens": "~150B/day",
         "prov": "OpenAI, Anthropic, Google",
         "ev": "$240-265M rev but only ~60% AI-related. 50M registered != DAU (likely <2M). Revenue/price: 260-310B. COGS: ~192B. Bottom-up much lower.",
-        "conf": "Low-Med"
+        "conf": "Low-Med",
+        "founded": 2016,
+        "category": "ai-application",
+        "subcategory": "coding",
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "tokensNumeric": 150000000000,
+        "arr": "$240-265M",
+        "arrNumeric": 252000000,
+        "valuation": "$9B",
+        "valuationNumeric": 9000000000,
+        "totalFunding": "$400M+",
+        "status": "private",
+        "website": "https://replit.com",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Cognition (Devin)",
@@ -1176,7 +1287,24 @@
         "tokens": "~125B/day",
         "prov": "OpenAI, Anthropic",
         "ev": "$155M ARR combined. Agent sessions burn 50-200K tokens each. Revenue/price: 178-212B. COGS: ~148B.",
-        "conf": "Med"
+        "conf": "Med",
+        "founded": 2023,
+        "category": "ai-application",
+        "subcategory": "coding",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 125000000000,
+        "arr": "$155M",
+        "arrNumeric": 155000000,
+        "valuation": "$3B+",
+        "valuationNumeric": 3000000000,
+        "totalFunding": "$275M",
+        "status": "private",
+        "website": "https://cognition.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Duolingo",
@@ -1185,7 +1313,23 @@
         "tokens": "~100B/day",
         "prov": "OpenAI (#1)",
         "ev": "47.7M DAU but most exercises pre-generated. $10-30M/yr AI spend (margin compression data). At $0.30-0.50/M: 110-183B.",
-        "conf": "Med"
+        "conf": "Med",
+        "founded": 2011,
+        "category": "digital-native",
+        "subcategory": "edtech",
+        "providers": [
+          "openai"
+        ],
+        "tokensNumeric": 100000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "public",
+        "website": "https://duolingo.com",
+        "employeeCount": 800,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "MiniMax",
@@ -1194,7 +1338,24 @@
         "tokens": "~100B/day",
         "prov": "Own + Anthropic",
         "ev": "$150M+ cloud spend, own models. Hard to decompose training vs inference. 212M cumulative (not DAU). Wide range.",
-        "conf": "Low"
+        "conf": "Low",
+        "founded": 2021,
+        "category": "foundation-model",
+        "subcategory": "platform",
+        "providers": [
+          "own",
+          "anthropic"
+        ],
+        "tokensNumeric": 100000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": "$2.5B",
+        "valuationNumeric": 2500000000,
+        "totalFunding": "$600M+",
+        "status": "private",
+        "website": "https://minimaxi.com",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Canva",
@@ -1203,7 +1364,23 @@
         "tokens": "~75B/day",
         "prov": "OpenAI",
         "ev": "800M AI uses/mo but most are tiny interactions (~1K tokens). \"Trillion Token Club\" = cumulative, not daily. COGS: 85-170B.",
-        "conf": "Low-Med"
+        "conf": "Low-Med",
+        "founded": 2012,
+        "category": "digital-native",
+        "subcategory": "design",
+        "providers": [
+          "openai"
+        ],
+        "tokensNumeric": 75000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": "$40B",
+        "valuationNumeric": 40000000000,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://canva.com",
+        "employeeCount": 5000,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Notion AI",
@@ -1212,7 +1389,24 @@
         "tokens": "~75B/day",
         "prov": "Anthropic, OpenAI",
         "ev": "10M \"AI users\" but active AI DAU likely ~1M. $10/user/mo add-on. Revenue/price: 137-171B. COGS: ~106B.",
-        "conf": "Low-Med"
+        "conf": "Low-Med",
+        "founded": 2016,
+        "category": "digital-native",
+        "subcategory": "productivity",
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "tokensNumeric": 75000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": "$10B",
+        "valuationNumeric": 10000000000,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://notion.so",
+        "employeeCount": 800,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Wrtn Technologies",
@@ -1221,7 +1415,24 @@
         "tokens": "~50B/day",
         "prov": "OpenAI, Anthropic",
         "ev": "6.5M MAU, free GPT-5. Revenue/price: 68-96B. Bottom-up: 9-32B. 200B/day would exceed entire $100M ARR.",
-        "conf": "Low"
+        "conf": "Low",
+        "founded": 2021,
+        "category": "ai-application",
+        "subcategory": "consumer",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 50000000000,
+        "arr": "$100M",
+        "arrNumeric": 100000000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": "$73.5M",
+        "status": "private",
+        "website": "https://wrtn.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "BLACKBOX.AI",
@@ -1230,7 +1441,25 @@
         "tokens": "~50B/day",
         "prov": "OpenAI, Anthropic, Google",
         "ev": "$31.7M rev, 20M registered (not DAU). Revenue/price: 107-172B. Bottom-up: 10-23B. Midpoint of financial methods.",
-        "conf": "Low"
+        "conf": "Low",
+        "founded": 2022,
+        "category": "ai-application",
+        "subcategory": "coding",
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "tokensNumeric": 50000000000,
+        "arr": "$31.7M",
+        "arrNumeric": 31700000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://blackbox.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Harvey AI",
@@ -1239,7 +1468,23 @@
         "tokens": "~45B/day",
         "prov": "OpenAI",
         "ev": "$190M ARR, 100K lawyers but DAU ~30-40K. Frontier-heavy = expensive per token. Revenue/price: 58-73B. COGS: ~50B.",
-        "conf": "Med"
+        "conf": "Med",
+        "founded": 2022,
+        "category": "vertical-ai",
+        "subcategory": "legal",
+        "providers": [
+          "openai"
+        ],
+        "tokensNumeric": 45000000000,
+        "arr": "$190M",
+        "arrNumeric": 190000000,
+        "valuation": "$11B",
+        "valuationNumeric": 11000000000,
+        "totalFunding": "$400M+",
+        "status": "private",
+        "website": "https://harvey.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Monica AI",
@@ -1248,7 +1493,25 @@
         "tokens": "~45B/day",
         "prov": "OpenAI, Anthropic, Google",
         "ev": "10M registered (not DAU, likely 300-500K). $100M ARR (Manus). Revenue/price: 68-82B. Bottom-up: 8-15B.",
-        "conf": "Low"
+        "conf": "Low",
+        "founded": 2023,
+        "category": "ai-application",
+        "subcategory": "consumer",
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "tokensNumeric": 45000000000,
+        "arr": "$100M",
+        "arrNumeric": 100000000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://monica.im",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Yellow.ai",
@@ -1257,7 +1520,24 @@
         "tokens": "~25B/day",
         "prov": "OpenAI, Google",
         "ev": "1,300+ clients, $79.5M rev. Many conversations are rule-based, not LLM. Revenue/price: 131-175B. Bottom-up: 8-20B.",
-        "conf": "Low-Med"
+        "conf": "Low-Med",
+        "founded": 2016,
+        "category": "enterprise-saas",
+        "subcategory": "cs-automation",
+        "providers": [
+          "openai",
+          "google"
+        ],
+        "tokensNumeric": 25000000000,
+        "arr": "$79.5M",
+        "arrNumeric": 79500000,
+        "valuation": "$1.1B",
+        "valuationNumeric": 1100000000,
+        "totalFunding": "$100M+",
+        "status": "private",
+        "website": "https://yellow.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Klarna",
@@ -1266,7 +1546,23 @@
         "tokens": "~20B/day",
         "prov": "OpenAI",
         "ev": "\"700 agents replaced\" = $21-28M equivalent, but AI spend much less. CS interactions are short (~2K tokens). Bottom-up: 0.7-30B.",
-        "conf": "Low-Med"
+        "conf": "Low-Med",
+        "founded": 2005,
+        "category": "digital-native",
+        "subcategory": "fintech",
+        "providers": [
+          "openai"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "pre-ipo",
+        "website": "https://klarna.com",
+        "employeeCount": 3500,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Grab",
@@ -1275,7 +1571,23 @@
         "tokens": "~20B/day",
         "prov": "OpenAI",
         "ev": "42M+ MAU but most \"AI\" is traditional ML (matching, fraud), not LLM. LLM-specific: CS chatbot + internal tools.",
-        "conf": "Low"
+        "conf": "Low",
+        "founded": 2012,
+        "category": "digital-native",
+        "subcategory": "super-app",
+        "providers": [
+          "openai"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "public",
+        "website": "https://grab.com",
+        "employeeCount": 9000,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Sea/Shopee",
@@ -1284,7 +1596,24 @@
         "tokens": "~20B/day",
         "prov": "OpenAI, Google",
         "ev": "OpenAI strategic MOU is forward-looking. Current LLM deployment: CS + product descriptions. $13B total rev.",
-        "conf": "Low"
+        "conf": "Low",
+        "founded": 2009,
+        "category": "digital-native",
+        "subcategory": "e-commerce",
+        "providers": [
+          "openai",
+          "google"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "public",
+        "website": "https://shopee.com",
+        "employeeCount": 50000,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Kakao",
@@ -1293,7 +1622,23 @@
         "tokens": "~20B/day",
         "prov": "OpenAI (GPT-5)",
         "ev": "53M MAU but AI feature adoption maybe 5-10%. Revenue/price: 27-68B. Bottom-up: 4.5-22B.",
-        "conf": "Low-Med"
+        "conf": "Low-Med",
+        "founded": 2010,
+        "category": "digital-native",
+        "subcategory": "messaging",
+        "providers": [
+          "openai"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "public",
+        "website": "https://kakao.com",
+        "employeeCount": 7000,
+        "lastUpdated": "2026-03-30"
       },
       {
         "co": "Salesforce Agentforce",
@@ -1302,7 +1647,409 @@
         "tokens": "~15B/day",
         "prov": "OpenAI, own",
         "ev": "$800M claimed but bundled/relabeled. Realistic: 5-20K active agents x 100 interactions x 3K tokens. Inference maybe $20-50M/yr.",
-        "conf": "Low"
+        "conf": "Low",
+        "founded": 1999,
+        "category": "enterprise-saas",
+        "subcategory": "crm",
+        "providers": [
+          "openai"
+        ],
+        "tokensNumeric": 15000000000,
+        "arr": "$800M claimed",
+        "arrNumeric": 300000000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "public",
+        "website": "https://salesforce.com",
+        "employeeCount": 73000,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Character.ai",
+        "hq": "US",
+        "type": "AI Characters",
+        "tokens": "~60B/day",
+        "prov": "Own",
+        "ev": "Acquired by Google for talent. 20M+ MAU. Own models, high volume per session (roleplay = long context).",
+        "conf": "Low-Med",
+        "founded": 2021,
+        "category": "ai-application",
+        "subcategory": "consumer",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 60000000000,
+        "arr": "~$150M",
+        "arrNumeric": 150000000,
+        "valuation": "$1B (post Google deal)",
+        "valuationNumeric": 1000000000,
+        "totalFunding": "$250M",
+        "status": "private",
+        "website": "https://character.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Together AI",
+        "hq": "US",
+        "type": "AI Infrastructure",
+        "tokens": "~100B/day",
+        "prov": "Meta, Mistral, open models",
+        "ev": "Leading open-model inference provider. Hosts Llama, Mixtral, DeepSeek. Competes with Fireworks, Groq.",
+        "conf": "Low-Med",
+        "founded": 2022,
+        "category": "ai-infrastructure",
+        "subcategory": "inference",
+        "providers": [
+          "meta",
+          "mistral",
+          "deepseek"
+        ],
+        "tokensNumeric": 100000000000,
+        "arr": "~$100M",
+        "arrNumeric": 100000000,
+        "valuation": "$3.3B",
+        "valuationNumeric": 3300000000,
+        "totalFunding": "$400M+",
+        "status": "private",
+        "website": "https://together.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Jasper",
+        "hq": "US",
+        "type": "AI Content",
+        "tokens": "~30B/day",
+        "prov": "OpenAI, Anthropic",
+        "ev": "Enterprise content platform. Pivoted from consumer. $130M ARR but growth slowing as ChatGPT/Claude eat use case.",
+        "conf": "Low-Med",
+        "founded": 2021,
+        "category": "ai-application",
+        "subcategory": "content",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 30000000000,
+        "arr": "~$130M",
+        "arrNumeric": 130000000,
+        "valuation": "$1.5B",
+        "valuationNumeric": 1500000000,
+        "totalFunding": "$300M",
+        "status": "private",
+        "website": "https://jasper.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Glean",
+        "hq": "US",
+        "type": "Enterprise Search",
+        "tokens": "~30B/day",
+        "prov": "OpenAI, Anthropic, Google",
+        "ev": "Enterprise AI search + knowledge assistant. $100M ARR. Deep enterprise adoption in F500.",
+        "conf": "Low-Med",
+        "founded": 2019,
+        "category": "ai-application",
+        "subcategory": "search",
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "tokensNumeric": 30000000000,
+        "arr": "~$100M",
+        "arrNumeric": 100000000,
+        "valuation": "$4.6B",
+        "valuationNumeric": 4600000000,
+        "totalFunding": "$350M+",
+        "status": "private",
+        "website": "https://glean.com",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Intercom Fin",
+        "hq": "US",
+        "type": "CS Automation",
+        "tokens": "~25B/day",
+        "prov": "OpenAI, Anthropic",
+        "ev": "$0.99/resolution. Each resolution = multiple LLM calls. Own fine-tuned model (Fin) + frontier fallback.",
+        "conf": "Med",
+        "founded": 2011,
+        "category": "ai-application",
+        "subcategory": "cs-automation",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 25000000000,
+        "arr": "~$50M AI-specific",
+        "arrNumeric": 50000000,
+        "valuation": "$1.8B",
+        "valuationNumeric": 1800000000,
+        "totalFunding": "$240M+",
+        "status": "private",
+        "website": "https://intercom.com/fin",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Midjourney",
+        "hq": "US",
+        "type": "Image Gen",
+        "tokens": "~10B/day",
+        "prov": "Own",
+        "ev": "Self-funded, profitable. ~$300M ARR. Own models, Discord-first then web app. Image tokens counted differently.",
+        "conf": "Med",
+        "founded": 2021,
+        "category": "ai-application",
+        "subcategory": "image-gen",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 10000000000,
+        "arr": "~$300M",
+        "arrNumeric": 300000000,
+        "valuation": "~$10B (est)",
+        "valuationNumeric": 10000000000,
+        "totalFunding": "$0 (self-funded)",
+        "status": "private",
+        "website": "https://midjourney.com",
+        "employeeCount": 50
+      },
+      {
+        "co": "ElevenLabs",
+        "hq": "US/UK",
+        "type": "Voice AI",
+        "tokens": "~15B/day",
+        "prov": "Own",
+        "ev": "TTS + voice cloning. Own models. $330M ARR. Enterprise + consumer.",
+        "conf": "Med",
+        "founded": 2022,
+        "category": "ai-application",
+        "subcategory": "voice",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 15000000000,
+        "arr": "~$330M",
+        "arrNumeric": 330000000,
+        "valuation": "$3.3B",
+        "valuationNumeric": 3300000000,
+        "totalFunding": "$180M+",
+        "status": "private",
+        "website": "https://elevenlabs.io",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Lovable",
+        "hq": "Sweden",
+        "type": "AI App Builder",
+        "tokens": "~20B/day",
+        "prov": "Anthropic, OpenAI",
+        "ev": "$400M ARR (per 20VC). AI-powered app builder \u2014 every generation = heavy token use.",
+        "conf": "Low-Med",
+        "founded": 2023,
+        "category": "ai-application",
+        "subcategory": "app-builder",
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": "~$400M",
+        "arrNumeric": 400000000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": null,
+        "status": "private",
+        "website": "https://lovable.dev",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Fireworks AI",
+        "hq": "US",
+        "type": "AI Infrastructure",
+        "tokens": "~60B/day",
+        "prov": "Meta, Mistral, open models",
+        "ev": "Fast inference provider for open models. Competes with Together AI. Custom model deployment.",
+        "conf": "Low",
+        "founded": 2022,
+        "category": "ai-infrastructure",
+        "subcategory": "inference",
+        "providers": [
+          "meta",
+          "mistral",
+          "deepseek"
+        ],
+        "tokensNumeric": 60000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": "$2.5B",
+        "valuationNumeric": 2500000000,
+        "totalFunding": "$220M+",
+        "status": "private",
+        "website": "https://fireworks.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Sierra AI",
+        "hq": "US",
+        "type": "Customer Agents",
+        "tokens": "~20B/day",
+        "prov": "OpenAI, Anthropic",
+        "ev": "Bret Taylor + Clay Bavor. Enterprise customer service agents. Early revenue, strong team signal.",
+        "conf": "Low",
+        "founded": 2023,
+        "category": "ai-application",
+        "subcategory": "cs-automation",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": "$4B+",
+        "valuationNumeric": 4000000000,
+        "totalFunding": "$300M+",
+        "status": "private",
+        "website": "https://sierra.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Groq",
+        "hq": "US",
+        "type": "AI Infrastructure",
+        "tokens": "~40B/day",
+        "prov": "Own hardware",
+        "ev": "LPU (Language Processing Unit) custom chip. Ultra-fast inference. Open models hosted.",
+        "conf": "Low",
+        "founded": 2016,
+        "category": "ai-infrastructure",
+        "subcategory": "chips",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 40000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": "$3B",
+        "valuationNumeric": 3000000000,
+        "totalFunding": "$640M+",
+        "status": "private",
+        "website": "https://groq.com",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Cohere",
+        "hq": "Canada",
+        "type": "Enterprise LLM",
+        "tokens": "~20B/day",
+        "prov": "Own",
+        "ev": "Enterprise-focused LLM provider. RAG-first architecture. Competes with Anthropic/OpenAI in enterprise.",
+        "conf": "Low",
+        "founded": 2019,
+        "category": "foundation-model",
+        "subcategory": "enterprise",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 20000000000,
+        "arr": "~$100M",
+        "arrNumeric": 100000000,
+        "valuation": "$5.5B",
+        "valuationNumeric": 5500000000,
+        "totalFunding": "$970M+",
+        "status": "private",
+        "website": "https://cohere.com",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Mistral AI",
+        "hq": "France",
+        "type": "Foundation Model",
+        "tokens": "~15B/day (API)",
+        "prov": "Own",
+        "ev": "European frontier model company. Mixtral, Mistral Large. API + Le Chat consumer app.",
+        "conf": "Low-Med",
+        "founded": 2023,
+        "category": "foundation-model",
+        "subcategory": "frontier",
+        "providers": [
+          "own"
+        ],
+        "tokensNumeric": 15000000000,
+        "arr": "~$400M",
+        "arrNumeric": 400000000,
+        "valuation": "$6.2B",
+        "valuationNumeric": 6200000000,
+        "totalFunding": "$1.1B+",
+        "status": "private",
+        "website": "https://mistral.ai",
+        "employeeCount": 700,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Writer",
+        "hq": "US",
+        "type": "Enterprise AI",
+        "tokens": "~25B/day",
+        "prov": "Own + OpenAI",
+        "ev": "Enterprise writing + agents. Trains own Palmyra models. 60% Fortune 100 customers.",
+        "conf": "Low-Med",
+        "founded": 2020,
+        "category": "ai-application",
+        "subcategory": "content",
+        "providers": [
+          "own",
+          "openai"
+        ],
+        "tokensNumeric": 25000000000,
+        "arr": "~$100M",
+        "arrNumeric": 100000000,
+        "valuation": "$1.9B",
+        "valuationNumeric": 1900000000,
+        "totalFunding": "$390M",
+        "status": "private",
+        "website": "https://writer.com",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
+      },
+      {
+        "co": "Hebbia",
+        "hq": "US",
+        "type": "Financial AI",
+        "tokens": "~15B/day",
+        "prov": "OpenAI, Anthropic",
+        "ev": "AI for financial analysis. Long-context document processing. Top law firms + PE funds.",
+        "conf": "Low",
+        "founded": 2020,
+        "category": "vertical-ai",
+        "subcategory": "finance",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 15000000000,
+        "arr": null,
+        "arrNumeric": null,
+        "valuation": "$700M",
+        "valuationNumeric": 700000000,
+        "totalFunding": "$130M+",
+        "status": "private",
+        "website": "https://hebbia.ai",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-30"
       }
     ],
     "models": [

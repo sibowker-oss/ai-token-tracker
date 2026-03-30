@@ -713,19 +713,23 @@ function updateConsumerTable() {
   let filtered = TOP_CONSUMERS;
 
   if (modelTypeFilter !== 'all') {
-    const openProvs = ['Meta', 'DeepSeek', 'Mistral', 'Llama', 'Qwen', 'OSS', 'open'];
-    const frontierProvs = ['OpenAI', 'Anthropic', 'Google', 'xAI'];
+    const openProvs = ['meta', 'deepseek', 'mistral', 'own'];
+    const frontierProvs = ['openai', 'anthropic', 'google', 'xai'];
     const matchProvs = modelTypeFilter === 'open' ? openProvs : frontierProvs;
-    filtered = filtered.filter(c => matchProvs.some(p => c.prov.includes(p)));
+    filtered = filtered.filter(c => {
+      const provArr = (c.providers || []).map(p => p.toLowerCase());
+      if (provArr.length === 0) return c.prov.toLowerCase().split(',').some(s => matchProvs.some(m => s.trim().includes(m)));
+      return provArr.some(p => matchProvs.includes(p));
+    });
   }
 
   if (filters.providers.length > 0) {
     filtered = filtered.filter(c => {
-      const provStr = c.prov.toLowerCase();
-      return filters.providers.some(p => {
-        const pLower = p.toLowerCase();
-        // Match provider name or first part before / (e.g. Google/Gemini → Google)
-        return provStr.includes(pLower) || provStr.includes(pLower.split('/')[0]);
+      const provArr = (c.providers || []).map(p => p.toLowerCase());
+      return filters.providers.some(fp => {
+        const fpLower = fp.toLowerCase().split('/')[0];
+        if (provArr.length > 0) return provArr.some(p => p.includes(fpLower));
+        return c.prov.toLowerCase().includes(fpLower);
       });
     });
     label.textContent = '\u2014 filtered by: ' + filters.providers.join(', ');
@@ -733,9 +737,13 @@ function updateConsumerTable() {
     label.textContent = modelTypeFilter !== 'all' ? '\u2014 showing ' + modelTypeFilter + ' models' : '';
   }
 
-  let html = '<thead><tr><th>Company</th><th>HQ</th><th>Type</th><th>Est. Tokens/Day</th><th>Provider(s)</th><th>Evidence</th></tr></thead><tbody>';
+  // Sort by tokensNumeric descending if available
+  filtered.sort((a, b) => (b.tokensNumeric || 0) - (a.tokensNumeric || 0));
+
+  let html = '<thead><tr><th style="cursor:pointer" onclick="consumerSort=\'co\';updateConsumerTable()">Company</th><th>HQ</th><th>Type</th><th>Founded</th><th style="cursor:pointer" onclick="consumerSort=\'tokens\';updateConsumerTable()">Est. Tokens/Day &#x25BC;</th><th>Provider(s)</th><th>Evidence</th></tr></thead><tbody>';
   filtered.forEach(c => {
-    html += '<tr><td><strong>' + c.co + '</strong></td><td>' + c.hq + '</td><td style="font-size:11px;">' + c.type + '</td><td style="font-weight:600;color:var(--accent);">' + c.tokens + '</td><td style="font-size:11px;">' + c.prov + '</td><td style="font-size:11px;color:var(--text-dim);">' + c.ev + '</td></tr>';
+    const foundedBadge = c.founded ? (c.founded >= 2023 ? '<span style="color:var(--green);font-weight:600;">' + c.founded + '</span>' : c.founded) : '—';
+    html += '<tr><td><strong>' + c.co + '</strong></td><td>' + c.hq + '</td><td style="font-size:11px;">' + c.type + '</td><td style="font-size:11px;">' + foundedBadge + '</td><td style="font-weight:600;color:var(--accent);">' + c.tokens + '</td><td style="font-size:11px;">' + c.prov + '</td><td style="font-size:11px;color:var(--text-dim);max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="' + (c.ev || '').replace(/"/g, '&quot;') + '">' + c.ev + '</td></tr>';
   });
   html += '</tbody>';
   t.innerHTML = html;
