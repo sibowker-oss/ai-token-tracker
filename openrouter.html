@@ -94,7 +94,6 @@
   <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
   <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
   <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
-  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">In Development</a>
 </nav>
 
 <div class="container">
@@ -542,7 +541,7 @@ async function loadGatewayData() {
         const dailyT = weeklyT / 7;
         OPENROUTER_DATA.totalTokens = Math.round(dailyT);
         const el = document.getElementById('or-live-stat');
-        if (el) el.textContent = (dailyT / 1e12).toFixed(1) + 'T tokens/day · ' + (weeklyT / 1e12).toFixed(1) + 'T/week (w/e ' + orRank.week_date + ')';
+        if (el) el.textContent = Math.round(dailyT / 1e9).toLocaleString() + 'B tokens/day · ' + (weeklyT / 1e12).toFixed(1) + 'T/week (w/e ' + orRank.week_date + ')';
         if (orRank.weekly_gmv_usd) {
           OPENROUTER_DATA.totalSpend = Math.round(orRank.weekly_gmv_usd / 7);
         }
@@ -599,8 +598,10 @@ function renderGateway() {
   const pSpend = pFiltered.models.reduce((s,m) => s + m.spend, 0);
   const oSpend = oFiltered.models.reduce((s,m) => s + m.spend, 0);
 
-  const tokens = (showP ? pTokens : 0) + (showO ? oTokens : 0);
-  const spend = (showP ? pSpend : 0) + (showO ? oSpend : 0);
+  // Use top-level totals (which may have been overridden by live signals) rather than
+  // summing stale per-model data. Fall back to per-model sum if totals are missing.
+  const tokens = (showP ? (p.totalTokens || pTokens) : 0) + (showO ? (o.totalTokens || oTokens) : 0);
+  const spend = (showP ? (p.totalSpend || pSpend) : 0) + (showO ? (o.totalSpend || oSpend) : 0);
   const reqs = (showP ? p.totalRequests : 0) + (showO ? o.totalRequests : 0);
 
   document.querySelector('#gw-stat-tokens .val').textContent = fmtB(tokens);
@@ -698,6 +699,6 @@ loadGatewayData();
 // Init OpenRouter live data (separate API fetch — untouched)
 fetchData();
 </script>
-<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger v1.0 — Directional estimates only. Not investment advice.</footer>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">Global AI Dash v1.0 — Directional estimates only. Not investment advice.</footer>
 </body>
 </html>

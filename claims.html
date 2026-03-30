@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim Review Queue — Admin</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+  if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { sessionStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1000px; margin:0 auto; padding:24px; }
+  h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  h1 span { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+
+  .stats-row { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .stat-pill { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:12px; }
+  .stat-pill strong { color:var(--text); }
+
+  .filters { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .filter-btn { padding:4px 10px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .filter-btn:hover { border-color:var(--text-dim); color:var(--text); }
+  .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  .claim-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:10px; }
+  .claim-card.w-authoritative { border-left:3px solid var(--green); }
+  .claim-card.w-corroborating { border-left:3px solid var(--accent); }
+  .claim-card.w-indicative { border-left:3px solid var(--text-dim); }
+
+  .claim-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
+  .claim-entity { font-size:14px; font-weight:700; }
+  .claim-badges { display:flex; gap:4px; flex-shrink:0; }
+
+  .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .badge-authoritative { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-corroborating { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .badge-indicative { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .badge-new { background:rgba(6,182,212,0.12); color:var(--cyan); }
+  .badge-confirms { background:rgba(16,185,129,0.12); color:var(--green); }
+  .badge-conflicts { background:rgba(239,68,68,0.15); color:var(--red); }
+  .badge-high { background:rgba(16,185,129,0.1); color:var(--green); }
+  .badge-medium { background:rgba(245,158,11,0.1); color:var(--orange); }
+  .badge-low { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+
+  .claim-quote { font-size:12px; color:var(--text); line-height:1.5; margin-bottom:8px; font-style:italic; }
+  .claim-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
+  .claim-meta strong { color:var(--text); font-weight:600; }
+  .claim-conflict { font-size:11px; color:var(--red); margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.06); border-radius:6px; }
+
+  .empty { text-align:center; padding:40px; color:var(--text-dim); font-size:13px; }
+
+  .rules { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:20px; font-size:11px; color:var(--text-dim); line-height:1.7; }
+  .rules strong { color:var(--text); }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Dashboard</a>
+  <span style="flex-grow:1"></span>
+  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Vault</a>
+  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Sources</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">In Development</a>
+  <a href="claims.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Claims</a>
+</nav>
+
+<div class="container">
+  <h1>Claim Review Queue <span>Admin</span></h1>
+  <p class="intro">Data point candidates extracted from podcast transcripts. Review before incorporating into site-data.json.</p>
+
+  <div class="rules">
+    <strong>Incorporation rules:</strong>
+    <strong style="color:var(--green);">Authoritative</strong> = can set/update a data point directly (speaker has first-hand knowledge).
+    <strong style="color:var(--accent);">Corroborating</strong> = raise confidence on existing point, or add if no primary source.
+    <strong style="color:var(--text-dim);">Indicative</strong> = triangulation only; never override authoritative/corroborating.
+  </div>
+
+  <div class="stats-row" id="stats-row"></div>
+  <div class="filters" id="filters"></div>
+  <div id="claims-list"></div>
+</div>
+
+<footer>Global AI Dash v1.0 — Admin</footer>
+
+<script>
+let allClaims = [];
+let activeFilter = 'all';
+
+async function loadClaims() {
+  // Try today's file first, then scan for most recent
+  const today = new Date().toISOString().split('T')[0];
+  const dates = [today];
+  // Also try last 7 days
+  for (let i = 1; i <= 7; i++) {
+    const d = new Date(Date.now() - i * 86400000);
+    dates.push(d.toISOString().split('T')[0]);
+  }
+
+  for (const date of dates) {
+    try {
+      const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
+      if (resp.ok) {
+        allClaims = await resp.json();
+        console.log('Loaded ' + allClaims.length + ' claims from ' + date);
+        break;
+      }
+    } catch(e) {}
+  }
+
+  if (allClaims.length === 0) {
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run extract_claims.py to generate candidates.</div>';
+    return;
+  }
+
+  renderStats();
+  renderFilters();
+  renderClaims();
+}
+
+function renderStats() {
+  const weights = {}, cats = {}, statuses = {};
+  allClaims.forEach(c => {
+    weights[c.weight] = (weights[c.weight] || 0) + 1;
+    cats[c.category] = (cats[c.category] || 0) + 1;
+    statuses[c.dedup_status] = (statuses[c.dedup_status] || 0) + 1;
+  });
+
+  let html = '<span class="stat-pill">Total: <strong>' + allClaims.length + '</strong></span>';
+  for (const [k,v] of Object.entries(weights)) {
+    html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
+  }
+  for (const [k,v] of Object.entries(statuses)) {
+    html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
+  }
+  document.getElementById('stats-row').innerHTML = html;
+}
+
+function renderFilters() {
+  const categories = ['all', ...new Set(allClaims.map(c => c.category))];
+  let html = '';
+  categories.forEach(cat => {
+    const label = cat === 'all' ? 'All' : cat.replace(/_/g, ' ');
+    html += '<button class="filter-btn' + (activeFilter === cat ? ' active' : '') + '" onclick="setFilter(\'' + cat + '\')">' + label + '</button>';
+  });
+  // Weight filters
+  ['authoritative', 'corroborating', 'indicative'].forEach(w => {
+    html += '<button class="filter-btn' + (activeFilter === 'w:' + w ? ' active' : '') + '" onclick="setFilter(\'w:' + w + '\')" style="margin-left:' + (w === 'authoritative' ? '12px' : '0') + ';">' + w + '</button>';
+  });
+  document.getElementById('filters').innerHTML = html;
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilters();
+  renderClaims();
+}
+
+function renderClaims() {
+  let filtered = allClaims;
+  if (activeFilter !== 'all') {
+    if (activeFilter.startsWith('w:')) {
+      filtered = filtered.filter(c => c.weight === activeFilter.substring(2));
+    } else {
+      filtered = filtered.filter(c => c.category === activeFilter);
+    }
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No claims match this filter.</div>';
+    return;
+  }
+
+  // Sort: conflicts first, then authoritative, then corroborating, then indicative
+  const weightOrder = { authoritative: 0, corroborating: 1, indicative: 2 };
+  const statusOrder = { conflicts: 0, new: 1, confirms: 2, stale: 3 };
+  filtered.sort((a, b) => {
+    const sa = statusOrder[a.dedup_status] ?? 9;
+    const sb = statusOrder[b.dedup_status] ?? 9;
+    if (sa !== sb) return sa - sb;
+    return (weightOrder[a.weight] ?? 9) - (weightOrder[b.weight] ?? 9);
+  });
+
+  let html = '';
+  filtered.forEach(c => {
+    html += '<div class="claim-card w-' + c.weight + '">';
+    html += '<div class="claim-top">';
+    html += '<span class="claim-entity">' + (c.entity || '?') + ' — ' + (c.value_display || c.value || '?') + '</span>';
+    html += '<div class="claim-badges">';
+    html += '<span class="badge badge-' + c.weight + '">' + c.weight + '</span>';
+    html += '<span class="badge badge-' + c.dedup_status + '">' + c.dedup_status + '</span>';
+    html += '<span class="badge badge-' + c.confidence + '">' + c.confidence + '</span>';
+    html += '</div></div>';
+    html += '<div class="claim-quote">"' + c.claim + '"</div>';
+    html += '<div class="claim-meta">';
+    html += '<strong>Metric:</strong> ' + (c.metric || '?') + ' &nbsp; ';
+    html += '<strong>Period:</strong> ' + (c.time_period || '?') + ' &nbsp; ';
+    html += '<strong>Speaker:</strong> ' + (c.speaker || '?') + '<br>';
+    html += '<strong>Source:</strong> ' + (c.source_podcast || '?') + ' (' + (c.source_date || '?') + ')';
+    if (c.original_source_cited) html += ' &nbsp; <strong>Cites:</strong> ' + c.original_source_cited;
+    html += '</div>';
+    if (c.dedup_note) {
+      html += '<div class="claim-conflict">' + c.dedup_note + '</div>';
+    }
+    html += '</div>';
+  });
+
+  document.getElementById('claims-list').innerHTML = html;
+}
+
+loadClaims();
+</script>
+</body>
+</html>

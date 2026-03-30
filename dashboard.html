@@ -146,16 +146,12 @@
   <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
   <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
   <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
-  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">In Development</a>
 </nav>
 <div class="container">
 
-<header>
+<header style="text-align:center;">
   <h1>Global AI Token Usage</h1>
-  <p style="font-size:12px;color:var(--text-dim);line-height:1.6;max-width:800px;">
-    <em>Estimates derived from triangulated public filings, API observations, and industry disclosures. Figures are directional indicators, not audited financials.</em><br>
-    <span style="font-size:11px;color:#f59e0b;">All revenue figures are annualized run rate (ARR). See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual 2025 collected.</span>
-  </p>
+  <p style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-top:6px;">Estimates derived from triangulated public filings, API observations, and industry disclosures. Figures are directional indicators, not audited financials. All revenue figures are annualized run rate (ARR). See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual 2025 collected.</p>
   <div id="data-refresh" style="font-size:10px;color:var(--text-dim);margin-top:4px;"></div>
 </header>
 
@@ -242,7 +238,7 @@
   </p>
 </details>
 
-<footer>The AI Ledger v1.0 &mdash; Directional estimates only. Not investment advice.</footer>
+<footer>Global AI Dash v1.0 &mdash; Directional estimates only. Not investment advice.</footer>
 
 </div>
 
@@ -724,7 +720,14 @@ function updateConsumerTable() {
   }
 
   if (filters.providers.length > 0) {
-    filtered = filtered.filter(c => filters.providers.some(p => c.prov.includes(p.split('/')[0]) || c.prov.includes(p.split(' ')[0])));
+    filtered = filtered.filter(c => {
+      const provStr = c.prov.toLowerCase();
+      return filters.providers.some(p => {
+        const pLower = p.toLowerCase();
+        // Match provider name or first part before / (e.g. Google/Gemini → Google)
+        return provStr.includes(pLower) || provStr.includes(pLower.split('/')[0]);
+      });
+    });
     label.textContent = '\u2014 filtered by: ' + filters.providers.join(', ');
   } else {
     label.textContent = modelTypeFilter !== 'all' ? '\u2014 showing ' + modelTypeFilter + ' models' : '';
