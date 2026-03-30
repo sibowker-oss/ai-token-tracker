@@ -279,7 +279,8 @@
 <div class="container">
   <div class="tabs" id="tabBar">
     <button class="tab active" onclick="switchTab('search')">Search & Browse</button>
-    <button class="tab" onclick="switchTab('submit')">Add Data Point</button>
+    <button class="tab" onclick="switchTab('quickadd')">Quick Add</button>
+    <button class="tab" onclick="switchTab('submit')">Full Add</button>
     <button class="tab" onclick="switchTab('review')">Weekly Review</button>
     <button class="tab" onclick="switchTab('consensus')">Consensus</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
@@ -294,6 +295,36 @@
     <div class="filters" id="filterBar"></div>
     <div class="stats-bar" id="statsBar"></div>
     <div class="dp-list" id="dpList"></div>
+  </div>
+
+  <!-- QUICK ADD VIEW -->
+  <div id="view-quickadd" class="view-section" style="display:none;">
+    <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px;">
+      <h2 style="font-size:18px; margin-bottom:8px;">Quick Add</h2>
+      <p style="font-size:12px; color:var(--text-dim); margin-bottom:20px;">Paste a URL and title. The enrichment script will fetch the page and extract data points automatically.</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;max-width:600px;">
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Title / Description</label>
+          <input id="qa-title" type="text" placeholder="e.g. Anthropic hits $14B ARR" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">URL</label>
+          <input id="qa-url" type="url" placeholder="https://..." style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="quickAddSave()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;">Save & Queue for Enrichment</button>
+        </div>
+      </div>
+
+      <div id="qa-status" style="margin-top:16px;"></div>
+
+      <!-- Pending enrichment queue -->
+      <div style="margin-top:24px;">
+        <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">Queued for Enrichment</h3>
+        <div id="qa-queue" style="font-size:12px;color:var(--text-dim);"></div>
+      </div>
+    </div>
   </div>
 
   <!-- SUBMIT VIEW -->
@@ -419,7 +450,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','submit','review','consensus','audit'];
+const TABS = ['search','quickadd','submit','review','consensus','audit'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -1751,7 +1782,66 @@ function clearForm() {
 // ============================================================
 // TABS
 // ============================================================
+// ============================================================
+// QUICK ADD
+// ============================================================
+function quickAddSave() {
+  const title = document.getElementById('qa-title').value.trim();
+  const url = document.getElementById('qa-url').value.trim();
+  if (!title || !url) { showToast('Title and URL required'); return; }
+
+  const dp = {
+    id: 'dp-' + String(vaultData.dataPoints.length + 1).padStart(3, '0'),
+    claim: title,
+    value: null,
+    unit: '',
+    sourceUrl: url,
+    sourceType: '',
+    sourceAuthor: '',
+    confidence: '',
+    dateOfClaim: new Date().toISOString().split('T')[0],
+    dateAdded: new Date().toISOString().split('T')[0],
+    usedOn: [],
+    notes: 'Quick Add — pending enrichment by enrich_vault.py',
+    tags: [],
+    metricKey: '',
+    status: 'pending_enrichment',
+  };
+
+  vaultData.dataPoints.push(dp);
+  saveData();
+
+  document.getElementById('qa-title').value = '';
+  document.getElementById('qa-url').value = '';
+  document.getElementById('qa-status').innerHTML =
+    '<div style="padding:10px 14px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;color:var(--green);font-size:12px;">' +
+    '✅ Saved: <strong>' + title + '</strong><br>' +
+    '<span style="color:var(--text-dim);">Run <code>python3 scripts/enrich_vault.py</code> to auto-extract data from the URL.</span></div>';
+
+  renderQuickAddQueue();
+  showToast('Saved — queued for enrichment');
+}
+
+function renderQuickAddQueue() {
+  const pending = vaultData.dataPoints.filter(dp => dp.status === 'pending_enrichment');
+  const el = document.getElementById('qa-queue');
+  if (!el) return;
+  if (pending.length === 0) {
+    el.innerHTML = '<span style="color:var(--text-dim);">No items queued. Add a URL above or run enrich_vault.py to process.</span>';
+    return;
+  }
+  let html = '';
+  pending.forEach(dp => {
+    html += '<div style="padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">' +
+      '<div><strong>' + dp.claim + '</strong><br><a href="' + dp.sourceUrl + '" target="_blank" style="color:var(--accent);font-size:10px;">' + dp.sourceUrl.substring(0, 60) + '...</a></div>' +
+      '<span style="font-size:9px;padding:2px 8px;border-radius:4px;background:rgba(245,158,11,0.15);color:var(--orange);font-weight:600;">PENDING</span>' +
+      '</div>';
+  });
+  el.innerHTML = html;
+}
+
 function switchTab(name) {
+  if (name === 'quickadd') renderQuickAddQueue();
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', TABS[i] === name);
   });
