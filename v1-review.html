@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V1 Release Review Checklist</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:900px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:22px; font-weight:700; margin-bottom:4px; }
+  .intro { font-size:13px; color:var(--text-dim); margin-bottom:24px; }
+  h2 { font-size:14px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.8px; margin:28px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--card-border); }
+
+  .review-item { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:10px; transition:border-color 0.15s; }
+  .review-item.pass { border-left:3px solid var(--green); }
+  .review-item.fail { border-left:3px solid var(--red); }
+
+  .review-top { display:flex; align-items:flex-start; gap:12px; }
+  .review-desc { flex:1; }
+  .review-desc .title { font-size:13px; font-weight:600; margin-bottom:3px; }
+  .review-desc .detail { font-size:11px; color:var(--text-dim); line-height:1.5; }
+  .review-desc .page-link { font-size:10px; color:var(--accent); text-decoration:none; margin-top:4px; display:inline-block; }
+  .review-desc .page-link:hover { text-decoration:underline; }
+
+  .review-actions { display:flex; gap:6px; flex-shrink:0; }
+  .btn-pass, .btn-fail { padding:5px 12px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .btn-pass:hover, .btn-pass.active { background:rgba(16,185,129,0.15); color:var(--green); border-color:var(--green); }
+  .btn-fail:hover, .btn-fail.active { background:rgba(239,68,68,0.15); color:var(--red); border-color:var(--red); }
+
+  .comment-area { margin-top:8px; }
+  .comment-area textarea { width:100%; padding:8px 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:6px; color:var(--text); font-size:12px; font-family:inherit; resize:vertical; min-height:32px; outline:none; transition:border-color 0.15s; }
+  .comment-area textarea:focus { border-color:var(--accent); }
+  .comment-area textarea::placeholder { color:#475569; }
+
+  .summary-bar { position:sticky; top:0; z-index:10; background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:12px 18px; margin-bottom:24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .summary-bar .stat { font-size:13px; }
+  .summary-bar .stat strong { font-weight:700; }
+  .summary-bar .stat.s-pass strong { color:var(--green); }
+  .summary-bar .stat.s-fail strong { color:var(--red); }
+  .summary-bar .stat.s-pending strong { color:var(--orange); }
+  .summary-bar button { margin-left:auto; padding:6px 16px; border-radius:8px; border:none; background:var(--accent); color:white; font-size:12px; font-weight:600; cursor:pointer; }
+  .summary-bar button:hover { opacity:0.9; }
+
+  @media(max-width:600px) { .review-top { flex-direction:column; } .review-actions { align-self:flex-start; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>V1 Release Review Checklist</h1>
+  <p class="intro">Go through each change, mark Pass or Fail, add comments. Click "Copy Summary" to share feedback.</p>
+
+  <div class="summary-bar" id="summary-bar">
+    <span class="stat s-pass">Pass: <strong id="count-pass">0</strong></span>
+    <span class="stat s-fail">Fail: <strong id="count-fail">0</strong></span>
+    <span class="stat s-pending">Pending: <strong id="count-pending">0</strong></span>
+    <button onclick="copySummary()">Copy Summary</button>
+  </div>
+
+  <div id="checklist"></div>
+</div>
+
+<script>
+const ITEMS = [
+  // Phase 1: Data Fixes
+  { section: 'Phase 1: Data Fixes', title: 'OpenRouter stats — live signal overlay', detail: 'Top stats now pull from signals_latest.json (22T/week actual) instead of stale 280B/day. Header shows live "X.XT tokens/day · X.XT/week" badge.', page: 'openrouter.html' },
+  { section: null, title: 'Timeline Q1 2026 OpenAI rev synced', detail: 'revData[8][0] updated from 16.8 → 20.0 to match dashboard $20B ARR.', page: 'timeline.html' },
+  { section: null, title: 'Multi-provider consumer filter fixed', detail: 'Perplexity now shows "OpenAI, Anthropic, Mistral, Meta" instead of "Multi". Same for Replit and Portkey. Should now appear when filtering by any matched provider.', page: 'dashboard.html' },
+
+  // Phase 2a: Global Changes
+  { section: 'Phase 2a: Global Changes', title: 'Dashboard headline renamed', detail: '"Global AI Token Usage Estimator" → "Global AI Token Usage"', page: 'dashboard.html' },
+  { section: null, title: 'Source & Validity statement added', detail: 'Italic statement in header: "Estimates derived from triangulated public filings, API observations, and industry disclosures. Figures are directional indicators, not audited financials."', page: 'dashboard.html' },
+  { section: null, title: 'Data refresh timestamp', detail: 'Shows "Data refreshed: YYYY-MM-DD HH:MM:SS UTC" below the header, pulled from site-data.json meta.generatedAt.', page: 'dashboard.html' },
+  { section: null, title: 'Methodology box collapsed', detail: 'Large methodology paragraph replaced with a collapsible <details> element. Click to expand. Content updated with current figures ($20B OpenAI, $14B Anthropic).', page: 'dashboard.html' },
+  { section: null, title: 'Footer standardized', detail: '"The AI Ledger v1.0 — Directional estimates only. Not investment advice." on all public pages. "APAC AI Intelligence Project" branding removed.', page: 'dashboard.html' },
+
+  // Phase 2b: Page-Specific
+  { section: 'Phase 2b: Page-Specific Changes', title: 'Sankey — source paragraph removed', detail: 'Removed "Sources: Anthropic sworn affidavit, Microsoft internal docs..." from both the static subtitle and the dynamic JS-rendered subtitle.', page: 'sankey.html' },
+  { section: null, title: 'Sankey — OpenRouter comment removed', detail: 'Removed "(likely the largest single revenue stream in this channel)" from IaaS note.', page: 'sankey.html' },
+  { section: null, title: '"Sankey" → "Follow the Dollar" in dashboard', detail: 'Demand Matrix subtitle now says "from Follow the Dollar" instead of "from Sankey".', page: 'dashboard.html' },
+  { section: null, title: 'Feed — new subscribe copy', detail: '"Get the Weekly AI Market Intelligence Brief. Real token economics, provider revenue moves, and enterprise adoption reality — not marketing fluff."', page: 'feed.html' },
+  { section: null, title: 'Feed — Formspree email capture live', detail: 'Form submits to formspree.io/f/mqegqzny. Shows success message on redirect with ?subscribed=true.', page: 'feed.html' },
+  { section: null, title: 'Feed — paid tier reference removed', detail: 'Removed "Free tier: weekly summary. Paid: full company database + shelfware calculator access."', page: 'feed.html' },
+
+  // Phase 3a: New Features
+  { section: 'Phase 3: New Features & Restructure', title: 'In Development page created', detail: '9 feature cards: 5 working prototypes (with iframe previews), 1 spec, 3 planned features with wireframe icons.', page: 'in-development.html' },
+  { section: null, title: 'Calculator moved to parked/', detail: 'calculator.html relocated to parked/calculator.html. Linked from In Development page as "AI Spend Intelligence Calculator" prototype.', page: 'in-development.html' },
+
+  // Phase 3b: Nav & Auth
+  { section: null, title: 'Public nav updated', detail: 'Now shows: Dashboard, Follow the $, Time Machine, Live Pricing, Weekly Feed, In Development. Removed: Shelfware Calculator, Vault, Sources.', page: 'dashboard.html' },
+  { section: null, title: 'Admin auth on Vault + Sources', detail: 'SHA-256 password prompt on vault.html and sources.html. Persists in sessionStorage for the browser session. Current password: "password" (needs changing).', page: 'vault.html' },
+
+  // Data updates from this session
+  { section: 'Data Updates (this session)', title: 'OpenAI ARR: $16.8B → $20.0B', detail: 'Source: All-In Podcast (2026-03-13), multiple reports. Corroborating weight. Updated in both dashboard and timeline.', page: 'dashboard.html' },
+  { section: null, title: 'Big Technology Podcast added as source', detail: '8th podcast source (Tier 3, Whisper STT). Alex Kantrowitz. RSS: feeds.megaphone.fm/LI3617121267.', page: 'sources.html' },
+  { section: null, title: '19 claim candidates extracted', detail: 'From All-In + Big Technology transcripts. 8 authoritative, 8 corroborating, 3 indicative. Stored in data-updates/2026-03-30-candidates.json.', page: null },
+];
+
+function render() {
+  const el = document.getElementById('checklist');
+  let html = '';
+  let currentSection = '';
+
+  ITEMS.forEach((item, i) => {
+    if (item.section && item.section !== currentSection) {
+      currentSection = item.section;
+      html += '<h2>' + currentSection + '</h2>';
+    }
+
+    const state = localStorage.getItem('v1r-' + i) || '';
+    const comment = localStorage.getItem('v1c-' + i) || '';
+    const cls = state === 'pass' ? 'pass' : state === 'fail' ? 'fail' : '';
+    const pageLink = item.page ? '<a class="page-link" href="' + item.page + '" target="_blank">Open ' + item.page + ' →</a>' : '';
+
+    html += '<div class="review-item ' + cls + '" id="item-' + i + '">' +
+      '<div class="review-top">' +
+        '<div class="review-desc">' +
+          '<div class="title">' + item.title + '</div>' +
+          '<div class="detail">' + item.detail + '</div>' +
+          pageLink +
+        '</div>' +
+        '<div class="review-actions">' +
+          '<button class="btn-pass ' + (state === 'pass' ? 'active' : '') + '" onclick="setStatus(' + i + ',\'pass\')">Pass</button>' +
+          '<button class="btn-fail ' + (state === 'fail' ? 'active' : '') + '" onclick="setStatus(' + i + ',\'fail\')">Fail</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="comment-area">' +
+        '<textarea placeholder="Comment..." oninput="saveComment(' + i + ', this.value)">' + comment + '</textarea>' +
+      '</div>' +
+    '</div>';
+  });
+
+  el.innerHTML = html;
+  updateCounts();
+}
+
+function setStatus(i, status) {
+  const current = localStorage.getItem('v1r-' + i);
+  if (current === status) {
+    localStorage.removeItem('v1r-' + i);
+  } else {
+    localStorage.setItem('v1r-' + i, status);
+  }
+  render();
+}
+
+function saveComment(i, val) {
+  if (val.trim()) localStorage.setItem('v1c-' + i, val);
+  else localStorage.removeItem('v1c-' + i);
+  updateCounts();
+}
+
+function updateCounts() {
+  let pass = 0, fail = 0, pending = 0;
+  ITEMS.forEach((_, i) => {
+    const s = localStorage.getItem('v1r-' + i);
+    if (s === 'pass') pass++;
+    else if (s === 'fail') fail++;
+    else pending++;
+  });
+  document.getElementById('count-pass').textContent = pass;
+  document.getElementById('count-fail').textContent = fail;
+  document.getElementById('count-pending').textContent = pending;
+}
+
+function copySummary() {
+  let lines = ['# V1 Release Review — ' + new Date().toISOString().split('T')[0], ''];
+  let currentSection = '';
+
+  ITEMS.forEach((item, i) => {
+    if (item.section && item.section !== currentSection) {
+      currentSection = item.section;
+      lines.push('## ' + currentSection);
+    }
+    const s = localStorage.getItem('v1r-' + i) || 'pending';
+    const c = localStorage.getItem('v1c-' + i) || '';
+    const icon = s === 'pass' ? 'PASS' : s === 'fail' ? 'FAIL' : '----';
+    lines.push('[' + icon + '] ' + item.title + (c ? ' — ' + c : ''));
+  });
+
+  let pass = 0, fail = 0;
+  ITEMS.forEach((_, i) => { const s = localStorage.getItem('v1r-' + i); if (s==='pass') pass++; if (s==='fail') fail++; });
+  lines.push('', '---', 'Pass: ' + pass + ' / Fail: ' + fail + ' / Pending: ' + (ITEMS.length - pass - fail));
+
+  navigator.clipboard.writeText(lines.join('\n')).then(() => alert('Summary copied to clipboard'));
+}
+
+render();
+</script>
+</body>
+</html>
