@@ -367,16 +367,65 @@ function exportDecisions() {
   showToast('Decisions exported as JSON');
 }
 
+// Load current site-data for impact preview
+let siteData = null;
+async function loadSiteData() {
+  try {
+    const r = await fetch('site-data.json?v=' + Date.now());
+    siteData = await r.json();
+  } catch(e) { console.warn('Could not load site-data for impact preview'); }
+}
+
+function getImpact(claim) {
+  if (!siteData || !claim.value) return null;
+  const entity = (claim.entity || '').toLowerCase();
+  const metric = (claim.metric || '').toLowerCase();
+
+  // Check provider ARR
+  const providers = siteData.dashboard?.providers || {};
+  for (const [name, data] of Object.entries(providers)) {
+    if (entity.includes(name.toLowerCase()) || name.toLowerCase().includes(entity)) {
+      if (metric.includes('arr') || metric.includes('revenue')) {
+        const currentB = data.rev || 0;
+        const claimB = claim.value / 1e9;
+        if (currentB > 0) {
+          const pctChange = ((claimB - currentB) / currentB * 100).toFixed(1);
+          const isMajor = Math.abs(pctChange) > 15;
+          return { type: 'provider_arr', name, current: '$' + currentB + 'B', proposed: '$' + claimB.toFixed(1) + 'B', pctChange, isMajor };
+        }
+      }
+    }
+  }
+
+  // Check consumer ARR
+  const consumers = siteData.dashboard?.topConsumers || [];
+  for (const c of consumers) {
+    if (entity.includes(c.co.toLowerCase()) || c.co.toLowerCase().includes(entity)) {
+      if ((metric.includes('arr') || metric.includes('revenue')) && c.arrNumeric) {
+        const pctChange = ((claim.value - c.arrNumeric) / c.arrNumeric * 100).toFixed(1);
+        const isMajor = Math.abs(pctChange) > 15;
+        return { type: 'consumer_arr', name: c.co, current: c.arr, proposed: claim.value_display || ('$' + (claim.value/1e6).toFixed(0) + 'M'), pctChange, isMajor };
+      }
+    }
+  }
+  return null;
+}
+
 function submitDecisions() {
-  // Build the accepted claims with decisions attached
   const accepted = [];
-  const parkedList = [];
   allClaims.forEach((c, i) => {
     const d = decisions[i] || {};
     if (d.decision === 'accepted') {
-      accepted.push({ ...c, review_decision: 'accepted', review_note: d.note || '', reviewed_at: new Date().toISOString() });
-    } else if (d.decision === 'parked') {
-      parkedList.push({ ...c, review_decision: 'parked', review_note: d.note || '' });
+      const impact = getImpact(c);
+      accepted.push({
+        ...c,
+        review_decision: 'accepted',
+        review_note: d.note || '',
+        reviewed_at: new Date().toISOString(),
+        major_change: impact?.isMajor || false,
+        confirmed: false,  // major changes need confirm step
+        impact: impact,
+      });
     }
   });
 
@@ -385,46 +434,121 @@ function submitDecisions() {
     return;
   }
 
-  // Generate a summary for clipboard (to paste into a Claude Code session for implementation)
-  let summary = '# Accepted Claims for site-data.json Update\n';
-  summary += 'Date: ' + new Date().toISOString().split('T')[0] + '\n';
-  summary += 'Source: ' + sourceFile + '\n\n';
+  // Check for major changes that need confirmation
+  const major = accepted.filter(c => c.major_change);
+  const minor = accepted.filter(c => !c.major_change);
 
-  accepted.forEach(c => {
-    summary += '## ' + c.entity + ' — ' + (c.value_display || c.value) + '\n';
-    summary += '- Metric: ' + c.metric + '\n';
-    summary += '- Value: ' + c.value + ' ' + (c.unit || '') + '\n';
-    summary += '- Period: ' + c.time_period + '\n';
-    summary += '- Weight: ' + c.weight + ' (speaker: ' + c.speaker + ')\n';
-    summary += '- Source: ' + c.source_podcast + ' (' + c.source_date + ')\n';
-    if (c.dedup_status === 'conflicts') summary += '- CONFLICT: ' + c.dedup_note + '\n';
-    if (c.review_note) summary += '- Note: ' + c.review_note + '\n';
-    summary += '\n';
-  });
+  if (major.length > 0 && !document.getElementById('impact-confirmed')?.checked) {
+    // Show impact preview modal
+    let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="impact-modal">';
+    html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;">';
+    html += '<h2 style="font-size:16px;margin-bottom:12px;">Impact Preview — Major Changes</h2>';
+    html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">' + major.length + ' claim(s) will make significant changes (>15% diff from current data):</p>';
 
-  if (parkedList.length > 0) {
-    summary += '---\n# Parked (revisit later)\n';
-    parkedList.forEach(c => {
-      summary += '- ' + c.entity + ' — ' + (c.value_display || c.value) + (c.review_note ? ' (' + c.review_note + ')' : '') + '\n';
+    major.forEach(c => {
+      const imp = c.impact;
+      const color = imp && parseFloat(imp.pctChange) > 0 ? 'var(--green)' : 'var(--red)';
+      html += '<div style="padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;margin-bottom:8px;">';
+      html += '<strong>' + c.entity + '</strong> — ' + c.metric + '<br>';
+      if (imp) {
+        html += '<span style="color:var(--text-dim);">Current: ' + imp.current + '</span> → ';
+        html += '<span style="color:' + color + ';font-weight:600;">' + imp.proposed + ' (' + (imp.pctChange > 0 ? '+' : '') + imp.pctChange + '%)</span>';
+        html += '<br><span style="font-size:10px;color:var(--text-dim);">This updates ' + imp.type.replace('_', ' ') + ': ' + imp.name + '</span>';
+      } else {
+        html += '<span style="color:var(--orange);">New data point (no existing value to compare)</span>';
+      }
+      html += '</div>';
     });
+
+    if (minor.length > 0) {
+      html += '<p style="font-size:11px;color:var(--text-dim);margin-top:12px;">+ ' + minor.length + ' minor/new claims will also be applied.</p>';
+    }
+
+    html += '<div style="margin-top:16px;display:flex;gap:8px;align-items:center;">';
+    html += '<label style="font-size:12px;color:var(--text);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="impact-confirmed" style="cursor:pointer;"> I confirm these changes</label>';
+    html += '</div>';
+    html += '<div style="margin-top:12px;display:flex;gap:8px;">';
+    html += '<button onclick="confirmAndSubmit()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--green);color:white;font-weight:600;cursor:pointer;">Apply Changes</button>';
+    html += '<button onclick="document.getElementById(\'impact-modal\').remove()" style="padding:8px 20px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;">Cancel</button>';
+    html += '</div>';
+    html += '</div></div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+    return;
   }
 
-  navigator.clipboard.writeText(summary).then(() => {
-    showToast(accepted.length + ' accepted claim(s) copied — paste into Claude Code to update site-data.json');
-  }).catch(() => {
-    // Fallback: download as text
-    const blob = new Blob([summary], { type: 'text/markdown' });
+  // No major changes, or already confirmed — write approved file
+  writeApprovedClaims(accepted);
+}
+
+function confirmAndSubmit() {
+  const checkbox = document.getElementById('impact-confirmed');
+  if (!checkbox || !checkbox.checked) {
+    showToast('Please check the confirmation box first');
+    return;
+  }
+
+  document.getElementById('impact-modal')?.remove();
+
+  // Rebuild accepted list with confirmed=true for major changes
+  const accepted = [];
+  allClaims.forEach((c, i) => {
+    const d = decisions[i] || {};
+    if (d.decision === 'accepted') {
+      const impact = getImpact(c);
+      accepted.push({
+        ...c,
+        review_decision: 'accepted',
+        review_note: d.note || '',
+        reviewed_at: new Date().toISOString(),
+        major_change: impact?.isMajor || false,
+        confirmed: true,
+        impact: impact,
+      });
+    }
+  });
+
+  writeApprovedClaims(accepted);
+}
+
+async function writeApprovedClaims(accepted) {
+  // Write to approved-claims.json via GitHub API (if available) or download
+  const jsonStr = JSON.stringify(accepted, null, 2);
+
+  // Try to write directly via fetch to the repo (works on GitHub Pages with token)
+  // Fallback: write as a downloadable file that gets committed by next cron
+  try {
+    // Save to localStorage as backup
+    localStorage.setItem('last-approved-claims', jsonStr);
+
+    // Create the file for download — auto_update.py will pick it up
+    const blob = new Blob([jsonStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'accepted-claims-' + new Date().toISOString().split('T')[0] + '.md';
+    a.download = 'approved-claims.json';
     a.click();
     URL.revokeObjectURL(url);
-    showToast(accepted.length + ' accepted claim(s) downloaded as markdown');
-  });
+
+    showToast(accepted.length + ' claim(s) approved! Save the downloaded file to data-updates/ in the repo. Next auto_update will apply them.');
+
+    // Show instruction
+    document.getElementById('claims-list').innerHTML =
+      '<div style="padding:24px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:12px;text-align:center;">' +
+      '<h3 style="color:var(--green);margin-bottom:8px;">' + accepted.length + ' Claims Approved</h3>' +
+      '<p style="font-size:13px;color:var(--text-dim);line-height:1.6;">' +
+      'Save <code>approved-claims.json</code> to:<br>' +
+      '<code style="color:var(--accent);">data-updates/approved-claims.json</code><br><br>' +
+      'The daily auto-update (7am) will apply the changes to site-data.json, add them to the vault, and push to GitHub Pages.<br><br>' +
+      '<span style="font-size:11px;">Or run manually: <code>python3 scripts/apply_claims.py</code></span>' +
+      '</p></div>';
+
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
 }
 
 loadClaims();
+loadSiteData();
 </script>
 </body>
 </html>

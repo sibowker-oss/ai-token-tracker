@@ -227,7 +227,14 @@ def main():
     # Step 4: Update self-hosted estimate in site-data.json
     update_site_data(signals)
 
-    # Step 5: Commit and push
+    # Step 5: Apply any approved claims from web review
+    try:
+        from apply_claims import main as apply_claims_main
+        apply_claims_main()
+    except Exception as e:
+        print(f"  Claims application: {e}")
+
+    # Step 6: Commit and push
     git_commit_push(today)
 
     print(f"\n{'='*60}")
