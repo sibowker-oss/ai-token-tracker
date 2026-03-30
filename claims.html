@@ -7,7 +7,7 @@
 <script>
 (function() {
   const AUTH_KEY = 'ai-ledger-admin-auth';
-  const HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
   if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
   const pw = prompt('Admin access required. Enter password:');
   if (!pw) { document.location = 'dashboard.html'; return; }
@@ -24,7 +24,7 @@
   body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
   .container { max-width:1000px; margin:0 auto; padding:24px; }
   h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
-  h1 span { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  h1 span.tag { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
   .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
 
   .stats-row { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
@@ -36,14 +36,17 @@
   .filter-btn:hover { border-color:var(--text-dim); color:var(--text); }
   .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
 
-  .claim-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:10px; }
+  .claim-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:10px; transition:all 0.2s; }
   .claim-card.w-authoritative { border-left:3px solid var(--green); }
   .claim-card.w-corroborating { border-left:3px solid var(--accent); }
   .claim-card.w-indicative { border-left:3px solid var(--text-dim); }
+  .claim-card.decided-accepted { opacity:0.6; border-left-color:var(--green); background:rgba(16,185,129,0.03); }
+  .claim-card.decided-declined { opacity:0.4; border-left-color:var(--red); background:rgba(239,68,68,0.02); }
+  .claim-card.decided-parked { opacity:0.5; border-left-color:var(--orange); background:rgba(245,158,11,0.02); }
 
   .claim-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
   .claim-entity { font-size:14px; font-weight:700; }
-  .claim-badges { display:flex; gap:4px; flex-shrink:0; }
+  .claim-badges { display:flex; gap:4px; flex-shrink:0; flex-wrap:wrap; }
 
   .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
   .badge-authoritative { background:rgba(16,185,129,0.15); color:var(--green); }
@@ -61,12 +64,46 @@
   .claim-meta strong { color:var(--text); font-weight:600; }
   .claim-conflict { font-size:11px; color:var(--red); margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.06); border-radius:6px; }
 
+  /* Action buttons per claim */
+  .claim-actions { display:flex; gap:6px; margin-top:10px; align-items:center; flex-wrap:wrap; }
+  .action-btn { padding:5px 12px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .action-btn:hover { color:var(--text); }
+  .action-btn.act-accept { border-color:rgba(16,185,129,0.3); }
+  .action-btn.act-accept:hover, .action-btn.act-accept.active { background:rgba(16,185,129,0.15); color:var(--green); border-color:var(--green); }
+  .action-btn.act-decline { border-color:rgba(239,68,68,0.3); }
+  .action-btn.act-decline:hover, .action-btn.act-decline.active { background:rgba(239,68,68,0.15); color:var(--red); border-color:var(--red); }
+  .action-btn.act-park { border-color:rgba(245,158,11,0.3); }
+  .action-btn.act-park:hover, .action-btn.act-park.active { background:rgba(245,158,11,0.15); color:var(--orange); border-color:var(--orange); }
+  .claim-note { flex:1; min-width:150px; padding:5px 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:6px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
+  .claim-note:focus { border-color:var(--accent); }
+  .claim-note::placeholder { color:#475569; }
+  .decision-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; margin-left:4px; }
+  .decision-label.dl-accepted { color:var(--green); }
+  .decision-label.dl-declined { color:var(--red); }
+  .decision-label.dl-parked { color:var(--orange); }
+
+  /* Submit bar */
+  .submit-bar { position:sticky; bottom:0; background:var(--card); border:1px solid var(--card-border); border-radius:10px 10px 0 0; padding:14px 20px; margin-top:24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; box-shadow:0 -4px 20px rgba(0,0,0,0.3); }
+  .submit-bar .summary { font-size:12px; color:var(--text-dim); flex:1; }
+  .submit-bar .summary strong { color:var(--text); }
+  .submit-bar .summary .s-green { color:var(--green); }
+  .submit-bar .summary .s-red { color:var(--red); }
+  .submit-bar .summary .s-orange { color:var(--orange); }
+  .submit-btn { padding:8px 24px; border-radius:8px; border:none; background:var(--green); color:white; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .submit-btn:hover { opacity:0.9; }
+  .submit-btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .export-btn { padding:8px 16px; border-radius:8px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
+  .export-btn:hover { background:#1e293b; color:var(--text); }
+
   .empty { text-align:center; padding:40px; color:var(--text-dim); font-size:13px; }
 
   .rules { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:20px; font-size:11px; color:var(--text-dim); line-height:1.7; }
   .rules strong { color:var(--text); }
 
-  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+  .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--green); color:white; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:600; z-index:100; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .toast.show { opacity:1; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:80px; }
 </style>
 </head>
 <body>
@@ -81,12 +118,12 @@
 </nav>
 
 <div class="container">
-  <h1>Claim Review Queue <span>Admin</span></h1>
-  <p class="intro">Data point candidates extracted from podcast transcripts. Review before incorporating into site-data.json.</p>
+  <h1>Claim Review Queue <span class="tag">Admin</span></h1>
+  <p class="intro">Review each claim: Accept to incorporate into site-data.json, Decline to reject, or Park for later. Add notes, then Submit Decisions.</p>
 
   <div class="rules">
     <strong>Incorporation rules:</strong>
-    <strong style="color:var(--green);">Authoritative</strong> = can set/update a data point directly (speaker has first-hand knowledge).
+    <strong style="color:var(--green);">Authoritative</strong> = can set/update a data point directly.
     <strong style="color:var(--accent);">Corroborating</strong> = raise confidence on existing point, or add if no primary source.
     <strong style="color:var(--text-dim);">Indicative</strong> = triangulation only; never override authoritative/corroborating.
   </div>
@@ -96,18 +133,34 @@
   <div id="claims-list"></div>
 </div>
 
+<div class="submit-bar" id="submit-bar">
+  <div class="summary" id="submit-summary"></div>
+  <button class="export-btn" onclick="exportDecisions()">Export JSON</button>
+  <button class="submit-btn" id="submit-btn" onclick="submitDecisions()">Submit Decisions</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <footer>Global AI Dash v1.0 — Admin</footer>
 
 <script>
+const DECISIONS_KEY = 'claim-decisions';
 let allClaims = [];
+let decisions = {}; // { claimIndex: { decision: 'accepted'|'declined'|'parked', note: '' } }
 let activeFilter = 'all';
+let sourceFile = '';
+
+function loadDecisions() {
+  try { decisions = JSON.parse(localStorage.getItem(DECISIONS_KEY) || '{}'); } catch(e) { decisions = {}; }
+}
+function saveDecisions() {
+  localStorage.setItem(DECISIONS_KEY, JSON.stringify(decisions));
+}
 
 async function loadClaims() {
-  // Try today's file first, then scan for most recent
   const today = new Date().toISOString().split('T')[0];
   const dates = [today];
-  // Also try last 7 days
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 1; i <= 14; i++) {
     const d = new Date(Date.now() - i * 86400000);
     dates.push(d.toISOString().split('T')[0]);
   }
@@ -117,6 +170,7 @@ async function loadClaims() {
       const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
       if (resp.ok) {
         allClaims = await resp.json();
+        sourceFile = date + '-candidates.json';
         console.log('Loaded ' + allClaims.length + ' claims from ' + date);
         break;
       }
@@ -128,9 +182,11 @@ async function loadClaims() {
     return;
   }
 
+  loadDecisions();
   renderStats();
   renderFilters();
   renderClaims();
+  updateSubmitBar();
 }
 
 function renderStats() {
@@ -141,26 +197,27 @@ function renderStats() {
     statuses[c.dedup_status] = (statuses[c.dedup_status] || 0) + 1;
   });
 
+  const decided = Object.keys(decisions).length;
   let html = '<span class="stat-pill">Total: <strong>' + allClaims.length + '</strong></span>';
-  for (const [k,v] of Object.entries(weights)) {
-    html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
-  }
-  for (const [k,v] of Object.entries(statuses)) {
-    html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
-  }
+  html += '<span class="stat-pill">Reviewed: <strong>' + decided + '/' + allClaims.length + '</strong></span>';
+  for (const [k,v] of Object.entries(weights)) html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
+  for (const [k,v] of Object.entries(statuses)) html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
   document.getElementById('stats-row').innerHTML = html;
 }
 
 function renderFilters() {
-  const categories = ['all', ...new Set(allClaims.map(c => c.category))];
+  const categories = ['all', 'pending', ...new Set(allClaims.map(c => c.category))];
   let html = '';
   categories.forEach(cat => {
-    const label = cat === 'all' ? 'All' : cat.replace(/_/g, ' ');
+    const label = cat === 'all' ? 'All' : cat === 'pending' ? 'Pending Review' : cat.replace(/_/g, ' ');
     html += '<button class="filter-btn' + (activeFilter === cat ? ' active' : '') + '" onclick="setFilter(\'' + cat + '\')">' + label + '</button>';
   });
-  // Weight filters
   ['authoritative', 'corroborating', 'indicative'].forEach(w => {
     html += '<button class="filter-btn' + (activeFilter === 'w:' + w ? ' active' : '') + '" onclick="setFilter(\'w:' + w + '\')" style="margin-left:' + (w === 'authoritative' ? '12px' : '0') + ';">' + w + '</button>';
+  });
+  // Decision filters
+  ['accepted', 'declined', 'parked'].forEach(d => {
+    html += '<button class="filter-btn' + (activeFilter === 'd:' + d ? ' active' : '') + '" onclick="setFilter(\'d:' + d + '\')" style="margin-left:' + (d === 'accepted' ? '12px' : '0') + ';">' + d + '</button>';
   });
   document.getElementById('filters').innerHTML = html;
 }
@@ -171,14 +228,38 @@ function setFilter(f) {
   renderClaims();
 }
 
+function setDecision(idx, decision) {
+  if (!decisions[idx]) decisions[idx] = { decision: '', note: '' };
+  if (decisions[idx].decision === decision) {
+    // Toggle off
+    delete decisions[idx];
+  } else {
+    decisions[idx].decision = decision;
+  }
+  saveDecisions();
+  renderStats();
+  renderClaims();
+  updateSubmitBar();
+}
+
+function setNote(idx, note) {
+  if (!decisions[idx]) decisions[idx] = { decision: '', note: '' };
+  decisions[idx].note = note;
+  if (!decisions[idx].decision && !note) delete decisions[idx];
+  saveDecisions();
+}
+
 function renderClaims() {
-  let filtered = allClaims;
-  if (activeFilter !== 'all') {
-    if (activeFilter.startsWith('w:')) {
-      filtered = filtered.filter(c => c.weight === activeFilter.substring(2));
-    } else {
-      filtered = filtered.filter(c => c.category === activeFilter);
-    }
+  let filtered = allClaims.map((c, i) => ({ ...c, _idx: i }));
+
+  if (activeFilter === 'pending') {
+    filtered = filtered.filter(c => !decisions[c._idx]?.decision);
+  } else if (activeFilter.startsWith('w:')) {
+    filtered = filtered.filter(c => c.weight === activeFilter.substring(2));
+  } else if (activeFilter.startsWith('d:')) {
+    filtered = filtered.filter(c => decisions[c._idx]?.decision === activeFilter.substring(2));
+  } else if (activeFilter !== 'all') {
+    filtered = filtered.filter(c => c.category === activeFilter);
   }
 
   if (filtered.length === 0) {
@@ -186,7 +267,7 @@ function renderClaims() {
     return;
   }
 
-  // Sort: conflicts first, then authoritative, then corroborating, then indicative
+  // Sort: conflicts first, then by weight
   const weightOrder = { authoritative: 0, corroborating: 1, indicative: 2 };
   const statusOrder = { conflicts: 0, new: 1, confirms: 2, stale: 3 };
   filtered.sort((a, b) => {
@@ -198,15 +279,26 @@ function renderClaims() {
 
   let html = '';
   filtered.forEach(c => {
-    html += '<div class="claim-card w-' + c.weight + '">';
+    const idx = c._idx;
+    const d = decisions[idx] || {};
+    const decidedClass = d.decision ? ' decided-' + d.decision : '';
+
+    html += '<div class="claim-card w-' + c.weight + decidedClass + '">';
+
+    // Header row
     html += '<div class="claim-top">';
     html += '<span class="claim-entity">' + (c.entity || '?') + ' — ' + (c.value_display || c.value || '?') + '</span>';
     html += '<div class="claim-badges">';
+    if (d.decision) html += '<span class="badge badge-' + (d.decision === 'accepted' ? 'confirms' : d.decision === 'declined' ? 'conflicts' : 'medium') + '">' + d.decision.toUpperCase() + '</span>';
     html += '<span class="badge badge-' + c.weight + '">' + c.weight + '</span>';
     html += '<span class="badge badge-' + c.dedup_status + '">' + c.dedup_status + '</span>';
     html += '<span class="badge badge-' + c.confidence + '">' + c.confidence + '</span>';
     html += '</div></div>';
+
+    // Quote
     html += '<div class="claim-quote">"' + c.claim + '"</div>';
+
+    // Metadata
     html += '<div class="claim-meta">';
     html += '<strong>Metric:</strong> ' + (c.metric || '?') + ' &nbsp; ';
     html += '<strong>Period:</strong> ' + (c.time_period || '?') + ' &nbsp; ';
@@ -214,13 +306,122 @@ function renderClaims() {
     html += '<strong>Source:</strong> ' + (c.source_podcast || '?') + ' (' + (c.source_date || '?') + ')';
     if (c.original_source_cited) html += ' &nbsp; <strong>Cites:</strong> ' + c.original_source_cited;
     html += '</div>';
+
+    // Conflict note
     if (c.dedup_note) {
       html += '<div class="claim-conflict">' + c.dedup_note + '</div>';
     }
+
+    // Action buttons
+    html += '<div class="claim-actions">';
+    html += '<button class="action-btn act-accept' + (d.decision === 'accepted' ? ' active' : '') + '" onclick="setDecision(' + idx + ',\'accepted\')">Accept</button>';
+    html += '<button class="action-btn act-decline' + (d.decision === 'declined' ? ' active' : '') + '" onclick="setDecision(' + idx + ',\'declined\')">Decline</button>';
+    html += '<button class="action-btn act-park' + (d.decision === 'parked' ? ' active' : '') + '" onclick="setDecision(' + idx + ',\'parked\')">Park</button>';
+    html += '<input class="claim-note" placeholder="Add a note..." value="' + (d.note || '').replace(/"/g, '&quot;') + '" oninput="setNote(' + idx + ', this.value)">';
+    html += '</div>';
+
     html += '</div>';
   });
 
   document.getElementById('claims-list').innerHTML = html;
+}
+
+function updateSubmitBar() {
+  let accepted = 0, declined = 0, parked = 0, pending = 0;
+  allClaims.forEach((_, i) => {
+    const d = decisions[i]?.decision;
+    if (d === 'accepted') accepted++;
+    else if (d === 'declined') declined++;
+    else if (d === 'parked') parked++;
+    else pending++;
+  });
+
+  const el = document.getElementById('submit-summary');
+  el.innerHTML = '<span class="s-green">Accept: <strong>' + accepted + '</strong></span> &nbsp; ' +
+    '<span class="s-red">Decline: <strong>' + declined + '</strong></span> &nbsp; ' +
+    '<span class="s-orange">Park: <strong>' + parked + '</strong></span> &nbsp; ' +
+    'Pending: <strong>' + pending + '</strong>';
+
+  document.getElementById('submit-btn').disabled = accepted === 0;
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function exportDecisions() {
+  const output = allClaims.map((c, i) => {
+    const d = decisions[i] || {};
+    return { ...c, review_decision: d.decision || 'pending', review_note: d.note || '' };
+  });
+  const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'claim-decisions-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Decisions exported as JSON');
+}
+
+function submitDecisions() {
+  // Build the accepted claims with decisions attached
+  const accepted = [];
+  const parkedList = [];
+  allClaims.forEach((c, i) => {
+    const d = decisions[i] || {};
+    if (d.decision === 'accepted') {
+      accepted.push({ ...c, review_decision: 'accepted', review_note: d.note || '', reviewed_at: new Date().toISOString() });
+    } else if (d.decision === 'parked') {
+      parkedList.push({ ...c, review_decision: 'parked', review_note: d.note || '' });
+    }
+  });
+
+  if (accepted.length === 0) {
+    showToast('No accepted claims to submit');
+    return;
+  }
+
+  // Generate a summary for clipboard (to paste into a Claude Code session for implementation)
+  let summary = '# Accepted Claims for site-data.json Update\n';
+  summary += 'Date: ' + new Date().toISOString().split('T')[0] + '\n';
+  summary += 'Source: ' + sourceFile + '\n\n';
+
+  accepted.forEach(c => {
+    summary += '## ' + c.entity + ' — ' + (c.value_display || c.value) + '\n';
+    summary += '- Metric: ' + c.metric + '\n';
+    summary += '- Value: ' + c.value + ' ' + (c.unit || '') + '\n';
+    summary += '- Period: ' + c.time_period + '\n';
+    summary += '- Weight: ' + c.weight + ' (speaker: ' + c.speaker + ')\n';
+    summary += '- Source: ' + c.source_podcast + ' (' + c.source_date + ')\n';
+    if (c.dedup_status === 'conflicts') summary += '- CONFLICT: ' + c.dedup_note + '\n';
+    if (c.review_note) summary += '- Note: ' + c.review_note + '\n';
+    summary += '\n';
+  });
+
+  if (parkedList.length > 0) {
+    summary += '---\n# Parked (revisit later)\n';
+    parkedList.forEach(c => {
+      summary += '- ' + c.entity + ' — ' + (c.value_display || c.value) + (c.review_note ? ' (' + c.review_note + ')' : '') + '\n';
+    });
+  }
+
+  navigator.clipboard.writeText(summary).then(() => {
+    showToast(accepted.length + ' accepted claim(s) copied — paste into Claude Code to update site-data.json');
+  }).catch(() => {
+    // Fallback: download as text
+    const blob = new Blob([summary], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'accepted-claims-' + new Date().toISOString().split('T')[0] + '.md';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast(accepted.length + ' accepted claim(s) downloaded as markdown');
+  });
 }
 
 loadClaims();

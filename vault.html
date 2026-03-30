@@ -7,7 +7,7 @@
 <script>
 (function() {
   const AUTH_KEY = 'ai-ledger-admin-auth';
-  const HASH = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
   if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
   const pw = prompt('Admin access required. Enter password:');
   if (!pw) { document.location = 'dashboard.html'; return; }
