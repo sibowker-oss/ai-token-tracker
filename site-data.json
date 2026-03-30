@@ -1120,7 +1120,7 @@
         "hq": "US/India",
         "type": "AI Gateway",
         "tokens": "1.9T/day",
-        "prov": "Multi (40+)",
+        "prov": "OpenAI, Anthropic, Google, Meta (40+)",
         "ev": "Live dashboard: $1.3M/day spend, $475M/yr managed. 35%/wk growth. Gateway passthrough (not additive to provider totals).",
         "conf": "High"
       },
@@ -1156,7 +1156,7 @@
         "hq": "US",
         "type": "AI Search",
         "tokens": "~200B/day",
-        "prov": "Multi",
+        "prov": "OpenAI, Anthropic, Mistral, Meta",
         "ev": "780M queries/mo, $200M ARR. Revenue/price: ~220B. Bottom-up: 91-130B (but multi-step pipelines inflate). COGS: 220-290B.",
         "conf": "Med"
       },
@@ -1165,7 +1165,7 @@
         "hq": "US",
         "type": "AI Dev Tool",
         "tokens": "~150B/day",
-        "prov": "Multi",
+        "prov": "OpenAI, Anthropic, Google",
         "ev": "$240-265M rev but only ~60% AI-related. 50M registered != DAU (likely <2M). Revenue/price: 260-310B. COGS: ~192B. Bottom-up much lower.",
         "conf": "Low-Med"
       },
@@ -1849,7 +1849,7 @@
         1.5
       ],
       [
-        16.8,
+        20.0,
         14.0,
         4.2,
         0.3,

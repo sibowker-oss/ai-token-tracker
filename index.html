@@ -141,21 +141,22 @@
 </head>
 <body>
 <nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
-  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Dashboard</a>
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
   <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
-  <a href="calculator.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Shelfware Calculator</a>
   <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
   <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
   <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
-  <span style="flex-grow:1"></span>
-  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Vault</a>
-  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Sources</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">In Development</a>
 </nav>
 <div class="container">
 
 <header>
-  <h1>Global AI Token Usage Estimator</h1>
-  <p>Directional estimates from public filings, earnings calls, press reports &amp; developer surveys &mdash; March 2026<br><span style="font-size:11px;color:#f59e0b;">All revenue figures are annualized run rate (ARR), not actual collected revenue. See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual 2025 collected.</span></p>
+  <h1>Global AI Token Usage</h1>
+  <p style="font-size:12px;color:var(--text-dim);line-height:1.6;max-width:800px;">
+    <em>Estimates derived from triangulated public filings, API observations, and industry disclosures. Figures are directional indicators, not audited financials.</em><br>
+    <span style="font-size:11px;color:#f59e0b;">All revenue figures are annualized run rate (ARR). See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual 2025 collected.</span>
+  </p>
+  <div id="data-refresh" style="font-size:10px;color:var(--text-dim);margin-top:4px;"></div>
 </header>
 
 <!-- ===== FILTER BAR ===== -->
@@ -199,7 +200,7 @@
 
 <!-- ===== DEMAND MATRIX ===== -->
 <div class="card">
-  <h2>Token Demand Quality Matrix <span class="sub">&mdash; who buys &times; how they buy. Actual 2025 collected revenue (from <a href="sankey.html" style="color:var(--accent);">Sankey</a>). Not all "$1 of AI revenue" is equal.</span></h2>
+  <h2>Token Demand Quality Matrix <span class="sub">&mdash; who buys &times; how they buy. Actual 2025 collected revenue (from <a href="sankey.html" style="color:var(--accent);">Follow the Dollar</a>). Not all "$1 of AI revenue" is equal.</span></h2>
   <div style="overflow-x:auto;">
     <table class="matrix-table" id="demand-matrix"></table>
   </div>
@@ -229,22 +230,19 @@
   </div>
 </div>
 
-<!-- ===== METHODOLOGY ===== -->
-<div class="card" style="background:rgba(59,130,246,0.05); border-color:rgba(59,130,246,0.2);">
-  <h2>Methodology &amp; Sources</h2>
-  <p style="font-size:12px; color:var(--text-dim); line-height:1.7;">
-    <strong>Provider revenue:</strong> OpenAI ($16.8B ARR est. Q1'26 &mdash; WSJ, Bloomberg); Anthropic ($14B ARR Mar'26 &mdash; SaaStr); Google Cloud AI ("billions" &mdash; Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
-    <strong>Token volumes:</strong> Triangulated from 4 independent methods: (1) Revenue &divide; blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv &times; 30-50% utilization &mdash; SemiAnalysis), (3) Bottom-up user &times; session &times; token estimation, (4) SDK download proxies (openai PyPI: 222M/month, anthropic: 78M/month &mdash; pypistats.org, Mar 2026). Previous estimate of ~680T/day revised down to ~565T based on GPU utilization cross-check.<br>
-    <strong>Self-hosted tokens:</strong> Included under "Others" (open model filter). Triangulated from: vLLM Docker Hub 16.3M cumulative pulls (production deployment signal); Ollama 1.8M binary downloads across recent releases (developer/personal signal); HuggingFace 15.9M model weight downloads/30d across tracked models. Estimated ~120–150T/day of inference outside API providers — real usage generating $0 provider revenue. Estimate auto-scales daily with vLLM Docker pull growth.<br>
-    <strong>Skeptical cross-checks:</strong> Sequoia "$200B question" capex gap (David Cahn, Sep 2024). Goldman Sachs "Too much spend, too little benefit" (Jun 2024). UBS: 4.4% of US adults use AI daily. ChatGPT Day-30 retention: 10-15% (Sensor Tower). GPU utilization 30-50% (SemiAnalysis). 85% AI projects fail (RAND/Gartner).<br>
-    <strong>Enterprise reality (2+ sources per claim):</strong> M365 Copilot 15M seats (Microsoft Q2 FY26 earnings). 35.8% usage (Recon Analytics, 150K respondents &mdash; NOT Gartner). Only 5% past pilot (Gartner 2025, 187 respondents). 70% tried, 8% kept choosing (Recon Analytics). SF Agentforce $800M ARR (SF Q4 FY26 earnings), ~50% deals free (derived from SF quarterly deal counts). NOW $600M ACV (NOW Q4 2025 earnings), Pro Plus premium 30-60% (UpperEdge). GitHub Copilot 4.7M subs (MSFT earnings). COGS cross-check: CRM gross margin flat 77% = minimal AI COGS. NOW -1.7pp. MSFT cloud -3pp. Full analysis: enterprise-saas-ai-sku-analysis.md.<br>
-    <strong>Geographic/Industry:</strong> Stanford HAI AI Index 2024, IDC, SlashData, Gartner AI Use Case Survey 2024, McKinsey Global AI Survey 2024.<br>
-    <strong>Live data:</strong> OpenRouter pricing via public API (openrouter.ai/api/v1/models). PyPI/npm download stats from pypistats.org and api.npmjs.org. HuggingFace model downloads via API.<br>
+<!-- ===== METHODOLOGY (collapsible) ===== -->
+<details class="card" style="background:rgba(59,130,246,0.05); border-color:rgba(59,130,246,0.2); cursor:pointer;">
+  <summary style="font-size:13px;font-weight:600;color:var(--text);padding:4px 0;">Methodology &amp; Sources</summary>
+  <p style="font-size:12px; color:var(--text-dim); line-height:1.7; margin-top:12px;">
+    <strong>Provider revenue:</strong> OpenAI ($20B ARR end-2025 &mdash; WSJ, Bloomberg, All-In); Anthropic ($14B ARR Feb'26 &mdash; investor disclosure); Google Cloud AI ("billions" &mdash; Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
+    <strong>Token volumes:</strong> Triangulated from 4 methods: (1) Revenue &divide; blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv &times; 30-50% utilization &mdash; SemiAnalysis), (3) Bottom-up user &times; session &times; token estimation, (4) SDK download proxies (PyPI/npm, pypistats.org).<br>
+    <strong>Self-hosted tokens:</strong> "Others" category. Triangulated from vLLM Docker Hub pulls, Ollama binary downloads, HuggingFace model downloads. Auto-scales daily from live signals.<br>
+    <strong>Live data:</strong> OpenRouter pricing API. PyPI/npm download stats. HuggingFace model downloads. GitHub release downloads. Docker Hub pull counts. OpenRouter weekly token rankings.<br>
     <strong>Cross-dimensional weights:</strong> Editorial estimates for filtering. Filtered views show directional splits, not precise figures.
   </p>
-</div>
+</details>
 
-<footer id="footer-text">Global AI Token Usage Estimator v2.0 &mdash; APAC AI Intelligence Project &mdash; Data as of March 2026<br>Estimates are directional. Not investment advice.</footer>
+<footer>The AI Ledger v1.0 &mdash; Directional estimates only. Not investment advice.</footer>
 
 </div>
 
@@ -299,13 +297,10 @@ async function loadDashboardData() {
       console.log('Sankey buyer→channel flows loaded for demand matrix:', Object.keys(SANKEY_BC_FLOWS).length, 'flows');
     }
 
-    // Show data timestamp from meta.generatedAt
+    // Show data refresh timestamp
     if (all.meta && all.meta.generatedAt) {
-      const ts = all.meta.generatedAt.split('T')[0];
-      const footer = document.getElementById('footer-text');
-      if (footer) {
-        footer.innerHTML = 'Data: ' + ts + ' &nbsp;|&nbsp; ' + footer.innerHTML;
-      }
+      const el = document.getElementById('data-refresh');
+      if (el) el.textContent = 'Data refreshed: ' + all.meta.generatedAt.replace('T', ' ').substring(0, 19) + ' UTC';
     }
 
   } catch(e) {

@@ -77,13 +77,10 @@
 <nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
   <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
   <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
-  <a href="calculator.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Shelfware Calculator</a>
   <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
   <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
-  <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Weekly Feed</a>
-  <span style="flex-grow:1"></span>
-  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Vault</a>
-  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Sources</a>
+  <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">In Development</a>
 </nav>
 
 <div class="container">
@@ -181,18 +178,26 @@
 
   <!-- SUBSCRIBE -->
   <div class="subscribe-box">
-    <h3>Get the Weekly AI Token Intelligence Brief</h3>
-    <p>The only newsletter tracking what's behind the AI revenue numbers. Real token consumption, not marketing fluff.</p>
-    <div>
-      <input type="email" placeholder="your@email.com" id="email-input">
-      <button onclick="alert('Coming soon! We\'re building the distribution pipeline.')">Subscribe</button>
-    </div>
-    <p style="margin-top:12px; font-size:11px; opacity:0.5;">Free tier: weekly summary. Paid: full company database + shelfware calculator access.</p>
+    <h3>Get the Weekly AI Market Intelligence Brief</h3>
+    <p>Real token economics, provider revenue moves, and enterprise adoption reality — not marketing fluff.</p>
+    <form action="https://formspree.io/f/mqegqzny" method="POST" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <input type="email" name="email" placeholder="your@email.com" required style="flex:1;min-width:200px;">
+      <input type="hidden" name="_subject" value="AI Ledger Newsletter Signup">
+      <input type="hidden" name="_next" value="https://sibowker-oss.github.io/ai-token-tracker/feed.html?subscribed=true">
+      <button type="submit">Subscribe</button>
+    </form>
+    <div id="subscribe-success" style="display:none;margin-top:12px;padding:10px 14px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;font-size:12px;color:#10b981;">You're in! Look for the first brief in your inbox.</div>
   </div>
+  <script>
+    if (window.location.search.includes('subscribed=true')) {
+      document.getElementById('subscribe-success').style.display = 'block';
+    }
+  </script>
 
   <div class="archive-link">
     <p style="color:var(--text-dim); font-size:12px; margin-top:16px;">This is Issue #1. Previous issues will appear here as the archive grows.</p>
   </div>
 </div>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger v1.0 — Directional estimates only. Not investment advice.</footer>
 </body>
 </html>

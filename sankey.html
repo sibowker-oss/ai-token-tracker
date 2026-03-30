@@ -44,19 +44,16 @@
 <body>
 <nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
   <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
-  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Follow the $</a>
-  <a href="calculator.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Shelfware Calculator</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
   <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
   <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
   <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
-  <span style="flex-grow:1"></span>
-  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Vault</a>
-  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Sources</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">In Development</a>
 </nav>
 
 <div class="container">
   <h1>Follow the Dollar</h1>
-  <div class="sub" id="sankeySubtitle">2025 actual revenue collected (not exit ARR). Sources: Anthropic sworn affidavit, Microsoft internal docs (Zitron), Sacra, The Information. Consensus-weighted estimates. Hover to explore.</div>
+  <div class="sub" id="sankeySubtitle">2025 actual revenue collected (not exit ARR). Consensus-weighted estimates. Hover to explore.</div>
 
   <div class="sankey-container">
     <canvas id="sankey" height="600"></canvas>
@@ -65,7 +62,7 @@
   <!-- IaaS / Open Models note -->
   <div style="display:flex; align-items:flex-start; gap:10px; margin-top:20px; padding:14px 18px; background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); border-radius:10px;">
     <div style="width:14px; height:14px; min-width:14px; border-radius:3px; background:#8b5cf6; margin-top:2px;"></div>
-    <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;"><strong style="color:#8b5cf6;">IaaS Providers & Aggregators</strong> — inference providers (Together, Fireworks, Groq) and aggregators like <strong>OpenRouter</strong> (likely the largest single revenue stream in this channel) are the primary commercial route for <strong>open-weight models</strong> (Llama, Mixtral, DeepSeek, Qwen). Revenue from open models flows through these intermediaries — not the model creators. Meta, Mistral and DeepSeek don't directly monetise inference for their open releases. In the Provider column, these become <strong>IaaS Providers</strong> as they host and serve the models.</p>
+    <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;"><strong style="color:#8b5cf6;">IaaS Providers & Aggregators</strong> — inference providers (Together, Fireworks, Groq) and aggregators like OpenRouter are the primary commercial route for <strong>open-weight models</strong> (Llama, Mixtral, DeepSeek, Qwen). Revenue from open models flows through these intermediaries — not the model creators. Meta, Mistral and DeepSeek don't directly monetise inference for their open releases.</p>
   </div>
 
   <!-- VC definition -->
@@ -217,7 +214,7 @@ async function loadSankeyData() {
     // Update subtitle with live numbers from data
     const sub = document.getElementById('sankeySubtitle');
     if (sub) {
-      sub.innerHTML = `2025 actual revenue collected (not exit ARR). $${s.totalCustomerRevenue}B customer revenue + $${s.totalVCSubsidy}B VC operating subsidy = $${s.totalSystem}B flowing through the system. Sources: Anthropic sworn affidavit, Microsoft internal docs (Zitron), Sacra, The Information. <span style="font-size:11px;color:#64748b;margin-left:4px;">Data: ${(all.meta?.generatedAt||'').slice(0,10)}</span>`;
+      sub.innerHTML = `2025 actual revenue collected (not exit ARR). $${s.totalCustomerRevenue}B customer revenue + $${s.totalVCSubsidy}B VC operating subsidy = $${s.totalSystem}B flowing through the system. Consensus-weighted estimates. <span style="font-size:11px;color:#64748b;margin-left:4px;">Data: ${(all.meta?.generatedAt||'').slice(0,10)}</span>`;
     }
 
     // Update narrative sections with live numbers
@@ -657,5 +654,6 @@ canvas.addEventListener('mouseleave', () => {
 // Boot
 loadSankeyData();
 </script>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger v1.0 — Directional estimates only. Not investment advice.</footer>
 </body>
 </html>

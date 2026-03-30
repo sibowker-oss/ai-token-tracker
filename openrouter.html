@@ -91,13 +91,10 @@
 <nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
   <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
   <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
-  <a href="calculator.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Shelfware Calculator</a>
   <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
-  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Live Pricing</a>
+  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
   <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
-  <span style="flex-grow:1"></span>
-  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Vault</a>
-  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Sources</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">In Development</a>
 </nav>
 
 <div class="container">
@@ -147,7 +144,7 @@
       <div id="gw-openrouter-panel">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
           <span style="font-size:14px;font-weight:700;">OpenRouter</span>
-          <span style="font-size:10px;color:var(--text-dim);padding:2px 8px;background:rgba(59,130,246,0.1);border-radius:4px;">280B tokens/day · 8.4T/month</span>
+          <span id="or-live-stat" style="font-size:10px;color:var(--text-dim);padding:2px 8px;background:rgba(59,130,246,0.1);border-radius:4px;">Loading...</span>
         </div>
         <table style="font-size:11px;">
           <thead><tr><th style="font-size:10px;">Model</th><th style="font-size:10px;">Tokens/Day</th><th style="font-size:10px;">$/Day</th><th style="font-size:10px;">Share</th></tr></thead>
@@ -533,6 +530,29 @@ async function loadGatewayData() {
     console.warn('Gateway data: site-data.json not found or missing gateway section, gateway charts disabled.', e);
     return;
   }
+
+  // Overlay live signal data from scraper (more accurate weekly totals)
+  try {
+    const sigResp = await fetch('data/signals_latest.json?v=' + Date.now());
+    if (sigResp.ok) {
+      const sig = await sigResp.json();
+      const orRank = sig.openrouter_rankings;
+      if (orRank && orRank.weekly_tokens_total) {
+        const weeklyT = orRank.weekly_tokens_total;
+        const dailyT = weeklyT / 7;
+        OPENROUTER_DATA.totalTokens = Math.round(dailyT);
+        const el = document.getElementById('or-live-stat');
+        if (el) el.textContent = (dailyT / 1e12).toFixed(1) + 'T tokens/day · ' + (weeklyT / 1e12).toFixed(1) + 'T/week (w/e ' + orRank.week_date + ')';
+        if (orRank.weekly_gmv_usd) {
+          OPENROUTER_DATA.totalSpend = Math.round(orRank.weekly_gmv_usd / 7);
+        }
+        console.log('OpenRouter stats updated from signals_latest.json (week: ' + orRank.week_date + ')');
+      }
+    }
+  } catch(e) {
+    console.warn('Could not load live signals for OpenRouter overlay', e);
+  }
+
   renderGateway();
 }
 
@@ -678,5 +698,6 @@ loadGatewayData();
 // Init OpenRouter live data (separate API fetch — untouched)
 fetchData();
 </script>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger v1.0 — Directional estimates only. Not investment advice.</footer>
 </body>
 </html>
