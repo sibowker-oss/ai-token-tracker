@@ -793,16 +793,15 @@ function updateConsumerTable() {
     filtered = filtered.filter(c => c.founded && c.founded >= 2023);
   }
 
-  // Sort
-  const dir = consumerSortAsc ? 1 : -1;
+  // Sort — descending by default for numeric columns
   filtered.sort((a, b) => {
-    if (consumerSort === 'co') return dir * (a.co || '').localeCompare(b.co || '');
-    if (consumerSort === 'arr') return dir * ((a.arrNumeric || 0) - (b.arrNumeric || 0));
-    if (consumerSort === 'founded') return dir * ((a.founded || 9999) - (b.founded || 9999));
-    return dir * ((a.tokensNumeric || 0) - (b.tokensNumeric || 0));
+    let cmp = 0;
+    if (consumerSort === 'co') cmp = (a.co || '').localeCompare(b.co || '');
+    else if (consumerSort === 'arr') cmp = (b.arrNumeric || 0) - (a.arrNumeric || 0);
+    else if (consumerSort === 'founded') cmp = (b.founded || 0) - (a.founded || 0);
+    else cmp = (b.tokensNumeric || 0) - (a.tokensNumeric || 0);
+    return consumerSortAsc ? -cmp : cmp;
   });
-  // Default sort: tokens descending
-  if (consumerSort === 'tokens' && !consumerSortAsc) filtered.reverse();
 
   // Render summary stats
   const totalTokens = filtered.reduce((s, c) => s + (c.tokensNumeric || 0), 0);
