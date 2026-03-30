@@ -113,6 +113,15 @@ SOURCES = {
         'skip_title_patterns': [],
         'extractor': 'whisper_stt',
     },
+    'big-technology': {
+        'label': 'Big Technology Podcast',
+        'dir': 'big-technology',
+        'tier': 3,
+        'discovery': 'rss',
+        'rss': 'https://feeds.megaphone.fm/LI3617121267',
+        'skip_title_patterns': [],
+        'extractor': 'whisper_stt',
+    },
 }
 
 
@@ -206,18 +215,22 @@ def discover_rss(cfg, limit):
             except Exception:
                 date_str = pub_el.text[:10]
 
-        slug = url.rstrip('/').split('/')[-1] or re.sub(r'[^a-z0-9]+', '-', title.lower())[:60]
-
         audio_url = ''
         if enclosure_el is not None:
             audio_url = enclosure_el.get('url', '')
 
-        if url:
-            episodes.append({
-                'title': title, 'url': url, 'date': date_str,
-                'slug': slug, 'rss_content': rss_content,
-                'audio_url': audio_url,
-            })
+        # Use link if available, fall back to audio URL for audio-only feeds
+        ep_url = url or audio_url
+        if not ep_url:
+            continue
+
+        slug = url.rstrip('/').split('/')[-1] if url else re.sub(r'[^a-z0-9]+', '-', title.lower())[:60]
+
+        episodes.append({
+            'title': title, 'url': ep_url, 'date': date_str,
+            'slug': slug, 'rss_content': rss_content,
+            'audio_url': audio_url,
+        })
 
     # Return generously — scrape_source handles skip patterns + limiting
     return episodes[:limit * 10]
