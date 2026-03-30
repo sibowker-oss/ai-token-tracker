@@ -261,7 +261,7 @@ let SANKEY_BC_FLOWS = {}; // buyer→channel flow lookup from Sankey
 // ============================================================
 // FILTER STATE
 // ============================================================
-const filters = { providers: [], regions: [], industries: [], useCases: [], demandTypes: [] };
+const filters = { providers: [], providerRegion: [], regions: [], industries: [], useCases: [], demandTypes: [] };
 let modelTypeFilter = 'all';
 const charts = {};
 
@@ -340,6 +340,14 @@ function getFilteredProviderData() {
     activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
   }
 
+  // Provider HQ region filter — only show providers from selected region(s)
+  if (filters.providerRegion.length > 0) {
+    activeProviders = activeProviders.filter(p => {
+      const region = PROVIDERS[p]?.region || 'US';
+      return filters.providerRegion.includes(region) || region === 'Mixed';
+    });
+  }
+
   const result = {};
   activeProviders.forEach(p => {
     let t = PROVIDERS[p].tokens, r = PROVIDERS[p].rev;
@@ -369,6 +377,12 @@ function getFilteredDimensionData(dimObj, dimKey) {
     ? filters.providers : Object.keys(PROVIDERS);
   if (modelTypeFilter !== 'all') {
     activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
+  }
+  if (filters.providerRegion.length > 0) {
+    activeProviders = activeProviders.filter(p => {
+      const region = PROVIDERS[p]?.region || 'US';
+      return filters.providerRegion.includes(region) || region === 'Mixed';
+    });
   }
 
   const result = {};
@@ -431,7 +445,8 @@ function buildFilterBar() {
 
   const dims = [
     { key: 'providers', label: 'Provider', items: Object.keys(PROVIDERS) },
-    { key: 'regions', label: 'Region', items: Object.keys(REGIONS) },
+    { key: 'providerRegion', label: 'Provider HQ', items: ['US', 'Asia', 'Europe'] },
+    { key: 'regions', label: 'Demand Region', items: Object.keys(REGIONS) },
     { key: 'industries', label: 'Industry', items: Object.keys(INDUSTRIES) },
     { key: 'useCases', label: 'Use Case', items: Object.keys(USE_CASES) },
     { key: 'demandTypes', label: 'Demand Type', items: Object.keys(DEMAND_TYPES) },
