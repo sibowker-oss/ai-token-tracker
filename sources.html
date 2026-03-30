@@ -139,8 +139,8 @@
     </tr></thead><tbody></tbody></table>
   </div>
 
-  <!-- Manual / Reference Sources -->
-  <div class="section-header">Manual & Reference Sources <span class="count" id="manual-count"></span></div>
+  <!-- Manual Sources -->
+  <div class="section-header">Manual Sources <span class="count" id="manual-count"></span></div>
   <div class="card-group">
     <table class="source-table" id="manual-table"><thead><tr>
       <th style="width:22%">Source</th>
@@ -148,6 +148,19 @@
       <th style="width:10%">Frequency</th>
       <th style="width:26%">Updates</th>
       <th style="width:15%">Last Checked</th>
+      <th style="width:15%">Status</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+
+  <!-- Internal Data Stores -->
+  <div class="section-header" style="color:var(--text-dim);opacity:0.7">Internal Data Stores <span class="count" id="internal-count"></span></div>
+  <div class="card-group" style="opacity:0.6">
+    <table class="source-table" id="internal-table"><thead><tr>
+      <th style="width:22%">Data Store</th>
+      <th style="width:12%">Type</th>
+      <th style="width:10%">Updated</th>
+      <th style="width:26%">Contains</th>
+      <th style="width:15%">Last Modified</th>
       <th style="width:15%">Status</th>
     </tr></thead><tbody></tbody></table>
   </div>
@@ -347,52 +360,59 @@ const SOURCES = {
   ],
   manual: [
     {
-      name: 'site-data.json',
-      sub: 'Dashboard, Timeline, Sankey data — provider ARR, tokens, pricing',
-      url: '',
-      method: 'manual', methodLabel: 'Manual + Auto',
-      frequency: 'As needed',
-      updates: ['dashboard.html provider cards', 'timeline.html revenue & token charts', 'sankey.html revenue flow model'],
-      script: 'auto_update.py (Others auto-scale only)',
-      lastCheckKey: 'sitedata',
-    },
-    {
-      name: 'Vault Data Points',
+      name: 'Vault — pages added manually',
       sub: 'vault-data.json — sourced claims with credibility scoring',
       url: '',
       method: 'manual', methodLabel: 'Manual Entry',
       frequency: 'As needed',
       updates: ['vault.html reference data', 'Consensus calculations', 'Audit trail per page'],
-      script: 'vault.html UI',
+      script: 'vault.html UI form',
       lastCheckKey: null,
+    },
+  ],
+  internal: [
+    {
+      name: 'site-data.json',
+      sub: 'Master data file — provider ARR, tokens, pricing, timeline, sankey',
+      type: 'Data Store',
+      updated: 'Auto + Manual',
+      contains: ['dashboard.html provider cards', 'timeline.html revenue & token charts', 'sankey.html revenue flow model'],
+      script: 'auto_update.py (Others auto-scale) + manual edits',
+      lastCheckKey: 'sitedata',
     },
     {
       name: 'AI Companies Database',
-      sub: 'data/ai_companies_reclassified.json — 109 companies',
-      url: '',
-      method: 'manual', methodLabel: 'Manual Import',
-      frequency: 'Periodic',
-      updates: ['Company classification (AI-native, category)', 'Revenue estimates, funding data'],
-      script: 'Imported from briefing package',
+      sub: 'ai_companies_reclassified.json — 109 companies classified',
+      type: 'Data Store',
+      updated: 'Import + Enrichment',
+      contains: ['Company classification (AI-native, category)', 'Revenue estimates, funding, employee data'],
+      script: 'Imported from briefing; enriched by enrich.py',
       lastCheckKey: null,
     },
     {
-      name: 'Podcast Claim Extraction',
-      sub: 'Claude API (Sonnet 4.6) — structured data point extraction',
-      url: '',
-      method: 'api', methodLabel: 'Claude API',
-      frequency: 'Manual trigger',
-      updates: ['data-updates/{date}-candidates.json', 'Dedup against site-data.json', 'Optional auto-PR via --auto-pr'],
+      name: 'Claim Candidates Queue',
+      sub: 'data-updates/{date}-candidates.json — extracted podcast claims',
+      type: 'Processing Queue',
+      updated: 'Manual trigger',
+      contains: ['Structured claims from transcripts (Claude API)', 'Dedup status vs site-data.json', 'Optional auto-PR via --auto-pr'],
       script: 'extract_claims.py',
       lastCheckKey: null,
     },
     {
-      name: 'Database Health Monitor',
-      sub: 'Staleness checks, incomplete fields, pipeline status',
-      url: '',
-      method: 'manual', methodLabel: 'Manual Run',
-      frequency: 'As needed',
-      updates: ['reports/monitor-{date}.md', 'monitor_log.json audit trail'],
+      name: 'Signal History',
+      sub: 'data/signals_history.jsonl — append-only time series',
+      type: 'Data Store',
+      updated: 'Daily (auto)',
+      contains: ['Daily derived signal snapshots', 'Trend data for all scraped metrics'],
+      script: 'scrape_signals.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'Health Monitor Reports',
+      sub: 'reports/monitor-{date}.md — database staleness & completeness',
+      type: 'Report Output',
+      updated: 'Manual trigger',
+      contains: ['Stale entries (>14d)', 'Incomplete fields', 'Pipeline status'],
       script: 'monitor.py --report',
       lastCheckKey: null,
     },
@@ -512,8 +532,30 @@ function renderRow(src, isPodcast) {
   </tr>`;
 }
 
+function renderInternalRow(src) {
+  const ts = src.lastCheckKey ? lastChecks[src.lastCheckKey] : null;
+  const status = statusForCheck(src.lastCheckKey);
+  const containsHtml = (src.contains || []).map(u => `<li>${u}</li>`).join('');
+
+  return `<tr>
+    <td>
+      <div class="source-name">${src.name}</div>
+      <div class="source-sub">${src.sub}</div>
+      <div style="margin-top:3px;font-size:10px;color:var(--text-dim)">Script: ${src.script || 'n/a'}</div>
+    </td>
+    <td><span style="font-size:11px;color:var(--text-dim)">${src.type}</span></td>
+    <td><span style="font-size:11px;color:var(--text-dim)">${src.updated}</span></td>
+    <td><ul class="updates-list">${containsHtml}</ul></td>
+    <td class="last-check">${ts
+      ? `<div class="timestamp">${formatTimestamp(ts)}</div><div class="ago">${timeAgo(ts)}</div>`
+      : '<span style="color:var(--text-dim)">—</span>'
+    }</td>
+    <td><span class="status-dot ${status.dot}"></span>${status.label}</td>
+  </tr>`;
+}
+
 function renderAll() {
-  // Stats
+  // Stats — count only real sources (not internal stores)
   const totalAuto = SOURCES.daily.length + SOURCES.weekly.length;
   const totalPodcasts = SOURCES.podcasts.length;
   const totalManual = SOURCES.manual.length;
@@ -543,6 +585,10 @@ function renderAll() {
   document.getElementById('manual-count').textContent = SOURCES.manual.length;
   document.getElementById('manual-table').querySelector('tbody').innerHTML =
     SOURCES.manual.map(s => renderRow(s, false)).join('');
+
+  document.getElementById('internal-count').textContent = SOURCES.internal.length;
+  document.getElementById('internal-table').querySelector('tbody').innerHTML =
+    SOURCES.internal.map(s => renderInternalRow(s)).join('');
 }
 
 async function refreshStatus() {
