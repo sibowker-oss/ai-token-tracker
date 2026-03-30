@@ -178,7 +178,7 @@ function initCharts() {
   chartRev = new Chart(document.getElementById('chart-rev'), {
     type: 'bar',
     data: { labels: PROV_NAMES, datasets: [{ data: REV_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } }, scales: { y: { max: 18, grid: darkGrid, title: { display: true, text: '$B' } }, x: { grid: { display: false } } } }
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } }, scales: { y: { grid: darkGrid, title: { display: true, text: '$B' } }, x: { grid: { display: false } } } }
   });
 
   chartTokens = new Chart(document.getElementById('chart-tokens'), {
