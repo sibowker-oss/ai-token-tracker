@@ -876,7 +876,7 @@ function renderModelTable() {
   let filtered = MODELS;
 
   if (modelTypeFilter !== 'all') {
-    const openProviders = ['Meta', 'DeepSeek', 'Mistral'];
+    const openProviders = ['Meta', 'DeepSeek', 'Mistral', 'Minimax', 'Moonshot'];
     if (modelTypeFilter === 'open') { filtered = filtered.filter(m => openProviders.includes(m.prov)); }
     else { filtered = filtered.filter(m => !openProviders.includes(m.prov)); }
   }
@@ -885,10 +885,13 @@ function renderModelTable() {
     filtered = filtered.filter(m => filters.providers.some(p => p.startsWith(m.prov) || m.prov.startsWith(p.split('/')[0]) || m.prov === 'Meta' && p.includes('Meta')));
   }
 
-  let html = '<thead><tr><th>Model</th><th>Provider</th><th>Est. Tokens/Day</th><th>Input $/1M</th><th>Output $/1M</th><th>Primary Use</th><th>Trend</th></tr></thead><tbody>';
+  const regionColors = { 'US': '#3b82f6', 'Asia': '#f59e0b', 'Europe': '#8b5cf6' };
+  let html = '<thead><tr><th>Model</th><th>Provider</th><th>Region</th><th>Est. Tokens/Day</th><th>Input $/1M</th><th>Output $/1M</th><th>Primary Use</th><th>Trend</th></tr></thead><tbody>';
   filtered.forEach(m => {
     const badge = m.prov === 'OpenAI' ? 'badge-openai' : m.prov === 'Anthropic' ? 'badge-anthropic' : m.prov === 'Google' ? 'badge-google' : m.prov === 'Meta' ? 'badge-meta' : 'badge-deepseek';
-    html += '<tr><td><strong>' + m.model + '</strong></td><td><span class="badge ' + badge + '">' + m.prov + '</span></td><td style="font-weight:600;">' + m.tokens + '</td><td>' + m.inP + '</td><td>' + m.outP + '</td><td style="font-size:11px;">' + m.use + '</td><td>' + m.trend + '</td></tr>';
+    const regionClr = regionColors[m.region] || '#94a3b8';
+    const regionBadge = '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:600;background:' + regionClr + '22;color:' + regionClr + ';">' + (m.region || '?') + '</span>';
+    html += '<tr><td><strong>' + m.model + '</strong></td><td><span class="badge ' + badge + '">' + m.prov + '</span></td><td>' + regionBadge + '</td><td style="font-weight:600;">' + m.tokens + '</td><td>' + m.inP + '</td><td>' + m.outP + '</td><td style="font-size:11px;">' + m.use + '</td><td>' + m.trend + '</td></tr>';
   });
   html += '</tbody>';
   t.innerHTML = html;

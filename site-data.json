@@ -498,7 +498,8 @@
         "growth": "+150% YoY",
         "consumerPct": 60,
         "bizPct": 40,
-        "modelType": "frontier"
+        "modelType": "frontier",
+        "region": "US"
       },
       "Anthropic": {
         "tokens": 110,
@@ -507,7 +508,8 @@
         "growth": "14x in 14mo",
         "consumerPct": 35,
         "bizPct": 65,
-        "modelType": "frontier"
+        "modelType": "frontier",
+        "region": "US"
       },
       "Google/Gemini": {
         "tokens": 90,
@@ -516,7 +518,8 @@
         "growth": "14x in '24",
         "consumerPct": 40,
         "bizPct": 60,
-        "modelType": "frontier"
+        "modelType": "frontier",
+        "region": "US"
       },
       "Meta": {
         "tokens": 80,
@@ -525,7 +528,8 @@
         "growth": "+400% YoY",
         "consumerPct": 0,
         "bizPct": 0,
-        "modelType": "open"
+        "modelType": "open",
+        "region": "US"
       },
       "DeepSeek": {
         "tokens": 40,
@@ -534,7 +538,8 @@
         "growth": "+800% YoY",
         "consumerPct": 50,
         "bizPct": 50,
-        "modelType": "open"
+        "modelType": "open",
+        "region": "Asia"
       },
       "Mistral": {
         "tokens": 15,
@@ -543,7 +548,8 @@
         "growth": "+250% YoY",
         "consumerPct": 20,
         "bizPct": 80,
-        "modelType": "frontier"
+        "modelType": "frontier",
+        "region": "Europe"
       },
       "xAI": {
         "tokens": 10,
@@ -552,16 +558,38 @@
         "growth": "+500% YoY",
         "consumerPct": 70,
         "bizPct": 30,
-        "modelType": "frontier"
+        "modelType": "frontier",
+        "region": "US"
       },
       "Others": {
-        "tokens": 130,
-        "rev": 1.5,
+        "tokens": 92,
+        "rev": 1.25,
         "color": "#475569",
         "growth": "+86% YoY",
         "consumerPct": 20,
         "bizPct": 80,
-        "modelType": "open"
+        "modelType": "open",
+        "region": "Mixed"
+      },
+      "Minimax": {
+        "tokens": 30,
+        "rev": 0.15,
+        "color": "#ec4899",
+        "growth": "+400% YoY",
+        "consumerPct": 60,
+        "bizPct": 40,
+        "modelType": "open",
+        "region": "Asia"
+      },
+      "Moonshot": {
+        "tokens": 8,
+        "rev": 0.1,
+        "color": "#14b8a6",
+        "growth": "+300% YoY",
+        "consumerPct": 50,
+        "bizPct": 50,
+        "modelType": "open",
+        "region": "Asia"
       }
     },
     "regions": {
@@ -902,6 +930,66 @@
           "Enterprise Agents": 0.1,
           "Search & RAG": 0.08,
           "Data Analysis": 0.07,
+          "Other": 0.05
+        }
+      },
+      "Minimax": {
+        "regions": {
+          "North America": 0.15,
+          "Asia-Pacific": 0.6,
+          "Europe": 0.15,
+          "Middle East": 0.04,
+          "Latin America": 0.03,
+          "Africa": 0.03
+        },
+        "industries": {
+          "Software & Tech": 0.4,
+          "Financial Services": 0.1,
+          "Healthcare": 0.05,
+          "Retail & E-commerce": 0.1,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.08,
+          "Education": 0.07,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.07
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.2,
+          "Chat & Assistants": 0.35,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.08,
+          "Data Analysis": 0.07,
+          "Other": 0.05
+        }
+      },
+      "Moonshot": {
+        "regions": {
+          "North America": 0.1,
+          "Asia-Pacific": 0.7,
+          "Europe": 0.1,
+          "Middle East": 0.04,
+          "Latin America": 0.03,
+          "Africa": 0.03
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.1,
+          "Healthcare": 0.05,
+          "Retail & E-commerce": 0.1,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.1,
+          "Education": 0.08,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.35,
+          "Content & Writing": 0.12,
+          "Enterprise Agents": 0.08,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.05,
           "Other": 0.05
         }
       }
@@ -2909,7 +2997,8 @@
         "inP": "$0.15",
         "outP": "$0.60",
         "use": "Chat, agents, coding",
-        "trend": "\u2191\u2191"
+        "trend": "\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "GPT-4o",
@@ -2918,7 +3007,8 @@
         "inP": "$2.50",
         "outP": "$10.00",
         "use": "Enterprise, complex tasks",
-        "trend": "\u2192"
+        "trend": "\u2192",
+        "region": "US"
       },
       {
         "model": "GPT-4.1 mini",
@@ -2927,7 +3017,8 @@
         "inP": "$0.40",
         "outP": "$1.60",
         "use": "Coding, agents",
-        "trend": "\u2191\u2191\u2191"
+        "trend": "\u2191\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "Gemini 2.0 Flash",
@@ -2936,7 +3027,8 @@
         "inP": "$0.10",
         "outP": "$0.40",
         "use": "High-volume, agents",
-        "trend": "\u2191\u2191\u2191"
+        "trend": "\u2191\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "Claude 3.5 Sonnet",
@@ -2945,7 +3037,8 @@
         "inP": "$3.00",
         "outP": "$15.00",
         "use": "Coding, analysis",
-        "trend": "\u2192"
+        "trend": "\u2192",
+        "region": "US"
       },
       {
         "model": "Claude Sonnet 4",
@@ -2954,7 +3047,8 @@
         "inP": "$3.00",
         "outP": "$15.00",
         "use": "Coding, enterprise",
-        "trend": "\u2191\u2191"
+        "trend": "\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "Llama 3.1 405B",
@@ -2963,7 +3057,8 @@
         "inP": "Self-host",
         "outP": "Self-host",
         "use": "On-prem enterprise",
-        "trend": "\u2192"
+        "trend": "\u2192",
+        "region": "US"
       },
       {
         "model": "Llama 4 Scout",
@@ -2972,7 +3067,8 @@
         "inP": "Self-host",
         "outP": "Self-host",
         "use": "Agents, coding",
-        "trend": "\u2191\u2191\u2191"
+        "trend": "\u2191\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "Gemini 2.5 Pro",
@@ -2981,7 +3077,8 @@
         "inP": "$1.25",
         "outP": "$10.00",
         "use": "Reasoning, analysis",
-        "trend": "\u2191\u2191"
+        "trend": "\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "DeepSeek R1",
@@ -2990,7 +3087,8 @@
         "inP": "$0.55",
         "outP": "$2.19",
         "use": "Reasoning, math",
-        "trend": "\u2191\u2191"
+        "trend": "\u2191\u2191",
+        "region": "Asia"
       },
       {
         "model": "GPT-5",
@@ -2999,7 +3097,8 @@
         "inP": "$5.00",
         "outP": "$20.00",
         "use": "Frontier reasoning",
-        "trend": "\u2191\u2191\u2191"
+        "trend": "\u2191\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "DeepSeek V3",
@@ -3008,7 +3107,8 @@
         "inP": "$0.27",
         "outP": "$1.10",
         "use": "General, coding",
-        "trend": "\u2191"
+        "trend": "\u2191",
+        "region": "Asia"
       },
       {
         "model": "Mistral Large",
@@ -3017,7 +3117,8 @@
         "inP": "$2.00",
         "outP": "$6.00",
         "use": "Enterprise, multilingual",
-        "trend": "\u2191"
+        "trend": "\u2191",
+        "region": "Europe"
       },
       {
         "model": "Grok 4",
@@ -3026,7 +3127,8 @@
         "inP": "$3.00",
         "outP": "$15.00",
         "use": "Reasoning, X integration",
-        "trend": "\u2191\u2191"
+        "trend": "\u2191\u2191",
+        "region": "US"
       },
       {
         "model": "Claude Opus 4",
@@ -3035,7 +3137,38 @@
         "inP": "$15.00",
         "outP": "$75.00",
         "use": "Complex agents, coding",
-        "trend": "\u2191"
+        "trend": "\u2191",
+        "region": "US"
+      },
+      {
+        "model": "MiniMax M2.7",
+        "prov": "Minimax",
+        "tokens": "~15T",
+        "inP": "$0.10",
+        "outP": "$0.40",
+        "use": "Chat, agents, coding",
+        "trend": "\u2191\u2191\u2191",
+        "region": "Asia"
+      },
+      {
+        "model": "MiniMax M2.5",
+        "prov": "Minimax",
+        "tokens": "~10T",
+        "inP": "Free/$0.10",
+        "outP": "Free/$0.40",
+        "use": "High-volume, chat",
+        "trend": "\u2191\u2191",
+        "region": "Asia"
+      },
+      {
+        "model": "Kimi K2.5",
+        "prov": "Moonshot",
+        "tokens": "~5T",
+        "inP": "$0.20",
+        "outP": "$0.80",
+        "use": "Reasoning, agents",
+        "trend": "\u2191\u2191",
+        "region": "Asia"
       }
     ],
     "demandTypes": {
@@ -3104,6 +3237,18 @@
         "API / Developer": 0.3,
         "Enterprise Platform": 0.2,
         "Cloud Channel": 0.2
+      },
+      "Minimax": {
+        "Consumer Subs": 0.45,
+        "API / Developer": 0.3,
+        "Enterprise Platform": 0.15,
+        "Cloud Channel": 0.1
+      },
+      "Moonshot": {
+        "Consumer Subs": 0.5,
+        "API / Developer": 0.25,
+        "Enterprise Platform": 0.15,
+        "Cloud Channel": 0.1
       }
     }
   },
@@ -3351,7 +3496,9 @@
       "Mistral",
       "xAI",
       "Meta",
-      "Others"
+      "Others",
+      "Minimax",
+      "Moonshot"
     ],
     "providerColors": [
       "#10a37f",
@@ -3361,7 +3508,9 @@
       "#f97316",
       "#e2e8f0",
       "#60a5fa",
-      "#475569"
+      "#475569",
+      "#ec4899",
+      "#14b8a6"
     ],
     "revData": [
       [
@@ -3372,7 +3521,9 @@
         0.05,
         0,
         0.0,
-        0.5
+        0.5,
+        0,
+        0
       ],
       [
         4.5,
@@ -3382,7 +3533,9 @@
         0.1,
         0,
         0.0,
-        0.7
+        0.7,
+        0,
+        0
       ],
       [
         5.5,
@@ -3392,7 +3545,9 @@
         0.15,
         0.1,
         0.0,
-        1.0
+        1.0,
+        0,
+        0
       ],
       [
         7.0,
@@ -3402,7 +3557,9 @@
         0.2,
         0.2,
         0.0,
-        1.4
+        1.39,
+        0.01,
+        0
       ],
       [
         9.0,
@@ -3412,7 +3569,9 @@
         0.3,
         0.3,
         0.0,
-        2.0
+        1.95,
+        0.03,
+        0.02
       ],
       [
         11.0,
@@ -3422,7 +3581,9 @@
         0.35,
         0.4,
         0.0,
-        2.5
+        2.41,
+        0.05,
+        0.04
       ],
       [
         13.0,
@@ -3432,7 +3593,9 @@
         0.38,
         0.45,
         0.0,
-        3.2
+        3.06,
+        0.08,
+        0.06
       ],
       [
         16.0,
@@ -3442,7 +3605,9 @@
         0.39,
         0.48,
         0.0,
-        3.8
+        3.6,
+        0.12,
+        0.08
       ],
       [
         20.0,
@@ -3452,7 +3617,9 @@
         0.4,
         0.5,
         0.0,
-        4.5
+        4.25,
+        0.15,
+        0.1
       ]
     ],
     "tokenData": [
@@ -3464,7 +3631,9 @@
         1,
         0,
         8,
-        10
+        10,
+        0,
+        0
       ],
       [
         50,
@@ -3474,7 +3643,9 @@
         2,
         1,
         12,
-        18
+        18,
+        0,
+        0
       ],
       [
         70,
@@ -3484,7 +3655,9 @@
         3,
         2,
         20,
-        35
+        35,
+        0,
+        0
       ],
       [
         95,
@@ -3494,7 +3667,9 @@
         5,
         3,
         30,
-        50
+        47,
+        2,
+        1
       ],
       [
         120,
@@ -3504,7 +3679,9 @@
         7,
         5,
         45,
-        70
+        63,
+        5,
+        2
       ],
       [
         145,
@@ -3514,7 +3691,9 @@
         9,
         7,
         60,
-        95
+        82,
+        10,
+        3
       ],
       [
         165,
@@ -3524,7 +3703,9 @@
         11,
         8,
         75,
-        110
+        87,
+        18,
+        5
       ],
       [
         185,
@@ -3534,7 +3715,9 @@
         13,
         9,
         88,
-        120
+        89,
+        25,
+        6
       ],
       [
         200,
@@ -3544,7 +3727,9 @@
         15,
         10,
         100,
-        130
+        92,
+        30,
+        8
       ]
     ],
     "priceData": [
