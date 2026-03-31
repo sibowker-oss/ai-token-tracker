@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-03-30",
+    "lastUpdated": "2026-04-01",
     "description": "Private reference data for APAC AI Intelligence site"
   },
   "dataPoints": [
@@ -982,6 +982,28 @@
         "podcast"
       ],
       "metricKey": "msft-drawdown-mar-2026",
+      "status": "accepted"
+    },
+    {
+      "id": "dp-043",
+      "claim": "Add Fathom to Top Token Consumers (~7B/day)",
+      "value": 20000000,
+      "unit": "USD",
+      "sourceUrl": "https://www.fathom.ai/",
+      "sourceType": "reporting",
+      "sourceAuthor": " ()",
+      "confidence": "medium",
+      "dateOfClaim": "",
+      "dateAdded": "2026-04-01",
+      "usedOn": [
+        "dashboard"
+      ],
+      "notes": "Auto-applied from claims review. Weight: authoritative. Dedup: ?.",
+      "tags": [
+        "fathom",
+        "new_company"
+      ],
+      "metricKey": "fathom-new_company",
       "status": "accepted"
     }
   ]

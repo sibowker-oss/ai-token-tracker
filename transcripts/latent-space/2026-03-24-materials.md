@@ -56,6 +56,8 @@ Full show notes always on https://latent.spaceSubscribeListen onSubstack AppAppl
 Brandon AndersonWrites Brandon Anderson Subscribe
 RJ HonickyRecent Episodes
 
+Mistral: Voxtral TTS, Forge, Leanstral, & what's next for Mistral 4 — w/ Pavan Kumar Reddy & Guillaume LampleMar 30
+
 Dreamer: the Personal Agent OS — David SingletonMar 20
 
 Why Anthropic Thinks AI Should Have Its Own Computer — Felix Rieseberg of Claude Cowork & Claude Code DesktopMar 17
@@ -67,9 +69,6 @@ NVIDIA's AI Engineers: Agent Inference at Planetary Scale and "Speed of Light" �
 Cursor's Third Era: Cloud AgentsMar 6
 
 Every Agent Needs a Box — Aaron Levie, BoxMar 5
-
-METR’s Joel Becker on exponential Time Horizon Evals, Threat Models, and the Limits of AI Productivity
-Feb 27
 ## Ready for more?
 Subscribe© 2026 Latent.Space · Privacy ∙ Terms ∙ Collection notice
 
