@@ -126,20 +126,18 @@ async function loadData() {
     vault = await r.json();
   } catch(e) {}
 
-  // 3. Load candidate files — try known dates only (last 7 days)
+  // 3. Load claim files from index (no guessing filenames)
   let allClaims = [];
-  const today = new Date();
-  const fetches = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(today - i * 86400000).toISOString().split('T')[0];
-    fetches.push(fetch('data-updates/' + d + '-candidates.json').then(r => r.ok ? r.json() : []).catch(() => []));
-    // Source-specific extractions
-    for (let s = 1; s <= 15; s++) {
-      fetches.push(fetch('data-updates/' + d + '-source-src-' + String(s).padStart(3,'0') + '.json').then(r => r.ok ? r.json() : []).catch(() => []));
+  try {
+    const idxResp = await fetch('data-updates/index.json?v=' + Date.now());
+    if (idxResp.ok) {
+      const fileList = await idxResp.json();
+      const claimFiles = fileList.filter(f => f.endsWith('.json') && !f.includes('reconciliation') && !f.includes('draft') && !f.includes('approved'));
+      const fetches = claimFiles.map(f => fetch('data-updates/' + f).then(r => r.ok ? r.json() : []).catch(() => []));
+      const results = await Promise.all(fetches);
+      results.forEach(claims => { if (Array.isArray(claims)) allClaims = allClaims.concat(claims); });
     }
-  }
-  const results = await Promise.all(fetches);
-  results.forEach(claims => { if (Array.isArray(claims)) allClaims = allClaims.concat(claims); });
+  } catch(e) { console.warn('Could not load claim index:', e); }
 
   // 4. Build unified source map
   const sourceMap = {}; // url → { source info + claims[] }
