@@ -12,3 +12,23 @@
 [2026-03-31 17:03:24] 
 ============================================================
 [2026-03-31 17:03:24] ✅ Done — 1 sources processed, 10 total claims extracted
+[2026-04-01 09:30:41] 
+============================================================
+[2026-04-01 09:30:41] 📡 Source Monitor — 2026-04-01
+[2026-04-01 09:30:41]   Registry: 11 sources
+[2026-04-01 09:30:41]   Due for extraction: 3
+[2026-04-01 09:30:41] 
+📄 OpenRouter Weekly Rankings (web_scrape)
+[2026-04-01 09:30:41]    Method: signal_scraper, URL: https://openrouter.ai/rankings
+[2026-04-01 09:30:41]    [DRY RUN] Would extract
+[2026-04-01 09:30:41] 
+📄 OpenRouter Model Catalog API (api)
+[2026-04-01 09:30:41]    Method: signal_scraper, URL: https://openrouter.ai/api/v1/models
+[2026-04-01 09:30:41]    [DRY RUN] Would extract
+[2026-04-01 09:30:41] 
+📄 PyPI Download Stats (api)
+[2026-04-01 09:30:41]    Method: signal_scraper, URL: https://pypistats.org/api/packages
+[2026-04-01 09:30:41]    [DRY RUN] Would extract
+[2026-04-01 09:30:41] 
+============================================================
+[2026-04-01 09:30:41] ✅ Done — 3 sources processed, 0 total claims extracted
