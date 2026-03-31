@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prediction Tracker — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:900px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:24px; font-weight:800; }
+  .sub { font-size:13px; color:var(--text-dim); margin-top:4px; margin-bottom:8px; }
+  .intro { font-size:12px; color:var(--text-dim); line-height:1.6; margin-bottom:24px; padding:12px 16px; background:var(--card); border:1px solid var(--card-border); border-radius:10px; }
+
+  .stats { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .stat { padding:8px 16px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:13px; }
+  .stat strong { font-size:18px; }
+
+  .filters { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .f-btn { padding:4px 10px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; }
+  .f-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  .pred-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px 20px; margin-bottom:12px; }
+  .pred-card.status-confirmed { border-left:3px solid var(--green); }
+  .pred-card.status-pending { border-left:3px solid var(--orange); }
+  .pred-card.status-wrong { border-left:3px solid var(--red); }
+
+  .pred-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
+  .pred-text { font-size:14px; font-weight:600; line-height:1.4; flex:1; }
+  .pred-status { flex-shrink:0; padding:4px 10px; border-radius:6px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; }
+  .s-pending { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .s-confirmed { background:rgba(16,185,129,0.15); color:var(--green); }
+  .s-wrong { background:rgba(239,68,68,0.15); color:var(--red); }
+
+  .pred-meta { font-size:11px; color:var(--text-dim); margin-bottom:8px; }
+  .pred-basis { font-size:12px; color:var(--text-dim); line-height:1.5; }
+  .pred-evidence { margin-top:8px; font-size:11px; }
+  .pred-evidence .for { color:var(--green); }
+  .pred-evidence .against { color:var(--red); }
+  .pred-evidence li { margin-bottom:3px; }
+
+  .confidence { display:inline-block; padding:2px 7px; border-radius:4px; font-size:9px; font-weight:600; text-transform:uppercase; }
+  .conf-high { background:rgba(16,185,129,0.12); color:var(--green); }
+  .conf-medium { background:rgba(245,158,11,0.12); color:var(--orange); }
+  .conf-low { background:rgba(148,163,184,0.12); color:var(--text-dim); }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
+  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
+  <a href="subsidy-clock.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Subsidy Clock</a>
+  <a href="predictions.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Predictions</a>
+</nav>
+
+<div class="container">
+  <h1>Prediction Tracker</h1>
+  <p class="sub">Dated, specific, accountable forecasts — updated as evidence emerges</p>
+
+  <div class="intro">
+    These are not hopes or vibes. Each prediction is specific enough to be proven right or wrong, with a target date and evidence trail. When we're wrong, we say so. That's how you build trust in a market full of hype.
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="filters" id="filters"></div>
+  <div id="predictions"></div>
+</div>
+
+<footer>The AI Ledger — Directional estimates only. Not investment advice.</footer>
+
+<script>
+const PREDICTIONS = [
+  {
+    id: 'pred-001',
+    prediction: 'OpenAI will not be gross-margin positive by end 2026',
+    date_made: '2026-03-31',
+    category: 'provider_economics',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'high',
+    basis: 'Sankey analysis: inference costs exceed revenue at gross margin level. $14B inference cost vs $17.5B total customer revenue across ALL providers. OpenAI specifically subsidises heavily — every ChatGPT Plus subscriber costs more to serve than they pay.',
+    evidence_for: ['Negative gross margin on inference industry-wide (Follow the Dollar analysis)', 'Chamath: "token spend tripling with no revenue gains" — even customers see it', 'Price deflation ~80%/yr makes margin harder not easier'],
+    evidence_against: ['Revenue growing 150%+ YoY could outpace costs', 'Hardware costs falling (H100 prices melting up suggests demand, but next-gen could be cheaper/token)', 'Enterprise API pricing is higher margin than consumer subs'],
+  },
+  {
+    id: 'pred-002',
+    prediction: 'Open model share will exceed 40% of production inference tokens by Q3 2026',
+    date_made: '2026-03-31',
+    category: 'market_structure',
+    target_date: '2026-09-30',
+    status: 'pending',
+    confidence: 'high',
+    basis: 'OpenRouter data shows open models at ~35% of token volume and growing fastest. Jason Calacanis reports 85% of startup tokens now on open source. DeepSeek R1 proved open models match frontier at 1/10th cost. vLLM Docker pulls accelerating.',
+    evidence_for: ['OpenRouter: Xiaomi + MiniMax + DeepSeek + Stepfun = 54% of non-frontier volume', '85% of startup tokens on open source (J-Cal, All-In)', 'vLLM Docker pulls growing monotonically — enterprise self-hosting accelerating'],
+    evidence_against: ['Claude Opus 4.6 / GPT-5 created a quality gap that open models haven\'t closed yet', 'Coding use case (28% of all tokens) strongly favours frontier models', 'Enterprise compliance requirements favour managed APIs'],
+  },
+  {
+    id: 'pred-003',
+    prediction: 'M365 Copilot active usage will not exceed 50% of licensed seats by end 2026',
+    date_made: '2026-03-31',
+    category: 'enterprise_adoption',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'high',
+    basis: 'Currently 35.8% active (Recon Analytics, 150K respondents). Auto-install inflates seats. Market share fell from 18.8% to 11.5% (Jul-Jan). Only 5% of orgs past pilot (Gartner). 70% tried, only 8% kept choosing it.',
+    evidence_for: ['35.8% active after 2+ years of aggressive rollout', 'Market share declining, not growing', 'Microsoft\'s own employees reportedly prefer ChatGPT over Copilot'],
+    evidence_against: ['New features (Copilot Pages, Agent mode) could re-engage users', 'Enterprise procurement cycles mean late 2026 renewals could show uptick', 'Microsoft bundling power is historically very effective long-term'],
+  },
+  {
+    id: 'pred-004',
+    prediction: 'Anthropic will file S-1 or IPO in 2026',
+    date_made: '2026-03-31',
+    category: 'ipo_market',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'medium',
+    basis: 'Jensen Huang stated both OpenAI and Anthropic expected to IPO in 2026. Brad Gerstner (direct investor) confirmed IPO expectation. $14B ARR and $380B valuation make it IPO-ready at scale.',
+    evidence_for: ['Jensen: "$40B invested, both going public this year"', 'Brad Gerstner confirmed March revenue momentum continuing', '$14B ARR is larger than most public SaaS companies'],
+    evidence_against: ['$380B valuation requires massive public market appetite', 'Negative gross margins would be scrutinised in S-1', 'Market volatility (Microsoft down 30%) could delay window'],
+  },
+  {
+    id: 'pred-005',
+    prediction: 'At least 2 Enterprise Reality Check vendors will stop reporting AI-specific revenue metrics by Q4 2026',
+    date_made: '2026-03-31',
+    category: 'enterprise_adoption',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'medium',
+    basis: 'SAP and Workday already don\'t disclose AI revenue. Salesforce\'s AWU metric is widely criticised. When AI metrics don\'t show growth acceleration, vendors stop reporting them — same pattern as "cloud revenue" metrics circa 2018.',
+    evidence_for: ['SAP: "2/3 of deals include AI" but no revenue number = immaterial', 'Workday: growth crashing 21%→13%, no AI metric disclosed', 'Adobe: growth flat at 10-11% pre AND post AI'],
+    evidence_against: ['Investor pressure to show AI traction keeps metrics alive', 'Microsoft expanding Copilot metrics (seats, usage, revenue)', 'New AI products (Agentforce) give fresh metrics to report'],
+  },
+  {
+    id: 'pred-006',
+    prediction: 'Total AI industry VC operating subsidy will exceed $15B in 2026',
+    date_made: '2026-03-31',
+    category: 'provider_economics',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'medium',
+    basis: '$9.8B in 2025 with a smaller revenue base. Revenue is growing ~150% but inference costs are growing faster (more tokens served, larger models, reasoning chains). Anthropic alone is adding $5-6B/month in revenue but COGS grows with it.',
+    evidence_for: ['Every provider loses money on inference (Follow the Dollar)', 'Anthropic $6B month = massive inference bill to compute providers', 'Chamath: $50B/GW data centre cost with 5yr payback'],
+    evidence_against: ['Revenue growth could exceed cost growth if efficiency gains materialise', 'Open models are cheaper to serve than frontier (positive margin for IaaS)', 'Possible that 2026 crosses the GM breakeven line for top providers'],
+  },
+  {
+    id: 'pred-007',
+    prediction: 'Cursor will exceed GitHub Copilot in daily token consumption by Q4 2026',
+    date_made: '2026-03-31',
+    category: 'market_structure',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'medium',
+    basis: 'Cursor: ~800B/day, $1B+ ARR, agent-first architecture (heavy token use per session). Copilot: ~1T/day, 4.7M subs but completion-first (lighter per session). Agent coding tools consume 10-50x more tokens per task than autocomplete.',
+    evidence_for: ['Agent-first tools (Cursor, Cline, Kilo Code) growing fastest on OpenRouter', 'Cursor revenue growing faster than Copilot subs', 'Microsoft adding Anthropic models "at great expense to margins" — playing catch-up'],
+    evidence_against: ['Copilot has 4.7M paid subs vs Cursor\'s smaller base', 'Microsoft enterprise distribution is unmatched', 'Copilot adding agent features (Copilot Workspace) to match'],
+  },
+  {
+    id: 'pred-008',
+    prediction: 'Chinese model providers will account for >30% of OpenRouter weekly token volume through Q3 2026',
+    date_made: '2026-03-31',
+    category: 'market_structure',
+    target_date: '2026-09-30',
+    status: 'pending',
+    confidence: 'high',
+    basis: 'Already at ~35% combined (Xiaomi 20%, MiniMax 10%, DeepSeek 6.6%, Stepfun 6.9%, Z-AI 6.9%). Growing fastest of any segment. Price/performance advantages on commodity workloads.',
+    evidence_for: ['Xiaomi #1 on OpenRouter by volume (4.4T/week)', 'MiniMax M2.5 offered free tier — drives adoption', 'Chinese models consistently cheapest per token'],
+    evidence_against: ['US/EU enterprise may restrict Chinese model usage (data sovereignty)', 'Quality gap on complex reasoning tasks', 'Regulatory risk if geopolitical tensions increase'],
+  },
+  {
+    id: 'pred-009',
+    prediction: 'At least one AI company at >$500M ARR will down-round or fail by end 2026',
+    date_made: '2026-03-31',
+    category: 'provider_economics',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'low',
+    basis: 'High burn rates + negative gross margins at scale. Replit gross margin swings between -14% and 36%. Jasper pivoting from consumer to enterprise as ChatGPT cannibalises use case. The gap between ARR and sustainable business is widening.',
+    evidence_for: ['Replit: $252M ARR but gross margin volatile', 'Jasper: $130M ARR but growth slowing, competitive pressure from ChatGPT/Claude', 'Character.ai: sold talent to Google, uncertain standalone path'],
+    evidence_against: ['VC funding environment still supportive for AI', 'Revenue growth rates remain exceptional', 'Acqui-hires provide a floor (Google/Character.ai pattern)'],
+  },
+  {
+    id: 'pred-010',
+    prediction: 'The coding agent category will consolidate to 3-4 dominant players by end 2026',
+    date_made: '2026-03-31',
+    category: 'market_structure',
+    target_date: '2026-12-31',
+    status: 'pending',
+    confidence: 'medium',
+    basis: 'Currently fragmented: Cursor, Claude Code, GitHub Copilot, Windsurf, Kilo Code, Roo Code, Cline, OpenHands, Continue, CodeGPT, BLACKBOX, Augment. But coding tools have strong network effects (context understanding, codebase memory) and high switching costs once integrated into workflow.',
+    evidence_for: ['OpenAI acquiring Windsurf ($3B) — consolidation already starting', 'Top 3 (Cursor, Copilot, Claude Code) account for ~85% of coding tool tokens', 'Open-source tools (Cline, Roo Code) likely merge or get acquired'],
+    evidence_against: ['Low barrier to entry — any team can build a VS Code extension', 'Multi-provider support means no lock-in to one model', 'Enterprise may want multiple options for negotiating leverage'],
+  },
+];
+
+let filter = 'all';
+
+function render() {
+  // Stats
+  const pending = PREDICTIONS.filter(p => p.status === 'pending').length;
+  const confirmed = PREDICTIONS.filter(p => p.status === 'confirmed').length;
+  const wrong = PREDICTIONS.filter(p => p.status === 'wrong').length;
+  document.getElementById('stats').innerHTML =
+    '<div class="stat">Total: <strong>' + PREDICTIONS.length + '</strong></div>' +
+    '<div class="stat" style="color:var(--orange);">Pending: <strong>' + pending + '</strong></div>' +
+    '<div class="stat" style="color:var(--green);">Confirmed: <strong>' + confirmed + '</strong></div>' +
+    '<div class="stat" style="color:var(--red);">Wrong: <strong>' + wrong + '</strong></div>';
+
+  // Filters
+  const cats = ['all', ...new Set(PREDICTIONS.map(p => p.category))];
+  document.getElementById('filters').innerHTML = cats.map(c =>
+    '<button class="f-btn' + (filter === c ? ' active' : '') + '" onclick="filter=\'' + c + '\';render();">' +
+    (c === 'all' ? 'All' : c.replace(/_/g, ' ')) + '</button>'
+  ).join('') +
+  ' <button class="f-btn' + (filter === 'high' ? ' active' : '') + '" onclick="filter=\'high\';render();" style="margin-left:8px;">High confidence</button>';
+
+  // Predictions
+  let filtered = PREDICTIONS;
+  if (filter === 'high') filtered = filtered.filter(p => p.confidence === 'high');
+  else if (filter !== 'all') filtered = filtered.filter(p => p.category === filter);
+
+  document.getElementById('predictions').innerHTML = filtered.map(p => {
+    const statusClass = 'status-' + p.status;
+    const statusBadge = p.status === 'pending' ? 's-pending' : p.status === 'confirmed' ? 's-confirmed' : 's-wrong';
+    const statusIcon = p.status === 'pending' ? '⏳' : p.status === 'confirmed' ? '✅' : '❌';
+    const confClass = 'conf-' + p.confidence;
+
+    return '<div class="pred-card ' + statusClass + '">' +
+      '<div class="pred-header">' +
+        '<div class="pred-text">' + p.prediction + '</div>' +
+        '<span class="pred-status ' + statusBadge + '">' + statusIcon + ' ' + p.status + '</span>' +
+      '</div>' +
+      '<div class="pred-meta">' +
+        '<span class="confidence ' + confClass + '">' + p.confidence + '</span> &nbsp; ' +
+        'Made: ' + p.date_made + ' &nbsp; Target: ' + p.target_date + ' &nbsp; ' +
+        '<span style="color:var(--text-dim);">' + p.category.replace(/_/g, ' ') + '</span>' +
+      '</div>' +
+      '<div class="pred-basis">' + p.basis + '</div>' +
+      '<div class="pred-evidence">' +
+        '<ul style="margin-top:6px;padding-left:16px;">' +
+          p.evidence_for.map(e => '<li class="for">✓ ' + e + '</li>').join('') +
+          p.evidence_against.map(e => '<li class="against">✗ ' + e + '</li>').join('') +
+        '</ul>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>
