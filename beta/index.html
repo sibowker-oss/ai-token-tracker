@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Global AI Token Usage Estimator</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --card: #111827;
+    --card-border: #1e293b;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --accent3: #06b6d4;
+    --green: #10b981;
+    --orange: #f59e0b;
+    --red: #ef4444;
+    --pink: #ec4899;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+  .container { max-width:1400px; margin:0 auto; padding:24px; }
+
+  header { text-align:center; padding:32px 0 24px; border-bottom:1px solid var(--card-border); margin-bottom:0; }
+  header h1 { font-size:32px; font-weight:700; background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:4px; }
+  header p { color:var(--text-dim); font-size:14px; }
+
+  /* Filter Bar */
+  .filter-bar { position:sticky; top:0; z-index:100; background:rgba(17,24,39,0.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--card-border); padding:12px 0; margin-bottom:24px; }
+  .filter-group { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:6px; }
+  .filter-group:last-child { margin-bottom:0; }
+  .filter-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); min-width:70px; font-weight:600; }
+  .filter-pill { padding:4px 12px; border-radius:16px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; user-select:none; }
+  .filter-pill:hover { border-color:var(--accent); color:var(--text); }
+  .filter-pill.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .filter-pill.active[data-dim="regions"] { background:var(--accent2); border-color:var(--accent2); }
+  .filter-pill.active[data-dim="industries"] { background:var(--green); border-color:var(--green); }
+  .filter-pill.active[data-dim="useCases"] { background:var(--orange); border-color:var(--orange); }
+  .filter-pill.active[data-dim="demandTypes"] { background:var(--pink); border-color:var(--pink); }
+  .filter-pill.active[data-dim="modelType"] { background:#8b5cf6; border-color:#8b5cf6; }
+  .filter-reset { padding:4px 10px; border-radius:16px; border:1px solid rgba(239,68,68,0.3); background:transparent; color:var(--red); font-size:10px; cursor:pointer; }
+
+  /* Cards */
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; color:var(--text); }
+  .card h2 .sub { font-size:12px; font-weight:400; color:var(--text-dim); }
+
+  /* Hero Stats */
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:4px 0; }
+  .hero-stat .detail { font-size:11px; color:var(--text-dim); }
+
+  /* Chart grids */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
+  .chart-wrap { position:relative; height:320px; }
+  .chart-wrap-tall { position:relative; height:400px; }
+
+  /* Matrix table */
+  .matrix-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .matrix-table th { padding:10px; background:#1e3a5f; color:white; text-align:center; border:1px solid #334155; width:22%; }
+  .matrix-table th:first-child { background:#1e293b; text-align:left; width:12%; }
+  .matrix-table td { max-width:0; overflow-wrap:break-word; }
+  .matrix-table td { padding:10px; border:1px solid #334155; vertical-align:top; }
+  .matrix-cell-rev { font-size:16px; font-weight:800; }
+  .matrix-cell-conv { font-size:10px; padding:2px 6px; border-radius:3px; font-weight:600; }
+
+  /* Detail tables */
+  table.detail { width:100%; border-collapse:collapse; }
+  table.detail th { text-align:left; padding:8px 10px; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); border-bottom:1px solid var(--card-border); }
+  table.detail td { padding:8px 10px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+
+  /* Badges */
+  .badge { padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; }
+  .badge-openai { background:rgba(16,163,127,0.15); color:#10a37f; }
+  .badge-anthropic { background:rgba(217,119,6,0.15); color:#d97706; }
+  .badge-google { background:rgba(66,133,244,0.15); color:#4285f4; }
+  .badge-meta { background:rgba(96,165,250,0.15); color:#60a5fa; }
+  .badge-deepseek { background:rgba(167,139,250,0.15); color:#a78bfa; }
+
+  footer { text-align:center; padding:32px 0 16px; font-size:12px; color:var(--text-dim); border-top:1px solid var(--card-border); margin-top:32px; }
+
+  @media(max-width:900px) {
+    .hero-grid { grid-template-columns:repeat(2,1fr); }
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    .filter-group { flex-wrap:wrap; }
+  }
+
+  /* Mobile responsive */
+  @media(max-width:768px) {
+    /* Nav pills */
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+
+    .container { padding:16px 12px; }
+    header h1 { font-size:22px; }
+    header p { font-size:12px; }
+
+    /* Hero stats: 2 columns */
+    .hero-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+    .hero-stat { padding:14px 10px; }
+    .hero-stat .value { font-size:22px; }
+    .hero-stat .label { font-size:10px; }
+
+    /* Filter bar: not sticky on mobile, collapsible */
+    .filter-bar { position:relative; top:auto; padding:8px 0; max-height:120px; overflow-y:auto; }
+    .filter-label { font-size:9px; min-width:50px; }
+    .filter-pill { font-size:9px; padding:4px 8px; min-height:36px; display:inline-flex; align-items:center; }
+    .filter-reset { font-size:8px; padding:4px 6px; min-height:36px; display:inline-flex; align-items:center; }
+    .filter-group { margin-bottom:2px; }
+
+    /* Grid layouts: single column */
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+
+    /* Charts: full width, min height */
+    .chart-wrap, .chart-wrap-tall { min-height:250px; height:300px; }
+
+    /* Cards */
+    .card { padding:14px; margin-bottom:14px; }
+    .card h2 { font-size:14px; }
+
+    /* Demand matrix table: horizontal scroll, smaller font */
+    .matrix-table { font-size:11px; }
+    .matrix-table th { padding:8px 6px; font-size:10px; }
+    .matrix-table td { padding:8px 6px; font-size:11px; }
+    .matrix-cell-rev { font-size:14px; }
+
+    /* Detail tables: smaller font */
+    table.detail th { padding:6px 8px; font-size:10px; }
+    table.detail td { padding:6px 8px; font-size:11px; }
+
+    /* Ensure tables don't overflow */
+    .card > div[style*="overflow-x"] { -webkit-overflow-scrolling:touch; }
+  }
+</style>
+</head>
+<body>
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
+  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
+  <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
+</nav>
+<div class="container">
+
+<header style="text-align:center;">
+  <h1 style="font-size:28px;font-weight:800;letter-spacing:-0.5px;">The AI Ledger</h1>
+  <p style="font-size:13px;color:var(--text-dim);margin-top:4px;">The live economics of AI — updated weekly</p>
+  <div id="data-refresh" style="font-size:11px;color:var(--accent);margin-top:8px;font-weight:600;"></div>
+  <p style="font-size:10px;color:var(--text-dim);line-height:1.5;margin-top:6px;">Triangulated from public filings, API observations, and industry disclosures. Directional indicators, not audited financials. ARR figures throughout. See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual collected.</p>
+</header>
+
+<!-- ===== FILTER BAR ===== -->
+<div class="filter-bar" id="filter-bar"></div>
+
+<!-- ===== HERO STATS ===== -->
+<div class="hero-grid" id="hero-stats"></div>
+
+<!-- ===== ENTERPRISE REALITY CHECK ===== -->
+<div class="card">
+  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">&mdash; Booked ARR vs. actual token consumption</span></h2>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="detail" id="enterprise-table"></table>
+  </div>
+</div>
+
+
+<!-- ===== MAIN CHARTS ===== -->
+<div class="card">
+  <h2>Token Volume &amp; ARR by Provider <span class="sub">&mdash; click bars to filter</span></h2>
+  <div class="chart-wrap"><canvas id="chart-provider"></canvas></div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h2>ARR by Demand Type</h2>
+    <div class="chart-wrap"><canvas id="chart-demand"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>Consumer vs Business Split by Provider</h2>
+    <div class="chart-wrap"><canvas id="chart-biz-consumer"></canvas></div>
+  </div>
+</div>
+
+<!-- ===== DIMENSION CHARTS (filterable) ===== -->
+<div class="grid-3">
+  <div class="card">
+    <h2>By Region</h2>
+    <div class="chart-wrap"><canvas id="chart-region"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>By Industry</h2>
+    <div class="chart-wrap"><canvas id="chart-industry"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>By Use Case</h2>
+    <div class="chart-wrap"><canvas id="chart-usecase"></canvas></div>
+  </div>
+</div>
+
+<!-- ===== DEMAND MATRIX ===== -->
+<div class="card">
+  <h2>Token Demand Quality Matrix <span class="sub">&mdash; who buys &times; how they buy. Actual 2025 collected revenue (from <a href="sankey.html" style="color:var(--accent);">Follow the Dollar</a>). Not all "$1 of AI revenue" is equal.</span></h2>
+  <div style="overflow-x:auto;">
+    <table class="matrix-table" id="demand-matrix"></table>
+  </div>
+</div>
+
+<!-- ===== TOP CONSUMERS ===== -->
+<div class="card">
+  <h2>Top Token Consumers <span class="sub" id="consumer-filter-label"></span></h2>
+
+  <!-- Summary stats -->
+  <div id="consumer-stats" style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;"></div>
+
+  <!-- Filter bar -->
+  <div id="consumer-filters" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;"></div>
+
+  <div style="overflow-x:auto;">
+    <table class="detail" id="consumer-table"></table>
+  </div>
+</div>
+
+<!-- ===== MODEL PRICING ===== -->
+<div class="card">
+  <h2>Model Pricing &amp; Estimated Volume</h2>
+  <div style="overflow-x:auto;">
+    <table class="detail" id="model-table"></table>
+  </div>
+</div>
+
+<!-- ===== METHODOLOGY (collapsible) ===== -->
+<details class="card" style="background:rgba(59,130,246,0.05); border-color:rgba(59,130,246,0.2); cursor:pointer;">
+  <summary style="font-size:13px;font-weight:600;color:var(--text);padding:4px 0;">How we estimate <span style="font-weight:400;color:var(--text-dim);font-size:11px;">&mdash; Triangulated from 4 independent methods across public filings, SDK stats, and GPU capacity.</span></summary>
+  <p style="font-size:12px; color:var(--text-dim); line-height:1.7; margin-top:12px;">
+    <strong>Provider revenue:</strong> OpenAI ($20B ARR end-2025 &mdash; WSJ, Bloomberg, All-In); Anthropic ($14B ARR Feb'26 &mdash; investor disclosure); Google Cloud AI ("billions" &mdash; Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
+    <strong>Token volumes:</strong> Triangulated from 4 methods: (1) Revenue &divide; blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv &times; 30-50% utilization &mdash; SemiAnalysis), (3) Bottom-up user &times; session &times; token estimation, (4) SDK download proxies (PyPI/npm, pypistats.org).<br>
+    <strong>Self-hosted tokens:</strong> "Others" category. Triangulated from vLLM Docker Hub pulls, Ollama binary downloads, HuggingFace model downloads. Auto-scales daily from live signals.<br>
+    <strong>Live data:</strong> OpenRouter pricing API. PyPI/npm download stats. HuggingFace model downloads. GitHub release downloads. Docker Hub pull counts. OpenRouter weekly token rankings.<br>
+    <strong>Cross-dimensional weights:</strong> Editorial estimates for filtering. Filtered views show directional splits, not precise figures.
+  </p>
+</details>
+
+<footer>The AI Ledger &mdash; Directional estimates only. Not investment advice.</footer>
+
+</div>
+
+<script>
+// ============================================================
+// DATA — loaded from site-data.json
+// ============================================================
+let PROVIDERS, REGIONS, INDUSTRIES, USE_CASES, CROSS_WEIGHTS;
+let DEMAND_MATRIX, ENTERPRISE_REALITY, TOP_CONSUMERS, MODELS;
+let DEMAND_TYPES, DEMAND_WEIGHTS;
+let SANKEY_BC_FLOWS = {}; // buyer→channel flow lookup from Sankey
+
+// ============================================================
+// FILTER STATE
+// ============================================================
+const filters = { providers: [], providerRegion: [], regions: [], industries: [], useCases: [], demandTypes: [] };
+let modelTypeFilter = 'all';
+const charts = {};
+
+// ============================================================
+// ASYNC LOADER
+// ============================================================
+async function loadDashboardData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load site-data.json: ' + resp.status);
+    const all = await resp.json();
+    const d = all.dashboard;
+
+    PROVIDERS        = d.providers;
+    REGIONS          = d.regions;
+    INDUSTRIES       = d.industries;
+    USE_CASES        = d.useCases;
+    CROSS_WEIGHTS    = d.crossWeights;
+    DEMAND_MATRIX    = d.demandMatrix;
+    ENTERPRISE_REALITY = d.enterpriseReality;
+    TOP_CONSUMERS    = d.topConsumers;
+    MODELS           = d.models;
+    DEMAND_TYPES     = d.demandTypes;
+    DEMAND_WEIGHTS   = d.demandWeights;
+
+    // Build buyer→channel flow lookup from Sankey for Demand Matrix
+    if (all.sankey && all.sankey.flows) {
+      SANKEY_BC_FLOWS = {};
+      all.sankey.flows.forEach(f => {
+        // buyer→channel flows: fromCol=0, toCol=1
+        if (f[0] === 0 && f[2] === 1) {
+          const key = f[1] + ',' + f[3]; // buyerIdx,channelIdx
+          SANKEY_BC_FLOWS[key] = (SANKEY_BC_FLOWS[key] || 0) + f[4];
+        }
+      });
+      console.log('Sankey buyer→channel flows loaded for demand matrix:', Object.keys(SANKEY_BC_FLOWS).length, 'flows');
+    }
+
+    // Show data refresh timestamp
+    if (all.meta && all.meta.generatedAt) {
+      const el = document.getElementById('data-refresh');
+      if (el) el.textContent = 'Data refreshed: ' + all.meta.generatedAt.replace('T', ' ').substring(0, 19) + ' UTC';
+    }
+
+  } catch(e) {
+    console.warn('site-data.json not found or invalid, dashboard cannot render:', e);
+    document.getElementById('hero-stats').innerHTML = '<div class="hero-stat" style="grid-column:1/-1;"><div class="label" style="color:var(--red);">Failed to load site-data.json</div></div>';
+    return;
+  }
+
+  // ============================================================
+  // CHART.JS DARK THEME DEFAULTS
+  // ============================================================
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.borderColor = '#1e293b';
+  Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,sans-serif';
+
+  // ============================================================
+  // INIT — everything below runs after data loads
+  // ============================================================
+  buildFilterBar();
+  updateAll();
+}
+
+// ============================================================
+// FILTER ENGINE
+// ============================================================
+const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+const noGrid = { display: false };
+
+function getFilteredProviderData() {
+  let activeProviders = filters.providers.length > 0
+    ? filters.providers : Object.keys(PROVIDERS);
+
+  if (modelTypeFilter !== 'all') {
+    activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
+  }
+
+  // Provider HQ region filter — only show providers from selected region(s)
+  if (filters.providerRegion.length > 0) {
+    activeProviders = activeProviders.filter(p => {
+      const region = PROVIDERS[p]?.region || 'US';
+      return filters.providerRegion.includes(region) || region === 'Mixed';
+    });
+  }
+
+  const result = {};
+  activeProviders.forEach(p => {
+    let t = PROVIDERS[p].tokens, r = PROVIDERS[p].rev;
+    if (filters.regions.length > 0) {
+      const s = filters.regions.reduce((a, rg) => a + (CROSS_WEIGHTS[p]?.regions?.[rg] || 0), 0);
+      t *= s; r *= s;
+    }
+    if (filters.industries.length > 0) {
+      const s = filters.industries.reduce((a, ind) => a + (CROSS_WEIGHTS[p]?.industries?.[ind] || 0), 0);
+      t *= s; r *= s;
+    }
+    if (filters.useCases.length > 0) {
+      const s = filters.useCases.reduce((a, uc) => a + (CROSS_WEIGHTS[p]?.useCases?.[uc] || 0), 0);
+      t *= s; r *= s;
+    }
+    if (filters.demandTypes.length > 0) {
+      const s = filters.demandTypes.reduce((a, dt) => a + (DEMAND_WEIGHTS[p]?.[dt] || 0), 0);
+      t *= s; r *= s;
+    }
+    result[p] = { tokens: t, rev: r, color: PROVIDERS[p].color, growth: PROVIDERS[p].growth };
+  });
+  return result;
+}
+
+function getFilteredDimensionData(dimObj, dimKey) {
+  let activeProviders = filters.providers.length > 0
+    ? filters.providers : Object.keys(PROVIDERS);
+  if (modelTypeFilter !== 'all') {
+    activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
+  }
+  if (filters.providerRegion.length > 0) {
+    activeProviders = activeProviders.filter(p => {
+      const region = PROVIDERS[p]?.region || 'US';
+      return filters.providerRegion.includes(region) || region === 'Mixed';
+    });
+  }
+
+  const result = {};
+  Object.keys(dimObj).forEach(key => {
+    let weighted = 0;
+    activeProviders.forEach(p => {
+      const w = CROSS_WEIGHTS[p]?.[dimKey]?.[key] || 0;
+      weighted += PROVIDERS[p].tokens * w;
+    });
+    let scale = 1;
+    if (dimKey !== 'regions' && filters.regions.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => { filters.regions.forEach(r => { s += CROSS_WEIGHTS[p]?.regions?.[r] || 0; }); });
+      scale *= s / activeProviders.length;
+    }
+    if (dimKey !== 'industries' && filters.industries.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => { filters.industries.forEach(i => { s += CROSS_WEIGHTS[p]?.industries?.[i] || 0; }); });
+      scale *= s / activeProviders.length;
+    }
+    if (dimKey !== 'useCases' && filters.useCases.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => { filters.useCases.forEach(u => { s += CROSS_WEIGHTS[p]?.useCases?.[u] || 0; }); });
+      scale *= s / activeProviders.length;
+    }
+    if (filters.demandTypes.length > 0) {
+      let s = 0;
+      activeProviders.forEach(p => { filters.demandTypes.forEach(dt => { s += DEMAND_WEIGHTS[p]?.[dt] || 0; }); });
+      scale *= s / activeProviders.length;
+    }
+    result[key] = { tokens: weighted * scale, color: dimObj[key].color };
+  });
+  return result;
+}
+
+// ============================================================
+// BUILD FILTER BAR
+// ============================================================
+function buildFilterBar() {
+  const bar = document.getElementById('filter-bar');
+
+  const mtGroup = document.createElement('div');
+  mtGroup.className = 'filter-group';
+  mtGroup.innerHTML = '<span class="filter-label">Model Type</span>';
+  ['All', 'Frontier', 'Open'].forEach(label => {
+    const pill = document.createElement('button');
+    pill.className = 'filter-pill' + (label === 'All' ? ' active' : '');
+    pill.textContent = label;
+    pill.dataset.dim = 'modelType';
+    pill.dataset.value = label.toLowerCase();
+    pill.onclick = () => {
+      modelTypeFilter = label.toLowerCase();
+      document.querySelectorAll('.filter-pill[data-dim="modelType"]').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      updateAll();
+    };
+    mtGroup.appendChild(pill);
+  });
+  bar.appendChild(mtGroup);
+
+  const dims = [
+    { key: 'providers', label: 'Provider', items: Object.keys(PROVIDERS) },
+    { key: 'providerRegion', label: 'Provider HQ', items: ['US', 'Asia', 'Europe'] },
+    { key: 'regions', label: 'Demand Region', items: Object.keys(REGIONS) },
+    { key: 'industries', label: 'Industry', items: Object.keys(INDUSTRIES) },
+    { key: 'useCases', label: 'Use Case', items: Object.keys(USE_CASES) },
+    { key: 'demandTypes', label: 'Demand Type', items: Object.keys(DEMAND_TYPES) },
+  ];
+
+  dims.forEach(d => {
+    const group = document.createElement('div');
+    group.className = 'filter-group';
+    group.innerHTML = '<span class="filter-label">' + d.label + '</span>';
+    d.items.forEach(item => {
+      const pill = document.createElement('button');
+      pill.className = 'filter-pill';
+      pill.textContent = item;
+      pill.dataset.dim = d.key;
+      pill.dataset.value = item;
+      pill.onclick = () => toggleFilter(d.key, item, pill);
+      group.appendChild(pill);
+    });
+    const reset = document.createElement('button');
+    reset.className = 'filter-reset';
+    reset.textContent = '\u2715 Clear';
+    reset.onclick = () => clearFilter(d.key);
+    group.appendChild(reset);
+    bar.appendChild(group);
+  });
+}
+
+function toggleFilter(dim, value, pill) {
+  const idx = filters[dim].indexOf(value);
+  if (idx >= 0) { filters[dim].splice(idx, 1); pill.classList.remove('active'); }
+  else { filters[dim].push(value); pill.classList.add('active'); }
+  updateAll();
+}
+
+function clearFilter(dim) {
+  filters[dim] = [];
+  document.querySelectorAll('.filter-pill[data-dim="' + dim + '"]').forEach(p => p.classList.remove('active'));
+  updateAll();
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function updateHeroStats() {
+  const data = getFilteredProviderData();
+  const totalTokens = Object.values(data).reduce((a, d) => a + d.tokens, 0);
+  const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
+  const provCount = Object.keys(data).length;
+  const bearTokens = Math.round(totalTokens * 0.4);
+  const bullTokens = Math.round(totalTokens * 1.8);
+  const bearRev = (totalRev * 0.6).toFixed(1);
+  const bullRev = (totalRev * 1.2).toFixed(1);
+
+  document.getElementById('hero-stats').innerHTML =
+    '<div class="hero-stat"><div class="label">Est. Tokens / Day</div><div class="value" style="color:var(--accent);">~' + Math.round(totalTokens) + 'T</div><div class="detail" style="font-size:10px;">Bear: ' + bearTokens + 'T \u00b7 Bull: ' + bullTokens + 'T</div></div>' +
+    '<div class="hero-stat"><div class="label">Combined ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail" style="font-size:10px;">Bear: $' + bearRev + 'B \u00b7 Bull: $' + bullRev + 'B</div></div>' +
+    '<div class="hero-stat"><div class="label">Active Providers</div><div class="value" style="color:var(--accent2);">' + provCount + '</div><div class="detail">tracked in this dashboard</div></div>' +
+    '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">frontier-equivalent cost (ARK Invest)</div></div>';
+}
+
+function updateProviderChart() {
+  const data = getFilteredProviderData();
+  const labels = Object.keys(data);
+  const tokenVals = labels.map(l => data[l].tokens);
+  const revVals = labels.map(l => data[l].rev);
+  const colors = labels.map(l => data[l].color);
+
+  if (charts.provider) {
+    charts.provider.data.labels = labels;
+    charts.provider.data.datasets[0].data = tokenVals;
+    charts.provider.data.datasets[0].backgroundColor = colors.map(c => c + 'cc');
+    charts.provider.data.datasets[1].data = revVals;
+    charts.provider.data.datasets[1].backgroundColor = colors.map(c => c + '55');
+    charts.provider.update('active');
+    return;
+  }
+
+  charts.provider = new Chart(document.getElementById('chart-provider'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Tokens (T/day)', data: tokenVals, backgroundColor: colors.map(c => c + 'cc'), yAxisID: 'y', borderRadius: 4, order: 1 },
+        { label: 'ARR ($B)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      onClick: (e, els) => {
+        if (els.length > 0) {
+          const label = charts.provider.data.labels[els[0].index];
+          const pill = document.querySelector('.filter-pill[data-dim="providers"][data-value="' + label + '"]');
+          if (pill) pill.click();
+        }
+      },
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } },
+        tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR' } }
+      },
+      scales: {
+        y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid },
+        y1: { position: 'right', title: { display: true, text: 'ARR ($B)' }, grid: noGrid },
+        x: { grid: noGrid }
+      }
+    }
+  });
+}
+
+function updateDemandChart() {
+  const data = getFilteredProviderData();
+  const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
+  const consumerSubs = totalRev * 0.38;
+  const apiDev = totalRev * 0.30;
+  const entPlatform = totalRev * 0.18;
+  const cloudChannel = totalRev * 0.14;
+  const labels = ['Consumer Subs', 'API / Developer', 'Enterprise Platform', 'Cloud Channel'];
+  const values = [consumerSubs, apiDev, entPlatform, cloudChannel];
+  const colors = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
+
+  if (charts.demand) {
+    charts.demand.data.datasets[0].data = values;
+    charts.demand.data.datasets[0].borderColor = labels.map(l => filters.demandTypes.includes(l) ? '#ffffff' : 'transparent');
+    charts.demand.data.datasets[0].borderWidth = labels.map(l => filters.demandTypes.includes(l) ? 3 : 0);
+    charts.demand.update('active');
+    return;
+  }
+
+  charts.demand = new Chart(document.getElementById('chart-demand'), {
+    type: 'bar',
+    data: { labels, datasets: [{ data: values, backgroundColor: colors.map(c => c + 'bb'), borderRadius: 4, borderColor: labels.map(l => filters.demandTypes.includes(l) ? '#ffffff' : 'transparent'), borderWidth: labels.map(l => filters.demandTypes.includes(l) ? 3 : 0) }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      onClick: (e, els) => { if (els.length > 0) { const label = charts.demand.data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="demandTypes"][data-value="' + label + '"]'); if (pill) pill.click(); } },
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + Math.abs(ctx.parsed.x).toFixed(1) + 'B ARR \u2014 click to filter' } } },
+      scales: { x: { title: { display: true, text: '$B ARR' }, grid: darkGrid }, y: { grid: noGrid } }
+    }
+  });
+}
+
+function updateBizConsumerChart() {
+  const data = getFilteredProviderData();
+  const labels = Object.keys(data).filter(p => data[p].rev > 0);
+  const consumerVals = labels.map(l => data[l].rev * (PROVIDERS[l].consumerPct / 100));
+  const bizVals = labels.map(l => data[l].rev * (PROVIDERS[l].bizPct / 100));
+
+  if (charts.bizConsumer) {
+    charts.bizConsumer.data.labels = labels;
+    charts.bizConsumer.data.datasets[0].data = consumerVals;
+    charts.bizConsumer.data.datasets[1].data = bizVals;
+    charts.bizConsumer.update('active');
+    return;
+  }
+
+  charts.bizConsumer = new Chart(document.getElementById('chart-biz-consumer'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Consumer', data: consumerVals, backgroundColor: '#f59e0bbb', borderRadius: 4 },
+      { label: 'Business/API', data: bizVals, backgroundColor: '#10b981bb', borderRadius: 4 },
+    ] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } },
+      scales: { x: { stacked: true, grid: noGrid }, y: { stacked: true, title: { display: true, text: '$B ARR' }, grid: darkGrid } }
+    }
+  });
+}
+
+function updateDimensionChart(canvasId, chartKey, dimObj, dimKey, chartType) {
+  const data = getFilteredDimensionData(dimObj, dimKey);
+  const labels = Object.keys(data);
+  const values = labels.map(l => data[l].tokens);
+  const colors = labels.map(l => data[l].color + 'cc');
+  const activeInDim = filters[dimKey === 'regions' ? 'regions' : dimKey] || [];
+  const borderColors = labels.map(l => activeInDim.includes(l) ? '#ffffff' : 'transparent');
+  const borderWidths = labels.map(l => activeInDim.includes(l) ? 3 : 0);
+
+  if (charts[chartKey]) {
+    charts[chartKey].data.labels = labels;
+    charts[chartKey].data.datasets[0].data = values;
+    charts[chartKey].data.datasets[0].backgroundColor = colors;
+    charts[chartKey].data.datasets[0].borderColor = borderColors;
+    charts[chartKey].data.datasets[0].borderWidth = borderWidths;
+    charts[chartKey].update('active');
+    return;
+  }
+
+  charts[chartKey] = new Chart(document.getElementById(canvasId), {
+    type: chartType,
+    data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: borderColors, borderWidth: borderWidths, borderRadius: chartType === 'bar' ? 4 : 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      ...(chartType === 'bar' ? { indexAxis: 'y' } : {}),
+      onClick: (e, els) => { if (els.length > 0) { const fKey = dimKey === 'regions' ? 'regions' : dimKey; const label = charts[chartKey].data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="' + fKey + '"][data-value="' + label + '"]'); if (pill) pill.click(); } },
+      plugins: {
+        legend: { display: chartType === 'doughnut', position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + (ctx.parsed.toFixed ? ctx.parsed.toFixed(0) : (ctx.parsed.y || ctx.parsed).toFixed(0)) + 'T tokens/day' } }
+      },
+      scales: chartType === 'bar' ? { x: { title: { display: true, text: 'T tokens/day' }, grid: darkGrid }, y: { grid: noGrid } } : undefined,
+    }
+  });
+}
+
+function renderDemandMatrix() {
+  const t = document.getElementById('demand-matrix');
+  const m = DEMAND_MATRIX;
+  const hasSankey = Object.keys(SANKEY_BC_FLOWS).length > 0;
+  const chMap = m.sankeyChannelMap || [[0],[1,2,4],[3],[5]];
+  const bMap = m.sankeyBuyerMap || { Consumer: 0, SME: 1, Enterprise: 2 };
+
+  // Column headers with totals
+  let colTotals = new Array(m.columns.length).fill(0);
+  let grandTotal = 0;
+
+  // Pre-compute all cell values from Sankey
+  const cellValues = [];
+  m.rows.forEach((row, ri) => {
+    const rowVals = [];
+    const buyerIdx = bMap[row.segment];
+    row.cells.forEach((cell, ci) => {
+      let val = 0;
+      if (hasSankey && buyerIdx !== undefined) {
+        chMap[ci].forEach(ch => { val += SANKEY_BC_FLOWS[buyerIdx + ',' + ch] || 0; });
+      }
+      rowVals.push(val);
+      colTotals[ci] += val;
+      grandTotal += val;
+    });
+    cellValues.push(rowVals);
+  });
+
+  let html = '<thead><tr><th></th>';
+  m.columns.forEach((c, i) => {
+    const colTotal = hasSankey ? '<div style="font-size:11px;color:var(--green);margin-top:2px;">$' + colTotals[i].toFixed(1) + 'B collected</div>' : '';
+    html += '<th><div style="font-size:13px;font-weight:700;">' + c + '</div><div style="font-size:10px;opacity:0.7;margin-top:2px;">' + m.colSubs[i] + '</div>' + colTotal + '</th>';
+  });
+  html += '</tr></thead><tbody>';
+
+  m.rows.forEach((row, ri) => {
+    const rowTotal = cellValues[ri].reduce((a, b) => a + b, 0);
+    html += '<tr><td style="background:#1a2332;color:white;font-weight:700;font-size:13px;">' + row.segment + '<div style="font-size:10px;font-weight:400;color:var(--green);margin-top:4px;">$' + rowTotal.toFixed(1) + 'B total</div></td>';
+    row.cells.forEach((cell, ci) => {
+      const val = cellValues[ri][ci];
+      const rgb = cell.color === '#10b981' ? '16,185,129' : cell.color === '#f59e0b' ? '249,159,11' : cell.color === '#ef4444' ? '239,68,68' : cell.color === '#3b82f6' ? '59,130,246' : '71,85,105';
+      // Primary: Sankey-derived actual collected. Secondary: ARR estimate for context
+      const revDisplay = hasSankey ? '$' + val.toFixed(1) + 'B' : (cell.arrEstimate || '—');
+      const arrRef = cell.arrEstimate ? '<span style="font-size:10px;color:var(--text-dim);margin-left:6px;" title="ARR estimate">(ARR: ' + cell.arrEstimate + ')</span>' : '';
+      html += '<td style="background:rgba(' + rgb + ',0.06);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex-wrap:wrap;">' +
+          '<span class="matrix-cell-rev" style="color:' + cell.color + ';">' + revDisplay + '</span>' + arrRef +
+          '<span class="matrix-cell-conv" style="background:rgba(' + rgb + ',0.15);color:' + cell.color + ';">' + cell.conv + ' tokens</span>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">' + cell.ex + '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);opacity:0.8;font-style:italic;">' + cell.note + '</div></td>';
+    });
+    html += '</tr>';
+  });
+
+  // Totals row
+  html += '<tr><td style="background:#1a2332;color:var(--green);font-weight:700;font-size:13px;">TOTAL<div style="font-size:10px;font-weight:400;margin-top:4px;">$' + grandTotal.toFixed(1) + 'B</div></td>';
+  colTotals.forEach((ct, i) => {
+    const pct = grandTotal > 0 ? Math.round(ct / grandTotal * 100) : 0;
+    html += '<td style="background:rgba(16,185,129,0.08);text-align:center;font-weight:700;color:var(--green);font-size:14px;">$' + ct.toFixed(1) + 'B<div style="font-size:10px;font-weight:400;color:var(--text-dim);">' + pct + '% of total</div></td>';
+  });
+  html += '</tr>';
+
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+function renderEnterpriseTable() {
+  const t = document.getElementById('enterprise-table');
+  let html = '<thead><tr><th>Company</th><th>Claimed AI ARR</th><th>Actual Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Red Flags</th></tr></thead><tbody>';
+  ENTERPRISE_REALITY.forEach(c => {
+    html += '<tr><td><strong>' + c.name + '</strong> <span style="color:var(--text-dim);font-size:11px;">' + c.ticker + '</span></td><td style="font-size:12px;">' + c.claimed + '</td><td style="font-size:12px;color:var(--orange);">' + c.usage + '</td><td style="font-size:12px;color:var(--green);font-weight:600;">' + c.real + '</td><td style="font-size:12px;"><span style="color:var(--red);">' + (c.growth || '\u2014') + '</span> <span style="color:var(--text-dim);font-size:10px;">\u2190 was ' + (c.prevGrowth || '\u2014') + '</span></td><td style="font-size:11px;color:var(--text-dim);">' + c.flags + '</td></tr>';
+  });
+  html += '</tbody>';
+  html += '<tr><td colspan="6" style="padding:16px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;"><strong style="color:var(--red);">Key Finding:</strong> <span style="color:var(--text-dim);font-size:12px;">Not a single major enterprise SaaS vendor has demonstrably accelerated its top-line growth rate due to AI. Revenue attribution is deliberately opaque \u2014 SKU upgrades are counted as "AI revenue," legacy ML is relabeled, and AI is bundled free into higher tiers. If AI were truly driving incremental demand, growth would be accelerating. Instead it\u2019s decelerating across the board.</span></td></tr>';
+  t.innerHTML = html;
+}
+
+// Consumer table state
+let consumerSort = 'tokens'; // 'tokens', 'co', 'arr', 'founded'
+let consumerSortAsc = false;
+let consumerCatFilter = 'all';
+let consumerVintage = 'all'; // 'all' or 'ai-era'
+
+function toggleConsumerSort(col) {
+  if (consumerSort === col) consumerSortAsc = !consumerSortAsc;
+  else { consumerSort = col; consumerSortAsc = col === 'co'; }
+  updateConsumerTable();
+}
+
+function setConsumerCat(cat) {
+  consumerCatFilter = cat;
+  updateConsumerTable();
+}
+
+function toggleVintage() {
+  consumerVintage = consumerVintage === 'all' ? 'ai-era' : 'all';
+  updateConsumerTable();
+}
+
+function updateConsumerTable() {
+  const t = document.getElementById('consumer-table');
+  const label = document.getElementById('consumer-filter-label');
+  let filtered = TOP_CONSUMERS;
+
+  // Model type filter (from global filter bar)
+  if (modelTypeFilter !== 'all') {
+    const openProvs = ['meta', 'deepseek', 'mistral', 'own'];
+    const frontierProvs = ['openai', 'anthropic', 'google', 'xai'];
+    const matchProvs = modelTypeFilter === 'open' ? openProvs : frontierProvs;
+    filtered = filtered.filter(c => {
+      const provArr = (c.providers || []).map(p => p.toLowerCase());
+      if (provArr.length === 0) return c.prov.toLowerCase().split(',').some(s => matchProvs.some(m => s.trim().includes(m)));
+      return provArr.some(p => matchProvs.includes(p));
+    });
+  }
+
+  // Global provider filter
+  if (filters.providers.length > 0) {
+    filtered = filtered.filter(c => {
+      const provArr = (c.providers || []).map(p => p.toLowerCase());
+      return filters.providers.some(fp => {
+        const fpLower = fp.toLowerCase().split('/')[0];
+        if (provArr.length > 0) return provArr.some(p => p.includes(fpLower));
+        return c.prov.toLowerCase().includes(fpLower);
+      });
+    });
+    label.textContent = '\u2014 filtered by: ' + filters.providers.join(', ');
+  } else {
+    label.textContent = modelTypeFilter !== 'all' ? '\u2014 showing ' + modelTypeFilter + ' models' : '';
+  }
+
+  // Category filter
+  if (consumerCatFilter !== 'all') {
+    filtered = filtered.filter(c => c.category === consumerCatFilter);
+  }
+
+  // AI Vintage filter
+  if (consumerVintage === 'ai-era') {
+    filtered = filtered.filter(c => c.founded && c.founded >= 2023);
+  }
+
+  // Sort — descending by default for numeric columns
+  filtered.sort((a, b) => {
+    let cmp = 0;
+    if (consumerSort === 'co') cmp = (a.co || '').localeCompare(b.co || '');
+    else if (consumerSort === 'arr') cmp = (b.arrNumeric || 0) - (a.arrNumeric || 0);
+    else if (consumerSort === 'founded') cmp = (b.founded || 0) - (a.founded || 0);
+    else cmp = (b.tokensNumeric || 0) - (a.tokensNumeric || 0);
+    return consumerSortAsc ? -cmp : cmp;
+  });
+
+  // Render summary stats
+  const totalTokens = filtered.reduce((s, c) => s + (c.tokensNumeric || 0), 0);
+  const withArr = filtered.filter(c => c.arrNumeric);
+  const totalArr = withArr.reduce((s, c) => s + c.arrNumeric, 0);
+  const aiEraCount = filtered.filter(c => c.founded && c.founded >= 2023).length;
+  document.getElementById('consumer-stats').innerHTML =
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;"><strong style="color:var(--accent);">' + filtered.length + '</strong> companies</div>' +
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;">Est. tokens: <strong style="color:var(--accent);">' + (totalTokens/1e12).toFixed(1) + 'T/day</strong></div>' +
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;">Known ARR: <strong style="color:var(--green);">$' + (totalArr/1e9).toFixed(1) + 'B</strong> (' + withArr.length + ' reported)</div>' +
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;">AI-era (2023+): <strong style="color:var(--green);">' + aiEraCount + '</strong></div>';
+
+  // Render filter bar
+  const cats = [...new Set(TOP_CONSUMERS.map(c => c.category).filter(Boolean))].sort();
+  let filterHtml = '';
+  // Category pills
+  filterHtml += '<span style="font-size:10px;color:var(--text-dim);margin-right:4px;">Category:</span>';
+  ['all', ...cats].forEach(cat => {
+    const lbl = cat === 'all' ? 'All' : cat.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const active = consumerCatFilter === cat ? ' style="background:var(--accent);color:white;border-color:var(--accent);"' : '';
+    filterHtml += '<button onclick="setConsumerCat(\'' + cat + '\')" style="padding:3px 9px;border-radius:5px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:10px;cursor:pointer;"' + active + '>' + lbl + '</button> ';
+  });
+  // AI Vintage toggle
+  filterHtml += '<span style="margin-left:12px;font-size:10px;color:var(--text-dim);">Vintage:</span>';
+  filterHtml += '<button onclick="toggleVintage()" style="padding:3px 9px;border-radius:5px;border:1px solid ' + (consumerVintage === 'ai-era' ? 'var(--green)' : 'var(--card-border)') + ';background:' + (consumerVintage === 'ai-era' ? 'rgba(16,185,129,0.15)' : 'transparent') + ';color:' + (consumerVintage === 'ai-era' ? 'var(--green)' : 'var(--text-dim)') + ';font-size:10px;cursor:pointer;font-weight:600;">' + (consumerVintage === 'ai-era' ? 'AI Era Only (2023+)' : 'All Companies') + '</button>';
+  document.getElementById('consumer-filters').innerHTML = filterHtml;
+
+  // Sort arrows
+  const sortArrow = (col) => consumerSort === col ? (consumerSortAsc ? ' \u25B2' : ' \u25BC') : '';
+
+  // Render table
+  let html = '<thead><tr>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'co\')">Company' + sortArrow('co') + '</th>' +
+    '<th>HQ</th><th>Type</th>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'founded\')">Founded' + sortArrow('founded') + '</th>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'tokens\')">Tokens/Day' + sortArrow('tokens') + '</th>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'arr\')">ARR' + sortArrow('arr') + '</th>' +
+    '<th>Providers</th>' +
+    '</tr></thead><tbody>';
+
+  filtered.forEach((c, i) => {
+    const foundedBadge = c.founded ? (c.founded >= 2023 ? '<span style="color:var(--green);font-weight:600;">' + c.founded + '</span>' : '' + c.founded) : '\u2014';
+    const arrDisplay = c.arr || '\u2014';
+    const statusDot = c.status === 'public' ? '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:4px;" title="Public"></span>' : c.status === 'pre-ipo' ? '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--orange);margin-left:4px;" title="Pre-IPO"></span>' : '';
+    const catBadge = c.category ? '<div style="font-size:9px;color:var(--text-dim);margin-top:1px;">' + (c.category || '').replace(/-/g, ' ') + '</div>' : '';
+
+    html += '<tr style="cursor:pointer" onclick="toggleConsumerDetail(' + i + ',this)">' +
+      '<td><strong>' + c.co + '</strong>' + statusDot + catBadge + '</td>' +
+      '<td>' + c.hq + '</td>' +
+      '<td style="font-size:11px;">' + c.type + '</td>' +
+      '<td style="font-size:11px;">' + foundedBadge + '</td>' +
+      '<td style="font-weight:600;color:var(--accent);">' + c.tokens + '</td>' +
+      '<td style="font-size:11px;">' + arrDisplay + '</td>' +
+      '<td style="font-size:11px;">' + c.prov + '</td>' +
+      '</tr>';
+
+    // Hidden detail row
+    const freshDays = c.lastUpdated ? Math.floor((Date.now() - new Date(c.lastUpdated).getTime()) / 86400000) : null;
+    const freshDot = freshDays !== null ? (freshDays < 30 ? 'var(--green)' : freshDays < 90 ? 'var(--orange)' : 'var(--text-dim)') : 'var(--text-dim)';
+    html += '<tr class="consumer-detail" style="display:none;">' +
+      '<td colspan="7" style="padding:12px 20px;background:rgba(59,130,246,0.03);font-size:12px;line-height:1.7;color:var(--text-dim);">' +
+      '<strong style="color:var(--text);">Evidence:</strong> ' + (c.ev || '\u2014') + '<br>' +
+      (c.valuation ? '<strong style="color:var(--text);">Valuation:</strong> ' + c.valuation + ' &nbsp; ' : '') +
+      (c.totalFunding ? '<strong style="color:var(--text);">Funding:</strong> ' + c.totalFunding + ' &nbsp; ' : '') +
+      (c.website ? '<strong style="color:var(--text);">Website:</strong> <a href="' + c.website + '" target="_blank" style="color:var(--accent);">' + c.website.replace('https://','') + '</a> &nbsp; ' : '') +
+      (c.employeeCount ? '<strong style="color:var(--text);">Team:</strong> ~' + c.employeeCount.toLocaleString() + ' &nbsp; ' : '') +
+      '<br><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:' + freshDot + ';margin-right:4px;"></span>' +
+      '<strong style="color:var(--text);">Updated:</strong> ' + (c.lastUpdated || 'Unknown') +
+      ' &nbsp; <strong style="color:var(--text);">Confidence:</strong> ' + (c.conf || '\u2014') +
+      '</td></tr>';
+  });
+
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+function toggleConsumerDetail(idx, row) {
+  const detail = row.nextElementSibling;
+  if (detail && detail.classList.contains('consumer-detail')) {
+    detail.style.display = detail.style.display === 'none' ? '' : 'none';
+  }
+}
+
+function renderModelTable() {
+  const t = document.getElementById('model-table');
+  let filtered = MODELS;
+
+  if (modelTypeFilter !== 'all') {
+    const openProviders = ['Meta', 'DeepSeek', 'Mistral', 'Minimax', 'Moonshot'];
+    if (modelTypeFilter === 'open') { filtered = filtered.filter(m => openProviders.includes(m.prov)); }
+    else { filtered = filtered.filter(m => !openProviders.includes(m.prov)); }
+  }
+
+  if (filters.providers.length > 0) {
+    filtered = filtered.filter(m => filters.providers.some(p => p.startsWith(m.prov) || m.prov.startsWith(p.split('/')[0]) || m.prov === 'Meta' && p.includes('Meta')));
+  }
+
+  const regionColors = { 'US': '#3b82f6', 'Asia': '#f59e0b', 'Europe': '#8b5cf6' };
+  let html = '<thead><tr><th>Model</th><th>Provider</th><th>Region</th><th>Est. Tokens/Day</th><th>Input $/1M</th><th>Output $/1M</th><th>Primary Use</th><th>Trend</th></tr></thead><tbody>';
+  filtered.forEach(m => {
+    const badge = m.prov === 'OpenAI' ? 'badge-openai' : m.prov === 'Anthropic' ? 'badge-anthropic' : m.prov === 'Google' ? 'badge-google' : m.prov === 'Meta' ? 'badge-meta' : 'badge-deepseek';
+    const regionClr = regionColors[m.region] || '#94a3b8';
+    const regionBadge = '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:600;background:' + regionClr + '22;color:' + regionClr + ';">' + (m.region || '?') + '</span>';
+    html += '<tr><td><strong>' + m.model + '</strong></td><td><span class="badge ' + badge + '">' + m.prov + '</span></td><td>' + regionBadge + '</td><td style="font-weight:600;">' + m.tokens + '</td><td>' + m.inP + '</td><td>' + m.outP + '</td><td style="font-size:11px;">' + m.use + '</td><td>' + m.trend + '</td></tr>';
+  });
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+// ============================================================
+// UPDATE ALL
+// ============================================================
+function updateAll() {
+  updateHeroStats();
+  updateProviderChart();
+  updateDemandChart();
+  updateBizConsumerChart();
+  updateDimensionChart('chart-region', 'region', REGIONS, 'regions', 'bar');
+  updateDimensionChart('chart-industry', 'industry', INDUSTRIES, 'industries', 'doughnut');
+  updateDimensionChart('chart-usecase', 'usecase', USE_CASES, 'useCases', 'doughnut');
+  updateConsumerTable();
+  renderModelTable();
+  renderDemandMatrix();
+  renderEnterpriseTable();
+}
+
+// ============================================================
+// KICK OFF
+// ============================================================
+loadDashboardData();
+</script>
+</body>
+</html>

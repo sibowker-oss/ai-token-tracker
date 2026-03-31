@@ -1,0 +1,149 @@
+{
+  "date": "2026-03-30",
+  "total_consumers": 63,
+  "signals_processed": 6,
+  "updates_flagged": 6,
+  "unmatched_signals": 6,
+  "updates": [
+    {
+      "company": "Runway",
+      "current_arr": 100000000,
+      "signal_arr": 100000000,
+      "arr_change_pct": 0,
+      "current_tokens": 8000000000,
+      "implied_tokens_low": 21917808219,
+      "implied_tokens_mid": 32876712328,
+      "implied_tokens_high": 43835616438,
+      "token_change_pct": 311.0,
+      "signal_source": "cogs_check",
+      "signal_detail": "Current tokens vs implied: ratio=0.2x (expected 0.3-3.0x)",
+      "signal_date": "2026-03-30",
+      "signal_confidence": "",
+      "signal_weight": "",
+      "category": "ai-application",
+      "action": "token_mismatch"
+    },
+    {
+      "company": "micro1",
+      "current_arr": 250000000,
+      "signal_arr": 250000000,
+      "arr_change_pct": 0,
+      "current_tokens": 50000000000,
+      "implied_tokens_low": 136986301369,
+      "implied_tokens_mid": 178082191780,
+      "implied_tokens_high": 219178082191,
+      "token_change_pct": 256.2,
+      "signal_source": "cogs_check",
+      "signal_detail": "Current tokens vs implied: ratio=0.3x (expected 0.3-3.0x)",
+      "signal_date": "2026-03-30",
+      "signal_confidence": "",
+      "signal_weight": "",
+      "category": "ai-infrastructure",
+      "action": "token_mismatch"
+    },
+    {
+      "company": "Fal.ai",
+      "current_arr": 95000000,
+      "signal_arr": 95000000,
+      "arr_change_pct": 0,
+      "current_tokens": 20000000000,
+      "implied_tokens_low": 52054794520,
+      "implied_tokens_mid": 67671232876,
+      "implied_tokens_high": 83287671232,
+      "token_change_pct": 238.4,
+      "signal_source": "cogs_check",
+      "signal_detail": "Current tokens vs implied: ratio=0.3x (expected 0.3-3.0x)",
+      "signal_date": "2026-03-30",
+      "signal_confidence": "",
+      "signal_weight": "",
+      "category": "ai-infrastructure",
+      "action": "token_mismatch"
+    },
+    {
+      "company": "OpenRouter",
+      "current_arr": 17500000,
+      "signal_arr": 17500000,
+      "arr_change_pct": 0,
+      "current_tokens": 280000000000,
+      "implied_tokens_low": 9589041095,
+      "implied_tokens_mid": 12465753424,
+      "implied_tokens_high": 15342465753,
+      "token_change_pct": -95.5,
+      "signal_source": "cogs_check",
+      "signal_detail": "Current tokens vs implied: ratio=22.5x (expected 0.3-3.0x)",
+      "signal_date": "2026-03-30",
+      "signal_confidence": "",
+      "signal_weight": "",
+      "category": "ai-infrastructure",
+      "action": "token_mismatch"
+    },
+    {
+      "company": "Yellow.ai",
+      "current_arr": 79500000,
+      "signal_arr": 79500000,
+      "arr_change_pct": 0,
+      "current_tokens": 25000000000,
+      "implied_tokens_low": 1742465753,
+      "implied_tokens_mid": 4356164383,
+      "implied_tokens_high": 8712328767,
+      "token_change_pct": -82.6,
+      "signal_source": "cogs_check",
+      "signal_detail": "Current tokens vs implied: ratio=5.7x (expected 0.3-3.0x)",
+      "signal_date": "2026-03-30",
+      "signal_confidence": "",
+      "signal_weight": "",
+      "category": "enterprise-saas",
+      "action": "token_mismatch"
+    },
+    {
+      "company": "Perplexity",
+      "current_arr": 200000000,
+      "signal_arr": 200000000,
+      "arr_change_pct": 0,
+      "current_tokens": 200000000000,
+      "implied_tokens_low": 43835616438,
+      "implied_tokens_mid": 65753424657,
+      "implied_tokens_high": 87671232876,
+      "token_change_pct": -67.1,
+      "signal_source": "cogs_check",
+      "signal_detail": "Current tokens vs implied: ratio=3.0x (expected 0.3-3.0x)",
+      "signal_date": "2026-03-30",
+      "signal_confidence": "",
+      "signal_weight": "",
+      "category": "ai-application",
+      "action": "token_mismatch"
+    }
+  ],
+  "unmatched": [
+    {
+      "entity": "Anthropic hit",
+      "value": 14,
+      "source": "vault"
+    },
+    {
+      "entity": "OpenAI ended 2025 at",
+      "value": 20,
+      "source": "vault"
+    },
+    {
+      "entity": "Sarah Friar (Anthropic CFO): every gigawatt =",
+      "value": 10,
+      "source": "vault"
+    },
+    {
+      "entity": "Anthropic",
+      "value": 14000000000,
+      "source": "podcast"
+    },
+    {
+      "entity": "OpenAI",
+      "value": 20000000000,
+      "source": "podcast"
+    },
+    {
+      "entity": "OpenAI",
+      "value": 100000000,
+      "source": "podcast"
+    }
+  ]
+}

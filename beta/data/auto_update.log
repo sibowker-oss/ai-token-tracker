@@ -1,0 +1,422 @@
+[main 71877a6] Auto-update: signal scrape 2026-03-27
+ Committer: Simon Bowker <simonbowker@MacBook-Air-6.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 4 files changed, 62 insertions(+), 5 deletions(-)
+ create mode 100644 data/auto_update.log
+ create mode 100644 data/signals_2026-03-27.json
+
+============================================================
+🤖 AI Token Tracker Auto-Update — 2026-03-27
+============================================================
+
+🔍 Running signal scraper...
+🔍 AI Signal Scraper — 2026-03-27
+==================================================
+📦 PyPI downloads (last month):
+  openai: 223,667,494
+  anthropic: 77,165,982
+  langchain-core: 99,433,271
+  litellm: 96,515,153
+  google-generativeai: 17,075,742
+  vllm: 7,433,188
+  transformers: 123,962,888
+  ollama: 10,128,533
+  mistralai: 14,585,226
+  cohere: 20,830,541
+  together: 4,598,250
+  groq: 12,616,507
+
+📦 npm downloads (last month):
+  openai: 68,257,658
+  @anthropic-ai/sdk: 36,571,967
+  @langchain/core: 14,948,410
+  ai: 42,636,182
+  @google/generative-ai: 10,187,224
+  ollama: 1,952,175
+  @mistralai/mistralai: 10,163,334
+  cohere-ai: 1,798,666
+  groq-sdk: 2,639,341
+
+🤗 HuggingFace model downloads (30d):
+  Llama-3.1-8B-Instruct: 8,456,765
+  Llama-3.1-70B-Instruct: 1,063,677
+  Llama-4-Scout-17B-16E-Instruct: 250,650
+  DeepSeek-R1: 1,981,391
+  DeepSeek-V3: 886,434
+  Mistral-7B-Instruct-v0.3: 2,175,563
+  Qwen2.5-72B-Instruct: 717,239
+  gemma-2-9b-it: 275,980
+
+🔀 OpenRouter:
+  Models: 346, Providers: 56, Free: 27
+  Output $/1M: min $-1000000.000, median $1.20, max $600.0
+
+📊 Derived signals:
+  openai_total: 291,925,152
+  anthropic_total: 113,737,949
+  google_total: 27,262,966
+  anthropic_openai_ratio: 0.39
+  self_hosted_total: 19,513,896
+  hf_total_downloads: 15,807,699
+  litellm_downloads: 96,515,153
+
+✅ Saved to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_2026-03-27.json
+✅ Updated /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_latest.json
+✅ Appended to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_history.jsonl
+
+✅ Dashboard updated with 3 changes:
+   • SDK downloads: openai 224M, anthropic 77M
+   • Llama 3.1 8B: 8.5M HF downloads
+   • vllm: 7.4M PyPI downloads
+⚠ Push failed: fatal: could not read Username for 'https://github.com': Device not configured
+
+
+============================================================
+✅ Auto-update complete — 2026-03-27
+============================================================
+
+[main 216afcb] Auto-update: signal scrape 2026-03-28
+ 8 files changed, 253 insertions(+), 49 deletions(-)
+ create mode 100644 data/news_monitor.log
+ create mode 100644 data/signals_2026-03-28.json
+
+============================================================
+🤖 AI Token Tracker Auto-Update — 2026-03-28
+============================================================
+
+🔍 Running signal scraper...
+🔍 AI Signal Scraper — 2026-03-28
+==================================================
+📦 PyPI downloads (last month):
+  openai: 224,299,797
+  anthropic: 78,155,985
+  langchain-core: 99,894,124
+  litellm: 96,318,971
+  google-generativeai: 17,098,334
+  vllm: 7,511,138
+  transformers: 124,629,149
+  ollama: 10,246,014
+  mistralai: 14,692,316
+  cohere: 21,323,238
+  together: 4,673,999
+  groq: 12,753,932
+
+📦 npm downloads (last month):
+  openai: 68,677,505
+  @anthropic-ai/sdk: 37,075,672
+  @langchain/core: 15,034,188
+  ai: 42,829,559
+  @google/generative-ai: 10,214,320
+  ollama: 1,959,734
+  @mistralai/mistralai: 10,207,933
+  cohere-ai: 1,797,664
+  groq-sdk: 2,647,244
+
+🤗 HuggingFace model downloads (30d):
+  Llama-3.1-8B-Instruct: 8,496,488
+  Llama-3.1-70B-Instruct: 1,059,930
+  Llama-4-Scout-17B-16E-Instruct: 255,184
+  DeepSeek-R1: 2,127,245
+  DeepSeek-V3: 848,630
+  Mistral-7B-Instruct-v0.3: 2,165,900
+  Qwen2.5-72B-Instruct: 690,444
+  gemma-2-9b-it: 274,640
+
+🔀 OpenRouter:
+  Models: 346, Providers: 56, Free: 27
+  Output $/1M: min $-1000000.000, median $1.20, max $600.0
+
+📊 Derived signals:
+  openai_total: 292,977,302
+  anthropic_total: 115,231,657
+  google_total: 27,312,654
+  anthropic_openai_ratio: 0.393
+  self_hosted_total: 19,716,886
+  hf_total_downloads: 15,918,461
+  litellm_downloads: 96,318,971
+
+✅ Saved to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_2026-03-28.json
+✅ Updated /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_latest.json
+✅ Appended to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_history.jsonl
+
+✅ Dashboard updated with 3 changes:
+   • SDK downloads: openai 224M, anthropic 78M
+   • Llama 3.1 8B: 8.5M HF downloads
+   • vllm: 7.5M PyPI downloads
+⚠ Push failed: fatal: could not read Username for 'https://github.com': Device not configured
+
+
+============================================================
+✅ Auto-update complete — 2026-03-28
+============================================================
+
+[main c1206b5] Auto-update: signal scrape 2026-03-29
+ 6 files changed, 357 insertions(+), 461 deletions(-)
+ create mode 100644 data/signals_2026-03-29.json
+
+============================================================
+🤖 AI Token Tracker Auto-Update — 2026-03-29
+============================================================
+
+🔍 Running signal scraper...
+🔍 AI Signal Scraper — 2026-03-29
+==================================================
+📦 PyPI downloads (last month):
+  openai: 224,305,409
+  anthropic: 78,780,747
+  langchain-core: 99,950,634
+  litellm: 95,835,692
+  google-generativeai: 17,067,993
+  vllm: 7,704,817
+  transformers: 125,297,403
+  ollama: 10,303,924
+  mistralai: 14,811,457
+  cohere: 21,696,262
+  together: 4,732,272
+  groq: 12,860,199
+
+📦 npm downloads (last month):
+  openai: 68,807,323
+  @anthropic-ai/sdk: 37,467,043
+  @langchain/core: 15,046,183
+  ai: 42,924,076
+  @google/generative-ai: 10,228,816
+  ollama: 1,966,078
+  @mistralai/mistralai: 10,213,149
+  cohere-ai: 1,799,613
+  groq-sdk: 2,651,124
+
+🤗 HuggingFace model downloads (30d):
+  Llama-3.1-8B-Instruct: 8,465,943
+  Llama-3.1-70B-Instruct: 1,051,044
+  Llama-4-Scout-17B-16E-Instruct: 256,666
+  DeepSeek-R1: 2,197,585
+  DeepSeek-V3: 823,329
+  Mistral-7B-Instruct-v0.3: 2,179,285
+  Qwen2.5-72B-Instruct: 673,127
+  gemma-2-9b-it: 273,940
+
+🔀 OpenRouter:
+  Models: 347, Providers: 56, Free: 27
+  Output $/1M: min $-1000000.000, median $1.20, max $600.0
+
+📊 Derived signals:
+  openai_total: 293,112,732
+  anthropic_total: 116,247,790
+  google_total: 27,296,809
+  anthropic_openai_ratio: 0.397
+  self_hosted_total: 19,974,819
+  hf_total_downloads: 15,920,919
+  litellm_downloads: 95,835,692
+
+✅ Saved to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_2026-03-29.json
+✅ Updated /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_latest.json
+✅ Appended to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_history.jsonl
+
+✅ Dashboard updated with 3 changes:
+   • SDK downloads: openai 224M, anthropic 79M
+   • Llama 3.1 8B: 8.5M HF downloads
+   • vllm: 7.7M PyPI downloads
+⚠ Push failed: fatal: could not read Username for 'https://github.com': Device not configured
+
+
+============================================================
+✅ Auto-update complete — 2026-03-29
+============================================================
+
+[main cdf90c5] Auto-update: signal scrape 2026-03-30
+ 5 files changed, 131 insertions(+), 29 deletions(-)
+ create mode 100644 data/signals_2026-03-30.json
+
+============================================================
+🤖 AI Token Tracker Auto-Update — 2026-03-30
+============================================================
+
+🔍 Running signal scraper...
+🔍 AI Signal Scraper — 2026-03-30
+==================================================
+📦 PyPI downloads (last month):
+  openai: 221,606,769
+  anthropic: 78,108,288
+  langchain-core: 98,832,168
+  litellm: 94,783,775
+  google-generativeai: 16,897,264
+  vllm: 7,809,508
+  transformers: 124,060,929
+  ollama: 10,248,336
+  mistralai: 14,611,887
+  cohere: 21,928,929
+  together: 4,809,630
+  groq: 12,758,633
+
+📦 npm downloads (last month):
+  openai: 67,735,298
+  @anthropic-ai/sdk: 37,366,126
+  @langchain/core: 14,748,817
+  ai: 42,154,502
+  @google/generative-ai: 10,122,063
+  ollama: 1,953,951
+  @mistralai/mistralai: 10,118,315
+  cohere-ai: 1,771,091
+  groq-sdk: 2,630,667
+
+🤗 HuggingFace model downloads (30d):
+  Llama-3.1-8B-Instruct: 8,384,864
+  Llama-3.1-70B-Instruct: 1,036,359
+  Llama-4-Scout-17B-16E-Instruct: 270,504
+  DeepSeek-R1: 2,203,466
+  DeepSeek-V3: 754,886
+  Mistral-7B-Instruct-v0.3: 2,186,431
+  Qwen2.5-72B-Instruct: 683,222
+  gemma-2-9b-it: 270,547
+
+🔀 OpenRouter:
+  Models: 345, Providers: 56, Free: 25
+  Output $/1M: min $-1000000.000, median $1.20, max $600.0
+
+📊 OpenRouter rankings (weekly token volume):
+  Week: 2026-03-22
+  Total tokens: 22.38T
+  Est. GMV: $3.4M/week (@ $0.15/M blended)
+  Est. ARR (10% take): $17.5M
+  Top providers: xiaomi (4426.9B), google (2959.7B), anthropic (2859.5B), others (2425.6B), minimax (2231.9B)
+
+🐙 GitHub release downloads:
+  ollama: 2,086,967 total release downloads (latest: v0.18.3)
+  vllm: 31,371 total release downloads (latest: v0.18.0)
+  llama_cpp: 13,175 total release downloads (latest: b8580)
+  tgi: 0 total release downloads (latest: v3.3.7)
+
+🐳 Docker Hub pulls:
+  vllm: 16,391,245 pulls
+
+📊 Derived signals:
+  openai_total: 289,342,067
+  anthropic_total: 115,474,414
+  google_total: 27,019,327
+  anthropic_openai_ratio: 0.399
+  self_hosted_sdk: 20,011,795
+  self_hosted_sdk_basis: monthly_rate
+  self_hosted_github: 2,131,513
+  self_hosted_github_basis: cumulative_last_5_releases
+  self_hosted_docker: 16,391,245
+  self_hosted_docker_basis: cumulative_alltime
+  hf_total_downloads: 15,790,279
+  litellm_downloads: 94,783,775
+
+✅ Saved to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_2026-03-30.json
+✅ Updated /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_latest.json
+✅ Appended to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_history.jsonl
+
+✅ Dashboard updated with 1 changes:
+   • SDK downloads: openai 222M, anthropic 78M
+ℹ Self-hosted estimate unchanged: 130T/day
+⚠ Push failed: fatal: could not read Username for 'https://github.com': Device not configured
+
+
+============================================================
+✅ Auto-update complete — 2026-03-30
+============================================================
+
+[main 9e4e278] Auto-update: signal scrape 2026-03-31
+ 9 files changed, 510 insertions(+), 51 deletions(-)
+ create mode 100644 data/enrich.log
+ create mode 100644 data/newsletter.log
+ create mode 100644 data/signals_2026-03-31.json
+
+============================================================
+🤖 AI Token Tracker Auto-Update — 2026-03-31
+============================================================
+
+🔍 Running signal scraper...
+🔍 AI Signal Scraper — 2026-03-31
+==================================================
+📦 PyPI downloads (last month):
+  ⚠ Failed: https://pypistats.org/api/packages/openai/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/anthropic/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/langchain-core/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/litellm/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/google-generativeai/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/vllm/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/transformers/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/ollama/recent?period=month — HTTP Error 429: Too Many Requests
+  mistralai: 14,451,736
+  ⚠ Failed: https://pypistats.org/api/packages/cohere/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/together/recent?period=month — HTTP Error 429: Too Many Requests
+  ⚠ Failed: https://pypistats.org/api/packages/groq/recent?period=month — HTTP Error 429: Too Many Requests
+
+📦 npm downloads (last month):
+  openai: 66,850,035
+  @anthropic-ai/sdk: 37,366,444
+  @langchain/core: 14,513,342
+  ai: 41,470,456
+  @google/generative-ai: 10,014,163
+  ollama: 1,931,306
+  @mistralai/mistralai: 10,057,884
+  cohere-ai: 1,733,775
+  groq-sdk: 2,599,509
+
+🤗 HuggingFace model downloads (30d):
+  Llama-3.1-8B-Instruct: 8,344,534
+  Llama-3.1-70B-Instruct: 1,039,752
+  Llama-4-Scout-17B-16E-Instruct: 273,249
+  DeepSeek-R1: 2,227,922
+  DeepSeek-V3: 715,209
+  Mistral-7B-Instruct-v0.3: 2,171,657
+  Qwen2.5-72B-Instruct: 690,954
+  gemma-2-9b-it: 265,936
+
+🔀 OpenRouter:
+  Models: 346, Providers: 56, Free: 26
+  Output $/1M: min $-1000000.000, median $1.20, max $600.0
+
+📊 OpenRouter rankings (weekly token volume):
+  Week: 2026-03-22
+  Total tokens: 22.38T
+  Est. GMV: $3.4M/week (@ $0.15/M blended)
+  Est. ARR (10% take): $17.5M
+  Top providers: xiaomi (4426.9B), google (2959.7B), anthropic (2859.5B), others (2425.6B), minimax (2231.9B)
+
+🐙 GitHub release downloads:
+  ollama: 2,485,739 total release downloads (latest: v0.19.0)
+  vllm: 32,795 total release downloads (latest: v0.18.0)
+  llama_cpp: 7,849 total release downloads (latest: b8587)
+  tgi: 0 total release downloads (latest: v3.3.7)
+
+🐳 Docker Hub pulls:
+  vllm: 16,473,562 pulls
+
+📊 Derived signals:
+  self_hosted_sdk: 1,931,306
+  self_hosted_sdk_basis: monthly_rate
+  self_hosted_github: 2,526,383
+  self_hosted_github_basis: cumulative_last_5_releases
+  self_hosted_docker: 16,473,562
+  self_hosted_docker_basis: cumulative_alltime
+  hf_total_downloads: 15,729,213
+  litellm_downloads: 0
+
+✅ Saved to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_2026-03-31.json
+✅ Updated /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_latest.json
+✅ Appended to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data/signals_history.jsonl
+
+ℹ No dashboard changes needed
+✅ Self-hosted estimate updated: 92T → 131T/day (Docker vLLM pulls: 16,473,562, growth factor: 1.008x)
+⚠ Push failed: fatal: could not read Username for 'https://github.com': Device not configured
+
+
+============================================================
+✅ Auto-update complete — 2026-03-31
+============================================================
+

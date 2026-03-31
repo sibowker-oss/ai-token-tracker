@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Market Time Machine — Global AI Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; }
+
+  .slider-area { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:24px; text-align:center; }
+  .quarter-label { font-size:36px; font-weight:800; margin-bottom:4px; }
+  .quarter-sub { font-size:14px; color:var(--text-dim); margin-bottom:16px; }
+  input[type=range] { width:100%; max-width:800px; height:8px; -webkit-appearance:none; background:var(--card-border); border-radius:4px; outline:none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--accent); cursor:grab; border:3px solid white; }
+  .tick-labels { display:flex; justify-content:space-between; max-width:800px; margin:8px auto 0; font-size:10px; color:var(--text-dim); }
+  .play-btn { margin-top:12px; padding:8px 24px; background:var(--accent); color:white; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+  .play-btn:hover { background:#2563eb; }
+
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .chart-wrap { height:300px; position:relative; }
+
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:24px; font-weight:800; margin:4px 0; }
+
+  .event-card { background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.15); border-radius:8px; padding:16px; margin-top:16px; }
+  .event-card h3 { font-size:14px; margin-bottom:8px; color:var(--accent); }
+  .event-card p { font-size:12px; color:var(--text-dim); line-height:1.6; }
+
+  .data-timestamp { font-size:11px; color:var(--text-dim); text-align:right; margin-bottom:12px; opacity:0.7; }
+
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+
+    /* Hero stats: 2 columns */
+    .hero-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+    .hero-stat { padding:12px 10px; }
+    .hero-stat .value { font-size:20px; }
+    .hero-stat .label { font-size:10px; }
+
+    /* Charts: single column, full width */
+    .grid-2 { grid-template-columns:1fr; }
+    .chart-wrap { min-height:250px; height:280px; }
+    .card { padding:14px; }
+    .card h2 { font-size:14px; }
+
+    /* Slider: full width */
+    .slider-area { padding:16px 12px; }
+    .quarter-label { font-size:28px; }
+    .quarter-sub { font-size:12px; }
+    input[type=range] { width:100%; max-width:100%; }
+    .tick-labels { max-width:100%; font-size:8px; }
+    .play-btn { min-height:44px; padding:10px 20px; }
+
+    /* Event card: full width */
+    .event-card { padding:14px; }
+    .event-card h3 { font-size:13px; }
+    .event-card p { font-size:11px; }
+  }
+</style>
+</head>
+<body>
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
+  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
+  <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
+</nav>
+
+<div class="container">
+  <h1>AI Market Time Machine</h1>
+  <div class="sub">Drag the slider to watch the AI market evolve quarter by quarter. Hit Play for the full animation.</div>
+  <div class="data-timestamp" id="data-timestamp"></div>
+
+  <div class="slider-area">
+    <div class="quarter-label" id="q-label">Q1 2024</div>
+    <div class="quarter-sub" id="q-sub"></div>
+    <input type="range" id="slider" min="0" max="8" value="0" step="1">
+    <div class="tick-labels" id="tick-labels"></div>
+    <button class="play-btn" id="play-btn" onclick="playAnimation()">&#9654; Play Animation</button>
+  </div>
+
+  <div class="hero-grid">
+    <div class="hero-stat"><div class="label">Total Tokens/Day</div><div class="value" style="color:var(--accent);" id="h-tokens"></div></div>
+    <div class="hero-stat"><div class="label">Total Revenue</div><div class="value" style="color:var(--green);" id="h-rev"></div></div>
+    <div class="hero-stat"><div class="label">Top Provider</div><div class="value" style="color:var(--orange);" id="h-top"></div></div>
+    <div class="hero-stat"><div class="label">Token Price</div><div class="value" style="color:var(--red);" id="h-price"></div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Provider Revenue ($B annualized)</h2>
+      <div class="chart-wrap"><canvas id="chart-rev"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Token Volume (T/day)</h2>
+      <div class="chart-wrap"><canvas id="chart-tokens"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Blended Token Price ($/1M tokens, 70% input + 30% output, most-used model)</h2>
+    <div class="chart-wrap"><canvas id="chart-price"></canvas></div>
+  </div>
+
+  <div class="event-card" id="event-card"></div>
+</div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+
+// Module-level variables populated from site-data.json
+let QUARTERS, PROV_NAMES, PROV_COLORS, REV_DATA, TOKEN_DATA, PRICE_DATA, EVENTS;
+let chartRev, chartTokens, chartPrice;
+const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+
+async function loadTimelineData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load site-data.json');
+    const all = await resp.json();
+    const t = all.timeline;
+
+    // Assign constants from JSON — exact same shapes as the old hardcoded data
+    QUARTERS = t.quarters;
+    PROV_NAMES = t.providerNames;
+    PROV_COLORS = t.providerColors;
+    REV_DATA = t.revData;
+    TOKEN_DATA = t.tokenData;
+    PRICE_DATA = t.priceData;
+    EVENTS = t.events;
+
+    // Show data timestamp
+    if (all.meta && all.meta.generatedAt) {
+      const ts = new Date(all.meta.generatedAt);
+      document.getElementById('data-timestamp').textContent =
+        'Data updated: ' + ts.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) +
+        ' ' + ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+    }
+  } catch(e) {
+    console.warn('site-data.json not found, timeline cannot load:', e.message);
+    document.querySelector('.container').innerHTML +=
+      '<div style="color:#ef4444;text-align:center;padding:40px;">Failed to load timeline data from site-data.json</div>';
+    return;
+  }
+
+  // Set slider max based on loaded data
+  const slider = document.getElementById('slider');
+  slider.max = QUARTERS.length - 1;
+
+  // Build tick labels
+  const tickContainer = document.getElementById('tick-labels');
+  QUARTERS.forEach(q => { tickContainer.innerHTML += '<span>' + q.q + '</span>'; });
+
+  // Init charts and show first quarter
+  initCharts();
+  updateToQuarter(0);
+}
+
+function initCharts() {
+  chartRev = new Chart(document.getElementById('chart-rev'), {
+    type: 'bar',
+    data: { labels: PROV_NAMES, datasets: [{ data: REV_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } }, scales: { y: { grid: darkGrid, title: { display: true, text: '$B' } }, x: { grid: { display: false } } } }
+  });
+
+  chartTokens = new Chart(document.getElementById('chart-tokens'), {
+    type: 'bar',
+    data: { labels: PROV_NAMES, datasets: [{ data: TOKEN_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + 'T/day' } } }, scales: { y: { max: 300, grid: darkGrid, title: { display: true, text: 'T/day' } }, x: { grid: { display: false } } } }
+  });
+
+  chartPrice = new Chart(document.getElementById('chart-price'), {
+    type: 'line',
+    data: {
+      labels: QUARTERS.map(q => q.q),
+      datasets: [
+        { label: 'OpenAI', data: PRICE_DATA.map(p => p.openai), borderColor: '#10a37f', backgroundColor: '#10a37f33', fill: false, tension: 0.3, pointRadius: 4 },
+        { label: 'Anthropic', data: PRICE_DATA.map(p => p.anthropic), borderColor: '#d97706', backgroundColor: '#d9770633', fill: false, tension: 0.3, pointRadius: 4 },
+        { label: 'Google', data: PRICE_DATA.map(p => p.google), borderColor: '#4285f4', backgroundColor: '#4285f433', fill: false, tension: 0.3, pointRadius: 4 },
+        { label: 'Open / Meta Models', data: PRICE_DATA.map(p => p.open), borderColor: '#60a5fa', backgroundColor: '#60a5fa33', fill: false, tension: 0.3, pointRadius: 4, borderDash: [6,3] },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y + '/M tokens' } } },
+      scales: { y: { type: 'logarithmic', grid: darkGrid, title: { display: true, text: '$/1M output tokens (log)' } }, x: { grid: { display: false } } }
+    }
+  });
+}
+
+function updateToQuarter(idx) {
+  const q = QUARTERS[idx];
+  document.getElementById('q-label').textContent = q.q;
+  document.getElementById('q-sub').textContent = q.date;
+
+  const revs = REV_DATA[idx];
+  const toks = TOKEN_DATA[idx];
+  const totalRev = revs.reduce((a, b) => a + b, 0);
+  const totalTok = toks.reduce((a, b) => a + b, 0);
+  const topIdx = revs.indexOf(Math.max(...revs));
+
+  document.getElementById('h-tokens').textContent = '~' + totalTok + 'T';
+  document.getElementById('h-rev').textContent = '$' + totalRev.toFixed(1) + 'B';
+  document.getElementById('h-top').textContent = PROV_NAMES[topIdx];
+  const price = PRICE_DATA[idx];
+  document.getElementById('h-price').textContent = '$' + price.open.toFixed(2) + ' open / $' + Math.min(price.openai, price.anthropic, price.google).toFixed(1) + ' frontier';
+
+  chartRev.data.datasets[0].data = revs;
+  chartRev.update('active');
+  chartTokens.data.datasets[0].data = toks;
+  chartTokens.update('active');
+
+  // Highlight current quarter on price chart
+  chartPrice.options.plugins.annotation = undefined; // simplified — just update
+
+  const ev = EVENTS[idx];
+  const deltaHtml = ev.delta ? '<div style="margin-top:8px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:6px;font-size:11px;color:var(--accent);font-weight:600;">' + ev.delta + '</div>' : '';
+  document.getElementById('event-card').innerHTML = '<h3>' + ev.title + '</h3><p>' + ev.text + '</p>' + deltaHtml;
+}
+
+// Slider
+document.getElementById('slider').addEventListener('input', function() {
+  updateToQuarter(parseInt(this.value));
+});
+
+// Play animation
+let playing = false;
+function playAnimation() {
+  if (playing || !QUARTERS) return;
+  playing = true;
+  const btn = document.getElementById('play-btn');
+  const slider = document.getElementById('slider');
+  btn.textContent = '\u23F8 Playing...';
+  slider.value = 0;
+  updateToQuarter(0);
+
+  let i = 0;
+  const interval = setInterval(() => {
+    i++;
+    if (i >= QUARTERS.length) {
+      clearInterval(interval);
+      playing = false;
+      btn.textContent = '\u25B6 Play Again';
+      return;
+    }
+    slider.value = i;
+    updateToQuarter(i);
+  }, 1500);
+}
+
+// Load data and initialize
+loadTimelineData();
+</script>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice.</footer>
+</body>
+</html>

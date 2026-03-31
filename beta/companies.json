@@ -1,0 +1,2092 @@
+{
+  "meta": {
+    "name": "AI Company Intelligence Database",
+    "version": "2.0",
+    "created": "2026-03-26",
+    "last_updated": "2026-03-30",
+    "schema_version": "2.0",
+    "company_types": [
+      "AI Startup",
+      "AI Cloud",
+      "Digital Native",
+      "AI Infrastructure",
+      "Enterprise AI",
+      "AI Model Provider",
+      "Global High-Volume Consumer"
+    ]
+  },
+  "companies": [
+    {
+      "id": "dify",
+      "company_name": "Dify (LangGenius, Inc.)",
+      "hq_country": "US (founded by Chinese team, offices in Shanghai/Suzhou/Tokyo)",
+      "apac_presence": "China, Japan",
+      "product": "Open-source LLMOps / agentic workflow platform",
+      "product_category": "AI Infrastructure / LLM Orchestration",
+      "models_used": [
+        "OpenAI GPT-4/3.5",
+        "Anthropic Claude 3",
+        "Google Gemini",
+        "Azure OpenAI",
+        "AWS Bedrock",
+        "Meta Llama",
+        "Mistral",
+        "Cohere",
+        "Groq",
+        "Together.ai",
+        "OpenRouter",
+        "xAI Grok"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic",
+        "Google"
+      ],
+      "estimated_volume_tier": "High — 280+ enterprise customers, 1.4M+ deployments across 175 countries",
+      "funding": "$30M Series Pre-A at $180M valuation (March 2026)",
+      "revenue_estimate": null,
+      "employee_count": 94,
+      "key_contacts": [
+        {
+          "name": "Luyu Zhang",
+          "title": "Co-Founder & CEO",
+          "linkedin": "https://www.linkedin.com/in/luyu-zhang/"
+        },
+        {
+          "name": "John Wang",
+          "title": "Co-Founder & Chief Engineer",
+          "linkedin": "https://cn.linkedin.com/in/john-wang-takatost"
+        },
+        {
+          "name": "Junchen (Richard) Yan",
+          "title": "Co-Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Founding team from Tencent Cloud DevOps. Model-agnostic platform — supports 40+ providers. Enterprise customers include Maersk, Novartis, Panasonic, Deloitte, NTT. GitHub top-51 most-starred project.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://dify.ai/",
+        "https://docs.dify.ai/",
+        "https://tracxn.com/d/companies/dify/"
+      ],
+      "enrichment": {
+        "website_title": "Dify: Leading Agentic Workflow Builder",
+        "website_description": "Unlock agentic workflow with Dify. Develop, deploy, and manage autonomous agents, RAG pipelines, and more for teams at any scale, effortlessly.",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:05:45.291778"
+      }
+    },
+    {
+      "id": "easeus-easemate",
+      "company_name": "EaseUS (CHENGDU YIWO Tech Development Co., Ltd.)",
+      "hq_country": "China",
+      "apac_presence": "China (Chengdu, Sichuan)",
+      "product": "EaseMate AI — multi-model AI assistant platform & Chrome extension",
+      "product_category": "Consumer AI Aggregator / Wrapper",
+      "models_used": [
+        "OpenAI GPT-4.1/GPT-4o/GPT-5",
+        "Anthropic Claude 3 Haiku",
+        "Google Gemini 2.0/2.5",
+        "xAI Grok 3/4",
+        "DeepSeek V3/R1",
+        "Meta Llama 3.3",
+        "Alibaba Qwen 3",
+        "Moonshot Kimi K2/K2.5",
+        "Midjourney",
+        "FLUX",
+        "Google Veo 3",
+        "OpenAI Sora 2"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Google",
+        "DeepSeek"
+      ],
+      "estimated_volume_tier": "Medium — 5-10M users across 190 countries, credit-based consumer model",
+      "funding": "Bootstrapped (founded 2004)",
+      "revenue_estimate": "$11.2M annually (Growjo estimate)",
+      "employee_count": 180,
+      "key_contacts": [
+        {
+          "name": "Ji'en Liu",
+          "title": "Founder & President/Chairman",
+          "linkedin": "https://www.linkedin.com/in/ji-an-liu-1449b5b/"
+        },
+        {
+          "name": "Jianhua Wan",
+          "title": "CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Ye Tao",
+          "title": "Technology Director (CTO equivalent)",
+          "linkedin": null
+        },
+        {
+          "name": "Ou Sun",
+          "title": "Marketing & Sales Director",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Traditional data recovery company pivoting to AI. EaseMate is a multi-model wrapper — packages third-party APIs into consumer micro-tools. Only uses Claude 3 Haiku (cheapest tier) suggesting cost sensitivity. Mixed Trustpilot reviews. Pricing starts $8.90/mo.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.easemate.ai/",
+        "https://www.easeus.com/company/index.htm"
+      ],
+      "enrichment": {
+        "website_title": "EaseMate AI: All-In-One AI Assistant for Study, Work, and Creativity",
+        "website_description": "EaseMate AI leverages cutting-edge AI models, including GPT-4.1 mini, GPT-4o mini, Gork 3 Mini, Gemini 2.5 Pro, Meta Llama 3.3, Claude 3 HaiKu, Deepseek V3, DeepSeek R1, Qwen3, etc.,  to effectively assist you in handling multi-tasks in study, research, work, and even creativity. Let EaseMate AI Assistant offer all-in-one solutions to enhance your chat, search, writing, designing, study, and researching experiences.",
+        "has_pricing_page": true,
+        "last_enriched": "2026-03-30T09:05:46.019339"
+      }
+    },
+    {
+      "id": "clawx-valuecell",
+      "company_name": "ClawX (ValueCell-ai)",
+      "hq_country": "China (likely)",
+      "apac_presence": "China",
+      "product": "Desktop GUI for OpenClaw AI agents",
+      "product_category": "AI Agent Desktop Client",
+      "models_used": [
+        "OpenAI GPT/Codex",
+        "Anthropic Claude",
+        "Google Gemini",
+        "Moonshot/Kimi",
+        "Alibaba Qwen"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic",
+        "Google"
+      ],
+      "estimated_volume_tier": "Unknown — open-source, part of massive OpenClaw adoption wave in China (600M+ Chinese GenAI users)",
+      "funding": "Unknown",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Unknown",
+          "title": "Leadership undisclosed",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Deliberately opaque organization. China-specific site at clawx.com.cn, WeChat/Tencent integration. Part of broader OpenClaw ecosystem — China adoption is 2x US. Open source (MIT). Contact: public@valuecell.ai. Tech stack: React 19, Electron, TypeScript. Latest release v0.2.4.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://github.com/ValueCell-ai/ClawX",
+        "https://claw-x.com/"
+      ],
+      "enrichment": {
+        "github_stars": 5806,
+        "github_forks": 783,
+        "github_language": "TypeScript",
+        "github_last_push": "2026-03-29T12:54:01Z",
+        "github_public_repos": 2,
+        "github_followers": 286,
+        "website_title": "ClawX - Open Source AI Research Assistant | 24/7 Autonomous Data Monitoring",
+        "website_description": "ClawX is an open-source desktop AI research assistant built on the OpenClaw ecosystem. Runs 24/7 on your computer, autonomously browsing the web, monitoring data sources, and delivering AI-powered research summaries through WhatsApp, Telegram, Slack, and 20+ channels.",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:05:47.448130"
+      }
+    },
+    {
+      "id": "portkey",
+      "company_name": "Portkey.ai",
+      "hq_country": "US (San Francisco, engineering team in India)",
+      "apac_presence": "India (engineering hub)",
+      "product": "AI Gateway — unified control plane for production AI systems",
+      "product_category": "AI Infrastructure / Gateway",
+      "models_used": [
+        "1,600+ models across 40+ providers"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic",
+        "Google",
+        "Azure OpenAI",
+        "Mistral",
+        "Meta"
+      ],
+      "estimated_volume_tier": "Very High — 1 TRILLION+ tokens/day, 120M+ AI requests/day, $180M+ annualized AI spend managed",
+      "funding": "$18M total ($3M Seed Aug 2023, $15M Series A Feb 2026)",
+      "revenue_estimate": "$5M in 2024",
+      "employee_count": 38,
+      "key_contacts": [
+        {
+          "name": "Rohit Agarwal",
+          "title": "Co-Founder & CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Ayush Garg",
+          "title": "Co-Founder & CTO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Founded by ex-Pepper Content team. 24,000+ orgs using platform. Sub-1ms latency gateway. Gartner Cool Vendor 2025. Gateway went fully open source March 24, 2026. Customers include Postman, Snorkel AI, Turing, Fortune 500s. Internet2 NET+ provider (300+ US universities). Indian founders, India engineering team, Lightspeed India + Elevation Capital backed.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://portkey.ai/",
+        "https://github.com/Portkey-AI/gateway"
+      ],
+      "enrichment": {
+        "github_stars": 11108,
+        "github_forks": 964,
+        "github_language": "TypeScript",
+        "github_last_push": "2026-03-25T09:33:55Z",
+        "github_public_repos": 33,
+        "github_followers": 366,
+        "website_title": "Production Stack for Gen AI Builders|Portkey",
+        "website_description": "Democratize and productionize Gen AI across your entire org with Portkey",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:05:48.698568"
+      }
+    },
+    {
+      "id": "blackboxai",
+      "company_name": "BLACKBOX.AI",
+      "hq_country": "US (San Francisco, possible Canadian roots)",
+      "apac_presence": "Middle East expansion (Saudi Arabia partnership with SambaNova)",
+      "product": "AI-powered coding assistant & Universal Agent Platform",
+      "product_category": "AI Developer Tools / Code Generation",
+      "models_used": [
+        "OpenAI GPT-4o/GPT-5",
+        "Anthropic Claude 3.5 Sonnet/Claude 4/Opus 4.6",
+        "Google Gemini Pro/3",
+        "Meta LLaMA 3.1/4",
+        "xAI Grok 4",
+        "DeepSeek R1",
+        "Mistral",
+        "Qwen",
+        "ElevenLabs"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic",
+        "Google",
+        "DeepSeek"
+      ],
+      "estimated_volume_tier": "Very High — 20M+ developers, 221.5M website visits/year, 878K daily visits",
+      "funding": "Bootstrapped (Spade Ventures minor investment)",
+      "revenue_estimate": "$31.7M annually (2025)",
+      "employee_count": 180,
+      "key_contacts": [
+        {
+          "name": "Robert Rizk",
+          "title": "CEO & Co-Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Richard Rizk",
+          "title": "CTO & Co-Founder",
+          "linkedin": "https://www.linkedin.com/in/richard-rizk-a09a70213/"
+        },
+        {
+          "name": "Roger Rizk",
+          "title": "COO & Co-Founder",
+          "linkedin": "https://www.linkedin.com/in/roger-rizk-70b91233/"
+        },
+        {
+          "name": "Jad Irani",
+          "title": "Head of Growth",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Family-run (three Rizk brothers). Bootstrapped to ~$32M revenue. Multi-agent parallel execution — dispatches tasks to multiple AI agents and picks best result. VS Code extension has 3.96M+ installs. a16z Top 25 Gen AI app. Microsoft Partner. SambaNova partnership for Middle East expansion. Enterprise clients include Meta, IBM, Google, Salesforce.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.blackbox.ai/",
+        "https://pitchbook.com/profiles/company/279672-22"
+      ],
+      "enrichment": {
+        "website_title": "BLACKBOX AI",
+        "website_description": "Build and ship software faster with BLACKBOX AI: multi-agent coding, AI-native IDE, VS Code extension, CLI, and a unified inference API.",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:05:49.453863"
+      }
+    },
+    {
+      "id": "wrtn",
+      "company_name": "Wrtn Technologies",
+      "hq_country": "South Korea (Seoul)",
+      "apac_presence": "South Korea, expanding to Japan, UAE",
+      "product": "AI chatbot aggregator — free access to GPT-5, Claude. Operates Crack (top Korean AI character app)",
+      "product_category": "Consumer AI Aggregator",
+      "models_used": [
+        "OpenAI GPT-4o",
+        "OpenAI GPT-4.1",
+        "OpenAI GPT-5",
+        "Anthropic Claude",
+        "Stable Diffusion"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic"
+      ],
+      "estimated_volume_tier": "Very High — 6.5M MAU, ~$100M ARR, offers GPT-5 free (absorbs API costs)",
+      "funding": "~$90M total, Series B $73.5M led by Goodwater Capital",
+      "revenue_estimate": "On track for $100M ARR",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Lee Seyoung",
+          "title": "CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Dong-jae Lee",
+          "title": "CPO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Massive API consumer — offers GPT-5 free to 6.5M users, absorbing costs. Router architecture with lightweight models for classification. Expanding to Japan, UAE, US by mid-2026.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://wrtn.ai"
+      ],
+      "enrichment": {
+        "website_title": "뤼튼",
+        "website_description": "AI 글쓰기, AI 이미지 생성 등 전세계 최신 AI를 무료로",
+        "last_enriched": "2026-03-30T09:05:50.223801"
+      }
+    },
+    {
+      "id": "monica-ai",
+      "company_name": "Monica AI (Butterfly Effect)",
+      "hq_country": "Singapore (originally Beijing/Wuhan, China)",
+      "apac_presence": "China, Singapore",
+      "product": "All-in-one AI browser extension and assistant — chat, search, writing, coding, translation",
+      "product_category": "Consumer AI Aggregator",
+      "models_used": [
+        "OpenAI GPT-4o",
+        "OpenAI GPT-5.2",
+        "Anthropic Claude 4.5",
+        "Google Gemini 3 Pro",
+        "DeepSeek R1",
+        "OpenAI Sora 2"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic",
+        "Google",
+        "DeepSeek"
+      ],
+      "estimated_volume_tier": "Very High — 10M+ users, Manus sister product hit $100M ARR in 9 months",
+      "funding": "Series A led by Tencent and Sequoia China. Manus valued at $500M, acquired by Meta for ~$2-3B",
+      "revenue_estimate": null,
+      "employee_count": 105,
+      "key_contacts": [
+        {
+          "name": "Xiao Hong",
+          "title": "CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Ji Yichao",
+          "title": "Chief Scientist",
+          "linkedin": null
+        },
+        {
+          "name": "Zhang Tao",
+          "title": "Product Partner",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "One of largest APAC API consumers. Orchestration layer routes across multiple Western AI APIs. Manus (sister product) acquired by Meta Dec 2025. Monica still operates independently.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://monica.im"
+      ],
+      "enrichment": {
+        "website_title": "Monica - All-In-One AI Assistant | GPT-5.2, Claude 4.5, Gemini 3 Pro, Sora 2, Nano Banana, all-in-one AI tools",
+        "website_description": "Monica is an all-in-one AI assistant powered by GPT-5.2, Claude 4.5, Gemini 3 Pro, Sora 2, and leading AI models. Access AI chat, smart search, writing assistance, document summarization, translation, code generation, image creation, and video generation—all directly on any webpage. Boost productivity with advanced natural language processing, content creation tools, and multilingual support. Perfect for students, professionals, writers, developers, and content creators seeking powerful AI tools",
+        "has_pricing_page": true,
+        "last_enriched": "2026-03-30T09:05:51.484529"
+      }
+    },
+    {
+      "id": "minimax",
+      "company_name": "MiniMax Group",
+      "hq_country": "China (Shanghai, listed in Hong Kong)",
+      "apac_presence": "China, Hong Kong, global",
+      "product": "Multimodal AI — Talkie (character app), Hailuo AI (video gen), developer API platform",
+      "product_category": "AI Model Provider / Consumer App",
+      "models_used": [
+        "Proprietary MiniMax-M1 (4.56T params)",
+        "Anthropic Claude (distillation accused)"
+      ],
+      "primary_providers": [
+        "Anthropic",
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 212M cumulative users, $150M+ cloud bills, billions API calls/day",
+      "funding": "$1.5B+ pre-IPO, $619M IPO Jan 2026. Market cap ~$13.7B",
+      "revenue_estimate": "$53.4M in 9 months (174% YoY growth)",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Yan Junjie",
+          "title": "CEO & Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Anthropic identified MiniMax distilling from Claude API (16M+ exchanges, 24K accounts). Investors: Alibaba, miHoYo, Tencent, Hillhouse. ~70% revenue from overseas.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://minimaxi.com",
+        "https://www.minimax.io/"
+      ],
+      "enrichment": {
+        "website_title": "MiniMax",
+        "website_description": "MiniMax是全球领先的通用人工智能科技公司，致力于&quot;与所有人共创智能&quot;，自主研发了一系列多模态通用大模型，并面向全球推出一系列AI原生产品，已服务逾 2亿名用户",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:05:54.380248"
+      }
+    },
+    {
+      "id": "moonshot-ai",
+      "company_name": "Moonshot AI (Kimi)",
+      "hq_country": "China (Beijing)",
+      "apac_presence": "China, US (Ohai, Noisee apps)",
+      "product": "Kimi chatbot (2M character context), Ohai (roleplay), Noisee (music video)",
+      "product_category": "AI Model Provider / Consumer App",
+      "models_used": [
+        "Proprietary Kimi K1.5/K2/K2.5 (1T params MoE)",
+        "Anthropic Claude (distillation accused)"
+      ],
+      "primary_providers": [
+        "Anthropic"
+      ],
+      "estimated_volume_tier": "Very High — API revenue 4x growth overseas, 170% MoM paying user growth",
+      "funding": "~$1.8B+ raised, seeking $1B at $18B valuation",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Yang Zhilin",
+          "title": "CEO & Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Zhou Xinyu",
+          "title": "Co-Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Wu Yuxin",
+          "title": "Co-Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Named by Anthropic as distilling from Claude via thousands of fraudulent accounts. Yang Zhilin is prominent NLP researcher (XLNet, Transformer-XL). Investors: Alibaba, Tencent, IDG.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://moonshot.cn",
+        "https://kimi.ai"
+      ],
+      "enrichment": {
+        "website_title": "Moonshot AI",
+        "website_description": "欢迎探索月之暗面，寻求将能源转化为智能的最优解",
+        "last_enriched": "2026-03-30T09:05:57.207276"
+      }
+    },
+    {
+      "id": "classmethod",
+      "company_name": "Classmethod",
+      "hq_country": "Japan (Tokyo)",
+      "apac_presence": "Japan, Thailand, Vietnam, Korea, Germany, Canada",
+      "product": "Cloud integrator — uses Claude Code for AI-driven development. Operates Developers.IO platform",
+      "product_category": "Cloud Services / AI Integration",
+      "models_used": [
+        "Anthropic Claude (Claude Code)"
+      ],
+      "primary_providers": [
+        "Anthropic"
+      ],
+      "estimated_volume_tier": "High — 15,000+ AWS accounts, 3,000+ companies served, 99% of rulesync project by Claude",
+      "funding": "Private, not disclosed",
+      "revenue_estimate": "$29.6M annually (2025)",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Satoshi Yokota",
+          "title": "CEO & Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Featured Anthropic customer case study. Heavy Claude API consumer for internal dev and client projects. 3,500+ AWS certifications. Developers.IO has 50K+ articles, 3M+ monthly page views.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://classmethod.jp/en"
+      ],
+      "enrichment": {
+        "website_title": "エアプラス オンライン海外旅行サイトのAWS化 | クラスメソッド株式会社",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:05:59.406994"
+      }
+    },
+    {
+      "id": "sakana-ai",
+      "company_name": "Sakana AI",
+      "hq_country": "Japan (Tokyo)",
+      "apac_presence": "Japan",
+      "product": "Nature-inspired AI models — breeds/merges existing models. AI Scientist for automated research",
+      "product_category": "AI Research / Model Builder",
+      "models_used": [
+        "OpenAI models",
+        "Google models",
+        "Model merging/breeding approach"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Google"
+      ],
+      "estimated_volume_tier": "High — $2.65B valuation, model merging requires frontier API access",
+      "funding": "$379M total. Investors: Nvidia, Mitsubishi UFJ, SMBC, Mizuho, Itochu, KDDI",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "David Ha",
+          "title": "CEO (ex-Stability AI, Google)",
+          "linkedin": null
+        },
+        {
+          "name": "Llion Jones",
+          "title": "Co-Founder (Attention Is All You Need co-author)",
+          "linkedin": null
+        },
+        {
+          "name": "Ren Ito",
+          "title": "Co-Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Japan's most valuable AI unicorn. Model-merging approach inherently consumes frontier model outputs. Expanding to defense, banking, manufacturing, government. Llion Jones co-authored the Transformer paper.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://sakana.ai"
+      ],
+      "enrichment": {
+        "website_title": "Sakana AI",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:05:59.646746"
+      }
+    },
+    {
+      "id": "cinnamon-ai",
+      "company_name": "Cinnamon AI",
+      "hq_country": "Japan (Tokyo, operations in Vietnam/Taiwan)",
+      "apac_presence": "Japan, Vietnam, Taiwan",
+      "product": "Enterprise AI document reader (Flax Scanner) — RAG service integrating docs with LLMs",
+      "product_category": "Enterprise AI / Document Intelligence",
+      "models_used": [
+        "LLM APIs for RAG service"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic"
+      ],
+      "estimated_volume_tier": "Medium — 50+ enterprise clients, $16.8M revenue",
+      "funding": "$52.9M total, $39M Series C (2020)",
+      "revenue_estimate": "$16.8M annually (2025)",
+      "employee_count": 102,
+      "key_contacts": [
+        {
+          "name": "Miku Hirano",
+          "title": "CEO & Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Well-established enterprise AI. Integrates LLM APIs into document processing for large Japanese corps (Dai-ichi Life Insurance). Handles 50+ document types including handwritten.",
+      "last_researched": "2026-03-26",
+      "sources": [
+        "https://cinnamon.is"
+      ]
+    },
+    {
+      "id": "sarvam-ai",
+      "company_name": "Sarvam AI",
+      "hq_country": "India (Bengaluru)",
+      "apac_presence": "India",
+      "product": "Sovereign AI platform for India — LLMs for 22+ Indian languages, speech, translation APIs",
+      "product_category": "AI Model Provider / Sovereign AI",
+      "models_used": [
+        "Proprietary Sarvam 30B/105B (Mistral-Small base)",
+        "OpenAI-compatible API"
+      ],
+      "primary_providers": [
+        "Mistral",
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "High — India sovereign AI initiative, UIDAI/Aadhaar partnership, Microsoft partnership",
+      "funding": "$54M total led by Lightspeed, Peak XV, Khosla Ventures",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Pratyush Kumar",
+          "title": "CEO (ex-IIT Bombay, IBM, Microsoft)",
+          "linkedin": null
+        },
+        {
+          "name": "Vivek Raghavan",
+          "title": "Co-Founder (ex-UIDAI/Aadhaar)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "India's leading sovereign AI startup. Selected for IndiaAI Mission. Building Sarvam Kaze AI-powered wearable glasses. Anthropic reported 5x usage growth from India.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.sarvam.ai"
+      ],
+      "enrichment": {
+        "website_title": "Sarvam | India&#39;s Full-Stack Sovereign AI Platform",
+        "website_description": "India",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:01.370176"
+      }
+    },
+    {
+      "id": "upstage",
+      "company_name": "Upstage AI",
+      "hq_country": "South Korea (Seoul, co-HQ San Jose)",
+      "apac_presence": "South Korea",
+      "product": "Solar LLM family (domain-specific) and Document AI (OCR for finance/healthcare)",
+      "product_category": "AI Model Provider / Document Intelligence",
+      "models_used": [
+        "Proprietary Solar Pro 2",
+        "Solar Mini",
+        "Available via Amazon Bedrock"
+      ],
+      "primary_providers": [
+        "AWS"
+      ],
+      "estimated_volume_tier": "High — Fortune 500 clients incl Samsung, Korea's most-funded AI software company",
+      "funding": "$157M total. Series B $72M, bridge $45M from Amazon, AMD, KDB",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Sung Kim",
+          "title": "CEO & Co-Founder (ex-HKUST, ex-Naver Clova)",
+          "linkedin": null
+        },
+        {
+          "name": "Park Eunjeong",
+          "title": "Co-Founder & CSO (heads US ops)",
+          "linkedin": null
+        },
+        {
+          "name": "Lee Hwalsuk",
+          "title": "CTO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Korea's first frontier-recognized model (Solar Pro 2). CB Insights AI 100. Negotiating 10,000 AMD MI355X accelerators. SoftBank Ventures investor.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.upstage.ai"
+      ],
+      "enrichment": {
+        "website_title": "Upstage AI - Building intelligence for the future of work",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:01.674345"
+      }
+    },
+    {
+      "id": "katalon",
+      "company_name": "Katalon",
+      "hq_country": "US (Atlanta), R&D in Vietnam (Hanoi)",
+      "apac_presence": "Vietnam (R&D hub)",
+      "product": "AI-augmented software testing — TrueTest for autonomous test generation/maintenance",
+      "product_category": "AI Developer Tools / Testing",
+      "models_used": [
+        "OpenAI GPT models"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Medium — Gartner Magic Quadrant Visionary, enterprise scale",
+      "funding": "Not publicly disclosed",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Vu Lam",
+          "title": "CEO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Vietnamese-founded. Named Visionary in 2025 Gartner Magic Quadrant for AI-Augmented Software Testing. Consumes OpenAI at enterprise scale.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://katalon.com"
+      ],
+      "enrichment": {
+        "website_title": "Katalon AI-augmented Test Automation Platform",
+        "website_description": "Transform software quality with Katalon’s AI powered testing platform. Automate faster, integrate seamlessly, and deliver reliable web, mobile, API, and desktop apps.",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:02.375117"
+      }
+    },
+    {
+      "id": "yellow-ai",
+      "company_name": "Yellow.ai",
+      "hq_country": "India (Bangalore, co-HQ San Mateo)",
+      "apac_presence": "India",
+      "product": "Agentic AI platform for enterprise customer service — omnichannel chatbots, voice assistants",
+      "product_category": "Enterprise AI / Conversational",
+      "models_used": [
+        "Proprietary YellowG model",
+        "15+ LLMs integrated"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Google"
+      ],
+      "estimated_volume_tier": "Very High — 1,300+ enterprise clients, 16B+ conversations annually, $79.5M revenue",
+      "funding": "$102M total, Series C led by WestBridge, Sapphire, Salesforce Ventures",
+      "revenue_estimate": "$79.5M in 2024 (up from $39.7M in 2023)",
+      "employee_count": 875,
+      "key_contacts": [
+        {
+          "name": "Raghu Ravinutala",
+          "title": "CEO & Co-Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Jaya Kishore Reddy Gollareddy",
+          "title": "Co-Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Rashid Khan",
+          "title": "Co-Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Enterprise clients: Sony, Domino's, Hyundai, Volkswagen. Multi-LLM architecture. Revenue doubled YoY.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://yellow.ai/"
+      ],
+      "enrichment": {
+        "website_title": "AI Agents for CX and EX Automation - Yellow.ai",
+        "website_description": "Enterprise AI agents powered by 15+ LLMs. Eliminates the trade-off between quality, cost and scale. Experience now.",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:03.270028"
+      }
+    },
+    {
+      "id": "gupshup",
+      "company_name": "Gupshup",
+      "hq_country": "India (Mumbai, co-HQ Cupertino)",
+      "apac_presence": "India (60% of revenue)",
+      "product": "Conversational AI messaging platform — unified API for 30+ channels (WhatsApp, RCS, SMS)",
+      "product_category": "Enterprise AI / Messaging",
+      "models_used": [
+        "Proprietary ACE LLM",
+        "Third-party LLM APIs"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 50,000+ customers, 120B+ messages/year, $1.4B unicorn",
+      "funding": "$447M total, Series F led by Tiger Global",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Beerud Sheth",
+          "title": "Founder & CEO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "120B+ messages processed annually. 130+ countries. Unicorn valued at $1.4B.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.gupshup.io/"
+      ],
+      "enrichment": {
+        "website_title": "Gupshup.ai | Autonomous AI Agents for Sales, Marketing &amp; Customer Support",
+        "website_description": "Deploy secure, scalable AI Agents with enterprise-ready infrastructure. Gupshup powers billions of customer conversations across channels and industries.",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:06.432811"
+      }
+    },
+    {
+      "id": "nurix-ai",
+      "company_name": "Nurix AI",
+      "hq_country": "India (Bangalore)",
+      "apac_presence": "India",
+      "product": "Enterprise AI agents with human-like voice — targets $300B BPO industry",
+      "product_category": "Enterprise AI / Voice",
+      "models_used": [
+        "Proprietary voice AI",
+        "LLM infrastructure"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic"
+      ],
+      "estimated_volume_tier": "Medium — 60+ enterprise clients, 60-70% processing time reduction",
+      "funding": "$27.5M from General Catalyst, Accel, Prosus",
+      "revenue_estimate": null,
+      "employee_count": 130,
+      "key_contacts": [
+        {
+          "name": "Mukesh Bansal",
+          "title": "Founder & CEO (ex-Myntra/Cult.fit founder)",
+          "linkedin": null
+        },
+        {
+          "name": "Abhishek Asawa",
+          "title": "Co-Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Founded by Mukesh Bansal (sold Myntra to Flipkart). Clients: Myntra, Cult.fit, Aditya Birla Capital.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.nurix.ai/"
+      ],
+      "enrichment": {
+        "website_title": "Nurix AI - Conversational AI for Sales and Support",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:06.560928"
+      }
+    },
+    {
+      "id": "corover-ai",
+      "company_name": "CoRover.ai",
+      "hq_country": "India (Bangalore)",
+      "apac_presence": "India",
+      "product": "BharatGPT — multi-lingual (100+ languages) conversational AI for government and banks",
+      "product_category": "Enterprise AI / Government",
+      "models_used": [
+        "Proprietary BharatGPT",
+        "Google Vertex AI",
+        "NVIDIA"
+      ],
+      "primary_providers": [
+        "Google",
+        "NVIDIA"
+      ],
+      "estimated_volume_tier": "High — 1B+ users impacted, 50,000+ enterprises, IRCTC 150K+ queries/day",
+      "funding": "$5.72M, Series A led by Venture Catalysts",
+      "revenue_estimate": "$10.5M, profitable 3+ years",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Ankush Sabharwal",
+          "title": "Co-Founder, CEO & CTO",
+          "linkedin": null
+        },
+        {
+          "name": "Manav Gandotra",
+          "title": "Co-Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Powers Indian Railways (IRCTC), Delhi Metro, LIC, NPCI, SEBI, 70+ banks. Google Cloud and Microsoft co-sell partnerships. Profitable.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://corover.ai/"
+      ],
+      "enrichment": {
+        "website_title": "CoRover - Conversational AI Platform | Enterprise Virtual Assistants",
+        "website_description": "World&#x27;s first BharatGPT-powered human-centric Agentic AI platform delivering the highest ROI through generative AI agents. Enterprise-grade virtual assistants to accelerate and grow your business.",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:07.708225"
+      }
+    },
+    {
+      "id": "haptik",
+      "company_name": "Haptik (Jio Haptik)",
+      "hq_country": "India (Mumbai)",
+      "apac_presence": "India",
+      "product": "Enterprise conversational AI — virtual assistants across WhatsApp, web, voice. Built India govt Corona Helpdesk",
+      "product_category": "Enterprise AI / Conversational",
+      "models_used": [
+        "Proprietary conversational AI",
+        "LLM APIs for generative features"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 2B+ conversations processed, backed by Reliance Jio (500M+ customers)",
+      "funding": "Acquired by Reliance Jio for $100M (2019)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Ahshad Jussawala",
+          "title": "CEO (joined Feb 2025)",
+          "linkedin": null
+        },
+        {
+          "name": "Aakrit Vaish",
+          "title": "Founder & former CEO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Owned by Reliance Jio. Clients: KFC, Whirlpool, HP, Disney Hotstar, OLA, Zurich Insurance. Reliance backing gives massive distribution.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.haptik.ai/"
+      ],
+      "enrichment": {
+        "website_title": "Build Enterprise-Grade Customer Experience AI Agents | Jio Haptik",
+        "website_description": "Get started with building enterprise-grade Conversational AI Agents powered by Jio Haptik",
+        "last_enriched": "2026-03-30T09:06:08.510422"
+      }
+    },
+    {
+      "id": "zhipu-ai",
+      "company_name": "Zhipu AI (Z.ai)",
+      "hq_country": "China (Beijing, spun out of Tsinghua)",
+      "apac_presence": "China",
+      "product": "GLM series LLMs via API platform (bigmodel.cn). Consumer app Zhipu Qingyan, AutoGLM mobile agent",
+      "product_category": "AI Model Provider",
+      "models_used": [
+        "Proprietary GLM-4.5 through GLM-5 (745B params)"
+      ],
+      "primary_providers": [],
+      "estimated_volume_tier": "Very High — 2.7M paying developers, 12,000+ enterprise clients, HKEX IPO $558M",
+      "funding": "RMB 2.5B (~$342M) Series B from Meituan, Alibaba, Tencent",
+      "revenue_estimate": "190M RMB (~$27M) H1 2025",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Tang Jie",
+          "title": "CEO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Third-largest LLM player in China per IDC. API pricing ~$0.11/M tokens. Open-source models. IPO Jan 2026 on HKEX. Tsinghua University spin-out.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://bigmodel.cn/",
+        "https://z.ai/"
+      ],
+      "enrichment": {
+        "website_title": "智谱AI开放平台",
+        "website_description": "智谱大模型开放平台-新一代国产自主通用AI大模型开放平台，是国内大模型排名前列的大模型网站，研发了多款LLM模型，多模态视觉模型产品，致力于将AI产品技术与行业场景双轮驱动的中国先进的认知智能技术和千行百业应用相结合，构建更高精度、高效率、通用化的AI开发新模式和企业级解决方案，实现智谱大模型的产业化，将AI的好处带给每个人。",
+        "last_enriched": "2026-03-30T09:06:09.570304"
+      }
+    },
+    {
+      "id": "api7",
+      "company_name": "API7.ai (Apache APISIX)",
+      "hq_country": "China (Shenzhen, Singapore presence)",
+      "apac_presence": "China, Singapore",
+      "product": "AI Gateway built on Apache APISIX — multi-LLM load balancing, rate limiting, routing",
+      "product_category": "AI Infrastructure / Gateway",
+      "models_used": [
+        "Routes to OpenAI, Anthropic Claude, DeepSeek, Mistral, Google Gemini"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic",
+        "Google",
+        "DeepSeek",
+        "Mistral"
+      ],
+      "estimated_volume_tier": "Very High — 10+ TRILLION API requests/day, 300,000+ services",
+      "funding": "Series A from Matrix Partners China",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Ming Wen",
+          "title": "Co-Founder & CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Yuansheng Wang",
+          "title": "Co-Founder & CTO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Like Portkey but Chinese. Routes/load-balances across LLM providers. Enterprise customers: Zoom, McDonald's, OPPO, vivo, Hisense, Lotus Cars, GEELY. Open source Apache project.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://api7.ai/"
+      ],
+      "enrichment": {
+        "website_title": "Apache APISIX &amp; Open-Source API Gateway - API7.ai",
+        "website_description": "API7.ai, the original creator of Apache APISIX, delivers a cloud-native API Gateway solution for the Enterprise, to help you maximize the value of APIs.",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:09.895515"
+      }
+    },
+    {
+      "id": "reka-ai",
+      "company_name": "Reka AI",
+      "hq_country": "Singapore (also San Jose)",
+      "apac_presence": "Singapore",
+      "product": "Custom multimodal LLMs for enterprise — video, image, text, audio. Reka Nexus agent platform",
+      "product_category": "AI Model Provider",
+      "models_used": [
+        "Proprietary Reka Core",
+        "Reka Flash (21B)",
+        "Reka Edge"
+      ],
+      "primary_providers": [],
+      "estimated_volume_tier": "High — $1B valuation unicorn, deep Snowflake integration",
+      "funding": "$168M total. $110M from NVIDIA and Snowflake. DST Global, Radical Ventures",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Dani Yogatama",
+          "title": "CEO & Co-Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Yi Tay",
+          "title": "Chief Scientist & Co-Founder (now back at Google)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Singapore unicorn. Rivals GPT-4 and Gemini Ultra. Deploys on cloud, on-prem, VPC, air-gapped. Healthcare, finance, creative focus.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://reka.ai/"
+      ],
+      "enrichment": {
+        "website_title": "Reka",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:10.317844"
+      }
+    },
+    {
+      "id": "skit-ai",
+      "company_name": "Skit.ai",
+      "hq_country": "India (Bangalore)",
+      "apac_presence": "India, US operations",
+      "product": "AI voice automation for contact centers and debt collection — 16+ Indian languages, 160+ dialects",
+      "product_category": "Enterprise AI / Voice",
+      "models_used": [
+        "Proprietary VIVA/VASR",
+        "LLM APIs for conversational intelligence"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "High — 1M+ debt collection calls automated/week, 80% call center automation",
+      "funding": "$47.6M total, Series B from WestBridge, Kalaari",
+      "revenue_estimate": null,
+      "employee_count": 400,
+      "key_contacts": [
+        {
+          "name": "Sourabh Gupta",
+          "title": "CEO & Co-Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Akshay Deshraj",
+          "title": "CTO & Co-Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "60+ enterprise clients. Automates 1M+ debt collection calls/week in US. 16+ Indian languages, 160+ dialects.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://skit.ai/"
+      ],
+      "enrichment": {
+        "website_title": "Skit | AI Debt Collection Software for Lean Collection Teams",
+        "website_description": "Tech-first collections that scale teams, sharpen targeting, standardise experiences, and outperform agency led models | Trusted by 120+ Modern collection teams",
+        "last_enriched": "2026-03-30T09:06:11.417454"
+      }
+    },
+    {
+      "id": "baichuan-ai",
+      "company_name": "Baichuan AI",
+      "hq_country": "China (Beijing)",
+      "apac_presence": "China",
+      "product": "Enterprise LLM platform — open-source and proprietary models. Pivoting to AI healthcare",
+      "product_category": "AI Model Provider",
+      "models_used": [
+        "Proprietary Baichuan-7B/13B/4",
+        "Baichuan4-Turbo"
+      ],
+      "primary_providers": [],
+      "estimated_volume_tier": "Very High — $2.7B valuation, 12+ LLMs released since 2023",
+      "funding": "$1.04B total. Series A $691M from Alibaba, Tencent, Xiaomi",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Wang Xiaochuan",
+          "title": "Founder & CEO (former CEO of Sogou/Tencent)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "One of China's AI Tigers. Founded by ex-Sogou CEO. Merged with Baichuan Medical 2025 — healthcare pivot. Open-source Apache 2.0. Investors: Alibaba, Tencent, Xiaomi.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.baichuan-ai.com/"
+      ],
+      "enrichment": {
+        "website_title": "百川大模型-汇聚世界知识 创作妙笔生花-百川智能",
+        "website_description": "百川智能以帮助大众轻松、普惠地获取世界知识和专业服务为使命，致力于通过语言AI的突破，构建中国最优秀的大模型底座。百川大模型，融合了意图理解、信息检索以及强化学习技术，结合有监督微调与人类意图对齐，在知识问答、文本创作领域表现突出。",
+        "last_enriched": "2026-03-30T09:06:13.695319"
+      }
+    },
+    {
+      "id": "alibaba-cloud",
+      "company_name": "Alibaba Cloud",
+      "hq_country": "China (Hangzhou)",
+      "apac_presence": "China, Southeast Asia, global",
+      "product": "AI Cloud — Model Studio, AI Gateway, Alibaba Token Hub. Qwen models + OpenAI/Anthropic-compatible API routing",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "Proprietary Qwen models",
+        "OpenAI-compatible APIs",
+        "Anthropic-compatible APIs"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic"
+      ],
+      "estimated_volume_tier": "Very High — AI >20% of cloud rev, $52.4B AI/cloud spend committed FY26-28",
+      "funding": "Alibaba subsidiary (NYSE: BABA)",
+      "revenue_estimate": "Projected $100B AI+cloud over 5 years",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Eddie Wu",
+          "title": "CEO, Alibaba Group (leads Token Hub division)",
+          "linkedin": null
+        },
+        {
+          "name": "Zhou Jingren",
+          "title": "CTO, Alibaba Cloud & Head of Tongyi Lab",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "After OpenAI exited China, offered migration plans. AI Gateway routes to Claude, Moonshot, Zhipu. >30% IaaS market share in China. OpenAI+Anthropic compatible API endpoints.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.alibabacloud.com"
+      ],
+      "enrichment": {
+        "website_title": "Digital Transformation for Your Business in Australia &amp; New Zealand with Alibaba Cloud",
+        "website_description": "Alibaba Cloud supports your business in Australia or New Zealand, to empower the digital transformation by providing integrated suite of scalable, secure and reliable cloud products and services. Try for Free.",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:16.076162"
+      }
+    },
+    {
+      "id": "tencent-cloud",
+      "company_name": "Tencent Cloud",
+      "hq_country": "China (Shenzhen)",
+      "apac_presence": "China, Southeast Asia, global",
+      "product": "ADP (Agent Development Platform), Hunyuan LLM Platform — 30+ models, enterprise AI agents",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "Proprietary Hunyuan models",
+        "OpenAI-compatible migration APIs"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — Hunyuan powers 900+ internal scenarios, tripled AI capex",
+      "funding": "Tencent subsidiary (HKEX: 0700)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Dowson Tong",
+          "title": "SVP, CEO Cloud and Smart Industries",
+          "linkedin": null
+        },
+        {
+          "name": "Yao Shunyu",
+          "title": "Chief AI Scientist (ex-OpenAI)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Chief AI Scientist is ex-OpenAI researcher. Hunyuan downloaded 2.6M+ times on HuggingFace. 88% price cut on Hunyuan-Standard. OpenAI migration services after China exit.",
+      "last_researched": "2026-03-26",
+      "sources": [
+        "https://www.tencentcloud.com"
+      ]
+    },
+    {
+      "id": "baidu-cloud",
+      "company_name": "Baidu Intelligent Cloud",
+      "hq_country": "China (Beijing)",
+      "apac_presence": "China",
+      "product": "Qianfan LLM Platform — MaaS with ERNIE models + open-source. OpenAI SDK compatible",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "Proprietary ERNIE 3.5/4.0",
+        "Meta Llama-2",
+        "OpenAI SDK compatible"
+      ],
+      "primary_providers": [
+        "Meta",
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 33K customized models, 770K industry apps, led China LLM market (IDC)",
+      "funding": "Baidu subsidiary (NASDAQ: BIDU)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Shen Dou",
+          "title": "EVP, Baidu Group (heads Qianfan)",
+          "linkedin": null
+        },
+        {
+          "name": "Robin Li",
+          "title": "CEO, Baidu",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "65% of China central enterprises collaborate with Baidu Cloud. Free ERNIE Speed/Lite models after OpenAI China exit. Financial-specific model (Qianfan Huijin).",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://cloud.baidu.com"
+      ],
+      "enrichment": {
+        "website_title": "百度智能云-云智一体深入产业",
+        "website_description": "百度智能云致力于为企业和开发者提供全球领先的人工智能、大数据和云计算服务，加速产业智能化转型升级",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:18.831879"
+      }
+    },
+    {
+      "id": "softbank-ai",
+      "company_name": "SoftBank Corp. / SB Intuitions",
+      "hq_country": "Japan (Tokyo)",
+      "apac_presence": "Japan",
+      "product": "Sarashina LLM API, sovereign cloud with Oracle Alloy, AITRAS GPU-as-a-Service",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "Proprietary Sarashina",
+        "OpenAI (JV partner)",
+        "Oracle Alloy"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — World's largest NVIDIA DGX SuperPOD, $960M invested in Japanese AI, OpenAI JV",
+      "funding": "SoftBank subsidiary (TYO: 9434)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Junichi Miyakawa",
+          "title": "CEO, SoftBank Corp.",
+          "linkedin": null
+        },
+        {
+          "name": "Hironobu Tamba",
+          "title": "President & CEO, SB Intuitions",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Direct JV with OpenAI for Japanese data centers. World's largest NVIDIA DGX SuperPOD (B200). 20K employees trialed Sarashina internally. Oracle Alloy sovereign cloud launching Apr 2026.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.softbank.jp/en/"
+      ],
+      "enrichment": {
+        "website_title": "SoftBank",
+        "website_description": "SoftBank",
+        "last_enriched": "2026-03-30T09:06:18.967974"
+      }
+    },
+    {
+      "id": "ntt-group",
+      "company_name": "NTT Group",
+      "hq_country": "Japan (Tokyo)",
+      "apac_presence": "Japan, global (NTT DATA)",
+      "product": "tsuzumi 2 LLM, NTT AI Platform — lightweight Japanese-processing LLM for enterprise DX",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "Proprietary tsuzumi 2"
+      ],
+      "primary_providers": [],
+      "estimated_volume_tier": "High — ~$95B group revenue, NTT DATA is one of world's largest IT services",
+      "funding": "NTT Corporation (TYO: 9432)",
+      "revenue_estimate": "~$95B group revenue",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Akira Shimada",
+          "title": "President & CEO, NTT Corporation",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Sovereign/domestic AI approach. tsuzumi 2 targets cost reduction vs large Western LLMs. NTT DATA integrates Western AI models for global enterprise clients. FUJIFILM partnership.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://group.ntt/en/"
+      ],
+      "enrichment": {
+        "website_title": "NTT / NTT Group",
+        "website_description": "NTT Group",
+        "last_enriched": "2026-03-30T09:06:21.082240"
+      }
+    },
+    {
+      "id": "singtel",
+      "company_name": "Singtel Digital InfraCo",
+      "hq_country": "Singapore",
+      "apac_presence": "Singapore, Indonesia, Thailand, ASEAN",
+      "product": "RE:AI — AI Cloud Service, GPU-as-a-Service (NVIDIA H100/GB200/GB300)",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "H2O.AI",
+        "Hippocratic.AI",
+        "Hive AI",
+        "NVIDIA AI platform"
+      ],
+      "primary_providers": [
+        "NVIDIA"
+      ],
+      "estimated_volume_tier": "High — Frost & Sullivan 2025 SEA GPU-as-a-Service leader, sovereign AI data centers across ASEAN",
+      "funding": "Singtel subsidiary (SGX: Z74)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Bill Chang",
+          "title": "CEO, Digital InfraCo & Nxera",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Building sovereign AI data centers across Singapore, Indonesia, Thailand. GPU cloud alliance with Vultr and GMI Cloud. Singapore's $767M National AI Strategy 2.0. Bridge Alliance across ASEAN telcos.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.singtel.com"
+      ],
+      "enrichment": {
+        "website_title": "Singtel: Mobile, Fibre Broadband and TV services provider",
+        "website_description": "The Singtel Group, Asia",
+        "last_enriched": "2026-03-30T09:06:23.346075"
+      }
+    },
+    {
+      "id": "sk-telecom",
+      "company_name": "SK Telecom",
+      "hq_country": "South Korea (Seoul)",
+      "apac_presence": "South Korea",
+      "product": "A. (A dot) AI Platform — B2C/B2B AI agents, A.X Foundation Model (519B params)",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "Proprietary A.X K1 (519B params)",
+        "OpenAI (JV partner)"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 10M MAU, 50M+ daily AI requests, OpenAI JV for Korea data centers",
+      "funding": "SK Telecom (KRX: 017670)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Jung Jai-hun",
+          "title": "CEO, SK Telecom",
+          "linkedin": null
+        },
+        {
+          "name": "Yang Seung-hyun",
+          "title": "Head, AI R&D Center (CTO)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Direct OpenAI JV for Korean data centers. 519B parameter foundation model (largest in Korea, upgrading to 1T+). Trillion-won AI infra investment announced MWC26. 7 AI business divisions.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.sktelecom.com/en/"
+      ],
+      "enrichment": {
+        "website_title": "",
+        "last_enriched": "2026-03-30T09:06:24.240369"
+      }
+    },
+    {
+      "id": "samsung-sds",
+      "company_name": "Samsung SDS",
+      "hq_country": "South Korea (Seoul)",
+      "apac_presence": "South Korea, global",
+      "product": "AIOS (AI Operating System) on Samsung Cloud Platform — enterprise LLM cloud, OpenAI/LangChain SDK compatible",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "OpenAI SDK compatible",
+        "LangChain SDK compatible"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — W6.4T cash for AI/cloud, building National AI Computing Center (15K GPUs → 50K by 2030)",
+      "funding": "Samsung subsidiary (KRX: 018260)",
+      "revenue_estimate": "13.9T won (2025), targeting $1B annual cloud sales",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Lee Jun-hee",
+          "title": "CEO, Samsung SDS",
+          "linkedin": null
+        },
+        {
+          "name": "Kaeyoung Shin",
+          "title": "EVP, Gen.AI Business Team Leader",
+          "linkedin": null
+        },
+        {
+          "name": "Sungwoo Hwang",
+          "title": "President (GPU-centric AI cloud strategy)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "OpenAI JV for Korean data centers. ChatGPT Enterprise across Samsung operations. Building multiple AI data centers (Gumi, Dongtan). CES 2026 AI-Agent showcase.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.samsungsds.com/en/"
+      ],
+      "enrichment": {
+        "website_title": "Samsung SDS | Enterprise IT Solutions",
+        "website_description": "Cloud Service Provider Leading Digital Transformation for Clients",
+        "last_enriched": "2026-03-30T09:06:26.192689"
+      }
+    },
+    {
+      "id": "naver-cloud",
+      "company_name": "Naver Cloud",
+      "hq_country": "South Korea (Seongnam)",
+      "apac_presence": "South Korea, Japan",
+      "product": "Naver Cloud Platform, HyperCLOVA X (6,500x more Korean data than GPT-4), Agent N",
+      "product_category": "AI Cloud",
+      "models_used": [
+        "Proprietary HyperCLOVA X",
+        "Twelve Labs (US video AI)"
+      ],
+      "primary_providers": [],
+      "estimated_volume_tier": "High — Part of Korea's $1.7B National AI Computing Center, Korea's dominant internet platform",
+      "funding": "Naver subsidiary (KRX: 035420)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Choi Soo-yeon",
+          "title": "CEO, Naver Corp.",
+          "linkedin": null
+        },
+        {
+          "name": "Kim Yu-won",
+          "title": "CEO, Naver Cloud",
+          "linkedin": null
+        },
+        {
+          "name": "Lee Hae-jin",
+          "title": "Founder & Board Chair, Naver Corp.",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Sovereign AI approach — HyperCLOVA X trained on 6,500x more Korean data than GPT-4. Developing Omni Foundation Model (language+voice+video). Selected for sovereign AI champion project.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.ncloud.com/"
+      ],
+      "enrichment": {
+        "website_title": "NAVER CLOUD PLATFORM 네이버 클라우드 플랫폼",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:33.464796"
+      }
+    },
+    {
+      "id": "infosys",
+      "company_name": "Infosys",
+      "hq_country": "India (Bangalore)",
+      "apac_presence": "India, global",
+      "product": "Infosys Topaz AI Platform — AI-first services integrating GenAI/agentic AI for enterprise. Anthropic Centre of Excellence",
+      "product_category": "AI Cloud / Enterprise Services",
+      "models_used": [
+        "Anthropic Claude",
+        "Anthropic Claude Code",
+        "OpenAI",
+        "Google"
+      ],
+      "primary_providers": [
+        "Anthropic",
+        "OpenAI",
+        "Google"
+      ],
+      "estimated_volume_tier": "Very High — $275M/quarter AI services revenue, India = 2nd largest Claude.ai market",
+      "funding": "Public (NYSE: INFY)",
+      "revenue_estimate": "~$5B quarterly total, ~$275M/quarter AI services",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Salil Parekh",
+          "title": "CEO, Infosys",
+          "linkedin": null
+        },
+        {
+          "name": "Balakrishna D.R. (Bali)",
+          "title": "EVP, Global Services Head, AI and Industry Verticals",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Strategic Anthropic partner. Dedicated Anthropic Centre of Excellence in telecom practice. Engineers using Claude Code. Forrester Wave AI Technical Services Leader Q4 2025. One of first Anthropic enterprise partners in India.",
+      "last_researched": "2026-03-26",
+      "sources": [
+        "https://www.infosys.com"
+      ]
+    },
+    {
+      "id": "sea-shopee",
+      "company_name": "SEA Limited (Shopee/Garena)",
+      "hq_country": "Singapore",
+      "apac_presence": "Southeast Asia, Brazil",
+      "product": "E-commerce (Shopee), gaming (Garena), fintech (SeaMoney) — AI across customer service, ads, fraud, logistics",
+      "product_category": "Digital Native / Super-App",
+      "models_used": [
+        "OpenAI GPT-5",
+        "OpenAI Operator",
+        "Google agentic AI"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Google"
+      ],
+      "estimated_volume_tier": "Very High — $13B+ revenue, #1 SE Asia e-commerce, OpenAI strategic MOU",
+      "funding": "Public (NYSE: SE)",
+      "revenue_estimate": "$13B+ (2024)",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Forrest Li",
+          "title": "CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Gang Ye",
+          "title": "COO (former CTO)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "OpenAI launch partner for Operator in SEA. ChatGPT Plus bundled for Shopee VIP. CEO mandated AI integration across all operations. Google agentic AI shopping partnership.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.sea.com/news/348"
+      ],
+      "enrichment": {
+        "website_title": "Sea | News",
+        "website_description": "Sea is a global technology company founded in Singapore in 2009. Our mission is to better the lives of consumers and small businesses with technology. Sea operates three core businesses across digital entertainment, e-commerce, as well as digital payments and financial services, known as Garena, Shopee, and Monee, respectively.",
+        "last_enriched": "2026-03-30T09:06:34.807008"
+      }
+    },
+    {
+      "id": "grab",
+      "company_name": "Grab Holdings",
+      "hq_country": "Singapore",
+      "apac_presence": "Southeast Asia (8 countries)",
+      "product": "Super-app (ride-hailing, food delivery, payments) — AI Centre of Excellence, 1000+ AI models, in-house LLM kit",
+      "product_category": "Digital Native / Super-App",
+      "models_used": [
+        "OpenAI (voice assistant)",
+        "In-house LLM kit (multi-provider)"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 42M+ monthly transacting users, 100+ internal AI apps, 1000+ AI models",
+      "funding": "Public (NASDAQ: GRAB)",
+      "revenue_estimate": "~$2.8B (2024)",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Suthen Thomas Paradatheth",
+          "title": "CTO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "AI Centre of Excellence in Singapore. In-house LLM kit enables gen-AI apps in half a day (vs 1.5 weeks). OpenAI voice assistant for visually impaired users. 8 countries.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.grab.com/sg/"
+      ],
+      "enrichment": {
+        "website_title": "Grab. The Everyday Everything App",
+        "website_description": "Grab is Southeast Asia&#8217;s leading superapp. It provides everyday services like Deliveries, Mobility, Financial Services, and More.",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:34.958889"
+      }
+    },
+    {
+      "id": "goto-group",
+      "company_name": "GoTo Group (Gojek + Tokopedia)",
+      "hq_country": "Indonesia (Jakarta)",
+      "apac_presence": "Indonesia, Southeast Asia",
+      "product": "Super-app — co-developed Sahabat-AI open-source LLM (70B params) for Bahasa Indonesia",
+      "product_category": "Digital Native / Super-App",
+      "models_used": [
+        "Proprietary Sahabat-AI (70B)",
+        "NVIDIA AI Enterprise"
+      ],
+      "primary_providers": [
+        "NVIDIA"
+      ],
+      "estimated_volume_tier": "High — 100M+ MAU, dominant in Indonesia, sovereign LLM development",
+      "funding": "Public (IDX: GOTO)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "William Xiong",
+          "title": "Group CTO (ex-Alibaba Cloud VP)",
+          "linkedin": null
+        },
+        {
+          "name": "Hans Patuwo",
+          "title": "Incoming CEO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Co-developed Sahabat-AI with Indosat for Bahasa Indonesia. 8-9B → 70B params. On Hugging Face. CTO is ex-Alibaba Cloud VP. Hippocratic AI partnership.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.gotocompany.com/en/"
+      ],
+      "enrichment": {
+        "website_title": "GoTo: Go Together, Go Far",
+        "website_description": "We are the #1 technology champion in Indonesia and a leading consumer tech company globally. GoTo dedicated to empower progress in all of the societies in which we operate.",
+        "last_enriched": "2026-03-30T09:06:39.659395"
+      }
+    },
+    {
+      "id": "kakao",
+      "company_name": "Kakao Corporation",
+      "hq_country": "South Korea (Seongnam)",
+      "apac_presence": "South Korea",
+      "product": "KakaoTalk (53M MAU) — ChatGPT for Kakao, Kakao Agent linking AI to Kakao services",
+      "product_category": "Digital Native / Messaging",
+      "models_used": [
+        "OpenAI GPT-5",
+        "OpenAI Operator",
+        "Proprietary Kanana (on-device)"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 53M MAU (97% of Korea), first Korean company with OpenAI strategic partnership",
+      "funding": "Public (KRX: 035720)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Gyu-Don Jeong",
+          "title": "CTO",
+          "linkedin": null
+        },
+        {
+          "name": "Shina Chung",
+          "title": "CEO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "First Korean company with OpenAI strategic partnership (Feb 2025). GPT-5 in KakaoTalk. Kakao Agent links ChatGPT to KakaoMap, Melon, KakaoPay. Korea has most paid ChatGPT users outside US.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.kakaocorp.com/"
+      ],
+      "enrichment": {
+        "website_title": "카카오",
+        "website_description": "누구나 일상에서 AI를 경험할 수 있도록",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:43.331448"
+      }
+    },
+    {
+      "id": "razorpay",
+      "company_name": "Razorpay",
+      "hq_country": "India (Bangalore)",
+      "apac_presence": "India",
+      "product": "Payment gateway (55% India market share) — Agentic payments on Claude, Agent Studio with Claude SDK",
+      "product_category": "Digital Native / Fintech",
+      "models_used": [
+        "Anthropic Claude (Agent SDK)",
+        "OpenAI (ChatGPT merchant integration)",
+        "Sarvam AI"
+      ],
+      "primary_providers": [
+        "Anthropic",
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "High — $9.2B valuation, 55% payment gateway market share, in-chat UPI payments on Claude",
+      "funding": "$9.2B valuation (2025)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Harshil Mathur",
+          "title": "Co-founder & CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Shashank Kumar",
+          "title": "Co-founder & MD",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Built Agent Studio with Anthropic Claude Agent SDK. In-chat UPI payments on Claude for Zomato, Swiggy, Zepto with NPCI. 400+ API endpoints. MCP server for LLM-agent integration. IPO expected late 2026.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://razorpay.com/"
+      ],
+      "enrichment": {
+        "website_title": "Razorpay - Best Payment Solution for Online Payments India",
+        "website_description": "Online Payments India: Start Accepting Payments Instantly with Razorpay",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:45.318407"
+      }
+    },
+    {
+      "id": "freshworks",
+      "company_name": "Freshworks",
+      "hq_country": "India (Chennai, NASDAQ-listed)",
+      "apac_presence": "India, global",
+      "product": "SaaS (Freshdesk, Freshservice, Freshsales) — Freddy AI across all products, Agent Studio",
+      "product_category": "Digital Native / SaaS",
+      "models_used": [
+        "Azure OpenAI GPT-3.5-turbo",
+        "Azure OpenAI GPT-4",
+        "GPT-4o mini"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Azure OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 67K+ customers, ~$720M ARR, 1,700+ paying Freddy AI customers",
+      "funding": "Public (NASDAQ: FRSH)",
+      "revenue_estimate": "~$720M ARR",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Dennis Woodside",
+          "title": "CEO",
+          "linkedin": null
+        },
+        {
+          "name": "Murali Swaminathan",
+          "title": "CTO (ex-ServiceNow)",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Heavy Azure OpenAI consumer. Freddy AI Agent, Copilot, and Insights across all products. No-code Agent Studio. 67K+ customers globally.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.freshworks.com/"
+      ],
+      "enrichment": {
+        "website_title": "Freshworks: Uncomplicated Software | IT Service, Customer Service",
+        "website_description": "Freshworks enterprise-grade solutions are powerful, yet easy to use, and quick to deliver results for customer service and IT teams",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:45.478757"
+      }
+    },
+    {
+      "id": "zoho",
+      "company_name": "Zoho Corporation",
+      "hq_country": "India (Chennai)",
+      "apac_presence": "India, global",
+      "product": "Enterprise SaaS suite (55+ apps) — Zia AI assistant with OpenAI + proprietary Zia LLM, Agent Studio",
+      "product_category": "Digital Native / SaaS",
+      "models_used": [
+        "OpenAI GPT-4o mini",
+        "Proprietary Zia LLM (1.3B-7B)",
+        "Meta Llama",
+        "DeepSeek"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "NVIDIA"
+      ],
+      "estimated_volume_tier": "Very High — 100M+ users, 55+ apps, $1B+ revenue (private)",
+      "funding": "Private, bootstrapped",
+      "revenue_estimate": "$1B+ estimated",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Sridhar Vembu",
+          "title": "CEO & Founder",
+          "linkedin": null
+        },
+        {
+          "name": "Mani Vembu",
+          "title": "COO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Dual strategy: OpenAI APIs in Zia + proprietary Zia LLM (trained on NVIDIA) for data-sovereign customers. MCP server for agents. Supports Llama, DeepSeek. Bootstrapped.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://www.zoho.com/"
+      ],
+      "enrichment": {
+        "website_title": "Zoho | Cloud Software Suite for Businesses",
+        "website_description": "A unique and powerful software suite for businesses of all sizes. With 55+ applications, Zoho is trusted by 130 million+ users for their end-to-end business needs.",
+        "last_enriched": "2026-03-30T09:06:45.919114"
+      }
+    },
+    {
+      "id": "ly-corporation",
+      "company_name": "LY Corporation (LINE + Yahoo Japan)",
+      "hq_country": "Japan (Tokyo)",
+      "apac_presence": "Japan, Taiwan, Thailand, Indonesia",
+      "product": "LINE messaging (200M+ MAU), Yahoo Japan — AI Assistant, review summarization. Saves 700K-800K work hours/year",
+      "product_category": "Digital Native / Messaging",
+      "models_used": [
+        "OpenAI GPT-4",
+        "OpenAI GPT-4o"
+      ],
+      "primary_providers": [
+        "OpenAI"
+      ],
+      "estimated_volume_tier": "Very High — 200M+ MAU, OpenAI official case study, 700K-800K work hours saved/year",
+      "funding": "SoftBank/Naver subsidiary",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Euivin Park",
+          "title": "CTO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Official OpenAI case study. GPT-4/4o powers LINE AI Assistant and Yahoo Japan review summarization. Personal Agent AI in development. Chairman leaving for AI startup in 2026.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://openai.com/index/ly-corporation/"
+      ],
+      "enrichment": {
+        "website_title": "LY Corporation: Driving growth and ‘WOW’ moments with OpenAI | OpenAI",
+        "website_description": "LY Corporation: Driving growth and ‘WOW’ moments with OpenAI",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:47.033068"
+      }
+    },
+    {
+      "id": "mercari",
+      "company_name": "Mercari",
+      "hq_country": "Japan (Tokyo)",
+      "apac_presence": "Japan",
+      "product": "C2C marketplace — AI Listing Support (hundreds of AI listings/minute), AI Task Force of 100+ members",
+      "product_category": "Digital Native / E-commerce",
+      "models_used": [
+        "OpenAI GPT-4",
+        "OpenAI GPT-4o mini",
+        "Anthropic Claude Code"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic"
+      ],
+      "estimated_volume_tier": "High — 20M+ MAU, OpenAI official case study, AI-redesigning all operations",
+      "funding": "Public (TSE: 4385)",
+      "revenue_estimate": "~$1.5B GMV",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Shunya Kimura",
+          "title": "CTO",
+          "linkedin": null
+        },
+        {
+          "name": "Shintaro Yamada",
+          "title": "CEO & Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Official OpenAI case study. Hundreds of AI-assisted listings per minute. Engineers use Claude Code. AI Task Force 100+ members. OpenAI Japan hackathon co-host.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://openai.com/index/mercari/"
+      ],
+      "enrichment": {
+        "website_title": "Mercari enhances product listings and better supports sellers with GPT-4o mini | OpenAI",
+        "website_description": "Mercari leverages GPT-4o mini and GPT-4 to streamline selling, enhance product listings, and boost sales, transforming the online marketplace with features like AI Listing Support and Mercari AI Assistant.",
+        "has_pricing_page": true,
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:47.571240"
+      }
+    },
+    {
+      "id": "paytm",
+      "company_name": "Paytm (One97 Communications)",
+      "hq_country": "India (Noida)",
+      "apac_presence": "India",
+      "product": "Digital payments — Groq partnership for real-time AI inference, Perplexity AI search, AI Soundbox in 11 languages",
+      "product_category": "Digital Native / Fintech",
+      "models_used": [
+        "Groq (LPU inference)",
+        "Perplexity AI"
+      ],
+      "primary_providers": [
+        "Groq"
+      ],
+      "estimated_volume_tier": "High — 100M+ MAU, real-time AI across transactions, fraud, customer engagement",
+      "funding": "Public (BSE/NSE)",
+      "revenue_estimate": null,
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Vijay Shekhar Sharma",
+          "title": "CEO & Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Groq partnership for real-time AI inference at scale. Perplexity AI integration. First AI-powered Soundbox with voice assistant in 11 Indian languages.",
+      "last_researched": "2026-03-30",
+      "sources": [
+        "https://paytm.com/"
+      ],
+      "enrichment": {
+        "website_title": "Paytm: Secure &amp; Fast UPI Payments, Recharge Mobile &amp; Pay Bills",
+        "website_description": "Send money with UPI using any bank account. Recharge mobile and pay bills.",
+        "has_api_docs": true,
+        "last_enriched": "2026-03-30T09:06:48.539912"
+      }
+    },
+    {
+      "id": "coupang",
+      "company_name": "Coupang",
+      "hq_country": "South Korea (Seoul, NYSE-listed)",
+      "apac_presence": "South Korea",
+      "product": "E-commerce (\"Amazon of Korea\") — fine-tunes open-source LLMs, launched Coupang Intelligent Cloud (GPU-as-a-Service)",
+      "product_category": "Digital Native / E-commerce",
+      "models_used": [
+        "Meta LLaMA (fine-tuned)",
+        "T5",
+        "Microsoft Phi",
+        "Polyglot"
+      ],
+      "primary_providers": [
+        "Meta"
+      ],
+      "estimated_volume_tier": "Very High — $30B+ revenue, 30M+ active customers, competing for Korea $1B GPU cluster",
+      "funding": "Public (NYSE: CPNG)",
+      "revenue_estimate": "$30B+ (2024)",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Bom Kim",
+          "title": "CEO & Founder",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Primarily fine-tunes open-source models. Launched Coupang Intelligent Cloud (CIC) — GPU-as-a-Service. Competing for Korea's $1B GPU cluster contract. $65B+ market cap.",
+      "last_researched": "2026-03-26",
+      "sources": [
+        "https://www.coupang.com/"
+      ]
+    },
+    {
+      "id": "flipkart",
+      "company_name": "Flipkart (Walmart-owned)",
+      "hq_country": "India (Bangalore)",
+      "apac_presence": "India",
+      "product": "E-commerce — AI shopping assistants, multimodal search (Flipkart Immerse), GEO optimization for LLM chatbots",
+      "product_category": "Digital Native / E-commerce",
+      "models_used": [
+        "OpenAI ChatGPT",
+        "Anthropic Claude",
+        "Google Gemini",
+        "Perplexity"
+      ],
+      "primary_providers": [
+        "OpenAI",
+        "Anthropic",
+        "Google"
+      ],
+      "estimated_volume_tier": "Very High — ~$25B GMV, 500M+ registered users, evaluating multi-provider LLM strategy",
+      "funding": "Walmart subsidiary",
+      "revenue_estimate": "~$25B GMV",
+      "employee_count": null,
+      "key_contacts": [
+        {
+          "name": "Kalyan Krishnamurthy",
+          "title": "CEO",
+          "linkedin": null
+        }
+      ],
+      "outreach_status": "Not started",
+      "notes": "Evaluating GEO (Generative Engine Optimization) — optimizing product listings for ChatGPT/Claude/Gemini/Perplexity. Acquired Minivet for visual/conversational AI. Walmart backed.",
+      "last_researched": "2026-03-26",
+      "sources": [
+        "https://www.flipkart.com/"
+      ]
+    }
+  ]
+}

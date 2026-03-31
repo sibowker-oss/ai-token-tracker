@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Source List — Intel Vault</title>
+<script>
+// Simple auth gate — keeps casual visitors out (not cryptographic security)
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6'; // sha256 of 'password'
+  if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { sessionStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); }
+  .topbar h1 { font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; }
+  .topbar h1 span { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; }
+  .topbar-actions { display:flex; gap:8px; }
+  .topbar-actions button { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
+  .topbar-actions button:hover { background:#1e293b; color:var(--text); }
+
+  .container { max-width:1200px; margin:0 auto; padding:24px; }
+
+  .stats-bar { display:flex; gap:24px; margin-bottom:24px; font-size:12px; color:var(--text-dim); flex-wrap:wrap; }
+  .stats-bar strong { color:var(--text); }
+  .stat-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:12px 18px; display:flex; flex-direction:column; gap:4px; min-width:140px; }
+  .stat-card .stat-value { font-size:22px; font-weight:700; color:var(--text); }
+  .stat-card .stat-label { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; }
+
+  .section-header { font-size:13px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.8px; margin:28px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--card-border); display:flex; align-items:center; gap:8px; }
+  .section-header .count { background:var(--card); border:1px solid var(--card-border); padding:2px 8px; border-radius:10px; font-size:11px; color:var(--text); font-weight:700; }
+
+  .source-table { width:100%; border-collapse:separate; border-spacing:0; }
+  .source-table th { text-align:left; font-size:10px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.8px; padding:8px 12px; border-bottom:1px solid var(--card-border); position:sticky; top:0; background:var(--bg); }
+  .source-table td { padding:10px 12px; border-bottom:1px solid rgba(30,41,59,0.5); font-size:13px; vertical-align:top; }
+  .source-table tr:hover td { background:rgba(59,130,246,0.04); }
+  .source-table tr:last-child td { border-bottom:none; }
+
+  .source-name { font-weight:600; color:var(--text); }
+  .source-sub { font-size:11px; color:var(--text-dim); margin-top:2px; }
+
+  .method-badge { display:inline-block; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .method-api { background:rgba(16,185,129,0.15); color:var(--green); }
+  .method-scrape { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .method-rss { background:rgba(6,182,212,0.15); color:var(--cyan); }
+  .method-stt { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .method-youtube { background:rgba(239,68,68,0.15); color:var(--red); }
+  .method-manual { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+
+  .freq-badge { display:inline-block; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:600; background:rgba(59,130,246,0.12); color:var(--accent); }
+  .freq-weekly { background:rgba(139,92,246,0.12); color:var(--purple); }
+
+  .updates-list { list-style:none; font-size:11px; color:var(--text-dim); }
+  .updates-list li { margin-bottom:2px; }
+  .updates-list li::before { content:''; display:inline-block; width:4px; height:4px; border-radius:50%; background:var(--text-dim); margin-right:6px; vertical-align:middle; }
+
+  .status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+  .status-ok { background:var(--green); box-shadow:0 0 4px rgba(16,185,129,0.4); }
+  .status-stale { background:var(--orange); box-shadow:0 0 4px rgba(245,158,11,0.4); }
+  .status-error { background:var(--red); box-shadow:0 0 4px rgba(239,68,68,0.4); }
+  .status-manual { background:var(--text-dim); }
+
+  .last-check { font-size:12px; }
+  .last-check .timestamp { color:var(--text); }
+  .last-check .ago { color:var(--text-dim); font-size:11px; }
+
+  .card-group { background:var(--card); border:1px solid var(--card-border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+
+  .source-url { font-size:10px; color:var(--accent); text-decoration:none; word-break:break-all; }
+  .source-url:hover { text-decoration:underline; }
+
+  @media(max-width:768px) {
+    .container { padding:16px; }
+    .source-table { display:block; overflow-x:auto; }
+    .stats-bar { gap:12px; }
+    .stat-card { min-width:100px; }
+  }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <span style="flex-grow:1"></span>
+  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Vault</a>
+  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Sources</a>
+  <a href="claims.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Claims</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">In Development</a>
+</nav>
+
+<div class="topbar">
+  <h1>Source List <span>Admin</span></h1>
+  <div class="topbar-actions">
+    <button onclick="refreshStatus()">Refresh Status</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Summary stats -->
+  <div class="stats-bar" id="stats-bar"></div>
+
+  <!-- Automated Signal Sources -->
+  <div class="section-header">Automated Signal Sources — Daily <span class="count" id="daily-count"></span></div>
+  <div class="card-group">
+    <table class="source-table" id="daily-table"><thead><tr>
+      <th style="width:22%">Source</th>
+      <th style="width:12%">Method</th>
+      <th style="width:10%">Frequency</th>
+      <th style="width:26%">Updates</th>
+      <th style="width:15%">Last Checked</th>
+      <th style="width:15%">Status</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+
+  <!-- Weekly Automated -->
+  <div class="section-header">Automated Sources — Weekly <span class="count" id="weekly-count"></span></div>
+  <div class="card-group">
+    <table class="source-table" id="weekly-table"><thead><tr>
+      <th style="width:22%">Source</th>
+      <th style="width:12%">Method</th>
+      <th style="width:10%">Frequency</th>
+      <th style="width:26%">Updates</th>
+      <th style="width:15%">Last Checked</th>
+      <th style="width:15%">Status</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+
+  <!-- Podcast Sources -->
+  <div class="section-header">Podcast Transcript Pipeline <span class="count" id="podcast-count"></span></div>
+  <div class="card-group">
+    <table class="source-table" id="podcast-table"><thead><tr>
+      <th style="width:22%">Source</th>
+      <th style="width:12%">Method</th>
+      <th style="width:10%">Tier</th>
+      <th style="width:26%">Updates</th>
+      <th style="width:15%">Last Checked</th>
+      <th style="width:15%">Status</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+
+  <!-- Manual Sources -->
+  <div class="section-header">Manual Sources <span class="count" id="manual-count"></span></div>
+  <div class="card-group">
+    <table class="source-table" id="manual-table"><thead><tr>
+      <th style="width:22%">Source</th>
+      <th style="width:12%">Method</th>
+      <th style="width:10%">Frequency</th>
+      <th style="width:26%">Updates</th>
+      <th style="width:15%">Last Checked</th>
+      <th style="width:15%">Status</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+
+  <!-- Internal Data Stores -->
+  <div class="section-header" style="color:var(--text-dim);opacity:0.7">Internal Data Stores <span class="count" id="internal-count"></span></div>
+  <div class="card-group" style="opacity:0.6">
+    <table class="source-table" id="internal-table"><thead><tr>
+      <th style="width:22%">Data Store</th>
+      <th style="width:12%">Type</th>
+      <th style="width:10%">Updated</th>
+      <th style="width:26%">Contains</th>
+      <th style="width:15%">Last Modified</th>
+      <th style="width:15%">Status</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+
+</div>
+
+<script>
+// ────────────────────────────────────────────────────────────
+// Source Registry — every data source in the system
+// ────────────────────────────────────────────────────────────
+const SOURCES = {
+  daily: [
+    {
+      name: 'PyPI Download Stats',
+      sub: 'pypistats.org — 12 packages',
+      url: 'https://pypistats.org/api/packages',
+      method: 'api', methodLabel: 'REST API',
+      frequency: 'Daily 7am',
+      updates: ['signals_latest.json (pypi section)', 'dashboard.html SDK download counts', 'Derived: openai_total, anthropic_total, google_total'],
+      script: 'scrape_signals.py → auto_update.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'npm Download Stats',
+      sub: 'api.npmjs.org — 9 packages',
+      url: 'https://api.npmjs.org/downloads/point/last-month',
+      method: 'api', methodLabel: 'REST API',
+      frequency: 'Daily 7am',
+      updates: ['signals_latest.json (npm section)', 'Derived: SDK totals per provider'],
+      script: 'scrape_signals.py → auto_update.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'HuggingFace Model Downloads',
+      sub: 'huggingface.co/api — Llama, DeepSeek, Mistral, Qwen, Gemma',
+      url: 'https://huggingface.co/api/models',
+      method: 'api', methodLabel: 'REST API',
+      frequency: 'Daily 7am',
+      updates: ['signals_latest.json (huggingface section)', 'Derived: hf_total_downloads'],
+      script: 'scrape_signals.py → auto_update.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'GitHub Release Downloads',
+      sub: 'api.github.com — Ollama, vLLM, llama.cpp, TGI',
+      url: 'https://api.github.com/repos',
+      method: 'api', methodLabel: 'REST API',
+      frequency: 'Daily 7am',
+      updates: ['signals_latest.json (github section)', 'Derived: self_hosted_github'],
+      script: 'scrape_signals.py → auto_update.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'Docker Hub Pull Counts',
+      sub: 'hub.docker.com — vLLM container',
+      url: 'https://hub.docker.com/v2/repositories',
+      method: 'api', methodLabel: 'REST API',
+      frequency: 'Daily 7am',
+      updates: ['signals_latest.json (docker section)', 'site-data.json Others token estimate (auto-scaled)', 'Derived: self_hosted_docker'],
+      script: 'scrape_signals.py → auto_update.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'OpenRouter Model Catalog',
+      sub: 'openrouter.ai/api/v1/models',
+      url: 'https://openrouter.ai/api/v1/models',
+      method: 'api', methodLabel: 'REST API',
+      frequency: 'Daily 7am',
+      updates: ['signals_latest.json (openrouter section)', 'Model count, pricing distribution'],
+      script: 'scrape_signals.py → auto_update.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'OpenRouter Weekly Rankings',
+      sub: 'openrouter.ai/rankings — RSC page parse',
+      url: 'https://openrouter.ai/rankings',
+      method: 'scrape', methodLabel: 'Web Scrape',
+      frequency: 'Daily 7am',
+      updates: ['signals_latest.json (openrouter_rankings)', 'Weekly token volume by provider', 'GMV & ARR estimates'],
+      script: 'scrape_signals.py → auto_update.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'News Monitor (RSS)',
+      sub: 'TechCrunch, The Information, AI Business, CNBC, VentureBeat',
+      url: '',
+      method: 'rss', methodLabel: 'RSS Feed',
+      frequency: 'Daily 8am',
+      updates: ['data/news_alerts.json', 'Keyword-matched alerts for dashboard-relevant news'],
+      script: 'news_monitor.py',
+      lastCheckKey: 'news',
+    },
+  ],
+  weekly: [
+    {
+      name: 'Company Database Enrichment',
+      sub: 'GitHub API + website scraping — 25 companies',
+      url: '',
+      method: 'api', methodLabel: 'REST API + Scrape',
+      frequency: 'Monday 9am',
+      updates: ['companies.json (enrichment data)', 'GitHub stars, forks, org repos', 'Website metadata, pricing page detection'],
+      script: 'enrich.py --all',
+      lastCheckKey: 'enrich',
+    },
+    {
+      name: 'Newsletter Generation',
+      sub: 'HTML intelligence briefing from company DB',
+      url: '',
+      method: 'manual', methodLabel: 'Generated',
+      frequency: 'Monday 9am',
+      updates: ['newsletters/brief-{date}.html', 'Provider demand map, company profiles'],
+      script: 'newsletter.py --format html',
+      lastCheckKey: 'enrich',
+    },
+  ],
+  podcasts: [
+    {
+      name: 'Latent Space',
+      sub: 'www.latent.space — Substack',
+      url: 'https://www.latent.space/feed',
+      method: 'scrape', methodLabel: 'HTML Scrape',
+      tier: 1,
+      updates: ['transcripts/latent-space/*.md', 'data-updates/ claim candidates (via extract_claims.py)'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+    {
+      name: 'Acquired FM',
+      sub: 'acquired.fm — Webflow transcript pages',
+      url: 'https://feeds.transistor.fm/acquired',
+      method: 'scrape', methodLabel: 'HTML Scrape',
+      tier: 1,
+      updates: ['transcripts/acquired/*.md', 'data-updates/ claim candidates'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+    {
+      name: 'All-In Podcast',
+      sub: 'podcasts.happyscribe.com — speaker labels + timestamps',
+      url: 'https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg',
+      method: 'scrape', methodLabel: 'HTML Scrape',
+      tier: 1,
+      updates: ['transcripts/all-in/*.md', 'data-updates/ claim candidates'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+    {
+      name: 'BG2Pod',
+      sub: 'Brad Gerstner + Bill Gurley — YouTube captions',
+      url: 'https://anchor.fm/s/f06c2370/podcast/rss',
+      method: 'youtube', methodLabel: 'YouTube Captions',
+      tier: 2,
+      updates: ['transcripts/bg2pod/*.md', 'data-updates/ claim candidates'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+    {
+      name: '20VC',
+      sub: 'Harry Stebbings — Libsyn MP3 → Whisper',
+      url: 'https://rss.libsyn.com/shows/61840/destinations/240976.xml',
+      method: 'stt', methodLabel: 'Whisper STT',
+      tier: 3,
+      updates: ['transcripts/20vc/*.md', 'data-updates/ claim candidates'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+    {
+      name: 'SaaStr Podcast',
+      sub: 'Simplecast MP3 → Whisper',
+      url: 'https://feeds.simplecast.com/4MvgQ73R',
+      method: 'stt', methodLabel: 'Whisper STT',
+      tier: 3,
+      updates: ['transcripts/saastr/*.md', 'data-updates/ claim candidates'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+    {
+      name: 'Cognitive Revolution',
+      sub: 'Nathan Labenz — Megaphone MP3 → Whisper',
+      url: 'https://feeds.megaphone.fm/RINTP3108857801',
+      method: 'stt', methodLabel: 'Whisper STT',
+      tier: 3,
+      updates: ['transcripts/cognitive-revolution/*.md', 'data-updates/ claim candidates'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+    {
+      name: 'Big Technology Podcast',
+      sub: 'Alex Kantrowitz — Megaphone MP3 → Whisper',
+      url: 'https://feeds.megaphone.fm/LI3617121267',
+      method: 'stt', methodLabel: 'Whisper STT',
+      tier: 3,
+      updates: ['transcripts/big-technology/*.md', 'data-updates/ claim candidates'],
+      script: 'scrape_podcasts.py',
+      lastCheckKey: 'podcasts',
+    },
+  ],
+  manual: [
+    {
+      name: 'Vault — pages added manually',
+      sub: 'vault-data.json — sourced claims with credibility scoring',
+      url: '',
+      method: 'manual', methodLabel: 'Manual Entry',
+      frequency: 'As needed',
+      updates: ['vault.html reference data', 'Consensus calculations', 'Audit trail per page'],
+      script: 'vault.html UI form',
+      lastCheckKey: null,
+    },
+  ],
+  internal: [
+    {
+      name: 'site-data.json',
+      sub: 'Master data file — provider ARR, tokens, pricing, timeline, sankey',
+      type: 'Data Store',
+      updated: 'Auto + Manual',
+      contains: ['dashboard.html provider cards', 'timeline.html revenue & token charts', 'sankey.html revenue flow model'],
+      script: 'auto_update.py (Others auto-scale) + manual edits',
+      lastCheckKey: 'sitedata',
+    },
+    {
+      name: 'AI Companies Database',
+      sub: 'ai_companies_reclassified.json — 109 companies classified',
+      type: 'Data Store',
+      updated: 'Import + Enrichment',
+      contains: ['Company classification (AI-native, category)', 'Revenue estimates, funding, employee data'],
+      script: 'Imported from briefing; enriched by enrich.py',
+      lastCheckKey: null,
+    },
+    {
+      name: 'Claim Candidates Queue',
+      sub: 'data-updates/{date}-candidates.json — extracted podcast claims',
+      type: 'Processing Queue',
+      updated: 'Manual trigger',
+      contains: ['Structured claims from transcripts (Claude API)', 'Dedup status vs site-data.json', 'Optional auto-PR via --auto-pr'],
+      script: 'extract_claims.py',
+      lastCheckKey: null,
+    },
+    {
+      name: 'Signal History',
+      sub: 'data/signals_history.jsonl — append-only time series',
+      type: 'Data Store',
+      updated: 'Daily (auto)',
+      contains: ['Daily derived signal snapshots', 'Trend data for all scraped metrics'],
+      script: 'scrape_signals.py',
+      lastCheckKey: 'signals',
+    },
+    {
+      name: 'Health Monitor Reports',
+      sub: 'reports/monitor-{date}.md — database staleness & completeness',
+      type: 'Report Output',
+      updated: 'Manual trigger',
+      contains: ['Stale entries (>14d)', 'Incomplete fields', 'Pipeline status'],
+      script: 'monitor.py --report',
+      lastCheckKey: null,
+    },
+  ],
+};
+
+// ────────────────────────────────────────────────────────────
+// Last-check timestamps from live data files
+// ────────────────────────────────────────────────────────────
+let lastChecks = {};
+
+async function loadTimestamps() {
+  // Signals (daily 7am scraper)
+  try {
+    const sig = await fetch('data/signals_latest.json?t=' + Date.now()).then(r => r.json());
+    lastChecks.signals = sig.timestamp;
+  } catch(e) {}
+
+  // News monitor
+  try {
+    const news = await fetch('data/news_alerts.json?t=' + Date.now()).then(r => r.json());
+    if (news.date) {
+      lastChecks.news = news.date + 'T08:00:00';
+    }
+  } catch(e) {}
+
+  // Enrichment — check log file modification via signals date as proxy
+  try {
+    // Use companies.json last_updated field
+    const companies = await fetch('companies.json?t=' + Date.now()).then(r => r.json());
+    if (companies.meta && companies.meta.last_updated) {
+      lastChecks.enrich = companies.meta.last_updated + 'T09:00:00';
+    }
+  } catch(e) {}
+
+  // Podcasts — check .seen file timestamp via most recent transcript
+  try {
+    const seen = await fetch('transcripts/.seen?t=' + Date.now()).then(r => r.json());
+    // Most recent seen entry suggests last run
+    if (seen.length > 0) {
+      lastChecks.podcasts = 'See transcript files';
+    }
+  } catch(e) {}
+
+  // site-data.json
+  try {
+    const sd = await fetch('site-data.json?t=' + Date.now()).then(r => r.json());
+    if (sd.meta && sd.meta.generatedAt) {
+      lastChecks.sitedata = sd.meta.generatedAt;
+    }
+  } catch(e) {}
+}
+
+function timeAgo(isoStr) {
+  if (!isoStr || isoStr === 'See transcript files') return isoStr || 'Unknown';
+  const d = new Date(isoStr);
+  if (isNaN(d.getTime())) return isoStr;
+  const diff = Date.now() - d.getTime();
+  const mins = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  if (mins < 60) return mins + 'm ago';
+  if (hours < 24) return hours + 'h ago';
+  return days + 'd ago';
+}
+
+function formatTimestamp(isoStr) {
+  if (!isoStr || isoStr === 'See transcript files') return isoStr || '';
+  const d = new Date(isoStr);
+  if (isNaN(d.getTime())) return isoStr;
+  return d.toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' })
+    + ' ' + d.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', hour12:false });
+}
+
+function statusForCheck(key) {
+  if (!key) return { dot: 'status-manual', label: 'Manual' };
+  const ts = lastChecks[key];
+  if (!ts || ts === 'See transcript files') return { dot: 'status-stale', label: ts || 'No data' };
+  const d = new Date(ts);
+  if (isNaN(d.getTime())) return { dot: 'status-stale', label: 'Unknown' };
+  const hours = (Date.now() - d.getTime()) / 3600000;
+  if (hours < 26) return { dot: 'status-ok', label: 'OK' };
+  if (hours < 170) return { dot: 'status-ok', label: 'OK' }; // weekly is fine up to 7d
+  return { dot: 'status-stale', label: 'Stale' };
+}
+
+function methodClass(m) {
+  return 'method-' + m;
+}
+
+function renderRow(src, isPodcast) {
+  const ts = src.lastCheckKey ? lastChecks[src.lastCheckKey] : null;
+  const status = statusForCheck(src.lastCheckKey);
+  const urlHtml = src.url ? `<a class="source-url" href="${src.url}" target="_blank">${src.url.replace(/^https?:\/\//, '').substring(0, 45)}${src.url.length > 55 ? '...' : ''}</a>` : '';
+
+  const freqOrTier = isPodcast
+    ? `<span class="freq-badge${src.tier >= 2 ? ' freq-weekly' : ''}">Tier ${src.tier}</span>`
+    : `<span class="freq-badge${src.frequency && src.frequency.includes('Monday') ? ' freq-weekly' : ''}">${src.frequency || 'Manual'}</span>`;
+
+  const updatesHtml = (src.updates || []).map(u => `<li>${u}</li>`).join('');
+
+  return `<tr>
+    <td>
+      <div class="source-name">${src.name}</div>
+      <div class="source-sub">${src.sub}</div>
+      ${urlHtml ? '<div style="margin-top:3px">' + urlHtml + '</div>' : ''}
+      <div style="margin-top:3px;font-size:10px;color:var(--text-dim)">Script: ${src.script || 'n/a'}</div>
+    </td>
+    <td><span class="method-badge ${methodClass(src.method)}">${src.methodLabel}</span></td>
+    <td>${freqOrTier}</td>
+    <td><ul class="updates-list">${updatesHtml}</ul></td>
+    <td class="last-check">${ts
+      ? `<div class="timestamp">${formatTimestamp(ts)}</div><div class="ago">${timeAgo(ts)}</div>`
+      : '<span style="color:var(--text-dim)">—</span>'
+    }</td>
+    <td><span class="status-dot ${status.dot}"></span>${status.label}</td>
+  </tr>`;
+}
+
+function renderInternalRow(src) {
+  const ts = src.lastCheckKey ? lastChecks[src.lastCheckKey] : null;
+  const status = statusForCheck(src.lastCheckKey);
+  const containsHtml = (src.contains || []).map(u => `<li>${u}</li>`).join('');
+
+  return `<tr>
+    <td>
+      <div class="source-name">${src.name}</div>
+      <div class="source-sub">${src.sub}</div>
+      <div style="margin-top:3px;font-size:10px;color:var(--text-dim)">Script: ${src.script || 'n/a'}</div>
+    </td>
+    <td><span style="font-size:11px;color:var(--text-dim)">${src.type}</span></td>
+    <td><span style="font-size:11px;color:var(--text-dim)">${src.updated}</span></td>
+    <td><ul class="updates-list">${containsHtml}</ul></td>
+    <td class="last-check">${ts
+      ? `<div class="timestamp">${formatTimestamp(ts)}</div><div class="ago">${timeAgo(ts)}</div>`
+      : '<span style="color:var(--text-dim)">—</span>'
+    }</td>
+    <td><span class="status-dot ${status.dot}"></span>${status.label}</td>
+  </tr>`;
+}
+
+function renderAll() {
+  // Stats — count only real sources (not internal stores)
+  const totalAuto = SOURCES.daily.length + SOURCES.weekly.length;
+  const totalPodcasts = SOURCES.podcasts.length;
+  const totalManual = SOURCES.manual.length;
+  const total = totalAuto + totalPodcasts + totalManual;
+
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Sources</div></div>
+    <div class="stat-card"><div class="stat-value">${totalAuto}</div><div class="stat-label">Automated</div></div>
+    <div class="stat-card"><div class="stat-value">${totalPodcasts}</div><div class="stat-label">Podcast Feeds</div></div>
+    <div class="stat-card"><div class="stat-value">${totalManual}</div><div class="stat-label">Manual / Reference</div></div>
+    <div class="stat-card"><div class="stat-value">${lastChecks.signals ? formatTimestamp(lastChecks.signals).split(' ')[0] : '—'}</div><div class="stat-label">Last Signal Scrape</div></div>
+  `;
+
+  // Tables
+  document.getElementById('daily-count').textContent = SOURCES.daily.length;
+  document.getElementById('daily-table').querySelector('tbody').innerHTML =
+    SOURCES.daily.map(s => renderRow(s, false)).join('');
+
+  document.getElementById('weekly-count').textContent = SOURCES.weekly.length;
+  document.getElementById('weekly-table').querySelector('tbody').innerHTML =
+    SOURCES.weekly.map(s => renderRow(s, false)).join('');
+
+  document.getElementById('podcast-count').textContent = SOURCES.podcasts.length;
+  document.getElementById('podcast-table').querySelector('tbody').innerHTML =
+    SOURCES.podcasts.map(s => renderRow(s, true)).join('');
+
+  document.getElementById('manual-count').textContent = SOURCES.manual.length;
+  document.getElementById('manual-table').querySelector('tbody').innerHTML =
+    SOURCES.manual.map(s => renderRow(s, false)).join('');
+
+  document.getElementById('internal-count').textContent = SOURCES.internal.length;
+  document.getElementById('internal-table').querySelector('tbody').innerHTML =
+    SOURCES.internal.map(s => renderInternalRow(s)).join('');
+}
+
+async function refreshStatus() {
+  await loadTimestamps();
+  renderAll();
+}
+
+// Init
+(async () => {
+  await loadTimestamps();
+  renderAll();
+})();
+</script>
+</body>
+</html>

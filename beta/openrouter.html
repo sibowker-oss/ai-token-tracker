@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live AI Model Pricing & Gateway Insights — Global AI Intelligence</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:1400px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; }
+  .live-badge { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:16px; font-size:11px; color:var(--green); font-weight:600; margin-bottom:16px; }
+  .live-dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+  .stats-bar { display:flex; gap:24px; margin-bottom:24px; flex-wrap:wrap; }
+  .stat-item { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px 24px; text-align:center; flex:1; min-width:140px; }
+  .stat-item .val { font-size:24px; font-weight:800; }
+  .stat-item .lbl { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; }
+
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; }
+
+  .filters { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .filter-pill { padding:4px 12px; border-radius:16px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; }
+  .filter-pill.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .search-input { padding:8px 14px; background:#1e293b; border:1px solid #334155; border-radius:8px; color:var(--text); font-size:13px; outline:none; width:250px; }
+  .search-input:focus { border-color:var(--accent); }
+
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; padding:10px 12px; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); border-bottom:1px solid var(--card-border); cursor:pointer; user-select:none; }
+  th:hover { color:var(--text); }
+  td { padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+  tr:hover { background:rgba(255,255,255,0.02); }
+  .price { font-variant-numeric:tabular-nums; }
+  .price-cheap { color:var(--green); }
+  .price-mid { color:var(--orange); }
+  .price-expensive { color:var(--red); }
+  .provider-tag { padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .chart-wrap { height:350px; position:relative; }
+
+  .loading { text-align:center; padding:60px; color:var(--text-dim); }
+  .loading .spinner { display:inline-block; width:24px; height:24px; border:3px solid var(--card-border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .error { color:var(--red); text-align:center; padding:40px; }
+
+  .context-note { font-size:11px; color:var(--text-dim); margin-top:8px; padding:10px; background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.1); border-radius:6px; }
+
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+
+    /* Stats bar: wrap to 2-3 columns */
+    .stats-bar { gap:10px; }
+    .stat-item { min-width:calc(50% - 10px); flex:1 1 calc(50% - 10px); padding:12px 10px; }
+    .stat-item .val { font-size:18px; }
+    .stat-item .lbl { font-size:10px; }
+
+    /* Grid-2: single column */
+    .grid-2 { grid-template-columns:1fr; }
+    .chart-wrap { min-height:250px; height:280px; }
+
+    /* Cards */
+    .card { padding:14px; }
+    .card h2 { font-size:14px; }
+
+    /* Table: smaller font, horizontal scroll handled by overflow-x wrapper */
+    table th { padding:8px 6px; font-size:10px; }
+    table td { padding:6px; font-size:11px; }
+
+    /* Search + filters: stack vertically */
+    .search-filters-wrap { flex-direction:column !important; }
+    .search-input { width:100%; }
+    .filters { flex-wrap:wrap; }
+    .filter-pill { font-size:10px; padding:6px 10px; min-height:44px; display:inline-flex; align-items:center; }
+
+    .context-note { font-size:10px; }
+  }
+</style>
+</head>
+<body>
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
+  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
+  <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
+</nav>
+
+<div class="container">
+  <h1>Live Pricing & Gateway Insights</h1>
+  <div class="sub">Real-time pricing from OpenRouter API + token flow data from Portkey — the two largest public windows into global AI traffic.</div>
+  <div class="live-badge"><div class="live-dot"></div> Live data from openrouter.ai/api/v1/models</div>
+
+  <!-- Gateway Comparison Section -->
+  <div class="card" style="margin-bottom:24px; border:1px solid rgba(59,130,246,0.2); background:linear-gradient(135deg, rgba(59,130,246,0.05), rgba(168,85,247,0.05));">
+    <h2 style="margin-bottom:4px;">AI Gateway Traffic Comparison</h2>
+    <div style="padding:10px 14px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:8px;margin-bottom:14px;font-size:12px;color:var(--text);">
+      <strong style="color:var(--accent);">Enterprise consolidates; developers diversify.</strong>
+      <span style="color:var(--text-dim);"> Portkey handles 1.9T tokens/day for enterprise customers routing through 2-3 providers. OpenRouter serves 3,200B+ tokens/day across 400+ models — the long tail of AI demand.</span>
+    </div>
+    <div style="font-size:11px; color:var(--text-dim); margin-bottom:16px;">Both gateways are passthrough — tokens are already counted in provider totals. This is a window into demand distribution, not additive volume.</div>
+
+    <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
+      <span style="font-size:10px;color:var(--text-dim);padding-top:6px;min-width:55px;">Gateway:</span>
+      <button class="filter-pill active" id="gw-both" onclick="setGatewayView('both')">Both</button>
+      <button class="filter-pill" id="gw-portkey" onclick="setGatewayView('portkey')">Portkey only</button>
+      <button class="filter-pill" id="gw-openrouter" onclick="setGatewayView('openrouter')">OpenRouter only</button>
+    </div>
+    <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+      <span style="font-size:10px;color:var(--text-dim);padding-top:6px;min-width:55px;">Model type:</span>
+      <button class="filter-pill active" id="mt-all" onclick="setModelType('all')">All Models</button>
+      <button class="filter-pill" id="mt-frontier" onclick="setModelType('frontier')">Frontier (closed)</button>
+      <button class="filter-pill" id="mt-open" onclick="setModelType('open')">Open Models</button>
+    </div>
+
+    <!-- Gateway stats -->
+    <div class="stats-bar" style="margin-bottom:20px;">
+      <div class="stat-item" id="gw-stat-tokens"><div class="val" style="color:#a78bfa;">—</div><div class="lbl">Combined Tokens/Day</div></div>
+      <div class="stat-item" id="gw-stat-requests"><div class="val" style="color:var(--accent);">—</div><div class="lbl">Combined Requests/Day</div></div>
+      <div class="stat-item" id="gw-stat-spend"><div class="val" style="color:var(--green);">—</div><div class="lbl">Combined Daily Spend</div></div>
+      <div class="stat-item" id="gw-stat-growth"><div class="val" style="color:var(--orange);">—</div><div class="lbl">Portkey Weekly Growth</div></div>
+    </div>
+
+    <!-- Top models comparison -->
+    <div class="grid-2">
+      <div id="gw-portkey-panel">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-size:14px;font-weight:700;">Portkey</span>
+          <span style="font-size:10px;color:var(--text-dim);padding:2px 8px;background:rgba(168,85,247,0.1);border-radius:4px;">1.9T tokens/day · $1.3M/day</span>
+        </div>
+        <table style="font-size:11px;">
+          <thead><tr><th style="font-size:10px;">Model</th><th style="font-size:10px;">Tokens/Day</th><th style="font-size:10px;">$/Day</th><th style="font-size:10px;">Share</th></tr></thead>
+          <tbody id="gw-portkey-models"></tbody>
+        </table>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:6px;">Source: portkey.ai/rankings/daily · Updated 2026-03-27</div>
+      </div>
+      <div id="gw-openrouter-panel">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <span style="font-size:14px;font-weight:700;">OpenRouter</span>
+          <span id="or-live-stat" style="font-size:10px;color:var(--text-dim);padding:2px 8px;background:rgba(59,130,246,0.1);border-radius:4px;">Loading...</span>
+        </div>
+        <table style="font-size:11px;">
+          <thead><tr><th style="font-size:10px;">Model</th><th style="font-size:10px;">Tokens/Day</th><th style="font-size:10px;">$/Day</th><th style="font-size:10px;">Share</th></tr></thead>
+          <tbody id="gw-openrouter-models"></tbody>
+        </table>
+        <div style="font-size:9px;color:var(--text-dim);margin-top:6px;">Source: openrouter.ai/rankings · Estimated from public data</div>
+      </div>
+    </div>
+
+    <!-- Overlay chart -->
+    <div style="margin-top:20px;">
+      <h2 style="font-size:14px; margin-bottom:8px;">Model Share by Gateway</h2>
+      <div class="chart-wrap"><canvas id="chart-gateway"></canvas></div>
+    </div>
+
+    <div class="context-note">
+      <strong>Why this matters:</strong> Portkey serves enterprise/production AI (24K orgs) while OpenRouter skews developer/prosumer (2.5M users). Comparing their model rankings reveals whether enterprise and developer preferences align. Key finding: Claude dominates Portkey (~30% of traffic) while OpenRouter shows more model diversity — suggesting enterprises consolidate on fewer providers while developers experiment broadly.
+    </div>
+  </div>
+
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-item"><div class="val" style="color:var(--accent);" id="s-models">—</div><div class="lbl">Models Available</div></div>
+    <div class="stat-item"><div class="val" style="color:var(--green);" id="s-providers">—</div><div class="lbl">Providers</div></div>
+    <div class="stat-item"><div class="val" style="color:var(--orange);" id="s-cheapest">—</div><div class="lbl">Cheapest Output $/1M</div></div>
+    <div class="stat-item"><div class="val" style="color:var(--red);" id="s-expensive">—</div><div class="lbl">Most Expensive $/1M</div></div>
+    <div class="stat-item"><div class="val" style="color:#8b5cf6;" id="s-free">—</div><div class="lbl">Free Models</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Output Price Distribution <span style="font-size:11px;font-weight:400;color:var(--text-dim);">$/1M tokens · OpenRouter live data</span></h2>
+      <div class="chart-wrap"><canvas id="chart-dist"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Models by Provider <span style="font-size:11px;font-weight:400;color:var(--text-dim);">· OpenRouter catalogue</span></h2>
+      <div class="chart-wrap"><canvas id="chart-providers"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 id="price-compare-title">Model Price Comparison <span style="font-size:12px;font-weight:400;color:var(--text-dim);">— output $/1M tokens, live</span></h2>
+    <div class="chart-wrap"><canvas id="chart-frontier"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>All Models <span style="font-size:12px;font-weight:400;color:var(--text-dim);" id="model-count-label"></span></h2>
+
+    <div class="search-filters-wrap" style="display:flex; gap:12px; align-items:center; margin-bottom:16px; flex-wrap:wrap;">
+      <input type="text" class="search-input" id="search" placeholder="Search models..." oninput="filterTable()">
+      <div class="filters" id="provider-filters"></div>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table id="model-table">
+        <thead>
+          <tr>
+            <th onclick="sortTable('name')">Model ↕</th>
+            <th onclick="sortTable('provider')">Provider ↕</th>
+            <th onclick="sortTable('inputPrice')">Input $/1M ↕</th>
+            <th onclick="sortTable('outputPrice')">Output $/1M ↕</th>
+            <th onclick="sortTable('context')">Context ↕</th>
+            <th>Modality</th>
+          </tr>
+        </thead>
+        <tbody id="model-tbody"></tbody>
+      </table>
+    </div>
+    <div class="context-note">
+      Pricing pulled live from OpenRouter API. Prices shown are OpenRouter's rates (small markup over direct provider pricing).
+      Rankings and usage volume data are not available via public API — see <a href="https://openrouter.ai/rankings" target="_blank" style="color:var(--accent);">openrouter.ai/rankings</a> for usage data.
+    </div>
+  </div>
+</div>
+
+<div class="loading" id="loading"><div class="spinner"></div><br>Fetching live data from OpenRouter...</div>
+<div class="error" id="error" style="display:none;"></div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+
+let allModels = [];
+let currentSort = { key: 'outputPrice', dir: 'asc' };
+let providerFilter = '';
+
+// Providers whose models are open-weight/open-source
+const OPEN_PROVIDERS = new Set(['meta-llama','deepseek','qwen','mistralai','microsoft','nvidia','01-ai','nous','openchat','teknium','undi95','nousresearch','huggingfaceh4','garage-bainai','databricks','allenai','mosaicml','togethercomputer','recursal','lizpreciatior','open-orca','phind','codellama','wizardlm','lmsys']);
+// Models from "closed" providers that are actually open-weight
+const OPEN_MODEL_PATTERNS = ['gemma','phi-','llama','codestral','mistral-','pixtral','command-r'];
+
+function isOpenModel(m) {
+  if (OPEN_PROVIDERS.has(m.provider)) return true;
+  const idLower = m.id.toLowerCase();
+  return OPEN_MODEL_PATTERNS.some(pat => idLower.includes(pat));
+}
+
+function getFilteredModels() {
+  if (modelTypeFilter === 'all') return allModels;
+  if (modelTypeFilter === 'open') return allModels.filter(m => m.isOpen);
+  return allModels.filter(m => !m.isOpen);
+}
+
+const PROVIDER_COLORS = {
+  'openai':'#10a37f', 'anthropic':'#d97706', 'google':'#4285f4', 'meta-llama':'#60a5fa',
+  'deepseek':'#a78bfa', 'mistralai':'#f97316', 'x-ai':'#e2e8f0', 'cohere':'#ec4899',
+  'qwen':'#06b6d4', 'nvidia':'#76b900', 'microsoft':'#00a4ef',
+};
+
+function getProviderFromId(id) {
+  return id.split('/')[0] || 'unknown';
+}
+
+function getProviderColor(provider) {
+  return PROVIDER_COLORS[provider] || '#475569';
+}
+
+function toPerMillion(pricePerToken) {
+  const p = parseFloat(pricePerToken);
+  if (!p || isNaN(p)) return 0;
+  return p * 1000000;
+}
+
+function formatPrice(perMillion) {
+  if (perMillion === 0) return 'Free';
+  if (perMillion < 0.01) return '<$0.01';
+  if (perMillion < 1) return '$' + perMillion.toFixed(3);
+  if (perMillion < 10) return '$' + perMillion.toFixed(2);
+  return '$' + perMillion.toFixed(1);
+}
+
+function priceClass(perMillion) {
+  if (perMillion === 0) return 'price-cheap';
+  if (perMillion < 2) return 'price-cheap';
+  if (perMillion < 15) return 'price-mid';
+  return 'price-expensive';
+}
+
+async function fetchData() {
+  try {
+    const resp = await fetch('https://openrouter.ai/api/v1/models');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const json = await resp.json();
+    allModels = json.data.map(m => {
+      const model = {
+        id: m.id,
+        name: m.name || m.id,
+        provider: getProviderFromId(m.id),
+        inputPrice: toPerMillion(m.pricing?.prompt || '0'),
+        outputPrice: toPerMillion(m.pricing?.completion || '0'),
+        context: m.context_length || 0,
+        modality: m.architecture?.modality || 'text→text',
+      };
+      model.isOpen = isOpenModel(model);
+      return model;
+    }).filter(m => m.name && !m.id.includes(':free'));
+
+    document.getElementById('loading').style.display = 'none';
+    render();
+  } catch (err) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').textContent = `Failed to fetch OpenRouter data: ${err.message}. Try refreshing.`;
+  }
+}
+
+function render() {
+  const models = getFilteredModels();
+
+  // Stats
+  const providers = [...new Set(models.map(m => m.provider))];
+  const outputPrices = models.filter(m => m.outputPrice > 0).map(m => m.outputPrice);
+  const freeCount = models.filter(m => m.outputPrice === 0).length;
+
+  document.getElementById('s-models').textContent = models.length;
+  document.getElementById('s-providers').textContent = providers.length;
+  document.getElementById('s-cheapest').textContent = outputPrices.length ? formatPrice(Math.min(...outputPrices)) : '—';
+  document.getElementById('s-expensive').textContent = outputPrices.length ? formatPrice(Math.max(...outputPrices)) : '—';
+  document.getElementById('s-free').textContent = freeCount;
+
+  // Provider filters
+  const topProviders = providers
+    .map(p => ({ p, count: models.filter(m => m.provider === p).length }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 12);
+
+  const filtersEl = document.getElementById('provider-filters');
+  filtersEl.innerHTML = '<button class="filter-pill active" onclick="setProviderFilter(\'\', this)">All</button>';
+  topProviders.forEach(tp => {
+    filtersEl.innerHTML += `<button class="filter-pill" onclick="setProviderFilter('${tp.p}', this)">${tp.p} (${tp.count})</button>`;
+  });
+
+  renderCharts(models, providers);
+  renderTable();
+}
+
+function setProviderFilter(p, el) {
+  providerFilter = p;
+  document.querySelectorAll('#provider-filters .filter-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderTable();
+}
+
+let distChart = null, provChart = null, frontierChart = null;
+
+function renderCharts(models, providers) {
+  // Destroy existing charts
+  if (distChart) distChart.destroy();
+  if (provChart) provChart.destroy();
+  if (frontierChart) frontierChart.destroy();
+
+  // Price distribution histogram
+  const buckets = [0, 0.1, 0.5, 1, 2, 5, 10, 20, 50, 100, 500];
+  const bucketLabels = ['Free', '<$0.10', '$0.10-0.50', '$0.50-1', '$1-2', '$2-5', '$5-10', '$10-20', '$20-50', '$50-100', '$100+'];
+  const counts = new Array(bucketLabels.length).fill(0);
+
+  models.forEach(m => {
+    const p = m.outputPrice;
+    if (p === 0) counts[0]++;
+    else if (p < 0.1) counts[1]++;
+    else if (p < 0.5) counts[2]++;
+    else if (p < 1) counts[3]++;
+    else if (p < 2) counts[4]++;
+    else if (p < 5) counts[5]++;
+    else if (p < 10) counts[6]++;
+    else if (p < 20) counts[7]++;
+    else if (p < 50) counts[8]++;
+    else if (p < 100) counts[9]++;
+    else counts[10]++;
+  });
+
+  distChart = new Chart(document.getElementById('chart-dist'), {
+    type: 'bar',
+    data: { labels: bucketLabels, datasets: [{ data: counts, backgroundColor: '#3b82f6aa', borderRadius: 4 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+  });
+
+  // Provider model counts
+  const topP = providers
+    .map(p => ({ name: p, count: models.filter(m => m.provider === p).length }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 15);
+
+  provChart = new Chart(document.getElementById('chart-providers'), {
+    type: 'bar',
+    data: {
+      labels: topP.map(p => p.name),
+      datasets: [{ data: topP.map(p => p.count), backgroundColor: topP.map(p => (getProviderColor(p.name) || '#475569') + 'cc'), borderRadius: 4 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' } }, y: { grid: { display: false } } } }
+  });
+
+  // Price comparison — adapts to model type filter
+  const frontierIds = [
+    'openai/gpt-4o', 'openai/gpt-4o-mini', 'openai/o3-mini',
+    'anthropic/claude-sonnet-4', 'anthropic/claude-3.5-sonnet', 'anthropic/claude-opus-4',
+    'google/gemini-2.5-pro-preview', 'google/gemini-2.0-flash-001',
+    'deepseek/deepseek-r1', 'deepseek/deepseek-chat',
+    'mistralai/mistral-large', 'x-ai/grok-3',
+  ];
+  const openIds = [
+    'meta-llama/llama-3.1-8b-instruct', 'meta-llama/llama-3.1-70b-instruct', 'meta-llama/llama-3.1-405b-instruct',
+    'deepseek/deepseek-r1', 'deepseek/deepseek-chat',
+    'qwen/qwen-2.5-72b-instruct', 'qwen/qwen-2.5-7b-instruct',
+    'mistralai/mistral-7b-instruct', 'mistralai/mistral-large',
+    'google/gemma-2-9b-it', 'microsoft/phi-3-mini-128k-instruct',
+    'nvidia/llama-3.1-nemotron-70b-instruct',
+  ];
+
+  const compareIds = modelTypeFilter === 'open' ? openIds : modelTypeFilter === 'frontier' ? frontierIds : [...new Set([...frontierIds, ...openIds])];
+  const titleEl = document.getElementById('price-compare-title');
+  titleEl.innerHTML = (modelTypeFilter === 'open' ? 'Open Model' : modelTypeFilter === 'frontier' ? 'Frontier Model' : 'Model') + ' Price Comparison <span style="font-size:12px;font-weight:400;color:var(--text-dim);">— output $/1M tokens, live</span>';
+
+  // Find models, dedupe by display name (not just ID) to avoid multiple versions
+  const seen = new Set();
+  const compareModels = compareIds
+    .map(id => models.find(m => m.id === id || m.id.startsWith(id)))
+    .filter(Boolean)
+    .filter(m => {
+      const shortName = m.name.replace(/^[^:]+:\s*/, '');
+      if (seen.has(shortName)) return false;
+      seen.add(shortName);
+      return true;
+    })
+    .sort((a, b) => a.outputPrice - b.outputPrice);
+
+  if (compareModels.length > 0) {
+    frontierChart = new Chart(document.getElementById('chart-frontier'), {
+      type: 'bar',
+      data: {
+        labels: compareModels.map(m => m.name.replace(/^[^:]+:\s*/, '')),
+        datasets: [{
+          label: 'Output $/1M tokens',
+          data: compareModels.map(m => m.outputPrice),
+          backgroundColor: compareModels.map(m => (getProviderColor(m.provider) || '#475569') + 'cc'),
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `$${ctx.parsed.x.toFixed(2)}/1M tokens` } } },
+        scales: { x: { type: 'logarithmic', grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: '$/1M output tokens (log scale)' } }, y: { grid: { display: false }, ticks: { autoSkip: false } } }
+      }
+    });
+  }
+}
+
+function renderTable() {
+  let filtered = getFilteredModels();
+  if (providerFilter) filtered = filtered.filter(m => m.provider === providerFilter);
+
+  const search = document.getElementById('search').value.toLowerCase();
+  if (search) filtered = filtered.filter(m => m.name.toLowerCase().includes(search) || m.id.toLowerCase().includes(search));
+
+  filtered.sort((a, b) => {
+    let va = a[currentSort.key], vb = b[currentSort.key];
+    if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
+    if (currentSort.dir === 'asc') return va > vb ? 1 : -1;
+    return va < vb ? 1 : -1;
+  });
+
+  document.getElementById('model-count-label').textContent = `— showing ${filtered.length} of ${allModels.length}`;
+
+  const tbody = document.getElementById('model-tbody');
+  tbody.innerHTML = filtered.slice(0, 200).map(m => `
+    <tr>
+      <td><strong>${m.name.replace(/^[^:]+:\s*/, '')}</strong><br><span style="font-size:10px;color:var(--text-dim);">${m.id}</span></td>
+      <td><span class="provider-tag" style="background:${getProviderColor(m.provider)}22;color:${getProviderColor(m.provider)};">${m.provider}</span></td>
+      <td class="price ${priceClass(m.inputPrice)}">${formatPrice(m.inputPrice)}</td>
+      <td class="price ${priceClass(m.outputPrice)}">${formatPrice(m.outputPrice)}</td>
+      <td>${m.context > 0 ? (m.context >= 1000000 ? (m.context/1000000).toFixed(1)+'M' : (m.context/1000).toFixed(0)+'K') : '—'}</td>
+      <td style="font-size:11px;color:var(--text-dim);">${m.modality}</td>
+    </tr>
+  `).join('');
+}
+
+function sortTable(key) {
+  if (currentSort.key === key) currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+  else { currentSort.key = key; currentSort.dir = 'asc'; }
+  renderTable();
+}
+
+function filterTable() { renderTable(); }
+
+// === Gateway Insights (loaded from site-data.json) ===
+let PORTKEY_DATA = null;
+let OPENROUTER_DATA = null;
+let GW_PROVIDER_COLORS = {};
+
+let gatewayChart = null;
+let gatewayView = 'both';
+let modelTypeFilter = 'all';
+let gatewayLoaded = false;
+
+async function loadGatewayData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load site-data.json');
+    const all = await resp.json();
+    const g = all.gateway;
+    if (!g) throw new Error('No gateway section in site-data.json');
+
+    GW_PROVIDER_COLORS = g.providerColors || {};
+
+    PORTKEY_DATA = {
+      totalTokens: g.portkey.totalTokens,
+      totalRequests: g.portkey.totalRequests,
+      totalSpend: g.portkey.totalSpend,
+      weeklyGrowth: g.portkey.weeklyGrowth,
+      updated: g.updated,
+      models: g.portkey.models
+    };
+
+    OPENROUTER_DATA = {
+      totalTokens: g.openrouter.totalTokens,
+      totalRequests: g.openrouter.totalRequests,
+      totalSpend: g.openrouter.totalSpend,
+      models: g.openrouter.models
+    };
+
+    gatewayLoaded = true;
+    console.log('Gateway data loaded from site-data.json (updated: ' + g.updated + ')');
+  } catch(e) {
+    console.warn('Gateway data: site-data.json not found or missing gateway section, gateway charts disabled.', e);
+    return;
+  }
+
+  // Overlay live signal data from scraper (more accurate weekly totals)
+  try {
+    const sigResp = await fetch('data/signals_latest.json?v=' + Date.now());
+    if (sigResp.ok) {
+      const sig = await sigResp.json();
+      const orRank = sig.openrouter_rankings;
+      if (orRank && orRank.weekly_tokens_total) {
+        const weeklyT = orRank.weekly_tokens_total;
+        const dailyT = weeklyT / 7;
+        OPENROUTER_DATA.totalTokens = Math.round(dailyT);
+        const el = document.getElementById('or-live-stat');
+        if (el) el.textContent = Math.round(dailyT / 1e9).toLocaleString() + 'B tokens/day · ' + (weeklyT / 1e12).toFixed(1) + 'T/week (w/e ' + orRank.week_date + ')';
+        if (orRank.weekly_gmv_usd) {
+          OPENROUTER_DATA.totalSpend = Math.round(orRank.weekly_gmv_usd / 7);
+        }
+        console.log('OpenRouter stats updated from signals_latest.json (week: ' + orRank.week_date + ')');
+      }
+    }
+  } catch(e) {
+    console.warn('Could not load live signals for OpenRouter overlay', e);
+  }
+
+  renderGateway();
+}
+
+function setGatewayView(view) {
+  gatewayView = view;
+  ['both','portkey','openrouter'].forEach(v => {
+    document.getElementById('gw-'+v).classList.toggle('active', v === view);
+  });
+  document.getElementById('gw-portkey-panel').style.display = (view === 'openrouter') ? 'none' : '';
+  document.getElementById('gw-openrouter-panel').style.display = (view === 'portkey') ? 'none' : '';
+  renderGateway();
+  if (allModels.length > 0) render();
+}
+
+function setModelType(type) {
+  modelTypeFilter = type;
+  ['all','frontier','open'].forEach(t => {
+    document.getElementById('mt-'+t).classList.toggle('active', t === type);
+  });
+  renderGateway();
+  if (allModels.length > 0) render();
+}
+
+function filterByType(models) {
+  if (modelTypeFilter === 'all') return models;
+  return models.filter(m => m.type === modelTypeFilter);
+}
+
+function fmtB(n) { return n >= 1e12 ? (n/1e12).toFixed(1)+'T' : n >= 1e9 ? (n/1e9).toFixed(0)+'B' : (n/1e6).toFixed(0)+'M'; }
+function fmtUSD(n) { return n >= 1e6 ? '$'+(n/1e6).toFixed(1)+'M' : '$'+(n/1e3).toFixed(0)+'K'; }
+
+function renderGateway() {
+  if (!gatewayLoaded || !PORTKEY_DATA || !OPENROUTER_DATA) return;
+  const p = PORTKEY_DATA, o = OPENROUTER_DATA;
+  const showP = gatewayView !== 'openrouter', showO = gatewayView !== 'portkey';
+
+  // Filter models by type
+  const pFiltered = { ...p, models: filterByType(p.models) };
+  const oFiltered = { ...o, models: filterByType(o.models) };
+
+  // Recalculate stats from filtered models
+  const pTokens = pFiltered.models.reduce((s,m) => s + m.tokens, 0);
+  const oTokens = oFiltered.models.reduce((s,m) => s + m.tokens, 0);
+  const pSpend = pFiltered.models.reduce((s,m) => s + m.spend, 0);
+  const oSpend = oFiltered.models.reduce((s,m) => s + m.spend, 0);
+
+  // Use top-level totals (which may have been overridden by live signals) rather than
+  // summing stale per-model data. Fall back to per-model sum if totals are missing.
+  const tokens = (showP ? (p.totalTokens || pTokens) : 0) + (showO ? (o.totalTokens || oTokens) : 0);
+  const spend = (showP ? (p.totalSpend || pSpend) : 0) + (showO ? (o.totalSpend || oSpend) : 0);
+  const reqs = (showP ? p.totalRequests : 0) + (showO ? o.totalRequests : 0);
+
+  document.querySelector('#gw-stat-tokens .val').textContent = fmtB(tokens);
+  document.querySelector('#gw-stat-requests .val').textContent = modelTypeFilter === 'all' ? fmtB(reqs) : '—';
+  document.querySelector('#gw-stat-spend .val').textContent = fmtUSD(spend);
+  document.querySelector('#gw-stat-growth .val').textContent = p.weeklyGrowth;
+
+  // Update stat labels
+  const typeLabel = modelTypeFilter === 'all' ? '' : modelTypeFilter === 'frontier' ? ' (Frontier)' : ' (Open)';
+  document.querySelector('#gw-stat-tokens .lbl').textContent = 'Tokens/Day' + typeLabel;
+  document.querySelector('#gw-stat-spend .lbl').textContent = 'Daily Spend' + typeLabel;
+
+  // Render model tables
+  function renderModelTable(el, data) {
+    const filtered = data.models;
+    if (filtered.length === 0) {
+      el.innerHTML = '<tr><td colspan="4" style="color:var(--text-dim);text-align:center;padding:16px;">No models in this category</td></tr>';
+      return;
+    }
+    // Recalculate share within filtered set
+    const totalTok = filtered.reduce((s,m) => s + m.tokens, 0);
+    el.innerHTML = filtered.map(m =>
+      `<tr><td><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${GW_PROVIDER_COLORS[m.provider]||'#475569'};margin-right:4px;"></span>${m.name}<span style="font-size:9px;color:${m.type==='open'?'var(--green)':'var(--orange)'};margin-left:4px;">${m.type==='open'?'OSS':'Closed'}</span></td><td>${fmtB(m.tokens)}</td><td>${fmtUSD(m.spend)}</td><td>${(m.tokens/totalTok*100).toFixed(1)}%</td></tr>`
+    ).join('');
+  }
+  renderModelTable(document.getElementById('gw-portkey-models'), pFiltered);
+  renderModelTable(document.getElementById('gw-openrouter-models'), oFiltered);
+
+  // Chart — stacked bars, provider-colored, two tones per bar
+  if (gatewayChart) gatewayChart.destroy();
+
+  // Merge and dedupe model names, get provider for each
+  const allModelsGW = {};
+  pFiltered.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].portkey = m.tokens; });
+  oFiltered.models.forEach(m => { allModelsGW[m.name] = allModelsGW[m.name] || { provider:m.provider, portkey:0, openrouter:0 }; allModelsGW[m.name].openrouter = m.tokens; });
+
+  // Sort by combined tokens descending, top 10 only
+  const sortedNames = Object.entries(allModelsGW)
+    .map(([name, d]) => ({ name, ...d, total: (showP ? d.portkey : 0) + (showO ? d.openrouter : 0) }))
+    .filter(d => d.total > 0)
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 10);
+
+  const labels = sortedNames.map(d => d.name);
+
+  // Build 1 dataset per model — each bar has 2 stacked segments (Portkey dark, OpenRouter light)
+  // Chart.js needs per-dataset colors, not per-bar, for stacking to work properly
+  // So we create 2 datasets with uniform colors and use tooltip to show provider
+  function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${alpha})`;
+  }
+
+  // Use per-bar provider colors but as arrays (Chart.js supports this for stacked)
+  const provColors = sortedNames.map(d => GW_PROVIDER_COLORS[d.provider] || '#475569');
+
+  const datasets = [];
+  if (showP) datasets.push({
+    label: 'Portkey (enterprise)',
+    data: sortedNames.map(d => d.portkey / 1e9),
+    backgroundColor: provColors.map(c => hexToRgba(c, 0.9)),
+    borderColor: provColors.map(c => hexToRgba(c, 1)),
+    borderWidth: 1,
+    borderSkipped: showO ? 'end' : false,
+  });
+  if (showO) datasets.push({
+    label: 'OpenRouter (developer)',
+    data: sortedNames.map(d => d.openrouter / 1e9),
+    backgroundColor: provColors.map(c => hexToRgba(c, 0.4)),
+    borderColor: provColors.map(c => hexToRgba(c, 0.6)),
+    borderWidth: 1,
+    borderSkipped: 'start',
+  });
+
+  gatewayChart = new Chart(document.getElementById('chart-gateway'), {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: {
+        legend: { labels: { color: '#e2e8f0', font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.x.toFixed(0)}B tokens/day` } },
+      },
+      scales: {
+        x: { stacked: true, title: { display: true, text: 'Tokens/day (billions)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { stacked: true, grid: { display: false } },
+      }
+    }
+  });
+}
+
+// Init gateway from site-data.json
+loadGatewayData();
+
+// Init OpenRouter live data (separate API fetch — untouched)
+fetchData();
+</script>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice.</footer>
+</body>
+</html>

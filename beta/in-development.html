@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>In Development — Global AI Dash</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { sessionStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1000px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:24px; font-weight:700; margin-bottom:8px; }
+  .intro { font-size:13px; color:var(--text-dim); margin-bottom:32px; line-height:1.6; }
+
+  .dev-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px; }
+
+  .dev-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; overflow:hidden; transition:all 0.15s; }
+  .dev-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+
+  .dev-thumb { width:100%; height:180px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .dev-thumb.prototype { background:linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1)); }
+  .dev-thumb.spec { background:linear-gradient(135deg, rgba(245,158,11,0.1), rgba(239,68,68,0.08)); }
+
+  .dev-thumb iframe { width:200%; height:200%; transform:scale(0.5); transform-origin:top left; pointer-events:none; border:none; }
+  .dev-thumb .wireframe { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .dev-thumb .wireframe-icon { font-size:36px; opacity:0.4; }
+  .dev-thumb .wireframe-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); opacity:0.6; }
+
+  .dev-body { padding:16px 20px; }
+  .dev-body h3 { font-size:14px; font-weight:600; margin-bottom:6px; }
+  .dev-body p { font-size:12px; color:var(--text-dim); line-height:1.5; margin-bottom:10px; }
+
+  .dev-status { display:inline-block; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .status-prototype { background:rgba(16,185,129,0.15); color:var(--green); }
+  .status-spec { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .status-idea { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+
+  .dev-link { display:inline-block; margin-top:8px; font-size:11px; color:var(--accent); text-decoration:none; }
+  .dev-link:hover { text-decoration:underline; }
+
+  .back { display:inline-block; margin-top:32px; color:var(--accent); text-decoration:none; font-size:13px; }
+  .back:hover { text-decoration:underline; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+
+  @media(max-width:768px) { .dev-grid { grid-template-columns:1fr; } .container { padding:20px 16px; } }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <span style="flex-grow:1"></span>
+  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Vault</a>
+  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Sources</a>
+  <a href="claims.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Claims</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">In Development</a>
+</nav>
+
+<div class="container">
+  <h1>In Development</h1>
+  <p class="intro">These features are in active development. Working prototypes can be previewed. Specs are available for features still in the design phase.</p>
+
+  <div class="dev-grid">
+
+    <!-- 1. AI Spend Intelligence Calculator (moved from nav) -->
+    <div class="dev-card">
+      <div class="dev-thumb prototype">
+        <iframe src="parked/calculator.html" loading="lazy"></iframe>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-prototype">Prototype</span>
+        <h3>AI Spend Intelligence Calculator</h3>
+        <p>Dual-lens ROI tool for AI buyers and builders. Being redesigned from the original Shelfware Calculator.</p>
+        <a class="dev-link" href="parked/calculator.html">Preview prototype &rarr;</a>
+      </div>
+    </div>
+
+    <!-- 2. Capex vs Revenue Gap -->
+    <div class="dev-card">
+      <div class="dev-thumb prototype">
+        <iframe src="parked/capex.html" loading="lazy"></iframe>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-prototype">Prototype</span>
+        <h3>AI Capex vs Revenue Gap</h3>
+        <p>Interactive analysis of the $200B+ gap between AI infrastructure spending and identifiable revenue. GPU supply ceiling model.</p>
+        <a class="dev-link" href="parked/capex.html">Preview prototype &rarr;</a>
+      </div>
+    </div>
+
+    <!-- 3. Live Token Counter -->
+    <div class="dev-card">
+      <div class="dev-thumb prototype">
+        <iframe src="parked/counter.html" loading="lazy"></iframe>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-prototype">Prototype</span>
+        <h3>Live AI Token Counter</h3>
+        <p>Real-time animated display of estimated global AI token processing. Analogy cards for scale context.</p>
+        <a class="dev-link" href="parked/counter.html">Preview prototype &rarr;</a>
+      </div>
+    </div>
+
+    <!-- 4. Bottom-Up Token Estimator -->
+    <div class="dev-card">
+      <div class="dev-thumb prototype">
+        <iframe src="parked/estimator.html" loading="lazy"></iframe>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-prototype">Prototype</span>
+        <h3>Bottom-Up Token Estimator</h3>
+        <p>User-editable spreadsheet for estimating global token consumption from usage patterns. Bull/base/bear scenarios.</p>
+        <a class="dev-link" href="parked/estimator.html">Preview prototype &rarr;</a>
+      </div>
+    </div>
+
+    <!-- 5. Workforce Math Problem -->
+    <div class="dev-card">
+      <div class="dev-thumb prototype">
+        <iframe src="parked/workforce.html" loading="lazy"></iframe>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-prototype">Prototype</span>
+        <h3>The Workforce Math Problem</h3>
+        <p>Interactive slider exploring the paradox between AI capex justification and realistic enterprise restructuring speeds.</p>
+        <a class="dev-link" href="parked/workforce.html">Preview prototype &rarr;</a>
+      </div>
+    </div>
+
+    <!-- 6. Enterprise SaaS AI SKU Analysis (spec) -->
+    <div class="dev-card">
+      <div class="dev-thumb spec">
+        <div class="wireframe">
+          <div class="wireframe-icon">&#x1f4ca;</div>
+          <div class="wireframe-label">Market Research</div>
+        </div>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-spec">Spec</span>
+        <h3>Enterprise SaaS &amp; AI SKU Analysis</h3>
+        <p>Market sizing for enterprise SaaS and AI-specific SKU revenue. $218-465B market breakdown with enterprise/SMB splits.</p>
+        <a class="dev-link" href="enterprise-saas-ai-sku-analysis.md">View spec &rarr;</a>
+      </div>
+    </div>
+
+    <!-- 7. IPO Pipeline Tracker (idea) -->
+    <div class="dev-card">
+      <div class="dev-thumb spec">
+        <div class="wireframe">
+          <div class="wireframe-icon">&#x1f4c8;</div>
+          <div class="wireframe-label">Planned Feature</div>
+        </div>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-idea">Planned</span>
+        <h3>IPO Pipeline Tracker</h3>
+        <p>Pre-IPO AI company status and timeline. Track OpenAI, Anthropic, Databricks, and others on the path to public markets.</p>
+      </div>
+    </div>
+
+    <!-- 8. SEC EDGAR Automation (idea) -->
+    <div class="dev-card">
+      <div class="dev-thumb spec">
+        <div class="wireframe">
+          <div class="wireframe-icon">&#x1f4c4;</div>
+          <div class="wireframe-label">Planned Feature</div>
+        </div>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-idea">Planned</span>
+        <h3>SEC EDGAR Automation</h3>
+        <p>Auto-pull public company filings for AI revenue disclosures. Structured extraction from 10-K/10-Q filings.</p>
+      </div>
+    </div>
+
+    <!-- 9. AI-Native vs Enterprise Toggle (idea) -->
+    <div class="dev-card">
+      <div class="dev-thumb spec">
+        <div class="wireframe">
+          <div class="wireframe-icon">&#x1f504;</div>
+          <div class="wireframe-label">Planned Feature</div>
+        </div>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-idea">Planned</span>
+        <h3>AI-Native vs Enterprise Toggle</h3>
+        <p>Filter the 109-company universe by founding date relative to ChatGPT launch. Separate AI-native economics from legacy SaaS.</p>
+      </div>
+    </div>
+
+  
+    <!-- AUTO-IDEAS-START -->
+
+    <div class="dev-card">
+      <div class="dev-thumb spec">
+        <div class="wireframe">
+          <div class="wireframe-icon">&#x1f4a1;</div>
+          <div class="wireframe-label">Project Idea</div>
+        </div>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-idea">Idea</span>
+        <h3>APAC BD Prospector — Project Brief</h3>
+        <p>A local-first web app (React + SQLite/JSON backend) that serves as a combined **research engine, CRM, and outreach tool** for Inceptron's APAC busi...</p>
+        <span style="font-size:10px;color:var(--text-dim);">Added: 2026-03-30</span>
+        <a class="dev-link" href="ideas/APAC-BD-Prospector-Brief.md" target="_blank">View spec &rarr;</a>
+      </div>
+    </div>
+
+    <div class="dev-card">
+      <div class="dev-thumb spec">
+        <div class="wireframe">
+          <div class="wireframe-icon">&#x1f4a1;</div>
+          <div class="wireframe-label">Project Idea</div>
+        </div>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-idea">Idea</span>
+        <h3>Claude API Automation — Project Spec</h3>
+        <p>| Script | Schedule | What it does |</p>
+        <span style="font-size:10px;color:var(--text-dim);">Added: 2026-03-31</span>
+        <a class="dev-link" href="ideas/claude-api-automation-spec.md" target="_blank">View spec &rarr;</a>
+      </div>
+    </div>
+
+    <div class="dev-card">
+      <div class="dev-thumb spec">
+        <div class="wireframe">
+          <div class="wireframe-icon">&#x1f4a1;</div>
+          <div class="wireframe-label">Project Idea</div>
+        </div>
+      </div>
+      <div class="dev-body">
+        <span class="dev-status status-idea">Idea</span>
+        <h3>Top Token Consumers — Expansion Spec</h3>
+        <p>```json</p>
+        <span style="font-size:10px;color:var(--text-dim);">Added: 2026-03-30</span>
+        <a class="dev-link" href="ideas/top-consumers-expansion-spec.md" target="_blank">View spec &rarr;</a>
+      </div>
+    </div>
+    <!-- AUTO-IDEAS-END -->
+</div>
+
+  <a href="dashboard.html" class="back">&larr; Back to Dashboard</a>
+</div>
+
+<footer>The AI Ledger — Directional estimates only. Not investment advice.</footer>
+</body>
+</html>
