@@ -205,7 +205,21 @@ def main():
         entity = claim.get('entity', '')
 
         changed = False
-        if 'arr' in metric or 'revenue' in metric:
+
+        # Handle new company additions
+        if metric == 'new_company' and claim.get('company_data'):
+            company = claim['company_data']
+            # Check duplicate
+            existing = [c for c in site['dashboard']['topConsumers'] if c['co'].lower() == company['co'].lower()]
+            if not existing:
+                site['dashboard']['topConsumers'].append(company)
+                site['dashboard']['topConsumers'].sort(key=lambda c: c.get('tokensNumeric') or 0, reverse=True)
+                log(f"  ADD COMPANY {company['co']} ({company.get('tokens', '?')})")
+                changed = True
+            else:
+                log(f"  SKIP {company['co']}: already exists")
+
+        elif 'arr' in metric or 'revenue' in metric:
             # Try provider-level first
             if apply_provider_arr(site, claim):
                 changed = True

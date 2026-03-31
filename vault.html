@@ -285,6 +285,7 @@
     <button class="tab" onclick="switchTab('review')">Weekly Review</button>
     <button class="tab" onclick="switchTab('consensus')">Consensus</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
+    <button class="tab" onclick="switchTab('settings')" style="margin-left:auto;font-size:11px;">Settings</button>
   </div>
 
   <!-- SEARCH VIEW -->
@@ -329,15 +330,42 @@
     </div>
   </div>
 
+  <!-- SETTINGS VIEW -->
+  <div id="view-settings" class="view-section" style="display:none;">
+    <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; max-width:500px;">
+      <h2 style="font-size:18px; margin-bottom:16px;">Settings</h2>
+
+      <div style="margin-bottom:20px;">
+        <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Anthropic API Key</label>
+        <div style="display:flex;gap:8px;">
+          <input id="settings-apikey" type="password" placeholder="sk-ant-..." style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:monospace;">
+          <button onclick="toggleKeyVisibility()" style="padding:8px 12px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;font-size:11px;">Show</button>
+        </div>
+        <p style="font-size:10px;color:var(--text-dim);margin-top:6px;">Used for Research button (Add Company) and source enrichment. Stored in this browser only (localStorage). Never sent to our server.</p>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button onclick="saveApiKey()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Save Key</button>
+          <button onclick="clearApiKey()" style="padding:8px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Clear Key</button>
+        </div>
+        <div id="settings-status" style="margin-top:8px;"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ADD COMPANY VIEW -->
   <div id="view-addcompany" class="view-section" style="display:none;">
     <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px;">
       <h2 style="font-size:18px; margin-bottom:8px;">Add Company to Top Token Consumers</h2>
       <p style="font-size:12px; color:var(--text-dim); margin-bottom:20px;">Paste a company URL. The system will research it and pre-fill the fields. Review and confirm to add.</p>
 
-      <div style="display:flex;gap:8px;margin-bottom:16px;max-width:600px;">
-        <input id="ac-url" type="url" placeholder="https://company.ai" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
-        <button onclick="researchCompany()" id="ac-research-btn" style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Research</button>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;max-width:600px;">
+        <div style="display:flex;gap:8px;">
+          <input id="ac-url" type="url" placeholder="https://company.ai" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
+          <button onclick="researchCompany()" id="ac-research-btn" style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Research</button>
+        </div>
+        <div>
+          <input id="ac-hint" type="text" placeholder="Your context (optional): e.g. 'AI ARR is only $600M, not total company revenue'" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid rgba(245,158,11,0.3);border-radius:8px;color:var(--orange);font-size:12px;outline:none;">
+          <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">If you know something Claude might get wrong, put it here — it'll be included in the research prompt.</div>
+        </div>
       </div>
 
       <div id="ac-loading" style="display:none;font-size:12px;color:var(--text-dim);margin-bottom:16px;">Researching... (fetching page + Claude extraction)</div>
@@ -375,8 +403,9 @@
             <input id="ac-founded" type="number" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
           </div>
           <div>
-            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">ARR (USD number, e.g. 50000000)</label>
-            <input id="ac-arr" type="number" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">AI-Specific ARR (USD, e.g. 600000000)</label>
+            <input id="ac-arr" type="number" placeholder="AI revenue only, not total company" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+            <div style="font-size:9px;color:var(--text-dim);margin-top:2px;">For enterprise SaaS, use AI-specific ARR — not total company revenue.</div>
           </div>
           <div>
             <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Funding</label>
@@ -523,7 +552,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','quickadd','addcompany','submit','review','consensus','audit'];
+const TABS = ['search','quickadd','addcompany','submit','review','consensus','audit','settings'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -1869,10 +1898,10 @@ async function loadSiteDataForCompanies() {
 }
 
 function getApiKey() {
-  let key = sessionStorage.getItem('anthropic-api-key');
+  let key = localStorage.getItem('anthropic-api-key');
   if (!key) {
-    key = prompt('Enter your Anthropic API key (stored for this session only):');
-    if (key) sessionStorage.setItem('anthropic-api-key', key);
+    key = prompt('Enter your Anthropic API key (saved permanently in this browser):');
+    if (key) localStorage.setItem('anthropic-api-key', key);
   }
   return key;
 }
@@ -1902,6 +1931,7 @@ async function researchCompany() {
 
   // Step 2: Call Claude to research the company
   const domain = url.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
+  const userHint = document.getElementById('ac-hint').value.trim();
   try {
     const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -1918,7 +1948,7 @@ async function researchCompany() {
 
 Company URL: ${url}
 Domain: ${domain}
-
+${userHint ? '\nUser context (trust this — the user has domain expertise):\n' + userHint + '\n' : ''}
 Page text (if available):
 ${pageText.substring(0, 3000)}
 
@@ -1931,8 +1961,8 @@ Return a JSON object with these fields (use null for truly unknown, make best es
   "subcategory": "e.g. coding, search, legal, voice, content, agent",
   "providers": ["openai", "anthropic", "google", "meta", "own"],
   "founded": 2023,
-  "arr": "$50M",
-  "arr_numeric": 50000000,
+  "arr": "$600M",
+  "arr_numeric": 600000000,
   "valuation": "$500M",
   "valuation_numeric": 500000000,
   "total_funding": "$100M",
@@ -1943,10 +1973,11 @@ Return a JSON object with these fields (use null for truly unknown, make best es
   "sources": "What you based the ARR/valuation on (e.g. press reports, TechCrunch, etc)"
 }
 
-Important:
-- For ARR: use the most recent known figure. If only revenue is known, note that. If unknown, estimate from funding stage and category.
+CRITICAL:
+- For ARR: return the AI-SPECIFIC revenue, NOT total company revenue. For enterprise SaaS companies (ServiceNow, Salesforce, etc.), only count the AI SKU/product ARR, not the entire company ARR. If the user has provided context about this, trust their figure.
 - For providers: infer which AI providers they likely use based on their product.
 - Be specific about confidence: "high" = from earnings/press, "medium" = from fundraising context, "low" = rough estimate.
+- If the user provided context, factor it into your response and explain how it affected your estimates.
 - Return ONLY the JSON object, no other text.` }],
       }),
     });
@@ -2077,26 +2108,69 @@ async function confirmAddCompany() {
     lastUpdated: new Date().toISOString().split('T')[0],
   };
 
-  acSiteData.dashboard.topConsumers.push(company);
-  // Sort by tokens desc
-  acSiteData.dashboard.topConsumers.sort((a, b) => (b.tokensNumeric || 0) - (a.tokensNumeric || 0));
+  // Save as a pending company claim in approved-claims.json format
+  // apply_claims.py will pick this up on the next daily cron run
+  const claim = {
+    review_decision: 'accepted',
+    confirmed: true,
+    entity: name,
+    metric: 'new_company',
+    value: arr,
+    unit: 'USD',
+    value_display: company.arr || 'Unknown ARR',
+    claim: 'Add ' + name + ' to Top Token Consumers (' + tokensStr + ')',
+    category: 'new_company',
+    confidence: 'medium',
+    weight: 'authoritative',
+    source_type: 'manual_add',
+    source_url: company.website,
+    reviewed_at: new Date().toISOString(),
+    company_data: company,
+  };
 
-  // Save — download as file for next auto_update to pick up
-  const blob = new Blob([JSON.stringify(acSiteData, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
+  // Write to localStorage queue — apply_claims.py reads from approved-claims.json
+  const queue = JSON.parse(localStorage.getItem('pending-company-adds') || '[]');
+  queue.push(claim);
+  localStorage.setItem('pending-company-adds', JSON.stringify(queue));
+
+  // Also add to vault as a data point
+  const dp = {
+    id: 'dp-' + String(vaultData.dataPoints.length + 1).padStart(3, '0'),
+    claim: 'Added ' + name + ' to Top Consumers: ' + tokensStr + ', ARR ' + (company.arr || 'unknown'),
+    value: arr,
+    unit: '$',
+    sourceUrl: company.website,
+    sourceType: 'observation',
+    sourceAuthor: 'Manual add via Vault',
+    confidence: 'estimated',
+    dateOfClaim: new Date().toISOString().split('T')[0],
+    dateAdded: new Date().toISOString().split('T')[0],
+    usedOn: ['dashboard'],
+    notes: JSON.stringify(company),
+    tags: [name.toLowerCase(), cat],
+    metricKey: name.toLowerCase().replace(/\s+/g, '-') + '-add',
+    status: 'accepted',
+  };
+  vaultData.dataPoints.push(dp);
+  saveData();
+
+  // Also download the company data as a JSON file that apply_claims.py can pick up from ~/Downloads
+  const approvedClaims = [claim];
+  const blob = new Blob([JSON.stringify(approvedClaims, null, 2)], { type: 'application/json' });
+  const dlUrl = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'site-data.json';
+  a.href = dlUrl;
+  a.download = 'approved-claims.json';
   a.click();
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(dlUrl);
 
   document.getElementById('ac-form').style.display = 'none';
   document.getElementById('ac-status').innerHTML =
     '<div style="padding:12px 16px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;color:var(--green);font-size:12px;">' +
     '✅ <strong>' + name + '</strong> added (' + tokensStr + ')<br>' +
-    '<span style="color:var(--text-dim);">Save the downloaded site-data.json to the repo root. Next auto-update (7am) will push it live.</span></div>';
+    '<span style="color:var(--text-dim);">Saved to vault + queued for dashboard. Will go live at next auto-update (7am).</span></div>';
 
-  showToast(name + ' added to Top Consumers');
+  showToast(name + ' added — goes live at next auto-update');
 }
 
 // ============================================================
@@ -2201,8 +2275,36 @@ function renderQuickAddQueue() {
   el.innerHTML = html;
 }
 
+// ============================================================
+// SETTINGS
+// ============================================================
+function loadSettingsView() {
+  const key = localStorage.getItem('anthropic-api-key') || '';
+  const el = document.getElementById('settings-apikey');
+  if (el) el.value = key;
+  const status = document.getElementById('settings-status');
+  if (status) status.innerHTML = key ? '<span style="color:var(--green);font-size:11px;">Key saved (' + key.substring(0, 12) + '...)</span>' : '<span style="color:var(--orange);font-size:11px;">No key set — Research button will prompt for one.</span>';
+}
+function saveApiKey() {
+  const key = document.getElementById('settings-apikey').value.trim();
+  if (key) { localStorage.setItem('anthropic-api-key', key); showToast('API key saved'); }
+  else { localStorage.removeItem('anthropic-api-key'); showToast('API key cleared'); }
+  loadSettingsView();
+}
+function clearApiKey() {
+  localStorage.removeItem('anthropic-api-key');
+  document.getElementById('settings-apikey').value = '';
+  showToast('API key cleared');
+  loadSettingsView();
+}
+function toggleKeyVisibility() {
+  const el = document.getElementById('settings-apikey');
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
 function switchTab(name) {
   if (name === 'quickadd') renderQuickAddQueue();
+  if (name === 'settings') loadSettingsView();
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', TABS[i] === name);
   });
