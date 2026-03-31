@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Subsidy Clock — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:900px; margin:0 auto; padding:32px 24px; text-align:center; }
+  h1 { font-size:24px; font-weight:800; letter-spacing:-0.5px; }
+  .sub { font-size:13px; color:var(--text-dim); margin-top:4px; margin-bottom:32px; }
+
+  .clock { margin:32px 0; }
+  .clock-value { font-size:clamp(36px, 8vw, 72px); font-weight:800; font-variant-numeric:tabular-nums; color:var(--text); letter-spacing:-1px; line-height:1; }
+  .clock-value .dollar { color:var(--red); }
+  .clock-label { font-size:14px; color:var(--text-dim); margin-top:8px; }
+  .clock-sub { font-size:11px; color:var(--text-dim); margin-top:4px; }
+
+  .pulse { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--red); margin-right:8px; animation:pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(239,68,68,0.4); } 50% { opacity:0.8; box-shadow:0 0 0 8px rgba(239,68,68,0); } }
+
+  .rates { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:12px; margin:32px 0; }
+  .rate-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px; }
+  .rate-value { font-size:22px; font-weight:700; color:var(--text); }
+  .rate-label { font-size:11px; color:var(--text-dim); margin-top:4px; }
+
+  .context { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:14px; margin:32px 0; text-align:left; }
+  .context-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px 18px; }
+  .context-card .stat { font-size:20px; font-weight:700; margin-bottom:4px; }
+  .context-card .desc { font-size:12px; color:var(--text-dim); line-height:1.5; }
+
+  .breakdown { margin:32px 0; text-align:left; }
+  .breakdown h2 { font-size:16px; margin-bottom:14px; }
+  .bar-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .bar-label { font-size:12px; color:var(--text-dim); width:120px; flex-shrink:0; }
+  .bar-track { flex:1; height:24px; background:var(--card); border-radius:6px; overflow:hidden; position:relative; }
+  .bar-fill { height:100%; border-radius:6px; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:600; color:white; }
+  .bar-amount { font-size:12px; color:var(--text); width:70px; text-align:right; flex-shrink:0; }
+
+  .methodology { font-size:11px; color:var(--text-dim); line-height:1.6; margin-top:32px; padding-top:16px; border-top:1px solid var(--card-border); text-align:left; }
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+  @media(max-width:600px) { .container { padding:20px 16px; } .rates { grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
+  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
+  <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
+  <a href="subsidy-clock.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Subsidy Clock</a>
+</nav>
+
+<div class="container">
+  <h1>The AI Subsidy Clock</h1>
+  <p class="sub">How much the AI industry has invested vs. what customers have paid — ticking in real time</p>
+
+  <div class="clock">
+    <div><span class="pulse"></span>Live estimate</div>
+    <div class="clock-value"><span class="dollar">$</span><span id="counter">0</span></div>
+    <div class="clock-label">Total AI industry investment since January 1, 2025</div>
+    <div class="clock-sub">VC operating subsidy + infrastructure capex + inference costs</div>
+  </div>
+
+  <div class="rates" id="rates"></div>
+
+  <div class="context" id="context"></div>
+
+  <div class="breakdown">
+    <h2>Where it goes</h2>
+    <div id="bars"></div>
+  </div>
+
+  <div class="methodology" id="methodology"></div>
+</div>
+
+<footer>The AI Ledger — Directional estimates only. Not investment advice.</footer>
+
+<script>
+// Data from Sankey + vault claims
+// 2025 annual figures (from site-data.json sankey section):
+//   VC subsidy: $9.8B, Inference: $14.03B, People: $11.08B, Margin: $2.15B
+//   Total system: $27.27B customer-facing
+// Plus capex (from vault/podcast claims):
+//   Industry capex: ~$250B (conservative) — Meta $125B alone, plus hyperscalers
+//   This is infrastructure investment, not operating cost
+// Total annual burn: ~$260B (capex) + ~$9.8B (VC subsidy) ≈ $270B
+// But let's be precise about what's customer-funded vs investor-funded:
+
+const DATA = {
+  year: 2025,
+  vcSubsidy: 9.8,           // $B — operating losses funded by investors
+  capex: 250,               // $B — infrastructure build (GPUs, DCs, power)
+  customerRevenue: 17.47,   // $B — what customers actually paid
+  inferenceCost: 14.03,     // $B — cost to serve tokens
+  people: 11.08,            // $B — salaries, SG&A
+  margin: 2.15,             // $B — goes to trad SaaS/hyperscalers
+  totalSystem: 27.27,       // $B — total flowing through the system
+};
+
+// The "investment" clock = capex + VC subsidy = what investors put in beyond customer payments
+const annualInvestment = (DATA.capex + DATA.vcSubsidy) * 1e9; // ~$260B
+const perSecond = annualInvestment / 365 / 24 / 3600;
+const perMinute = perSecond * 60;
+const perHour = perMinute * 60;
+const perDay = perHour * 24;
+
+// Start date: Jan 1, 2025
+const startDate = new Date('2025-01-01T00:00:00Z');
+
+function formatMoney(n) {
+  if (n >= 1e12) return '$' + (n / 1e12).toFixed(2) + 'T';
+  if (n >= 1e9) return '$' + (n / 1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function updateClock() {
+  const now = new Date();
+  const elapsed = (now - startDate) / 1000; // seconds since Jan 1 2025
+  const total = Math.max(0, elapsed * perSecond);
+
+  // Format with commas, no decimals above $1B
+  const formatted = Math.round(total).toLocaleString('en-US');
+  document.getElementById('counter').textContent = formatted;
+
+  requestAnimationFrame(updateClock);
+}
+
+function renderRates() {
+  document.getElementById('rates').innerHTML = [
+    { value: formatMoney(perDay), label: 'per day' },
+    { value: formatMoney(perHour), label: 'per hour' },
+    { value: formatMoney(perMinute), label: 'per minute' },
+    { value: formatMoney(perSecond), label: 'per second' },
+  ].map(r => '<div class="rate-card"><div class="rate-value">' + r.value + '</div><div class="rate-label">' + r.label + '</div></div>').join('');
+}
+
+function renderContext() {
+  const ratio = Math.round((DATA.capex + DATA.vcSubsidy) / DATA.customerRevenue);
+  document.getElementById('context').innerHTML = [
+    { stat: '$' + ratio + ' invested', desc: 'for every $1 of customer revenue collected in 2025. The gap between what the industry spends and what customers pay is the defining economic fact of AI today.' },
+    { stat: '$' + DATA.capex + 'B capex', desc: 'in GPU procurement, data centre construction, and power infrastructure in 2025 alone. Meta\'s $125B is the single largest line item. This is not operating cost — it\'s infrastructure betting on future demand.' },
+    { stat: '$' + DATA.vcSubsidy + 'B subsidy', desc: 'in VC-funded operating losses. Every major model provider loses money serving tokens. The $2.15B of "margin" in the system belongs to traditional SaaS vendors and hyperscaler cloud fees — not to the AI companies building the models.' },
+  ].map(c => '<div class="context-card"><div class="stat" style="color:var(--accent);">' + c.stat + '</div><div class="desc">' + c.desc + '</div></div>').join('');
+}
+
+function renderBars() {
+  const total = DATA.capex + DATA.vcSubsidy + DATA.customerRevenue;
+  const items = [
+    { label: 'Capex', value: DATA.capex, color: '#ef4444', pct: DATA.capex / total * 100 },
+    { label: 'Customer Rev', value: DATA.customerRevenue, color: '#10b981', pct: DATA.customerRevenue / total * 100 },
+    { label: 'VC Subsidy', value: DATA.vcSubsidy, color: '#f59e0b', pct: DATA.vcSubsidy / total * 100 },
+  ];
+
+  document.getElementById('bars').innerHTML = items.map(b =>
+    '<div class="bar-row">' +
+    '<div class="bar-label">' + b.label + '</div>' +
+    '<div class="bar-track"><div class="bar-fill" style="width:' + b.pct + '%;background:' + b.color + ';">' + b.pct.toFixed(0) + '%</div></div>' +
+    '<div class="bar-amount">$' + b.value + 'B</div>' +
+    '</div>'
+  ).join('');
+}
+
+function renderMethodology() {
+  document.getElementById('methodology').innerHTML =
+    '<strong>Methodology:</strong> Capex estimate ($250B) from industry reports, Meta public guidance ($115-135B), and All-In podcast claims (Chamath: $50B/GW data centre cost). ' +
+    'VC subsidy ($9.8B) is the gap between customer revenue and operating costs from the Follow the Dollar analysis. ' +
+    'Customer revenue ($17.47B) is consensus-weighted from public filings, earnings calls, and press reports. ' +
+    'The clock ticks at a constant daily rate based on 2025 annual totals. Actual spending is lumpy (quarterly capex cycles, seasonal revenue). ' +
+    'This is a directional illustration, not an audited figure.';
+}
+
+renderRates();
+renderContext();
+renderBars();
+renderMethodology();
+updateClock();
+</script>
+</body>
+</html>

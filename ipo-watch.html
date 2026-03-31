@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI IPO Watch — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1000px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:24px; font-weight:800; }
+  .sub { font-size:13px; color:var(--text-dim); margin-top:4px; margin-bottom:24px; }
+
+  .spotlight { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:28px; }
+  .spot-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:18px 20px; }
+  .spot-card h3 { font-size:16px; font-weight:700; margin-bottom:2px; }
+  .spot-card .val-row { display:flex; gap:16px; margin-top:10px; }
+  .spot-card .val { text-align:center; }
+  .spot-card .val .num { font-size:20px; font-weight:700; color:var(--accent); }
+  .spot-card .val .lbl { font-size:10px; color:var(--text-dim); }
+  .spot-status { display:inline-block; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:600; text-transform:uppercase; }
+  .ipo-filed { background:rgba(16,185,129,0.15); color:var(--green); }
+  .ipo-rumored { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .ipo-expected { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .ipo-unlikely { background:rgba(148,163,184,0.12); color:var(--text-dim); }
+
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-top:16px; }
+  th { text-align:left; font-size:10px; text-transform:uppercase; color:var(--text-dim); padding:8px 8px; border-bottom:1px solid var(--card-border); cursor:pointer; }
+  td { padding:10px 8px; border-bottom:1px solid rgba(30,41,59,0.4); }
+  tr:hover td { background:rgba(59,130,246,0.04); }
+  .co-name { font-weight:600; }
+  .multiple { color:var(--orange); font-weight:600; }
+
+  .comp-section { margin-top:28px; }
+  .comp-section h2 { font-size:16px; margin-bottom:12px; }
+  .comp-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; }
+  .comp-card { background:var(--card); border:1px solid var(--card-border); border-radius:8px; padding:12px; text-align:center; }
+  .comp-card .ticker { font-size:14px; font-weight:700; color:var(--accent); }
+  .comp-card .name { font-size:11px; color:var(--text-dim); }
+  .comp-card .mult { font-size:16px; font-weight:700; margin-top:4px; }
+  .comp-card .mlbl { font-size:10px; color:var(--text-dim); }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+  @media(max-width:600px) { .spotlight { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
+  <a href="subsidy-clock.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Subsidy Clock</a>
+  <a href="ipo-watch.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">IPO Watch</a>
+</nav>
+
+<div class="container">
+  <h1>AI IPO Watch</h1>
+  <p class="sub">Pre-IPO AI companies ranked by readiness — valuation, revenue, and path to public markets</p>
+
+  <div class="spotlight" id="spotlight"></div>
+
+  <h2 style="font-size:16px;margin-bottom:4px;">Full Pipeline</h2>
+  <p style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Sorted by IPO readiness. Revenue multiples calculated from last reported valuation ÷ ARR.</p>
+  <table id="ipo-table"></table>
+
+  <div class="comp-section">
+    <h2>Public Company Comps</h2>
+    <p style="font-size:11px;color:var(--text-dim);margin-bottom:12px;">Current revenue multiples for publicly traded AI-adjacent companies — the benchmark for pre-IPO valuations.</p>
+    <div class="comp-grid" id="comps"></div>
+  </div>
+</div>
+
+<footer>The AI Ledger — Directional estimates only. Not investment advice.</footer>
+
+<script>
+const COMPANIES = [
+  { co: 'OpenAI', valuation: 840, arr: 20000, timeline: 'Q4 2026', timelineSource: 'WSJ', status: 'expected', category: 'Foundation Model', hq: 'US', funding: '$64B', note: 'Jensen expects IPO this year. Largest private AI company. Negative gross margin on inference but revenue scale is unprecedented.' },
+  { co: 'Anthropic', valuation: 380, arr: 14000, timeline: '2026', timelineSource: 'Jensen Huang / Brad Gerstner', status: 'expected', category: 'Foundation Model', hq: 'US', funding: '$17B', note: '$6B revenue in February alone. $380B valuation at 27x ARR. IPO readiness depends on demonstrating a path to GM+.' },
+  { co: 'Databricks', valuation: 62, arr: 2400, timeline: '2026', timelineSource: 'Rumored', status: 'rumored', category: 'Data + AI', hq: 'US', funding: '$19B', note: 'Unity Catalog and AI/ML workloads driving growth. Most conventional IPO candidate — profitable or near-profitable.' },
+  { co: 'CoreWeave', valuation: 35, arr: 2300, timeline: 'Filed Mar 2025', timelineSource: 'SEC filing', status: 'filed', category: 'GPU Cloud', hq: 'US', funding: '$1.6B', note: 'Filed S-1 March 2025. Pure GPU cloud play. Revenue concentration risk (large % from Microsoft).' },
+  { co: 'Stripe', valuation: 91, arr: 4000, timeline: 'Rumored', timelineSource: 'Multiple reports', status: 'rumored', category: 'Fintech + AI', hq: 'US', funding: '$9.4B', note: 'Not pure AI but AI features (Radar, Revenue Recognition) drive upsell. Would be largest fintech IPO.' },
+  { co: 'Scale AI', valuation: 14, arr: null, timeline: 'Unknown', timelineSource: '', status: 'unlikely', category: 'AI Infrastructure', hq: 'US', funding: '$1.6B', note: 'Data labeling shifting to synthetic. Revenue not disclosed. RLHF demand could support but timing unclear.' },
+  { co: 'Cursor (Anysphere)', valuation: 10, arr: 1000, timeline: 'Not yet', timelineSource: '', status: 'unlikely', category: 'AI Dev Tool', hq: 'US', funding: '$900M', note: '$1B+ ARR in 2 years. 10x revenue multiple suggests investors expect massive growth. Too early — building category dominance first.' },
+  { co: 'Perplexity', valuation: 18, arr: 200, timeline: 'Not yet', timelineSource: '', status: 'unlikely', category: 'AI Search', hq: 'US', funding: '$900M', note: '90x revenue multiple — priced for AI search dominance, not current revenue. Margin profile unknown. Needs to prove unit economics.' },
+  { co: 'Replit', valuation: 9, arr: 252, timeline: 'Not yet', timelineSource: '', status: 'unlikely', category: 'AI Dev Tool', hq: 'US', funding: '$400M', note: '36x multiple. Gross margin swings -14% to 36% — would be heavily scrutinised in S-1.' },
+  { co: 'Harvey', valuation: 11, arr: 190, timeline: 'Not yet', timelineSource: '', status: 'unlikely', category: 'Legal AI', hq: 'US', funding: '$500M', note: '58x multiple. Strong vertical AI story. $190M ARR growing fast but needs scale for public market.' },
+  { co: 'ElevenLabs', valuation: 3.3, arr: 330, timeline: 'Possible 2027', timelineSource: '', status: 'rumored', category: 'Voice AI', hq: 'UK', funding: '$281M', note: '10x multiple — attractively valued if growth sustains. Voice AI category leader.' },
+  { co: 'Mistral AI', valuation: 6.2, arr: 400, timeline: 'Possible', timelineSource: '', status: 'rumored', category: 'Foundation Model', hq: 'France', funding: '$1.1B', note: '16x multiple. European AI champion. Le Chat + API revenue. Would likely list on Euronext Paris.' },
+];
+
+const COMPS = [
+  { ticker: 'PLTR', name: 'Palantir', rev: 2800, mcap: 250000, multiple: 89 },
+  { ticker: 'SNOW', name: 'Snowflake', rev: 3400, mcap: 55000, multiple: 16 },
+  { ticker: 'NET', name: 'Cloudflare', rev: 1800, mcap: 38000, multiple: 21 },
+  { ticker: 'DUOL', name: 'Duolingo', rev: 700, mcap: 14000, multiple: 20 },
+  { ticker: 'AI', name: 'C3.ai', rev: 310, mcap: 3700, multiple: 12 },
+  { ticker: 'CRWV', name: 'CoreWeave', rev: 2300, mcap: 35000, multiple: 15 },
+];
+
+function render() {
+  // Top 3 spotlight
+  const top3 = COMPANIES.filter(c => c.status === 'filed' || c.status === 'expected').slice(0, 3);
+  document.getElementById('spotlight').innerHTML = top3.map(c => {
+    const multiple = c.arr ? Math.round(c.valuation * 1000 / c.arr) : '—';
+    const statusClass = c.status === 'filed' ? 'ipo-filed' : c.status === 'expected' ? 'ipo-expected' : 'ipo-rumored';
+    return '<div class="spot-card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<h3>' + c.co + '</h3>' +
+        '<span class="spot-status ' + statusClass + '">' + c.status + '</span>' +
+      '</div>' +
+      '<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">' + c.category + ' · ' + c.hq + ' · Timeline: ' + c.timeline + '</div>' +
+      '<div class="val-row">' +
+        '<div class="val"><div class="num">$' + c.valuation + 'B</div><div class="lbl">Valuation</div></div>' +
+        '<div class="val"><div class="num">' + (c.arr ? '$' + (c.arr/1000).toFixed(1) + 'B' : '—') + '</div><div class="lbl">ARR</div></div>' +
+        '<div class="val"><div class="num" style="color:var(--orange);">' + multiple + 'x</div><div class="lbl">Rev Multiple</div></div>' +
+      '</div>' +
+      '<div style="font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.5;">' + c.note + '</div>' +
+    '</div>';
+  }).join('');
+
+  // Full table
+  let html = '<thead><tr><th>Company</th><th>Category</th><th>Valuation</th><th>ARR</th><th>Multiple</th><th>Timeline</th><th>Status</th><th>Source</th></tr></thead><tbody>';
+  COMPANIES.forEach(c => {
+    const multiple = c.arr ? Math.round(c.valuation * 1000 / c.arr) + 'x' : '—';
+    const statusClass = c.status === 'filed' ? 'ipo-filed' : c.status === 'expected' ? 'ipo-expected' : c.status === 'rumored' ? 'ipo-rumored' : 'ipo-unlikely';
+    html += '<tr>' +
+      '<td class="co-name">' + c.co + '</td>' +
+      '<td style="font-size:11px;">' + c.category + '</td>' +
+      '<td>$' + c.valuation + 'B</td>' +
+      '<td>' + (c.arr ? '$' + (c.arr >= 1000 ? (c.arr/1000).toFixed(1) + 'B' : c.arr + 'M') : '—') + '</td>' +
+      '<td class="multiple">' + multiple + '</td>' +
+      '<td style="font-size:11px;">' + c.timeline + '</td>' +
+      '<td><span class="spot-status ' + statusClass + '">' + c.status + '</span></td>' +
+      '<td style="font-size:10px;color:var(--text-dim);">' + (c.timelineSource || '—') + '</td>' +
+    '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('ipo-table').innerHTML = html;
+
+  // Comps
+  document.getElementById('comps').innerHTML = COMPS.map(c =>
+    '<div class="comp-card">' +
+      '<div class="ticker">' + c.ticker + '</div>' +
+      '<div class="name">' + c.name + '</div>' +
+      '<div class="mult">' + c.multiple + 'x</div>' +
+      '<div class="mlbl">EV/Revenue</div>' +
+    '</div>'
+  ).join('');
+}
+
+render();
+</script>
+</body>
+</html>
