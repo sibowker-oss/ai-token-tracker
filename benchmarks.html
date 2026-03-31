@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Founder Benchmarks — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:900px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:24px; font-weight:800; }
+  .sub { font-size:13px; color:var(--text-dim); margin-top:4px; margin-bottom:24px; }
+
+  .input-section { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:24px; }
+  .input-section h2 { font-size:16px; margin-bottom:16px; }
+  .input-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px; }
+  .input-group label { display:block; font-size:11px; color:var(--text-dim); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.5px; }
+  .input-group select, .input-group input { width:100%; padding:10px 12px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text); font-size:14px; outline:none; }
+  .input-group select:focus, .input-group input:focus { border-color:var(--accent); }
+  .btn-calc { margin-top:16px; padding:10px 28px; border-radius:8px; border:none; background:var(--accent); color:white; font-size:14px; font-weight:600; cursor:pointer; }
+  .btn-calc:hover { opacity:0.9; }
+
+  .results { display:none; }
+  .result-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; margin-bottom:24px; }
+  .result-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px 18px; }
+  .result-card .label { font-size:11px; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px; }
+  .result-card .value { font-size:24px; font-weight:700; }
+  .result-card .detail { font-size:11px; color:var(--text-dim); margin-top:4px; line-height:1.5; }
+
+  .percentile-bar { height:24px; background:var(--card); border-radius:6px; position:relative; overflow:hidden; margin:8px 0; }
+  .percentile-fill { height:100%; border-radius:6px; }
+  .percentile-marker { position:absolute; top:-2px; width:3px; height:28px; background:white; border-radius:2px; }
+
+  .comparables { margin-top:24px; }
+  .comparables h2 { font-size:16px; margin-bottom:12px; }
+  .comp-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .comp-table th { text-align:left; font-size:10px; text-transform:uppercase; color:var(--text-dim); padding:8px; border-bottom:1px solid var(--card-border); }
+  .comp-table td { padding:8px; border-bottom:1px solid rgba(30,41,59,0.4); }
+  .comp-table .you { background:rgba(59,130,246,0.08); font-weight:600; }
+
+  .cta { margin-top:32px; text-align:center; padding:24px; background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(139,92,246,0.08)); border:1px solid rgba(59,130,246,0.2); border-radius:12px; }
+  .cta h3 { font-size:16px; margin-bottom:6px; }
+  .cta p { font-size:12px; color:var(--text-dim); margin-bottom:12px; }
+  .cta a { padding:10px 24px; border-radius:8px; background:var(--accent); color:white; text-decoration:none; font-weight:600; font-size:13px; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+  @media(max-width:600px) { .input-grid { grid-template-columns:1fr; } .result-grid { grid-template-columns:1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="subsidy-clock.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Subsidy Clock</a>
+  <a href="ipo-watch.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">IPO Watch</a>
+  <a href="benchmarks.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Benchmarks</a>
+</nav>
+
+<div class="container">
+  <h1>How does your AI startup compare?</h1>
+  <p class="sub">Benchmark your token economics against 63 tracked AI companies. Real data, not projections.</p>
+
+  <div class="input-section">
+    <h2>Your numbers</h2>
+    <div class="input-grid">
+      <div class="input-group">
+        <label>Stage</label>
+        <select id="in-stage">
+          <option value="seed">Seed / Pre-revenue</option>
+          <option value="a">Series A ($1-10M ARR)</option>
+          <option value="b" selected>Series B ($10-50M ARR)</option>
+          <option value="c">Series C ($50-200M ARR)</option>
+          <option value="growth">Growth ($200M+ ARR)</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>ARR (annual)</label>
+        <input type="number" id="in-arr" placeholder="e.g. 10000000" value="50000000">
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">In USD (e.g. 50000000 = $50M)</div>
+      </div>
+      <div class="input-group">
+        <label>Monthly AI/token spend</label>
+        <input type="number" id="in-spend" placeholder="e.g. 500000" value="500000">
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">In USD (e.g. 500000 = $500K/mo)</div>
+      </div>
+      <div class="input-group">
+        <label>Category</label>
+        <select id="in-category">
+          <option value="ai-application" selected>AI Application</option>
+          <option value="vertical-ai">Vertical AI</option>
+          <option value="ai-infrastructure">AI Infrastructure</option>
+          <option value="digital-native">Digital Native</option>
+          <option value="enterprise-saas">Enterprise SaaS</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Primary provider</label>
+        <select id="in-provider">
+          <option value="anthropic">Anthropic</option>
+          <option value="openai" selected>OpenAI</option>
+          <option value="google">Google</option>
+          <option value="meta">Meta / open models</option>
+          <option value="mixed">Mixed / multi-provider</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Founded year</label>
+        <input type="number" id="in-founded" value="2023" min="2010" max="2026">
+      </div>
+    </div>
+    <button class="btn-calc" onclick="calculate()">Benchmark me</button>
+  </div>
+
+  <div class="results" id="results">
+    <div class="result-grid" id="result-cards"></div>
+
+    <div class="comparables">
+      <h2>Most similar companies</h2>
+      <table class="comp-table" id="comp-table"></table>
+    </div>
+
+    <div class="cta">
+      <h3>Want a deeper analysis?</h3>
+      <p>Get a personalised AI economics review — provider mix optimisation, COGS benchmarking, and scaling strategy.</p>
+      <a href="mailto:simon@inceptron.ai?subject=AI%20Benchmark%20Analysis%20Request">Request analysis</a>
+    </div>
+  </div>
+</div>
+
+<footer>The AI Ledger — Directional estimates only. Not investment advice.</footer>
+
+<script>
+let allConsumers = [];
+
+async function loadData() {
+  try {
+    const r = await fetch('site-data.json?v=' + Date.now());
+    const s = await r.json();
+    allConsumers = (s.dashboard?.topConsumers || []).filter(c => c.arrNumeric && c.tokensNumeric);
+    console.log('Loaded ' + allConsumers.length + ' benchmarkable companies');
+  } catch(e) { console.warn('Could not load benchmark data'); }
+}
+
+function percentile(arr, value) {
+  const sorted = [...arr].sort((a,b) => a - b);
+  const below = sorted.filter(v => v <= value).length;
+  return Math.round(below / sorted.length * 100);
+}
+
+function formatMoney(n) {
+  if (n >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(0) + 'M';
+  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+  return '$' + n;
+}
+
+function calculate() {
+  const arr = parseFloat(document.getElementById('in-arr').value) || 0;
+  const monthlySpend = parseFloat(document.getElementById('in-spend').value) || 0;
+  const category = document.getElementById('in-category').value;
+  const provider = document.getElementById('in-provider').value;
+  const founded = parseInt(document.getElementById('in-founded').value) || 2023;
+
+  if (arr <= 0) { alert('Please enter your ARR'); return; }
+
+  const annualSpend = monthlySpend * 12;
+  const cogsRatio = arr > 0 ? (annualSpend / arr * 100) : 0;
+
+  // Estimate daily tokens from spend
+  const blendedPrice = provider === 'meta' ? 1.0 : provider === 'anthropic' ? 4.0 : provider === 'openai' ? 3.0 : 2.5;
+  const dailyTokens = (monthlySpend / 30) / blendedPrice * 1e6;
+
+  // Calculate percentiles against dataset
+  const arrValues = allConsumers.map(c => c.arrNumeric);
+  const tokenValues = allConsumers.map(c => c.tokensNumeric);
+  const cogsValues = allConsumers.filter(c => c.arrNumeric > 0).map(c => {
+    // Estimate COGS from tokens and blended price
+    const estSpend = c.tokensNumeric / 1e6 * 2.5 * 365;
+    return estSpend / c.arrNumeric * 100;
+  });
+
+  const arrPct = percentile(arrValues, arr);
+  const tokenPct = percentile(tokenValues, dailyTokens);
+  const cogsPct = percentile(cogsValues, cogsRatio);
+
+  // Category benchmarks
+  const catBenchmarks = { 'ai-application': 30, 'vertical-ai': 25, 'ai-infrastructure': 65, 'digital-native': 12, 'enterprise-saas': 5 };
+  const expectedCogs = catBenchmarks[category] || 25;
+  const cogsHealth = cogsRatio <= expectedCogs * 0.8 ? 'excellent' : cogsRatio <= expectedCogs * 1.2 ? 'healthy' : cogsRatio <= expectedCogs * 1.8 ? 'elevated' : 'critical';
+  const cogsColor = cogsHealth === 'excellent' ? 'var(--green)' : cogsHealth === 'healthy' ? 'var(--accent)' : cogsHealth === 'elevated' ? 'var(--orange)' : 'var(--red)';
+
+  // Provider mix comparison
+  const sameCategory = allConsumers.filter(c => c.category === category);
+  const providerCounts = {};
+  sameCategory.forEach(c => (c.providers || []).forEach(p => { providerCounts[p] = (providerCounts[p] || 0) + 1; }));
+  const totalProvRefs = Object.values(providerCounts).reduce((a,b) => a+b, 0) || 1;
+  const topProviders = Object.entries(providerCounts).sort((a,b) => b[1] - a[1]).slice(0, 4)
+    .map(([p, n]) => p + ' (' + Math.round(n/totalProvRefs*100) + '%)').join(', ');
+
+  // AI era check
+  const isAiEra = founded >= 2023;
+  const aiEraCount = allConsumers.filter(c => c.founded && c.founded >= 2023).length;
+  const aiEraPct = Math.round(aiEraCount / allConsumers.length * 100);
+
+  // Render results
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('result-cards').innerHTML = [
+    { label: 'ARR Percentile', value: 'P' + arrPct, color: arrPct >= 75 ? 'var(--green)' : arrPct >= 50 ? 'var(--accent)' : 'var(--orange)', detail: 'Your ' + formatMoney(arr) + ' ARR is larger than ' + arrPct + '% of tracked AI companies.' },
+    { label: 'Token Volume Percentile', value: 'P' + tokenPct, color: tokenPct >= 75 ? 'var(--green)' : tokenPct >= 50 ? 'var(--accent)' : 'var(--orange)', detail: 'Est. ' + Math.round(dailyTokens/1e9) + 'B tokens/day puts you at P' + tokenPct + ' of tracked companies.' },
+    { label: 'COGS Ratio', value: cogsRatio.toFixed(0) + '%', color: cogsColor, detail: 'Your AI spend is ' + cogsRatio.toFixed(0) + '% of revenue. Category average: ' + expectedCogs + '%. Status: ' + cogsHealth + '.' },
+    { label: 'AI Era', value: isAiEra ? 'Post-ChatGPT' : 'Pre-ChatGPT', color: isAiEra ? 'var(--green)' : 'var(--text-dim)', detail: isAiEra ? 'Founded ' + founded + '. ' + aiEraPct + '% of tracked companies are AI-era.' : 'Founded ' + founded + '. Pre-AI-era companies make up ' + (100-aiEraPct) + '% of the dataset.' },
+    { label: 'Provider Mix', value: provider, color: 'var(--accent)', detail: 'Similar companies in your category use: ' + (topProviders || 'mixed providers') + '.' },
+    { label: 'Dataset', value: allConsumers.length + ' companies', color: 'var(--text-dim)', detail: 'Benchmarked against ' + allConsumers.length + ' AI companies with known ARR and token consumption data.' },
+  ].map(r => '<div class="result-card"><div class="label">' + r.label + '</div><div class="value" style="color:' + r.color + ';">' + r.value + '</div><div class="detail">' + r.detail + '</div></div>').join('');
+
+  // Find 5 most similar companies (by ARR proximity)
+  const scored = allConsumers.map(c => ({
+    ...c,
+    arrDist: Math.abs(Math.log10(Math.max(c.arrNumeric, 1)) - Math.log10(Math.max(arr, 1))),
+    catMatch: c.category === category ? 0 : 1,
+  })).sort((a, b) => (a.catMatch - b.catMatch) || (a.arrDist - b.arrDist));
+
+  const comparables = scored.slice(0, 5);
+  let html = '<thead><tr><th>Company</th><th>Category</th><th>ARR</th><th>Tokens/Day</th><th>Est. COGS</th><th>Founded</th></tr></thead><tbody>';
+  // Add "You" row
+  html += '<tr class="you"><td>Your company</td><td>' + category.replace(/-/g,' ') + '</td><td>' + formatMoney(arr) + '</td><td>' + Math.round(dailyTokens/1e9) + 'B</td><td>' + cogsRatio.toFixed(0) + '%</td><td>' + founded + '</td></tr>';
+  comparables.forEach(c => {
+    const estCogs = c.arrNumeric > 0 ? Math.round(c.tokensNumeric / 1e6 * 2.5 * 365 / c.arrNumeric * 100) : '—';
+    html += '<tr><td style="font-weight:600;">' + c.co + '</td><td style="font-size:11px;">' + (c.category || '').replace(/-/g,' ') + '</td><td>' + (c.arr || formatMoney(c.arrNumeric)) + '</td><td>' + c.tokens + '</td><td>' + estCogs + '%</td><td>' + (c.founded || '—') + '</td></tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('comp-table').innerHTML = html;
+
+  // Scroll to results
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+}
+
+loadData();
+</script>
+</body>
+</html>
