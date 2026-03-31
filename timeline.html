@@ -232,7 +232,8 @@ function updateToQuarter(idx) {
   chartPrice.options.plugins.annotation = undefined; // simplified — just update
 
   const ev = EVENTS[idx];
-  document.getElementById('event-card').innerHTML = '<h3>' + ev.title + '</h3><p>' + ev.text + '</p>';
+  const deltaHtml = ev.delta ? '<div style="margin-top:8px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:6px;font-size:11px;color:var(--accent);font-weight:600;">' + ev.delta + '</div>' : '';
+  document.getElementById('event-card').innerHTML = '<h3>' + ev.title + '</h3><p>' + ev.text + '</p>' + deltaHtml;
 }
 
 // Slider
@@ -268,6 +269,6 @@ function playAnimation() {
 // Load data and initialize
 loadTimelineData();
 </script>
-<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">Global AI Dash v1.0 — Directional estimates only. Not investment advice.</footer>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice.</footer>
 </body>
 </html>

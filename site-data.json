@@ -3634,39 +3634,48 @@
     "events": [
       {
         "title": "The GPT-4 Era",
-        "text": "OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche."
+        "text": "OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche.",
+        "delta": "Baseline quarter. Total market: $4.7B ARR."
       },
       {
         "title": "GPT-4o + Claude 3.5 Sonnet + Llama 3",
-        "text": "Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast."
+        "text": "Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast.",
+        "delta": "Total +$1.9B (+42% QoQ). Biggest mover: OpenAI (+$1.1B)."
       },
       {
         "title": "The Mini Revolution",
-        "text": "GPT-4o mini at $0.60/M output \u2014 99.5% cheaper than GPT-4. But Llama 3.1 405B launches in July, closing the frontier quality gap. vLLM Docker pulls accelerate. Self-hosting becomes viable at enterprise scale."
+        "text": "GPT-4o mini at $0.60/M output \u2014 99.5% cheaper than GPT-4. But Llama 3.1 405B launches in July, closing the frontier quality gap. vLLM Docker pulls accelerate. Self-hosting becomes viable at enterprise scale.",
+        "delta": "Total +$2.3B (+36% QoQ). Biggest mover: OpenAI (+$1.0B)."
       },
       {
         "title": "Open Source Inflection",
-        "text": "Llama 3.1, Qwen 2.5, DeepSeek V2.5 all strong. Self-hosted tokens now ~9% of global volume. Enterprises self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges."
+        "text": "Llama 3.1, Qwen 2.5, DeepSeek V2.5 all strong. Self-hosted tokens now ~9% of global volume. Enterprises self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges.",
+        "delta": "Total +$3.7B (+41% QoQ). Biggest mover: OpenAI (+$1.5B)."
       },
       {
         "title": "DeepSeek Shock",
-        "text": "DeepSeek R1 matches GPT-4o at 1/10th the price \u2014 and it's open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?"
+        "text": "DeepSeek R1 matches GPT-4o at 1/10th the price \u2014 and it's open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?",
+        "delta": "Total +$5.2B (+42% QoQ). Biggest mover: OpenAI (+$2.0B)."
       },
       {
         "title": "The Enterprise AI Mirage",
-        "text": "M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked \u2260 used. Meanwhile open models quietly grow \u2014 banks, governments, sovereign clouds all deploying Llama/Qwen."
+        "text": "M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked \u2260 used. Meanwhile open models quietly grow \u2014 banks, governments, sovereign clouds all deploying Llama/Qwen.",
+        "delta": "Total +$5.8B (+32% QoQ). Biggest mover: Anthropic (+$2.5B)."
       },
       {
         "title": "Anthropic Takes Enterprise, OSS Takes Volume",
-        "text": "Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story \u2014 80T tokens/day with almost no model-layer revenue."
+        "text": "Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story \u2014 80T tokens/day with almost no model-layer revenue.",
+        "delta": "Total +$5.7B (+24% QoQ). Biggest mover: Anthropic (+$2.5B)."
       },
       {
         "title": "The AI Native Explosion",
-        "text": "Cursor $1B ARR, Harvey $190M, Cognition $155M. Many AI natives use a mix of frontier AND open models, routing by cost/quality. litellm hits 97M downloads/month."
+        "text": "Cursor $1B ARR, Harvey $190M, Cognition $155M. Many AI natives use a mix of frontier AND open models, routing by cost/quality. litellm hits 97M downloads/month.",
+        "delta": "Total +$6.6B (+22% QoQ). Biggest mover: OpenAI (+$3.0B)."
       },
       {
         "title": "Today: Revenue Explosion Meets Reality Check",
-        "text": "OpenAI $20B ARR, Anthropic $14B (adding $6B in February alone \u2014 Brad Gerstner). Both expected to IPO in 2026 (Jensen Huang). NVIDIA invested $40B. But Chamath warns: zero proven enterprise ROI at scale, token spend tripling quarterly with no revenue gains. Meta spending $115-135B on AI infra. 85% of startup tokens now on open source. Data center costs hit $50B/GW with 5-year payback \u2014 and 40% of protested US DCs get canceled."
+        "text": "OpenAI $20B ARR, Anthropic $14B (adding $6B in February alone \u2014 Brad Gerstner). Both expected to IPO in 2026 (Jensen Huang). NVIDIA invested $40B. But Chamath warns: zero proven enterprise ROI at scale, token spend tripling quarterly with no revenue gains. Meta spending $115-135B on AI infra. 85% of startup tokens now on open source. Data center costs hit $50B/GW with 5-year payback \u2014 and 40% of protested US DCs get canceled.",
+        "delta": "Total +$7.9B (+22% QoQ). Biggest mover: OpenAI (+$4.0B)."
       }
     ]
   },

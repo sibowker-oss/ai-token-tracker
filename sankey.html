@@ -54,6 +54,13 @@
   <h1>Follow the Dollar</h1>
   <div class="sub" id="sankeySubtitle">2025 actual revenue collected (not exit ARR). Consensus-weighted estimates. Hover to explore.</div>
 
+  <!-- Headline callout -->
+  <div style="text-align:center;padding:24px;margin:16px 0;background:linear-gradient(135deg, rgba(239,68,68,0.08), rgba(245,158,11,0.08));border:1px solid rgba(239,68,68,0.15);border-radius:12px;">
+    <div style="font-size:48px;font-weight:800;color:var(--red);line-height:1;">$15 invested</div>
+    <div style="font-size:16px;color:var(--text-dim);margin-top:4px;">for every <strong style="color:var(--text);">$1</strong> of customer revenue collected</div>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:8px;">VC subsidy + infrastructure capex vs. actual customer payments in 2025</div>
+  </div>
+
   <div class="sankey-container">
     <canvas id="sankey" height="600"></canvas>
   </div>
@@ -94,7 +101,10 @@
     <p style="font-size:12px; color:var(--text-dim); margin-top:16px; font-style:italic;">Even ignoring people costs, R&D, and SG&A — the core AI inference business loses money at the gross margin level. Every token served costs more than customers pay for it. The $2.15B of "margin" in the system belongs entirely to Trad SaaS vendors and hyperscaler cloud fees — not to the companies building the models.</p>
 
     <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(16,185,129,0.15);">
-      <h4 style="color:var(--green); font-size:14px; margin-bottom:8px;">This is unsustainable. Only three things fix it:</h4>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <span style="background:var(--accent);color:white;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;">Editor's View</span>
+        <h4 style="color:var(--green); font-size:14px;">This is unsustainable. Only three things fix it:</h4>
+      </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px;">
         <div style="background:rgba(16,185,129,0.06); border-radius:8px; padding:14px;">
           <div style="font-size:13px; font-weight:700; color:var(--green); margin-bottom:6px;">1. Inference costs fall ~35%</div>
@@ -653,6 +663,6 @@ canvas.addEventListener('mouseleave', () => {
 // Boot
 loadSankeyData();
 </script>
-<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">Global AI Dash v1.0 — Directional estimates only. Not investment advice.</footer>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice.</footer>
 </body>
 </html>

@@ -150,9 +150,10 @@
 <div class="container">
 
 <header style="text-align:center;">
-  <h1>Global AI Token Usage</h1>
-  <p style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-top:6px;">Estimates derived from triangulated public filings, API observations, and industry disclosures. Figures are directional indicators, not audited financials. All revenue figures are annualized run rate (ARR). See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual 2025 collected.</p>
-  <div id="data-refresh" style="font-size:10px;color:var(--text-dim);margin-top:4px;"></div>
+  <h1 style="font-size:28px;font-weight:800;letter-spacing:-0.5px;">The AI Ledger</h1>
+  <p style="font-size:13px;color:var(--text-dim);margin-top:4px;">The live economics of AI — updated weekly</p>
+  <div id="data-refresh" style="font-size:11px;color:var(--accent);margin-top:8px;font-weight:600;"></div>
+  <p style="font-size:10px;color:var(--text-dim);line-height:1.5;margin-top:6px;">Triangulated from public filings, API observations, and industry disclosures. Directional indicators, not audited financials. ARR figures throughout. See <a href="sankey.html" style="color:#3b82f6;">Follow the Dollar</a> for actual collected.</p>
 </header>
 
 <!-- ===== FILTER BAR ===== -->
@@ -160,6 +161,15 @@
 
 <!-- ===== HERO STATS ===== -->
 <div class="hero-grid" id="hero-stats"></div>
+
+<!-- ===== ENTERPRISE REALITY CHECK ===== -->
+<div class="card">
+  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">&mdash; Booked ARR vs. actual token consumption</span></h2>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="detail" id="enterprise-table"></table>
+  </div>
+</div>
+
 
 <!-- ===== MAIN CHARTS ===== -->
 <div class="card">
@@ -202,14 +212,6 @@
   </div>
 </div>
 
-<!-- ===== ENTERPRISE REALITY CHECK ===== -->
-<div class="card">
-  <h2 style="color:var(--red);">Enterprise AI Reality Check <span class="sub">&mdash; Booked ARR vs. actual token consumption</span></h2>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
-    <table class="detail" id="enterprise-table"></table>
-  </div>
-</div>
-
 <!-- ===== TOP CONSUMERS ===== -->
 <div class="card">
   <h2>Top Token Consumers <span class="sub" id="consumer-filter-label"></span></h2>
@@ -235,7 +237,7 @@
 
 <!-- ===== METHODOLOGY (collapsible) ===== -->
 <details class="card" style="background:rgba(59,130,246,0.05); border-color:rgba(59,130,246,0.2); cursor:pointer;">
-  <summary style="font-size:13px;font-weight:600;color:var(--text);padding:4px 0;">Methodology &amp; Sources</summary>
+  <summary style="font-size:13px;font-weight:600;color:var(--text);padding:4px 0;">How we estimate <span style="font-weight:400;color:var(--text-dim);font-size:11px;">&mdash; Triangulated from 4 independent methods across public filings, SDK stats, and GPU capacity.</span></summary>
   <p style="font-size:12px; color:var(--text-dim); line-height:1.7; margin-top:12px;">
     <strong>Provider revenue:</strong> OpenAI ($20B ARR end-2025 &mdash; WSJ, Bloomberg, All-In); Anthropic ($14B ARR Feb'26 &mdash; investor disclosure); Google Cloud AI ("billions" &mdash; Alphabet earnings); xAI, DeepSeek, Mistral from press reports.<br>
     <strong>Token volumes:</strong> Triangulated from 4 methods: (1) Revenue &divide; blended pricing, (2) GPU capacity ceiling (~4.5M H100-equiv &times; 30-50% utilization &mdash; SemiAnalysis), (3) Bottom-up user &times; session &times; token estimation, (4) SDK download proxies (PyPI/npm, pypistats.org).<br>
@@ -245,7 +247,7 @@
   </p>
 </details>
 
-<footer>Global AI Dash v1.0 &mdash; Directional estimates only. Not investment advice.</footer>
+<footer>The AI Ledger &mdash; Directional estimates only. Not investment advice.</footer>
 
 </div>
 
