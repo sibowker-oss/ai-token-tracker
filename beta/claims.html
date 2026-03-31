@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim Review Queue — Admin</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { sessionStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1000px; margin:0 auto; padding:24px; }
+  h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  h1 span.tag { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+
+  .stats-row { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .stat-pill { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:12px; }
+  .stat-pill strong { color:var(--text); }
+
+  .filters { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .filter-btn { padding:4px 10px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .filter-btn:hover { border-color:var(--text-dim); color:var(--text); }
+  .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  .claim-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:10px; transition:all 0.2s; }
+  .claim-card.w-authoritative { border-left:3px solid var(--green); }
+  .claim-card.w-corroborating { border-left:3px solid var(--accent); }
+  .claim-card.w-indicative { border-left:3px solid var(--text-dim); }
+  .claim-card.decided-accepted { opacity:0.6; border-left-color:var(--green); background:rgba(16,185,129,0.03); }
+  .claim-card.decided-declined { opacity:0.4; border-left-color:var(--red); background:rgba(239,68,68,0.02); }
+  .claim-card.decided-parked { opacity:0.5; border-left-color:var(--orange); background:rgba(245,158,11,0.02); }
+
+  .claim-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
+  .claim-entity { font-size:14px; font-weight:700; }
+  .claim-badges { display:flex; gap:4px; flex-shrink:0; flex-wrap:wrap; }
+
+  .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .badge-authoritative { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-corroborating { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .badge-indicative { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .badge-new { background:rgba(6,182,212,0.12); color:var(--cyan); }
+  .badge-confirms { background:rgba(16,185,129,0.12); color:var(--green); }
+  .badge-conflicts { background:rgba(239,68,68,0.15); color:var(--red); }
+  .badge-high { background:rgba(16,185,129,0.1); color:var(--green); }
+  .badge-medium { background:rgba(245,158,11,0.1); color:var(--orange); }
+  .badge-low { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+
+  .claim-quote { font-size:12px; color:var(--text); line-height:1.5; margin-bottom:8px; font-style:italic; }
+  .claim-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
+  .claim-meta strong { color:var(--text); font-weight:600; }
+  .claim-conflict { font-size:11px; color:var(--red); margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.06); border-radius:6px; }
+
+  /* Action buttons per claim */
+  .claim-actions { display:flex; gap:6px; margin-top:10px; align-items:center; flex-wrap:wrap; }
+  .action-btn { padding:5px 12px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .action-btn:hover { color:var(--text); }
+  .action-btn.act-accept { border-color:rgba(16,185,129,0.3); }
+  .action-btn.act-accept:hover, .action-btn.act-accept.active { background:rgba(16,185,129,0.15); color:var(--green); border-color:var(--green); }
+  .action-btn.act-decline { border-color:rgba(239,68,68,0.3); }
+  .action-btn.act-decline:hover, .action-btn.act-decline.active { background:rgba(239,68,68,0.15); color:var(--red); border-color:var(--red); }
+  .action-btn.act-park { border-color:rgba(245,158,11,0.3); }
+  .action-btn.act-park:hover, .action-btn.act-park.active { background:rgba(245,158,11,0.15); color:var(--orange); border-color:var(--orange); }
+  .claim-note { flex:1; min-width:150px; padding:5px 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:6px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
+  .claim-note:focus { border-color:var(--accent); }
+  .claim-note::placeholder { color:#475569; }
+  .decision-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; margin-left:4px; }
+  .decision-label.dl-accepted { color:var(--green); }
+  .decision-label.dl-declined { color:var(--red); }
+  .decision-label.dl-parked { color:var(--orange); }
+
+  /* Submit bar */
+  .submit-bar { position:sticky; bottom:0; background:var(--card); border:1px solid var(--card-border); border-radius:10px 10px 0 0; padding:14px 20px; margin-top:24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; box-shadow:0 -4px 20px rgba(0,0,0,0.3); }
+  .submit-bar .summary { font-size:12px; color:var(--text-dim); flex:1; }
+  .submit-bar .summary strong { color:var(--text); }
+  .submit-bar .summary .s-green { color:var(--green); }
+  .submit-bar .summary .s-red { color:var(--red); }
+  .submit-bar .summary .s-orange { color:var(--orange); }
+  .submit-btn { padding:8px 24px; border-radius:8px; border:none; background:var(--green); color:white; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .submit-btn:hover { opacity:0.9; }
+  .submit-btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .export-btn { padding:8px 16px; border-radius:8px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
+  .export-btn:hover { background:#1e293b; color:var(--text); }
+
+  .empty { text-align:center; padding:40px; color:var(--text-dim); font-size:13px; }
+
+  .rules { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:20px; font-size:11px; color:var(--text-dim); line-height:1.7; }
+  .rules strong { color:var(--text); }
+
+  .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--green); color:white; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:600; z-index:100; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .toast.show { opacity:1; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:80px; }
+</style>
+</head>
+<body>
+
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <span style="flex-grow:1"></span>
+  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Vault</a>
+  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Sources</a>
+  <a href="claims.html" style="padding:6px 14px;border-radius:8px;background:#3b82f6;color:white;text-decoration:none;font-size:12px;font-weight:600;">Claims</a>
+  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">In Development</a>
+</nav>
+
+<div class="container">
+  <h1>Claim Review Queue <span class="tag">Admin</span></h1>
+  <p class="intro">Review each claim: Accept to incorporate into site-data.json, Decline to reject, or Park for later. Add notes, then Submit Decisions.</p>
+
+  <div class="rules">
+    <strong>Incorporation rules:</strong>
+    <strong style="color:var(--green);">Authoritative</strong> = can set/update a data point directly.
+    <strong style="color:var(--accent);">Corroborating</strong> = raise confidence on existing point, or add if no primary source.
+    <strong style="color:var(--text-dim);">Indicative</strong> = triangulation only; never override authoritative/corroborating.
+  </div>
+
+  <div class="stats-row" id="stats-row"></div>
+  <div class="filters" id="filters"></div>
+  <div id="claims-list"></div>
+</div>
+
+<div class="submit-bar" id="submit-bar">
+  <div class="summary" id="submit-summary"></div>
+  <button class="export-btn" onclick="exportDecisions()">Export JSON</button>
+  <button class="submit-btn" id="submit-btn" onclick="submitDecisions()">Submit Decisions</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>Global AI Dash v1.0 — Admin</footer>
+
+<script>
+const DECISIONS_KEY = 'claim-decisions';
+let allClaims = [];
+let decisions = {}; // { claimIndex: { decision: 'accepted'|'declined'|'parked', note: '' } }
+let activeFilter = 'all';
+let sourceFile = '';
+
+function loadDecisions() {
+  try { decisions = JSON.parse(localStorage.getItem(DECISIONS_KEY) || '{}'); } catch(e) { decisions = {}; }
+}
+function saveDecisions() {
+  localStorage.setItem(DECISIONS_KEY, JSON.stringify(decisions));
+}
+
+async function loadClaims() {
+  const today = new Date().toISOString().split('T')[0];
+  const dates = [today];
+  for (let i = 1; i <= 14; i++) {
+    const d = new Date(Date.now() - i * 86400000);
+    dates.push(d.toISOString().split('T')[0]);
+  }
+
+  for (const date of dates) {
+    try {
+      const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
+      if (resp.ok) {
+        allClaims = await resp.json();
+        sourceFile = date + '-candidates.json';
+        console.log('Loaded ' + allClaims.length + ' claims from ' + date);
+        break;
+      }
+    } catch(e) {}
+  }
+
+  if (allClaims.length === 0) {
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run extract_claims.py to generate candidates.</div>';
+    return;
+  }
+
+  loadDecisions();
+  renderStats();
+  renderFilters();
+  renderClaims();
+  updateSubmitBar();
+}
+
+function renderStats() {
+  const weights = {}, cats = {}, statuses = {};
+  allClaims.forEach(c => {
+    weights[c.weight] = (weights[c.weight] || 0) + 1;
+    cats[c.category] = (cats[c.category] || 0) + 1;
+    statuses[c.dedup_status] = (statuses[c.dedup_status] || 0) + 1;
+  });
+
+  const decided = Object.keys(decisions).length;
+  let html = '<span class="stat-pill">Total: <strong>' + allClaims.length + '</strong></span>';
+  html += '<span class="stat-pill">Reviewed: <strong>' + decided + '/' + allClaims.length + '</strong></span>';
+  for (const [k,v] of Object.entries(weights)) html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
+  for (const [k,v] of Object.entries(statuses)) html += '<span class="stat-pill">' + k + ': <strong>' + v + '</strong></span>';
+  document.getElementById('stats-row').innerHTML = html;
+}
+
+function renderFilters() {
+  const categories = ['all', 'pending', ...new Set(allClaims.map(c => c.category))];
+  let html = '';
+  categories.forEach(cat => {
+    const label = cat === 'all' ? 'All' : cat === 'pending' ? 'Pending Review' : cat.replace(/_/g, ' ');
+    html += '<button class="filter-btn' + (activeFilter === cat ? ' active' : '') + '" onclick="setFilter(\'' + cat + '\')">' + label + '</button>';
+  });
+  ['authoritative', 'corroborating', 'indicative'].forEach(w => {
+    html += '<button class="filter-btn' + (activeFilter === 'w:' + w ? ' active' : '') + '" onclick="setFilter(\'w:' + w + '\')" style="margin-left:' + (w === 'authoritative' ? '12px' : '0') + ';">' + w + '</button>';
+  });
+  // Decision filters
+  ['accepted', 'declined', 'parked'].forEach(d => {
+    html += '<button class="filter-btn' + (activeFilter === 'd:' + d ? ' active' : '') + '" onclick="setFilter(\'d:' + d + '\')" style="margin-left:' + (d === 'accepted' ? '12px' : '0') + ';">' + d + '</button>';
+  });
+  document.getElementById('filters').innerHTML = html;
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilters();
+  renderClaims();
+}
+
+function setDecision(idx, decision) {
+  if (!decisions[idx]) decisions[idx] = { decision: '', note: '' };
+  if (decisions[idx].decision === decision) {
+    // Toggle off
+    delete decisions[idx];
+  } else {
+    decisions[idx].decision = decision;
+  }
+  saveDecisions();
+  renderStats();
+  renderClaims();
+  updateSubmitBar();
+}
+
+function setNote(idx, note) {
+  if (!decisions[idx]) decisions[idx] = { decision: '', note: '' };
+  decisions[idx].note = note;
+  if (!decisions[idx].decision && !note) delete decisions[idx];
+  saveDecisions();
+}
+
+function renderClaims() {
+  let filtered = allClaims.map((c, i) => ({ ...c, _idx: i }));
+
+  if (activeFilter === 'pending') {
+    filtered = filtered.filter(c => !decisions[c._idx]?.decision);
+  } else if (activeFilter.startsWith('w:')) {
+    filtered = filtered.filter(c => c.weight === activeFilter.substring(2));
+  } else if (activeFilter.startsWith('d:')) {
+    filtered = filtered.filter(c => decisions[c._idx]?.decision === activeFilter.substring(2));
+  } else if (activeFilter !== 'all') {
+    filtered = filtered.filter(c => c.category === activeFilter);
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No claims match this filter.</div>';
+    return;
+  }
+
+  // Sort: conflicts first, then by weight
+  const weightOrder = { authoritative: 0, corroborating: 1, indicative: 2 };
+  const statusOrder = { conflicts: 0, new: 1, confirms: 2, stale: 3 };
+  filtered.sort((a, b) => {
+    const sa = statusOrder[a.dedup_status] ?? 9;
+    const sb = statusOrder[b.dedup_status] ?? 9;
+    if (sa !== sb) return sa - sb;
+    return (weightOrder[a.weight] ?? 9) - (weightOrder[b.weight] ?? 9);
+  });
+
+  let html = '';
+  filtered.forEach(c => {
+    const idx = c._idx;
+    const d = decisions[idx] || {};
+    const decidedClass = d.decision ? ' decided-' + d.decision : '';
+
+    html += '<div class="claim-card w-' + c.weight + decidedClass + '">';
+
+    // Header row
+    html += '<div class="claim-top">';
+    html += '<span class="claim-entity">' + (c.entity || '?') + ' — ' + (c.value_display || c.value || '?') + '</span>';
+    html += '<div class="claim-badges">';
+    if (d.decision) html += '<span class="badge badge-' + (d.decision === 'accepted' ? 'confirms' : d.decision === 'declined' ? 'conflicts' : 'medium') + '">' + d.decision.toUpperCase() + '</span>';
+    html += '<span class="badge badge-' + c.weight + '">' + c.weight + '</span>';
+    html += '<span class="badge badge-' + c.dedup_status + '">' + c.dedup_status + '</span>';
+    html += '<span class="badge badge-' + c.confidence + '">' + c.confidence + '</span>';
+    html += '</div></div>';
+
+    // Quote
+    html += '<div class="claim-quote">"' + c.claim + '"</div>';
+
+    // Metadata
+    html += '<div class="claim-meta">';
+    html += '<strong>Metric:</strong> ' + (c.metric || '?') + ' &nbsp; ';
+    html += '<strong>Period:</strong> ' + (c.time_period || '?') + ' &nbsp; ';
+    html += '<strong>Speaker:</strong> ' + (c.speaker || '?') + '<br>';
+    html += '<strong>Source:</strong> ' + (c.source_podcast || '?') + ' (' + (c.source_date || '?') + ')';
+    if (c.original_source_cited) html += ' &nbsp; <strong>Cites:</strong> ' + c.original_source_cited;
+    html += '</div>';
+
+    // Conflict note
+    if (c.dedup_note) {
+      html += '<div class="claim-conflict">' + c.dedup_note + '</div>';
+    }
+
+    // Action buttons
+    html += '<div class="claim-actions">';
+    html += '<button class="action-btn act-accept' + (d.decision === 'accepted' ? ' active' : '') + '" onclick="setDecision(' + idx + ',\'accepted\')">Accept</button>';
+    html += '<button class="action-btn act-decline' + (d.decision === 'declined' ? ' active' : '') + '" onclick="setDecision(' + idx + ',\'declined\')">Decline</button>';
+    html += '<button class="action-btn act-park' + (d.decision === 'parked' ? ' active' : '') + '" onclick="setDecision(' + idx + ',\'parked\')">Park</button>';
+    html += '<input class="claim-note" placeholder="Add a note..." value="' + (d.note || '').replace(/"/g, '&quot;') + '" oninput="setNote(' + idx + ', this.value)">';
+    html += '</div>';
+
+    html += '</div>';
+  });
+
+  document.getElementById('claims-list').innerHTML = html;
+}
+
+function updateSubmitBar() {
+  let accepted = 0, declined = 0, parked = 0, pending = 0;
+  allClaims.forEach((_, i) => {
+    const d = decisions[i]?.decision;
+    if (d === 'accepted') accepted++;
+    else if (d === 'declined') declined++;
+    else if (d === 'parked') parked++;
+    else pending++;
+  });
+
+  const el = document.getElementById('submit-summary');
+  el.innerHTML = '<span class="s-green">Accept: <strong>' + accepted + '</strong></span> &nbsp; ' +
+    '<span class="s-red">Decline: <strong>' + declined + '</strong></span> &nbsp; ' +
+    '<span class="s-orange">Park: <strong>' + parked + '</strong></span> &nbsp; ' +
+    'Pending: <strong>' + pending + '</strong>';
+
+  document.getElementById('submit-btn').disabled = accepted === 0;
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function exportDecisions() {
+  const output = allClaims.map((c, i) => {
+    const d = decisions[i] || {};
+    return { ...c, review_decision: d.decision || 'pending', review_note: d.note || '' };
+  });
+  const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'claim-decisions-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Decisions exported as JSON');
+}
+
+// Load current site-data for impact preview
+let siteData = null;
+async function loadSiteData() {
+  try {
+    const r = await fetch('site-data.json?v=' + Date.now());
+    siteData = await r.json();
+  } catch(e) { console.warn('Could not load site-data for impact preview'); }
+}
+
+function getImpact(claim) {
+  if (!siteData || !claim.value) return null;
+  const entity = (claim.entity || '').toLowerCase();
+  const metric = (claim.metric || '').toLowerCase();
+
+  // Check provider ARR
+  const providers = siteData.dashboard?.providers || {};
+  for (const [name, data] of Object.entries(providers)) {
+    if (entity.includes(name.toLowerCase()) || name.toLowerCase().includes(entity)) {
+      if (metric.includes('arr') || metric.includes('revenue')) {
+        const currentB = data.rev || 0;
+        const claimB = claim.value / 1e9;
+        if (currentB > 0) {
+          const pctChange = ((claimB - currentB) / currentB * 100).toFixed(1);
+          const isMajor = Math.abs(pctChange) > 15;
+          return { type: 'provider_arr', name, current: '$' + currentB + 'B', proposed: '$' + claimB.toFixed(1) + 'B', pctChange, isMajor };
+        }
+      }
+    }
+  }
+
+  // Check consumer ARR
+  const consumers = siteData.dashboard?.topConsumers || [];
+  for (const c of consumers) {
+    if (entity.includes(c.co.toLowerCase()) || c.co.toLowerCase().includes(entity)) {
+      if ((metric.includes('arr') || metric.includes('revenue')) && c.arrNumeric) {
+        const pctChange = ((claim.value - c.arrNumeric) / c.arrNumeric * 100).toFixed(1);
+        const isMajor = Math.abs(pctChange) > 15;
+        return { type: 'consumer_arr', name: c.co, current: c.arr, proposed: claim.value_display || ('$' + (claim.value/1e6).toFixed(0) + 'M'), pctChange, isMajor };
+      }
+    }
+  }
+  return null;
+}
+
+function submitDecisions() {
+  const accepted = [];
+  allClaims.forEach((c, i) => {
+    const d = decisions[i] || {};
+    if (d.decision === 'accepted') {
+      const impact = getImpact(c);
+      accepted.push({
+        ...c,
+        review_decision: 'accepted',
+        review_note: d.note || '',
+        reviewed_at: new Date().toISOString(),
+        major_change: impact?.isMajor || false,
+        confirmed: false,  // major changes need confirm step
+        impact: impact,
+      });
+    }
+  });
+
+  if (accepted.length === 0) {
+    showToast('No accepted claims to submit');
+    return;
+  }
+
+  // Check for major changes that need confirmation
+  const major = accepted.filter(c => c.major_change);
+  const minor = accepted.filter(c => !c.major_change);
+
+  if (major.length > 0 && !document.getElementById('impact-confirmed')?.checked) {
+    // Show impact preview modal
+    let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="impact-modal">';
+    html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;">';
+    html += '<h2 style="font-size:16px;margin-bottom:12px;">Impact Preview — Major Changes</h2>';
+    html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">' + major.length + ' claim(s) will make significant changes (>15% diff from current data):</p>';
+
+    major.forEach(c => {
+      const imp = c.impact;
+      const color = imp && parseFloat(imp.pctChange) > 0 ? 'var(--green)' : 'var(--red)';
+      html += '<div style="padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;margin-bottom:8px;">';
+      html += '<strong>' + c.entity + '</strong> — ' + c.metric + '<br>';
+      if (imp) {
+        html += '<span style="color:var(--text-dim);">Current: ' + imp.current + '</span> → ';
+        html += '<span style="color:' + color + ';font-weight:600;">' + imp.proposed + ' (' + (imp.pctChange > 0 ? '+' : '') + imp.pctChange + '%)</span>';
+        html += '<br><span style="font-size:10px;color:var(--text-dim);">This updates ' + imp.type.replace('_', ' ') + ': ' + imp.name + '</span>';
+      } else {
+        html += '<span style="color:var(--orange);">New data point (no existing value to compare)</span>';
+      }
+      html += '</div>';
+    });
+
+    if (minor.length > 0) {
+      html += '<p style="font-size:11px;color:var(--text-dim);margin-top:12px;">+ ' + minor.length + ' minor/new claims will also be applied.</p>';
+    }
+
+    html += '<div style="margin-top:16px;display:flex;gap:8px;align-items:center;">';
+    html += '<label style="font-size:12px;color:var(--text);display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="impact-confirmed" style="cursor:pointer;"> I confirm these changes</label>';
+    html += '</div>';
+    html += '<div style="margin-top:12px;display:flex;gap:8px;">';
+    html += '<button onclick="confirmAndSubmit()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--green);color:white;font-weight:600;cursor:pointer;">Apply Changes</button>';
+    html += '<button onclick="document.getElementById(\'impact-modal\').remove()" style="padding:8px 20px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;">Cancel</button>';
+    html += '</div>';
+    html += '</div></div>';
+    document.body.insertAdjacentHTML('beforeend', html);
+    return;
+  }
+
+  // No major changes, or already confirmed — write approved file
+  writeApprovedClaims(accepted);
+}
+
+function confirmAndSubmit() {
+  const checkbox = document.getElementById('impact-confirmed');
+  if (!checkbox || !checkbox.checked) {
+    showToast('Please check the confirmation box first');
+    return;
+  }
+
+  document.getElementById('impact-modal')?.remove();
+
+  // Rebuild accepted list with confirmed=true for major changes
+  const accepted = [];
+  allClaims.forEach((c, i) => {
+    const d = decisions[i] || {};
+    if (d.decision === 'accepted') {
+      const impact = getImpact(c);
+      accepted.push({
+        ...c,
+        review_decision: 'accepted',
+        review_note: d.note || '',
+        reviewed_at: new Date().toISOString(),
+        major_change: impact?.isMajor || false,
+        confirmed: true,
+        impact: impact,
+      });
+    }
+  });
+
+  writeApprovedClaims(accepted);
+}
+
+async function writeApprovedClaims(accepted) {
+  // Write to approved-claims.json via GitHub API (if available) or download
+  const jsonStr = JSON.stringify(accepted, null, 2);
+
+  // Try to write directly via fetch to the repo (works on GitHub Pages with token)
+  // Fallback: write as a downloadable file that gets committed by next cron
+  try {
+    // Save to localStorage as backup
+    localStorage.setItem('last-approved-claims', jsonStr);
+
+    // Create the file for download — auto_update.py will pick it up
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'approved-claims.json';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast(accepted.length + ' claim(s) approved! Save the downloaded file to data-updates/ in the repo. Next auto_update will apply them.');
+
+    // Show instruction
+    document.getElementById('claims-list').innerHTML =
+      '<div style="padding:24px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:12px;text-align:center;">' +
+      '<h3 style="color:var(--green);margin-bottom:8px;">' + accepted.length + ' Claims Approved</h3>' +
+      '<p style="font-size:13px;color:var(--text-dim);line-height:1.6;">' +
+      'Save <code>approved-claims.json</code> to:<br>' +
+      '<code style="color:var(--accent);">data-updates/approved-claims.json</code><br><br>' +
+      'The daily auto-update (7am) will apply the changes to site-data.json, add them to the vault, and push to GitHub Pages.<br><br>' +
+      '<span style="font-size:11px;">Or run manually: <code>python3 scripts/apply_claims.py</code></span>' +
+      '</p></div>';
+
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+}
+
+loadClaims();
+loadSiteData();
+</script>
+</body>
+</html>

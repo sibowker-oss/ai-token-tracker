@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weekly AI Movers & Shakers — Global AI Intelligence</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
+  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
+  .container { max-width:900px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:32px; }
+  .week-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid var(--card-border); }
+  .week-header h2 { font-size:20px; }
+  .week-header .date { font-size:13px; color:var(--text-dim); }
+
+  .feed-item { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:16px; transition:border-color 0.2s; cursor:default; }
+  .feed-item:hover { border-color:var(--accent); }
+  .feed-meta { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+  .feed-tag { padding:3px 10px; border-radius:12px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+  .tag-revenue { background:rgba(16,185,129,0.15); color:var(--green); }
+  .tag-launch { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .tag-pricing { background:rgba(249,159,11,0.15); color:var(--orange); }
+  .tag-shelfware { background:rgba(239,68,68,0.15); color:var(--red); }
+  .tag-funding { background:rgba(139,92,246,0.15); color:#8b5cf6; }
+  .tag-partnership { background:rgba(6,182,212,0.15); color:#06b6d4; }
+  .feed-date { font-size:11px; color:var(--text-dim); }
+  .feed-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+  .feed-body { font-size:13px; color:var(--text-dim); line-height:1.7; }
+  .feed-impact { margin-top:10px; padding:10px 14px; border-radius:8px; font-size:12px; }
+  .impact-up { background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.15); color:var(--green); }
+  .impact-down { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.15); color:var(--red); }
+  .impact-neutral { background:rgba(249,159,11,0.06); border:1px solid rgba(249,159,11,0.15); color:var(--orange); }
+
+  .subscribe-box { background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(139,92,246,0.1)); border:1px solid rgba(59,130,246,0.3); border-radius:12px; padding:32px; text-align:center; margin-top:32px; }
+  .subscribe-box h3 { font-size:18px; margin-bottom:8px; }
+  .subscribe-box p { font-size:13px; color:var(--text-dim); margin-bottom:16px; }
+  .subscribe-box input { padding:10px 16px; background:#1e293b; border:1px solid #334155; border-radius:8px 0 0 8px; color:var(--text); font-size:14px; outline:none; width:260px; }
+  .subscribe-box button { padding:10px 20px; background:var(--accent); color:white; border:none; border-radius:0 8px 8px 0; font-size:14px; font-weight:600; cursor:pointer; }
+
+  .archive-link { text-align:center; margin-top:24px; }
+  .archive-link a { color:var(--accent); font-size:13px; }
+
+  /* Mobile responsive */
+  @media(max-width:768px) {
+    nav { padding:8px 12px !important; gap:6px !important; }
+    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .sub { font-size:12px; }
+
+    /* Feed items: full width, less padding */
+    .feed-item { padding:14px; margin-bottom:12px; }
+    .feed-title { font-size:15px; }
+    .feed-body { font-size:12px; }
+    .feed-impact { font-size:11px; padding:8px 12px; }
+    .feed-tag { font-size:9px; padding:3px 8px; }
+    .feed-date { font-size:10px; }
+
+    /* Week header */
+    .week-header { flex-direction:column; align-items:flex-start; gap:4px; }
+    .week-header h2 { font-size:18px; }
+
+    /* Subscribe box: input + button stack vertically */
+    .subscribe-box { padding:20px 16px; }
+    .subscribe-box h3 { font-size:16px; }
+    .subscribe-box p { font-size:12px; }
+    .subscribe-box input { width:100%; border-radius:8px; margin-bottom:8px; }
+    .subscribe-box button { width:100%; border-radius:8px; min-height:44px; }
+  }
+</style>
+</head>
+<body>
+<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
+  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+  <a href="sankey.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Follow the $</a>
+  <a href="timeline.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Time Machine</a>
+  <a href="openrouter.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Live Pricing</a>
+  <a href="feed.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Weekly Feed</a>
+</nav>
+
+<div class="container">
+  <h1>AI Market Movers & Shakers</h1>
+  <div class="sub">Weekly intelligence on what's moving in the AI token economy. The stories behind the numbers.</div>
+
+  <div class="week-header">
+    <h2>Week of March 23, 2026</h2>
+    <div class="date">Issue #1</div>
+  </div>
+
+  <div class="feed-item">
+    <div class="feed-meta">
+      <span class="feed-tag tag-revenue">Revenue</span>
+      <span class="feed-date">Mar 25, 2026</span>
+    </div>
+    <div class="feed-title">Anthropic Hits $14B ARR — 14x Growth in 14 Months</div>
+    <div class="feed-body">
+      Anthropic crossed $14B in annualized revenue, up from $1B just 14 months ago, per SaaStr reporting. Enterprise API revenue (direct + Bedrock/Vertex) now accounts for ~65% of total. Claude now captures 40% of enterprise LLM spend, up from 12% a year ago. The coding use case — driven by Cursor, Windsurf, and Claude Code — is the primary growth vector.
+    </div>
+    <div class="feed-impact impact-up">
+      <strong>Dashboard impact:</strong> Anthropic revenue updated from $1B → $14B. Provider share chart fundamentally reshapes. Enterprise demand column grows.
+    </div>
+  </div>
+
+  <div class="feed-item">
+    <div class="feed-meta">
+      <span class="feed-tag tag-shelfware">Shelfware Alert</span>
+      <span class="feed-date">Mar 24, 2026</span>
+    </div>
+    <div class="feed-title">Harvey AI Raises at $11B — While Enterprise SaaS AI Stalls</div>
+    <div class="feed-body">
+      Legal AI startup Harvey raised $200M at $11B valuation (CNBC), with $190M ARR — up from $100M just 7 months ago. Meanwhile, Salesforce stock is down 26% as investors question whether Agentforce will deliver real consumption. The contrast is stark: Harvey's $190M is nearly 100% token-driven. Salesforce's $800M "AI revenue" is largely bundled deals.
+    </div>
+    <div class="feed-impact impact-neutral">
+      <strong>Dashboard impact:</strong> Harvey added to Top Consumers at ~100B tokens/day. Enterprise Reality Check reinforces the shelfware narrative.
+    </div>
+  </div>
+
+  <div class="feed-item">
+    <div class="feed-meta">
+      <span class="feed-tag tag-launch">Launch</span>
+      <span class="feed-date">Mar 22, 2026</span>
+    </div>
+    <div class="feed-title">GPT-5 Goes Live — But Wrtn Offers It Free to 6.5M Korean Users</div>
+    <div class="feed-body">
+      OpenAI's GPT-5 launched at $5/$20 per million tokens (input/output). Within days, Korean AI platform Wrtn announced unlimited free GPT-5 access for all users — absorbing the full API cost. Wrtn is on track for $100M ARR and just raised $73.5M Series B. This is the AI native model in action: subsidize frontier access to build scale.
+    </div>
+    <div class="feed-impact impact-up">
+      <strong>Dashboard impact:</strong> GPT-5 added to model table. Wrtn's estimated token consumption increases. APAC share grows.
+    </div>
+  </div>
+
+  <div class="feed-item">
+    <div class="feed-meta">
+      <span class="feed-tag tag-shelfware">Shelfware Alert</span>
+      <span class="feed-date">Mar 21, 2026</span>
+    </div>
+    <div class="feed-title">M365 Copilot: 15M Seats Sold, 35.8% Actually Used</div>
+    <div class="feed-body">
+      New data from Gartner and enterprise surveys shows Microsoft 365 Copilot at 15M licensed seats ($5.4B annualized) but only 35.8% active usage. Microsoft has been auto-installing Copilot since October 2025 to inflate adoption numbers. UBS analyst Karl Keirstead: "M365 revenue growth is not accelerating due to Copilot." Multiple reports indicate Microsoft's own employees prefer ChatGPT over Copilot.
+    </div>
+    <div class="feed-impact impact-down">
+      <strong>Dashboard impact:</strong> M365 Copilot shelfware rate updated to ~65%. Enterprise SaaS token conversion estimate stays at 10-20%.
+    </div>
+  </div>
+
+  <div class="feed-item">
+    <div class="feed-meta">
+      <span class="feed-tag tag-funding">Funding</span>
+      <span class="feed-date">Mar 20, 2026</span>
+    </div>
+    <div class="feed-title">Replit Hits $9B Valuation — AI Coding is the Biggest Token Consumer</div>
+    <div class="feed-body">
+      Replit raised $400M at $9B valuation, with revenue surging from $16M (2024) to $240-265M (2025). They're targeting $1B by end of 2026. But the margin story is brutal: gross margins swing between -14% and 36% depending on LLM costs. Coding is now the #1 use case for AI tokens globally at 28% of all consumption, driven by Cursor, Replit, Windsurf/Devin, GitHub Copilot, and BLACKBOX.AI.
+    </div>
+    <div class="feed-impact impact-up">
+      <strong>Dashboard impact:</strong> Coding use case share validated at 28%. Replit token consumption estimate updated.
+    </div>
+  </div>
+
+  <div class="feed-item">
+    <div class="feed-meta">
+      <span class="feed-tag tag-partnership">Partnership</span>
+      <span class="feed-date">Mar 19, 2026</span>
+    </div>
+    <div class="feed-title">Razorpay + Anthropic: AI Agents Now Process UPI Payments</div>
+    <div class="feed-body">
+      Razorpay launched agentic payments on Claude, enabling in-chat UPI payments for Zomato, Swiggy, and Zepto in India. Built on Claude Agent SDK with NPCI integration. This is one of the first examples of frontier AI models directly embedded in financial transaction flows — each payment triggers Claude inference. India is now Anthropic's second-largest market for claude.ai traffic.
+    </div>
+    <div class="feed-impact impact-up">
+      <strong>Dashboard impact:</strong> APAC token volume grows. Anthropic's regional weight for Asia-Pacific increases. Financial Services industry share grows.
+    </div>
+  </div>
+
+  <!-- SUBSCRIBE -->
+  <div class="subscribe-box">
+    <h3>Get the Weekly AI Market Intelligence Brief</h3>
+    <p>Real token economics, provider revenue moves, and enterprise adoption reality — not marketing fluff.</p>
+    <form action="https://formspree.io/f/mqegqzny" method="POST" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <input type="email" name="email" placeholder="your@email.com" required style="flex:1;min-width:200px;">
+      <input type="hidden" name="_subject" value="AI Ledger Newsletter Signup">
+      <input type="hidden" name="_next" value="https://sibowker-oss.github.io/ai-token-tracker/feed.html?subscribed=true">
+      <button type="submit">Subscribe</button>
+    </form>
+    <div id="subscribe-success" style="display:none;margin-top:12px;padding:10px 14px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;font-size:12px;color:#10b981;">You're in! Look for the first brief in your inbox.</div>
+  </div>
+  <script>
+    if (window.location.search.includes('subscribed=true')) {
+      document.getElementById('subscribe-success').style.display = 'block';
+    }
+  </script>
+
+  <div class="archive-link">
+    <p style="color:var(--text-dim); font-size:12px; margin-top:16px;">This is Issue #1. Previous issues will appear here as the archive grows.</p>
+  </div>
+</div>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice.</footer>
+</body>
+</html>

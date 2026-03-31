@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draft Consumer Expansion — Review</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:24px; }
+  h1 { font-size:20px; margin-bottom:4px; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:16px; }
+  .stats { display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .stat { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:12px; }
+  .stat strong { color:var(--text); }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th { text-align:left; font-size:10px; text-transform:uppercase; color:var(--text-dim); padding:8px 6px; border-bottom:1px solid var(--card-border); position:sticky; top:0; background:var(--bg); cursor:pointer; }
+  td { padding:8px 6px; border-bottom:1px solid rgba(30,41,59,0.4); vertical-align:top; }
+  tr:hover td { background:rgba(59,130,246,0.04); }
+  tr.accepted td { background:rgba(16,185,129,0.05); }
+  tr.declined td { background:rgba(239,68,68,0.03); opacity:0.4; }
+  .co-name { font-weight:600; }
+  .signal { font-size:10px; color:var(--text-dim); max-width:250px; }
+  .conf-high { color:var(--green); } .conf-med { color:var(--orange); } .conf-low { color:var(--text-dim); }
+  .btn { padding:3px 8px; border-radius:4px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:10px; cursor:pointer; }
+  .btn:hover { color:var(--text); }
+  .btn.active-yes { background:rgba(16,185,129,0.15); color:var(--green); border-color:var(--green); }
+  .btn.active-no { background:rgba(239,68,68,0.15); color:var(--red); border-color:var(--red); }
+  .submit-bar { position:sticky; bottom:0; background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:12px 20px; margin-top:16px; display:flex; align-items:center; gap:16px; }
+  .submit-bar button { padding:8px 20px; border-radius:8px; border:none; background:var(--green); color:white; font-weight:600; cursor:pointer; }
+</style>
+</head>
+<body>
+<h1>Draft Consumer Expansion — 68 Candidates</h1>
+<p class="intro">Review each candidate. Accept to add to the top consumers list, Decline to skip. Then click Export to get the accepted list.</p>
+<div class="stats" id="stats"></div>
+<table id="tbl"></table>
+<div class="submit-bar">
+  <span id="bar-summary" style="flex:1;font-size:12px;color:var(--text-dim);"></span>
+  <button onclick="exportAccepted()">Export Accepted (JSON)</button>
+  <button onclick="copyAccepted()" style="background:var(--accent);">Copy to Clipboard</button>
+</div>
+
+<script>
+let data = [];
+let decisions = {};
+const DK = 'consumer-draft-decisions';
+try { decisions = JSON.parse(localStorage.getItem(DK) || '{}'); } catch(e) {}
+
+async function init() {
+  const r = await fetch('draft-consumers-expansion.json?v=' + Date.now());
+  const j = await r.json();
+  data = j.candidates;
+  render();
+}
+
+function decide(i, val) {
+  decisions[i] = decisions[i] === val ? null : val;
+  localStorage.setItem(DK, JSON.stringify(decisions));
+  render();
+}
+
+function render() {
+  let accepted=0, declined=0, pending=0;
+  data.forEach((_, i) => { const d=decisions[i]; if(d==='yes') accepted++; else if(d==='no') declined++; else pending++; });
+  document.getElementById('stats').innerHTML =
+    '<div class="stat">Total: <strong>'+data.length+'</strong></div>' +
+    '<div class="stat" style="color:var(--green)">Accept: <strong>'+accepted+'</strong></div>' +
+    '<div class="stat" style="color:var(--red)">Decline: <strong>'+declined+'</strong></div>' +
+    '<div class="stat" style="color:var(--orange)">Pending: <strong>'+pending+'</strong></div>';
+  document.getElementById('bar-summary').innerHTML = '<strong>'+accepted+'</strong> accepted, <strong>'+declined+'</strong> declined, <strong>'+pending+'</strong> pending';
+
+  let h = '<thead><tr><th>Company</th><th>Type</th><th>Category</th><th>Tokens/Day</th><th>Providers</th><th>Founded</th><th>ARR</th><th>Signal Source</th><th>Conf</th><th>Action</th></tr></thead><tbody>';
+  data.forEach((c, i) => {
+    const d = decisions[i];
+    const cls = d === 'yes' ? 'accepted' : d === 'no' ? 'declined' : '';
+    const confCls = (c.confidence||'').toLowerCase().startsWith('high') ? 'conf-high' : (c.confidence||'').toLowerCase().startsWith('med') ? 'conf-med' : 'conf-low';
+    h += '<tr class="'+cls+'">' +
+      '<td class="co-name">'+(c.website ? '<a href="'+c.website+'" target="_blank" style="color:var(--accent);text-decoration:none;">'+c.co+'</a>' : c.co)+'</td>' +
+      '<td>'+c.type+'</td>' +
+      '<td style="font-size:10px;">'+(c.category||'')+'</td>' +
+      '<td style="font-weight:600;color:var(--accent);">'+(c.tokens_est||'N/A')+'</td>' +
+      '<td style="font-size:10px;">'+(c.providers||[]).join(', ')+'</td>' +
+      '<td>'+(c.founded||'—')+'</td>' +
+      '<td style="font-size:11px;">'+(c.arr||'—')+'</td>' +
+      '<td class="signal">'+c.source_signal+'</td>' +
+      '<td class="'+confCls+'">'+c.confidence+'</td>' +
+      '<td style="white-space:nowrap;">' +
+        '<button class="btn '+(d==='yes'?'active-yes':'')+'" onclick="decide('+i+',\'yes\')">Accept</button> ' +
+        '<button class="btn '+(d==='no'?'active-no':'')+'" onclick="decide('+i+',\'no\')">Decline</button>' +
+      '</td></tr>';
+  });
+  h += '</tbody>';
+  document.getElementById('tbl').innerHTML = h;
+}
+
+function getAccepted() {
+  return data.filter((_, i) => decisions[i] === 'yes');
+}
+
+function exportAccepted() {
+  const a = getAccepted();
+  const blob = new Blob([JSON.stringify(a, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const el = document.createElement('a');
+  el.href = url; el.download = 'accepted-consumers-'+new Date().toISOString().split('T')[0]+'.json';
+  el.click(); URL.revokeObjectURL(url);
+}
+
+function copyAccepted() {
+  const a = getAccepted();
+  const lines = ['# Accepted Consumer Candidates (' + a.length + ')\n'];
+  a.forEach(c => {
+    lines.push('- **' + c.co + '** | ' + (c.tokens_est||'N/A') + ' | ' + (c.providers||[]).join(', ') + ' | ' + c.source_signal);
+  });
+  navigator.clipboard.writeText(lines.join('\n')).then(() => alert(a.length + ' accepted companies copied'));
+}
+
+init();
+</script>
+</body>
+</html>

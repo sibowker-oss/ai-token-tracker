@@ -1,0 +1,56 @@
+{
+  "date": "2026-03-28",
+  "timestamp": "2026-03-28T07:00:21.689104",
+  "pypi": {
+    "openai": 224299797,
+    "anthropic": 78155985,
+    "langchain-core": 99894124,
+    "litellm": 96318971,
+    "google-generativeai": 17098334,
+    "vllm": 7511138,
+    "transformers": 124629149,
+    "ollama": 10246014,
+    "mistralai": 14692316,
+    "cohere": 21323238,
+    "together": 4673999,
+    "groq": 12753932
+  },
+  "npm": {
+    "openai": 68677505,
+    "@anthropic-ai/sdk": 37075672,
+    "@langchain/core": 15034188,
+    "ai": 42829559,
+    "@google/generative-ai": 10214320,
+    "ollama": 1959734,
+    "@mistralai/mistralai": 10207933,
+    "cohere-ai": 1797664,
+    "groq-sdk": 2647244
+  },
+  "huggingface": {
+    "meta-llama/Llama-3.1-8B-Instruct": 8496488,
+    "meta-llama/Llama-3.1-70B-Instruct": 1059930,
+    "meta-llama/Llama-4-Scout-17B-16E-Instruct": 255184,
+    "deepseek-ai/DeepSeek-R1": 2127245,
+    "deepseek-ai/DeepSeek-V3": 848630,
+    "mistralai/Mistral-7B-Instruct-v0.3": 2165900,
+    "Qwen/Qwen2.5-72B-Instruct": 690444,
+    "google/gemma-2-9b-it": 274640
+  },
+  "openrouter": {
+    "total_models": 346,
+    "providers": 56,
+    "free_models": 27,
+    "min_output_price_per_m": -1000000.0,
+    "max_output_price_per_m": 600.0,
+    "median_output_price_per_m": 1.2
+  },
+  "derived": {
+    "openai_total": 292977302,
+    "anthropic_total": 115231657,
+    "google_total": 27312654,
+    "anthropic_openai_ratio": 0.393,
+    "self_hosted_total": 19716886,
+    "hf_total_downloads": 15918461,
+    "litellm_downloads": 96318971
+  }
+}
