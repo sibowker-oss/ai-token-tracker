@@ -1,0 +1,125 @@
+{
+  "free_automatable": [
+    {
+      "source": "SEC EDGAR",
+      "url": "https://efts.sec.gov/LATEST/search-index?q=",
+      "type": "Earnings/10-K/10-Q",
+      "api": "Full-Text Search API",
+      "notes": "Free; pull revenue/ARR from filings for all public cos"
+    },
+    {
+      "source": "PyPI Stats",
+      "url": "https://pypistats.org/api/",
+      "type": "SDK download volumes",
+      "api": "REST API",
+      "notes": "Track openai, anthropic, langchain, vllm, etc."
+    },
+    {
+      "source": "npm Registry",
+      "url": "https://api.npmjs.org/downloads/",
+      "type": "JS SDK downloads",
+      "api": "REST API",
+      "notes": "Track @anthropic-ai/sdk, openai, langchain"
+    },
+    {
+      "source": "HuggingFace API",
+      "url": "https://huggingface.co/api/models",
+      "type": "Model downloads",
+      "api": "REST API",
+      "notes": "Track download counts for LLaMA, Mistral, etc."
+    },
+    {
+      "source": "Docker Hub",
+      "url": "https://hub.docker.com/v2/repositories/",
+      "type": "Container pulls",
+      "api": "REST API",
+      "notes": "Track vllm, text-generation-inference pulls"
+    },
+    {
+      "source": "GitHub API",
+      "url": "https://api.github.com/repos/",
+      "type": "Stars, releases, downloads",
+      "api": "REST API",
+      "notes": "Ollama releases, vllm stars, etc."
+    },
+    {
+      "source": "OpenRouter",
+      "url": "https://openrouter.ai/api/v1/models",
+      "type": "Model pricing",
+      "api": "Public API",
+      "notes": "Already integrated in your app"
+    },
+    {
+      "source": "Artificial Analysis",
+      "url": "https://artificialanalysis.ai/",
+      "type": "Throughput benchmarks",
+      "api": "Public API",
+      "notes": "GPU utilization cross-check"
+    },
+    {
+      "source": "OECD AI Observatory",
+      "url": "https://oecd.ai/en/data",
+      "type": "Country-level AI adoption",
+      "api": "CSV downloads",
+      "notes": "Geographic splits"
+    }
+  ],
+  "free_scraping_needed": [
+    {
+      "source": "Cloudflare Radar",
+      "url": "https://radar.cloudflare.com/",
+      "type": "AI traffic patterns",
+      "notes": "Some API; mostly dashboard scraping"
+    },
+    {
+      "source": "Seeking Alpha RSS",
+      "url": "https://seekingalpha.com/",
+      "type": "Earnings transcripts",
+      "notes": "Parse with LLM for revenue extraction"
+    },
+    {
+      "source": "Company blogs/PR",
+      "url": "Various",
+      "type": "Revenue milestones",
+      "notes": "RSS feeds + LLM extraction"
+    }
+  ],
+  "freemium_cheap": [
+    {
+      "source": "SimilarWeb",
+      "url": "https://www.similarweb.com/",
+      "type": "Website traffic/DAU",
+      "cost": "$0-200/mo",
+      "notes": "Basic traffic ranks free"
+    },
+    {
+      "source": "Crunchbase",
+      "url": "https://www.crunchbase.com/",
+      "type": "Funding/valuations",
+      "cost": "$0-300/mo",
+      "notes": "IPO pipeline tracking"
+    }
+  ],
+  "paywalled_manual": [
+    {
+      "source": "Morgan Stanley/UBS reports",
+      "type": "Cloud AI revenue estimates",
+      "notes": "Cite manually when reports drop"
+    },
+    {
+      "source": "Okta Businesses at Work",
+      "type": "Enterprise AI tool adoption",
+      "notes": "Annual report; manual extraction"
+    },
+    {
+      "source": "Gartner/IDC",
+      "type": "Market sizing",
+      "notes": "Very paywalled; cite from press coverage"
+    },
+    {
+      "source": "Zylo/Productiv",
+      "type": "SaaS utilization data",
+      "notes": "Enterprise subscription; no public data"
+    }
+  ]
+}

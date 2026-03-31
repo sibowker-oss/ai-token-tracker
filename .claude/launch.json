@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "dashboard",
+      "name": "sankey",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "-d", "/Users/simonbowker/Documents/Claude/Code/apac-ai-intel"],
-      "port": 8765
+      "runtimeArgs": ["-m", "http.server", "3457"],
+      "port": 3457
     }
   ]
 }

@@ -1,0 +1,45 @@
+name: Deploy Beta Preview
+
+on:
+  push:
+    branches: [beta]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-beta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: beta
+
+      - name: Deploy to beta/ subdirectory on main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Save beta files
+          mkdir -p /tmp/beta-build
+          cp *.html /tmp/beta-build/ 2>/dev/null || true
+          cp *.json /tmp/beta-build/ 2>/dev/null || true
+          cp -r data/ /tmp/beta-build/data/ 2>/dev/null || true
+          cp -r parked/ /tmp/beta-build/parked/ 2>/dev/null || true
+          cp -r ideas/ /tmp/beta-build/ideas/ 2>/dev/null || true
+          cp -r data-updates/ /tmp/beta-build/data-updates/ 2>/dev/null || true
+
+          # Switch to main and copy beta into /beta/ subdirectory
+          git fetch origin main
+          git checkout main
+
+          # Create beta directory
+          rm -rf beta/
+          mkdir -p beta
+          cp -r /tmp/beta-build/* beta/
+
+          # Commit and push
+          git add beta/
+          git diff --cached --quiet || git commit -m "Deploy beta preview $(date +%Y-%m-%d-%H%M)"
+          git push origin main
