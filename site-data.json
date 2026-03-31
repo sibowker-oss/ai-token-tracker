@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generatedAt": "2026-03-30T05:14:13Z",
+    "generatedAt": "2026-03-31T21:29:44Z",
     "source": "Intel Vault export (consensus-weighted)",
-    "acceptedPoints": 48,
+    "acceptedPoints": 43,
     "consensusMetrics": 3,
     "notes": "Fully rebalanced from consensus. All flows verified."
   },
@@ -562,7 +562,7 @@
         "region": "US"
       },
       "Others": {
-        "tokens": 131,
+        "tokens": 132,
         "rev": 1.25,
         "color": "#475569",
         "growth": "+86% YoY",
@@ -2706,6 +2706,32 @@
         "lastUpdated": "2026-03-30"
       },
       {
+        "co": "Fathom",
+        "hq": "US",
+        "type": "AI Meeting Assistant / Note-taking AI",
+        "tokens": "~7B/day",
+        "prov": "Openai, Anthropic",
+        "ev": "Fathom is an AI-powered meeting assistant that automatically records, transcribes, highlights, and summarizes video calls on platforms like Zoom, Google Meet, and Microsoft Teams.\n\nSources: Crunchbase funding data, TechCrunch coverage, ProductHunt launch, LinkedIn employee count, general SaaS freemium benchmarking\nConfidence: low \u2014 Fathom is a private company with limited public financial disclosures. They raised a ~$17-18M seed/Series A round (reported ~2022-2023), have a freemium model with a paid tier (Fathom Team Edition), and have reported strong user growth (millions of users). ARR estimate is a rough extrapolation based on funding size, team size, and freemium conversion typical for this category \u2014 no verified press report of exact ARR figure.",
+        "conf": "Low",
+        "founded": 2020,
+        "category": "ai-application",
+        "subcategory": "",
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "tokensNumeric": 6575342466,
+        "arr": "$20M",
+        "arrNumeric": 20000000,
+        "valuation": null,
+        "valuationNumeric": null,
+        "totalFunding": "$18M",
+        "status": "private",
+        "website": "https://www.fathom.ai/",
+        "employeeCount": null,
+        "lastUpdated": "2026-03-31"
+      },
+      {
         "co": "Pika",
         "hq": "US",
         "type": "Video Gen",
@@ -3570,7 +3596,7 @@
         15,
         10,
         100,
-        131,
+        132,
         30,
         8
       ]
