@@ -2405,15 +2405,20 @@ function toggleKeyVisibility() {
 }
 
 function switchTab(name) {
-  if (name === 'quickadd') renderQuickAddQueue();
-  if (name === 'addcompany') populateCompanyDropdown();
-  if (name === 'settings') loadSettingsView();
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', TABS[i] === name);
+  try {
+    if (name === 'quickadd') renderQuickAddQueue();
+    if (name === 'addcompany') populateCompanyDropdown();
+    if (name === 'settings') loadSettingsView();
+  } catch(e) { console.warn('Tab init error:', e); }
+  // Highlight active tab button — match by onclick content, not index
+  document.querySelectorAll('#tabBar .tab').forEach(t => {
+    const onclick = t.getAttribute('onclick') || '';
+    t.classList.toggle('active', onclick.includes("'" + name + "'"));
   });
-  TABS.forEach(v => {
-    const el = document.getElementById('view-' + v);
-    if (el) el.style.display = v === name ? 'block' : 'none';
+  // Show/hide view panels
+  document.querySelectorAll('.view-section').forEach(el => {
+    const viewName = el.id.replace('view-', '');
+    el.style.display = viewName === name ? 'block' : 'none';
   });
   if (name === 'audit') renderAudit();
   if (name === 'review') renderReview();
