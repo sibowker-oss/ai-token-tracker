@@ -8,12 +8,12 @@
 (function() {
   const AUTH_KEY = 'ai-ledger-admin-auth';
   const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
-  if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
   const pw = prompt('Admin access required. Enter password:');
   if (!pw) { document.location = 'dashboard.html'; return; }
   crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
     const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    if (hash === HASH) { sessionStorage.setItem(AUTH_KEY, 'ok'); }
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
     else { alert('Incorrect password'); document.location = 'dashboard.html'; }
   });
 })();
@@ -354,8 +354,16 @@
   <!-- ADD COMPANY VIEW -->
   <div id="view-addcompany" class="view-section" style="display:none;">
     <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px;">
-      <h2 style="font-size:18px; margin-bottom:8px;">Add Company to Top Token Consumers</h2>
-      <p style="font-size:12px; color:var(--text-dim); margin-bottom:20px;">Paste a company URL. The system will research it and pre-fill the fields. Review and confirm to add.</p>
+      <h2 id="ac-title" style="font-size:18px; margin-bottom:8px;">Add or Edit Company</h2>
+      <p style="font-size:12px; color:var(--text-dim); margin-bottom:16px;">Add a new company or select an existing one to edit.</p>
+
+      <!-- Edit existing -->
+      <div style="margin-bottom:16px;max-width:600px;">
+        <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:4px;">Edit existing company</label>
+        <select id="ac-edit-select" onchange="loadExistingCompany()" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:13px;outline:none;">
+          <option value="">— Add new company —</option>
+        </select>
+      </div>
 
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;max-width:600px;">
         <div style="display:flex;gap:8px;">
@@ -420,7 +428,7 @@
         <div id="ac-preview" style="margin-top:14px;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:11px;color:var(--text-dim);display:none;"></div>
 
         <div style="margin-top:14px;display:flex;gap:8px;">
-          <button onclick="confirmAddCompany()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--green);color:white;font-size:13px;font-weight:600;cursor:pointer;">Add to Dashboard</button>
+          <button onclick="confirmAddCompany()" id="ac-submit-btn" style="padding:10px 24px;border-radius:8px;border:none;background:var(--green);color:white;font-size:13px;font-weight:600;cursor:pointer;">Add to Dashboard</button>
           <button onclick="document.getElementById('ac-form').style.display='none'" style="padding:10px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:13px;cursor:pointer;">Cancel</button>
         </div>
       </div>
@@ -1889,12 +1897,64 @@ function clearForm() {
 // ============================================================
 let acSiteData = null;
 
+let acEditingIndex = -1; // -1 = adding new, >= 0 = editing existing
+
 async function loadSiteDataForCompanies() {
   if (acSiteData) return;
   try {
     const r = await fetch('site-data.json?v=' + Date.now());
     acSiteData = await r.json();
   } catch(e) { console.warn('Could not load site-data.json for company add'); }
+}
+
+async function populateCompanyDropdown() {
+  await loadSiteDataForCompanies();
+  if (!acSiteData) return;
+  const sel = document.getElementById('ac-edit-select');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Add new company —</option>';
+  const sorted = [...acSiteData.dashboard.topConsumers].sort((a, b) => a.co.localeCompare(b.co));
+  sorted.forEach((c, i) => {
+    const realIdx = acSiteData.dashboard.topConsumers.indexOf(c);
+    sel.innerHTML += '<option value="' + realIdx + '">' + c.co + ' (' + (c.tokens || '?') + ', ' + (c.arr || 'no ARR') + ')</option>';
+  });
+}
+
+function loadExistingCompany() {
+  const sel = document.getElementById('ac-edit-select');
+  const idx = parseInt(sel.value);
+  acEditingIndex = isNaN(idx) ? -1 : idx;
+
+  if (acEditingIndex < 0) {
+    // Reset to add mode
+    document.getElementById('ac-title').textContent = 'Add New Company';
+    document.getElementById('ac-submit-btn').textContent = 'Add to Dashboard';
+    document.getElementById('ac-form').style.display = 'none';
+    document.getElementById('ac-status').innerHTML = '';
+    document.getElementById('ac-url').value = '';
+    document.getElementById('ac-hint').value = '';
+    document.getElementById('ac-hint').placeholder = "Your context (optional): e.g. 'AI ARR is only $600M, not total company revenue'";
+    return;
+  }
+
+  const c = acSiteData.dashboard.topConsumers[acEditingIndex];
+  document.getElementById('ac-title').textContent = 'Edit: ' + c.co;
+  document.getElementById('ac-submit-btn').textContent = 'Save Changes';
+  document.getElementById('ac-url').value = c.website || '';
+  document.getElementById('ac-hint').placeholder = "What changed? e.g. 'ARR updated to $800M per Q4 earnings'";
+  document.getElementById('ac-hint').value = '';
+
+  // Show current values as read-only reference
+  document.getElementById('ac-status').innerHTML =
+    '<div style="padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:11px;margin-bottom:12px;">' +
+    '<strong>Current data for ' + c.co + ':</strong><br>' +
+    'Tokens: ' + (c.tokens || '?') + ' | ARR: ' + (c.arr || '?') + ' | Category: ' + (c.category || '?') +
+    ' | Providers: ' + (c.prov || '?') + ' | Founded: ' + (c.founded || '?') +
+    ' | Confidence: ' + (c.conf || '?') +
+    '<br><span style="color:var(--orange);">To edit, provide a source URL and click Research. Every change needs a source.</span></div>';
+
+  // Don't show the form yet — require Research click with a source
+  document.getElementById('ac-form').style.display = 'none';
 }
 
 function getApiKey() {
@@ -1932,6 +1992,15 @@ async function researchCompany() {
   // Step 2: Call Claude to research the company
   const domain = url.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
   const userHint = document.getElementById('ac-hint').value.trim();
+
+  // If editing, include current data for context
+  let editContext = '';
+  if (acEditingIndex >= 0 && acSiteData) {
+    const current = acSiteData.dashboard.topConsumers[acEditingIndex];
+    editContext = '\nCURRENT DATA (we are UPDATING this company, not adding new):\n' +
+      JSON.stringify({ co: current.co, tokens: current.tokens, arr: current.arr, arrNumeric: current.arrNumeric,
+        category: current.category, providers: current.providers, founded: current.founded, conf: current.conf }, null, 2) +
+      '\nUpdate the fields that the source/hint suggests have changed. Keep unchanged fields the same.\n';
   try {
     const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -1948,7 +2017,7 @@ async function researchCompany() {
 
 Company URL: ${url}
 Domain: ${domain}
-${userHint ? '\nUser context (trust this — the user has domain expertise):\n' + userHint + '\n' : ''}
+${editContext}${userHint ? '\nUser context (trust this — the user has domain expertise):\n' + userHint + '\n' : ''}
 Page text (if available):
 ${pageText.substring(0, 3000)}
 
@@ -2064,9 +2133,17 @@ async function confirmAddCompany() {
   const name = document.getElementById('ac-name').value.trim();
   if (!name) { showToast('Company name required'); return; }
 
-  // Check duplicate
-  const existing = acSiteData.dashboard.topConsumers.find(c => c.co.toLowerCase() === name.toLowerCase());
-  if (existing) { showToast('Already exists: ' + existing.co); return; }
+  const sourceUrl = document.getElementById('ac-url').value.trim();
+  const sourceHint = document.getElementById('ac-hint').value.trim();
+  if (!sourceUrl && acEditingIndex < 0) { showToast('Source URL required'); return; }
+
+  const isEdit = acEditingIndex >= 0;
+
+  // Check duplicate (only for new adds)
+  if (!isEdit) {
+    const existing = acSiteData.dashboard.topConsumers.find(c => c.co.toLowerCase() === name.toLowerCase());
+    if (existing) { showToast('Already exists: ' + existing.co + '. Select it from the dropdown to edit.'); return; }
+  }
 
   const arr = parseFloat(document.getElementById('ac-arr').value) || null;
   const cat = document.getElementById('ac-category').value;
@@ -2084,77 +2161,96 @@ async function confirmAddCompany() {
     tokensStr = tokensNumeric >= 1e12 ? '~' + (tokensNumeric/1e12).toFixed(1) + 'T/day' : '~' + Math.round(tokensNumeric/1e9) + 'B/day';
   }
 
+  const arrDisplay = arr ? (arr >= 1e9 ? '$' + (arr/1e9).toFixed(1) + 'B' : '$' + (arr/1e6).toFixed(0) + 'M') : null;
+  const evidence = document.getElementById('ac-evidence').value.trim();
+  const funding = document.getElementById('ac-funding').value.trim() || null;
+  const website = document.getElementById('ac-url').value.trim();
+
+  // Build company object
   const company = {
     co: name,
     hq: document.getElementById('ac-hq').value.trim() || 'US',
     type: document.getElementById('ac-type').value.trim() || 'AI Application',
     tokens: tokensStr,
     prov: provs.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', '),
-    ev: document.getElementById('ac-evidence').value.trim(),
+    ev: evidence,
     conf: 'Low',
     founded: founded,
     category: cat,
     subcategory: '',
     providers: provs,
     tokensNumeric: tokensNumeric,
-    arr: arr ? (arr >= 1e9 ? '$' + (arr/1e9).toFixed(1) + 'B' : '$' + (arr/1e6).toFixed(0) + 'M') : null,
+    arr: arrDisplay,
     arrNumeric: arr,
     valuation: null,
     valuationNumeric: null,
-    totalFunding: document.getElementById('ac-funding').value.trim() || null,
+    totalFunding: funding,
     status: 'private',
-    website: document.getElementById('ac-url').value.trim(),
+    website: website,
     employeeCount: null,
     lastUpdated: new Date().toISOString().split('T')[0],
   };
 
-  // Save as a pending company claim in approved-claims.json format
-  // apply_claims.py will pick this up on the next daily cron run
+  // If editing, merge with existing (keep fields not in the form)
+  if (isEdit) {
+    const existing = acSiteData.dashboard.topConsumers[acEditingIndex];
+    for (const key of Object.keys(existing)) {
+      if (company[key] === null || company[key] === undefined || company[key] === '') {
+        company[key] = existing[key];
+      }
+    }
+  }
+
+  const actionVerb = isEdit ? 'Updated' : 'Added';
+  const metricType = isEdit ? 'update_company' : 'new_company';
+
+  // Save claim with source provenance
   const claim = {
     review_decision: 'accepted',
     confirmed: true,
     entity: name,
-    metric: 'new_company',
+    metric: metricType,
     value: arr,
     unit: 'USD',
-    value_display: company.arr || 'Unknown ARR',
-    claim: 'Add ' + name + ' to Top Token Consumers (' + tokensStr + ')',
-    category: 'new_company',
+    value_display: arrDisplay || 'Unknown ARR',
+    claim: actionVerb + ' ' + name + ': ' + tokensStr + ', ARR ' + (arrDisplay || 'unknown') + (sourceHint ? ' — ' + sourceHint : ''),
+    category: metricType,
     confidence: 'medium',
     weight: 'authoritative',
     source_type: 'manual_add',
-    source_url: company.website,
+    source_url: sourceUrl,
+    source_hint: sourceHint,
     reviewed_at: new Date().toISOString(),
     company_data: company,
   };
 
-  // Write to localStorage queue — apply_claims.py reads from approved-claims.json
+  // Write to localStorage queue
   const queue = JSON.parse(localStorage.getItem('pending-company-adds') || '[]');
   queue.push(claim);
   localStorage.setItem('pending-company-adds', JSON.stringify(queue));
 
-  // Also add to vault as a data point
+  // Add to vault with full source trail
   const dp = {
     id: 'dp-' + String(vaultData.dataPoints.length + 1).padStart(3, '0'),
-    claim: 'Added ' + name + ' to Top Consumers: ' + tokensStr + ', ARR ' + (company.arr || 'unknown'),
+    claim: actionVerb + ' ' + name + ': ' + tokensStr + ', ARR ' + (arrDisplay || 'unknown'),
     value: arr,
     unit: '$',
-    sourceUrl: company.website,
+    sourceUrl: sourceUrl,
     sourceType: 'observation',
-    sourceAuthor: 'Manual add via Vault',
+    sourceAuthor: 'Vault Add/Edit' + (sourceHint ? ' — ' + sourceHint : ''),
     confidence: 'estimated',
     dateOfClaim: new Date().toISOString().split('T')[0],
     dateAdded: new Date().toISOString().split('T')[0],
     usedOn: ['dashboard'],
-    notes: JSON.stringify(company),
+    notes: 'Source: ' + sourceUrl + (sourceHint ? '\nContext: ' + sourceHint : '') + '\nData: ' + JSON.stringify(company),
     tags: [name.toLowerCase(), cat],
-    metricKey: name.toLowerCase().replace(/\s+/g, '-') + '-add',
+    metricKey: name.toLowerCase().replace(/\s+/g, '-') + (isEdit ? '-update' : '-add'),
     status: 'accepted',
   };
   vaultData.dataPoints.push(dp);
   saveData();
 
-  // Also download the company data as a JSON file that apply_claims.py can pick up from ~/Downloads
+  // Download approved-claims.json for apply_claims.py
   const approvedClaims = [claim];
   const blob = new Blob([JSON.stringify(approvedClaims, null, 2)], { type: 'application/json' });
   const dlUrl = URL.createObjectURL(blob);
@@ -2167,10 +2263,16 @@ async function confirmAddCompany() {
   document.getElementById('ac-form').style.display = 'none';
   document.getElementById('ac-status').innerHTML =
     '<div style="padding:12px 16px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;color:var(--green);font-size:12px;">' +
-    '✅ <strong>' + name + '</strong> added (' + tokensStr + ')<br>' +
+    '✅ <strong>' + name + '</strong> ' + (isEdit ? 'updated' : 'added') + ' (' + tokensStr + ')<br>' +
+    '<span style="color:var(--text-dim);">Source: ' + (sourceUrl || 'none') + (sourceHint ? ' — ' + sourceHint : '') + '</span><br>' +
     '<span style="color:var(--text-dim);">Saved to vault + queued for dashboard. Will go live at next auto-update (7am).</span></div>';
 
-  showToast(name + ' added — goes live at next auto-update');
+  showToast(name + (isEdit ? ' updated' : ' added') + ' — goes live at next auto-update');
+
+  // Reset form
+  acEditingIndex = -1;
+  document.getElementById('ac-edit-select').value = '';
+  document.getElementById('ac-title').textContent = 'Add or Edit Company';
 }
 
 // ============================================================
@@ -2304,6 +2406,7 @@ function toggleKeyVisibility() {
 
 function switchTab(name) {
   if (name === 'quickadd') renderQuickAddQueue();
+  if (name === 'addcompany') populateCompanyDropdown();
   if (name === 'settings') loadSettingsView();
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', TABS[i] === name);

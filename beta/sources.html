@@ -9,12 +9,12 @@
 (function() {
   const AUTH_KEY = 'ai-ledger-admin-auth';
   const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6'; // sha256 of 'password'
-  if (sessionStorage.getItem(AUTH_KEY) === 'ok') return;
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
   const pw = prompt('Admin access required. Enter password:');
   if (!pw) { document.location = 'dashboard.html'; return; }
   crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
     const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    if (hash === HASH) { sessionStorage.setItem(AUTH_KEY, 'ok'); }
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
     else { alert('Incorrect password'); document.location = 'dashboard.html'; }
   });
 })();
