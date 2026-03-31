@@ -206,18 +206,31 @@ def main():
 
         changed = False
 
-        # Handle new company additions
-        if metric == 'new_company' and claim.get('company_data'):
+        # Handle new company additions and updates
+        if metric in ('new_company', 'update_company') and claim.get('company_data'):
             company = claim['company_data']
-            # Check duplicate
-            existing = [c for c in site['dashboard']['topConsumers'] if c['co'].lower() == company['co'].lower()]
-            if not existing:
+            existing_idx = None
+            for i, c in enumerate(site['dashboard']['topConsumers']):
+                if c['co'].lower() == company['co'].lower():
+                    existing_idx = i
+                    break
+
+            if metric == 'update_company' and existing_idx is not None:
+                old = site['dashboard']['topConsumers'][existing_idx]
+                for k, v in company.items():
+                    if v is not None and v != '' and v != 0:
+                        old[k] = v
+                old['lastUpdated'] = datetime.now().strftime('%Y-%m-%d')
+                site['dashboard']['topConsumers'].sort(key=lambda c: c.get('tokensNumeric') or 0, reverse=True)
+                log(f"  UPDATE COMPANY {company['co']} (source: {claim.get('source_url', '?')})")
+                changed = True
+            elif existing_idx is None:
                 site['dashboard']['topConsumers'].append(company)
                 site['dashboard']['topConsumers'].sort(key=lambda c: c.get('tokensNumeric') or 0, reverse=True)
                 log(f"  ADD COMPANY {company['co']} ({company.get('tokens', '?')})")
                 changed = True
             else:
-                log(f"  SKIP {company['co']}: already exists")
+                log(f"  SKIP {company['co']}: already exists (use update_company to edit)")
 
         elif 'arr' in metric or 'revenue' in metric:
             # Try provider-level first
