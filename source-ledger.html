@@ -102,7 +102,7 @@
 
   <div class="stats" id="stats"></div>
   <div class="filters" id="filters"></div>
-  <div id="ledger"></div>
+  <div id="ledger"><div style="text-align:center;padding:40px;color:var(--text-dim);">Loading sources...</div></div>
 </div>
 
 <footer>The AI Ledger — Admin</footer>
@@ -126,29 +126,20 @@ async function loadData() {
     vault = await r.json();
   } catch(e) {}
 
-  // 3. Load all candidate files (extracted claims)
+  // 3. Load candidate files — try known dates only (last 7 days)
   let allClaims = [];
   const today = new Date();
-  for (let i = 0; i < 30; i++) {
+  const fetches = [];
+  for (let i = 0; i < 7; i++) {
     const d = new Date(today - i * 86400000).toISOString().split('T')[0];
-    try {
-      const r = await fetch('data-updates/' + d + '-candidates.json?v=' + Date.now());
-      if (r.ok) {
-        const claims = await r.json();
-        allClaims = allClaims.concat(claims);
-      }
-    } catch(e) {}
-    // Also check source-specific files
-    for (let s = 1; s <= 20; s++) {
-      try {
-        const r = await fetch('data-updates/' + d + '-source-src-' + String(s).padStart(3,'0') + '.json?v=' + Date.now());
-        if (r.ok) {
-          const claims = await r.json();
-          allClaims = allClaims.concat(claims);
-        }
-      } catch(e) {}
+    fetches.push(fetch('data-updates/' + d + '-candidates.json').then(r => r.ok ? r.json() : []).catch(() => []));
+    // Source-specific extractions
+    for (let s = 1; s <= 15; s++) {
+      fetches.push(fetch('data-updates/' + d + '-source-src-' + String(s).padStart(3,'0') + '.json').then(r => r.ok ? r.json() : []).catch(() => []));
     }
   }
+  const results = await Promise.all(fetches);
+  results.forEach(claims => { if (Array.isArray(claims)) allClaims = allClaims.concat(claims); });
 
   // 4. Build unified source map
   const sourceMap = {}; // url → { source info + claims[] }
@@ -226,7 +217,12 @@ async function loadData() {
 
   // Convert to array and sort by claim count
   allSources = Object.values(sourceMap).sort((a, b) => b.claims.length - a.claims.length);
-  console.log('Loaded ' + allSources.length + ' sources with ' + allSources.reduce((s, x) => s + x.claims.length, 0) + ' total claims');
+  console.log('Source Ledger loaded:', allSources.length, 'sources,', allSources.reduce((s, x) => s + x.claims.length, 0), 'claims');
+  console.log('Registry sources:', registry.sources.length, 'Vault points:', vault.dataPoints.length, 'Extracted claims:', allClaims.length);
+  if (allSources.length === 0) {
+    document.getElementById('ledger').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-dim);">No sources found. Check console for errors.</div>';
+    return;
+  }
   render();
 }
 
