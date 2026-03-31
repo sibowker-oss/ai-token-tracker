@@ -1868,60 +1868,130 @@ async function loadSiteDataForCompanies() {
   } catch(e) { console.warn('Could not load site-data.json for company add'); }
 }
 
+function getApiKey() {
+  let key = sessionStorage.getItem('anthropic-api-key');
+  if (!key) {
+    key = prompt('Enter your Anthropic API key (stored for this session only):');
+    if (key) sessionStorage.setItem('anthropic-api-key', key);
+  }
+  return key;
+}
+
 async function researchCompany() {
   const url = document.getElementById('ac-url').value.trim();
   if (!url) { showToast('Enter a URL'); return; }
 
   document.getElementById('ac-loading').style.display = 'block';
+  document.getElementById('ac-loading').textContent = 'Researching with Claude... (fetching page + AI analysis)';
   document.getElementById('ac-form').style.display = 'none';
   document.getElementById('ac-research-btn').disabled = true;
 
+  // Step 1: Try to fetch the page for context
+  let pageText = '';
   try {
-    // Fetch the page
     const resp = await fetch(url);
     const html = await resp.text();
-    // Strip tags for text
-    const text = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
-                     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-                     .replace(/<[^>]+>/g, ' ')
-                     .replace(/\s+/g, ' ')
-                     .substring(0, 10000);
+    pageText = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+                   .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+                   .replace(/<[^>]+>/g, ' ')
+                   .replace(/\s+/g, ' ')
+                   .substring(0, 5000);
+  } catch(e) {
+    pageText = '(Could not fetch page — CORS blocked)';
+  }
 
-    // Extract title from page
-    const titleMatch = html.match(/<title[^>]*>(.*?)<\/title>/i);
-    const pageTitle = titleMatch ? titleMatch[1].replace(/[|–—].*/, '').trim() : '';
+  // Step 2: Call Claude to research the company
+  const domain = url.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
+  try {
+    const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': getApiKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: `Research this AI company and return a JSON object with the best known data.
 
-    // Try to infer from text
-    const name = pageTitle || url.replace(/https?:\/\/(www\.)?/, '').split('/')[0].split('.')[0];
+Company URL: ${url}
+Domain: ${domain}
 
-    // Pre-fill form with what we can detect
-    document.getElementById('ac-name').value = name;
-    document.getElementById('ac-hq').value = 'US';
-    document.getElementById('ac-type').value = '';
-    document.getElementById('ac-providers').value = 'openai';
-    document.getElementById('ac-founded').value = '';
-    document.getElementById('ac-arr').value = '';
-    document.getElementById('ac-funding').value = '';
-    document.getElementById('ac-evidence').value = text.substring(0, 300);
+Page text (if available):
+${pageText.substring(0, 3000)}
 
-    // Try to detect providers from page text
-    const provs = [];
-    if (/openai|gpt|chatgpt/i.test(text)) provs.push('openai');
-    if (/anthropic|claude/i.test(text)) provs.push('anthropic');
-    if (/google|gemini/i.test(text)) provs.push('google');
-    if (/llama|meta ai/i.test(text)) provs.push('meta');
-    if (provs.length > 0) document.getElementById('ac-providers').value = provs.join(', ');
+Return a JSON object with these fields (use null for truly unknown, make best estimates where possible):
+{
+  "company_name": "Official name",
+  "hq": "Country (e.g. US, UK, France, China)",
+  "type": "What they do (e.g. AI Dev Tool, Legal AI, Voice AI, AI Search)",
+  "category": "one of: ai-application, ai-infrastructure, vertical-ai, digital-native, enterprise-saas",
+  "subcategory": "e.g. coding, search, legal, voice, content, agent",
+  "providers": ["openai", "anthropic", "google", "meta", "own"],
+  "founded": 2023,
+  "arr": "$50M",
+  "arr_numeric": 50000000,
+  "valuation": "$500M",
+  "valuation_numeric": 500000000,
+  "total_funding": "$100M",
+  "employee_count": 50,
+  "description": "One sentence description",
+  "confidence": "high/medium/low — how confident are you in the ARR estimate?",
+  "confidence_reasoning": "Brief explanation of confidence level",
+  "sources": "What you based the ARR/valuation on (e.g. press reports, TechCrunch, etc)"
+}
+
+Important:
+- For ARR: use the most recent known figure. If only revenue is known, note that. If unknown, estimate from funding stage and category.
+- For providers: infer which AI providers they likely use based on their product.
+- Be specific about confidence: "high" = from earnings/press, "medium" = from fundraising context, "low" = rough estimate.
+- Return ONLY the JSON object, no other text.` }],
+      }),
+    });
+
+    const claudeData = await claudeResp.json();
+    const raw = claudeData.content?.[0]?.text || '{}';
+    const cleaned = raw.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+    const research = JSON.parse(cleaned);
+
+    // Fill form with Claude's research
+    document.getElementById('ac-name').value = research.company_name || domain;
+    document.getElementById('ac-hq').value = research.hq || 'US';
+    document.getElementById('ac-type').value = research.type || '';
+    document.getElementById('ac-category').value = research.category || 'ai-application';
+    document.getElementById('ac-providers').value = (research.providers || ['openai']).join(', ');
+    document.getElementById('ac-founded').value = research.founded || '';
+    document.getElementById('ac-arr').value = research.arr_numeric || '';
+    document.getElementById('ac-funding').value = research.total_funding || '';
+    document.getElementById('ac-evidence').value = (research.description || '') +
+      (research.sources ? '\n\nSources: ' + research.sources : '') +
+      (research.confidence_reasoning ? '\nConfidence: ' + research.confidence + ' — ' + research.confidence_reasoning : '');
+
+    // Show confidence prominently
+    const confColors = { high: 'var(--green)', medium: 'var(--orange)', low: 'var(--red)' };
+    const conf = research.confidence || 'low';
+    document.getElementById('ac-status').innerHTML =
+      '<div style="padding:8px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;margin-bottom:12px;font-size:12px;">' +
+      '<strong>Research confidence: <span style="color:' + (confColors[conf] || 'var(--text-dim)') + ';">' + conf.toUpperCase() + '</span></strong> — ' +
+      (research.confidence_reasoning || 'No reasoning provided') +
+      (research.sources ? '<br><span style="color:var(--text-dim);">Based on: ' + research.sources + '</span>' : '') +
+      '</div>';
 
     document.getElementById('ac-form').style.display = 'block';
+    updateCompanyPreview();
 
   } catch(e) {
-    // CORS will block most fetches — that's OK, just show the form empty
-    const domain = url.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
+    // Claude call failed — fall back to basic form
+    console.warn('Claude research failed:', e);
     document.getElementById('ac-name').value = domain.split('.')[0];
     document.getElementById('ac-hq').value = 'US';
     document.getElementById('ac-providers').value = 'openai';
     document.getElementById('ac-evidence').value = '';
     document.getElementById('ac-form').style.display = 'block';
+    document.getElementById('ac-status').innerHTML =
+      '<div style="padding:8px 14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;font-size:11px;color:var(--red);">Claude research unavailable — fill in manually.</div>';
   }
 
   document.getElementById('ac-loading').style.display = 'none';
