@@ -280,6 +280,7 @@
   <div class="tabs" id="tabBar">
     <button class="tab active" onclick="switchTab('search')">Search & Browse</button>
     <button class="tab" onclick="switchTab('quickadd')">Quick Add</button>
+    <button class="tab" onclick="switchTab('addcompany')">Add Company</button>
     <button class="tab" onclick="switchTab('submit')">Full Add</button>
     <button class="tab" onclick="switchTab('review')">Weekly Review</button>
     <button class="tab" onclick="switchTab('consensus')">Consensus</button>
@@ -325,6 +326,77 @@
         <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">Queued for Enrichment</h3>
         <div id="qa-queue" style="font-size:12px;color:var(--text-dim);"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- ADD COMPANY VIEW -->
+  <div id="view-addcompany" class="view-section" style="display:none;">
+    <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px;">
+      <h2 style="font-size:18px; margin-bottom:8px;">Add Company to Top Token Consumers</h2>
+      <p style="font-size:12px; color:var(--text-dim); margin-bottom:20px;">Paste a company URL. The system will research it and pre-fill the fields. Review and confirm to add.</p>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;max-width:600px;">
+        <input id="ac-url" type="url" placeholder="https://company.ai" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
+        <button onclick="researchCompany()" id="ac-research-btn" style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Research</button>
+      </div>
+
+      <div id="ac-loading" style="display:none;font-size:12px;color:var(--text-dim);margin-bottom:16px;">Researching... (fetching page + Claude extraction)</div>
+
+      <div id="ac-form" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:600px;">
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Company Name</label>
+            <input id="ac-name" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">HQ</label>
+            <input id="ac-hq" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Type</label>
+            <input id="ac-type" placeholder="e.g. AI Dev Tool" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Category</label>
+            <select id="ac-category" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+              <option value="ai-application">AI Application</option>
+              <option value="vertical-ai">Vertical AI</option>
+              <option value="ai-infrastructure">AI Infrastructure</option>
+              <option value="digital-native">Digital Native</option>
+              <option value="enterprise-saas">Enterprise SaaS</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Providers (comma-sep)</label>
+            <input id="ac-providers" placeholder="openai, anthropic" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Founded Year</label>
+            <input id="ac-founded" type="number" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">ARR (USD number, e.g. 50000000)</label>
+            <input id="ac-arr" type="number" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Funding</label>
+            <input id="ac-funding" placeholder="e.g. $100M" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+        </div>
+        <div style="margin-top:12px;max-width:600px;">
+          <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Evidence / Description</label>
+          <textarea id="ac-evidence" rows="2" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:12px;outline:none;font-family:inherit;resize:vertical;"></textarea>
+        </div>
+
+        <div id="ac-preview" style="margin-top:14px;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:11px;color:var(--text-dim);display:none;"></div>
+
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <button onclick="confirmAddCompany()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--green);color:white;font-size:13px;font-weight:600;cursor:pointer;">Add to Dashboard</button>
+          <button onclick="document.getElementById('ac-form').style.display='none'" style="padding:10px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:13px;cursor:pointer;">Cancel</button>
+        </div>
+      </div>
+
+      <div id="ac-status" style="margin-top:16px;"></div>
     </div>
   </div>
 
@@ -451,7 +523,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','quickadd','submit','review','consensus','audit'];
+const TABS = ['search','quickadd','addcompany','submit','review','consensus','audit'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -1783,6 +1855,180 @@ function clearForm() {
 // ============================================================
 // TABS
 // ============================================================
+// ============================================================
+// ADD COMPANY
+// ============================================================
+let acSiteData = null;
+
+async function loadSiteDataForCompanies() {
+  if (acSiteData) return;
+  try {
+    const r = await fetch('site-data.json?v=' + Date.now());
+    acSiteData = await r.json();
+  } catch(e) { console.warn('Could not load site-data.json for company add'); }
+}
+
+async function researchCompany() {
+  const url = document.getElementById('ac-url').value.trim();
+  if (!url) { showToast('Enter a URL'); return; }
+
+  document.getElementById('ac-loading').style.display = 'block';
+  document.getElementById('ac-form').style.display = 'none';
+  document.getElementById('ac-research-btn').disabled = true;
+
+  try {
+    // Fetch the page
+    const resp = await fetch(url);
+    const html = await resp.text();
+    // Strip tags for text
+    const text = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+                     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+                     .replace(/<[^>]+>/g, ' ')
+                     .replace(/\s+/g, ' ')
+                     .substring(0, 10000);
+
+    // Extract title from page
+    const titleMatch = html.match(/<title[^>]*>(.*?)<\/title>/i);
+    const pageTitle = titleMatch ? titleMatch[1].replace(/[|–—].*/, '').trim() : '';
+
+    // Try to infer from text
+    const name = pageTitle || url.replace(/https?:\/\/(www\.)?/, '').split('/')[0].split('.')[0];
+
+    // Pre-fill form with what we can detect
+    document.getElementById('ac-name').value = name;
+    document.getElementById('ac-hq').value = 'US';
+    document.getElementById('ac-type').value = '';
+    document.getElementById('ac-providers').value = 'openai';
+    document.getElementById('ac-founded').value = '';
+    document.getElementById('ac-arr').value = '';
+    document.getElementById('ac-funding').value = '';
+    document.getElementById('ac-evidence').value = text.substring(0, 300);
+
+    // Try to detect providers from page text
+    const provs = [];
+    if (/openai|gpt|chatgpt/i.test(text)) provs.push('openai');
+    if (/anthropic|claude/i.test(text)) provs.push('anthropic');
+    if (/google|gemini/i.test(text)) provs.push('google');
+    if (/llama|meta ai/i.test(text)) provs.push('meta');
+    if (provs.length > 0) document.getElementById('ac-providers').value = provs.join(', ');
+
+    document.getElementById('ac-form').style.display = 'block';
+
+  } catch(e) {
+    // CORS will block most fetches — that's OK, just show the form empty
+    const domain = url.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
+    document.getElementById('ac-name').value = domain.split('.')[0];
+    document.getElementById('ac-hq').value = 'US';
+    document.getElementById('ac-providers').value = 'openai';
+    document.getElementById('ac-evidence').value = '';
+    document.getElementById('ac-form').style.display = 'block';
+  }
+
+  document.getElementById('ac-loading').style.display = 'none';
+  document.getElementById('ac-research-btn').disabled = false;
+
+  updateCompanyPreview();
+}
+
+function updateCompanyPreview() {
+  const arr = parseFloat(document.getElementById('ac-arr').value) || 0;
+  const cat = document.getElementById('ac-category').value;
+  const cogsRatios = { 'ai-application': 0.30, 'ai-infrastructure': 0.65, 'vertical-ai': 0.25, 'digital-native': 0.12, 'enterprise-saas': 0.05 };
+  const cogs = cogsRatios[cat] || 0.25;
+
+  if (arr > 0) {
+    const dailyTokens = Math.round(arr / 365 * cogs / 2.5 * 1e6);
+    const tokStr = dailyTokens >= 1e12 ? (dailyTokens/1e12).toFixed(1) + 'T' : Math.round(dailyTokens/1e9) + 'B';
+    document.getElementById('ac-preview').style.display = 'block';
+    document.getElementById('ac-preview').innerHTML =
+      '<strong>Estimated token volume:</strong> ~' + tokStr + '/day ' +
+      '<span style="color:var(--text-dim);">(ARR $' + (arr/1e6).toFixed(0) + 'M × ' + (cogs*100).toFixed(0) + '% COGS ÷ $2.50/M blended)</span>';
+  } else {
+    document.getElementById('ac-preview').style.display = 'none';
+  }
+}
+
+// Attach preview updater to ARR and category inputs
+document.addEventListener('DOMContentLoaded', () => {
+  const arrEl = document.getElementById('ac-arr');
+  const catEl = document.getElementById('ac-category');
+  if (arrEl) arrEl.addEventListener('input', updateCompanyPreview);
+  if (catEl) catEl.addEventListener('change', updateCompanyPreview);
+});
+
+async function confirmAddCompany() {
+  await loadSiteDataForCompanies();
+  if (!acSiteData) { showToast('Could not load site data'); return; }
+
+  const name = document.getElementById('ac-name').value.trim();
+  if (!name) { showToast('Company name required'); return; }
+
+  // Check duplicate
+  const existing = acSiteData.dashboard.topConsumers.find(c => c.co.toLowerCase() === name.toLowerCase());
+  if (existing) { showToast('Already exists: ' + existing.co); return; }
+
+  const arr = parseFloat(document.getElementById('ac-arr').value) || null;
+  const cat = document.getElementById('ac-category').value;
+  const provStr = document.getElementById('ac-providers').value;
+  const provs = provStr.split(',').map(p => p.trim().toLowerCase()).filter(Boolean);
+  const founded = parseInt(document.getElementById('ac-founded').value) || null;
+
+  // Calculate tokens
+  const cogsRatios = { 'ai-application': 0.30, 'ai-infrastructure': 0.65, 'vertical-ai': 0.25, 'digital-native': 0.12, 'enterprise-saas': 0.05 };
+  const cogs = cogsRatios[cat] || 0.25;
+  let tokensNumeric = null;
+  let tokensStr = 'Unknown';
+  if (arr) {
+    tokensNumeric = Math.round(arr / 365 * cogs / 2.5 * 1e6);
+    tokensStr = tokensNumeric >= 1e12 ? '~' + (tokensNumeric/1e12).toFixed(1) + 'T/day' : '~' + Math.round(tokensNumeric/1e9) + 'B/day';
+  }
+
+  const company = {
+    co: name,
+    hq: document.getElementById('ac-hq').value.trim() || 'US',
+    type: document.getElementById('ac-type').value.trim() || 'AI Application',
+    tokens: tokensStr,
+    prov: provs.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', '),
+    ev: document.getElementById('ac-evidence').value.trim(),
+    conf: 'Low',
+    founded: founded,
+    category: cat,
+    subcategory: '',
+    providers: provs,
+    tokensNumeric: tokensNumeric,
+    arr: arr ? (arr >= 1e9 ? '$' + (arr/1e9).toFixed(1) + 'B' : '$' + (arr/1e6).toFixed(0) + 'M') : null,
+    arrNumeric: arr,
+    valuation: null,
+    valuationNumeric: null,
+    totalFunding: document.getElementById('ac-funding').value.trim() || null,
+    status: 'private',
+    website: document.getElementById('ac-url').value.trim(),
+    employeeCount: null,
+    lastUpdated: new Date().toISOString().split('T')[0],
+  };
+
+  acSiteData.dashboard.topConsumers.push(company);
+  // Sort by tokens desc
+  acSiteData.dashboard.topConsumers.sort((a, b) => (b.tokensNumeric || 0) - (a.tokensNumeric || 0));
+
+  // Save — download as file for next auto_update to pick up
+  const blob = new Blob([JSON.stringify(acSiteData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'site-data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  document.getElementById('ac-form').style.display = 'none';
+  document.getElementById('ac-status').innerHTML =
+    '<div style="padding:12px 16px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;color:var(--green);font-size:12px;">' +
+    '✅ <strong>' + name + '</strong> added (' + tokensStr + ')<br>' +
+    '<span style="color:var(--text-dim);">Save the downloaded site-data.json to the repo root. Next auto-update (7am) will push it live.</span></div>';
+
+  showToast(name + ' added to Top Consumers');
+}
+
 // ============================================================
 // QUICK ADD + AUTO-CLASSIFY
 // ============================================================
