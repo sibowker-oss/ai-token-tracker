@@ -55,10 +55,10 @@
   <div class="sub" id="sankeySubtitle">2025 actual revenue collected (not exit ARR). Consensus-weighted estimates. Hover to explore.</div>
 
   <!-- Headline callout -->
-  <div style="text-align:center;padding:24px;margin:16px 0;background:linear-gradient(135deg, rgba(239,68,68,0.08), rgba(245,158,11,0.08));border:1px solid rgba(239,68,68,0.15);border-radius:12px;">
-    <div style="font-size:48px;font-weight:800;color:var(--red);line-height:1;">$15 invested</div>
-    <div style="font-size:16px;color:var(--text-dim);margin-top:4px;">for every <strong style="color:var(--text);">$1</strong> of customer revenue collected</div>
-    <div style="font-size:11px;color:var(--text-dim);margin-top:8px;">VC subsidy + infrastructure capex vs. actual customer payments in 2025</div>
+  <div style="text-align:center;padding:16px 20px;margin:12px 0;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:10px;">
+    <div style="font-size:13px;color:var(--text-dim);">2025 investment-to-revenue ratio</div>
+    <div style="font-size:28px;font-weight:700;color:var(--text);margin-top:4px;"><span style="color:var(--accent);">$15</span> invested for every <span style="color:var(--accent);">$1</span> of customer revenue</div>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">Total system cost (capex + operating subsidy + inference) vs. actual customer payments</div>
   </div>
 
   <div class="sankey-container">
@@ -228,14 +228,20 @@ async function loadSankeyData() {
 
     // Update narrative sections with live numbers
     const updateText = (selector, text) => { const el = document.querySelector(selector); if (el) el.innerHTML = text; };
-    // VC callout
-    const vcEl = document.querySelectorAll('.container > div')[3]; // VC definition box
-    if (vcEl) {
-      const vcP = vcEl.querySelector('p');
-      if (vcP) vcP.innerHTML = `<strong style="color:#dc2626;">VC/Investor subsidy ($${s.totalVCSubsidy}B)</strong> is purely the gap between what customers spend on AI and the published, calculated and estimated operating expense to provide that service. It excludes training compute capex, data centre construction, and GPU procurement — which are funded separately and dwarf customer revenue.`;
-    }
-    // Real Economics summary stats
-    const statEls = document.querySelectorAll('.container > div')[4]?.querySelectorAll('div[style*="text-align:center"] > div:first-child');
+    // VC callout — find by background color to avoid fragile index
+    document.querySelectorAll('.container > div').forEach(el => {
+      if (el.style.background?.includes('220,38,38') || el.outerHTML?.includes('rgba(220,38,38')) {
+        const vcP = el.querySelector('p');
+        if (vcP) vcP.innerHTML = `<strong style="color:#dc2626;">VC/Investor subsidy ($${s.totalVCSubsidy}B)</strong> is purely the gap between what customers spend on AI and the published, calculated and estimated operating expense to provide that service. It excludes training compute capex, data centre construction, and GPU procurement — which are funded separately and dwarf customer revenue.`;
+      }
+    });
+    // Real Economics summary stats — find by green background
+    let statEls = null;
+    document.querySelectorAll('.container > div').forEach(el => {
+      if (el.style.background?.includes('16,185,129') || el.outerHTML?.includes('rgba(16,185,129,0.08)')) {
+        statEls = el.querySelectorAll('div[style*="text-align:center"] > div:first-child');
+      }
+    });
     if (statEls && statEls.length >= 3) {
       const trueRev = Math.round((s.totalCustomerRevenue - (s.outcomes[2]?.value || 0)) * 10) / 10;
       const infCost = s.outcomes[0]?.value || 13;
