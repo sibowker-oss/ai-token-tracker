@@ -61,13 +61,23 @@
 </head>
 <body>
 
-<nav style="display:flex;align-items:center;gap:8px;padding:10px 24px;background:#0f172a;border-bottom:1px solid #1e293b;flex-wrap:wrap;">
-  <a href="dashboard.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#1e293b'">Dashboard</a>
+<style>
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
+  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
+  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
+  @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
+</style>
+<nav class="nav-bar">
+  <a href="index.html" class="nav-brand"><span>AI Ledger</span></a>
+  <a href="dashboard.html" class="nav-link">Dashboard</a>
   <span style="flex-grow:1"></span>
-  <a href="vault.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Vault</a>
-  <a href="sources.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Sources</a>
-  <a href="claims.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">Claims</a>
-  <a href="in-development.html" style="padding:6px 14px;border-radius:8px;background:#1e293b;color:#e2e8f0;text-decoration:none;font-size:12px;font-weight:500;border:1px solid #334155;">In Development</a>
+  <a href="vault.html" class="nav-link">Vault</a>
+  <a href="sources.html" class="nav-link">Sources</a>
+  <a href="claims.html" class="nav-link">Claims</a>
+  <a href="in-development.html" class="nav-link">In Development</a>
 </nav>
 
 <div class="container">
