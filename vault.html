@@ -2001,6 +2001,7 @@ async function researchCompany() {
       JSON.stringify({ co: current.co, tokens: current.tokens, arr: current.arr, arrNumeric: current.arrNumeric,
         category: current.category, providers: current.providers, founded: current.founded, conf: current.conf }, null, 2) +
       '\nUpdate the fields that the source/hint suggests have changed. Keep unchanged fields the same.\n';
+  }
   try {
     const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
