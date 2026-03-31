@@ -305,15 +305,16 @@
 
       <div style="display:flex;flex-direction:column;gap:14px;max-width:600px;">
         <div>
-          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Title / Description</label>
-          <input id="qa-title" type="text" placeholder="e.g. Anthropic hits $14B ARR" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
-        </div>
-        <div>
           <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">URL</label>
-          <input id="qa-url" type="url" placeholder="https://..." style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
+          <input id="qa-url" type="url" placeholder="Paste any URL — report, slide deck, article, podcast, tweet..." style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;" oninput="autoClassify()">
+        </div>
+        <div id="qa-classify" style="display:none;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:12px;"></div>
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Title / Description (optional — auto-filled if left blank)</label>
+          <input id="qa-title" type="text" placeholder="e.g. State of AI Report 2025" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
         </div>
         <div style="display:flex;gap:8px;">
-          <button onclick="quickAddSave()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;">Save & Queue for Enrichment</button>
+          <button onclick="quickAddSave()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;">Add Source</button>
         </div>
       </div>
 
@@ -1783,8 +1784,52 @@ function clearForm() {
 // TABS
 // ============================================================
 // ============================================================
-// QUICK ADD
+// QUICK ADD + AUTO-CLASSIFY
 // ============================================================
+const SOURCE_PATTERNS = [
+  [/docs\.google\.com\/presentation/, 'slide_deck', 'PDF export → Claude extraction', 'annual'],
+  [/docs\.google\.com\/document/, 'document', 'Web extraction', 'one_time'],
+  [/\.pdf(\?|$)/, 'pdf_report', 'PDF text → Claude extraction', 'one_time'],
+  [/arxiv\.org/, 'research_paper', 'PDF text → Claude extraction', 'one_time'],
+  [/\.substack\.com/, 'newsletter', 'RSS feed monitoring', 'weekly'],
+  [/medium\.com/, 'blog', 'Web extraction', 'weekly'],
+  [/(twitter|x)\.com\/.+\/status/, 'social_thread', 'Thread extraction', 'one_time'],
+  [/youtube\.com\/watch|youtu\.be/, 'video', 'YouTube captions', 'one_time'],
+  [/sec\.gov|edgar/, 'sec_filing', 'SEC filing extraction', 'quarterly'],
+  [/github\.com\/[^\/]+\/[^\/]+$/, 'github_repo', 'GitHub API', 'weekly'],
+  [/(anchor|megaphone|transistor|simplecast|libsyn|buzzsprout)\.fm/, 'podcast_feed', 'Podcast scraper', 'weekly'],
+  [/(mckinsey|gartner|forrester|idc|statista)\.com/, 'research_report', 'Web extraction', 'quarterly'],
+  [/(a16z|sequoiacap|benchmark)\.com/, 'vc_research', 'Web extraction', 'quarterly'],
+  [/(bloomberg|wsj|ft\.com|reuters|theinformation|cnbc|techcrunch)\.com/, 'news_article', 'Web extraction', 'one_time'],
+  [/crunchbase\.com/, 'company_data', 'Web extraction', 'monthly'],
+  [/happyscribe\.com/, 'podcast_transcript', 'Web extraction', 'weekly'],
+];
+
+let classifyTimeout = null;
+function autoClassify() {
+  clearTimeout(classifyTimeout);
+  classifyTimeout = setTimeout(() => {
+    const url = document.getElementById('qa-url').value.trim();
+    const el = document.getElementById('qa-classify');
+    if (!url || url.length < 10) { el.style.display = 'none'; return; }
+
+    let type = 'web_page', method = 'Web extraction → Claude', freq = 'one_time';
+    for (const [pattern, t, m, f] of SOURCE_PATTERNS) {
+      if (pattern.test(url)) { type = t; method = m; freq = f; break; }
+    }
+
+    const typeColors = { slide_deck:'#8b5cf6', pdf_report:'#ef4444', newsletter:'#f59e0b', podcast_feed:'#06b6d4', research_report:'#10b981', news_article:'#3b82f6', video:'#ec4899', github_repo:'#475569', social_thread:'#f97316', web_page:'#94a3b8' };
+    const color = typeColors[type] || '#94a3b8';
+
+    el.style.display = 'block';
+    el.innerHTML = '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">' +
+      '<span style="padding:3px 8px;border-radius:5px;font-size:10px;font-weight:600;background:' + color + '22;color:' + color + ';text-transform:uppercase;">' + type.replace(/_/g,' ') + '</span>' +
+      '<span style="color:var(--text-dim);">Extraction: ' + method + '</span>' +
+      '<span style="color:var(--text-dim);">Check: ' + freq + '</span>' +
+      '</div>';
+  }, 300);
+}
+
 function quickAddSave() {
   const title = document.getElementById('qa-title').value.trim();
   const url = document.getElementById('qa-url').value.trim();

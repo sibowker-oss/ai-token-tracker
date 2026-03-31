@@ -1,0 +1,208 @@
+{
+  "meta": {
+    "version": "1.0",
+    "lastUpdated": "2026-03-31",
+    "description": "Registry of all data sources \u2014 auto-classified with extraction method and check frequency"
+  },
+  "sources": [
+    {
+      "id": "src-001",
+      "url": "https://docs.google.com/presentation/d/1xiLl0VdrlNMAei8pmaX4ojIOfej6lhvZbOIK7Z6C-Go",
+      "title": "State of AI Report 2025",
+      "type": "slide_deck",
+      "author": "Nathan Benaich & Ian Hogarth",
+      "organization": "Air Street Capital",
+      "added": "2026-03-31",
+      "tags": [
+        "research",
+        "annual-report",
+        "market-sizing",
+        "model-benchmarks"
+      ],
+      "extraction_method": "pdf_export",
+      "frequency": "annual",
+      "next_check": "2026-10-01",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-002",
+      "url": "https://www.latent.space/feed",
+      "title": "Latent Space Podcast",
+      "type": "rss_feed",
+      "author": "swyx & Alessio",
+      "organization": "Latent Space",
+      "added": "2026-03-29",
+      "tags": [
+        "podcast",
+        "inference-costs",
+        "token-economics"
+      ],
+      "extraction_method": "podcast_scraper",
+      "frequency": "weekly",
+      "next_check": "2026-04-02",
+      "last_checked": "2026-03-30",
+      "last_claims_count": 0,
+      "status": "active"
+    },
+    {
+      "id": "src-003",
+      "url": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg",
+      "title": "All-In Podcast",
+      "type": "rss_feed",
+      "author": "Chamath, Jason, Sacks, Friedberg",
+      "organization": "All-In",
+      "added": "2026-03-29",
+      "tags": [
+        "podcast",
+        "ai-economics",
+        "capex",
+        "bear-case"
+      ],
+      "extraction_method": "podcast_scraper",
+      "frequency": "weekly",
+      "next_check": "2026-04-02",
+      "last_checked": "2026-03-30",
+      "last_claims_count": 30,
+      "status": "active"
+    },
+    {
+      "id": "src-004",
+      "url": "https://feeds.megaphone.fm/LI3617121267",
+      "title": "Big Technology Podcast",
+      "type": "rss_feed",
+      "author": "Alex Kantrowitz",
+      "organization": "Big Technology",
+      "added": "2026-03-30",
+      "tags": [
+        "podcast",
+        "big-tech",
+        "ai-strategy"
+      ],
+      "extraction_method": "podcast_scraper",
+      "frequency": "weekly",
+      "next_check": "2026-04-02",
+      "last_checked": "2026-03-30",
+      "last_claims_count": 8,
+      "status": "active"
+    },
+    {
+      "id": "src-005",
+      "url": "https://openrouter.ai/rankings",
+      "title": "OpenRouter Weekly Rankings",
+      "type": "web_scrape",
+      "author": "OpenRouter",
+      "organization": "OpenRouter",
+      "added": "2026-03-29",
+      "tags": [
+        "live-signal",
+        "token-volumes",
+        "provider-share"
+      ],
+      "extraction_method": "signal_scraper",
+      "frequency": "daily",
+      "next_check": "2026-04-01",
+      "last_checked": "2026-03-31",
+      "last_claims_count": 0,
+      "status": "active"
+    },
+    {
+      "id": "src-006",
+      "url": "https://openrouter.ai/api/v1/models",
+      "title": "OpenRouter Model Catalog API",
+      "type": "api",
+      "author": "OpenRouter",
+      "organization": "OpenRouter",
+      "added": "2026-03-28",
+      "tags": [
+        "live-signal",
+        "pricing",
+        "model-catalog"
+      ],
+      "extraction_method": "signal_scraper",
+      "frequency": "daily",
+      "next_check": "2026-04-01",
+      "last_checked": "2026-03-31",
+      "last_claims_count": 0,
+      "status": "active"
+    },
+    {
+      "id": "src-007",
+      "url": "https://pypistats.org/api/packages",
+      "title": "PyPI Download Stats",
+      "type": "api",
+      "author": "PyPI",
+      "organization": "Python Software Foundation",
+      "added": "2026-03-28",
+      "tags": [
+        "live-signal",
+        "sdk-adoption"
+      ],
+      "extraction_method": "signal_scraper",
+      "frequency": "daily",
+      "next_check": "2026-04-01",
+      "last_checked": "2026-03-31",
+      "last_claims_count": 0,
+      "status": "active"
+    },
+    {
+      "id": "src-008",
+      "url": "https://www.forbes.com/lists/ai50/",
+      "title": "Forbes AI 50",
+      "type": "web_page",
+      "author": "Forbes / Sequoia / Meritech",
+      "organization": "Forbes",
+      "added": "2026-03-30",
+      "tags": [
+        "research",
+        "annual-list",
+        "company-data",
+        "funding"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "annual",
+      "next_check": "2026-06-01",
+      "last_checked": "2026-03-30",
+      "last_claims_count": 50,
+      "status": "active"
+    },
+    {
+      "id": "src-009",
+      "url": "https://leanaileaderboard.com/",
+      "title": "Lean AI Leaderboard",
+      "type": "web_page",
+      "author": "Henry Shi",
+      "organization": "Super.com",
+      "added": "2026-03-30",
+      "tags": [
+        "research",
+        "live-list",
+        "arr-data",
+        "efficiency"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-30",
+      "last_checked": "2026-03-30",
+      "last_claims_count": 45,
+      "status": "active"
+    },
+    {
+      "id": "src-010",
+      "url": "https://www.stateof.ai/",
+      "title": "State of AI 2025 (Website)",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-03-31",
+      "tags": [],
+      "extraction_method": "web_extract",
+      "frequency": "one_time",
+      "next_check": "2300-01-13",
+      "last_checked": "2026-03-31",
+      "last_claims_count": 10,
+      "status": "active"
+    }
+  ]
+}
