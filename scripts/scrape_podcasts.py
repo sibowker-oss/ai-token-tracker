@@ -608,7 +608,76 @@ def scrape_source(source_key, limit=5, seen=None):
     return saved
 
 
+def load_registry_podcasts():
+    """Load podcast sources from sources-registry.json and merge into SOURCES.
+
+    Any source with type='podcast_feed' or 'rss_feed' with podcast-related tags
+    that isn't already in the hardcoded SOURCES dict gets added as a Tier 3
+    Whisper STT source (safest default — works for any audio podcast).
+    """
+    registry_path = os.path.join(BASE_DIR, 'sources-registry.json')
+    if not os.path.exists(registry_path):
+        return
+
+    with open(registry_path) as f:
+        registry = json.load(f)
+
+    existing_urls = {v.get('rss', '').lower() for v in SOURCES.values()}
+    existing_urls.update({v.get('happyscribe_index', '').lower() for v in SOURCES.values()})
+
+    added = 0
+    for src in registry.get('sources', []):
+        if src.get('type') not in ('podcast_feed', 'rss_feed', 'podcast_transcript'):
+            continue
+        if src.get('status') == 'disabled':
+            continue
+
+        url = src.get('url', '')
+        if url.lower() in existing_urls:
+            continue
+
+        # Generate a key from the title
+        key = re.sub(r'[^a-z0-9]+', '-', src.get('title', '').lower()).strip('-')[:30]
+        if not key or key in SOURCES:
+            continue
+
+        # Determine best extractor based on URL
+        extractor = 'whisper_stt'  # default: download audio + Whisper
+        discovery = 'rss'
+        extra = {}
+
+        if 'happyscribe.com' in url:
+            extractor = 'happyscribe_html'
+            discovery = 'happyscribe'
+            extra['happyscribe_index'] = url
+        elif 'substack.com' in url:
+            extractor = 'substack_html'
+        elif 'youtube.com' in url or 'youtu.be' in url:
+            extractor = 'youtube_captions'
+
+        source_cfg = {
+            'label': src.get('title', key),
+            'dir': key,
+            'tier': 3 if extractor == 'whisper_stt' else 2 if extractor == 'youtube_captions' else 1,
+            'discovery': discovery,
+            'rss': url if discovery == 'rss' else '',
+            'skip_title_patterns': [],
+            'extractor': extractor,
+            **extra,
+        }
+
+        SOURCES[key] = source_cfg
+        existing_urls.add(url.lower())
+        added += 1
+
+    if added:
+        print(f"  📡 Loaded {added} additional podcast source(s) from registry")
+
+
 def main():
+    # Load additional sources from registry before parsing args
+    load_registry_podcasts()
+
     parser = argparse.ArgumentParser(description='Scrape podcast transcripts')
     source_choices = ['all', 'tier1', 'tier2', 'tier3'] + list(SOURCES.keys())
     parser.add_argument('--source', default='all', choices=source_choices,

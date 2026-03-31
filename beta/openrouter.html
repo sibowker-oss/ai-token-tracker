@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Live AI Model Pricing & Gateway Insights — Global AI Intelligence</title>
+<title>Live Pricing & Gateway Insights — The AI Ledger</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
@@ -285,31 +285,56 @@ function priceClass(perMillion) {
   return 'price-expensive';
 }
 
-async function fetchData() {
-  try {
-    const resp = await fetch('https://openrouter.ai/api/v1/models');
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const json = await resp.json();
-    allModels = json.data.map(m => {
-      const model = {
-        id: m.id,
-        name: m.name || m.id,
-        provider: getProviderFromId(m.id),
-        inputPrice: toPerMillion(m.pricing?.prompt || '0'),
-        outputPrice: toPerMillion(m.pricing?.completion || '0'),
-        context: m.context_length || 0,
-        modality: m.architecture?.modality || 'text→text',
-      };
-      model.isOpen = isOpenModel(model);
-      return model;
-    }).filter(m => m.name && !m.id.includes(':free'));
+const OR_CACHE_KEY = 'or-models-cache';
 
+function parseModels(json) {
+  return json.data.map(m => {
+    const model = {
+      id: m.id,
+      name: m.name || m.id,
+      provider: getProviderFromId(m.id),
+      inputPrice: toPerMillion(m.pricing?.prompt || '0'),
+      outputPrice: toPerMillion(m.pricing?.completion || '0'),
+      context: m.context_length || 0,
+      modality: m.architecture?.modality || 'text→text',
+    };
+    model.isOpen = isOpenModel(model);
+    return model;
+  }).filter(m => m.name && !m.id.includes(':free'));
+}
+
+async function fetchData() {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
+  try {
+    const resp = await fetch('https://openrouter.ai/api/v1/models', { signal: controller.signal });
+    clearTimeout(timeout);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const json = await resp.json();
+    allModels = parseModels(json);
+    // Cache successful response
+    try { localStorage.setItem(OR_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: json })); } catch(e) {}
     document.getElementById('loading').style.display = 'none';
     render();
   } catch (err) {
+    clearTimeout(timeout);
+    // Try cached data as fallback
+    try {
+      const cached = JSON.parse(localStorage.getItem(OR_CACHE_KEY));
+      if (cached && cached.data) {
+        allModels = parseModels(cached.data);
+        document.getElementById('loading').style.display = 'none';
+        const age = Math.round((Date.now() - cached.ts) / 3600000);
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').innerHTML = 'Live data temporarily unavailable. Showing cached data (' + age + 'h old). <a href="" style="color:var(--accent);">Refresh to retry.</a>';
+        render();
+        return;
+      }
+    } catch(e) {}
     document.getElementById('loading').style.display = 'none';
     document.getElementById('error').style.display = 'block';
-    document.getElementById('error').textContent = `Failed to fetch OpenRouter data: ${err.message}. Try refreshing.`;
+    document.getElementById('error').textContent = 'Live data temporarily unavailable. Refresh to retry.';
   }
 }
 
@@ -703,6 +728,6 @@ loadGatewayData();
 // Init OpenRouter live data (separate API fetch — untouched)
 fetchData();
 </script>
-<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice.</footer>
+<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice. Built by <a href="https://hepburnadvisory.com.au" style="color:#64748b;text-decoration:underline;" target="_blank">Hepburn Advisory</a></footer>
 </body>
 </html>

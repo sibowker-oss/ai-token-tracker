@@ -280,10 +280,12 @@
   <div class="tabs" id="tabBar">
     <button class="tab active" onclick="switchTab('search')">Search & Browse</button>
     <button class="tab" onclick="switchTab('quickadd')">Quick Add</button>
+    <button class="tab" onclick="switchTab('addcompany')">Add Company</button>
     <button class="tab" onclick="switchTab('submit')">Full Add</button>
     <button class="tab" onclick="switchTab('review')">Weekly Review</button>
     <button class="tab" onclick="switchTab('consensus')">Consensus</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
+    <button class="tab" onclick="switchTab('settings')" style="margin-left:auto;font-size:11px;">Settings</button>
   </div>
 
   <!-- SEARCH VIEW -->
@@ -305,15 +307,16 @@
 
       <div style="display:flex;flex-direction:column;gap:14px;max-width:600px;">
         <div>
-          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Title / Description</label>
-          <input id="qa-title" type="text" placeholder="e.g. Anthropic hits $14B ARR" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
-        </div>
-        <div>
           <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">URL</label>
-          <input id="qa-url" type="url" placeholder="https://..." style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
+          <input id="qa-url" type="url" placeholder="Paste any URL — report, slide deck, article, podcast, tweet..." style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;" oninput="autoClassify()">
+        </div>
+        <div id="qa-classify" style="display:none;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:12px;"></div>
+        <div>
+          <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Title / Description (optional — auto-filled if left blank)</label>
+          <input id="qa-title" type="text" placeholder="e.g. State of AI Report 2025" style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
         </div>
         <div style="display:flex;gap:8px;">
-          <button onclick="quickAddSave()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;">Save & Queue for Enrichment</button>
+          <button onclick="quickAddSave()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;">Add Source</button>
         </div>
       </div>
 
@@ -324,6 +327,105 @@
         <h3 style="font-size:13px;color:var(--text-dim);margin-bottom:10px;">Queued for Enrichment</h3>
         <div id="qa-queue" style="font-size:12px;color:var(--text-dim);"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS VIEW -->
+  <div id="view-settings" class="view-section" style="display:none;">
+    <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; max-width:500px;">
+      <h2 style="font-size:18px; margin-bottom:16px;">Settings</h2>
+
+      <div style="margin-bottom:20px;">
+        <label style="font-size:11px;color:var(--text-dim);display:block;margin-bottom:4px;">Anthropic API Key</label>
+        <div style="display:flex;gap:8px;">
+          <input id="settings-apikey" type="password" placeholder="sk-ant-..." style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:13px;outline:none;font-family:monospace;">
+          <button onclick="toggleKeyVisibility()" style="padding:8px 12px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;font-size:11px;">Show</button>
+        </div>
+        <p style="font-size:10px;color:var(--text-dim);margin-top:6px;">Used for Research button (Add Company) and source enrichment. Stored in this browser only (localStorage). Never sent to our server.</p>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button onclick="saveApiKey()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Save Key</button>
+          <button onclick="clearApiKey()" style="padding:8px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Clear Key</button>
+        </div>
+        <div id="settings-status" style="margin-top:8px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD COMPANY VIEW -->
+  <div id="view-addcompany" class="view-section" style="display:none;">
+    <div style="background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px;">
+      <h2 style="font-size:18px; margin-bottom:8px;">Add Company to Top Token Consumers</h2>
+      <p style="font-size:12px; color:var(--text-dim); margin-bottom:20px;">Paste a company URL. The system will research it and pre-fill the fields. Review and confirm to add.</p>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;max-width:600px;">
+        <div style="display:flex;gap:8px;">
+          <input id="ac-url" type="url" placeholder="https://company.ai" style="flex:1;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:14px;outline:none;">
+          <button onclick="researchCompany()" id="ac-research-btn" style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;">Research</button>
+        </div>
+        <div>
+          <input id="ac-hint" type="text" placeholder="Your context (optional): e.g. 'AI ARR is only $600M, not total company revenue'" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid rgba(245,158,11,0.3);border-radius:8px;color:var(--orange);font-size:12px;outline:none;">
+          <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">If you know something Claude might get wrong, put it here — it'll be included in the research prompt.</div>
+        </div>
+      </div>
+
+      <div id="ac-loading" style="display:none;font-size:12px;color:var(--text-dim);margin-bottom:16px;">Researching... (fetching page + Claude extraction)</div>
+
+      <div id="ac-form" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:600px;">
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Company Name</label>
+            <input id="ac-name" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">HQ</label>
+            <input id="ac-hq" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Type</label>
+            <input id="ac-type" placeholder="e.g. AI Dev Tool" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Category</label>
+            <select id="ac-category" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+              <option value="ai-application">AI Application</option>
+              <option value="vertical-ai">Vertical AI</option>
+              <option value="ai-infrastructure">AI Infrastructure</option>
+              <option value="digital-native">Digital Native</option>
+              <option value="enterprise-saas">Enterprise SaaS</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Providers (comma-sep)</label>
+            <input id="ac-providers" placeholder="openai, anthropic" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Founded Year</label>
+            <input id="ac-founded" type="number" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">AI-Specific ARR (USD, e.g. 600000000)</label>
+            <input id="ac-arr" type="number" placeholder="AI revenue only, not total company" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+            <div style="font-size:9px;color:var(--text-dim);margin-top:2px;">For enterprise SaaS, use AI-specific ARR — not total company revenue.</div>
+          </div>
+          <div>
+            <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Funding</label>
+            <input id="ac-funding" placeholder="e.g. $100M" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:13px;outline:none;">
+          </div>
+        </div>
+        <div style="margin-top:12px;max-width:600px;">
+          <label style="font-size:10px;color:var(--text-dim);display:block;margin-bottom:3px;">Evidence / Description</label>
+          <textarea id="ac-evidence" rows="2" style="width:100%;padding:8px 12px;background:var(--bg);border:1px solid var(--card-border);border-radius:6px;color:var(--text);font-size:12px;outline:none;font-family:inherit;resize:vertical;"></textarea>
+        </div>
+
+        <div id="ac-preview" style="margin-top:14px;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:11px;color:var(--text-dim);display:none;"></div>
+
+        <div style="margin-top:14px;display:flex;gap:8px;">
+          <button onclick="confirmAddCompany()" style="padding:10px 24px;border-radius:8px;border:none;background:var(--green);color:white;font-size:13px;font-weight:600;cursor:pointer;">Add to Dashboard</button>
+          <button onclick="document.getElementById('ac-form').style.display='none'" style="padding:10px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:13px;cursor:pointer;">Cancel</button>
+        </div>
+      </div>
+
+      <div id="ac-status" style="margin-top:16px;"></div>
     </div>
   </div>
 
@@ -450,7 +552,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','quickadd','submit','review','consensus','audit'];
+const TABS = ['search','quickadd','addcompany','submit','review','consensus','audit','settings'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -1783,8 +1885,341 @@ function clearForm() {
 // TABS
 // ============================================================
 // ============================================================
-// QUICK ADD
+// ADD COMPANY
 // ============================================================
+let acSiteData = null;
+
+async function loadSiteDataForCompanies() {
+  if (acSiteData) return;
+  try {
+    const r = await fetch('site-data.json?v=' + Date.now());
+    acSiteData = await r.json();
+  } catch(e) { console.warn('Could not load site-data.json for company add'); }
+}
+
+function getApiKey() {
+  let key = localStorage.getItem('anthropic-api-key');
+  if (!key) {
+    key = prompt('Enter your Anthropic API key (saved permanently in this browser):');
+    if (key) localStorage.setItem('anthropic-api-key', key);
+  }
+  return key;
+}
+
+async function researchCompany() {
+  const url = document.getElementById('ac-url').value.trim();
+  if (!url) { showToast('Enter a URL'); return; }
+
+  document.getElementById('ac-loading').style.display = 'block';
+  document.getElementById('ac-loading').textContent = 'Researching with Claude... (fetching page + AI analysis)';
+  document.getElementById('ac-form').style.display = 'none';
+  document.getElementById('ac-research-btn').disabled = true;
+
+  // Step 1: Try to fetch the page for context
+  let pageText = '';
+  try {
+    const resp = await fetch(url);
+    const html = await resp.text();
+    pageText = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+                   .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+                   .replace(/<[^>]+>/g, ' ')
+                   .replace(/\s+/g, ' ')
+                   .substring(0, 5000);
+  } catch(e) {
+    pageText = '(Could not fetch page — CORS blocked)';
+  }
+
+  // Step 2: Call Claude to research the company
+  const domain = url.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
+  const userHint = document.getElementById('ac-hint').value.trim();
+  try {
+    const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': getApiKey(),
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1024,
+        messages: [{ role: 'user', content: `Research this AI company and return a JSON object with the best known data.
+
+Company URL: ${url}
+Domain: ${domain}
+${userHint ? '\nUser context (trust this — the user has domain expertise):\n' + userHint + '\n' : ''}
+Page text (if available):
+${pageText.substring(0, 3000)}
+
+Return a JSON object with these fields (use null for truly unknown, make best estimates where possible):
+{
+  "company_name": "Official name",
+  "hq": "Country (e.g. US, UK, France, China)",
+  "type": "What they do (e.g. AI Dev Tool, Legal AI, Voice AI, AI Search)",
+  "category": "one of: ai-application, ai-infrastructure, vertical-ai, digital-native, enterprise-saas",
+  "subcategory": "e.g. coding, search, legal, voice, content, agent",
+  "providers": ["openai", "anthropic", "google", "meta", "own"],
+  "founded": 2023,
+  "arr": "$600M",
+  "arr_numeric": 600000000,
+  "valuation": "$500M",
+  "valuation_numeric": 500000000,
+  "total_funding": "$100M",
+  "employee_count": 50,
+  "description": "One sentence description",
+  "confidence": "high/medium/low — how confident are you in the ARR estimate?",
+  "confidence_reasoning": "Brief explanation of confidence level",
+  "sources": "What you based the ARR/valuation on (e.g. press reports, TechCrunch, etc)"
+}
+
+CRITICAL:
+- For ARR: return the AI-SPECIFIC revenue, NOT total company revenue. For enterprise SaaS companies (ServiceNow, Salesforce, etc.), only count the AI SKU/product ARR, not the entire company ARR. If the user has provided context about this, trust their figure.
+- For providers: infer which AI providers they likely use based on their product.
+- Be specific about confidence: "high" = from earnings/press, "medium" = from fundraising context, "low" = rough estimate.
+- If the user provided context, factor it into your response and explain how it affected your estimates.
+- Return ONLY the JSON object, no other text.` }],
+      }),
+    });
+
+    const claudeData = await claudeResp.json();
+    const raw = claudeData.content?.[0]?.text || '{}';
+    const cleaned = raw.replace(/^```(?:json)?\s*/, '').replace(/\s*```$/, '');
+    const research = JSON.parse(cleaned);
+
+    // Fill form with Claude's research
+    document.getElementById('ac-name').value = research.company_name || domain;
+    document.getElementById('ac-hq').value = research.hq || 'US';
+    document.getElementById('ac-type').value = research.type || '';
+    document.getElementById('ac-category').value = research.category || 'ai-application';
+    document.getElementById('ac-providers').value = (research.providers || ['openai']).join(', ');
+    document.getElementById('ac-founded').value = research.founded || '';
+    document.getElementById('ac-arr').value = research.arr_numeric || '';
+    document.getElementById('ac-funding').value = research.total_funding || '';
+    document.getElementById('ac-evidence').value = (research.description || '') +
+      (research.sources ? '\n\nSources: ' + research.sources : '') +
+      (research.confidence_reasoning ? '\nConfidence: ' + research.confidence + ' — ' + research.confidence_reasoning : '');
+
+    // Show confidence prominently
+    const confColors = { high: 'var(--green)', medium: 'var(--orange)', low: 'var(--red)' };
+    const conf = research.confidence || 'low';
+    document.getElementById('ac-status').innerHTML =
+      '<div style="padding:8px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;margin-bottom:12px;font-size:12px;">' +
+      '<strong>Research confidence: <span style="color:' + (confColors[conf] || 'var(--text-dim)') + ';">' + conf.toUpperCase() + '</span></strong> — ' +
+      (research.confidence_reasoning || 'No reasoning provided') +
+      (research.sources ? '<br><span style="color:var(--text-dim);">Based on: ' + research.sources + '</span>' : '') +
+      '</div>';
+
+    document.getElementById('ac-form').style.display = 'block';
+    updateCompanyPreview();
+
+  } catch(e) {
+    // Claude call failed — fall back to basic form
+    console.warn('Claude research failed:', e);
+    document.getElementById('ac-name').value = domain.split('.')[0];
+    document.getElementById('ac-hq').value = 'US';
+    document.getElementById('ac-providers').value = 'openai';
+    document.getElementById('ac-evidence').value = '';
+    document.getElementById('ac-form').style.display = 'block';
+    document.getElementById('ac-status').innerHTML =
+      '<div style="padding:8px 14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;font-size:11px;color:var(--red);">Claude research unavailable — fill in manually.</div>';
+  }
+
+  document.getElementById('ac-loading').style.display = 'none';
+  document.getElementById('ac-research-btn').disabled = false;
+
+  updateCompanyPreview();
+}
+
+function updateCompanyPreview() {
+  const arr = parseFloat(document.getElementById('ac-arr').value) || 0;
+  const cat = document.getElementById('ac-category').value;
+  const cogsRatios = { 'ai-application': 0.30, 'ai-infrastructure': 0.65, 'vertical-ai': 0.25, 'digital-native': 0.12, 'enterprise-saas': 0.05 };
+  const cogs = cogsRatios[cat] || 0.25;
+
+  if (arr > 0) {
+    const dailyTokens = Math.round(arr / 365 * cogs / 2.5 * 1e6);
+    const tokStr = dailyTokens >= 1e12 ? (dailyTokens/1e12).toFixed(1) + 'T' : Math.round(dailyTokens/1e9) + 'B';
+    document.getElementById('ac-preview').style.display = 'block';
+    document.getElementById('ac-preview').innerHTML =
+      '<strong>Estimated token volume:</strong> ~' + tokStr + '/day ' +
+      '<span style="color:var(--text-dim);">(ARR $' + (arr/1e6).toFixed(0) + 'M × ' + (cogs*100).toFixed(0) + '% COGS ÷ $2.50/M blended)</span>';
+  } else {
+    document.getElementById('ac-preview').style.display = 'none';
+  }
+}
+
+// Attach preview updater to ARR and category inputs
+document.addEventListener('DOMContentLoaded', () => {
+  const arrEl = document.getElementById('ac-arr');
+  const catEl = document.getElementById('ac-category');
+  if (arrEl) arrEl.addEventListener('input', updateCompanyPreview);
+  if (catEl) catEl.addEventListener('change', updateCompanyPreview);
+});
+
+async function confirmAddCompany() {
+  await loadSiteDataForCompanies();
+  if (!acSiteData) { showToast('Could not load site data'); return; }
+
+  const name = document.getElementById('ac-name').value.trim();
+  if (!name) { showToast('Company name required'); return; }
+
+  // Check duplicate
+  const existing = acSiteData.dashboard.topConsumers.find(c => c.co.toLowerCase() === name.toLowerCase());
+  if (existing) { showToast('Already exists: ' + existing.co); return; }
+
+  const arr = parseFloat(document.getElementById('ac-arr').value) || null;
+  const cat = document.getElementById('ac-category').value;
+  const provStr = document.getElementById('ac-providers').value;
+  const provs = provStr.split(',').map(p => p.trim().toLowerCase()).filter(Boolean);
+  const founded = parseInt(document.getElementById('ac-founded').value) || null;
+
+  // Calculate tokens
+  const cogsRatios = { 'ai-application': 0.30, 'ai-infrastructure': 0.65, 'vertical-ai': 0.25, 'digital-native': 0.12, 'enterprise-saas': 0.05 };
+  const cogs = cogsRatios[cat] || 0.25;
+  let tokensNumeric = null;
+  let tokensStr = 'Unknown';
+  if (arr) {
+    tokensNumeric = Math.round(arr / 365 * cogs / 2.5 * 1e6);
+    tokensStr = tokensNumeric >= 1e12 ? '~' + (tokensNumeric/1e12).toFixed(1) + 'T/day' : '~' + Math.round(tokensNumeric/1e9) + 'B/day';
+  }
+
+  const company = {
+    co: name,
+    hq: document.getElementById('ac-hq').value.trim() || 'US',
+    type: document.getElementById('ac-type').value.trim() || 'AI Application',
+    tokens: tokensStr,
+    prov: provs.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', '),
+    ev: document.getElementById('ac-evidence').value.trim(),
+    conf: 'Low',
+    founded: founded,
+    category: cat,
+    subcategory: '',
+    providers: provs,
+    tokensNumeric: tokensNumeric,
+    arr: arr ? (arr >= 1e9 ? '$' + (arr/1e9).toFixed(1) + 'B' : '$' + (arr/1e6).toFixed(0) + 'M') : null,
+    arrNumeric: arr,
+    valuation: null,
+    valuationNumeric: null,
+    totalFunding: document.getElementById('ac-funding').value.trim() || null,
+    status: 'private',
+    website: document.getElementById('ac-url').value.trim(),
+    employeeCount: null,
+    lastUpdated: new Date().toISOString().split('T')[0],
+  };
+
+  // Save as a pending company claim in approved-claims.json format
+  // apply_claims.py will pick this up on the next daily cron run
+  const claim = {
+    review_decision: 'accepted',
+    confirmed: true,
+    entity: name,
+    metric: 'new_company',
+    value: arr,
+    unit: 'USD',
+    value_display: company.arr || 'Unknown ARR',
+    claim: 'Add ' + name + ' to Top Token Consumers (' + tokensStr + ')',
+    category: 'new_company',
+    confidence: 'medium',
+    weight: 'authoritative',
+    source_type: 'manual_add',
+    source_url: company.website,
+    reviewed_at: new Date().toISOString(),
+    company_data: company,
+  };
+
+  // Write to localStorage queue — apply_claims.py reads from approved-claims.json
+  const queue = JSON.parse(localStorage.getItem('pending-company-adds') || '[]');
+  queue.push(claim);
+  localStorage.setItem('pending-company-adds', JSON.stringify(queue));
+
+  // Also add to vault as a data point
+  const dp = {
+    id: 'dp-' + String(vaultData.dataPoints.length + 1).padStart(3, '0'),
+    claim: 'Added ' + name + ' to Top Consumers: ' + tokensStr + ', ARR ' + (company.arr || 'unknown'),
+    value: arr,
+    unit: '$',
+    sourceUrl: company.website,
+    sourceType: 'observation',
+    sourceAuthor: 'Manual add via Vault',
+    confidence: 'estimated',
+    dateOfClaim: new Date().toISOString().split('T')[0],
+    dateAdded: new Date().toISOString().split('T')[0],
+    usedOn: ['dashboard'],
+    notes: JSON.stringify(company),
+    tags: [name.toLowerCase(), cat],
+    metricKey: name.toLowerCase().replace(/\s+/g, '-') + '-add',
+    status: 'accepted',
+  };
+  vaultData.dataPoints.push(dp);
+  saveData();
+
+  // Also download the company data as a JSON file that apply_claims.py can pick up from ~/Downloads
+  const approvedClaims = [claim];
+  const blob = new Blob([JSON.stringify(approvedClaims, null, 2)], { type: 'application/json' });
+  const dlUrl = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = dlUrl;
+  a.download = 'approved-claims.json';
+  a.click();
+  URL.revokeObjectURL(dlUrl);
+
+  document.getElementById('ac-form').style.display = 'none';
+  document.getElementById('ac-status').innerHTML =
+    '<div style="padding:12px 16px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;color:var(--green);font-size:12px;">' +
+    '✅ <strong>' + name + '</strong> added (' + tokensStr + ')<br>' +
+    '<span style="color:var(--text-dim);">Saved to vault + queued for dashboard. Will go live at next auto-update (7am).</span></div>';
+
+  showToast(name + ' added — goes live at next auto-update');
+}
+
+// ============================================================
+// QUICK ADD + AUTO-CLASSIFY
+// ============================================================
+const SOURCE_PATTERNS = [
+  [/docs\.google\.com\/presentation/, 'slide_deck', 'PDF export → Claude extraction', 'annual'],
+  [/docs\.google\.com\/document/, 'document', 'Web extraction', 'one_time'],
+  [/\.pdf(\?|$)/, 'pdf_report', 'PDF text → Claude extraction', 'one_time'],
+  [/arxiv\.org/, 'research_paper', 'PDF text → Claude extraction', 'one_time'],
+  [/\.substack\.com/, 'newsletter', 'RSS feed monitoring', 'weekly'],
+  [/medium\.com/, 'blog', 'Web extraction', 'weekly'],
+  [/(twitter|x)\.com\/.+\/status/, 'social_thread', 'Thread extraction', 'one_time'],
+  [/youtube\.com\/watch|youtu\.be/, 'video', 'YouTube captions', 'one_time'],
+  [/sec\.gov|edgar/, 'sec_filing', 'SEC filing extraction', 'quarterly'],
+  [/github\.com\/[^\/]+\/[^\/]+$/, 'github_repo', 'GitHub API', 'weekly'],
+  [/(anchor|megaphone|transistor|simplecast|libsyn|buzzsprout)\.fm/, 'podcast_feed', 'Podcast scraper', 'weekly'],
+  [/(mckinsey|gartner|forrester|idc|statista)\.com/, 'research_report', 'Web extraction', 'quarterly'],
+  [/(a16z|sequoiacap|benchmark)\.com/, 'vc_research', 'Web extraction', 'quarterly'],
+  [/(bloomberg|wsj|ft\.com|reuters|theinformation|cnbc|techcrunch)\.com/, 'news_article', 'Web extraction', 'one_time'],
+  [/crunchbase\.com/, 'company_data', 'Web extraction', 'monthly'],
+  [/happyscribe\.com/, 'podcast_transcript', 'Web extraction', 'weekly'],
+];
+
+let classifyTimeout = null;
+function autoClassify() {
+  clearTimeout(classifyTimeout);
+  classifyTimeout = setTimeout(() => {
+    const url = document.getElementById('qa-url').value.trim();
+    const el = document.getElementById('qa-classify');
+    if (!url || url.length < 10) { el.style.display = 'none'; return; }
+
+    let type = 'web_page', method = 'Web extraction → Claude', freq = 'one_time';
+    for (const [pattern, t, m, f] of SOURCE_PATTERNS) {
+      if (pattern.test(url)) { type = t; method = m; freq = f; break; }
+    }
+
+    const typeColors = { slide_deck:'#8b5cf6', pdf_report:'#ef4444', newsletter:'#f59e0b', podcast_feed:'#06b6d4', research_report:'#10b981', news_article:'#3b82f6', video:'#ec4899', github_repo:'#475569', social_thread:'#f97316', web_page:'#94a3b8' };
+    const color = typeColors[type] || '#94a3b8';
+
+    el.style.display = 'block';
+    el.innerHTML = '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">' +
+      '<span style="padding:3px 8px;border-radius:5px;font-size:10px;font-weight:600;background:' + color + '22;color:' + color + ';text-transform:uppercase;">' + type.replace(/_/g,' ') + '</span>' +
+      '<span style="color:var(--text-dim);">Extraction: ' + method + '</span>' +
+      '<span style="color:var(--text-dim);">Check: ' + freq + '</span>' +
+      '</div>';
+  }, 300);
+}
+
 function quickAddSave() {
   const title = document.getElementById('qa-title').value.trim();
   const url = document.getElementById('qa-url').value.trim();
@@ -1840,8 +2275,36 @@ function renderQuickAddQueue() {
   el.innerHTML = html;
 }
 
+// ============================================================
+// SETTINGS
+// ============================================================
+function loadSettingsView() {
+  const key = localStorage.getItem('anthropic-api-key') || '';
+  const el = document.getElementById('settings-apikey');
+  if (el) el.value = key;
+  const status = document.getElementById('settings-status');
+  if (status) status.innerHTML = key ? '<span style="color:var(--green);font-size:11px;">Key saved (' + key.substring(0, 12) + '...)</span>' : '<span style="color:var(--orange);font-size:11px;">No key set — Research button will prompt for one.</span>';
+}
+function saveApiKey() {
+  const key = document.getElementById('settings-apikey').value.trim();
+  if (key) { localStorage.setItem('anthropic-api-key', key); showToast('API key saved'); }
+  else { localStorage.removeItem('anthropic-api-key'); showToast('API key cleared'); }
+  loadSettingsView();
+}
+function clearApiKey() {
+  localStorage.removeItem('anthropic-api-key');
+  document.getElementById('settings-apikey').value = '';
+  showToast('API key cleared');
+  loadSettingsView();
+}
+function toggleKeyVisibility() {
+  const el = document.getElementById('settings-apikey');
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
 function switchTab(name) {
   if (name === 'quickadd') renderQuickAddQueue();
+  if (name === 'settings') loadSettingsView();
   document.querySelectorAll('.tab').forEach((t, i) => {
     t.classList.toggle('active', TABS[i] === name);
   });
