@@ -1,0 +1,33 @@
+🔄 Reconciliation — 2026-04-01
+============================================================
+  Consumers loaded: 64
+  ARR signals found: 6
+  OpenRouter data: 2026-03-22
+
+============================================================
+  Updates flagged: 6
+  Unmatched signals: 6
+
+📋 FLAGGED UPDATES:
+  ❓ Runway                    | ARR: $100M → $100M             | Tokens: 8B → 33B (+311%)
+     Source: cogs_check — Current tokens vs implied: ratio=0.2x (expected 0.3-3.0x)
+  ❓ micro1                    | ARR: $250M → $250M             | Tokens: 50B → 178B (+256%)
+     Source: cogs_check — Current tokens vs implied: ratio=0.3x (expected 0.3-3.0x)
+  ❓ Fal.ai                    | ARR: $95M → $95M               | Tokens: 20B → 68B (+238%)
+     Source: cogs_check — Current tokens vs implied: ratio=0.3x (expected 0.3-3.0x)
+  ❓ OpenRouter                | ARR: $18M → $18M               | Tokens: 280B → 12B (-96%)
+     Source: cogs_check — Current tokens vs implied: ratio=22.5x (expected 0.3-3.0x)
+  ❓ Yellow.ai                 | ARR: $80M → $80M               | Tokens: 25B → 4B (-83%)
+     Source: cogs_check — Current tokens vs implied: ratio=5.7x (expected 0.3-3.0x)
+  ❓ Perplexity                | ARR: $200M → $200M             | Tokens: 200B → 66B (-67%)
+     Source: cogs_check — Current tokens vs implied: ratio=3.0x (expected 0.3-3.0x)
+
+❓ UNMATCHED SIGNALS (no matching consumer):
+  - Anthropic hit: $14
+  - OpenAI ended 2025 at: $20
+  - Sarah Friar (Anthropic CFO): every gigawatt =: $10
+  - Anthropic: $14000000000
+  - OpenAI: $20000000000
+  - OpenAI: $100000000
+
+✅ Saved to /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data-updates/reconciliation-2026-04-01.json
