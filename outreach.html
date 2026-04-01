@@ -168,7 +168,7 @@ function generateId() {
 // ─── API ───
 
 function getApiKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || "";
+  return (localStorage.getItem(API_KEY_STORAGE) || "").trim().replace(/[^\x20-\x7E]/g, "");
 }
 
 async function callClaude(prompt, systemPrompt) {
@@ -1070,8 +1070,9 @@ function OutreachApp() {
   }, [prospects, loaded]);
 
   const handleApiKeyChange = (val) => {
-    setApiKey(val);
-    localStorage.setItem(API_KEY_STORAGE, val);
+    const clean = val.trim().replace(/[^\x20-\x7E]/g, "");
+    setApiKey(clean);
+    localStorage.setItem(API_KEY_STORAGE, clean);
   };
 
   const addProspects = (newProspects) => {
