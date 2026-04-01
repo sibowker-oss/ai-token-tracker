@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Launch Outreach — AI Ledger</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --card: #111827;
+    --card-border: #1e293b;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --accent: #c8ff00;
+    --accent-blue: #3b82f6;
+    --accent-purple: #8b5cf6;
+    --green: #22c55e;
+    --orange: #f59e0b;
+    --red: #ef4444;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+  ::selection { background: #c8ff0044; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+  /* Nav */
+  .nav-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 12px 24px; background: #0f172a;
+    border-bottom: 2px solid var(--card-border); flex-wrap: wrap;
+  }
+  .nav-brand { font-size: 15px; font-weight: 700; color: #f8fafc; text-decoration: none; margin-right: 12px; letter-spacing: -0.3px; }
+  .nav-brand span { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .nav-link {
+    padding: 8px 18px; border-radius: 8px; background: #1e293b;
+    color: #cbd5e1; text-decoration: none; font-size: 13px; font-weight: 500;
+    border: 1px solid #334155; transition: all 0.15s ease;
+  }
+  .nav-link:hover { background: #334155; color: #f1f5f9; border-color: #475569; }
+  .nav-link.active { background: #1e3a5f; color: #ffffff; border-color: #3b82f6; font-weight: 600; box-shadow: 0 0 0 1px rgba(59,130,246,0.3); }
+  @media (max-width:768px) {
+    .nav-bar { padding: 10px 12px; gap: 4px; }
+    .nav-link { font-size: 11px; padding: 6px 12px; }
+    .nav-brand { font-size: 13px; margin-right: 8px; }
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+  /* API key bar */
+  .api-key-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; margin-bottom: 20px;
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: 8px; font-size: 12px;
+  }
+  .api-key-bar label { color: var(--text-dim); white-space: nowrap; font-weight: 600; }
+  .api-key-bar input {
+    flex: 1; padding: 6px 10px; background: var(--bg);
+    border: 1px solid var(--card-border); border-radius: 6px;
+    color: var(--text); font-size: 12px; font-family: monospace;
+    outline: none; transition: border-color 0.2s;
+  }
+  .api-key-bar input:focus { border-color: var(--accent-blue); }
+  .api-key-bar .status { font-size: 11px; }
+  .api-key-bar .status.ok { color: var(--green); }
+  .api-key-bar .status.missing { color: var(--orange); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
+  <span style="flex-grow:1"></span>
+  <a href="vault.html" class="nav-link">Vault</a>
+  <a href="sources.html" class="nav-link">Sources</a>
+  <a href="claims.html" class="nav-link">Claims</a>
+  <a href="outreach.html" class="nav-link active">Outreach</a>
+  <a href="in-development.html" class="nav-link">In Development</a>
+</nav>
+
+<div class="container">
+  <div id="root"></div>
+</div>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+// ─── CONSTANTS ───
+
+const HOOKS = [
+  { id: "ai-native", label: "AI-Native vs Legacy", text: "Only ~8 truly AI-native companies are currently public \u2014 91 'AI stocks' are legacy enterprise software that rebranded. The AI Ledger separates signal from noise." },
+  { id: "token-volume", label: "Token Volume Scale", text: "~650 trillion tokens/day now flow through the AI ecosystem. The AI Ledger tracks where they go, who pays, and what it costs \u2014 in real time." },
+  { id: "revenue-reality", label: "Revenue Reality Check", text: "The AI inference market is running at $60\u201375B annualized, but only ~$0.8B in collected inference revenue is validated. The AI Ledger shows the real numbers behind the hype." },
+  { id: "bloomberg-for-ai", label: "Bloomberg for AI", text: "Think of it as a Bloomberg terminal for AI economics \u2014 live pricing, provider breakdowns, capital flows, and market intelligence, updated continuously. Free and open." },
+  { id: "pricing-transparency", label: "Live Pricing Data", text: "Model pricing changes weekly. The AI Ledger pulls live data from OpenRouter to show exactly what each model costs per million tokens \u2014 across 50+ models." },
+  { id: "follow-the-dollar", label: "Follow the Dollar", text: "A Sankey diagram tracing how AI dollars flow from enterprise buyers \u2192 through providers \u2192 to infrastructure. First public visualization of the full AI revenue stack." },
+];
+
+const CATEGORIES = [
+  { id: "journalist", label: "AI/Tech Journalists", icon: "\ud83d\udcf0", searchTerms: ["AI journalist", "tech reporter artificial intelligence", "AI beat reporter"] },
+  { id: "newsletter", label: "Newsletter Authors", icon: "\u2709\ufe0f", searchTerms: ["AI newsletter Substack", "tech newsletter AI economics", "AI industry newsletter author"] },
+  { id: "vc", label: "VCs & Investors", icon: "\ud83d\udcb0", searchTerms: ["AI venture capital investor thought leader", "VC AI market commentary"] },
+  { id: "podcast", label: "Podcast Hosts", icon: "\ud83c\udfa9\ufe0f", searchTerms: ["AI podcast host technology", "tech podcast AI market analysis"] },
+  { id: "analyst", label: "Analysts & Commentators", icon: "\ud83d\udcca", searchTerms: ["AI industry analyst market intelligence", "AI market research analyst commentary"] },
+  { id: "founder", label: "AI Founders & Builders", icon: "\ud83d\udd27", searchTerms: ["AI startup founder thought leader", "AI company CEO commentary market"] },
+];
+
+const CHANNELS = [
+  { id: "linkedin", label: "LinkedIn DM", icon: "in", color: "#0A66C2" },
+  { id: "email", label: "Email", icon: "\u2709", color: "#EA4335" },
+  { id: "twitter", label: "X / Twitter DM", icon: "\ud835\udd4f", color: "#a0a0a0" },
+];
+
+const TIERS = {
+  1: { label: "Tier 1", color: "#22c55e", desc: "Perfect fit, large audience" },
+  2: { label: "Tier 2", color: "#eab308", desc: "Adjacent fit or smaller audience" },
+  3: { label: "Tier 3", color: "#94a3b8", desc: "Speculative" },
+};
+
+const STATUS_FLOW = ["sourced", "drafting", "review", "approved", "sent", "replied"];
+const STATUS_COLORS = {
+  sourced: "#64748b",
+  drafting: "#8b5cf6",
+  review: "#f59e0b",
+  approved: "#22c55e",
+  sent: "#3b82f6",
+  replied: "#10b981",
+};
+
+const STORAGE_KEY = "ai-ledger-outreach-prospects";
+const API_KEY_STORAGE = "ai-ledger-anthropic-key";
+
+function generateId() {
+  return Math.random().toString(36).substr(2, 9);
+}
+
+// ─── API ───
+
+function getApiKey() {
+  return localStorage.getItem(API_KEY_STORAGE) || "";
+}
+
+async function callClaude(prompt, systemPrompt) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    alert("Please enter your Anthropic API key first.");
+    return null;
+  }
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true",
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1500,
+        system: systemPrompt || "You are a research assistant. Respond only in valid JSON with no preamble or markdown.",
+        messages: [{ role: "user", content: prompt }],
+        tools: [{ type: "web_search_20250305", name: "web_search" }],
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      console.error("API error:", res.status, err);
+      throw new Error(err.error?.message || `API returned ${res.status}`);
+    }
+    const data = await res.json();
+    const text = data.content?.filter((b) => b.type === "text").map((b) => b.text).join("\n") || "";
+    return text;
+  } catch (e) {
+    console.error("Claude API error:", e);
+    alert("API error: " + e.message);
+    return null;
+  }
+}
+
+// ─── SHARED COMPONENTS ───
+
+function Badge({ children, color, style }) {
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center",
+      padding: "2px 8px", borderRadius: "4px",
+      fontSize: "11px", fontWeight: 600, letterSpacing: "0.03em",
+      background: color + "22", color: color,
+      border: `1px solid ${color}44`, ...style,
+    }}>
+      {children}
+    </span>
+  );
+}
+
+function Btn({ children, onClick, variant = "primary", disabled, style, small }) {
+  const base = {
+    padding: small ? "4px 10px" : "8px 16px",
+    borderRadius: "6px", border: "none",
+    fontSize: small ? "12px" : "13px", fontWeight: 600,
+    cursor: disabled ? "not-allowed" : "pointer",
+    opacity: disabled ? 0.5 : 1,
+    transition: "all 0.15s", fontFamily: "inherit", ...style,
+  };
+  const variants = {
+    primary: { background: "#c8ff00", color: "#0a0a0a" },
+    secondary: { background: "#1e293b", color: "#e2e8f0", border: "1px solid #334155" },
+    danger: { background: "#7f1d1d", color: "#fca5a5" },
+    ghost: { background: "transparent", color: "#94a3b8", border: "1px solid #334155" },
+    success: { background: "#14532d", color: "#86efac" },
+  };
+  return (
+    <button onClick={onClick} disabled={disabled} style={{ ...base, ...variants[variant] }}>
+      {children}
+    </button>
+  );
+}
+
+function TabBar({ tabs, active, onChange }) {
+  return (
+    <div style={{ display: "flex", gap: "2px", background: "#0f172a", borderRadius: "8px", padding: "3px", marginBottom: "24px" }}>
+      {tabs.map((t) => (
+        <button
+          key={t.id}
+          onClick={() => onChange(t.id)}
+          style={{
+            flex: 1, padding: "10px 16px", borderRadius: "6px",
+            border: "none", fontSize: "13px", fontWeight: 600,
+            cursor: "pointer", fontFamily: "inherit", transition: "all 0.2s",
+            background: active === t.id ? "#1e293b" : "transparent",
+            color: active === t.id ? "#c8ff00" : "#64748b",
+          }}
+        >
+          {t.icon && <span style={{ marginRight: "6px" }}>{t.icon}</span>}
+          {t.label}
+          {t.count != null && (
+            <span style={{
+              marginLeft: "6px",
+              background: active === t.id ? "#c8ff0033" : "#334155",
+              padding: "1px 6px", borderRadius: "10px", fontSize: "11px",
+            }}>
+              {t.count}
+            </span>
+          )}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function ConfirmDialog({ message, onConfirm, onCancel }) {
+  return (
+    <div style={{
+      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+      background: "rgba(0,0,0,0.7)", display: "flex",
+      alignItems: "center", justifyContent: "center", zIndex: 1000,
+    }}>
+      <div style={{
+        background: "#1e293b", border: "1px solid #334155",
+        borderRadius: "12px", padding: "24px", maxWidth: "400px", width: "90%",
+      }}>
+        <p style={{ fontSize: "14px", marginBottom: "20px", lineHeight: 1.6 }}>{message}</p>
+        <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+          <Btn variant="ghost" onClick={onCancel}>Cancel</Btn>
+          <Btn variant="danger" onClick={onConfirm}>Confirm</Btn>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── RESEARCH TAB ───
+
+function ResearchTab({ onAddProspects, existingCount }) {
+  const [selectedCats, setSelectedCats] = useState(["journalist", "newsletter", "analyst"]);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState([]);
+  const [error, setError] = useState(null);
+  const [progress, setProgress] = useState("");
+
+  const toggleCat = (id) => {
+    setSelectedCats((p) => (p.includes(id) ? p.filter((c) => c !== id) : [...p, id]));
+  };
+
+  const runResearch = async () => {
+    if (!getApiKey()) {
+      alert("Please enter your Anthropic API key in the bar above.");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    setResults([]);
+
+    for (let i = 0; i < selectedCats.length; i++) {
+      const catId = selectedCats[i];
+      const cat = CATEGORIES.find((c) => c.id === catId);
+      setProgress(`Searching ${cat.label} (${i + 1}/${selectedCats.length})...`);
+
+      const prompt = `Search for real, specific people who are ${cat.label.toLowerCase()} covering AI market economics, AI industry data, token pricing, AI startup funding, or AI infrastructure costs. I need people who would find an "AI market intelligence dashboard" (tracking token volumes, provider economics, model pricing, enterprise adoption) genuinely valuable.
+
+Return a JSON array of 4-6 real people. Each object must have:
+- "name": full real name
+- "role": their actual title/role
+- "outlet": their publication, newsletter, podcast, or firm
+- "linkedin": their LinkedIn URL if findable, else null
+- "twitter": their Twitter/X handle if findable, else null
+- "email": professional email if publicly listed, else null
+- "recentTopic": a specific recent topic they covered that relates to AI economics/market data
+- "relevanceScore": 1-10 how well they'd resonate with AI market intelligence data
+- "tier": 1, 2, or 3 (1=perfect fit large audience, 2=adjacent or smaller, 3=speculative)
+- "suggestedHook": which of these hooks would resonate most: "ai-native", "token-volume", "revenue-reality", "bloomberg-for-ai", "pricing-transparency", "follow-the-dollar"
+
+Return ONLY the JSON array, no other text.`;
+
+      const raw = await callClaude(prompt);
+      if (raw) {
+        try {
+          const clean = raw.replace(/```json|```/g, "").trim();
+          const match = clean.match(/\[[\s\S]*\]/);
+          if (match) {
+            const parsed = JSON.parse(match[0]);
+            const enriched = parsed.map((p) => ({
+              ...p,
+              id: generateId(),
+              category: catId,
+              status: "sourced",
+              messages: {},
+              selected: true,
+              researchedAt: new Date().toISOString(),
+            }));
+            setResults((prev) => [...prev, ...enriched]);
+          }
+        } catch (e) {
+          console.error("Parse error for", catId, e);
+          setError(`Failed to parse results for ${cat.label}`);
+        }
+      }
+    }
+    setProgress("");
+    setLoading(false);
+  };
+
+  const toggleResult = (id) => {
+    setResults((prev) => prev.map((r) => (r.id === id ? { ...r, selected: !r.selected } : r)));
+  };
+
+  const selectAll = () => setResults((prev) => prev.map((r) => ({ ...r, selected: true })));
+  const selectNone = () => setResults((prev) => prev.map((r) => ({ ...r, selected: false })));
+
+  const addSelected = () => {
+    const selected = results.filter((r) => r.selected);
+    if (selected.length === 0) return;
+    onAddProspects(selected);
+    setResults([]);
+  };
+
+  return (
+    <div>
+      <div style={{ marginBottom: "20px" }}>
+        <div style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          Target Categories
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => toggleCat(cat.id)}
+              style={{
+                padding: "8px 14px", borderRadius: "6px",
+                border: selectedCats.includes(cat.id) ? "1px solid #c8ff00" : "1px solid #334155",
+                background: selectedCats.includes(cat.id) ? "#c8ff0015" : "#0f172a",
+                color: selectedCats.includes(cat.id) ? "#c8ff00" : "#94a3b8",
+                cursor: "pointer", fontSize: "13px", fontFamily: "inherit",
+                fontWeight: 500, transition: "all 0.15s",
+              }}
+            >
+              {cat.icon} {cat.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
+        <Btn onClick={runResearch} disabled={loading || selectedCats.length === 0}>
+          {loading ? "Researching..." : "Research Prospects"}
+        </Btn>
+        <span style={{ fontSize: "12px", color: "#64748b" }}>
+          {existingCount} prospects sourced
+        </span>
+      </div>
+
+      {error && (
+        <div style={{ padding: "12px 16px", background: "#7f1d1d33", border: "1px solid #7f1d1d", borderRadius: "8px", marginBottom: "16px", fontSize: "13px", color: "#fca5a5" }}>
+          {error}
+        </div>
+      )}
+
+      {loading && (
+        <div style={{ padding: "40px", textAlign: "center", color: "#94a3b8" }}>
+          <div style={{ fontSize: "24px", marginBottom: "8px", animation: "pulse 1.5s infinite" }}>...</div>
+          <div>{progress}</div>
+          <div style={{ fontSize: "12px", marginTop: "4px", color: "#64748b" }}>Uses Claude + web search. ~15-30s per category.</div>
+        </div>
+      )}
+
+      {results.length > 0 && (
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <span style={{ fontSize: "14px", fontWeight: 600 }}>
+                Found {results.length} prospects
+              </span>
+              <Btn small variant="ghost" onClick={selectAll}>All</Btn>
+              <Btn small variant="ghost" onClick={selectNone}>None</Btn>
+            </div>
+            <Btn onClick={addSelected} variant="success" small>
+              Add {results.filter((r) => r.selected).length} selected
+            </Btn>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px", maxHeight: "500px", overflowY: "auto" }}>
+            {results.map((r) => (
+              <div
+                key={r.id}
+                onClick={() => toggleResult(r.id)}
+                style={{
+                  display: "flex", alignItems: "center", gap: "12px",
+                  padding: "10px 14px", borderRadius: "6px",
+                  background: r.selected ? "#1e293b" : "#0f172a",
+                  border: r.selected ? "1px solid #334155" : "1px solid #1e293b",
+                  cursor: "pointer", transition: "all 0.15s",
+                }}
+              >
+                <div style={{
+                  width: "18px", height: "18px", borderRadius: "4px",
+                  border: r.selected ? "2px solid #c8ff00" : "2px solid #475569",
+                  background: r.selected ? "#c8ff0033" : "transparent",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "12px", flexShrink: 0, color: "#c8ff00",
+                }}>
+                  {r.selected && "\u2713"}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+                    <span style={{ fontWeight: 600, fontSize: "13px" }}>{r.name}</span>
+                    <Badge color={TIERS[r.tier]?.color || "#64748b"}>T{r.tier}</Badge>
+                    <Badge color="#8b5cf6">{CATEGORIES.find((c) => c.id === r.category)?.icon} {r.category}</Badge>
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#94a3b8", marginTop: "2px" }}>
+                    {r.role} \u2014 {r.outlet}
+                  </div>
+                  {r.recentTopic && (
+                    <div style={{ fontSize: "11px", color: "#64748b", marginTop: "2px" }}>
+                      Recent: {r.recentTopic}
+                    </div>
+                  )}
+                </div>
+                <div style={{ fontSize: "12px", color: "#64748b", textAlign: "right", flexShrink: 0 }}>
+                  {r.relevanceScore}/10
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── PROSPECTS TAB ───
+
+function ProspectsTab({ prospects, onUpdate, onRemove }) {
+  const [expandedId, setExpandedId] = useState(null);
+  const [generating, setGenerating] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("tier");
+  const [confirmRemove, setConfirmRemove] = useState(null);
+
+  const genMessages = async (prospect) => {
+    if (!getApiKey()) {
+      alert("Please enter your Anthropic API key first.");
+      return;
+    }
+    setGenerating(prospect.id);
+    const hook = HOOKS.find((h) => h.id === prospect.suggestedHook) || HOOKS[0];
+
+    const prompt = `Write 3 outreach messages to promote "The AI Ledger" \u2014 a free, interactive AI market intelligence dashboard (https://sibowker-oss.github.io/ai-token-tracker/dashboard.html) created by Simon Bowker, an AI economics advisor.
+
+PROSPECT:
+- Name: ${prospect.name}
+- Role: ${prospect.role}
+- Outlet: ${prospect.outlet}
+- Recent topic they covered: ${prospect.recentTopic || "AI industry analysis"}
+- Best hook: ${hook.text}
+
+Write messages for 3 channels. Each must feel personal and reference their specific work. No generic pitches.
+
+DASHBOARD URL: https://sibowker-oss.github.io/ai-token-tracker/dashboard.html
+
+Return ONLY a JSON object with this exact structure:
+{
+  "linkedin": "LinkedIn DM text (150-200 words, professional but warm, reference their work, include URL)",
+  "email": {"subject": "email subject line", "body": "email body (200-250 words, include URL, sign off as Simon Bowker)"},
+  "twitter": "X/Twitter DM text (80-120 words, casual but substantive, include URL)"
+}`;
+
+    const raw = await callClaude(prompt, "You write personalized outreach messages. Respond only in valid JSON.");
+    if (raw) {
+      try {
+        const clean = raw.replace(/```json|```/g, "").trim();
+        const match = clean.match(/\{[\s\S]*\}/);
+        if (match) {
+          const messages = JSON.parse(match[0]);
+          onUpdate(prospect.id, { messages, status: "review" });
+        }
+      } catch (e) {
+        console.error("Parse error:", e);
+      }
+    }
+    setGenerating(null);
+  };
+
+  const filtered = prospects.filter((p) => {
+    if (filter === "all") return true;
+    if (filter === "needsDraft") return !p.messages?.linkedin;
+    return p.status === filter;
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortBy === "tier") return (a.tier || 3) - (b.tier || 3);
+    if (sortBy === "score") return (b.relevanceScore || 0) - (a.relevanceScore || 0);
+    if (sortBy === "name") return a.name.localeCompare(b.name);
+    if (sortBy === "status") return STATUS_FLOW.indexOf(a.status) - STATUS_FLOW.indexOf(b.status);
+    return 0;
+  });
+
+  return (
+    <div>
+      {confirmRemove && (
+        <ConfirmDialog
+          message={`Remove ${prospects.find((p) => p.id === confirmRemove)?.name || "this prospect"}?`}
+          onConfirm={() => { onRemove(confirmRemove); setConfirmRemove(null); }}
+          onCancel={() => setConfirmRemove(null)}
+        />
+      )}
+
+      {/* Toolbar */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "8px" }}>
+        <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+          {[
+            { id: "all", label: "All" },
+            { id: "needsDraft", label: "Needs Draft" },
+            { id: "review", label: "In Review" },
+            { id: "approved", label: "Approved" },
+            { id: "sent", label: "Sent" },
+          ].map((f) => (
+            <Btn key={f.id} small variant={filter === f.id ? "primary" : "ghost"} onClick={() => setFilter(f.id)}>
+              {f.label}
+            </Btn>
+          ))}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "11px", color: "#64748b" }}>Sort:</span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            style={{
+              background: "#1e293b", color: "#e2e8f0", border: "1px solid #334155",
+              borderRadius: "6px", padding: "4px 8px", fontSize: "12px", fontFamily: "inherit",
+              cursor: "pointer", outline: "none",
+            }}
+          >
+            <option value="tier">Tier</option>
+            <option value="score">Score</option>
+            <option value="name">Name</option>
+            <option value="status">Status</option>
+          </select>
+        </div>
+      </div>
+
+      {sorted.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "60px 20px", color: "#64748b" }}>
+          <div style={{ fontSize: "14px" }}>
+            {prospects.length === 0 ? "No prospects yet. Head to Research to source targets." : "No prospects match this filter."}
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 140px 70px 80px 100px 120px",
+            padding: "8px 14px", fontSize: "11px", color: "#64748b",
+            textTransform: "uppercase", letterSpacing: "0.06em",
+            borderBottom: "1px solid #1e293b",
+          }}>
+            <span>Prospect</span>
+            <span>Outlet</span>
+            <span>Tier</span>
+            <span>Score</span>
+            <span>Status</span>
+            <span style={{ textAlign: "right" }}>Actions</span>
+          </div>
+          {sorted.map((p) => (
+            <div key={p.id}>
+              <div
+                onClick={() => setExpandedId(expandedId === p.id ? null : p.id)}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 140px 70px 80px 100px 120px",
+                  padding: "10px 14px", borderRadius: "6px",
+                  background: expandedId === p.id ? "#1e293b" : "transparent",
+                  cursor: "pointer", alignItems: "center",
+                  fontSize: "13px", transition: "background 0.15s",
+                }}
+              >
+                <div>
+                  <div style={{ fontWeight: 600 }}>{p.name}</div>
+                  <div style={{ fontSize: "11px", color: "#64748b" }}>{p.role}</div>
+                </div>
+                <div style={{ color: "#94a3b8", fontSize: "12px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.outlet}</div>
+                <Badge color={TIERS[p.tier]?.color}>T{p.tier}</Badge>
+                <span style={{ color: p.relevanceScore >= 7 ? "#22c55e" : p.relevanceScore >= 5 ? "#eab308" : "#94a3b8" }}>
+                  {p.relevanceScore}/10
+                </span>
+                <Badge color={STATUS_COLORS[p.status]}>{p.status}</Badge>
+                <div style={{ textAlign: "right", display: "flex", gap: "4px", justifyContent: "flex-end" }}>
+                  {!p.messages?.linkedin && (
+                    <Btn small variant="secondary" onClick={(e) => { e.stopPropagation(); genMessages(p); }} disabled={generating === p.id}>
+                      {generating === p.id ? "..." : "Draft"}
+                    </Btn>
+                  )}
+                  <Btn small variant="ghost" onClick={(e) => { e.stopPropagation(); setConfirmRemove(p.id); }}>\u00d7</Btn>
+                </div>
+              </div>
+              {expandedId === p.id && (
+                <div style={{ padding: "12px 14px 16px", background: "#0f172a", borderRadius: "0 0 6px 6px", marginTop: "-2px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", fontSize: "12px" }}>
+                    <div>
+                      <span style={{ color: "#64748b" }}>Category: </span>
+                      <span style={{ color: "#e2e8f0" }}>{CATEGORIES.find((c) => c.id === p.category)?.label}</span>
+                    </div>
+                    <div>
+                      <span style={{ color: "#64748b" }}>Hook: </span>
+                      <span style={{ color: "#c8ff00" }}>{HOOKS.find((h) => h.id === p.suggestedHook)?.label || "\u2014"}</span>
+                    </div>
+                    {p.linkedin && (
+                      <div>
+                        <span style={{ color: "#64748b" }}>LinkedIn: </span>
+                        <a href={p.linkedin} target="_blank" rel="noopener" style={{ color: "#3b82f6", textDecoration: "none" }}>{p.linkedin}</a>
+                      </div>
+                    )}
+                    {p.twitter && (
+                      <div><span style={{ color: "#64748b" }}>X: </span><span style={{ color: "#e2e8f0" }}>@{p.twitter}</span></div>
+                    )}
+                    {p.email && (
+                      <div>
+                        <span style={{ color: "#64748b" }}>Email: </span>
+                        <a href={`mailto:${p.email}`} style={{ color: "#3b82f6", textDecoration: "none" }}>{p.email}</a>
+                      </div>
+                    )}
+                    {p.recentTopic && (
+                      <div style={{ gridColumn: "1 / -1" }}>
+                        <span style={{ color: "#64748b" }}>Recent coverage: </span>
+                        <span style={{ color: "#e2e8f0" }}>{p.recentTopic}</span>
+                      </div>
+                    )}
+                    {p.researchedAt && (
+                      <div>
+                        <span style={{ color: "#64748b" }}>Researched: </span>
+                        <span style={{ color: "#94a3b8" }}>{new Date(p.researchedAt).toLocaleDateString()}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Inline hook selector */}
+                  <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid #1e293b" }}>
+                    <div style={{ fontSize: "11px", color: "#64748b", marginBottom: "6px", textTransform: "uppercase" }}>Change hook</div>
+                    <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                      {HOOKS.map((h) => (
+                        <Btn
+                          key={h.id} small
+                          variant={p.suggestedHook === h.id ? "primary" : "ghost"}
+                          onClick={(e) => { e.stopPropagation(); onUpdate(p.id, { suggestedHook: h.id }); }}
+                        >
+                          {h.label}
+                        </Btn>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── MESSAGES TAB ───
+
+function MessagesTab({ prospects, onUpdate }) {
+  const [selected, setSelected] = useState(null);
+  const [editChannel, setEditChannel] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [editSubject, setEditSubject] = useState("");
+  const [copied, setCopied] = useState(null);
+
+  const withMessages = prospects.filter((p) => p.messages?.linkedin);
+  const current = withMessages.find((p) => p.id === selected) || withMessages[0];
+
+  useEffect(() => {
+    if (!selected && withMessages.length > 0) setSelected(withMessages[0].id);
+  }, [withMessages.length]);
+
+  const startEdit = (channel, text, subject) => {
+    setEditChannel(channel);
+    setEditText(text);
+    setEditSubject(subject || "");
+  };
+
+  const saveEdit = (prospect, channel) => {
+    const updated = { ...prospect.messages };
+    if (channel === "email") {
+      updated.email = { ...updated.email, body: editText, subject: editSubject || updated.email.subject };
+    } else {
+      updated[channel] = editText;
+    }
+    onUpdate(prospect.id, { messages: updated });
+    setEditChannel(null);
+  };
+
+  const approveAll = (prospect) => {
+    onUpdate(prospect.id, { status: "approved" });
+  };
+
+  const copyToClipboard = (text, channel) => {
+    navigator.clipboard.writeText(text);
+    setCopied(channel);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  const markSent = (prospect, channel) => {
+    const sentChannels = { ...(prospect.sentChannels || {}), [channel]: new Date().toISOString() };
+    const allSent = CHANNELS.every((ch) => sentChannels[ch.id] || !prospect.messages[ch.id]);
+    onUpdate(prospect.id, { sentChannels, status: allSent ? "sent" : prospect.status });
+  };
+
+  const markReplied = (prospect) => {
+    onUpdate(prospect.id, { status: "replied" });
+  };
+
+  if (withMessages.length === 0) {
+    return (
+      <div style={{ textAlign: "center", padding: "60px 20px", color: "#64748b" }}>
+        <div style={{ fontSize: "14px" }}>No drafts yet. Generate messages from the Prospects tab.</div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", gap: "16px", minHeight: "500px" }}>
+      {/* Prospect sidebar */}
+      <div style={{ width: "220px", flexShrink: 0, borderRight: "1px solid #1e293b", paddingRight: "12px", overflowY: "auto", maxHeight: "600px" }}>
+        <div style={{ fontSize: "11px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px" }}>
+          {withMessages.length} with drafts
+        </div>
+        {withMessages.map((p) => (
+          <div
+            key={p.id}
+            onClick={() => setSelected(p.id)}
+            style={{
+              padding: "8px 10px", borderRadius: "6px", cursor: "pointer",
+              background: current?.id === p.id ? "#1e293b" : "transparent",
+              marginBottom: "2px", transition: "background 0.15s",
+            }}
+          >
+            <div style={{ fontSize: "13px", fontWeight: 600 }}>{p.name}</div>
+            <div style={{ display: "flex", gap: "4px", marginTop: "3px" }}>
+              <Badge color={STATUS_COLORS[p.status]}>{p.status}</Badge>
+              <Badge color={TIERS[p.tier]?.color}>T{p.tier}</Badge>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Message panels */}
+      {current && (
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "8px" }}>
+            <div>
+              <span style={{ fontSize: "16px", fontWeight: 700 }}>{current.name}</span>
+              <span style={{ fontSize: "13px", color: "#64748b", marginLeft: "8px" }}>{current.role} \u2014 {current.outlet}</span>
+            </div>
+            <div style={{ display: "flex", gap: "6px" }}>
+              {current.status === "review" && (
+                <Btn small variant="success" onClick={() => approveAll(current)}>Approve All</Btn>
+              )}
+              {(current.status === "approved" || current.status === "sent") && (
+                <Btn small variant="secondary" onClick={() => markReplied(current)}>Mark Replied</Btn>
+              )}
+            </div>
+          </div>
+
+          {CHANNELS.map((ch) => {
+            const msg = current.messages[ch.id];
+            if (!msg) return null;
+            const displayText = ch.id === "email" ? msg.body : msg;
+            const subject = ch.id === "email" ? msg.subject : null;
+            const isEditing = editChannel === ch.id;
+            const isSent = current.sentChannels?.[ch.id];
+
+            return (
+              <div key={ch.id} style={{ marginBottom: "12px", border: "1px solid #1e293b", borderRadius: "8px", overflow: "hidden" }}>
+                <div style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  padding: "8px 12px", background: "#0f172a", borderBottom: "1px solid #1e293b",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span style={{ fontSize: "14px", fontWeight: 700, color: ch.color === "#000" ? "#e2e8f0" : ch.color }}>
+                      {ch.icon}
+                    </span>
+                    <span style={{ fontSize: "13px", fontWeight: 600 }}>{ch.label}</span>
+                    {subject && <span style={{ fontSize: "12px", color: "#64748b" }}>Subj: {subject}</span>}
+                    {isSent && <Badge color="#3b82f6">Sent {new Date(isSent).toLocaleDateString()}</Badge>}
+                  </div>
+                  <div style={{ display: "flex", gap: "4px" }}>
+                    {!isEditing && (
+                      <>
+                        <Btn small variant="ghost" onClick={() => startEdit(ch.id, displayText, subject)}>Edit</Btn>
+                        <Btn
+                          small
+                          variant={copied === ch.id ? "success" : "secondary"}
+                          onClick={() => copyToClipboard(ch.id === "email" ? `Subject: ${subject}\n\n${displayText}` : displayText, ch.id)}
+                        >
+                          {copied === ch.id ? "Copied!" : "Copy"}
+                        </Btn>
+                        {current.status === "approved" && !isSent && (
+                          <Btn small variant="primary" onClick={() => markSent(current, ch.id)}>Mark Sent</Btn>
+                        )}
+                      </>
+                    )}
+                    {isEditing && (
+                      <>
+                        <Btn small variant="success" onClick={() => saveEdit(current, ch.id)}>Save</Btn>
+                        <Btn small variant="ghost" onClick={() => setEditChannel(null)}>Cancel</Btn>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div style={{ padding: "12px" }}>
+                  {isEditing ? (
+                    <div>
+                      {ch.id === "email" && (
+                        <input
+                          value={editSubject}
+                          onChange={(e) => setEditSubject(e.target.value)}
+                          placeholder="Subject line"
+                          style={{
+                            width: "100%", marginBottom: "8px", padding: "6px 8px",
+                            background: "#0f172a", color: "#e2e8f0", border: "1px solid #334155",
+                            borderRadius: "4px", fontSize: "13px", fontFamily: "inherit", outline: "none",
+                          }}
+                        />
+                      )}
+                      <textarea
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        style={{
+                          width: "100%", minHeight: "120px", background: "#0f172a",
+                          color: "#e2e8f0", border: "1px solid #334155", borderRadius: "4px",
+                          padding: "8px", fontSize: "13px", fontFamily: "inherit",
+                          resize: "vertical", lineHeight: 1.5, outline: "none",
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <pre style={{
+                      whiteSpace: "pre-wrap", fontSize: "13px", color: "#cbd5e1",
+                      lineHeight: 1.6, margin: 0, fontFamily: "inherit",
+                    }}>
+                      {displayText}
+                    </pre>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── CAMPAIGN TAB ───
+
+function CampaignTab({ prospects }) {
+  const total = prospects.length;
+  const byStatus = STATUS_FLOW.map((s) => ({ status: s, count: prospects.filter((p) => p.status === s).length }));
+  const byTier = [1, 2, 3].map((t) => ({ tier: t, count: prospects.filter((p) => p.tier === t).length }));
+  const byCategory = CATEGORIES.map((c) => ({ ...c, count: prospects.filter((p) => p.category === c.id).length })).filter((c) => c.count > 0);
+  const approved = prospects.filter((p) => ["approved", "sent", "replied"].includes(p.status)).length;
+  const sent = prospects.filter((p) => p.status === "sent" || p.status === "replied").length;
+  const replied = prospects.filter((p) => p.status === "replied").length;
+
+  const exportProspects = (format) => {
+    let data, type, ext;
+    if (format === "csv") {
+      const headers = ["Name", "Role", "Outlet", "Category", "Tier", "Score", "Status", "Hook", "LinkedIn", "Twitter", "Email"];
+      const rows = prospects.map((p) => [
+        p.name, p.role, p.outlet, p.category, p.tier, p.relevanceScore, p.status,
+        p.suggestedHook, p.linkedin || "", p.twitter || "", p.email || "",
+      ].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
+      data = [headers.join(","), ...rows].join("\n");
+      type = "text/csv";
+      ext = "csv";
+    } else {
+      data = JSON.stringify(prospects, null, 2);
+      type = "application/json";
+      ext = "json";
+    }
+    const blob = new Blob([data], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `ai-ledger-outreach.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div>
+      {/* Stats cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px", marginBottom: "24px" }}>
+        {[
+          { label: "Total Prospects", value: total, color: "#e2e8f0" },
+          { label: "With Drafts", value: prospects.filter((p) => p.messages?.linkedin).length, color: "#8b5cf6" },
+          { label: "Approved", value: approved, color: "#22c55e" },
+          { label: "Sent", value: sent, color: "#3b82f6" },
+          { label: "Replied", value: replied, color: "#10b981" },
+          { label: "Reply Rate", value: sent > 0 ? Math.round((replied / sent) * 100) + "%" : "\u2014", color: "#f59e0b" },
+        ].map((s) => (
+          <div key={s.label} style={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+            <div style={{ fontSize: "11px", color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em" }}>{s.label}</div>
+            <div style={{ fontSize: "28px", fontWeight: 800, color: s.color, marginTop: "4px" }}>{s.value}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+        {/* Pipeline */}
+        <div style={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+          <div style={{ fontSize: "12px", color: "#64748b", textTransform: "uppercase", marginBottom: "12px" }}>Pipeline by Status</div>
+          {byStatus.map((s) => (
+            <div key={s.status} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+              <div style={{ width: "80px" }}>
+                <Badge color={STATUS_COLORS[s.status]}>{s.status}</Badge>
+              </div>
+              <div style={{ flex: 1, height: "6px", background: "#1e293b", borderRadius: "3px", overflow: "hidden" }}>
+                <div style={{
+                  width: total > 0 ? `${(s.count / total) * 100}%` : "0%",
+                  height: "100%", background: STATUS_COLORS[s.status],
+                  borderRadius: "3px", transition: "width 0.3s",
+                }} />
+              </div>
+              <span style={{ fontSize: "13px", fontWeight: 600, color: "#e2e8f0", width: "24px", textAlign: "right" }}>{s.count}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Tiers + Categories */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div style={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+            <div style={{ fontSize: "12px", color: "#64748b", textTransform: "uppercase", marginBottom: "12px" }}>Tier Breakdown</div>
+            {byTier.map((t) => (
+              <div key={t.tier} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
+                <Badge color={TIERS[t.tier].color}>{TIERS[t.tier].label}</Badge>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: "12px", color: "#94a3b8" }}>{TIERS[t.tier].desc}</div>
+                </div>
+                <span style={{ fontSize: "18px", fontWeight: 700, color: TIERS[t.tier].color }}>{t.count}</span>
+              </div>
+            ))}
+          </div>
+
+          {byCategory.length > 0 && (
+            <div style={{ background: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+              <div style={{ fontSize: "12px", color: "#64748b", textTransform: "uppercase", marginBottom: "12px" }}>By Category</div>
+              {byCategory.map((c) => (
+                <div key={c.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px", fontSize: "13px" }}>
+                  <span>{c.icon} {c.label}</span>
+                  <span style={{ fontWeight: 700 }}>{c.count}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Export */}
+      {total > 0 && (
+        <div style={{ marginTop: "20px", background: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px", padding: "16px" }}>
+          <div style={{ fontSize: "12px", color: "#64748b", textTransform: "uppercase", marginBottom: "8px" }}>Export</div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <Btn variant="secondary" onClick={() => exportProspects("json")}>Export JSON</Btn>
+            <Btn variant="secondary" onClick={() => exportProspects("csv")}>Export CSV</Btn>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── MAIN APP ───
+
+function OutreachApp() {
+  const [tab, setTab] = useState("research");
+  const [prospects, setProspects] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [apiKey, setApiKey] = useState("");
+  const [keyVisible, setKeyVisible] = useState(false);
+
+  // Load from localStorage
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) setProspects(JSON.parse(saved));
+    } catch (e) {}
+    setApiKey(localStorage.getItem(API_KEY_STORAGE) || "");
+    setLoaded(true);
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (!loaded) return;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prospects));
+    } catch (e) {}
+  }, [prospects, loaded]);
+
+  const handleApiKeyChange = (val) => {
+    setApiKey(val);
+    localStorage.setItem(API_KEY_STORAGE, val);
+  };
+
+  const addProspects = (newProspects) => {
+    setProspects((prev) => {
+      const existingNames = new Set(prev.map((p) => p.name.toLowerCase()));
+      const deduped = newProspects.filter((p) => !existingNames.has(p.name.toLowerCase()));
+      return [...prev, ...deduped];
+    });
+    setTab("prospects");
+  };
+
+  const updateProspect = (id, updates) => {
+    setProspects((prev) => prev.map((p) => (p.id === id ? { ...p, ...updates } : p)));
+  };
+
+  const removeProspect = (id) => {
+    setProspects((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const importProspects = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (Array.isArray(data)) {
+            addProspects(data.map((p) => ({ ...p, id: p.id || generateId() })));
+          }
+        } catch (err) {
+          alert("Invalid JSON file");
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
+  const tabs = [
+    { id: "research", label: "Research", count: null },
+    { id: "prospects", label: "Prospects", count: prospects.length || null },
+    { id: "messages", label: "Messages", count: prospects.filter((p) => p.messages?.linkedin).length || null },
+    { id: "campaign", label: "Campaign", count: null },
+  ];
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
+            <span style={{ fontSize: "20px", fontWeight: 800, letterSpacing: "-0.02em" }}>
+              <span style={{ color: "#c8ff00" }}>AI Ledger</span> Launch Outreach
+            </span>
+            <Badge color="#c8ff00" style={{ fontSize: "10px" }}>BETA</Badge>
+          </div>
+          <div style={{ fontSize: "13px", color: "#64748b" }}>
+            Research prospects \u2192 draft messages \u2192 review & approve \u2192 send
+          </div>
+        </div>
+        <Btn variant="ghost" small onClick={importProspects}>Import JSON</Btn>
+      </div>
+
+      {/* API Key bar */}
+      <div className="api-key-bar">
+        <label>Anthropic API Key:</label>
+        <input
+          type={keyVisible ? "text" : "password"}
+          value={apiKey}
+          onChange={(e) => handleApiKeyChange(e.target.value)}
+          placeholder="sk-ant-..."
+          autoComplete="off"
+        />
+        <button
+          onClick={() => setKeyVisible(!keyVisible)}
+          style={{
+            background: "none", border: "1px solid #334155", borderRadius: "4px",
+            color: "#94a3b8", padding: "4px 8px", cursor: "pointer", fontSize: "11px",
+            fontFamily: "inherit",
+          }}
+        >
+          {keyVisible ? "Hide" : "Show"}
+        </button>
+        <span className={`status ${apiKey ? "ok" : "missing"}`}>
+          {apiKey ? "Key set" : "Required for research & drafting"}
+        </span>
+      </div>
+
+      <TabBar tabs={tabs} active={tab} onChange={setTab} />
+
+      <div style={{ background: "#111827", border: "1px solid #1e293b", borderRadius: "10px", padding: "20px" }}>
+        {tab === "research" && <ResearchTab onAddProspects={addProspects} existingCount={prospects.length} />}
+        {tab === "prospects" && (
+          <ProspectsTab prospects={prospects} onUpdate={updateProspect} onRemove={removeProspect} />
+        )}
+        {tab === "messages" && <MessagesTab prospects={prospects} onUpdate={updateProspect} />}
+        {tab === "campaign" && <CampaignTab prospects={prospects} />}
+      </div>
+
+      <div style={{ textAlign: "center", padding: "20px", fontSize: "11px", color: "#475569" }}>
+        Data stored locally in your browser. Nothing is sent to any server except the Anthropic API for research/drafting.
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<OutreachApp />);
+</script>
+</body>
+</html>
