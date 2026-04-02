@@ -236,10 +236,9 @@ let siteData = null;
 // ----- Data loading -----
 
 async function loadAll() {
-  const [registry, inbox, candidates, vault, schema, sd, ents] = await Promise.all([
+  const [registry, inbox, vault, schema, sd, ents] = await Promise.all([
     loadJSON('sources-registry.json'),
     loadJSON('vault-inbox.json'),
-    loadCandidates(),
     loadJSON('vault-data.json'),
     loadJSON('metric-schema.json'),
     loadJSON('site-data.json'),
@@ -309,49 +308,6 @@ async function loadAll() {
       });
       }
 
-  // Merge candidate claims from extraction pipeline
-  if (candidates.length > 0) {
-    candidates.forEach((c, idx) => {
-      // Skip if already in inbox by similar claim text
-      const isDupe = allItems.some(existing =>
-        existing.claim === c.claim ||
-        (existing.entity === c.entity && existing.metricKey === c.metric_key && existing.value === c.value)
-      );
-      if (isDupe) return;
-
-      allItems.push({
-        id: c.id || 'cand-' + idx,
-        origin: 'extraction',
-        entity: c.entity || '?',
-        claim: c.claim,
-        value: c.value,
-        unit: c.unit,
-        value_display: c.value_display || (c.value != null ? String(c.value) : null),
-        weight: c.weight || 'indicative',
-        confidence: c.confidence || 'estimated',
-        dedup_status: c.dedup_status || 'new',
-        dedup_note: c.dedup_note || null,
-        sourceUrl: c.source_url || '',
-        sourceAuthor: c.speaker || c.source_podcast || '',
-        sourceType: 'podcast',
-        source_id: c.source_id || inferSourceFromPodcast(c),
-        tags: c.tags || [],
-        notes: '',
-        dateOfClaim: c.source_date || c.time_period || '',
-        dateAdded: c.extracted_at || '',
-        usedOn: [],
-        replaces: null,
-        metricKey: c.metric_key || null,
-        metric: c.metric || '',
-        speaker: c.speaker,
-        source_podcast: c.source_podcast,
-        original_source_cited: c.original_source_cited,
-        category: c.category,
-        time_period: c.time_period,
-      });
-    });
-  }
-
   loadDecisions();
   try {
     renderSourceTabs();
@@ -370,18 +326,6 @@ async function loadJSON(path) {
     if (r.ok) return await r.json();
   } catch(e) {}
   return null;
-}
-
-async function loadCandidates() {
-  const today = new Date().toISOString().split('T')[0];
-  for (let i = 0; i <= 14; i++) {
-    const d = new Date(Date.now() - i * 86400000).toISOString().split('T')[0];
-    try {
-      const r = await fetch('data-updates/' + d + '-candidates.json?v=' + Date.now());
-      if (r.ok) return await r.json();
-    } catch(e) {}
-  }
-  return [];
 }
 
 // ----- Inference helpers -----
@@ -415,15 +359,6 @@ function inferMetric(item) {
   if (claim.includes('user') || claim.includes('customer')) return 'adoption';
   if (claim.includes('token') || claim.includes('inference')) return 'inference';
   return 'other';
-}
-
-function inferSourceFromPodcast(c) {
-  const name = (c.source_podcast || '').toLowerCase();
-  if (name.includes('all-in') || name.includes('all in')) return 'src-003';
-  if (name.includes('big technology') || name.includes('kantrowitz')) return 'src-004';
-  if (name.includes('latent space')) return 'src-002';
-  if (name.includes('recode')) return 'src-011';
-  return null;
 }
 
 function getSourceName(source_id) {
@@ -792,15 +727,12 @@ function renderSourceTabs() {
 }
 
 function renderStats() {
-  const inboxItems = allItems.filter(i => i.origin === 'inbox');
-  const candidateItems = allItems.filter(i => i.origin === 'extraction');
-  const pending = inboxItems.filter(i => !decisions[i.id]?.decision).length;
+  const pending = allItems.filter(i => !decisions[i.id]?.decision).length;
   const accepted = allItems.filter(i => decisions[i.id]?.decision === 'accepted').length;
   const declined = allItems.filter(i => decisions[i.id]?.decision === 'declined').length;
   const parked = allItems.filter(i => decisions[i.id]?.decision === 'parked').length;
 
   let html = '<span class="stat-pill">Pending: <strong>' + pending + '</strong></span>';
-  if (candidateItems.length > 0) html += '<span class="stat-pill">Candidates: <strong>' + candidateItems.length + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(16,185,129,0.3);">Accepted: <strong style="color:var(--green);">' + accepted + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(239,68,68,0.3);">Declined: <strong style="color:var(--red);">' + declined + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(245,158,11,0.3);">Parked: <strong style="color:var(--orange);">' + parked + '</strong></span>';
@@ -810,7 +742,6 @@ function renderStats() {
 function renderFilters() {
   const filters = [
     { key: 'pending', label: 'Pending' },
-    { key: 'candidates', label: 'Candidates' },
     { key: 'all', label: 'All' },
     { key: 'w:authoritative', label: 'Authoritative' },
     { key: 'w:corroborating', label: 'Corroborating' },
@@ -853,9 +784,7 @@ function renderClaims() {
 
   // Status/weight/decision filter
   if (activeFilter === 'pending') {
-    filtered = filtered.filter(i => !decisions[i.id]?.decision && i.origin === 'inbox');
-  } else if (activeFilter === 'candidates') {
-    filtered = filtered.filter(i => i.origin === 'extraction');
+    filtered = filtered.filter(i => !decisions[i.id]?.decision);
   } else if (activeFilter.startsWith('w:')) {
     filtered = filtered.filter(i => i.weight === activeFilter.substring(2));
   } else if (activeFilter.startsWith('d:')) {
@@ -970,7 +899,7 @@ function renderClaims() {
 
 function updateSubmitBar() {
   let accepted = 0, declined = 0, parked = 0, pending = 0;
-  allItems.filter(i => i.origin === 'inbox').forEach(i => {
+  allItems.forEach(i => {
     const d = decisions[i.id]?.decision;
     if (d === 'accepted') accepted++;
     else if (d === 'declined') declined++;

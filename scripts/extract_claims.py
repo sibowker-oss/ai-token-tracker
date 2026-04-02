@@ -407,22 +407,58 @@ def main():
     # Deduplicate against existing site-data.json
     all_claims = deduplicate_claims(all_claims)
 
-    # Save to review queue
+    # Write directly into vault-inbox.json as pending items
+    inbox_path = os.path.join(BASE_DIR, 'vault-inbox.json')
+    if os.path.exists(inbox_path):
+        with open(inbox_path) as f:
+            inbox = json.load(f)
+    else:
+        inbox = {"items": [], "lastProcessed": None}
+
+    date_str = today.replace('-', '')
+    added = 0
+    for i, claim in enumerate(all_claims):
+        claim_id = f"podcast-{date_str}-{i+1}"
+        # Skip if already in inbox
+        if any(item['id'] == claim_id for item in inbox['items']):
+            continue
+        inbox['items'].append({
+            "id": claim_id,
+            "claim": claim.get("claim", ""),
+            "value": claim.get("value"),
+            "unit": claim.get("unit", ""),
+            "sourceUrl": claim.get("source_url", ""),
+            "sourceType": "podcast_discussion",
+            "sourceAuthor": claim.get("speaker") or claim.get("source_podcast", ""),
+            "confidence": {"high": "verified", "medium": "estimated", "low": "speculative"}.get(claim.get("confidence", "medium"), "estimated"),
+            "dateOfClaim": claim.get("source_date") or claim.get("time_period", today),
+            "dateAdded": today,
+            "usedOn": [],
+            "tags": [claim.get("category", "other")],
+            "notes": f"Podcast: {claim.get('source_podcast', '')} — {claim.get('source_episode', '')[:60]}",
+            "status": "pending",
+            "replaces": None,
+            "source_id": None,
+            "metricKey": claim.get("metric_key") or claim.get("metric"),
+            "entity": claim.get("entity", ""),
+            "weight": claim.get("weight", "indicative"),
+            "dedup_status": claim.get("dedup_status", "new"),
+            "dedup_note": claim.get("dedup_note"),
+        })
+        added += 1
+
+    inbox["lastProcessed"] = today
+    with open(inbox_path, 'w') as f:
+        json.dump(inbox, f, indent=2)
+
+    print(f"\n✅ {added} claim(s) added to vault-inbox.json as pending")
+    print(f"   Total inbox items: {len(inbox['items'])}")
+
+    # Also save candidates file for archival reference
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     output_path = os.path.join(OUTPUT_DIR, f'{today}-candidates.json')
-
-    # Append to existing file for today if it exists
-    existing = []
-    if os.path.exists(output_path):
-        with open(output_path) as f:
-            existing = json.load(f)
-
-    combined = existing + all_claims
     with open(output_path, 'w') as f:
-        json.dump(combined, f, indent=2)
-
-    print(f"\n✅ {len(all_claims)} claim(s) written to {output_path}")
-    print(f"   Total in today's queue: {len(combined)}")
+        json.dump(all_claims, f, indent=2)
 
     # Print summary by category and weight
     cats = {}
