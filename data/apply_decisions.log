@@ -1,0 +1,173 @@
+[2026-04-02 14:50:31] apply_decisions.py — Processing /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/beta/data-updates/review-decisions-2026-04-02.json
+[2026-04-02 14:50:31]   Accepted: 61, Declined: 9, Parked: 8, New fields: 0
+[2026-04-02 14:50:31]   VAULT: Added dp-043: Anthropic annualized revenue $19B (March 2026), up 1,167% Yo
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2026.arr = 19
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2026.arr: high (4 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-044: OpenAI annualized revenue ~$25B (March 2026)
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.arr = 25
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.arr: high (4 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-045: Anthropic cash flow breakeven timeline delayed beyond 2028 (
+[2026-04-02 14:50:31]   VAULT: Added dp-046: Anthropic Series G: $30B raised at $380B valuation (Feb 2026
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2026.valuation = 380
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2026.valuation: high (3 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-047: OpenAI H1 2025 inference spend $5.0B (exceeds H1 revenue)
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2025.inference_cost = 5
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2025.inference_cost: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-048: Salesforce Agentforce standalone Q4 FY2026 ARR: $800M (+169%
+[2026-04-02 14:50:31]   VAULT: Added dp-049: ServiceNow Now Assist ACV $600M+ (Q4 2025), doubled YoY; FY2
+[2026-04-02 14:50:31]   VAULT: Added dp-050: OpenRouter processing 1T+ tokens per day as of March 2026; 1
+[2026-04-02 14:50:31]   ENTITY: OpenRouter → 2026.tokens_per_day = 1
+[2026-04-02 14:50:31]   PROVENANCE: OpenRouter → 2026.tokens_per_day: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-051: Google Cloud Q4 2025 revenue $17.66B (+47.8% YoY); $240B clo
+[2026-04-02 14:50:31]   VAULT: Added dp-052: Anthropic Claude Opus 4.6 API repriced to $5/$25 per M input
+[2026-04-02 14:50:31]   VAULT: Added dp-053: Chamath states he is personally paying AI models millions of
+[2026-04-02 14:50:31]   VAULT: Added dp-054: Chamath says his AI token spending is tripling every 3 month
+[2026-04-02 14:50:31]   VAULT: Added dp-055: Speaker is building a 1-gigawatt data center in Arizona that
+[2026-04-02 14:50:31]   VAULT: Added dp-056: Speaker states that open source models are picking up about 
+[2026-04-02 14:50:31]   VAULT: Added dp-057: Anthropic 2025 actual revenue confirmed ~$4.5B (Sacra histor
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2025.collected_revenue = 4.5
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2025.collected_revenue: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-058: Claude Code annualized revenue >$2.5B (Feb 2026)
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2026.arr = 2.5
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2026.arr: high (5 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-059: Anthropic: 70-75% revenue from API, 10-15% from subscription
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2026.subscription_revenue = 72.5
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2026.subscription_revenue: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-060: Anthropic has 300,000+ business customers, 500 spending >$1M
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2025.customer_count = 300000
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2025.customer_count: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-061: Claude Code: 29M daily VS Code installs, 4% of public GitHub
+[2026-04-02 14:50:31]   VAULT: Added dp-062: Gemini: 650M monthly users vs ChatGPT 800M weekly users
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.market_share_pct = 650
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.market_share_pct: high (3 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-063: OpenAI H1 2025 actual collected revenue ~$4.3B
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2025.collected_revenue = 4.3
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2025.collected_revenue: high (4 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-064: OpenAI $25B ARR uses best 4-week period × 12 (not monthly × 
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.arr = 25
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.arr: high (5 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-065: OpenAI funding round extended to $120B total at $840B post-m
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.valuation = 840
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.valuation: high (3 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-066: OpenAI projected 2026 cash burn ~$25B
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.cash_burn = 25
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.cash_burn: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-067: OpenAI internal 2030 revenue forecast: $280B
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2030.arr = 280
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2030.arr: medium (1 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-068: Microsoft AI business $13B ARR (Q2 FY2026, Jan 2026); Copilo
+[2026-04-02 14:50:31]   VAULT: Added dp-069: Harvey (legal AI) raised $200M at $11B valuation (March 25, 
+[2026-04-02 14:50:31]   VAULT: Added dp-070: Physical Intelligence (ex-DeepMind robotics) in talks for ~$
+[2026-04-02 14:50:31]   ENTITY: Google/Gemini → 2026.valuation = 11
+[2026-04-02 14:50:31]   PROVENANCE: Google/Gemini → 2026.valuation: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-071: Anthropic 2026 internal revenue forecast raised 20% to $18B
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2026.arr = 18
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2026.arr: high (6 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-072: February 2026 was largest startup funding month ever: $189B 
+[2026-04-02 14:50:31]   VAULT: Added dp-073: OpenAI projected operating loss $14B in 2026 (tripling from 
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.operating_loss = 14
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.operating_loss: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-074: OpenAI cumulative cash burn $115B through 2029
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2029.cash_burn = 115
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2029.cash_burn: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-075: OpenAI burn rate 57% of revenue in 2026-2027; Anthropic burn
+[2026-04-02 14:50:31]   VAULT: Added dp-076: Anthropic gross margin projection lowered ~10 percentage poi
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2026.inference_cost = -10
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2026.inference_cost: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-077: OpenRouter March 2026: MiniMax M2.5 #1 by token volume (4.55
+[2026-04-02 14:50:31]   ENTITY: Minimax → 2026.market_share_pct = 4.55
+[2026-04-02 14:50:31]   PROVENANCE: Minimax → 2026.market_share_pct: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-078: H100 cloud GPU spot pricing fell to ~$2.99/hr in Q1 2026, do
+[2026-04-02 14:50:31]   VAULT: Added dp-079: LLM inference cost collapsed ~1,000x: GPT-4-class model $20/
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2022.inference_cost = 0.4
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2022.inference_cost: high (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-080: Inference accounts for ~2/3 of all AI compute workloads in 2
+[2026-04-02 14:50:31]   VAULT: Added dp-081: Qwen (Alibaba) 400M+ Hugging Face downloads; Chinese open mo
+[2026-04-02 14:50:31]   VAULT: Added dp-082: Nscale (AI compute infrastructure) raised $2B Series C at $1
+[2026-04-02 14:50:31]   VAULT: Added dp-083: A McKinsey study showed that a lot of pilot projects in Fort
+[2026-04-02 14:50:31]   VAULT: Added dp-084: About 80% of people in China said AI would be more beneficia
+[2026-04-02 14:50:31]   VAULT: Added dp-085: Sam Altman stated that fundamentally OpenAI's business, and 
+[2026-04-02 14:50:31]   VAULT: Added dp-086: OpenAI is discontinuing Sora consumer app, the developer API
+[2026-04-02 14:50:31]   VAULT: Added dp-087: OpenAI spending ratio: $2.25-$2.60 to make $1 in revenue
+[2026-04-02 14:50:31]   VAULT: Added dp-088: Anthropic hit a $14 billion run rate last month, February. T
+[2026-04-02 14:50:31]   VAULT: Added dp-089: Anthropic grew revenue from $1 billion to $14 billion in 14 
+[2026-04-02 14:50:31]   VAULT: Added dp-090: Anthropic was valued at $380 billion last month.
+[2026-04-02 14:50:31]   ENTITY: Anthropic → 2026.valuation = 380
+[2026-04-02 14:50:31]   PROVENANCE: Anthropic → 2026.valuation: high (4 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-091: OpenAI ended 2025 at a $20 billion annualized run rate, grow
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2025.arr = 20
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2025.arr: medium (2 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-092: OpenAI was valued at $840 billion last month.
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.valuation = 840
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.valuation: high (4 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-093: Jensen Huang said he expected the $40 billion he recently in
+[2026-04-02 14:50:31]   VAULT: Added dp-094: Consumer subscriptions are roughly half of OpenAI's revenue;
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.subscription_revenue = 50
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.subscription_revenue: low (1 sources)
+[2026-04-02 14:50:31]   VAULT: Added dp-095: Sarah Friar said that for every gigawatt, it's about $10 bil
+[2026-04-02 14:50:31]   VAULT: Added dp-096: For every gigawatt of spend, there is roughly a 5-year payba
+[2026-04-02 14:50:31]   VAULT: Added dp-097: It's about $50 billion per gigawatt of data center cost and 
+[2026-04-02 14:50:31]   VAULT: Added dp-098: In 2025, about 25 data centers were canceled, representing a
+[2026-04-02 14:50:31]   VAULT: Added dp-099: As of end of February 2026, about 100 data centers are being
+[2026-04-02 14:50:31]   VAULT: Added dp-100: In 2025 and 2026 combined, approximately $120 billion of cum
+[2026-04-02 14:50:31]   VAULT: Added dp-101: About 40% of all protested data centers in America get cance
+[2026-04-02 14:50:31]   VAULT: Added dp-102: Meta is spending 115 to 135 billion on AI infrastructure thi
+[2026-04-02 14:50:31]   VAULT: Added dp-103: OpenAI has 800 million users and is aiming to get to a billi
+[2026-04-02 14:50:31]   ENTITY: OpenAI → 2026.user_count = 800000000
+[2026-04-02 14:50:31]   PROVENANCE: OpenAI → 2026.user_count: low (1 sources)
+[2026-04-02 14:50:31]   DECLINED: scan-20260330-a1b: OpenAI ads pilot hit $100M ARR in under 2 months
+[2026-04-02 14:50:31]   PARKED: email-20260328-e5v: Anthropic expects cash flow breakeven by 2028, burned ~$3B i
+[2026-04-02 14:50:31]   PARKED: zitron-20260328-c3: OpenAI full-year 2025 estimated collected revenue ~$11.9B (Z
+[2026-04-02 14:50:31]   PARKED: scan-20260401-i9j: Nvidia AI inference market share projected to fall from 90%+
+[2026-04-02 14:50:31]   Saved: vault-data, vault-inbox, entities, metric-schema
+[2026-04-02 14:50:31]   Archived: review-decisions-2026-04-02.json
+[2026-04-02 14:50:31]   Regenerating site-data.json from entities.json...
+[2026-04-02 14:50:31]   Done. 61 accepted, 9 declined, 8 parked, 0 new fields.
+[2026-04-02 16:11:09] apply_decisions.py — Processing /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/beta/data-updates/review-decisions-2026-04-02.json
+[2026-04-02 16:11:09]   Accepted: 9, Declined: 0, Parked: 3, New fields: 0
+[2026-04-02 16:11:09]   VAULT: Added dp-104: OpenAI closed its latest funding round with $122 billion in 
+[2026-04-02 16:11:09]   ENTITY: OpenAI → 2024.total_funding = 122
+[2026-04-02 16:11:09]   PROVENANCE: OpenAI → 2024.total_funding: medium (1 sources)
+[2026-04-02 16:11:09]   VAULT: Added dp-105: OpenAI achieved a post money valuation of $852 billion
+[2026-04-02 16:11:09]   ENTITY: OpenAI → 2024.valuation = 852
+[2026-04-02 16:11:09]   PROVENANCE: OpenAI → 2024.valuation: medium (1 sources)
+[2026-04-02 16:11:09]   VAULT: Added dp-106: OpenAI is now generating $2B in revenue per month
+[2026-04-02 16:11:09]   ANNUALISE: 2 /month × 12 = 24 (annual)
+[2026-04-02 16:11:09]   ENTITY: OpenAI → 2024.arr = 24 (annualised)
+[2026-04-02 16:11:09]   PROVENANCE: OpenAI → 2024.arr: high (2 sources)
+[2026-04-02 16:11:09]   VAULT: Added dp-107: OpenAI expanded its revolving credit facility to approximate
+[2026-04-02 16:11:09]   VAULT: Added dp-108: ChatGPT has more than 900 million weekly active users
+[2026-04-02 16:11:09]   ENTITY: OpenAI → 2024.user_count = 900
+[2026-04-02 16:11:09]   PROVENANCE: OpenAI → 2024.user_count: medium (1 sources)
+[2026-04-02 16:11:09]   VAULT: Added dp-109: Enterprise makes up more than 40% of OpenAI's revenue
+[2026-04-02 16:11:09]   VAULT: Added dp-110: Codex serves over 2 million weekly users
+[2026-04-02 16:11:09]   VAULT: Added dp-111: OpenRouter model rankings by token volume: Anthropic #1 (1.1
+[2026-04-02 16:11:09]   ENTITY: OpenAI → 2026.market_share_pct = 1.1
+[2026-04-02 16:11:09]   PROVENANCE: OpenAI → 2026.market_share_pct: high (4 sources)
+[2026-04-02 16:11:09]   VAULT: Added dp-112: OpenAI has 800 million users and is aiming to get to a billi
+[2026-04-02 16:11:09]   ENTITY: OpenAI → 2026.user_count = 800000000
+[2026-04-02 16:11:09]   PROVENANCE: OpenAI → 2026.user_count: low (2 sources)
+[2026-04-02 16:11:09]   PARKED: extract-20260402-src-021-6: OpenAI was generating $1B per quarter by the end of 2024
+[2026-04-02 16:11:09]   PARKED: extract-20260402-src-021-12: OpenAI's ads pilot reached more than $100 million in ARR in 
+[2026-04-02 16:11:09]   PARKED: extract-20260402-src-021-14: OpenAI's APIs process more than 15 billion tokens per minute
+[2026-04-02 16:11:09]   Saved: vault-data, vault-inbox, entities, metric-schema
+[2026-04-02 16:11:09]   Archived: review-decisions-2026-04-02.json
+[2026-04-02 16:11:09]   Regenerating site-data.json from entities.json...
+[2026-04-02 16:11:09]   Done. 9 accepted, 0 declined, 3 parked, 0 new fields.
+[2026-04-02 16:26:35] apply_decisions.py — Processing /Users/simonbowker/Documents/Claude/Code/apac-ai-intel/data-updates/review-decisions-2026-04-02.json
+[2026-04-02 16:26:35]   Accepted: 2, Declined: 2, Parked: 2, New fields: 0
+[2026-04-02 16:26:35]   VAULT: Added dp-113: OpenAI has a post money valuation of $852 billion
+[2026-04-02 16:26:35]   ENTITY: OpenAI → 2024.valuation = 852
+[2026-04-02 16:26:35]   PROVENANCE: OpenAI → 2024.valuation: high (2 sources)
+[2026-04-02 16:26:35]   VAULT: Added dp-114: OpenAI is now generating $2B in revenue per month
+[2026-04-02 16:26:35]   ANNUALISE: 2 /month × 12 = 24 (annual)
+[2026-04-02 16:26:35]   ENTITY: OpenAI → 2024.arr = 24 (annualised)
+[2026-04-02 16:26:35]   PROVENANCE: OpenAI → 2024.arr: high (3 sources)
+[2026-04-02 16:26:35]   DECLINED: extract-20260402-src-021-8: OpenAI raised over $3 billion from individual investors
+[2026-04-02 16:26:35]   DECLINED: extract-20260402-src-022-9: OpenAI raised over $3 billion from individual investors thro
+[2026-04-02 16:26:35]   PARKED: extract-20260402-src-021-4: OpenAI was the fastest to 100 million users
+[2026-04-02 16:26:35]   PARKED: extract-20260402-src-021-11: ChatGPT has over 50 million subscribers
+[2026-04-02 16:26:35]   Saved: vault-data, vault-inbox, entities, metric-schema
+[2026-04-02 16:26:35]   Archived: review-decisions-2026-04-02.json
+[2026-04-02 16:26:35]   Regenerating site-data.json from entities.json...
+[2026-04-02 16:26:35]   Done. 2 accepted, 2 declined, 2 parked, 0 new fields.
