@@ -194,7 +194,7 @@ async function addSource() {
 
   try {
     // Read current sources-registry from GitHub
-    const regFile = await GitHubAPI.readFile('beta/sources-registry.json');
+    const regFile = await GitHubAPI.readFile('sources-registry.json');
     const registry = JSON.parse(regFile.content);
 
     // Auto-classify
@@ -215,7 +215,7 @@ async function addSource() {
     };
 
     registry.sources.push(newSource);
-    const filesToCommit = [{ path: 'beta/sources-registry.json', content: registry }];
+    const filesToCommit = [{ path: 'sources-registry.json', content: registry }];
     let claimsExtracted = 0;
     let extractMsg = '';
 
@@ -226,7 +226,7 @@ async function addSource() {
 
       if (claims.length > 0) {
         // Read current vault-inbox
-        const inboxFile = await GitHubAPI.readFile('beta/vault-inbox.json');
+        const inboxFile = await GitHubAPI.readFile('vault-inbox.json');
         const inbox = JSON.parse(inboxFile.content);
         const dateStr = today.replace(/-/g, '');
 
@@ -256,7 +256,7 @@ async function addSource() {
         });
 
         inbox.lastProcessed = today;
-        filesToCommit.push({ path: 'beta/vault-inbox.json', content: inbox });
+        filesToCommit.push({ path: 'vault-inbox.json', content: inbox });
 
         newSource.status = 'active';
         newSource.last_checked = today;
@@ -305,7 +305,7 @@ async function addCompany() {
 
   try {
     // Read current entities from GitHub
-    const entFile = await GitHubAPI.readFile('beta/entities.json');
+    const entFile = await GitHubAPI.readFile('entities.json');
     const entities = JSON.parse(entFile.content);
 
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/\./g, '');
@@ -329,7 +329,7 @@ async function addCompany() {
     });
 
     const result = await GitHubAPI.commitFiles(
-      [{ path: 'beta/entities.json', content: entities }],
+      [{ path: 'entities.json', content: entities }],
       'Add company: ' + name + ' (' + role + ')'
     );
 

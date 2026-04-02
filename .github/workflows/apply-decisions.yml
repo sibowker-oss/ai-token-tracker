@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'data-updates/review-decisions-*.json'
       - 'beta/data-updates/review-decisions-*.json'
   workflow_dispatch:
 
@@ -28,7 +29,10 @@ jobs:
 
       - name: Archive processed decisions
         run: |
-          mkdir -p beta/data-updates/archive
+          mkdir -p data-updates/archive beta/data-updates/archive
+          for f in data-updates/review-decisions-*.json; do
+            [ -f "$f" ] && mv "$f" data-updates/archive/
+          done
           for f in beta/data-updates/review-decisions-*.json; do
             [ -f "$f" ] && mv "$f" beta/data-updates/archive/
           done
@@ -37,6 +41,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A beta/ entities.json vault-data.json vault-inbox.json site-data.json sources-registry.json
+          git add -A data-updates/ beta/ entities.json vault-data.json vault-inbox.json site-data.json sources-registry.json
           git diff --cached --quiet || git commit -m "Auto-apply review decisions $(date +%Y-%m-%d)"
           git push
