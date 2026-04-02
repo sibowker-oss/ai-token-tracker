@@ -1,0 +1,42 @@
+name: Apply Review Decisions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'beta/data-updates/review-decisions-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Apply decisions
+        run: python scripts/apply_decisions.py
+
+      - name: Regenerate site-data.json
+        run: python scripts/generate_site_data.py
+
+      - name: Archive processed decisions
+        run: |
+          mkdir -p beta/data-updates/archive
+          for f in beta/data-updates/review-decisions-*.json; do
+            [ -f "$f" ] && mv "$f" beta/data-updates/archive/
+          done
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A beta/ entities.json vault-data.json vault-inbox.json site-data.json sources-registry.json
+          git diff --cached --quiet || git commit -m "Auto-apply review decisions $(date +%Y-%m-%d)"
+          git push

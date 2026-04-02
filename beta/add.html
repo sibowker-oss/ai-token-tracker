@@ -93,11 +93,21 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="github-api.js"></script>
 <script>
+const CLAUDE_KEY = 'ai-ledger-claude-api-key';
+
 function autoClassify() {
   const url = document.getElementById('src-url').value.trim();
   if (!url) { document.getElementById('src-classify').style.display = 'none'; return; }
 
+  const c = classifyUrl(url);
+  const el = document.getElementById('src-classify');
+  el.style.display = 'block';
+  el.innerHTML = 'Type: <strong style="color:var(--text)">' + c.type + '</strong> · Method: <strong style="color:var(--text)">' + c.method + '</strong> · Frequency: <strong style="color:var(--text)">' + c.freq + '</strong>';
+}
+
+function classifyUrl(url) {
   let type = 'web_page', method = 'web_extract', freq = 'one_time';
   if (url.includes('docs.google.com/presentation')) { type = 'slide_deck'; method = 'pdf_export'; freq = 'annual'; }
   else if (url.endsWith('.pdf')) { type = 'pdf'; method = 'pdf_export'; }
@@ -106,80 +116,233 @@ function autoClassify() {
   else if (url.includes('sec.gov')) { type = 'sec_filing'; method = 'web_extract'; freq = 'quarterly'; }
   else if (url.includes('github.com') && url.split('/').length >= 5) { type = 'github_repo'; method = 'api'; freq = 'weekly'; }
   else if (url.includes('/feed') || url.includes('/rss') || url.includes('feeds.')) { type = 'rss_feed'; method = 'podcast_scraper'; freq = 'weekly'; }
+  return { type, method, freq };
+}
 
-  const el = document.getElementById('src-classify');
-  el.style.display = 'block';
-  el.innerHTML = 'Type: <strong style="color:var(--text)">' + type + '</strong> · Method: <strong style="color:var(--text)">' + method + '</strong> · Frequency: <strong style="color:var(--text)">' + freq + '</strong>';
+async function extractClaimsViaClaude(text, sourceId, sourceTitle) {
+  const apiKey = localStorage.getItem(CLAUDE_KEY);
+  if (!apiKey) return { claims: [], error: 'No Claude API key — claims will be extracted by weekly workflow' };
+
+  const prompt = `Extract ALL specific quantitative claims from this web page. Focus on:
+- Revenue figures (ARR, annual revenue, monthly revenue, collected revenue)
+- User/customer counts
+- Growth rates
+- Financial projections, targets, or guidance
+- Token volumes, API usage stats
+- Funding, valuation
+- Cost figures, margins, losses
+- Employee counts
+
+For each claim, return a JSON array. Each item:
+{
+  "claim": "ALWAYS start with the company name, e.g. 'OpenAI ended 2024 with $3.4B revenue' not 'We ended 2024...'",
+  "entity": "company name this is about",
+  "value": <numeric value — use billions for $B, millions for $M, raw number for counts>,
+  "unit": "unit — e.g. $B, $B ARR, %, count, T tokens/day",
+  "confidence": "verified|estimated|speculative",
+  "dateOfClaim": "YYYY-MM-DD or best guess",
+  "tags": ["relevant", "tags"]
+}
+
+Return ONLY a valid JSON array. No markdown, no explanation. If no claims found, return [].
+
+PAGE CONTENT:
+${text.slice(0, 8000)}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const result = await resp.json();
+    let responseText = result.content[0].text.trim();
+    if (responseText.startsWith('```')) {
+      responseText = responseText.split('```')[1];
+      if (responseText.startsWith('json')) responseText = responseText.slice(4);
+    }
+    const claims = JSON.parse(responseText.trim());
+    return { claims: Array.isArray(claims) ? claims : [], error: null };
+  } catch (e) {
+    return { claims: [], error: 'Claude extraction failed: ' + e.message };
+  }
 }
 
 async function addSource() {
   const url = document.getElementById('src-url').value.trim();
   if (!url) return;
-  const title = document.getElementById('src-title').value.trim();
+  if (!GitHubAPI.hasToken()) {
+    showStatus('src-status', 'GitHub token not set — go to Settings tab first');
+    return;
+  }
 
-  // Show progress
+  let title = document.getElementById('src-title').value.trim();
+  const pastedContent = document.getElementById('src-content').value.trim();
+
   document.getElementById('src-btn').disabled = true;
   document.getElementById('src-progress').style.display = 'block';
   document.getElementById('src-status').innerHTML = '';
 
   try {
-    const resp = await fetch('/api/add-source', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, title, content: document.getElementById('src-content').value })
-    });
-    const result = await resp.json();
+    // Read current sources-registry from GitHub
+    const regFile = await GitHubAPI.readFile('beta/sources-registry.json');
+    const registry = JSON.parse(regFile.content);
+
+    // Auto-classify
+    const c = classifyUrl(url);
+    const newId = 'src-' + String(registry.sources.length + 1).padStart(3, '0');
+    if (!title) {
+      try { title = new URL(url).hostname.replace('www.', ''); } catch(e) { title = url.slice(0, 50); }
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const newSource = {
+      id: newId, url, title,
+      type: c.type, author: '', organization: '',
+      added: today, tags: [],
+      extraction_method: c.method, frequency: c.freq,
+      next_check: today, last_checked: null, last_claims_count: 0,
+      status: 'pending_first_extraction'
+    };
+
+    registry.sources.push(newSource);
+    const filesToCommit = [{ path: 'beta/sources-registry.json', content: registry }];
+    let claimsExtracted = 0;
+    let extractMsg = '';
+
+    // If content was pasted, extract claims client-side
+    if (pastedContent && pastedContent.length > 50) {
+      document.querySelector('#src-progress div:last-child').textContent = 'Extracting claims via Claude...';
+      const { claims, error } = await extractClaimsViaClaude(pastedContent, newId, title);
+
+      if (claims.length > 0) {
+        // Read current vault-inbox
+        const inboxFile = await GitHubAPI.readFile('beta/vault-inbox.json');
+        const inbox = JSON.parse(inboxFile.content);
+        const dateStr = today.replace(/-/g, '');
+
+        claims.forEach((claim, i) => {
+          const claimId = 'extract-' + dateStr + '-' + newId + '-' + (i + 1);
+          if (inbox.items.some(item => item.id === claimId)) return;
+          inbox.items.push({
+            id: claimId,
+            claim: claim.claim || '',
+            value: claim.value,
+            unit: claim.unit || '',
+            sourceUrl: url,
+            sourceType: url.includes(claim.entity?.toLowerCase().replace(/\s/g,'')) ? 'official' : 'reporting',
+            sourceAuthor: claim.entity || title,
+            confidence: claim.confidence || 'estimated',
+            dateOfClaim: claim.dateOfClaim || today,
+            dateAdded: today,
+            usedOn: [],
+            tags: claim.tags || [],
+            notes: 'Auto-extracted from ' + title,
+            status: 'pending',
+            replaces: null,
+            source_id: newId,
+            metricKey: null
+          });
+          claimsExtracted++;
+        });
+
+        inbox.lastProcessed = today;
+        filesToCommit.push({ path: 'beta/vault-inbox.json', content: inbox });
+
+        newSource.status = 'active';
+        newSource.last_checked = today;
+        newSource.last_claims_count = claimsExtracted;
+        extractMsg = ' — ' + claimsExtracted + ' claim(s) extracted';
+      } else {
+        extractMsg = error ? ' — ' + error : ' — no claims found in content';
+      }
+    } else {
+      extractMsg = ' — claims will be extracted by weekly workflow';
+    }
+
+    // Commit to GitHub
+    document.querySelector('#src-progress div:last-child').textContent = 'Committing to GitHub...';
+    const result = await GitHubAPI.commitFiles(filesToCommit, 'Add source: ' + title);
+
     document.getElementById('src-progress').style.display = 'none';
     document.getElementById('src-btn').disabled = false;
+    document.getElementById('src-url').value = '';
+    document.getElementById('src-title').value = '';
+    document.getElementById('src-content').value = '';
+    document.getElementById('src-classify').style.display = 'none';
 
-    if (result.success) {
-      document.getElementById('src-url').value = '';
-      document.getElementById('src-title').value = '';
-      document.getElementById('src-content').value = '';
-      document.getElementById('src-classify').style.display = 'none';
-
-      let msg = result.message;
-      if (result.claims_extracted > 0) {
-        msg += '<br><a href="review.html" style="color:var(--accent);margin-top:8px;display:inline-block;">Go to Review tab to see extracted claims →</a>';
-      }
-      showStatus('src-status', msg);
-      showToast(result.claims_extracted > 0 ? result.claims_extracted + ' claims extracted' : 'Source added');
-    } else {
-      showStatus('src-status', 'Error: ' + result.message);
+    let msg = 'Added: ' + title + extractMsg;
+    if (claimsExtracted > 0) {
+      msg += '<br><a href="review.html" style="color:var(--accent);margin-top:8px;display:inline-block;">Go to Review tab to see extracted claims →</a>';
     }
+    msg += '<br><a href="' + result.url + '" target="_blank" style="color:var(--text-dim);font-size:10px;margin-top:4px;display:inline-block;">View commit →</a>';
+    showStatus('src-status', msg);
+    showToast(claimsExtracted > 0 ? claimsExtracted + ' claims extracted' : 'Source added');
+
   } catch(e) {
     document.getElementById('src-progress').style.display = 'none';
     document.getElementById('src-btn').disabled = false;
-    showStatus('src-status', 'Server not running — start with: python3 scripts/admin_server.py');
+    showStatus('src-status', 'Error: ' + e.message);
   }
 }
 
 async function addCompany() {
   const name = document.getElementById('co-name').value.trim();
   if (!name) return;
-  const url = document.getElementById('co-url').value.trim();
-  const role = document.getElementById('co-role').value;
-  const region = document.getElementById('co-region').value.trim();
+  if (!GitHubAPI.hasToken()) {
+    showStatus('co-status', 'GitHub token not set — go to Settings tab first');
+    return;
+  }
 
   try {
-    const resp = await fetch('/api/add-company', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, url, role, region })
-    });
-    const result = await resp.json();
-    if (result.success) {
-      document.getElementById('co-name').value = '';
-      document.getElementById('co-url').value = '';
-      document.getElementById('co-region').value = '';
-      document.getElementById('co-notes').value = '';
-      showStatus('co-status', result.message);
-      showToast('Company added');
-    } else {
-      showStatus('co-status', 'Error: ' + result.message);
+    // Read current entities from GitHub
+    const entFile = await GitHubAPI.readFile('beta/entities.json');
+    const entities = JSON.parse(entFile.content);
+
+    const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/\./g, '');
+    if (entities.companies.some(c => c.slug === slug)) {
+      showStatus('co-status', 'Error: ' + name + ' already exists');
+      return;
     }
+
+    const role = document.getElementById('co-role').value;
+    const region = document.getElementById('co-region').value.trim();
+    const url = document.getElementById('co-url').value.trim();
+
+    entities.companies.push({
+      slug, name,
+      roles: [role],
+      region,
+      website: url,
+      products: [],
+      financials: {},
+      current: {}
+    });
+
+    const result = await GitHubAPI.commitFiles(
+      [{ path: 'beta/entities.json', content: entities }],
+      'Add company: ' + name + ' (' + role + ')'
+    );
+
+    document.getElementById('co-name').value = '';
+    document.getElementById('co-url').value = '';
+    document.getElementById('co-region').value = '';
+    document.getElementById('co-notes').value = '';
+    showStatus('co-status', 'Added: ' + name + ' (' + role + ')' +
+      '<br><a href="' + result.url + '" target="_blank" style="color:var(--text-dim);font-size:10px;margin-top:4px;display:inline-block;">View commit →</a>');
+    showToast('Company added');
+
   } catch(e) {
-    showStatus('co-status', 'Server not running — start with: python3 scripts/admin_server.py');
+    showStatus('co-status', 'Error: ' + e.message);
   }
 }
 

@@ -55,6 +55,22 @@
   </div>
 
   <div class="section">
+    <h2>GitHub Token</h2>
+    <label>Personal Access Token (fine-grained)</label>
+    <div style="display:flex;gap:8px;">
+      <input id="gh-token" type="password" placeholder="github_pat_..." style="flex:1;">
+      <button class="btn btn-secondary" onclick="toggleGhVis()" id="gh-vis-btn" style="white-space:nowrap;">Show</button>
+    </div>
+    <p class="hint">Required for submitting reviews and adding sources/companies from the browser. Create a fine-grained token at github.com → Settings → Developer settings → Fine-grained tokens. Needs <strong>Contents: Read and write</strong> permission on <strong>sibowker-oss/ai-token-tracker</strong>.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveGhToken()">Save</button>
+      <button class="btn btn-secondary" onclick="testGhToken()">Test</button>
+      <button class="btn btn-danger" onclick="clearGhToken()">Clear</button>
+    </div>
+    <div id="gh-status"></div>
+  </div>
+
+  <div class="section">
     <h2>Clear Local Data</h2>
     <p class="hint" style="margin-bottom:12px;">Review decisions and field approvals are stored in localStorage. Clear them to start fresh.</p>
     <div class="btn-row">
@@ -144,6 +160,51 @@ function clearAll() {
   document.getElementById('clear-status').innerHTML = '<div class="status status-clear">All local data cleared</div>';
 }
 
+// --- GitHub Token ---
+const GH_TOKEN_KEY = 'ai-ledger-github-token';
+
+function saveGhToken() {
+  const token = document.getElementById('gh-token').value.trim();
+  localStorage.setItem(GH_TOKEN_KEY, token);
+  document.getElementById('gh-status').innerHTML = '<div class="status status-ok">Token saved</div>';
+}
+
+function clearGhToken() {
+  localStorage.removeItem(GH_TOKEN_KEY);
+  document.getElementById('gh-token').value = '';
+  document.getElementById('gh-status').innerHTML = '<div class="status status-clear">Token cleared</div>';
+}
+
+function toggleGhVis() {
+  const input = document.getElementById('gh-token');
+  const btn = document.getElementById('gh-vis-btn');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Hide'; }
+  else { input.type = 'password'; btn.textContent = 'Show'; }
+}
+
+async function testGhToken() {
+  const token = document.getElementById('gh-token').value.trim() || localStorage.getItem(GH_TOKEN_KEY);
+  if (!token) { document.getElementById('gh-status').innerHTML = '<div class="status status-clear">No token to test</div>'; return; }
+  try {
+    const resp = await fetch('https://api.github.com/repos/sibowker-oss/ai-token-tracker', {
+      headers: { 'Authorization': 'token ' + token, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    const scopes = resp.headers.get('x-oauth-scopes') || 'fine-grained (no scopes header)';
+    if (resp.ok) {
+      document.getElementById('gh-status').innerHTML = '<div class="status status-ok">✓ Token valid — repo access confirmed</div>';
+    } else {
+      document.getElementById('gh-status').innerHTML = '<div class="status" style="background:rgba(239,68,68,0.08);color:var(--red);">Token rejected: HTTP ' + resp.status + '</div>';
+    }
+  } catch(e) {
+    document.getElementById('gh-status').innerHTML = '<div class="status" style="background:rgba(239,68,68,0.08);color:var(--red);">Error: ' + e.message + '</div>';
+  }
+}
+
+function initGh() {
+  document.getElementById('gh-token').value = localStorage.getItem(GH_TOKEN_KEY) || '';
+}
+
+initGh();
 init();
 </script>
 </body>
