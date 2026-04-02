@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-02",
+  "lastProcessed": "2026-04-03",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -7836,6 +7836,91 @@
       "replaces": null,
       "source_id": "src-022",
       "metricKey": null
+    },
+    {
+      "id": "scan-20260403-v1a",
+      "claim": "Global VC investment hit $297B in Q1 2026, an all-time quarterly record — up 150% YoY",
+      "value": 297,
+      "unit": "$B",
+      "sourceUrl": "https://news.crunchbase.com/venture/record-breaking-funding-ai-global-q1-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Crunchbase News",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-01",
+      "dateAdded": "2026-04-03",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "VC", "funding", "market-size", "2026"],
+      "notes": "Crunchbase Q1 2026 recap. Record $297B into 6,000 startups globally. Up ~150% YoY. AI dominant driver. Single-quarter total near 70% of all 2025 VC.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260403-v1b",
+      "claim": "AI startups captured 81% of global VC in Q1 2026 (~$242B of $297B total)",
+      "value": 81,
+      "unit": "%",
+      "sourceUrl": "https://news.crunchbase.com/venture/record-breaking-funding-ai-global-q1-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Crunchbase News",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-01",
+      "dateAdded": "2026-04-03",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "VC", "funding", "AI-share", "2026"],
+      "notes": "81% of Q1 2026 global VC went to AI. Four frontier labs (OpenAI $120B, Anthropic $30B, xAI $20B, Waymo $16B) = $186B = 64% of all global VC for the quarter.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260403-v1c",
+      "claim": "xAI raised $20B in Q1 2026",
+      "value": 20,
+      "unit": "$B",
+      "sourceUrl": "https://news.crunchbase.com/venture/record-breaking-funding-ai-global-q1-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Crunchbase News",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-01",
+      "dateAdded": "2026-04-03",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "VC", "funding", "xAI", "2026"],
+      "notes": "Elon Musk's xAI raised $20B in Q1 2026, per Crunchbase Q1 2026 funding recap. Part of the $186B raised by top 4 frontier labs in Q1.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260403-v1d",
+      "claim": "Chinese AI models hit 61% of total token consumption on OpenRouter (Feb 2026)",
+      "value": 61,
+      "unit": "%",
+      "sourceUrl": "https://dataconomy.com/2026/02/25/chinese-ai-models-hit-61-market-share-on-openrouter/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Dataconomy / OpenRouter data",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-02-24",
+      "dateAdded": "2026-04-03",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "OpenRouter", "Chinese-AI", "market-share", "DeepSeek", "Qwen", "MiniMax"],
+      "notes": "OpenRouter Feb 24, 2026 data: Chinese models = 61% of token consumption. Top model: MiniMax M2.5 (4.55T tokens), #2 Kimi K2.5 (4.02T). Chinese OSS displacing US frontier models in volume.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260403-v1e",
+      "claim": "Programming use cases grew from 11% to >50% of OpenRouter total token volume throughout 2025",
+      "value": 50,
+      "unit": "%",
+      "sourceUrl": "https://pandaily.com/chinese-models-top-open-router-token-rankings-as-agent-scenarios-emerge-as-new-frontier",
+      "sourceType": "reporting",
+      "sourceAuthor": "Pandaily / OpenRouter data",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-02-24",
+      "dateAdded": "2026-04-03",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "OpenRouter", "coding", "programming", "use-case-mix", "2025"],
+      "notes": "Programming expanded from 11% to 50%+ of OpenRouter token usage across 2025, now the largest category. Reflects AI coding tool dominance (Cursor, Claude Code, etc.).",
+      "status": "pending",
+      "replaces": null
     }
   ]
 }
