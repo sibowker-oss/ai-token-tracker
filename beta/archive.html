@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision Archive — AI Ledger</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1000px; margin:0 auto; padding:24px; }
+  h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  h1 span.tag { background:var(--text-dim); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+
+  .stats-row { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .stat-pill { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:12px; }
+  .stat-pill strong { color:var(--text); }
+
+  .search-bar { position:relative; margin-bottom:20px; }
+  .search-bar input { width:100%; padding:12px 16px; background:var(--card); border:1px solid var(--card-border); border-radius:10px; color:var(--text); font-size:14px; outline:none; }
+  .search-bar input:focus { border-color:var(--accent); }
+  .search-bar input::placeholder { color:var(--text-dim); }
+
+  .filters { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .filter-btn { padding:4px 10px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .filter-btn:hover { border-color:var(--text-dim); color:var(--text); }
+  .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  .item { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:12px 16px; margin-bottom:8px; }
+  .item.s-accepted { border-left:3px solid var(--green); }
+  .item.s-declined { border-left:3px solid var(--red); opacity:0.7; }
+  .item.s-parked { border-left:3px solid var(--orange); opacity:0.8; }
+  .item-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:4px; }
+  .item-claim { font-size:13px; font-weight:600; flex:1; line-height:1.5; }
+  .item-badges { display:flex; gap:4px; flex-shrink:0; }
+  .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; }
+  .badge-accepted { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-declined { background:rgba(239,68,68,0.15); color:var(--red); }
+  .badge-parked { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .badge-pending { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+  .item-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
+  .item-meta strong { color:var(--text); }
+  .item-note { font-size:11px; color:var(--cyan); margin-top:4px; font-style:italic; }
+  .item-value { font-weight:700; color:var(--accent); }
+
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
+  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
+  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
+  @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } }
+  .empty { text-align:center; padding:40px; color:var(--text-dim); font-size:13px; }
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+</style>
+</head>
+<body>
+
+<div class="standalone-bar" id="standalone-bar" style="display:none;padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:11px;">
+  <a href="admin.html" style="color:#3b82f6;text-decoration:none;">Open in Command Centre</a>
+</div>
+<script>
+// Show standalone bar if NOT in an iframe
+if (window === window.top) document.getElementById('standalone-bar').style.display = 'block';
+</script>
+
+<div class="container">
+  <h1>Decision Archive <span class="tag">Admin</span></h1>
+  <p class="intro">Every claim you've accepted, declined, or parked. Searchable by entity, claim text, source, or date.</p>
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search claims... (entity, text, source, date)" oninput="render()">
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div id="items-list"></div>
+</div>
+
+<footer>AI Ledger v2 Beta</footer>
+
+<script>
+let allItems = [];
+let activeFilter = 'all';
+
+async function init() {
+  // Load from three sources:
+  // 1. vault-data.json (accepted claims with full provenance)
+  // 2. vault-inbox.json (declined + parked items)
+  // 3. vault-data points that are "accepted" status
+
+  const [vaultData, inbox] = await Promise.all([
+    loadJSON('vault-data.json'),
+    loadJSON('vault-inbox.json')
+  ]);
+
+  // Accepted items from vault-data
+  if (vaultData?.dataPoints) {
+    vaultData.dataPoints.forEach(dp => {
+      allItems.push({
+        id: dp.id,
+        claim: dp.claim,
+        value: dp.value,
+        unit: dp.unit || '',
+        status: 'accepted',
+        source: dp.sourceAuthor || '',
+        sourceUrl: dp.sourceUrl || '',
+        date: dp.dateAdded || dp.dateOfClaim || '',
+        note: dp.notes || '',
+        tags: dp.tags || [],
+        confidence: dp.confidence || '',
+      });
+    });
+  }
+
+  // Declined + parked from inbox
+  if (inbox?.items) {
+    inbox.items.forEach(item => {
+      if (item.status === 'declined' || item.status === 'parked') {
+        allItems.push({
+          id: item.id,
+          claim: item.claim,
+          value: item.value,
+          unit: item.unit || '',
+          status: item.status,
+          source: item.sourceAuthor || '',
+          sourceUrl: item.sourceUrl || '',
+          date: item.declined_at || item.parked_at || item.dateAdded || '',
+          note: item.declined_note || item.parked_note || item.notes || '',
+          tags: item.tags || [],
+          confidence: item.confidence || '',
+        });
+      }
+    });
+  }
+
+  // Sort by date, newest first
+  allItems.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+  renderStats();
+  renderFilters();
+  render();
+}
+
+async function loadJSON(path) {
+  try {
+    const r = await fetch(path + '?v=' + Date.now());
+    if (r.ok) return await r.json();
+  } catch(e) {}
+  return null;
+}
+
+function renderStats() {
+  const accepted = allItems.filter(i => i.status === 'accepted').length;
+  const declined = allItems.filter(i => i.status === 'declined').length;
+  const parked = allItems.filter(i => i.status === 'parked').length;
+
+  document.getElementById('stats-row').innerHTML =
+    '<span class="stat-pill">Total: <strong>' + allItems.length + '</strong></span>' +
+    '<span class="stat-pill" style="border-color:rgba(16,185,129,0.3);">Accepted: <strong style="color:var(--green);">' + accepted + '</strong></span>' +
+    '<span class="stat-pill" style="border-color:rgba(239,68,68,0.3);">Declined: <strong style="color:var(--red);">' + declined + '</strong></span>' +
+    '<span class="stat-pill" style="border-color:rgba(245,158,11,0.3);">Parked: <strong style="color:var(--orange);">' + parked + '</strong></span>';
+}
+
+function renderFilters() {
+  const filters = [
+    { key: 'all', label: 'All' },
+    { key: 'accepted', label: 'Accepted' },
+    { key: 'declined', label: 'Declined' },
+    { key: 'parked', label: 'Parked' },
+  ];
+  let html = '';
+  filters.forEach(f => {
+    html += '<button class="filter-btn' + (activeFilter === f.key ? ' active' : '') + '" onclick="setFilter(\'' + f.key + '\')">' + f.label + '</button>';
+  });
+  document.getElementById('filters').innerHTML = html;
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilters();
+  render();
+}
+
+function render() {
+  const query = (document.getElementById('search')?.value || '').toLowerCase();
+
+  let filtered = allItems;
+
+  if (activeFilter !== 'all') {
+    filtered = filtered.filter(i => i.status === activeFilter);
+  }
+
+  if (query) {
+    filtered = filtered.filter(i =>
+      i.claim.toLowerCase().includes(query) ||
+      i.source.toLowerCase().includes(query) ||
+      i.id.toLowerCase().includes(query) ||
+      (i.tags || []).some(t => t.toLowerCase().includes(query)) ||
+      (i.date || '').includes(query) ||
+      (i.note || '').toLowerCase().includes(query)
+    );
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('items-list').innerHTML = '<div class="empty">No items match your search.</div>';
+    return;
+  }
+
+  let html = '';
+  filtered.forEach(item => {
+    html += '<div class="item s-' + item.status + '">';
+    html += '<div class="item-top">';
+    html += '<span class="item-claim">' + esc(item.claim) + '</span>';
+    html += '<div class="item-badges">';
+    html += '<span class="badge badge-' + item.status + '">' + item.status + '</span>';
+    if (item.confidence) html += '<span class="badge badge-pending">' + item.confidence + '</span>';
+    html += '</div></div>';
+
+    html += '<div class="item-meta">';
+    if (item.value != null) html += '<span class="item-value">' + item.value + ' ' + esc(item.unit) + '</span> · ';
+    if (item.source) html += '<strong>' + esc(item.source) + '</strong> · ';
+    if (item.date) html += esc(item.date) + ' · ';
+    html += '<span style="color:var(--text-dim);">' + esc(item.id) + '</span>';
+    if (item.sourceUrl) html += ' · <a href="' + esc(item.sourceUrl) + '" target="_blank" style="color:var(--accent);font-size:10px;">source</a>';
+    html += '</div>';
+
+    if (item.note) {
+      html += '<div class="item-note">' + esc(item.note) + '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  document.getElementById('items-list').innerHTML = html;
+}
+
+function esc(s) {
+  if (s == null) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+init();
+</script>
+</body>
+</html>

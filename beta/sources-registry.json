@@ -219,6 +219,89 @@
       "last_checked": null,
       "last_claims_count": 0,
       "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-012",
+      "url": "https://sacra.com",
+      "title": "Sacra",
+      "type": "web_page",
+      "author": "Sacra Research",
+      "organization": "Sacra",
+      "added": "2026-04-01",
+      "tags": [
+        "research",
+        "revenue-estimates",
+        "company-data",
+        "funding"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-05-01",
+      "last_checked": "2026-03-28",
+      "last_claims_count": 10,
+      "status": "active"
+    },
+    {
+      "id": "src-013",
+      "url": "https://www.wheresyoured.at/",
+      "title": "Where's Your Ed At (Ed Zitron)",
+      "type": "web_page",
+      "author": "Ed Zitron",
+      "organization": "EZPR",
+      "added": "2026-04-01",
+      "tags": [
+        "analysis",
+        "leaked-documents",
+        "openai",
+        "revenue-forensics"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-08",
+      "last_checked": "2026-03-28",
+      "last_claims_count": 7,
+      "status": "active"
+    },
+    {
+      "id": "src-014",
+      "url": "https://www.theinformation.com",
+      "title": "The Information",
+      "type": "web_page",
+      "author": "Various",
+      "organization": "The Information",
+      "added": "2026-04-01",
+      "tags": [
+        "reporting",
+        "revenue",
+        "fundraising",
+        "scoops"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-08",
+      "last_checked": "2026-03-28",
+      "last_claims_count": 3,
+      "status": "active"
+    },
+    {
+      "id": "src-015",
+      "url": "https://www.nytimes.com",
+      "title": "New York Times",
+      "type": "web_page",
+      "author": "Various",
+      "organization": "NYT",
+      "added": "2026-04-01",
+      "tags": [
+        "reporting",
+        "openai",
+        "fundraising"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-08",
+      "last_checked": "2026-03-28",
+      "last_claims_count": 1,
+      "status": "active"
     }
   ]
 }

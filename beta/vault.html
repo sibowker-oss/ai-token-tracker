@@ -264,8 +264,8 @@
   <span style="flex-grow:1"></span>
   <a href="vault.html" class="nav-link active">Vault</a>
   <a href="sources.html" class="nav-link">Sources</a>
-  <a href="claims.html" class="nav-link">Claims</a>
-  <a href="in-development.html" class="nav-link">In Development</a>
+  <a href="review.html" class="nav-link">Review</a>
+  <a href="ask.html" class="nav-link">Ask</a>
 </nav>
 
 <div class="topbar">
@@ -286,12 +286,32 @@
 </div>
 
 <div class="container">
+
+  <!-- Quick nav to new v2 pages -->
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+    <a href="review.html" style="flex:1;min-width:200px;padding:16px 20px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:10px;text-decoration:none;color:var(--text);display:block;">
+      <div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:4px;">Daily Review</div>
+      <div style="font-size:11px;color:var(--text-dim);">Accept, decline, or park all pending data from every source</div>
+    </a>
+    <a href="sources.html" style="flex:1;min-width:200px;padding:16px 20px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.2);border-radius:10px;text-decoration:none;color:var(--text);display:block;">
+      <div style="font-size:14px;font-weight:700;color:var(--purple);margin-bottom:4px;">Source Ledger</div>
+      <div style="font-size:11px;color:var(--text-dim);">Browse all sources and see what claims each has produced</div>
+    </a>
+    <a href="ask.html" style="flex:1;min-width:200px;padding:16px 20px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:10px;text-decoration:none;color:var(--text);display:block;">
+      <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:4px;">Ask the Vault</div>
+      <div style="font-size:11px;color:var(--text-dim);">Question answering grounded in your data and sources</div>
+    </a>
+    <a href="confidence.html" style="flex:1;min-width:200px;padding:16px 20px;background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:10px;text-decoration:none;color:var(--text);display:block;">
+      <div style="font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:4px;">Data Confidence</div>
+      <div style="font-size:11px;color:var(--text-dim);">How well-sourced is every number — field by field</div>
+    </a>
+  </div>
+
   <div class="tabs" id="tabBar">
     <button class="tab active" onclick="switchTab('search')">Search & Browse</button>
     <button class="tab" onclick="switchTab('quickadd')">Quick Add</button>
     <button class="tab" onclick="switchTab('addcompany')">Add Company</button>
     <button class="tab" onclick="switchTab('submit')">Full Add</button>
-    <button class="tab" onclick="switchTab('review')">Weekly Review</button>
     <button class="tab" onclick="switchTab('consensus')">Consensus</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
     <button class="tab" onclick="switchTab('settings')" style="margin-left:auto;font-size:11px;">Settings</button>
@@ -569,7 +589,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','quickadd','addcompany','submit','review','consensus','audit','settings'];
+const TABS = ['search','quickadd','addcompany','submit','consensus','audit','settings'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -883,8 +903,8 @@ async function checkInbox() {
     if (imported > 0) {
       saveData();
       showToast(`${imported} new item${imported > 1 ? 's' : ''} from email inbox`);
-      // Auto-switch to review tab if we have new items
-      setTimeout(() => switchTab('review'), 500);
+      // Redirect to unified review page
+      setTimeout(() => window.location.href = 'review.html', 500);
     }
   } catch(e) {
     // vault-inbox.json doesn't exist yet — that's fine
@@ -1851,7 +1871,8 @@ function submitDP(e) {
   clearForm();
   showToast(wasPending ? 'Data point queued for review' : 'Data point saved');
   renderAll();
-  switchTab(wasPending ? 'review' : 'search');
+  if (wasPending) { window.location.href = 'review.html'; return; }
+  switchTab('search');
 }
 
 function editDP(id) {

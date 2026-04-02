@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:24px; }
+  .container { max-width:500px; margin:0 auto; }
+  h2 { font-size:16px; font-weight:700; margin-bottom:16px; }
+
+  .section { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
+  label { font-size:11px; color:var(--text-dim); display:block; margin-bottom:4px; font-weight:600; }
+  input { width:100%; padding:10px 14px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text); font-size:13px; outline:none; font-family:monospace; }
+  input:focus { border-color:var(--accent); }
+  .hint { font-size:10px; color:var(--text-dim); margin-top:6px; line-height:1.5; }
+  .btn-row { display:flex; gap:8px; margin-top:12px; }
+  .btn { padding:8px 16px; border-radius:8px; border:none; font-size:12px; font-weight:600; cursor:pointer; }
+  .btn-primary { background:var(--accent); color:white; }
+  .btn-secondary { background:transparent; color:var(--text-dim); border:1px solid var(--card-border); }
+  .btn-danger { background:transparent; color:var(--red); border:1px solid rgba(239,68,68,0.3); }
+  .status { margin-top:10px; font-size:12px; padding:6px 10px; border-radius:6px; }
+  .status-ok { background:rgba(16,185,129,0.08); color:var(--green); }
+  .status-clear { background:rgba(148,163,184,0.08); color:var(--text-dim); }
+
+  .stat-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:12px; }
+  .stat-row:last-child { border-bottom:none; }
+  .stat-label { color:var(--text-dim); }
+  .stat-value { color:var(--text); font-weight:600; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="section">
+    <h2>API Key</h2>
+    <label>Anthropic API Key</label>
+    <div style="display:flex;gap:8px;">
+      <input id="api-key" type="password" placeholder="sk-ant-..." style="flex:1;">
+      <button class="btn btn-secondary" onclick="toggleVis()" id="vis-btn" style="white-space:nowrap;">Show</button>
+    </div>
+    <p class="hint">Used for Ask the Vault, Add Company research, and field discovery. Stored in this browser only (localStorage).</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveKey()">Save</button>
+      <button class="btn btn-danger" onclick="clearKey()">Clear</button>
+    </div>
+    <div id="key-status"></div>
+  </div>
+
+  <div class="section">
+    <h2>Data Summary</h2>
+    <div id="data-stats"></div>
+  </div>
+
+  <div class="section">
+    <h2>Clear Local Data</h2>
+    <p class="hint" style="margin-bottom:12px;">Review decisions and field approvals are stored in localStorage. Clear them to start fresh.</p>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="clearDecisions()">Clear Review Decisions</button>
+      <button class="btn btn-danger" onclick="clearAll()">Clear All Local Data</button>
+    </div>
+    <div id="clear-status"></div>
+  </div>
+
+</div>
+
+<script>
+const KEY_STORAGE = 'ai-ledger-claude-api-key';
+
+function init() {
+  document.getElementById('api-key').value = localStorage.getItem(KEY_STORAGE) || '';
+  loadStats();
+}
+
+function saveKey() {
+  const key = document.getElementById('api-key').value.trim();
+  localStorage.setItem(KEY_STORAGE, key);
+  document.getElementById('key-status').innerHTML = '<div class="status status-ok">Key saved</div>';
+}
+
+function clearKey() {
+  localStorage.removeItem(KEY_STORAGE);
+  document.getElementById('api-key').value = '';
+  document.getElementById('key-status').innerHTML = '<div class="status status-clear">Key cleared</div>';
+}
+
+function toggleVis() {
+  const input = document.getElementById('api-key');
+  const btn = document.getElementById('vis-btn');
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = 'Hide'; }
+  else { input.type = 'password'; btn.textContent = 'Show'; }
+}
+
+async function loadStats() {
+  const stats = [];
+  try {
+    const ents = await fetch('entities.json?v=' + Date.now()).then(r => r.json());
+    stats.push(['Companies tracked', ents.companies?.length || 0]);
+    const roles = {};
+    (ents.companies || []).forEach(c => (c.roles || []).forEach(r => roles[r] = (roles[r] || 0) + 1));
+    for (const [r, n] of Object.entries(roles)) stats.push(['  ' + r.replace(/_/g, ' '), n]);
+  } catch(e) {}
+
+  try {
+    const vault = await fetch('vault-data.json?v=' + Date.now()).then(r => r.json());
+    stats.push(['Accepted data points', vault.dataPoints?.length || 0]);
+  } catch(e) {}
+
+  try {
+    const inbox = await fetch('vault-inbox.json?v=' + Date.now()).then(r => r.json());
+    const items = inbox.items || [];
+    stats.push(['Inbox pending', items.filter(i => i.status === 'pending').length]);
+    stats.push(['Inbox parked', items.filter(i => i.status === 'parked').length]);
+    stats.push(['Inbox declined', items.filter(i => i.status === 'declined').length]);
+  } catch(e) {}
+
+  try {
+    const schema = await fetch('metric-schema.json?v=' + Date.now()).then(r => r.json());
+    stats.push(['Proposed fields', (schema.proposed_fields || []).length]);
+    const totalFields = Object.values(schema.roles || {}).reduce((n, r) => n + Object.keys(r.fields || {}).length, 0);
+    stats.push(['Schema fields', totalFields]);
+  } catch(e) {}
+
+  let html = '';
+  stats.forEach(([label, value]) => {
+    html += '<div class="stat-row"><span class="stat-label">' + label + '</span><span class="stat-value">' + value + '</span></div>';
+  });
+  document.getElementById('data-stats').innerHTML = html;
+}
+
+function clearDecisions() {
+  localStorage.removeItem('review-decisions-v2');
+  localStorage.removeItem('field-decisions');
+  document.getElementById('clear-status').innerHTML = '<div class="status status-clear">Review decisions cleared</div>';
+}
+
+function clearAll() {
+  if (!confirm('This will clear all review decisions, field approvals, and pending additions. Continue?')) return;
+  const keysToKeep = ['ai-ledger-admin-auth', KEY_STORAGE];
+  const allKeys = Object.keys(localStorage);
+  allKeys.forEach(k => { if (!keysToKeep.includes(k)) localStorage.removeItem(k); });
+  document.getElementById('clear-status').innerHTML = '<div class="status status-clear">All local data cleared</div>';
+}
+
+init();
+</script>
+</body>
+</html>

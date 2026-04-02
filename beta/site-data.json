@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generatedAt": "2026-03-31T21:29:44Z",
-    "source": "Intel Vault export (consensus-weighted)",
+    "generatedAt": "2026-04-02T03:50:31Z",
+    "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
     "notes": "Fully rebalanced from consensus. All flows verified."
@@ -493,7 +493,7 @@
     "providers": {
       "OpenAI": {
         "tokens": 200,
-        "rev": 20.0,
+        "rev": 25.0,
         "color": "#10a37f",
         "growth": "+150% YoY",
         "consumerPct": 60,
@@ -503,7 +503,7 @@
       },
       "Anthropic": {
         "tokens": 110,
-        "rev": 14.0,
+        "rev": 19.0,
         "color": "#d97706",
         "growth": "14x in 14mo",
         "consumerPct": 35,
@@ -3479,13 +3479,13 @@
         0.08
       ],
       [
-        20.0,
-        14.0,
+        25.0,
+        19.0,
         4.2,
         0.3,
         0.4,
         0.5,
-        0.0,
+        0,
         4.25,
         0.15,
         0.1
@@ -3595,7 +3595,7 @@
         40,
         15,
         10,
-        100,
+        80,
         132,
         30,
         8

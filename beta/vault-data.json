@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-03-30",
+    "lastUpdated": "2026-04-01",
     "description": "Private reference data for APAC AI Intelligence site"
   },
   "dataPoints": [
@@ -27,7 +27,8 @@
         "court-filing",
         "2025"
       ],
-      "metricKey": "anthropic-revenue-2025"
+      "metricKey": "anthropic-revenue-2025",
+      "source_id": "src-014"
     },
     {
       "id": "dp-002",
@@ -51,7 +52,8 @@
         "the-information",
         "2025"
       ],
-      "metricKey": "anthropic-revenue-2025"
+      "metricKey": "anthropic-revenue-2025",
+      "source_id": "src-014"
     },
     {
       "id": "dp-003",
@@ -77,7 +79,8 @@
         "2024",
         "actual-collected"
       ],
-      "metricKey": "openai-revenue-2024"
+      "metricKey": "openai-revenue-2024",
+      "source_id": "src-013"
     },
     {
       "id": "dp-004",
@@ -101,7 +104,8 @@
         "calculation",
         "2025"
       ],
-      "metricKey": "openai-revenue-2025"
+      "metricKey": "openai-revenue-2025",
+      "source_id": null
     },
     {
       "id": "dp-005",
@@ -125,7 +129,8 @@
         "operating-loss",
         "vc-subsidy",
         "2025"
-      ]
+      ],
+      "source_id": "src-015"
     },
     {
       "id": "dp-006",
@@ -149,7 +154,8 @@
         "vc-subsidy",
         "2025"
       ],
-      "metricKey": "anthropic-loss-2025"
+      "metricKey": "anthropic-loss-2025",
+      "source_id": null
     },
     {
       "id": "dp-007",
@@ -173,7 +179,8 @@
         "calculation",
         "2025"
       ],
-      "metricKey": "total-ai-revenue-2025"
+      "metricKey": "total-ai-revenue-2025",
+      "source_id": null
     },
     {
       "id": "dp-008",
@@ -196,7 +203,8 @@
         "total-market",
         "calculation",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-009",
@@ -220,7 +228,8 @@
         "calculation",
         "2025"
       ],
-      "metricKey": "total-inference-cost-2025"
+      "metricKey": "total-inference-cost-2025",
+      "source_id": null
     },
     {
       "id": "dp-010",
@@ -245,7 +254,8 @@
         "servicenow",
         "copilot",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-011",
@@ -271,7 +281,8 @@
         "zitron",
         "copilot",
         "2024"
-      ]
+      ],
+      "source_id": "src-013"
     },
     {
       "id": "dp-012",
@@ -297,7 +308,8 @@
         "bedrock",
         "vertex",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-013",
@@ -322,7 +334,8 @@
         "together-ai",
         "gross-margin",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-014",
@@ -346,7 +359,8 @@
         "qwen",
         "frontier-gap",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-015",
@@ -369,7 +383,8 @@
         "meta",
         "adoption",
         "downloads"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-016",
@@ -392,7 +407,8 @@
         "token-volume",
         "market-share",
         "2025"
-      ]
+      ],
+      "source_id": "src-005"
     },
     {
       "id": "dp-017",
@@ -415,7 +431,8 @@
         "investment",
         "infrastructure",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-018",
@@ -437,7 +454,8 @@
         "compute",
         "capex",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-019",
@@ -459,7 +477,8 @@
         "investment",
         "total-market",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-020",
@@ -482,7 +501,8 @@
         "gross-margin",
         "calculation",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-021",
@@ -505,7 +525,8 @@
         "sustainability",
         "calculation",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-022",
@@ -528,7 +549,8 @@
         "breakeven",
         "calculation",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-023",
@@ -550,7 +572,8 @@
         "tokens",
         "deflation",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-024",
@@ -573,7 +596,8 @@
         "hyperscaler",
         "profitability",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-025",
@@ -595,7 +619,8 @@
         "total-market",
         "calculation",
         "2025"
-      ]
+      ],
+      "source_id": null
     },
     {
       "id": "dp-026",
@@ -619,7 +644,8 @@
         "podcast"
       ],
       "metricKey": "anthropic-arr-q1-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-027",
@@ -642,7 +668,8 @@
         "podcast"
       ],
       "metricKey": "anthropic-monthly-rev-feb-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-028",
@@ -663,7 +690,8 @@
         "podcast"
       ],
       "metricKey": "anthropic-valuation-feb-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-029",
@@ -687,7 +715,8 @@
         "podcast"
       ],
       "metricKey": "openai-arr-end-2025",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-030",
@@ -708,7 +737,8 @@
         "podcast"
       ],
       "metricKey": "openai-valuation-feb-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-031",
@@ -731,7 +761,8 @@
         "podcast"
       ],
       "metricKey": "anthropic-revenue-per-gw",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-032",
@@ -754,7 +785,8 @@
         "podcast"
       ],
       "metricKey": "dc-cost-per-gw-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-033",
@@ -776,7 +808,8 @@
         "podcast"
       ],
       "metricKey": "dc-payback-period",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-034",
@@ -798,7 +831,8 @@
         "podcast"
       ],
       "metricKey": "compute-constraint-mar-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-035",
@@ -823,7 +857,8 @@
         "podcast"
       ],
       "metricKey": "nvidia-investment-ipo-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-036",
@@ -846,7 +881,8 @@
         "podcast"
       ],
       "metricKey": "enterprise-roi-zero-mar-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-037",
@@ -869,7 +905,8 @@
         "podcast"
       ],
       "metricKey": "token-spend-3x-no-roi",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-038",
@@ -892,7 +929,8 @@
         "podcast"
       ],
       "metricKey": "dc-protest-cancellation-q1-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-039",
@@ -915,7 +953,8 @@
         "podcast"
       ],
       "metricKey": "startup-open-source-share",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-003"
     },
     {
       "id": "dp-040",
@@ -938,7 +977,8 @@
         "podcast"
       ],
       "metricKey": "meta-capex-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-004"
     },
     {
       "id": "dp-041",
@@ -961,7 +1001,8 @@
         "podcast"
       ],
       "metricKey": "openai-ipo-q4-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-004"
     },
     {
       "id": "dp-042",
@@ -982,7 +1023,1409 @@
         "podcast"
       ],
       "metricKey": "msft-drawdown-mar-2026",
-      "status": "accepted"
+      "status": "accepted",
+      "source_id": "src-004"
+    },
+    {
+      "id": "dp-043",
+      "claim": "Anthropic annualized revenue $19B (March 2026), up 1,167% YoY",
+      "value": 19,
+      "unit": "$B ARR",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey"
+      ],
+      "notes": "Sacra estimate. NOTE: This is annualized run rate, NOT collected revenue. Our Sankey uses actual collected. Previous Sacra data shows $4.5B for 2025, $14B ARR in Feb 2026. Growth from $875M ARR Jan 2025.",
+      "tags": [
+        "revenue",
+        "anthropic",
+        "ARR",
+        "2026",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-044",
+      "claim": "OpenAI annualized revenue ~$25B (March 2026)",
+      "value": 25,
+      "unit": "$B ARR",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey"
+      ],
+      "notes": "Sacra states OpenAI at $25B annualized from $13.1B. NOTE: ARR not collected. Our Sankey had $6B collected for 2025. Need to reconcile \u2014 The Information previously reported $13.1B which may be 2025 actual collected.",
+      "tags": [
+        "revenue",
+        "openai",
+        "ARR",
+        "2026",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-045",
+      "claim": "Anthropic cash flow breakeven timeline delayed beyond 2028 (previously projected 2028)",
+      "value": null,
+      "unit": "timeline",
+      "sourceUrl": "https://www.theinformation.com/articles/anthropic-hikes-2026-revenue-forecast-20-delays-will-go-cash-flow-positive",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Anthropic raised 2026 revenue forecast 20% to $18B but simultaneously delayed cash flow positive timeline past 2028. Revenue growth not translating to faster profitability path.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "cash-flow",
+        "breakeven",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-014"
+    },
+    {
+      "id": "dp-046",
+      "claim": "Anthropic Series G: $30B raised at $380B valuation (Feb 2026)",
+      "value": 380,
+      "unit": "$B valuation",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "official",
+      "sourceAuthor": "Sacra",
+      "confidence": "verified",
+      "dateOfClaim": "2026-02-12",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "dashboard"
+      ],
+      "notes": "Series G closed Feb 2026. Led by GIC and Coatue. Amazon total investment $8B. Up from $183B valuation in Sep 2025.",
+      "tags": [
+        "funding",
+        "anthropic",
+        "valuation",
+        "series-g",
+        "2026",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-047",
+      "claim": "OpenAI H1 2025 inference spend $5.0B (exceeds H1 revenue)",
+      "value": 5,
+      "unit": "$B",
+      "sourceUrl": "https://www.wheresyoured.at/oai_docs/",
+      "sourceType": "leaked-internal",
+      "sourceAuthor": "Ed Zitron / Microsoft leaked documents",
+      "confidence": "verified",
+      "dateOfClaim": "2025-11-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey"
+      ],
+      "notes": "OpenAI spent $5.022B on inference in H1 2025 alone \u2014 MORE than $4.3B H1 revenue. Full 2024-Sep2025 inference total: $12.4B. This is a critical data point: inference costs EXCEED revenue for OpenAI.",
+      "tags": [
+        "inference",
+        "costs",
+        "openai",
+        "2025",
+        "H1",
+        "zitron",
+        "microsoft",
+        "leaked"
+      ],
+      "metricKey": "openai-inference-cost-2025",
+      "status": "accepted",
+      "source_id": "src-013"
+    },
+    {
+      "id": "dp-048",
+      "claim": "Salesforce Agentforce standalone Q4 FY2026 ARR: $800M (+169% YoY); combined AI + Data 360 FY2026: $2.9B (+200% YoY)",
+      "value": 800,
+      "unit": "$M ARR",
+      "sourceUrl": "https://www.businesswire.com/news/home/20260225325122/en/Salesforce-Delivers-Record-Fourth-Quarter-Fiscal-2026-Results",
+      "sourceType": "official",
+      "sourceAuthor": "Salesforce / Business Wire",
+      "confidence": "verified",
+      "dateOfClaim": "2026-02-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Salesforce Agentforce Q4 FY2026: $800M ARR standalone (+169% YoY). Full FY2026 AI + Data 360 combined: $2.9B (+200% YoY). Also: 19 trillion tokens processed (5x YoY). Official earnings release.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "salesforce",
+        "agentforce",
+        "enterprise-ai",
+        "revenue",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-049",
+      "claim": "ServiceNow Now Assist ACV $600M+ (Q4 2025), doubled YoY; FY2026 subscription revenue guidance $15.53-15.57B (+20% YoY)",
+      "value": 600,
+      "unit": "$M ACV",
+      "sourceUrl": "https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results-Board-of-Directors-Authorizes-Additional-5B-for-Share-Repurchase-Program/default.aspx",
+      "sourceType": "official",
+      "sourceAuthor": "ServiceNow",
+      "confidence": "verified",
+      "dateOfClaim": "2026-01-31",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Now Assist ACV $600M+ at Q4 2025, doubled YoY (tracking toward $1B+ for 2026). Total ServiceNow FY2026 sub revenue guided at $15.53-15.57B. AI = ~4% of total sub base \u2014 consistent with low-penetration thesis.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "servicenow",
+        "now-assist",
+        "enterprise-ai",
+        "revenue",
+        "2025"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-050",
+      "claim": "OpenRouter processing 1T+ tokens per day as of March 2026; 100T+ tokens/year total throughput",
+      "value": 1,
+      "unit": "T tokens/day",
+      "sourceUrl": "https://openrouter.ai/state-of-ai",
+      "sourceType": "official",
+      "sourceAuthor": "OpenRouter",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "OpenRouter processing 1T+ tokens/day (March 2026). Annual run rate: 100T+ tokens/year. Now routes traffic across 300+ models from 60+ providers, serving 5M+ developers. Key demand-side indicator.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openrouter",
+        "token-volume",
+        "infrastructure",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-005"
+    },
+    {
+      "id": "dp-051",
+      "claim": "Google Cloud Q4 2025 revenue $17.66B (+47.8% YoY); $240B cloud backlog (doubled YoY) heading into 2026",
+      "value": 17.66,
+      "unit": "$B quarterly revenue",
+      "sourceUrl": "https://www.trendforce.com/news/2026/02/05/news-google-reportedly-to-nearly-double-2026-capex-as-cloud-revenue-jumps-nearly-48/",
+      "sourceType": "official",
+      "sourceAuthor": "Alphabet / TrendForce",
+      "confidence": "verified",
+      "dateOfClaim": "2026-02-05",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Google Cloud Q4 2025: $17.66B (+47.8% YoY). Full-year 2025 growth accelerated through H2. $240B backlog doubled YoY \u2014 indicates committed future AI cloud revenue. Vertex AI cited as key driver.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "google",
+        "cloud",
+        "revenue",
+        "vertex-ai",
+        "2025"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-052",
+      "claim": "Anthropic Claude Opus 4.6 API repriced to $5/$25 per M input/output tokens; long-context (1M token) surcharge eliminated for Opus 4.6 and Sonnet 4.6",
+      "value": 5,
+      "unit": "$/M input tokens (Opus 4.6)",
+      "sourceUrl": "https://thenewstack.io/claude-million-token-pricing/",
+      "sourceType": "official",
+      "sourceAuthor": "The New Stack / Anthropic",
+      "confidence": "verified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Opus 4.6: $5/$25 per M in/out tokens (was higher; ~67% cut). Sonnet 4.6: $3/$15. Haiku 4.5: $1/$5. Long-context surcharge removed \u2014 1M context window now at standard per-token rates.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "token-pricing",
+        "anthropic",
+        "claude",
+        "api",
+        "pricing",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-053",
+      "claim": "Chamath states he is personally paying AI models millions of dollars a year in token costs, consuming more tokens every single day, but not seeing proportional revenue growth from his business.",
+      "value": null,
+      "unit": "USD millions",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-054",
+      "claim": "Chamath says his AI token spending is tripling every 3 months but his revenues are not tripling correspondingly.",
+      "value": 3,
+      "unit": "x per quarter",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-055",
+      "claim": "Speaker is building a 1-gigawatt data center in Arizona that started as a $4-5 billion investment estimate but has grown to upwards of $50 billion when including powered shell, land, permits, infrastructure, and people.",
+      "value": 50000000000,
+      "unit": "USD",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "high",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-056",
+      "claim": "Speaker states that open source models are picking up about 85% of their tokens right now, with paid frontier models only used for jobs that can't be done otherwise.",
+      "value": 85,
+      "unit": "%",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Jason Calacanis",
+      "confidence": "high",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-057",
+      "claim": "Anthropic 2025 actual revenue confirmed ~$4.5B (Sacra historical)",
+      "value": 4.5,
+      "unit": "$B",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra / The Information",
+      "confidence": "verified",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey"
+      ],
+      "notes": "Sacra confirms our existing $4.5B figure for Anthropic 2025 revenue. Cross-referenced with The Information reporting. Validates current Sankey number.",
+      "tags": [
+        "revenue",
+        "anthropic",
+        "actual-collected",
+        "2025",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": "anthropic-revenue-2025",
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-058",
+      "claim": "Claude Code annualized revenue >$2.5B (Feb 2026)",
+      "value": 2.5,
+      "unit": "$B ARR",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey",
+        "dashboard"
+      ],
+      "notes": "Claude Code hit $2.5B ARR in Feb 2026, doubled since start of 2026 (was $500M ARR in Sep 2025). Major new revenue stream \u2014 not broken out in our current Sankey.",
+      "tags": [
+        "revenue",
+        "anthropic",
+        "claude-code",
+        "ARR",
+        "2026",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-059",
+      "claim": "Anthropic: 70-75% revenue from API, 10-15% from subscriptions",
+      "value": 72.5,
+      "unit": "% API revenue",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey"
+      ],
+      "notes": "Revenue breakdown: 70-75% token-based API, 10-15% subscriptions, remainder reserved capacity/enterprise. Useful for Sankey channel allocation (Model Subs vs API vs Enterprise).",
+      "tags": [
+        "revenue-mix",
+        "anthropic",
+        "api",
+        "subscriptions",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-060",
+      "claim": "Anthropic has 300,000+ business customers, 500 spending >$1M/yr",
+      "value": 300000,
+      "unit": "business customers",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "estimated",
+      "dateOfClaim": "2025-10-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "dashboard"
+      ],
+      "notes": "As of Oct 2025: 300K+ biz customers (~80% of revenue), 500 spending >$1M/yr (up from 12 two years ago). 8 of Fortune 10 are Claude customers.",
+      "tags": [
+        "customers",
+        "anthropic",
+        "enterprise",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-061",
+      "claim": "Claude Code: 29M daily VS Code installs, 4% of public GitHub commits",
+      "value": 4,
+      "unit": "% of GitHub commits",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "dashboard"
+      ],
+      "notes": "Claude Code developer adoption metrics. 29M daily VS Code installs. 4% of all public GitHub commits.",
+      "tags": [
+        "claude-code",
+        "anthropic",
+        "adoption",
+        "github",
+        "vscode",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-062",
+      "claim": "Gemini: 650M monthly users vs ChatGPT 800M weekly users",
+      "value": 650,
+      "unit": "M monthly users",
+      "sourceUrl": "https://sacra.com/c/anthropic/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "dashboard"
+      ],
+      "notes": "User comparison: Gemini 650M monthly vs ChatGPT 800M weekly (note different measurement periods). Google boosted by Nano Banana launch.",
+      "tags": [
+        "users",
+        "google",
+        "gemini",
+        "openai",
+        "chatgpt",
+        "market-share",
+        "sacra",
+        "email-import"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-012"
+    },
+    {
+      "id": "dp-063",
+      "claim": "OpenAI H1 2025 actual collected revenue ~$4.3B",
+      "value": 4.3,
+      "unit": "$B",
+      "sourceUrl": "https://www.wheresyoured.at/where-is-openais-money-going/",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information (cited by Zitron)",
+      "confidence": "estimated",
+      "dateOfClaim": "2025-09-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey"
+      ],
+      "notes": "The Information reported $4.3B H1 2025 revenue. Zitron's MSFT rev share analysis implies it may be closer to $2.27B \u2014 a ~$2B gap. Used $4.3B as the more conservative (higher) figure.",
+      "tags": [
+        "revenue",
+        "openai",
+        "actual-collected",
+        "2025",
+        "H1",
+        "zitron",
+        "the-information"
+      ],
+      "metricKey": "openai-revenue-2025",
+      "status": "accepted",
+      "source_id": "src-013"
+    },
+    {
+      "id": "dp-064",
+      "claim": "OpenAI $25B ARR uses best 4-week period \u00d7 12 (not monthly \u00d7 12)",
+      "value": 25,
+      "unit": "$B ARR (peak-4wk)",
+      "sourceUrl": "https://www.wheresyoured.at/howmuchmoney/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Ed Zitron / confirmed methodology",
+      "confidence": "verified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "CRITICAL: OpenAI's $25B ARR confirmed to use best 4-week period \u00d7 12, NOT calendar month \u00d7 12. This inflates the figure by an estimated 10-15% vs monthly calculation. Must apply cherry-pick haircut in ARR conversion.",
+      "tags": [
+        "ARR",
+        "openai",
+        "methodology",
+        "zitron",
+        "arr-manipulation"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-013"
+    },
+    {
+      "id": "dp-065",
+      "claim": "OpenAI funding round extended to $120B total at $840B post-money valuation (March 2026)",
+      "value": 840,
+      "unit": "$B valuation",
+      "sourceUrl": "https://www.cnbc.com/2026/03/24/openai-secures-an-extra-10-billion-in-record-funding-round-cfo-friar-says.html",
+      "sourceType": "reporting",
+      "sourceAuthor": "CNBC",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-24",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "OpenAI added extra $10B to existing round, bringing total to $120B at $840B post-money valuation. Significantly higher than Anthropic's $380B valuation.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "funding",
+        "valuation",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-066",
+      "claim": "OpenAI projected 2026 cash burn ~$25B",
+      "value": 25,
+      "unit": "$B cash burn",
+      "sourceUrl": "https://www.theinformation.com/articles/openai-tops-25-billion-annualized-revenue-anthropic-narrows-gap",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information / multiple",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-05",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "OpenAI projected to burn ~$25B in 2026 even as revenue hits $25B ARR. Implies close to breakeven on ARR basis but not on actual collected revenue. Critical context for burn rate analysis.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "cash-burn",
+        "losses",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-014"
+    },
+    {
+      "id": "dp-067",
+      "claim": "OpenAI internal 2030 revenue forecast: $280B",
+      "value": 280,
+      "unit": "$B",
+      "sourceUrl": "https://fortune.com/2026/02/20/openai-revenue-forecast-280-billion-2030-capex-sam-altman/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Fortune",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-02-20",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "OpenAI's internal 2030 revenue forecast is $280B. Context: current 2025 actual ~$13B, implies 21x growth in 5 years. Highly speculative \u2014 flagged for perspective/context use only.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "forecast",
+        "2030"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-068",
+      "claim": "Microsoft AI business $13B ARR (Q2 FY2026, Jan 2026); Copilot 15M paid seats, 3.3% of M365 commercial base",
+      "value": 13,
+      "unit": "$B ARR",
+      "sourceUrl": "https://tech-insider.org/microsoft-ai-spending-azure-copilot-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Microsoft / Tech-Insider",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-01-31",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Microsoft AI at $13B ARR Q2 FY2026. Copilot: 15M paid seats (+160% YoY) = 3.3% of 450M commercial M365 base. Key enterprise adoption data point \u2014 2+ years in, still only 1-in-30 users paying.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "microsoft",
+        "copilot",
+        "ARR",
+        "enterprise-ai",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-069",
+      "claim": "Harvey (legal AI) raised $200M at $11B valuation (March 25, 2026)",
+      "value": 11,
+      "unit": "$B valuation",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-03-25/legal-ai-startup-harvey-raises-funds-at-11-billion-valuation",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-25",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Harvey raised $200M at $11B valuation. Legal AI vertical \u2014 notable as sector-specific AI company reaching unicorn+ status.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "harvey",
+        "legal-ai",
+        "funding",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-070",
+      "claim": "Physical Intelligence (ex-DeepMind robotics) in talks for ~$1B round at $11B+ valuation (March 27, 2026)",
+      "value": 11,
+      "unit": "$B valuation",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-03-27/ex-deepmind-staffers-robotics-startup-in-talks-for-11-billion-valuation",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-27",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Physical Intelligence (robotics startup, ex-DeepMind staff) in talks for ~$1B at $11B+ valuation. AI investment extending into physical AI/robotics sector.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "physical-intelligence",
+        "robotics",
+        "funding",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-071",
+      "claim": "Anthropic 2026 internal revenue forecast raised 20% to $18B",
+      "value": 18,
+      "unit": "$B",
+      "sourceUrl": "https://seekingalpha.com/news/4543624-anthropic-raises-2026-revenue-forecast-by-20-to-18b",
+      "sourceType": "reporting",
+      "sourceAuthor": "Seeking Alpha",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Anthropic raised its internal 2026 revenue forecast by 20% to $18B. Note: this is a forecast for actual collected revenue (not ARR), distinct from the $19B current ARR run rate.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "forecast",
+        "revenue",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-072",
+      "claim": "February 2026 was largest startup funding month ever: $189B globally; AI startups = 41% of all VC dollars",
+      "value": 189,
+      "unit": "$B monthly funding",
+      "sourceUrl": "https://techcrunch.com/2026/03/20/ai-startups-are-eating-the-venture-industry-and-the-returns-so-far-are-good/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch / Carta",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-20",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Feb 2026 record driven by OpenAI $110B + Anthropic $30B + Waymo $16B. AI = 41% of all venture dollars on Carta. Highly concentrated \u2014 3 deals = ~83% of the record month.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "vc-funding",
+        "market-size",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-073",
+      "claim": "OpenAI projected operating loss $14B in 2026 (tripling from ~$5B in 2025)",
+      "value": 14,
+      "unit": "$B operating loss",
+      "sourceUrl": "https://www.theinformation.com/articles/openai-projections-imply-losses-tripling-to-14-billion-in-2026",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "OpenAI internal projections imply $14B operating loss in 2026 \u2014 tripling from ~$5B in 2025. Burn rate ~57% of projected revenue. Critical context: losses growing faster than revenue.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "losses",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-014"
+    },
+    {
+      "id": "dp-074",
+      "claim": "OpenAI cumulative cash burn $115B through 2029",
+      "value": 115,
+      "unit": "$B cumulative burn",
+      "sourceUrl": "https://www.theinformation.com/articles/openai-says-business-will-burn-115-billion-2029",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-02-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "OpenAI says its business will burn $115B cumulatively through 2029. Projects profitability at $100B revenue in 2029. Contrasts with Anthropic target of 9% burn rate by 2027.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "losses",
+        "cash-burn",
+        "2029"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-014"
+    },
+    {
+      "id": "dp-075",
+      "claim": "OpenAI burn rate 57% of revenue in 2026-2027; Anthropic burn dropping to 9% of revenue by 2027",
+      "value": 57,
+      "unit": "% of revenue burned (OpenAI)",
+      "sourceUrl": "https://www.theinformation.com/articles/openai-projections-imply-losses-tripling-to-14-billion-in-2026",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "OpenAI burn 57% of revenue through 2027. Anthropic projects burn dropping to ~33% in 2026 and 9% by 2027 \u2014 structural divergence in economics between the two leading frontier labs.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "anthropic",
+        "burn-rate",
+        "economics",
+        "2026",
+        "2027"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-014"
+    },
+    {
+      "id": "dp-076",
+      "claim": "Anthropic gross margin projection lowered ~10 percentage points vs prior forecast due to rising inference costs",
+      "value": -10,
+      "unit": "pp vs prior forecast",
+      "sourceUrl": "https://www.theinformation.com/articles/anthropic-lowers-profit-margin-projection-revenue-skyrockets",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-01-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Anthropic cut gross margin projection by ~10pp as cloud server/inference costs outpaced revenue growth. Both OpenAI and Anthropic missed their own gross margin forecasts. Signals compute cost pressure despite rapid revenue growth.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "gross-margin",
+        "inference-costs",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-014"
+    },
+    {
+      "id": "dp-077",
+      "claim": "OpenRouter March 2026: MiniMax M2.5 #1 by token volume (4.55T tokens), Moonshot Kimi K2.5 #2 (4.02T tokens); Chinese models ~2/3 of top-5 token consumption",
+      "value": 4.55,
+      "unit": "T tokens (MiniMax M2.5)",
+      "sourceUrl": "https://www.indexbox.io/blog/chinese-ai-models-dominate-global-usage-surpass-us-developers-in-token-ranking/",
+      "sourceType": "reporting",
+      "sourceAuthor": "IndexBox / OpenRouter data",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Chinese models dominate OpenRouter by token volume in March 2026. MiniMax M2.5: 4.55T tokens (#1), Kimi K2.5: 4.02T (#2), DeepSeek #4. Chinese models = ~2/3 of top-5 consumption. Top-5 includes only one Anthropic model.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openrouter",
+        "open-models",
+        "china",
+        "minimax",
+        "moonshot",
+        "market-share",
+        "token-volume",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-078",
+      "claim": "H100 cloud GPU spot pricing fell to ~$2.99/hr in Q1 2026, down 64-75% from $8-10/hr in Q4 2024",
+      "value": 2.99,
+      "unit": "$/hr H100 spot",
+      "sourceUrl": "https://www.thundercompute.com/blog/ai-gpu-rental-market-trends",
+      "sourceType": "reporting",
+      "sourceAuthor": "ThunderCompute",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "H100 spot pricing ~$2.99/hr (Q1 2026) vs $8-10/hr (Q4 2024). Specialized GPU providers 60-85% cheaper than hyperscalers at $0.29-$2.99/hr.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "gpu-pricing",
+        "inference-costs",
+        "compute-economics",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-079",
+      "claim": "LLM inference cost collapsed ~1,000x: GPT-4-class model $20/M tokens (late 2022) \u2192 ~$0.40/M tokens (early 2026)",
+      "value": 0.4,
+      "unit": "$/M tokens (2026 equivalent)",
+      "sourceUrl": "https://www.gpunex.com/blog/ai-inference-economics-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "GPUnex",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "From $20/M tokens (Nov 2022) to $0.40/M tokens (early 2026) for GPT-4 class performance \u2014 a ~1,000x reduction in 3 years. Driven by hardware advances, competition, efficiency gains.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "inference-costs",
+        "token-pricing",
+        "compute-economics",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-080",
+      "claim": "Inference accounts for ~2/3 of all AI compute workloads in 2026, overtaking training as the dominant workload",
+      "value": 67,
+      "unit": "% of AI compute (inference)",
+      "sourceUrl": "https://www.gpunex.com/blog/ai-inference-economics-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "GPUnex",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Inference now ~2/3 of all AI compute (up from minority share in 2023). Training has been overtaken as the dominant AI workload \u2014 structurally important for GPU demand forecasting.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "inference-costs",
+        "compute-economics",
+        "market-share",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-081",
+      "claim": "Qwen (Alibaba) 400M+ Hugging Face downloads; Chinese open models overtook US models in total hub downloads",
+      "value": 400,
+      "unit": "M downloads (Qwen)",
+      "sourceUrl": "https://getaibook.com/news/hugging-face-reports-chinese-open-models-overtook-us-on-hub-as-qwen-and-deepseek/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Hugging Face / GetAIBook",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Qwen: 400M+ downloads; OpenAI/DeepSeek ~50M each. 113K+ Qwen derivative models. China = 41% of Hugging Face downloads. Chinese open models now dominant on largest ML hub.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "open-models",
+        "qwen",
+        "alibaba",
+        "china",
+        "market-share",
+        "huggingface",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-082",
+      "claim": "Nscale (AI compute infrastructure) raised $2B Series C at $14.6B valuation (Q1 2026)",
+      "value": 14.6,
+      "unit": "$B valuation",
+      "sourceUrl": "https://aifundingtracker.com/top-50-ai-startups/",
+      "sourceType": "reporting",
+      "sourceAuthor": "AI Funding Tracker / Crunchbase",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Nscale $2B Series C at $14.6B valuation. AI compute infra now a sovereign-level investment priority. Signals large-scale private capital flowing into GPU/inference infrastructure beyond the frontier labs.",
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "funding",
+        "ai-infrastructure",
+        "compute",
+        "nscale",
+        "2026"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": null
+    },
+    {
+      "id": "dp-083",
+      "claim": "A McKinsey study showed that a lot of pilot projects in Fortune 500 companies were experimental and a lot of them were proving not to be successful.",
+      "value": null,
+      "unit": null,
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Jason Calacanis",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-084",
+      "claim": "About 80% of people in China said AI would be more beneficial than harmful. In the US, it was in the 30s.",
+      "value": 80,
+      "unit": "%",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "David Sacks",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-085",
+      "claim": "Sam Altman stated that fundamentally OpenAI's business, and the business of every other model provider, is going to look like selling tokens.",
+      "value": null,
+      "unit": null,
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Sam Altman",
+      "confidence": "high",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-086",
+      "claim": "OpenAI is discontinuing Sora consumer app, the developer API, and video functionality inside ChatGPT as part of a refocus on business and coding functions ahead of a potential IPO as soon as Q4 this year.",
+      "value": null,
+      "unit": null,
+      "sourceUrl": "https://pdst.fm/e/tracking.swap.fm/track/t7yC0rGPUqahTF4et8YD/pscrb.fm/rss/p/traffic.megaphone.fm/AMPP4147573754.mp3?updated=1774661186",
+      "sourceType": "podcast",
+      "sourceAuthor": "Alex",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-28",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-004"
+    },
+    {
+      "id": "dp-087",
+      "claim": "OpenAI spending ratio: $2.25-$2.60 to make $1 in revenue",
+      "value": 2.4,
+      "unit": "x spend ratio",
+      "sourceUrl": "https://www.wheresyoured.at/where-is-openais-money-going/",
+      "sourceType": "calculation",
+      "sourceAuthor": "Ed Zitron",
+      "confidence": "estimated",
+      "dateOfClaim": "2025-12-01",
+      "dateAdded": "2026-04-02",
+      "usedOn": [
+        "sankey"
+      ],
+      "notes": "OpenAI spending $2.25-$2.60 for every $1 earned. Implies ~60% of total spend is just inference, rest is R&D ($6.7B H1), sales/marketing ($2B H1), and other ops.",
+      "tags": [
+        "economics",
+        "openai",
+        "spend-ratio",
+        "burn-rate",
+        "2025",
+        "zitron"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-013"
+    },
+    {
+      "id": "dp-088",
+      "claim": "Anthropic hit a $14 billion run rate last month, February. That means they have grown revenue from $1 billion to $14 billion in 14 months \u2014 12x year over year.",
+      "value": 14,
+      "unit": "USD billions (annualized)",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Jason Calacanis",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-089",
+      "claim": "Anthropic grew revenue from $1 billion to $14 billion in 14 months, representing approximately 12x year-over-year growth.",
+      "value": 12,
+      "unit": "x YoY",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Jason Calacanis",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-090",
+      "claim": "Anthropic was valued at $380 billion last month.",
+      "value": 380,
+      "unit": "USD billions",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Jason Calacanis",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-091",
+      "claim": "OpenAI ended 2025 at a $20 billion annualized run rate, growing revenue from $2 billion to $20 billion in 24 months.",
+      "value": 20,
+      "unit": "USD billions (annualized)",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Jason Calacanis",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-092",
+      "claim": "OpenAI was valued at $840 billion last month.",
+      "value": 840,
+      "unit": "USD billions",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Jason Calacanis",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-093",
+      "claim": "Jensen Huang said he expected the $40 billion he recently invested in OpenAI and Anthropic would be his last money in because they were both going to go public this year.",
+      "value": 40,
+      "unit": "USD billions",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Brad Gerstner",
+      "confidence": "low",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-094",
+      "claim": "Consumer subscriptions are roughly half of OpenAI's revenue; consumer subscribers at ~$20/month are clearly getting value.",
+      "value": 50,
+      "unit": "percent",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Brad Gerstner",
+      "confidence": "low",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-095",
+      "claim": "Sarah Friar said that for every gigawatt, it's about $10 billion of annual revenue.",
+      "value": 10000000000,
+      "unit": "USD",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-096",
+      "claim": "For every gigawatt of spend, there is roughly a 5-year payback period just to get to break even, with profit coming in years 6, 7, and 8.",
+      "value": 5,
+      "unit": "years",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-097",
+      "claim": "It's about $50 billion per gigawatt of data center cost and about a 5 to 6 year payback just to get into the money, then about $10 billion a year in revenue.",
+      "value": 50000000000,
+      "unit": "USD",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-098",
+      "claim": "In 2025, about 25 data centers were canceled, representing about 5 gigawatts. Using Sarah Friar's number, that's $50 billion a year of revenue off the table.",
+      "value": 5,
+      "unit": "GW",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-099",
+      "claim": "As of end of February 2026, about 100 data centers are being protested, representing about 7 gigawatts, which at $10B/GW equals $70 billion a year of revenue at risk.",
+      "value": 7,
+      "unit": "GW",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-100",
+      "claim": "In 2025 and 2026 combined, approximately $120 billion of cumulative annual revenue has been taken off the table due to data center cancellations.",
+      "value": 120000000000,
+      "unit": "USD",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "low",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-101",
+      "claim": "About 40% of all protested data centers in America get canceled.",
+      "value": 40,
+      "unit": "%",
+      "sourceUrl": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+      "sourceType": "podcast",
+      "sourceAuthor": "Chamath Palihapitiya",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-13",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-003"
+    },
+    {
+      "id": "dp-102",
+      "claim": "Meta is spending 115 to 135 billion on AI infrastructure this year.",
+      "value": null,
+      "unit": "USD",
+      "sourceUrl": "https://pdst.fm/e/tracking.swap.fm/track/t7yC0rGPUqahTF4et8YD/pscrb.fm/rss/p/traffic.megaphone.fm/AMPP4147573754.mp3?updated=1774661186",
+      "sourceType": "podcast",
+      "sourceAuthor": "Alex",
+      "confidence": "medium",
+      "dateOfClaim": "2026-03-28",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-004"
+    },
+    {
+      "id": "dp-103",
+      "claim": "OpenAI has 800 million users and is aiming to get to a billion.",
+      "value": 800000000,
+      "unit": "users",
+      "sourceUrl": "https://pdst.fm/e/tracking.swap.fm/track/t7yC0rGPUqahTF4et8YD/pscrb.fm/rss/p/traffic.megaphone.fm/AMPP4147573754.mp3?updated=1774661186",
+      "sourceType": "podcast",
+      "sourceAuthor": "Ranjan Roy",
+      "confidence": "low",
+      "dateOfClaim": "2026-03-28",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "",
+      "tags": [],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-004"
     }
   ]
 }

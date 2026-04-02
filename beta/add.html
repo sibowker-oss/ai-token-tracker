@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add — AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:24px; }
+  .container { max-width:700px; margin:0 auto; }
+  h2 { font-size:16px; font-weight:700; margin-bottom:6px; }
+  .desc { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+
+  .section { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
+  label { font-size:11px; color:var(--text-dim); display:block; margin-bottom:4px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  input, select { width:100%; padding:10px 14px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text); font-size:13px; outline:none; margin-bottom:12px; }
+  input:focus, select:focus { border-color:var(--accent); }
+  .btn { padding:10px 24px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; }
+  .btn-primary { background:var(--accent); color:white; }
+  .btn-primary:hover { opacity:0.9; }
+  .btn-secondary { background:var(--card); color:var(--text-dim); border:1px solid var(--card-border); }
+  .status-msg { margin-top:12px; font-size:12px; padding:8px 12px; border-radius:8px; }
+  .status-ok { background:rgba(16,185,129,0.08); color:var(--green); border:1px solid rgba(16,185,129,0.2); }
+  .classify-box { padding:10px 14px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; font-size:12px; margin-bottom:12px; display:none; }
+
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--green); color:white; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:600; z-index:100; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .toast.show { opacity:1; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ADD SOURCE -->
+  <div class="section">
+    <h2>Add Source</h2>
+    <p class="desc">Paste a URL — it'll be auto-classified and queued for enrichment.</p>
+
+    <label>URL</label>
+    <input id="src-url" type="url" placeholder="Paste any URL — report, article, podcast, slide deck..." oninput="autoClassify()">
+
+    <div id="src-classify" class="classify-box"></div>
+
+    <label>Title (optional — auto-filled if blank)</label>
+    <input id="src-title" type="text" placeholder="e.g. State of AI Report 2025">
+
+    <button class="btn btn-primary" onclick="addSource()">Add Source</button>
+    <div id="src-status"></div>
+  </div>
+
+  <!-- ADD COMPANY -->
+  <div class="section">
+    <h2>Add Company</h2>
+    <p class="desc">Add a company to entities.json. Enter a URL and optionally research via Claude.</p>
+
+    <label>Company Website</label>
+    <input id="co-url" type="url" placeholder="https://company.ai">
+
+    <label>Company Name</label>
+    <input id="co-name" type="text" placeholder="e.g. Cursor, Harvey AI">
+
+    <label>Role</label>
+    <select id="co-role">
+      <option value="ai_app">AI App</option>
+      <option value="model_provider">Model Provider</option>
+      <option value="traditional_saas">Traditional SaaS</option>
+      <option value="hyperscaler">Hyperscaler</option>
+      <option value="neo_cloud">Neo Cloud</option>
+      <option value="iaas_provider">IaaS Provider</option>
+      <option value="aggregator">Aggregator</option>
+      <option value="gpu_provider">GPU Provider</option>
+    </select>
+
+    <label>Region</label>
+    <input id="co-region" type="text" placeholder="e.g. US, Asia, Europe">
+
+    <label>Notes (optional)</label>
+    <input id="co-notes" type="text" placeholder="Any context — ARR, funding, what they do">
+
+    <button class="btn btn-primary" onclick="addCompany()">Add Company</button>
+    <div id="co-status"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function autoClassify() {
+  const url = document.getElementById('src-url').value.trim();
+  if (!url) { document.getElementById('src-classify').style.display = 'none'; return; }
+
+  let type = 'web_page', method = 'web_extract', freq = 'one_time';
+  if (url.includes('docs.google.com/presentation')) { type = 'slide_deck'; method = 'pdf_export'; freq = 'annual'; }
+  else if (url.endsWith('.pdf')) { type = 'pdf'; method = 'pdf_export'; }
+  else if (url.includes('substack.com')) { type = 'newsletter'; method = 'web_extract'; freq = 'weekly'; }
+  else if (url.includes('youtube.com/watch')) { type = 'video'; method = 'youtube_captions'; }
+  else if (url.includes('sec.gov')) { type = 'sec_filing'; method = 'web_extract'; freq = 'quarterly'; }
+  else if (url.includes('github.com') && url.split('/').length >= 5) { type = 'github_repo'; method = 'api'; freq = 'weekly'; }
+  else if (url.includes('/feed') || url.includes('/rss') || url.includes('feeds.')) { type = 'rss_feed'; method = 'podcast_scraper'; freq = 'weekly'; }
+
+  const el = document.getElementById('src-classify');
+  el.style.display = 'block';
+  el.innerHTML = 'Type: <strong style="color:var(--text)">' + type + '</strong> · Method: <strong style="color:var(--text)">' + method + '</strong> · Frequency: <strong style="color:var(--text)">' + freq + '</strong>';
+}
+
+async function addSource() {
+  const url = document.getElementById('src-url').value.trim();
+  if (!url) return;
+  const title = document.getElementById('src-title').value.trim();
+
+  try {
+    const resp = await fetch('/api/add-source', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, title })
+    });
+    const result = await resp.json();
+    if (result.success) {
+      document.getElementById('src-url').value = '';
+      document.getElementById('src-title').value = '';
+      document.getElementById('src-classify').style.display = 'none';
+      showStatus('src-status', result.message);
+      showToast('Source added');
+    } else {
+      showStatus('src-status', 'Error: ' + result.message);
+    }
+  } catch(e) {
+    showStatus('src-status', 'Server not running — start with: python3 scripts/admin_server.py');
+  }
+}
+
+async function addCompany() {
+  const name = document.getElementById('co-name').value.trim();
+  if (!name) return;
+  const url = document.getElementById('co-url').value.trim();
+  const role = document.getElementById('co-role').value;
+  const region = document.getElementById('co-region').value.trim();
+
+  try {
+    const resp = await fetch('/api/add-company', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, url, role, region })
+    });
+    const result = await resp.json();
+    if (result.success) {
+      document.getElementById('co-name').value = '';
+      document.getElementById('co-url').value = '';
+      document.getElementById('co-region').value = '';
+      document.getElementById('co-notes').value = '';
+      showStatus('co-status', result.message);
+      showToast('Company added');
+    } else {
+      showStatus('co-status', 'Error: ' + result.message);
+    }
+  } catch(e) {
+    showStatus('co-status', 'Server not running — start with: python3 scripts/admin_server.py');
+  }
+}
+
+function showStatus(id, msg) {
+  document.getElementById(id).innerHTML = '<div class="status-msg status-ok">' + msg + '</div>';
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>

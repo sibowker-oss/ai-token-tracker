@@ -1,0 +1,866 @@
+{
+  "meta": {
+    "version": "2.1",
+    "description": "Field definitions per role. Supports dynamic field discovery \u2014 new fields proposed by Claude are added to proposed_fields until approved.",
+    "lastUpdated": "2026-04-02"
+  },
+  "proposed_fields": [
+    {
+      "field_id": "vscode_extension_daily_installs",
+      "label": "VS Code Extension Daily Installs",
+      "unit": "count",
+      "type": "primary",
+      "yearly": false,
+      "description": "Daily active installs of Claude Code extension for VS Code",
+      "regex_pattern": "(?:claude code|claude.*extension).*(?:\\d+[MK])\\s*daily.*(?:installs|users|downloads|active)",
+      "status": "proposed",
+      "proposed_from_claim": "email-20260328-i9r",
+      "proposed_for_entity": "anthropic"
+    },
+    {
+      "field_id": "cogs_to_revenue_ratio",
+      "label": "Cost of Goods Sold to Revenue Ratio",
+      "unit": "ratio",
+      "type": "primary",
+      "yearly": true,
+      "description": "Ratio of spending/costs required to generate $1 in revenue, typically calculated as inference compute costs divided by revenue.",
+      "regex_pattern": "(?:spending|cost|cogs)\\s+ratio|\\$[\\d.]+-\\$[\\d.]+\\s+(?:to|per)\\s+\\$?1\\s+(?:in\\s+)?revenue",
+      "status": "proposed",
+      "proposed_from_claim": "zitron-20260328-e5",
+      "proposed_for_entity": "openai"
+    },
+    {
+      "field_id": "revenue_forecast",
+      "label": "Revenue Forecast",
+      "unit": "$B",
+      "type": "primary",
+      "yearly": true,
+      "description": "Projected annual revenue for a future fiscal year based on internal forecasts or guidance.",
+      "regex_pattern": "(?:internal|forecast|projection|guidance)\\s+(?:\\d{4}\\s+)?revenue\\s+(?:forecast|projection|guidance|target).*\\$\\d+[BM]",
+      "status": "proposed",
+      "proposed_from_claim": "scan-20260330-d4e",
+      "proposed_for_entity": "openai"
+    },
+    {
+      "field_id": "burn_rate_pct_of_revenue",
+      "label": "Burn Rate (% of Revenue)",
+      "unit": "%",
+      "type": "primary",
+      "yearly": true,
+      "description": "Annual cash burn expressed as a percentage of annual revenue, indicating efficiency and runway sustainability.",
+      "regex_pattern": "burn\\s+rate\\s+.*?\\d+%\\s+of\\s+revenue|burn.*?\\d+%.*?revenue",
+      "status": "proposed",
+      "proposed_from_claim": "scan-20260331-c3d",
+      "proposed_for_entity": "openai"
+    },
+    {
+      "field_id": "cash_breakeven_timeline",
+      "label": "Cash Breakeven Timeline (Years)",
+      "unit": "years",
+      "type": "primary",
+      "yearly": false,
+      "description": "Projected number of years until the company reaches cash flow breakeven.",
+      "regex_pattern": "(?:cash\\s+flow\\s+)?breakeven\\s+(?:timeline|projection|target|delayed|pushed|expected).*(?:\\d{4}|\\d+\\s+years?)",
+      "status": "proposed",
+      "proposed_from_claim": "scan-20260331-e5f",
+      "proposed_for_entity": "anthropic"
+    },
+    {
+      "field_id": "cloud_backlog",
+      "label": "Cloud Backlog",
+      "unit": "$B",
+      "type": "primary",
+      "yearly": false,
+      "description": "Future revenue committed through cloud service contracts and agreements",
+      "regex_pattern": "(?:cloud|services)\\s+backlog|committed\\s+(?:cloud|services)\\s+revenue|backlog.*cloud",
+      "status": "proposed",
+      "proposed_from_claim": "scan-20260401-e5f",
+      "proposed_for_entity": "google"
+    },
+    {
+      "field_id": "api_pricing",
+      "label": "API Pricing Schedule",
+      "unit": "string",
+      "type": "primary",
+      "yearly": false,
+      "description": "Current pricing for API access by model and token type, including any surcharges or discounts.",
+      "regex_pattern": "(?:API|token|model)\\s+(?:price|pricing|repriced|cost).*(?:per|\\$).*(?:input|output|tokens)",
+      "status": "proposed",
+      "proposed_from_claim": "scan-20260401-f6g",
+      "proposed_for_entity": "anthropic"
+    }
+  ],
+  "roles": {
+    "model_provider": {
+      "label": "Model Provider",
+      "description": "Builds and serves foundation models",
+      "fields": {
+        "arr": {
+          "label": "Current ARR",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Annualised revenue run-rate. Point-in-time snapshot, NOT collected."
+        },
+        "arr_date": {
+          "label": "ARR Measurement Date",
+          "unit": "date",
+          "type": "primary",
+          "yearly": false,
+          "description": "When ARR was measured."
+        },
+        "collected_revenue": {
+          "label": "Collected Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Actual cash received in the calendar year."
+        },
+        "subscription_revenue": {
+          "label": "Subscription Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Revenue from consumer/pro subscriptions (ChatGPT Plus, Claude Pro etc)."
+        },
+        "api_revenue": {
+          "label": "API Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Revenue from token-based API sales."
+        },
+        "enterprise_revenue": {
+          "label": "Enterprise Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Revenue from reserved capacity / enterprise deals."
+        },
+        "operating_loss": {
+          "label": "Operating Loss",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Annual operating loss (accrual basis)."
+        },
+        "cash_burn": {
+          "label": "Cash Burn",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Actual cash burned (may differ from operating loss)."
+        },
+        "inference_cost": {
+          "label": "Inference Compute Cost",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Annual inference compute spend."
+        },
+        "people_sga": {
+          "label": "People / SG&A",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "People, R&D, sales, admin costs."
+        },
+        "tokens_per_day": {
+          "label": "Tokens / Day",
+          "unit": "T/day",
+          "type": "primary",
+          "yearly": true,
+          "description": "Estimated daily token throughput."
+        },
+        "growth_rate": {
+          "label": "Growth Rate",
+          "unit": "string",
+          "type": "primary",
+          "yearly": false,
+          "description": "YoY or period growth."
+        },
+        "consumer_pct": {
+          "label": "Consumer Revenue %",
+          "unit": "%",
+          "type": "primary",
+          "yearly": false,
+          "description": "% of revenue from consumer."
+        },
+        "biz_pct": {
+          "label": "Business Revenue %",
+          "unit": "%",
+          "type": "primary",
+          "yearly": false,
+          "description": "% of revenue from business."
+        },
+        "customer_count": {
+          "label": "Customer Count",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "Number of business customers."
+        },
+        "valuation": {
+          "label": "Valuation",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": false,
+          "description": "Latest known valuation."
+        },
+        "total_funding": {
+          "label": "Total Funding",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": false,
+          "description": "Cumulative funding raised."
+        },
+        "capex": {
+          "label": "Capex",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "AI infrastructure capital expenditure."
+        },
+        "employees": {
+          "label": "Employees",
+          "unit": "count",
+          "type": "primary",
+          "yearly": false,
+          "description": "Headcount."
+        }
+      }
+    },
+    "ai_app": {
+      "label": "AI App",
+      "description": "AI-native application consuming tokens from providers",
+      "fields": {
+        "arr": {
+          "label": "ARR",
+          "unit": "$",
+          "type": "primary",
+          "yearly": true,
+          "description": "The app's own annual recurring revenue."
+        },
+        "tokens_per_day": {
+          "label": "Tokens / Day",
+          "unit": "tokens",
+          "type": "primary",
+          "yearly": true,
+          "description": "Tokens consumed from providers."
+        },
+        "providers": {
+          "label": "Providers",
+          "unit": "[slug]",
+          "type": "primary",
+          "yearly": false,
+          "description": "Which model providers they use."
+        },
+        "primary_provider": {
+          "label": "Primary Provider",
+          "unit": "slug",
+          "type": "primary",
+          "yearly": false,
+          "description": "Dominant provider."
+        },
+        "cogs_ratio": {
+          "label": "COGS Ratio",
+          "unit": "%",
+          "type": "derived",
+          "yearly": true,
+          "description": "AI cost as % of revenue."
+        },
+        "valuation": {
+          "label": "Valuation",
+          "unit": "$",
+          "type": "primary",
+          "yearly": false,
+          "description": "Latest valuation."
+        },
+        "total_funding": {
+          "label": "Total Funding",
+          "unit": "$",
+          "type": "primary",
+          "yearly": false,
+          "description": "Cumulative funding."
+        },
+        "employee_count": {
+          "label": "Employees",
+          "unit": "count",
+          "type": "primary",
+          "yearly": false,
+          "description": "Headcount."
+        },
+        "user_count": {
+          "label": "Users",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "MAU or total users."
+        },
+        "customer_count": {
+          "label": "Customers",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "Paying customers (B2B)."
+        },
+        "confidence": {
+          "label": "Confidence",
+          "unit": "string",
+          "type": "primary",
+          "yearly": false,
+          "description": "How confident we are in the data."
+        }
+      }
+    },
+    "traditional_saas": {
+      "label": "Traditional SaaS",
+      "description": "Established SaaS company adding AI features",
+      "fields": {
+        "ai_arr": {
+          "label": "AI ARR",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "ARR from AI-specific features/SKUs."
+        },
+        "paid_seats": {
+          "label": "Paid AI Seats",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "Number of paid AI seats."
+        },
+        "total_addressable_seats": {
+          "label": "Addressable Seats",
+          "unit": "count",
+          "type": "primary",
+          "yearly": false,
+          "description": "Total user base they could upsell to."
+        },
+        "active_rate": {
+          "label": "Active Rate",
+          "unit": "%",
+          "type": "primary",
+          "yearly": true,
+          "description": "% of paid seats actually using AI."
+        },
+        "seat_price": {
+          "label": "Seat Price",
+          "unit": "$/seat",
+          "type": "primary",
+          "yearly": false,
+          "description": "Per-seat or per-unit price."
+        },
+        "pricing_model": {
+          "label": "Pricing Model",
+          "unit": "string",
+          "type": "primary",
+          "yearly": false,
+          "description": "per_seat, per_conversation, usage_based, bundled."
+        },
+        "tokens_per_day": {
+          "label": "Tokens / Day",
+          "unit": "tokens",
+          "type": "primary",
+          "yearly": true,
+          "description": "Token consumption."
+        },
+        "providers": {
+          "label": "Providers",
+          "unit": "[slug]",
+          "type": "primary",
+          "yearly": false,
+          "description": "Which models power it."
+        },
+        "cogs_ratio": {
+          "label": "COGS Ratio",
+          "unit": "%",
+          "type": "derived",
+          "yearly": true,
+          "description": "AI cost as % of AI revenue."
+        }
+      }
+    },
+    "hyperscaler": {
+      "label": "Hyperscaler",
+      "description": "Cloud platform providing infrastructure to providers and managed AI APIs",
+      "fields": {
+        "ai_cloud_revenue": {
+          "label": "AI Cloud Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Total AI-related cloud revenue."
+        },
+        "managed_api_revenue": {
+          "label": "Managed API Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Revenue from managed AI APIs (Bedrock, Azure OpenAI)."
+        },
+        "gpu_rental_revenue": {
+          "label": "GPU Rental Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Revenue from GPU-as-a-service."
+        },
+        "model_providers_hosted": {
+          "label": "Providers Hosted",
+          "unit": "[slug]",
+          "type": "primary",
+          "yearly": false,
+          "description": "Providers they sell compute TO."
+        },
+        "model_providers_resold": {
+          "label": "Providers Resold",
+          "unit": "[slug]",
+          "type": "primary",
+          "yearly": false,
+          "description": "Providers they resell as managed API."
+        },
+        "margin_on_resale_pct": {
+          "label": "Resale Margin",
+          "unit": "%",
+          "type": "primary",
+          "yearly": false,
+          "description": "Margin on model API pass-through."
+        },
+        "gpu_capacity": {
+          "label": "GPU Capacity",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "GPU fleet size."
+        },
+        "gpu_capex": {
+          "label": "GPU Capex",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Annual GPU/DC capital expenditure."
+        }
+      }
+    },
+    "neo_cloud": {
+      "label": "Neo Cloud",
+      "description": "Purpose-built GPU cloud for AI workloads",
+      "fields": {
+        "arr": {
+          "label": "ARR",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Annual recurring revenue."
+        },
+        "valuation": {
+          "label": "Valuation",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": false,
+          "description": "Latest valuation."
+        },
+        "total_funding": {
+          "label": "Total Funding",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": false,
+          "description": "Cumulative funding."
+        },
+        "gpu_count": {
+          "label": "GPU Fleet",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "Total GPU count."
+        },
+        "gpu_types": {
+          "label": "GPU Types",
+          "unit": "[string]",
+          "type": "primary",
+          "yearly": false,
+          "description": "H100, B200, etc."
+        },
+        "data_center_capacity": {
+          "label": "DC Capacity",
+          "unit": "MW",
+          "type": "primary",
+          "yearly": true,
+          "description": "Power capacity."
+        },
+        "model_providers_hosted": {
+          "label": "Providers Hosted",
+          "unit": "[slug]",
+          "type": "primary",
+          "yearly": false,
+          "description": "Which providers use their GPUs."
+        },
+        "employee_count": {
+          "label": "Employees",
+          "unit": "count",
+          "type": "primary",
+          "yearly": false,
+          "description": "Headcount."
+        }
+      }
+    },
+    "iaas_provider": {
+      "label": "IaaS Provider",
+      "description": "Inference-as-a-Service: hosts open models for SME/enterprise",
+      "fields": {
+        "arr": {
+          "label": "ARR",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Annual recurring revenue."
+        },
+        "valuation": {
+          "label": "Valuation",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": false,
+          "description": "Latest valuation."
+        },
+        "total_funding": {
+          "label": "Total Funding",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": false,
+          "description": "Cumulative funding."
+        },
+        "tokens_per_day": {
+          "label": "Tokens / Day",
+          "unit": "tokens",
+          "type": "primary",
+          "yearly": true,
+          "description": "Total inference throughput."
+        },
+        "models_hosted": {
+          "label": "Models Hosted",
+          "unit": "[string]",
+          "type": "primary",
+          "yearly": false,
+          "description": "Which open models they serve."
+        },
+        "gross_margin_pct": {
+          "label": "Gross Margin",
+          "unit": "%",
+          "type": "primary",
+          "yearly": true,
+          "description": "Margin on inference."
+        },
+        "blended_price_per_m": {
+          "label": "Blended Price",
+          "unit": "$/1M",
+          "type": "primary",
+          "yearly": true,
+          "description": "Average $/1M tokens."
+        },
+        "gpu_count": {
+          "label": "GPU Fleet",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "GPU fleet size."
+        },
+        "employee_count": {
+          "label": "Employees",
+          "unit": "count",
+          "type": "primary",
+          "yearly": false,
+          "description": "Headcount."
+        }
+      }
+    },
+    "aggregator": {
+      "label": "Aggregator",
+      "description": "Routing/gateway providing unified API access to providers and IaaS",
+      "fields": {
+        "arr": {
+          "label": "ARR",
+          "unit": "$",
+          "type": "primary",
+          "yearly": true,
+          "description": "Annual recurring revenue."
+        },
+        "tokens_per_day": {
+          "label": "Tokens / Day",
+          "unit": "tokens",
+          "type": "primary",
+          "yearly": true,
+          "description": "Total tokens routed."
+        },
+        "requests_per_day": {
+          "label": "Requests / Day",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "Total API requests."
+        },
+        "daily_spend": {
+          "label": "Daily Spend",
+          "unit": "$",
+          "type": "primary",
+          "yearly": true,
+          "description": "Total $ flowing through per day."
+        },
+        "providers_connected": {
+          "label": "Providers",
+          "unit": "[slug]",
+          "type": "primary",
+          "yearly": false,
+          "description": "Model providers accessible."
+        },
+        "iaas_connected": {
+          "label": "IaaS Connected",
+          "unit": "[slug]",
+          "type": "primary",
+          "yearly": false,
+          "description": "IaaS providers they route to."
+        },
+        "model_count": {
+          "label": "Model Count",
+          "unit": "count",
+          "type": "primary",
+          "yearly": false,
+          "description": "Number of models accessible."
+        },
+        "user_count": {
+          "label": "Users",
+          "unit": "count",
+          "type": "primary",
+          "yearly": true,
+          "description": "Developers/orgs using the gateway."
+        },
+        "total_funding": {
+          "label": "Total Funding",
+          "unit": "$",
+          "type": "primary",
+          "yearly": false,
+          "description": "Cumulative funding."
+        }
+      }
+    },
+    "gpu_provider": {
+      "label": "GPU Provider",
+      "description": "GPU/silicon manufacturer",
+      "fields": {
+        "data_center_revenue": {
+          "label": "DC Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Revenue from data center / AI segment."
+        },
+        "total_revenue": {
+          "label": "Total Revenue",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "Company total revenue."
+        },
+        "growth_rate": {
+          "label": "Growth Rate",
+          "unit": "string",
+          "type": "primary",
+          "yearly": true,
+          "description": "YoY growth."
+        },
+        "market_share_pct": {
+          "label": "Market Share",
+          "unit": "%",
+          "type": "primary",
+          "yearly": true,
+          "description": "% of AI GPU market."
+        },
+        "key_products": {
+          "label": "Key Products",
+          "unit": "[string]",
+          "type": "primary",
+          "yearly": false,
+          "description": "H100, B200, MI300X, etc."
+        },
+        "capex_from_customers": {
+          "label": "Capex from Customers",
+          "unit": "$B",
+          "type": "derived",
+          "yearly": true,
+          "description": "How much of Mag7 capex flows to them."
+        }
+      }
+    }
+  },
+  "derived_fields": {
+    "vc_subsidy": {
+      "formula": "operating_loss (approximately)",
+      "description": "Gap between costs and revenue funded by investors."
+    },
+    "total_system_inflow": {
+      "formula": "collected_revenue + vc_subsidy",
+      "description": "Total money flowing into a provider (sankey provider column)."
+    },
+    "sankey_buyer_flows": {
+      "formula": "allocated from collected_revenue by consumer_pct/biz_pct",
+      "description": "Sankey buyer \u2192 channel flows."
+    },
+    "cogs_ratio": {
+      "formula": "inference_cost / collected_revenue",
+      "description": "Cost of goods sold ratio."
+    }
+  },
+  "entity_match_rules": [
+    {
+      "pattern": "openai|open.ai|chatgpt|gpt-",
+      "slug": "openai"
+    },
+    {
+      "pattern": "anthropic|claude",
+      "slug": "anthropic"
+    },
+    {
+      "pattern": "google|gemini|deepmind",
+      "slug": "google"
+    },
+    {
+      "pattern": "\\bmeta\\b|llama",
+      "slug": "meta"
+    },
+    {
+      "pattern": "deepseek",
+      "slug": "deepseek"
+    },
+    {
+      "pattern": "mistral",
+      "slug": "mistral"
+    },
+    {
+      "pattern": "\\bxai\\b|grok",
+      "slug": "xai"
+    },
+    {
+      "pattern": "minimax",
+      "slug": "minimax"
+    },
+    {
+      "pattern": "moonshot|kimi",
+      "slug": "moonshot"
+    },
+    {
+      "pattern": "nvidia|nvda",
+      "slug": "nvidia"
+    },
+    {
+      "pattern": "coreweave",
+      "slug": "coreweave"
+    },
+    {
+      "pattern": "nebius",
+      "slug": "nebius"
+    },
+    {
+      "pattern": "together.?ai",
+      "slug": "together"
+    },
+    {
+      "pattern": "openrouter",
+      "slug": "openrouter"
+    },
+    {
+      "pattern": "portkey",
+      "slug": "portkey"
+    },
+    {
+      "pattern": "cursor|anysphere",
+      "slug": "cursor"
+    },
+    {
+      "pattern": "perplexity",
+      "slug": "perplexity"
+    }
+  ],
+  "field_match_rules": [
+    {
+      "pattern": "\\barr\\b|annuali[sz]ed.*revenue|revenue.*run.rate|revenue.*forecast|revenue.*target|revenue.*projection|revenue.*guidance",
+      "field": "arr"
+    },
+    {
+      "pattern": "collected.*revenue|actual.*revenue|full.year.*revenue",
+      "field": "collected_revenue"
+    },
+    {
+      "pattern": "subscription.*revenue|sub.*revenue|model.sub",
+      "field": "subscription_revenue"
+    },
+    {
+      "pattern": "api.*revenue|token.*revenue|model.api",
+      "field": "api_revenue"
+    },
+    {
+      "pattern": "operating.*loss",
+      "field": "operating_loss"
+    },
+    {
+      "pattern": "cash.*burn",
+      "field": "cash_burn"
+    },
+    {
+      "pattern": "valuation|valued.at",
+      "field": "valuation"
+    },
+    {
+      "pattern": "token.*day|daily.*token|inference.*volume",
+      "field": "tokens_per_day"
+    },
+    {
+      "pattern": "capex|capital.*expenditure|infrastructure.*spend",
+      "field": "capex"
+    },
+    {
+      "pattern": "inference.*cost|compute.*cost",
+      "field": "inference_cost"
+    },
+    {
+      "pattern": "customer|business.*customer",
+      "field": "customer_count"
+    },
+    {
+      "pattern": "revenue.*api|api.*revenue|revenue.*mix",
+      "field": "api_revenue"
+    },
+    {
+      "pattern": "data.center.*revenue|dc.*revenue",
+      "field": "data_center_revenue"
+    },
+    {
+      "pattern": "market.*share",
+      "field": "market_share_pct"
+    },
+    {
+      "pattern": "gpu.*count|gpu.*fleet",
+      "field": "gpu_count"
+    },
+    {
+      "pattern": "active.*rate|usage.*rate|adoption.*rate",
+      "field": "active_rate"
+    },
+    {
+      "pattern": "paid.*seat|ai.*seat",
+      "field": "paid_seats"
+    },
+    {
+      "pattern": "\\busers?\\b|mau|monthly.*active",
+      "field": "user_count"
+    },
+    {
+      "pattern": "employ|headcount|staff",
+      "field": "employees"
+    },
+    {
+      "pattern": "total.*funding|funding.*round|series\\s+[a-g]|raised.*(?:seed|series|round|funding|capital)",
+      "field": "total_funding"
+    }
+  ]
+}
