@@ -580,7 +580,7 @@
         },
         "2024.arr": {
           "confidence": "high",
-          "claim_count": 2,
+          "claim_count": 3,
           "needs_source": false,
           "recovered_from": "original_conversation",
           "claims": [
@@ -598,6 +598,19 @@
             },
             {
               "id": "dp-106",
+              "claim": "OpenAI is now generating $2B in revenue per month [annualised: 24]",
+              "value": 24,
+              "unit": "$B",
+              "weight": "corroborating",
+              "confidence": "verified",
+              "source": "OpenAI",
+              "source_url": "/api/add-source",
+              "date": "2024-12-31",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-114",
               "claim": "OpenAI is now generating $2B in revenue per month [annualised: 24]",
               "value": 24,
               "unit": "$B",
@@ -1445,12 +1458,25 @@
           "needs_source": false
         },
         "2024.valuation": {
-          "confidence": "medium",
-          "claim_count": 1,
+          "confidence": "high",
+          "claim_count": 2,
           "claims": [
             {
               "id": "dp-105",
               "claim": "OpenAI achieved a post money valuation of $852 billion",
+              "value": 852,
+              "unit": "$B",
+              "weight": "corroborating",
+              "confidence": "verified",
+              "source": "OpenAI",
+              "source_url": "/api/add-source",
+              "date": "2024-12-31",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-113",
+              "claim": "OpenAI has a post money valuation of $852 billion",
               "value": 852,
               "unit": "$B",
               "weight": "corroborating",

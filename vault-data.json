@@ -2622,6 +2622,48 @@
       "metricKey": null,
       "status": "accepted",
       "source_id": "src-004"
+    },
+    {
+      "id": "dp-113",
+      "claim": "OpenAI has a post money valuation of $852 billion",
+      "value": 852,
+      "unit": "$B",
+      "sourceUrl": "/api/add-source",
+      "sourceType": "reporting",
+      "sourceAuthor": "OpenAI",
+      "confidence": "verified",
+      "dateOfClaim": "2024-12-31",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Auto-extracted from OpenAI Again",
+      "tags": [
+        "valuation",
+        "funding"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-022"
+    },
+    {
+      "id": "dp-114",
+      "claim": "OpenAI is now generating $2B in revenue per month",
+      "value": 2,
+      "unit": "$B monthly",
+      "sourceUrl": "/api/add-source",
+      "sourceType": "reporting",
+      "sourceAuthor": "OpenAI",
+      "confidence": "verified",
+      "dateOfClaim": "2024-12-31",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "notes": "Auto-extracted from OpenAI Again",
+      "tags": [
+        "revenue",
+        "monthly"
+      ],
+      "metricKey": null,
+      "status": "accepted",
+      "source_id": "src-022"
     }
   ]
 }
