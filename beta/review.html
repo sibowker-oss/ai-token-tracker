@@ -230,7 +230,7 @@ let proposedFields = []; // from metric-schema.json proposed_fields
 let fieldDecisions = {}; // { field_id: 'approved'|'rejected'|'remapped' }
 let decisions = {};      // keyed by item.id
 let activeSource = 'all';
-let activeFilter = 'all';
+let activeFilter = 'pending';
 let siteData = null;
 
 // ----- Data loading -----
@@ -792,13 +792,15 @@ function renderSourceTabs() {
 }
 
 function renderStats() {
-  const decided = allItems.filter(i => decisions[i.id]?.decision).length;
+  const inboxItems = allItems.filter(i => i.origin === 'inbox');
+  const candidateItems = allItems.filter(i => i.origin === 'extraction');
+  const pending = inboxItems.filter(i => !decisions[i.id]?.decision).length;
   const accepted = allItems.filter(i => decisions[i.id]?.decision === 'accepted').length;
   const declined = allItems.filter(i => decisions[i.id]?.decision === 'declined').length;
   const parked = allItems.filter(i => decisions[i.id]?.decision === 'parked').length;
 
-  let html = '<span class="stat-pill">Total: <strong>' + allItems.length + '</strong></span>';
-  html += '<span class="stat-pill">Reviewed: <strong>' + decided + '/' + allItems.length + '</strong></span>';
+  let html = '<span class="stat-pill">Pending: <strong>' + pending + '</strong></span>';
+  if (candidateItems.length > 0) html += '<span class="stat-pill">Candidates: <strong>' + candidateItems.length + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(16,185,129,0.3);">Accepted: <strong style="color:var(--green);">' + accepted + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(239,68,68,0.3);">Declined: <strong style="color:var(--red);">' + declined + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(245,158,11,0.3);">Parked: <strong style="color:var(--orange);">' + parked + '</strong></span>';
@@ -807,8 +809,9 @@ function renderStats() {
 
 function renderFilters() {
   const filters = [
-    { key: 'all', label: 'All' },
     { key: 'pending', label: 'Pending' },
+    { key: 'candidates', label: 'Candidates' },
+    { key: 'all', label: 'All' },
     { key: 'w:authoritative', label: 'Authoritative' },
     { key: 'w:corroborating', label: 'Corroborating' },
     { key: 'w:indicative', label: 'Indicative' },
@@ -850,7 +853,9 @@ function renderClaims() {
 
   // Status/weight/decision filter
   if (activeFilter === 'pending') {
-    filtered = filtered.filter(i => !decisions[i.id]?.decision);
+    filtered = filtered.filter(i => !decisions[i.id]?.decision && i.origin === 'inbox');
+  } else if (activeFilter === 'candidates') {
+    filtered = filtered.filter(i => i.origin === 'extraction');
   } else if (activeFilter.startsWith('w:')) {
     filtered = filtered.filter(i => i.weight === activeFilter.substring(2));
   } else if (activeFilter.startsWith('d:')) {
@@ -965,7 +970,7 @@ function renderClaims() {
 
 function updateSubmitBar() {
   let accepted = 0, declined = 0, parked = 0, pending = 0;
-  allItems.forEach(i => {
+  allItems.filter(i => i.origin === 'inbox').forEach(i => {
     const d = decisions[i.id]?.decision;
     if (d === 'accepted') accepted++;
     else if (d === 'declined') declined++;
@@ -1183,7 +1188,7 @@ async function writeApproved(accepted) {
     html += '<div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px;">Decisions downloaded as file</div>';
     html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.8;">';
     html += 'To submit directly from the browser, add a GitHub token in the <strong>Settings</strong> tab.<br>';
-    html += 'Or apply manually: move the downloaded file to <code>beta/data-updates/</code> and push.';
+    html += 'Or apply manually: move the downloaded file to <code>data-updates/</code> and push.';
     html += '</div></div></div>';
     document.getElementById('claims-list').innerHTML = html;
     return;
@@ -1234,7 +1239,7 @@ async function writeApproved(accepted) {
     html += '<div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px;">' + esc(e.message) + '</div>';
     html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.8;">';
     html += 'Decisions downloaded as file instead. Check your GitHub token in Settings.<br>';
-    html += 'To apply: move file to <code>beta/data-updates/</code> and push.';
+    html += 'To apply: move file to <code>data-updates/</code> and push.';
     html += '</div></div></div>';
     document.getElementById('claims-list').innerHTML = html;
   }
