@@ -3,12 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Source List — Intel Vault</title>
+<title>Source Ledger — AI Ledger</title>
 <script>
-// Simple auth gate — keeps casual visitors out (not cryptographic security)
 (function() {
   const AUTH_KEY = 'ai-ledger-admin-auth';
-  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6'; // sha256 of 'password'
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
   if (localStorage.getItem(AUTH_KEY) === 'ok') return;
   const pw = prompt('Admin access required. Enter password:');
   if (!pw) { document.location = 'dashboard.html'; return; }
@@ -23,608 +22,357 @@
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1100px; margin:0 auto; padding:24px; }
+  h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  h1 span.tag { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
 
-  .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); }
-  .topbar h1 { font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; }
-  .topbar h1 span { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; }
-  .topbar-actions { display:flex; gap:8px; }
-  .topbar-actions button { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
-  .topbar-actions button:hover { background:#1e293b; color:var(--text); }
+  /* Stats */
+  .stats-row { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+  .stat-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:12px 18px; min-width:120px; }
+  .stat-value { font-size:22px; font-weight:700; }
+  .stat-label { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
 
-  .container { max-width:1200px; margin:0 auto; padding:24px; }
+  /* Search */
+  .search-bar { position:relative; margin-bottom:20px; }
+  .search-bar input { width:100%; padding:12px 16px 12px 40px; background:var(--card); border:1px solid var(--card-border); border-radius:10px; color:var(--text); font-size:14px; outline:none; }
+  .search-bar input:focus { border-color:var(--accent); }
+  .search-bar input::placeholder { color:var(--text-dim); }
+  .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-dim); }
 
-  .stats-bar { display:flex; gap:24px; margin-bottom:24px; font-size:12px; color:var(--text-dim); flex-wrap:wrap; }
-  .stats-bar strong { color:var(--text); }
-  .stat-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:12px 18px; display:flex; flex-direction:column; gap:4px; min-width:140px; }
-  .stat-card .stat-value { font-size:22px; font-weight:700; color:var(--text); }
-  .stat-card .stat-label { font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; }
+  /* Quick Add */
+  .quick-add { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:24px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .quick-add input { flex:1; min-width:200px; padding:8px 14px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; color:var(--text); font-size:13px; outline:none; }
+  .quick-add input:focus { border-color:var(--accent); }
+  .quick-add button { padding:8px 18px; border-radius:8px; border:none; background:var(--accent); color:white; font-size:13px; font-weight:600; cursor:pointer; }
+  .quick-add button:hover { opacity:0.9; }
+  .quick-add-label { font-size:12px; color:var(--text-dim); font-weight:600; }
 
-  .section-header { font-size:13px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.8px; margin:28px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--card-border); display:flex; align-items:center; gap:8px; }
-  .section-header .count { background:var(--card); border:1px solid var(--card-border); padding:2px 8px; border-radius:10px; font-size:11px; color:var(--text); font-weight:700; }
+  /* Source cards */
+  .source-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:16px 20px; margin-bottom:12px; cursor:pointer; transition:all 0.15s; }
+  .source-card:hover { border-color:var(--accent); }
+  .source-card.expanded { border-color:var(--accent); }
+  .source-card.highlighted { border-color:var(--purple); box-shadow:0 0 0 2px rgba(139,92,246,0.2); }
 
-  .source-table { width:100%; border-collapse:separate; border-spacing:0; }
-  .source-table th { text-align:left; font-size:10px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.8px; padding:8px 12px; border-bottom:1px solid var(--card-border); position:sticky; top:0; background:var(--bg); }
-  .source-table td { padding:10px 12px; border-bottom:1px solid rgba(30,41,59,0.5); font-size:13px; vertical-align:top; }
-  .source-table tr:hover td { background:rgba(59,130,246,0.04); }
-  .source-table tr:last-child td { border-bottom:none; }
+  .source-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .source-title { font-size:14px; font-weight:700; }
+  .source-org { font-size:12px; color:var(--text-dim); margin-top:2px; }
+  .source-url-small { font-size:10px; color:var(--accent); text-decoration:none; word-break:break-all; margin-top:3px; display:block; }
+  .source-url-small:hover { text-decoration:underline; }
+  .source-badges { display:flex; gap:4px; flex-shrink:0; flex-wrap:wrap; }
 
-  .source-name { font-weight:600; color:var(--text); }
-  .source-sub { font-size:11px; color:var(--text-dim); margin-top:2px; }
+  .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .badge-active { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-pending { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .badge-type { background:rgba(59,130,246,0.12); color:var(--accent); }
+  .badge-freq { background:rgba(139,92,246,0.12); color:var(--purple); }
+  .badge-claims { background:rgba(6,182,212,0.12); color:var(--cyan); }
 
-  .method-badge { display:inline-block; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
-  .method-api { background:rgba(16,185,129,0.15); color:var(--green); }
-  .method-scrape { background:rgba(139,92,246,0.15); color:var(--purple); }
-  .method-rss { background:rgba(6,182,212,0.15); color:var(--cyan); }
-  .method-stt { background:rgba(245,158,11,0.15); color:var(--orange); }
-  .method-youtube { background:rgba(239,68,68,0.15); color:var(--red); }
-  .method-manual { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .source-meta { display:flex; gap:16px; margin-top:8px; font-size:11px; color:var(--text-dim); flex-wrap:wrap; }
 
-  .freq-badge { display:inline-block; padding:3px 8px; border-radius:6px; font-size:10px; font-weight:600; background:rgba(59,130,246,0.12); color:var(--accent); }
-  .freq-weekly { background:rgba(139,92,246,0.12); color:var(--purple); }
+  .source-tags { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; }
+  .source-tag { padding:2px 8px; border-radius:10px; background:rgba(59,130,246,0.08); color:var(--accent); font-size:10px; }
 
-  .updates-list { list-style:none; font-size:11px; color:var(--text-dim); }
-  .updates-list li { margin-bottom:2px; }
-  .updates-list li::before { content:''; display:inline-block; width:4px; height:4px; border-radius:50%; background:var(--text-dim); margin-right:6px; vertical-align:middle; }
+  /* Expanded detail */
+  .source-detail { display:none; margin-top:16px; padding-top:16px; border-top:1px solid var(--card-border); }
+  .source-card.expanded .source-detail { display:block; }
 
-  .status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
-  .status-ok { background:var(--green); box-shadow:0 0 4px rgba(16,185,129,0.4); }
-  .status-stale { background:var(--orange); box-shadow:0 0 4px rgba(245,158,11,0.4); }
-  .status-error { background:var(--red); box-shadow:0 0 4px rgba(239,68,68,0.4); }
-  .status-manual { background:var(--text-dim); }
+  .claims-section-title { font-size:12px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; }
 
-  .last-check { font-size:12px; }
-  .last-check .timestamp { color:var(--text); }
-  .last-check .ago { color:var(--text-dim); font-size:11px; }
+  .linked-claim { padding:8px 12px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; margin-bottom:6px; font-size:12px; }
+  .linked-claim .lc-claim { color:var(--text); line-height:1.5; }
+  .linked-claim .lc-meta { font-size:10px; color:var(--text-dim); margin-top:4px; }
+  .linked-claim .lc-value { color:var(--accent); font-weight:700; }
+  .linked-claim .lc-status { font-weight:600; }
+  .lc-accepted { color:var(--green); }
+  .lc-pending { color:var(--orange); }
+  .lc-declined { color:var(--red); }
 
-  .card-group { background:var(--card); border:1px solid var(--card-border); border-radius:12px; overflow:hidden; margin-bottom:16px; }
+  .no-claims { font-size:12px; color:var(--text-dim); font-style:italic; padding:8px 0; }
 
-  .source-url { font-size:10px; color:var(--accent); text-decoration:none; word-break:break-all; }
-  .source-url:hover { text-decoration:underline; }
+  /* Nav removed — shown via admin.html */ .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
 
-  @media(max-width:768px) {
-    .container { padding:16px; }
-    .source-table { display:block; overflow-x:auto; }
-    .stats-bar { gap:12px; }
-    .stat-card { min-width:100px; }
-  }
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--green); color:white; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:600; z-index:100; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .toast.show { opacity:1; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
 </style>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-211EY55BEQ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-211EY55BEQ");</script>
 </head>
 <body>
 
-<style>
-  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
-  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
-  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
-  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
-  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
-  @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
-</style>
-<nav class="nav-bar">
-  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
-  <span style="flex-grow:1"></span>
-  <a href="vault.html" class="nav-link">Vault</a>
-  <a href="sources.html" class="nav-link active">Sources</a>
-  <a href="claims.html" class="nav-link">Claims</a>
-  <a href="in-development.html" class="nav-link">In Development</a>
-</nav>
-
-<div class="topbar">
-  <h1>Source List <span>Admin</span></h1>
-  <div class="topbar-actions">
-    <button onclick="refreshStatus()">Refresh Status</button>
-  </div>
+<div class="standalone-bar" id="standalone-bar" style="display:none;padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:11px;">
+  <a href="admin.html" style="color:#3b82f6;text-decoration:none;">Open in Command Centre</a>
 </div>
+<script>
+// Show standalone bar if NOT in an iframe
+if (window === window.top) document.getElementById('standalone-bar').style.display = 'block';
+</script>
 
 <div class="container">
+  <h1>Source Ledger <span class="tag">Admin</span></h1>
+  <p class="intro">Every source feeding the system. Click any source to see claims it has produced.</p>
 
-  <!-- Summary stats -->
-  <div class="stats-bar" id="stats-bar"></div>
+  <div class="stats-row" id="stats-row"></div>
 
-  <!-- Automated Signal Sources -->
-  <div class="section-header">Automated Signal Sources — Daily <span class="count" id="daily-count"></span></div>
-  <div class="card-group">
-    <table class="source-table" id="daily-table"><thead><tr>
-      <th style="width:22%">Source</th>
-      <th style="width:12%">Method</th>
-      <th style="width:10%">Frequency</th>
-      <th style="width:26%">Updates</th>
-      <th style="width:15%">Last Checked</th>
-      <th style="width:15%">Status</th>
-    </tr></thead><tbody></tbody></table>
+  <div class="quick-add">
+    <span class="quick-add-label">Quick Add:</span>
+    <input type="text" id="quick-add-url" placeholder="Paste a URL to register a new source...">
+    <button onclick="quickAdd()">Add Source</button>
   </div>
 
-  <!-- Weekly Automated -->
-  <div class="section-header">Automated Sources — Weekly <span class="count" id="weekly-count"></span></div>
-  <div class="card-group">
-    <table class="source-table" id="weekly-table"><thead><tr>
-      <th style="width:22%">Source</th>
-      <th style="width:12%">Method</th>
-      <th style="width:10%">Frequency</th>
-      <th style="width:26%">Updates</th>
-      <th style="width:15%">Last Checked</th>
-      <th style="width:15%">Status</th>
-    </tr></thead><tbody></tbody></table>
+  <div class="search-bar">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="search" placeholder="Search sources by name, tag, or URL..." oninput="renderSources()">
   </div>
 
-  <!-- Podcast Sources -->
-  <div class="section-header">Podcast Transcript Pipeline <span class="count" id="podcast-count"></span></div>
-  <div class="card-group">
-    <table class="source-table" id="podcast-table"><thead><tr>
-      <th style="width:22%">Source</th>
-      <th style="width:12%">Method</th>
-      <th style="width:10%">Tier</th>
-      <th style="width:26%">Updates</th>
-      <th style="width:15%">Last Checked</th>
-      <th style="width:15%">Status</th>
-    </tr></thead><tbody></tbody></table>
-  </div>
-
-  <!-- Manual Sources -->
-  <div class="section-header">Manual Sources <span class="count" id="manual-count"></span></div>
-  <div class="card-group">
-    <table class="source-table" id="manual-table"><thead><tr>
-      <th style="width:22%">Source</th>
-      <th style="width:12%">Method</th>
-      <th style="width:10%">Frequency</th>
-      <th style="width:26%">Updates</th>
-      <th style="width:15%">Last Checked</th>
-      <th style="width:15%">Status</th>
-    </tr></thead><tbody></tbody></table>
-  </div>
-
-  <!-- Internal Data Stores -->
-  <div class="section-header" style="color:var(--text-dim);opacity:0.7">Internal Data Stores <span class="count" id="internal-count"></span></div>
-  <div class="card-group" style="opacity:0.6">
-    <table class="source-table" id="internal-table"><thead><tr>
-      <th style="width:22%">Data Store</th>
-      <th style="width:12%">Type</th>
-      <th style="width:10%">Updated</th>
-      <th style="width:26%">Contains</th>
-      <th style="width:15%">Last Modified</th>
-      <th style="width:15%">Status</th>
-    </tr></thead><tbody></tbody></table>
-  </div>
-
+  <div id="sources-list"></div>
 </div>
 
+<div class="toast" id="toast"></div>
+<footer>AI Ledger v2 Beta</footer>
+
 <script>
-// ────────────────────────────────────────────────────────────
-// Source Registry — every data source in the system
-// ────────────────────────────────────────────────────────────
-const SOURCES = {
-  daily: [
-    {
-      name: 'PyPI Download Stats',
-      sub: 'pypistats.org — 12 packages',
-      url: 'https://pypistats.org/api/packages',
-      method: 'api', methodLabel: 'REST API',
-      frequency: 'Daily 7am',
-      updates: ['signals_latest.json (pypi section)', 'dashboard.html SDK download counts', 'Derived: openai_total, anthropic_total, google_total'],
-      script: 'scrape_signals.py → auto_update.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'npm Download Stats',
-      sub: 'api.npmjs.org — 9 packages',
-      url: 'https://api.npmjs.org/downloads/point/last-month',
-      method: 'api', methodLabel: 'REST API',
-      frequency: 'Daily 7am',
-      updates: ['signals_latest.json (npm section)', 'Derived: SDK totals per provider'],
-      script: 'scrape_signals.py → auto_update.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'HuggingFace Model Downloads',
-      sub: 'huggingface.co/api — Llama, DeepSeek, Mistral, Qwen, Gemma',
-      url: 'https://huggingface.co/api/models',
-      method: 'api', methodLabel: 'REST API',
-      frequency: 'Daily 7am',
-      updates: ['signals_latest.json (huggingface section)', 'Derived: hf_total_downloads'],
-      script: 'scrape_signals.py → auto_update.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'GitHub Release Downloads',
-      sub: 'api.github.com — Ollama, vLLM, llama.cpp, TGI',
-      url: 'https://api.github.com/repos',
-      method: 'api', methodLabel: 'REST API',
-      frequency: 'Daily 7am',
-      updates: ['signals_latest.json (github section)', 'Derived: self_hosted_github'],
-      script: 'scrape_signals.py → auto_update.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'Docker Hub Pull Counts',
-      sub: 'hub.docker.com — vLLM container',
-      url: 'https://hub.docker.com/v2/repositories',
-      method: 'api', methodLabel: 'REST API',
-      frequency: 'Daily 7am',
-      updates: ['signals_latest.json (docker section)', 'site-data.json Others token estimate (auto-scaled)', 'Derived: self_hosted_docker'],
-      script: 'scrape_signals.py → auto_update.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'OpenRouter Model Catalog',
-      sub: 'openrouter.ai/api/v1/models',
-      url: 'https://openrouter.ai/api/v1/models',
-      method: 'api', methodLabel: 'REST API',
-      frequency: 'Daily 7am',
-      updates: ['signals_latest.json (openrouter section)', 'Model count, pricing distribution'],
-      script: 'scrape_signals.py → auto_update.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'OpenRouter Weekly Rankings',
-      sub: 'openrouter.ai/rankings — RSC page parse',
-      url: 'https://openrouter.ai/rankings',
-      method: 'scrape', methodLabel: 'Web Scrape',
-      frequency: 'Daily 7am',
-      updates: ['signals_latest.json (openrouter_rankings)', 'Weekly token volume by provider', 'GMV & ARR estimates'],
-      script: 'scrape_signals.py → auto_update.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'News Monitor (RSS)',
-      sub: 'TechCrunch, The Information, AI Business, CNBC, VentureBeat',
-      url: '',
-      method: 'rss', methodLabel: 'RSS Feed',
-      frequency: 'Daily 8am',
-      updates: ['data/news_alerts.json', 'Keyword-matched alerts for dashboard-relevant news'],
-      script: 'news_monitor.py',
-      lastCheckKey: 'news',
-    },
-  ],
-  weekly: [
-    {
-      name: 'Company Database Enrichment',
-      sub: 'GitHub API + website scraping — 25 companies',
-      url: '',
-      method: 'api', methodLabel: 'REST API + Scrape',
-      frequency: 'Monday 9am',
-      updates: ['companies.json (enrichment data)', 'GitHub stars, forks, org repos', 'Website metadata, pricing page detection'],
-      script: 'enrich.py --all',
-      lastCheckKey: 'enrich',
-    },
-    {
-      name: 'Newsletter Generation',
-      sub: 'HTML intelligence briefing from company DB',
-      url: '',
-      method: 'manual', methodLabel: 'Generated',
-      frequency: 'Monday 9am',
-      updates: ['newsletters/brief-{date}.html', 'Provider demand map, company profiles'],
-      script: 'newsletter.py --format html',
-      lastCheckKey: 'enrich',
-    },
-  ],
-  podcasts: [
-    {
-      name: 'Latent Space',
-      sub: 'www.latent.space — Substack',
-      url: 'https://www.latent.space/feed',
-      method: 'scrape', methodLabel: 'HTML Scrape',
-      tier: 1,
-      updates: ['transcripts/latent-space/*.md', 'data-updates/ claim candidates (via extract_claims.py)'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-    {
-      name: 'Acquired FM',
-      sub: 'acquired.fm — Webflow transcript pages',
-      url: 'https://feeds.transistor.fm/acquired',
-      method: 'scrape', methodLabel: 'HTML Scrape',
-      tier: 1,
-      updates: ['transcripts/acquired/*.md', 'data-updates/ claim candidates'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-    {
-      name: 'All-In Podcast',
-      sub: 'podcasts.happyscribe.com — speaker labels + timestamps',
-      url: 'https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg',
-      method: 'scrape', methodLabel: 'HTML Scrape',
-      tier: 1,
-      updates: ['transcripts/all-in/*.md', 'data-updates/ claim candidates'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-    {
-      name: 'BG2Pod',
-      sub: 'Brad Gerstner + Bill Gurley — YouTube captions',
-      url: 'https://anchor.fm/s/f06c2370/podcast/rss',
-      method: 'youtube', methodLabel: 'YouTube Captions',
-      tier: 2,
-      updates: ['transcripts/bg2pod/*.md', 'data-updates/ claim candidates'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-    {
-      name: '20VC',
-      sub: 'Harry Stebbings — Libsyn MP3 → Whisper',
-      url: 'https://rss.libsyn.com/shows/61840/destinations/240976.xml',
-      method: 'stt', methodLabel: 'Whisper STT',
-      tier: 3,
-      updates: ['transcripts/20vc/*.md', 'data-updates/ claim candidates'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-    {
-      name: 'SaaStr Podcast',
-      sub: 'Simplecast MP3 → Whisper',
-      url: 'https://feeds.simplecast.com/4MvgQ73R',
-      method: 'stt', methodLabel: 'Whisper STT',
-      tier: 3,
-      updates: ['transcripts/saastr/*.md', 'data-updates/ claim candidates'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-    {
-      name: 'Cognitive Revolution',
-      sub: 'Nathan Labenz — Megaphone MP3 → Whisper',
-      url: 'https://feeds.megaphone.fm/RINTP3108857801',
-      method: 'stt', methodLabel: 'Whisper STT',
-      tier: 3,
-      updates: ['transcripts/cognitive-revolution/*.md', 'data-updates/ claim candidates'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-    {
-      name: 'Big Technology Podcast',
-      sub: 'Alex Kantrowitz — Megaphone MP3 → Whisper',
-      url: 'https://feeds.megaphone.fm/LI3617121267',
-      method: 'stt', methodLabel: 'Whisper STT',
-      tier: 3,
-      updates: ['transcripts/big-technology/*.md', 'data-updates/ claim candidates'],
-      script: 'scrape_podcasts.py',
-      lastCheckKey: 'podcasts',
-    },
-  ],
-  manual: [
-    {
-      name: 'Vault — pages added manually',
-      sub: 'vault-data.json — sourced claims with credibility scoring',
-      url: '',
-      method: 'manual', methodLabel: 'Manual Entry',
-      frequency: 'As needed',
-      updates: ['vault.html reference data', 'Consensus calculations', 'Audit trail per page'],
-      script: 'vault.html UI form',
-      lastCheckKey: null,
-    },
-  ],
-  internal: [
-    {
-      name: 'site-data.json',
-      sub: 'Master data file — provider ARR, tokens, pricing, timeline, sankey',
-      type: 'Data Store',
-      updated: 'Auto + Manual',
-      contains: ['dashboard.html provider cards', 'timeline.html revenue & token charts', 'sankey.html revenue flow model'],
-      script: 'auto_update.py (Others auto-scale) + manual edits',
-      lastCheckKey: 'sitedata',
-    },
-    {
-      name: 'AI Companies Database',
-      sub: 'ai_companies_reclassified.json — 109 companies classified',
-      type: 'Data Store',
-      updated: 'Import + Enrichment',
-      contains: ['Company classification (AI-native, category)', 'Revenue estimates, funding, employee data'],
-      script: 'Imported from briefing; enriched by enrich.py',
-      lastCheckKey: null,
-    },
-    {
-      name: 'Claim Candidates Queue',
-      sub: 'data-updates/{date}-candidates.json — extracted podcast claims',
-      type: 'Processing Queue',
-      updated: 'Manual trigger',
-      contains: ['Structured claims from transcripts (Claude API)', 'Dedup status vs site-data.json', 'Optional auto-PR via --auto-pr'],
-      script: 'extract_claims.py',
-      lastCheckKey: null,
-    },
-    {
-      name: 'Signal History',
-      sub: 'data/signals_history.jsonl — append-only time series',
-      type: 'Data Store',
-      updated: 'Daily (auto)',
-      contains: ['Daily derived signal snapshots', 'Trend data for all scraped metrics'],
-      script: 'scrape_signals.py',
-      lastCheckKey: 'signals',
-    },
-    {
-      name: 'Health Monitor Reports',
-      sub: 'reports/monitor-{date}.md — database staleness & completeness',
-      type: 'Report Output',
-      updated: 'Manual trigger',
-      contains: ['Stale entries (>14d)', 'Incomplete fields', 'Pipeline status'],
-      script: 'monitor.py --report',
-      lastCheckKey: null,
-    },
-  ],
-};
+let sources = [];
+let vaultData = [];
+let inboxItems = [];
+let highlightId = null;
 
-// ────────────────────────────────────────────────────────────
-// Last-check timestamps from live data files
-// ────────────────────────────────────────────────────────────
-let lastChecks = {};
+async function loadAll() {
+  // Check URL params for highlight
+  const params = new URLSearchParams(window.location.search);
+  highlightId = params.get('highlight');
 
-async function loadTimestamps() {
-  // Signals (daily 7am scraper)
+  const [registry, vault, inbox] = await Promise.all([
+    loadJSON('sources-registry.json'),
+    loadJSON('vault-data.json'),
+    loadJSON('vault-inbox.json')
+  ]);
+
+  sources = registry?.sources || [];
+  vaultData = vault?.dataPoints || [];
+  inboxItems = inbox?.items || [];
+
+  renderStats();
+  renderSources();
+
+  // Auto-expand highlighted source
+  if (highlightId) {
+    setTimeout(() => {
+      const el = document.getElementById('src-' + highlightId);
+      if (el) {
+        el.classList.add('expanded', 'highlighted');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  }
+}
+
+async function loadJSON(path) {
   try {
-    const sig = await fetch('data/signals_latest.json?t=' + Date.now()).then(r => r.json());
-    lastChecks.signals = sig.timestamp;
+    const r = await fetch(path + '?v=' + Date.now());
+    if (r.ok) return await r.json();
   } catch(e) {}
-
-  // News monitor
-  try {
-    const news = await fetch('data/news_alerts.json?t=' + Date.now()).then(r => r.json());
-    if (news.date) {
-      lastChecks.news = news.date + 'T08:00:00';
-    }
-  } catch(e) {}
-
-  // Enrichment — check log file modification via signals date as proxy
-  try {
-    // Use companies.json last_updated field
-    const companies = await fetch('companies.json?t=' + Date.now()).then(r => r.json());
-    if (companies.meta && companies.meta.last_updated) {
-      lastChecks.enrich = companies.meta.last_updated + 'T09:00:00';
-    }
-  } catch(e) {}
-
-  // Podcasts — check .seen file timestamp via most recent transcript
-  try {
-    const seen = await fetch('transcripts/.seen?t=' + Date.now()).then(r => r.json());
-    // Most recent seen entry suggests last run
-    if (seen.length > 0) {
-      lastChecks.podcasts = 'See transcript files';
-    }
-  } catch(e) {}
-
-  // site-data.json
-  try {
-    const sd = await fetch('site-data.json?t=' + Date.now()).then(r => r.json());
-    if (sd.meta && sd.meta.generatedAt) {
-      lastChecks.sitedata = sd.meta.generatedAt;
-    }
-  } catch(e) {}
+  return null;
 }
 
-function timeAgo(isoStr) {
-  if (!isoStr || isoStr === 'See transcript files') return isoStr || 'Unknown';
-  const d = new Date(isoStr);
-  if (isNaN(d.getTime())) return isoStr;
-  const diff = Date.now() - d.getTime();
-  const mins = Math.floor(diff / 60000);
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(diff / 86400000);
-  if (mins < 60) return mins + 'm ago';
-  if (hours < 24) return hours + 'h ago';
-  return days + 'd ago';
+function getClaimsForSource(sourceId) {
+  const accepted = vaultData.filter(dp => dp.source_id === sourceId);
+  const pending = inboxItems.filter(i => i.source_id === sourceId && i.status === 'pending');
+  return { accepted, pending };
 }
 
-function formatTimestamp(isoStr) {
-  if (!isoStr || isoStr === 'See transcript files') return isoStr || '';
-  const d = new Date(isoStr);
-  if (isNaN(d.getTime())) return isoStr;
-  return d.toLocaleDateString('en-AU', { day:'numeric', month:'short', year:'numeric' })
-    + ' ' + d.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit', hour12:false });
-}
+function renderStats() {
+  const totalSources = sources.length;
+  const activeSources = sources.filter(s => s.status === 'active').length;
+  const totalAccepted = vaultData.filter(dp => dp.source_id).length;
+  const totalPending = inboxItems.filter(i => i.source_id && i.status === 'pending').length;
 
-function statusForCheck(key) {
-  if (!key) return { dot: 'status-manual', label: 'Manual' };
-  const ts = lastChecks[key];
-  if (!ts || ts === 'See transcript files') return { dot: 'status-stale', label: ts || 'No data' };
-  const d = new Date(ts);
-  if (isNaN(d.getTime())) return { dot: 'status-stale', label: 'Unknown' };
-  const hours = (Date.now() - d.getTime()) / 3600000;
-  if (hours < 26) return { dot: 'status-ok', label: 'OK' };
-  if (hours < 170) return { dot: 'status-ok', label: 'OK' }; // weekly is fine up to 7d
-  return { dot: 'status-stale', label: 'Stale' };
-}
-
-function methodClass(m) {
-  return 'method-' + m;
-}
-
-function renderRow(src, isPodcast) {
-  const ts = src.lastCheckKey ? lastChecks[src.lastCheckKey] : null;
-  const status = statusForCheck(src.lastCheckKey);
-  const urlHtml = src.url ? `<a class="source-url" href="${src.url}" target="_blank">${src.url.replace(/^https?:\/\//, '').substring(0, 45)}${src.url.length > 55 ? '...' : ''}</a>` : '';
-
-  const freqOrTier = isPodcast
-    ? `<span class="freq-badge${src.tier >= 2 ? ' freq-weekly' : ''}">Tier ${src.tier}</span>`
-    : `<span class="freq-badge${src.frequency && src.frequency.includes('Monday') ? ' freq-weekly' : ''}">${src.frequency || 'Manual'}</span>`;
-
-  const updatesHtml = (src.updates || []).map(u => `<li>${u}</li>`).join('');
-
-  return `<tr>
-    <td>
-      <div class="source-name">${src.name}</div>
-      <div class="source-sub">${src.sub}</div>
-      ${urlHtml ? '<div style="margin-top:3px">' + urlHtml + '</div>' : ''}
-      <div style="margin-top:3px;font-size:10px;color:var(--text-dim)">Script: ${src.script || 'n/a'}</div>
-    </td>
-    <td><span class="method-badge ${methodClass(src.method)}">${src.methodLabel}</span></td>
-    <td>${freqOrTier}</td>
-    <td><ul class="updates-list">${updatesHtml}</ul></td>
-    <td class="last-check">${ts
-      ? `<div class="timestamp">${formatTimestamp(ts)}</div><div class="ago">${timeAgo(ts)}</div>`
-      : '<span style="color:var(--text-dim)">—</span>'
-    }</td>
-    <td><span class="status-dot ${status.dot}"></span>${status.label}</td>
-  </tr>`;
-}
-
-function renderInternalRow(src) {
-  const ts = src.lastCheckKey ? lastChecks[src.lastCheckKey] : null;
-  const status = statusForCheck(src.lastCheckKey);
-  const containsHtml = (src.contains || []).map(u => `<li>${u}</li>`).join('');
-
-  return `<tr>
-    <td>
-      <div class="source-name">${src.name}</div>
-      <div class="source-sub">${src.sub}</div>
-      <div style="margin-top:3px;font-size:10px;color:var(--text-dim)">Script: ${src.script || 'n/a'}</div>
-    </td>
-    <td><span style="font-size:11px;color:var(--text-dim)">${src.type}</span></td>
-    <td><span style="font-size:11px;color:var(--text-dim)">${src.updated}</span></td>
-    <td><ul class="updates-list">${containsHtml}</ul></td>
-    <td class="last-check">${ts
-      ? `<div class="timestamp">${formatTimestamp(ts)}</div><div class="ago">${timeAgo(ts)}</div>`
-      : '<span style="color:var(--text-dim)">—</span>'
-    }</td>
-    <td><span class="status-dot ${status.dot}"></span>${status.label}</td>
-  </tr>`;
-}
-
-function renderAll() {
-  // Stats — count only real sources (not internal stores)
-  const totalAuto = SOURCES.daily.length + SOURCES.weekly.length;
-  const totalPodcasts = SOURCES.podcasts.length;
-  const totalManual = SOURCES.manual.length;
-  const total = totalAuto + totalPodcasts + totalManual;
-
-  document.getElementById('stats-bar').innerHTML = `
-    <div class="stat-card"><div class="stat-value">${total}</div><div class="stat-label">Total Sources</div></div>
-    <div class="stat-card"><div class="stat-value">${totalAuto}</div><div class="stat-label">Automated</div></div>
-    <div class="stat-card"><div class="stat-value">${totalPodcasts}</div><div class="stat-label">Podcast Feeds</div></div>
-    <div class="stat-card"><div class="stat-value">${totalManual}</div><div class="stat-label">Manual / Reference</div></div>
-    <div class="stat-card"><div class="stat-value">${lastChecks.signals ? formatTimestamp(lastChecks.signals).split(' ')[0] : '—'}</div><div class="stat-label">Last Signal Scrape</div></div>
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="stat-value">${totalSources}</div><div class="stat-label">Sources</div></div>
+    <div class="stat-card"><div class="stat-value">${activeSources}</div><div class="stat-label">Active</div></div>
+    <div class="stat-card"><div class="stat-value">${totalAccepted}</div><div class="stat-label">Accepted Claims</div></div>
+    <div class="stat-card"><div class="stat-value">${totalPending}</div><div class="stat-label">Pending Review</div></div>
   `;
-
-  // Tables
-  document.getElementById('daily-count').textContent = SOURCES.daily.length;
-  document.getElementById('daily-table').querySelector('tbody').innerHTML =
-    SOURCES.daily.map(s => renderRow(s, false)).join('');
-
-  document.getElementById('weekly-count').textContent = SOURCES.weekly.length;
-  document.getElementById('weekly-table').querySelector('tbody').innerHTML =
-    SOURCES.weekly.map(s => renderRow(s, false)).join('');
-
-  document.getElementById('podcast-count').textContent = SOURCES.podcasts.length;
-  document.getElementById('podcast-table').querySelector('tbody').innerHTML =
-    SOURCES.podcasts.map(s => renderRow(s, true)).join('');
-
-  document.getElementById('manual-count').textContent = SOURCES.manual.length;
-  document.getElementById('manual-table').querySelector('tbody').innerHTML =
-    SOURCES.manual.map(s => renderRow(s, false)).join('');
-
-  document.getElementById('internal-count').textContent = SOURCES.internal.length;
-  document.getElementById('internal-table').querySelector('tbody').innerHTML =
-    SOURCES.internal.map(s => renderInternalRow(s)).join('');
 }
 
-async function refreshStatus() {
-  await loadTimestamps();
-  renderAll();
+function renderSources() {
+  const query = (document.getElementById('search')?.value || '').toLowerCase();
+
+  let filtered = sources;
+  if (query) {
+    filtered = sources.filter(s =>
+      s.title.toLowerCase().includes(query) ||
+      s.url.toLowerCase().includes(query) ||
+      (s.organization || '').toLowerCase().includes(query) ||
+      (s.author || '').toLowerCase().includes(query) ||
+      (s.tags || []).some(t => t.toLowerCase().includes(query))
+    );
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('sources-list').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-dim);">No sources match your search.</div>';
+    return;
+  }
+
+  // Sort: active first, then by last_claims_count desc
+  filtered.sort((a, b) => {
+    if (a.status === 'active' && b.status !== 'active') return -1;
+    if (b.status === 'active' && a.status !== 'active') return 1;
+    return (b.last_claims_count || 0) - (a.last_claims_count || 0);
+  });
+
+  let html = '';
+  filtered.forEach(src => {
+    const { accepted, pending } = getClaimsForSource(src.id);
+    const totalClaims = accepted.length + pending.length;
+    const isHighlighted = src.id === highlightId;
+
+    html += '<div class="source-card' + (isHighlighted ? ' expanded highlighted' : '') + '" id="src-' + src.id + '" onclick="toggleSource(this)">';
+
+    // Header
+    html += '<div class="source-header">';
+    html += '<div>';
+    html += '<div class="source-title">' + esc(src.title) + '</div>';
+    if (src.author || src.organization) {
+      html += '<div class="source-org">' + esc([src.author, src.organization].filter(Boolean).join(' — ')) + '</div>';
+    }
+    if (src.url) {
+      html += '<a class="source-url-small" href="' + esc(src.url) + '" target="_blank" onclick="event.stopPropagation()">' + esc(src.url.replace(/^https?:\/\//, '').substring(0, 60)) + '</a>';
+    }
+    html += '</div>';
+
+    html += '<div class="source-badges">';
+    html += '<span class="badge badge-' + src.status + '">' + (src.status === 'active' ? 'Active' : 'Pending') + '</span>';
+    html += '<span class="badge badge-type">' + esc(src.type.replace(/_/g, ' ')) + '</span>';
+    html += '<span class="badge badge-freq">' + esc(src.frequency) + '</span>';
+    if (totalClaims > 0) html += '<span class="badge badge-claims">' + totalClaims + ' claims</span>';
+    html += '</div></div>';
+
+    // Meta row
+    html += '<div class="source-meta">';
+    html += '<span>Method: <strong style="color:var(--text);">' + esc(src.extraction_method.replace(/_/g, ' ')) + '</strong></span>';
+    if (src.last_checked) html += '<span>Last checked: <strong style="color:var(--text);">' + esc(src.last_checked) + '</strong></span>';
+    if (src.next_check && src.next_check < '2100') html += '<span>Next: <strong style="color:var(--text);">' + esc(src.next_check) + '</strong></span>';
+    html += '</div>';
+
+    // Tags
+    if (src.tags && src.tags.length > 0) {
+      html += '<div class="source-tags">';
+      src.tags.forEach(t => html += '<span class="source-tag">' + esc(t) + '</span>');
+      html += '</div>';
+    }
+
+    // Expandable detail — linked claims
+    html += '<div class="source-detail">';
+
+    if (accepted.length > 0) {
+      html += '<div class="claims-section-title">Accepted Data Points (' + accepted.length + ')</div>';
+      accepted.forEach(dp => {
+        html += '<div class="linked-claim">';
+        html += '<div class="lc-claim">' + esc(dp.claim) + '</div>';
+        html += '<div class="lc-meta">';
+        html += '<span class="lc-value">' + (dp.value != null ? dp.value + ' ' + (dp.unit || '') : '') + '</span>';
+        html += ' · ' + esc(dp.sourceAuthor || '');
+        html += ' · ' + esc(dp.dateOfClaim || '');
+        html += ' · <span class="lc-status lc-accepted">accepted</span>';
+        html += ' · Used on: ' + (dp.usedOn || []).join(', ');
+        html += '</div></div>';
+      });
+    }
+
+    if (pending.length > 0) {
+      html += '<div class="claims-section-title" style="margin-top:16px;">Pending Review (' + pending.length + ')</div>';
+      pending.forEach(item => {
+        html += '<div class="linked-claim">';
+        html += '<div class="lc-claim">' + esc(item.claim) + '</div>';
+        html += '<div class="lc-meta">';
+        html += '<span class="lc-value">' + (item.value != null ? item.value + ' ' + (item.unit || '') : '') + '</span>';
+        html += ' · ' + esc(item.sourceAuthor || '');
+        html += ' · ' + esc(item.dateOfClaim || '');
+        html += ' · <span class="lc-status lc-pending">pending</span>';
+        if (item.replaces) html += ' · replaces ' + esc(item.replaces);
+        html += '</div></div>';
+      });
+      html += '<a href="review.html" style="display:inline-block;margin-top:8px;font-size:11px;color:var(--accent);text-decoration:none;" onclick="event.stopPropagation()">Review these items →</a>';
+    }
+
+    if (totalClaims === 0) {
+      html += '<div class="no-claims">No claims extracted from this source yet.</div>';
+    }
+
+    html += '</div>'; // source-detail
+    html += '</div>'; // source-card
+  });
+
+  document.getElementById('sources-list').innerHTML = html;
 }
 
-// Init
-(async () => {
-  await loadTimestamps();
-  renderAll();
-})();
+function toggleSource(el) {
+  el.classList.toggle('expanded');
+}
+
+function quickAdd() {
+  const input = document.getElementById('quick-add-url');
+  const url = (input.value || '').trim();
+  if (!url) return;
+
+  // Auto-classify
+  let type = 'web_page';
+  let extraction = 'web_extract';
+  let freq = 'one_time';
+
+  if (url.includes('docs.google.com/presentation')) { type = 'slide_deck'; extraction = 'pdf_export'; freq = 'annual'; }
+  else if (url.endsWith('.pdf')) { type = 'pdf'; extraction = 'pdf_export'; freq = 'one_time'; }
+  else if (url.includes('substack.com')) { type = 'rss_feed'; extraction = 'web_extract'; freq = 'weekly'; }
+  else if (url.includes('youtube.com/watch')) { type = 'video'; extraction = 'youtube_captions'; freq = 'one_time'; }
+  else if (url.includes('sec.gov')) { type = 'sec_filing'; extraction = 'web_extract'; freq = 'quarterly'; }
+  else if (url.includes('github.com') && url.split('/').length >= 5) { type = 'github_repo'; extraction = 'api'; freq = 'weekly'; }
+  else if (url.includes('/feed') || url.includes('/rss') || url.includes('feeds.')) { type = 'rss_feed'; extraction = 'podcast_scraper'; freq = 'weekly'; }
+
+  const newSource = {
+    id: 'src-' + String(sources.length + 1).padStart(3, '0'),
+    url: url,
+    title: new URL(url).hostname.replace('www.', ''),
+    type: type,
+    author: '',
+    organization: '',
+    added: new Date().toISOString().split('T')[0],
+    tags: [],
+    extraction_method: extraction,
+    frequency: freq,
+    next_check: new Date().toISOString().split('T')[0],
+    last_checked: null,
+    last_claims_count: 0,
+    status: 'pending_first_extraction'
+  };
+
+  sources.push(newSource);
+  input.value = '';
+  renderStats();
+  renderSources();
+  showToast('Source added: ' + newSource.title + ' (type: ' + type + ', freq: ' + freq + ')');
+
+  // Save to localStorage as pending addition
+  const pendingSources = JSON.parse(localStorage.getItem('pending-source-additions') || '[]');
+  pendingSources.push(newSource);
+  localStorage.setItem('pending-source-additions', JSON.stringify(pendingSources));
+}
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function esc(s) {
+  if (s == null) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+loadAll();
 </script>
 </body>
 </html>

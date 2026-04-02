@@ -30,13 +30,13 @@ from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-BETA_DIR = os.path.join(ROOT_DIR, "beta")
+SITE_DIR = ROOT_DIR
 
-VAULT_DATA = os.path.join(BETA_DIR, "vault-data.json")
-VAULT_INBOX = os.path.join(BETA_DIR, "vault-inbox.json")
-ENTITIES = os.path.join(BETA_DIR, "entities.json")
-SCHEMA = os.path.join(BETA_DIR, "metric-schema.json")
-ARCHIVE_DIR = os.path.join(BETA_DIR, "data-updates", "archive")
+VAULT_DATA = os.path.join(SITE_DIR, "vault-data.json")
+VAULT_INBOX = os.path.join(SITE_DIR, "vault-inbox.json")
+ENTITIES = os.path.join(SITE_DIR, "entities.json")
+SCHEMA = os.path.join(SITE_DIR, "metric-schema.json")
+ARCHIVE_DIR = os.path.join(SITE_DIR, "data-updates", "archive")
 LOG_FILE = os.path.join(ROOT_DIR, "data", "apply_decisions.log")
 
 def load_json(path):
@@ -269,7 +269,7 @@ def main(decisions_path=None):
     # Find decisions file
     if not decisions_path:
         # Look for latest review-decisions-*.json in data-updates/
-        updates_dir = os.path.join(BETA_DIR, "data-updates")
+        updates_dir = os.path.join(SITE_DIR, "data-updates")
         if os.path.isdir(updates_dir):
             files = sorted([f for f in os.listdir(updates_dir) if f.startswith("review-decisions-")], reverse=True)
             if files:
@@ -342,7 +342,7 @@ def main(decisions_path=None):
     # Regenerate site-data.json
     log(f"  Regenerating site-data.json from entities.json...")
     from generate_site_data import generate
-    generate(ENTITIES, os.path.join(BETA_DIR, "site-data.json"), os.path.join(BETA_DIR, "site-data.json"))
+    generate(ENTITIES, os.path.join(SITE_DIR, "site-data.json"), os.path.join(SITE_DIR, "site-data.json"))
 
     log(f"  Done. {len(accepted)} accepted, {len(declined)} declined, {len(parked)} parked, {len(new_fields)} new fields.")
 

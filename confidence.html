@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data Confidence — AI Ledger</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1100px; margin:0 auto; padding:24px; }
+  h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  h1 span.tag { background:var(--purple); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
+
+  /* Stats */
+  .stats-row { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+  .stat-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; min-width:130px; text-align:center; }
+  .stat-value { font-size:28px; font-weight:800; }
+  .stat-label { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
+  .stat-green .stat-value { color:var(--green); }
+  .stat-orange .stat-value { color:var(--orange); }
+  .stat-red .stat-value { color:var(--red); }
+
+  /* Entity blocks */
+  .entity-block { background:var(--card); border:1px solid var(--card-border); border-radius:10px; margin-bottom:16px; overflow:hidden; }
+  .entity-header { padding:14px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+  .entity-header:hover { background:rgba(255,255,255,0.02); }
+  .entity-name { font-size:15px; font-weight:700; }
+  .entity-roles { font-size:10px; color:var(--text-dim); margin-top:2px; }
+  .entity-score { display:flex; gap:6px; align-items:center; }
+  .score-bar { display:flex; gap:2px; }
+  .score-dot { width:10px; height:10px; border-radius:2px; }
+  .score-dot.high { background:var(--green); }
+  .score-dot.medium { background:var(--orange); }
+  .score-dot.low { background:var(--red); }
+  .score-dot.none { background:#1e293b; }
+  .score-text { font-size:11px; color:var(--text-dim); }
+
+  /* Field rows */
+  .entity-fields { display:none; border-top:1px solid var(--card-border); }
+  .entity-block.expanded .entity-fields { display:block; }
+  .field-row { padding:10px 20px; border-bottom:1px solid rgba(255,255,255,0.03); display:flex; gap:12px; align-items:baseline; font-size:12px; }
+  .field-row:last-child { border-bottom:none; }
+  .field-row:hover { background:rgba(59,130,246,0.03); }
+  .field-key { min-width:180px; color:var(--text-dim); font-weight:500; }
+  .field-value { min-width:100px; font-weight:700; color:var(--text); }
+  .field-confidence { min-width:60px; }
+  .conf-badge { padding:2px 8px; border-radius:4px; font-size:9px; font-weight:700; text-transform:uppercase; }
+  .conf-high { background:rgba(16,185,129,0.15); color:var(--green); }
+  .conf-medium { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .conf-low { background:rgba(239,68,68,0.15); color:var(--red); }
+  .conf-unsourced { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+  .field-sources { flex:1; font-size:10px; color:var(--text-dim); }
+  .field-sources .src-tag { display:inline-block; padding:1px 5px; border-radius:3px; margin:1px 2px; font-size:9px; }
+  .src-tag.wt-authoritative { background:rgba(16,185,129,0.1); color:var(--green); }
+  .src-tag.wt-corroborating { background:rgba(59,130,246,0.1); color:var(--accent); }
+  .src-tag.wt-indicative { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+
+  /* Filter */
+  .filters { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; }
+  .filter-btn { padding:5px 12px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .filter-btn:hover { border-color:var(--text-dim); color:var(--text); }
+  .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  /* Nav removed */ .nav-brand { font-size:13px; margin-right:8px; } }
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+</style>
+</head>
+<body>
+
+<div class="standalone-bar" id="standalone-bar" style="display:none;padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:11px;">
+  <a href="admin.html" style="color:#3b82f6;text-decoration:none;">Open in Command Centre</a>
+</div>
+<script>
+// Show standalone bar if NOT in an iframe
+if (window === window.top) document.getElementById('standalone-bar').style.display = 'block';
+</script>
+
+<div class="container">
+  <h1>Data Confidence <span class="tag">Beta</span></h1>
+  <p class="intro">How well-sourced is every number in the system? Green = multiple quality sources. Orange = single source or estimates only. Red = no source linked. Click any company to see field-level detail.</p>
+
+  <div class="stats-row" id="stats-row"></div>
+  <div class="filters" id="filters"></div>
+  <div id="entity-list"></div>
+</div>
+
+<footer>AI Ledger v2 Beta</footer>
+
+<script>
+let entitiesData = null;
+let metricSchema = null;
+let activeFilter = 'all';
+
+async function init() {
+  const [ents, schema] = await Promise.all([
+    loadJSON('entities.json'),
+    loadJSON('metric-schema.json')
+  ]);
+  entitiesData = ents;
+  metricSchema = schema;
+  renderStats();
+  renderFilters();
+  renderEntities();
+}
+
+async function loadJSON(path) {
+  try {
+    const r = await fetch(path + '?v=' + Date.now());
+    if (r.ok) return await r.json();
+  } catch(e) {}
+  return null;
+}
+
+function getFieldsForEntity(entity) {
+  const fields = [];
+  const prov = entity.provenance || {};
+
+  // Helper: find best provenance for a key, with fallbacks
+  function findProv(key, field) {
+    // Direct match
+    if (prov[key]) return prov[key];
+    // Try without "current." prefix
+    if (key.startsWith('current.') && prov[field]) return prov[field];
+    // Try "current.{field}" when looking up bare field
+    if (!key.includes('.') && prov['current.' + key]) return prov['current.' + key];
+    // For current fields, check if any year has provenance for same field
+    if (key.startsWith('current.')) {
+      for (const [pk, pv] of Object.entries(prov)) {
+        if (pk.endsWith('.' + field) && !pv.needs_source) return pv;
+      }
+    }
+    return null;
+  }
+
+  // From financials (by year)
+  for (const [year, data] of Object.entries(entity.financials || {})) {
+    for (const [field, value] of Object.entries(data)) {
+      if (value == null) continue;
+      if (typeof value === 'object' && !Array.isArray(value)) {
+        // Nested objects (e.g. revenue_by_channel) — expand sub-fields
+        for (const [sub, sv] of Object.entries(value)) {
+          if (sv == null) continue;
+          const key = year + '.' + field + '.' + sub;
+          const pe = findProv(key, field + '.' + sub);
+          fields.push({
+            key, year, field: field + '.' + sub, value: sv,
+            confidence: pe?.confidence || 'unsourced',
+            claims: pe?.claims || [],
+            claim_count: pe?.claim_count || 0
+          });
+        }
+        continue;
+      }
+      const key = year + '.' + field;
+      const pe = findProv(key, field);
+      fields.push({
+        key, year, field, value,
+        confidence: pe?.confidence || 'unsourced',
+        claims: pe?.claims || [],
+        claim_count: pe?.claim_count || 0
+      });
+    }
+  }
+
+  // From current (non-year-keyed)
+  const skipFields = new Set(['color', 'arr_date', 'valuation_date']);
+  for (const [field, value] of Object.entries(entity.current || {})) {
+    if (value == null || skipFields.has(field)) continue;
+    if (typeof value === 'object') continue;
+    const alreadyCovered = fields.some(f => f.field === field);
+    if (alreadyCovered) continue;
+
+    const key = 'current.' + field;
+    const pe = findProv(key, field);
+    fields.push({
+      key, year: 'current', field, value,
+      confidence: pe?.confidence || 'unsourced',
+      claims: pe?.claims || [],
+      claim_count: pe?.claim_count || 0
+    });
+  }
+
+  return fields;
+}
+
+function renderStats() {
+  let totalFields = 0, high = 0, medium = 0, low = 0, unsourced = 0;
+  const companiesWithProv = new Set();
+
+  for (const entity of entitiesData?.companies || []) {
+    const fields = getFieldsForEntity(entity);
+    totalFields += fields.length;
+    for (const f of fields) {
+      if (f.confidence === 'high') { high++; companiesWithProv.add(entity.slug); }
+      else if (f.confidence === 'medium') { medium++; companiesWithProv.add(entity.slug); }
+      else if (f.confidence === 'low') low++;
+      else unsourced++;
+    }
+  }
+
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="stat-value">${totalFields}</div><div class="stat-label">Data Fields</div></div>
+    <div class="stat-card stat-green"><div class="stat-value">${high}</div><div class="stat-label">High Confidence</div></div>
+    <div class="stat-card stat-orange"><div class="stat-value">${medium}</div><div class="stat-label">Medium</div></div>
+    <div class="stat-card stat-red"><div class="stat-value">${low + unsourced}</div><div class="stat-label">Low / Unsourced</div></div>
+    <div class="stat-card"><div class="stat-value">${companiesWithProv.size}</div><div class="stat-label">Entities With Sources</div></div>
+  `;
+}
+
+function renderFilters() {
+  const roles = ['all', ...new Set((entitiesData?.companies || []).flatMap(c => c.roles || []))];
+  let html = '';
+  roles.forEach(r => {
+    const label = r === 'all' ? 'All' : r.replace(/_/g, ' ');
+    html += '<button class="filter-btn' + (activeFilter === r ? ' active' : '') + '" onclick="setFilter(\'' + r + '\')">' + label + '</button>';
+  });
+  // Confidence filters
+  ['high', 'medium', 'low', 'unsourced'].forEach(c => {
+    html += '<button class="filter-btn' + (activeFilter === 'c:' + c ? ' active' : '') + '" onclick="setFilter(\'c:' + c + '\')" style="margin-left:' + (c === 'high' ? '12px' : '0') + ';">' + c + '</button>';
+  });
+  document.getElementById('filters').innerHTML = html;
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilters();
+  renderEntities();
+}
+
+function renderEntities() {
+  let companies = entitiesData?.companies || [];
+
+  // Filter by role
+  if (activeFilter !== 'all' && !activeFilter.startsWith('c:')) {
+    companies = companies.filter(c => (c.roles || []).includes(activeFilter));
+  }
+
+  // Filter by confidence (only show entities with at least one field at that level)
+  if (activeFilter.startsWith('c:')) {
+    const conf = activeFilter.substring(2);
+    companies = companies.filter(c => {
+      const fields = getFieldsForEntity(c);
+      return fields.some(f => f.confidence === conf);
+    });
+  }
+
+  // Sort: most provenance first, then by name
+  companies.sort((a, b) => {
+    const pa = Object.keys(a.provenance || {}).length;
+    const pb = Object.keys(b.provenance || {}).length;
+    if (pa !== pb) return pb - pa;
+    return a.name.localeCompare(b.name);
+  });
+
+  let html = '';
+  companies.forEach(entity => {
+    const fields = getFieldsForEntity(entity);
+    if (fields.length === 0) return;
+
+    const highCount = fields.filter(f => f.confidence === 'high').length;
+    const medCount = fields.filter(f => f.confidence === 'medium').length;
+    const lowCount = fields.filter(f => f.confidence === 'low' || f.confidence === 'unsourced').length;
+
+    // Score bar visualization
+    let dots = '';
+    for (let i = 0; i < Math.min(highCount, 8); i++) dots += '<div class="score-dot high"></div>';
+    for (let i = 0; i < Math.min(medCount, 8); i++) dots += '<div class="score-dot medium"></div>';
+    for (let i = 0; i < Math.min(lowCount, 5); i++) dots += '<div class="score-dot low"></div>';
+
+    html += '<div class="entity-block" onclick="this.classList.toggle(\'expanded\')">';
+    html += '<div class="entity-header">';
+    html += '<div><div class="entity-name">' + esc(entity.name) + '</div>';
+    html += '<div class="entity-roles">' + (entity.roles || []).join(', ') + ' · ' + fields.length + ' fields</div></div>';
+    html += '<div class="entity-score">';
+    html += '<div class="score-bar">' + dots + '</div>';
+    html += '<span class="score-text">' + highCount + 'H ' + medCount + 'M ' + lowCount + 'L</span>';
+    html += '</div></div>';
+
+    // Field detail
+    html += '<div class="entity-fields">';
+    fields.sort((a, b) => {
+      const confOrder = { high: 0, medium: 1, low: 2, unsourced: 3 };
+      return (confOrder[a.confidence] ?? 9) - (confOrder[b.confidence] ?? 9);
+    });
+
+    fields.forEach(f => {
+      html += '<div class="field-row">';
+      html += '<span class="field-key">' + esc(f.key) + '</span>';
+      html += '<span class="field-value">' + esc(String(f.value)) + '</span>';
+      html += '<span class="field-confidence"><span class="conf-badge conf-' + f.confidence + '">' + f.confidence + '</span></span>';
+      html += '<span class="field-sources">';
+      if (f.claims.length > 0) {
+        f.claims.forEach(c => {
+          html += '<span class="src-tag wt-' + c.weight + '" title="' + esc(c.claim || '') + '">' + esc(c.id) + ' (' + c.weight[0] + ')</span>';
+        });
+      } else {
+        html += '<span style="color:var(--text-dim);font-style:italic;">no source linked</span>';
+      }
+      html += '</span>';
+      html += '</div>';
+    });
+
+    html += '</div></div>';
+  });
+
+  if (html === '') {
+    html = '<div style="text-align:center;padding:40px;color:var(--text-dim);">No entities match this filter.</div>';
+  }
+
+  document.getElementById('entity-list').innerHTML = html;
+}
+
+function esc(s) {
+  if (s == null) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+init();
+</script>
+</body>
+</html>

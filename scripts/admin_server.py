@@ -19,7 +19,7 @@ from datetime import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-BETA_DIR = os.path.join(ROOT_DIR, "beta")
+SITE_DIR = ROOT_DIR
 PORT = 8080
 
 
@@ -36,7 +36,7 @@ def save_json(path, data):
 class AdminHandler(SimpleHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=BETA_DIR, **kwargs)
+        super().__init__(*args, directory=SITE_DIR, **kwargs)
 
     def do_POST(self):
         if self.path == "/api/submit-decisions":
@@ -76,8 +76,8 @@ class AdminHandler(SimpleHTTPRequestHandler):
 
             # 1. Save decisions file
             date = datetime.now().strftime("%Y-%m-%d")
-            os.makedirs(os.path.join(BETA_DIR, "data-updates"), exist_ok=True)
-            decisions_path = os.path.join(BETA_DIR, "data-updates", f"review-decisions-{date}.json")
+            os.makedirs(os.path.join(SITE_DIR, "data-updates"), exist_ok=True)
+            decisions_path = os.path.join(SITE_DIR, "data-updates", f"review-decisions-{date}.json")
             save_json(decisions_path, decisions)
 
             # 2. Run apply_decisions.py
@@ -118,7 +118,7 @@ class AdminHandler(SimpleHTTPRequestHandler):
                 self.send_json({"success": False, "message": "URL required"}, 400)
                 return
 
-            registry_path = os.path.join(BETA_DIR, "sources-registry.json")
+            registry_path = os.path.join(SITE_DIR, "sources-registry.json")
             registry = load_json(registry_path)
 
             # Auto-classify
@@ -311,7 +311,7 @@ PAGE CONTENT:
             return 0
 
         # 4. Add claims to vault-inbox.json
-        inbox_path = os.path.join(BETA_DIR, "vault-inbox.json")
+        inbox_path = os.path.join(SITE_DIR, "vault-inbox.json")
         inbox = load_json(inbox_path)
         date_str = datetime.now().strftime("%Y%m%d")
         added = 0
@@ -358,7 +358,7 @@ PAGE CONTENT:
                 self.send_json({"success": False, "message": "Company name required"}, 400)
                 return
 
-            entities_path = os.path.join(BETA_DIR, "entities.json")
+            entities_path = os.path.join(SITE_DIR, "entities.json")
             entities = load_json(entities_path)
 
             slug = name.lower().replace(" ", "-").replace(".", "")
@@ -415,7 +415,7 @@ def main():
 
     server = HTTPServer(("", PORT), AdminHandler)
     print(f"AI Ledger Command Centre")
-    print(f"  Serving: {BETA_DIR}")
+    print(f"  Serving: {SITE_DIR}")
     print(f"  URL:     http://localhost:{PORT}/admin.html")
     print(f"  API:     POST /api/submit-decisions")
     print(f"           POST /api/add-source")

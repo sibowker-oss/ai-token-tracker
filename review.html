@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Review — Admin</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1000px; margin:0 auto; padding:24px; }
+  h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  h1 span.tag { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+
+  /* Stats */
+  .stats-row { display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .stat-pill { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:12px; }
+  .stat-pill strong { color:var(--text); }
+
+  /* Source tabs */
+  .source-tabs { display:flex; gap:4px; margin-bottom:16px; flex-wrap:wrap; }
+  .source-tab { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:12px; font-weight:500; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:6px; }
+  .source-tab:hover { border-color:var(--text-dim); color:var(--text); }
+  .source-tab.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .source-tab .tab-count { background:rgba(255,255,255,0.15); padding:1px 6px; border-radius:10px; font-size:10px; font-weight:700; }
+  .source-tab.active .tab-count { background:rgba(255,255,255,0.25); }
+
+  /* Filters */
+  .filters { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .filter-btn { padding:4px 10px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; cursor:pointer; transition:all 0.15s; }
+  .filter-btn:hover { border-color:var(--text-dim); color:var(--text); }
+  .filter-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  /* Claim cards */
+  .claim-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:10px; transition:all 0.2s; }
+  .claim-card.w-authoritative { border-left:3px solid var(--green); }
+  .claim-card.w-corroborating { border-left:3px solid var(--accent); }
+  .claim-card.w-indicative { border-left:3px solid var(--text-dim); }
+  .claim-card.decided-accepted { opacity:0.6; background:rgba(16,185,129,0.03); }
+  .claim-card.decided-declined { opacity:0.4; background:rgba(239,68,68,0.02); }
+  .claim-card.decided-parked { opacity:0.5; background:rgba(245,158,11,0.02); }
+
+  .claim-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
+  .claim-entity { font-size:14px; font-weight:700; }
+  .claim-badges { display:flex; gap:4px; flex-shrink:0; flex-wrap:wrap; }
+
+  .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .badge-authoritative { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-corroborating { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .badge-indicative { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .badge-new { background:rgba(6,182,212,0.12); color:var(--cyan); }
+  .badge-confirms { background:rgba(16,185,129,0.12); color:var(--green); }
+  .badge-conflicts { background:rgba(239,68,68,0.15); color:var(--red); }
+  .badge-high { background:rgba(16,185,129,0.1); color:var(--green); }
+  .badge-medium { background:rgba(245,158,11,0.1); color:var(--orange); }
+  .badge-low { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+  .badge-source { background:rgba(139,92,246,0.12); color:var(--purple); }
+  .badge-pending { background:rgba(245,158,11,0.12); color:var(--orange); }
+  .badge-estimated { background:rgba(245,158,11,0.1); color:var(--orange); }
+  .badge-verified { background:rgba(16,185,129,0.1); color:var(--green); }
+  .badge-speculative { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+
+  .claim-quote { font-size:12px; color:var(--text); line-height:1.5; margin-bottom:8px; font-style:italic; }
+
+  .claim-source-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:11px; }
+  .source-link { color:var(--purple); text-decoration:none; font-weight:600; }
+  .source-link:hover { text-decoration:underline; }
+  .source-origin { color:var(--text-dim); }
+
+  .claim-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
+  .claim-meta strong { color:var(--text); font-weight:600; }
+  .claim-conflict { font-size:11px; color:var(--red); margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.06); border-radius:6px; }
+
+  /* Actions */
+  .claim-actions { display:flex; gap:6px; margin-top:10px; align-items:center; flex-wrap:wrap; }
+  .action-btn { padding:5px 12px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .action-btn:hover { color:var(--text); }
+  .action-btn.act-accept { border-color:rgba(16,185,129,0.3); }
+  .action-btn.act-accept:hover, .action-btn.act-accept.active { background:rgba(16,185,129,0.15); color:var(--green); border-color:var(--green); }
+  .action-btn.act-decline { border-color:rgba(239,68,68,0.3); }
+  .action-btn.act-decline:hover, .action-btn.act-decline.active { background:rgba(239,68,68,0.15); color:var(--red); border-color:var(--red); }
+  .action-btn.act-park { border-color:rgba(245,158,11,0.3); }
+  .action-btn.act-park:hover, .action-btn.act-park.active { background:rgba(245,158,11,0.15); color:var(--orange); border-color:var(--orange); }
+  .claim-note { flex:1; min-width:150px; padding:5px 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:6px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
+  .claim-note:focus { border-color:var(--accent); }
+  .claim-note::placeholder { color:#475569; }
+
+  /* Monitor toggle */
+  .monitor-row { display:flex; align-items:center; gap:8px; margin-top:8px; padding-top:8px; border-top:1px solid var(--card-border); font-size:11px; color:var(--text-dim); }
+  .toggle { position:relative; width:32px; height:18px; cursor:pointer; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .toggle .slider { position:absolute; top:0; left:0; right:0; bottom:0; background:#334155; border-radius:9px; transition:0.2s; }
+  .toggle .slider:before { content:''; position:absolute; height:14px; width:14px; left:2px; bottom:2px; background:white; border-radius:50%; transition:0.2s; }
+  .toggle input:checked + .slider { background:var(--green); }
+  .toggle input:checked + .slider:before { transform:translateX(14px); }
+
+  /* Impact preview (replaces) */
+  .impact-row { font-size:11px; margin-top:6px; padding:8px 12px; background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.15); border-radius:8px; }
+  .impact-row .impact-label { color:var(--orange); font-weight:700; text-transform:uppercase; font-size:9px; letter-spacing:0.5px; margin-bottom:4px; }
+  .impact-row .impact-current { color:var(--text-dim); }
+  .impact-row .impact-arrow { color:var(--orange); margin:0 6px; }
+  .impact-row .impact-new { color:var(--green); font-weight:700; }
+  .impact-row .impact-pct { font-size:10px; margin-left:6px; }
+  .impact-pct.up { color:var(--green); }
+  .impact-pct.down { color:var(--red); }
+
+  /* Provenance */
+  .prov-section { margin-top:8px; padding-top:8px; border-top:1px solid var(--card-border); }
+  .prov-header { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--purple); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .prov-confidence { padding:1px 6px; border-radius:4px; font-size:9px; font-weight:700; }
+  .prov-high { background:rgba(16,185,129,0.15); color:var(--green); }
+  .prov-medium { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .prov-low { background:rgba(239,68,68,0.15); color:var(--red); }
+  .prov-claim { padding:4px 8px; margin-bottom:3px; border-radius:4px; font-size:10px; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
+  .prov-claim.role-supports { background:rgba(16,185,129,0.04); border-left:2px solid var(--green); }
+  .prov-claim.role-conflicts { background:rgba(239,68,68,0.04); border-left:2px solid var(--red); }
+  .prov-claim.role-context { background:rgba(148,163,184,0.04); border-left:2px solid var(--text-dim); }
+  .prov-claim.role-pending_review { background:rgba(245,158,11,0.04); border-left:2px solid var(--orange); }
+  .prov-claim.role-superseded { background:rgba(148,163,184,0.03); border-left:2px solid #334155; opacity:0.6; }
+  .prov-id { color:var(--purple); font-weight:600; white-space:nowrap; min-width:50px; }
+  .prov-text { flex:1; color:var(--text-dim); }
+  .prov-val { font-weight:700; color:var(--text); white-space:nowrap; }
+  .prov-weight { font-size:8px; font-weight:600; text-transform:uppercase; padding:1px 4px; border-radius:3px; }
+  .pw-authoritative { background:rgba(16,185,129,0.12); color:var(--green); }
+  .pw-corroborating { background:rgba(59,130,246,0.12); color:var(--accent); }
+  .pw-indicative { background:rgba(148,163,184,0.12); color:var(--text-dim); }
+
+  /* New field proposal */
+  .new-field-box { margin-top:8px; padding:10px 14px; background:rgba(139,92,246,0.06); border:1px solid rgba(139,92,246,0.2); border-radius:8px; }
+  .new-field-header { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--purple); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .new-field-badge { background:var(--purple); color:white; padding:2px 6px; border-radius:4px; font-size:8px; }
+  .new-field-detail { font-size:11px; color:var(--text-dim); line-height:1.6; }
+  .new-field-detail strong { color:var(--text); }
+  .new-field-actions { display:flex; gap:6px; margin-top:8px; }
+  .nf-btn { padding:4px 10px; border-radius:5px; border:1px solid var(--card-border); background:transparent; font-size:10px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .nf-btn.nf-approve { border-color:rgba(16,185,129,0.3); color:var(--green); }
+  .nf-btn.nf-approve:hover, .nf-btn.nf-approve.active { background:rgba(16,185,129,0.15); border-color:var(--green); }
+  .nf-btn.nf-reject { border-color:rgba(239,68,68,0.3); color:var(--red); }
+  .nf-btn.nf-reject:hover, .nf-btn.nf-reject.active { background:rgba(239,68,68,0.15); border-color:var(--red); }
+  .nf-btn.nf-remap { border-color:rgba(59,130,246,0.3); color:var(--accent); }
+  .nf-btn.nf-remap:hover, .nf-btn.nf-remap.active { background:rgba(59,130,246,0.15); border-color:var(--accent); }
+
+  /* Submit bar */
+  .submit-bar { position:sticky; bottom:0; background:var(--card); border:1px solid var(--card-border); border-radius:10px 10px 0 0; padding:14px 20px; margin-top:24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; box-shadow:0 -4px 20px rgba(0,0,0,0.3); }
+  .submit-bar .summary { font-size:12px; color:var(--text-dim); flex:1; }
+  .submit-bar .summary strong { color:var(--text); }
+  .submit-bar .summary .s-green { color:var(--green); }
+  .submit-bar .summary .s-red { color:var(--red); }
+  .submit-bar .summary .s-orange { color:var(--orange); }
+  .submit-btn { padding:8px 24px; border-radius:8px; border:none; background:var(--green); color:white; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .submit-btn:hover { opacity:0.9; }
+  .submit-btn:disabled { opacity:0.4; cursor:not-allowed; }
+  .export-btn { padding:8px 16px; border-radius:8px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
+  .export-btn:hover { background:#1e293b; color:var(--text); }
+
+  .empty { text-align:center; padding:40px; color:var(--text-dim); font-size:13px; }
+
+  .rules { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 18px; margin-bottom:20px; font-size:11px; color:var(--text-dim); line-height:1.7; }
+  .rules strong { color:var(--text); }
+
+  .toast { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); background:var(--green); color:white; padding:10px 20px; border-radius:8px; font-size:13px; font-weight:600; z-index:100; opacity:0; transition:opacity 0.3s; pointer-events:none; }
+  .toast.show { opacity:1; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:80px; }
+
+  /* Nav removed — shown via admin.html */ .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
+</style>
+</head>
+<body>
+
+<div class="standalone-bar" id="standalone-bar" style="display:none;padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:11px;">
+  <a href="admin.html" style="color:#3b82f6;text-decoration:none;">Open in Command Centre</a>
+</div>
+<script>
+// Show standalone bar if NOT in an iframe
+if (window === window.top) document.getElementById('standalone-bar').style.display = 'block';
+</script>
+
+<div class="container">
+  <h1>Daily Review <span class="tag">Admin</span></h1>
+  <p class="intro">All pending data from every source in one queue. Accept, decline, or park each item.</p>
+
+  <div class="rules">
+    <strong>Weight rules:</strong>
+    <strong style="color:var(--green);">Authoritative</strong> = first-hand, can override existing data.
+    <strong style="color:var(--accent);">Corroborating</strong> = cites named primary source, raises confidence.
+    <strong style="color:var(--text-dim);">Indicative</strong> = market colour only, never overrides.
+  </div>
+
+  <div class="stats-row" id="stats-row"></div>
+  <div class="source-tabs" id="source-tabs"></div>
+  <div class="filters" id="filters"></div>
+  <div id="claims-list"></div>
+</div>
+
+<div class="submit-bar" id="submit-bar">
+  <div class="summary" id="submit-summary"></div>
+  <button class="export-btn" onclick="exportDecisions()">Export JSON</button>
+  <button class="submit-btn" id="submit-btn" onclick="submitDecisions()">Submit Decisions</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>AI Ledger v2 Beta</footer>
+
+<script>
+const DECISIONS_KEY = 'review-decisions-v2';
+let allItems = [];       // unified list
+let sourcesRegistry = {};// id -> source object
+let vaultDataPoints = {};// id -> data point (for "replaces" lookups)
+let metricSchema = null; // metric-schema.json
+let entitiesData = null; // entities.json
+let entitiesLookup = {}; // slug -> entity
+let proposedFields = []; // from metric-schema.json proposed_fields
+let fieldDecisions = {}; // { field_id: 'approved'|'rejected'|'remapped' }
+let decisions = {};      // keyed by item.id
+let activeSource = 'all';
+let activeFilter = 'all';
+let siteData = null;
+
+// ----- Data loading -----
+
+async function loadAll() {
+  const [registry, inbox, candidates, vault, schema, sd, ents] = await Promise.all([
+    loadJSON('sources-registry.json'),
+    loadJSON('vault-inbox.json'),
+    loadCandidates(),
+    loadJSON('vault-data.json'),
+    loadJSON('metric-schema.json'),
+    loadJSON('site-data.json'),
+    loadJSON('entities.json')
+  ]);
+
+  // Build source lookup
+  if (registry?.sources) {
+    registry.sources.forEach(s => sourcesRegistry[s.id] = s);
+  }
+
+  // Build vault data point lookup (for "replaces" resolution)
+  if (vault?.dataPoints) {
+    vault.dataPoints.forEach(dp => vaultDataPoints[dp.id] = dp);
+  }
+
+  metricSchema = schema;
+  siteData = sd;
+  entitiesData = ents;
+  if (ents?.companies) {
+    ents.companies.forEach(c => entitiesLookup[c.slug] = c);
+  }
+  proposedFields = schema?.proposed_fields || [];
+  try { fieldDecisions = JSON.parse(localStorage.getItem('field-decisions') || '{}'); } catch(e) { fieldDecisions = {}; }
+
+  // Debug: log what loaded
+  console.log('Review data loaded:', {
+    schema: !!metricSchema,
+    schemaRules: metricSchema?.field_match_rules?.length || 0,
+    entities: !!entitiesData,
+    entityCount: Object.keys(entitiesLookup).length,
+    inbox: allItems.length
+  });
+
+  // Merge inbox items (pending only)
+  if (inbox?.items) {
+    inbox.items
+      .filter(i => i.status === 'pending')
+      .forEach(i => {
+        try {
+        allItems.push({
+          id: i.id,
+          origin: 'inbox',
+          entity: extractEntity(i),
+          claim: i.claim,
+          value: i.value,
+          unit: i.unit,
+          value_display: i.value != null ? (i.value + ' ' + (i.unit || '')).trim() : null,
+          weight: inferWeight(i),
+          confidence: i.confidence || 'estimated',
+          dedup_status: i.replaces ? 'conflicts' : 'new',
+          dedup_note: null, // impact shown via renderImpactRow instead
+          sourceUrl: i.sourceUrl,
+          sourceAuthor: i.sourceAuthor,
+          sourceType: i.sourceType,
+          source_id: i.source_id || null,
+          tags: i.tags || [],
+          notes: i.notes || '',
+          dateOfClaim: i.dateOfClaim,
+          dateAdded: i.dateAdded,
+          usedOn: i.usedOn || [],
+          replaces: i.replaces || null,
+          metricKey: i.metricKey || null,
+          metric: inferMetric(i),
+        });
+        } catch(e) { console.error('Failed to add inbox item:', i.id, e); }
+      });
+      }
+
+  // Merge candidate claims from extraction pipeline
+  if (candidates.length > 0) {
+    candidates.forEach((c, idx) => {
+      // Skip if already in inbox by similar claim text
+      const isDupe = allItems.some(existing =>
+        existing.claim === c.claim ||
+        (existing.entity === c.entity && existing.metricKey === c.metric_key && existing.value === c.value)
+      );
+      if (isDupe) return;
+
+      allItems.push({
+        id: c.id || 'cand-' + idx,
+        origin: 'extraction',
+        entity: c.entity || '?',
+        claim: c.claim,
+        value: c.value,
+        unit: c.unit,
+        value_display: c.value_display || (c.value != null ? String(c.value) : null),
+        weight: c.weight || 'indicative',
+        confidence: c.confidence || 'estimated',
+        dedup_status: c.dedup_status || 'new',
+        dedup_note: c.dedup_note || null,
+        sourceUrl: c.source_url || '',
+        sourceAuthor: c.speaker || c.source_podcast || '',
+        sourceType: 'podcast',
+        source_id: c.source_id || inferSourceFromPodcast(c),
+        tags: c.tags || [],
+        notes: '',
+        dateOfClaim: c.source_date || c.time_period || '',
+        dateAdded: c.extracted_at || '',
+        usedOn: [],
+        replaces: null,
+        metricKey: c.metric_key || null,
+        metric: c.metric || '',
+        speaker: c.speaker,
+        source_podcast: c.source_podcast,
+        original_source_cited: c.original_source_cited,
+        category: c.category,
+        time_period: c.time_period,
+      });
+    });
+  }
+
+  loadDecisions();
+  try {
+    renderSourceTabs();
+    renderStats();
+    renderFilters();
+      renderClaims();
+    updateSubmitBar();
+    } catch(e) {
+    document.getElementById('claims-list').innerHTML = '<div style="color:var(--red);padding:20px;">Error loading claims: ' + e.message + '</div>';
+  }
+}
+
+async function loadJSON(path) {
+  try {
+    const r = await fetch(path + '?v=' + Date.now());
+    if (r.ok) return await r.json();
+  } catch(e) {}
+  return null;
+}
+
+async function loadCandidates() {
+  const today = new Date().toISOString().split('T')[0];
+  for (let i = 0; i <= 14; i++) {
+    const d = new Date(Date.now() - i * 86400000).toISOString().split('T')[0];
+    try {
+      const r = await fetch('data-updates/' + d + '-candidates.json?v=' + Date.now());
+      if (r.ok) return await r.json();
+    } catch(e) {}
+  }
+  return [];
+}
+
+// ----- Inference helpers -----
+
+function extractEntity(item) {
+  // Try to pull entity from tags or claim
+  const entityTags = ['openai', 'anthropic', 'google', 'meta', 'microsoft', 'nvidia', 'deepseek'];
+  for (const t of (item.tags || [])) {
+    if (entityTags.includes(t.toLowerCase())) return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+  // Check claim text
+  for (const e of entityTags) {
+    if (item.claim.toLowerCase().includes(e)) return e.charAt(0).toUpperCase() + e.slice(1);
+  }
+  return item.sourceAuthor || '?';
+}
+
+function inferWeight(item) {
+  const st = (item.sourceType || '').toLowerCase();
+  if (['sworn-affidavit', 'official', 'leaked-internal'].includes(st)) return 'authoritative';
+  if (['reporting', 'platform-data', 'earnings-aggregation'].includes(st)) return 'corroborating';
+  return 'indicative';
+}
+
+function inferMetric(item) {
+  const claim = (item.claim || '').toLowerCase();
+  if (claim.includes('revenue') || claim.includes('arr')) return 'revenue';
+  if (claim.includes('valuation')) return 'valuation';
+  if (claim.includes('loss') || claim.includes('burn')) return 'operating_loss';
+  if (claim.includes('capex') || claim.includes('spending')) return 'capex';
+  if (claim.includes('user') || claim.includes('customer')) return 'adoption';
+  if (claim.includes('token') || claim.includes('inference')) return 'inference';
+  return 'other';
+}
+
+function inferSourceFromPodcast(c) {
+  const name = (c.source_podcast || '').toLowerCase();
+  if (name.includes('all-in') || name.includes('all in')) return 'src-003';
+  if (name.includes('big technology') || name.includes('kantrowitz')) return 'src-004';
+  if (name.includes('latent space')) return 'src-002';
+  if (name.includes('recode')) return 'src-011';
+  return null;
+}
+
+function getSourceName(source_id) {
+  if (!source_id) return null;
+  const s = sourcesRegistry[source_id];
+  return s ? s.title : source_id;
+}
+
+// ----- Entity-driven claim classification -----
+
+function classifyClaim(item) {
+  if (!metricSchema || !entitiesData) return null;
+
+  const claim = (item.claim || '').toLowerCase();
+  const tags = (item.tags || []).map(t => t.toLowerCase()).join(' ');
+  const searchText = claim + ' ' + tags;
+
+  // Match entity slug
+  let slug = null;
+  for (const rule of metricSchema.entity_match_rules || []) {
+    if (new RegExp(rule.pattern, 'i').test(searchText)) {
+      slug = rule.slug;
+      break;
+    }
+  }
+  if (!slug) return null;
+
+  const entity = entitiesLookup[slug];
+  if (!entity) return null;
+
+  // Match field
+  let fieldId = null;
+  for (const rule of metricSchema.field_match_rules || []) {
+    if (new RegExp(rule.pattern, 'i').test(searchText)) {
+      fieldId = rule.field;
+      break;
+    }
+  }
+
+  // Infer year from claim
+  let year = null;
+  const yearMatch = searchText.match(/\b(20[2-3]\d)\b/);
+  if (yearMatch) year = yearMatch[1];
+
+  // Look up field definition from the entity's primary role
+  let fieldDef = null;
+  let roleName = null;
+  if (fieldId) {
+    for (const role of entity.roles || []) {
+      const roleDef = metricSchema.roles?.[role];
+      if (roleDef?.fields?.[fieldId]) {
+        fieldDef = roleDef.fields[fieldId];
+        roleName = roleDef.label;
+        break;
+      }
+    }
+  }
+
+  return { slug, entity, fieldId, fieldDef, roleName, year };
+}
+
+function resolveCurrentValue(classification) {
+  if (!classification || !classification.entity) return null;
+  const { entity, fieldId, year } = classification;
+
+  if (!fieldId) return null;
+
+  // Check year-keyed financials first
+  if (year && entity.financials?.[year]?.[fieldId] != null) {
+    return entity.financials[year][fieldId];
+  }
+
+  // Check current snapshot
+  if (entity.current?.[fieldId] != null) {
+    return entity.current[fieldId];
+  }
+
+  // Check most recent year in financials
+  if (entity.financials) {
+    const years = Object.keys(entity.financials).filter(y => !y.includes('projected')).sort().reverse();
+    for (const y of years) {
+      if (entity.financials[y]?.[fieldId] != null) {
+        return entity.financials[y][fieldId];
+      }
+    }
+  }
+
+  return null;
+}
+
+function renderImpactRow(item) {
+  const classification = classifyClaim(item);
+
+  if (classification && classification.fieldId) {
+    const { entity, fieldId, fieldDef, roleName, year } = classification;
+    const currentVal = resolveCurrentValue(classification);
+    const unit = fieldDef?.unit || item.unit || '';
+
+    let html = '<div class="impact-row">';
+
+    // Header: Entity → Field (Year)
+    html += '<div class="impact-label">';
+    html += esc(entity.name) + ' → ' + esc(fieldDef?.label || fieldId);
+    if (year) html += ' (' + year + ')';
+    if (roleName) html += ' <span style="opacity:0.6;font-weight:400;">[' + esc(roleName) + ']</span>';
+    html += '</div>';
+
+    // Description
+    if (fieldDef?.description) {
+      html += '<div style="margin-top:3px;font-size:10px;color:var(--text-dim);">' + esc(fieldDef.description) + '</div>';
+    }
+
+    // Auto-annualise monthly/quarterly for display
+    let displayValue = item.value;
+    let annualNote = '';
+    const claimLower = (item.claim || '').toLowerCase();
+    const unitLower = (item.unit || '').toLowerCase();
+    if (typeof displayValue === 'number') {
+      if (unitLower.includes('/month') || claimLower.includes('per month') || unitLower.includes('$b/month')) {
+        displayValue = displayValue * 12;
+        annualNote = ' <span style="color:var(--cyan);font-size:10px;">(= ' + item.value + '/mo × 12)</span>';
+      } else if (unitLower.includes('/quarter') || claimLower.includes('per quarter')) {
+        displayValue = displayValue * 4;
+        annualNote = ' <span style="color:var(--cyan);font-size:10px;">(= ' + item.value + '/qtr × 4)</span>';
+      }
+    }
+
+    // Current → New value comparison
+    if (currentVal != null && displayValue != null) {
+      let pctHtml = '';
+      if (typeof currentVal === 'number' && typeof displayValue === 'number' && currentVal !== 0) {
+        const pct = ((displayValue - currentVal) / Math.abs(currentVal) * 100).toFixed(0);
+        const dir = Number(pct) >= 0 ? 'up' : 'down';
+        pctHtml = '<span class="impact-pct ' + dir + '">(' + (Number(pct) > 0 ? '+' : '') + pct + '%)</span>';
+      }
+      html += '<div style="margin-top:6px;font-size:12px;">';
+      html += '<span class="impact-current" style="text-decoration:line-through;">' + currentVal + ' ' + esc(unit) + '</span>';
+      html += '<span class="impact-arrow">→</span>';
+      html += '<span class="impact-new">' + displayValue + ' ' + esc(unit) + '</span>';
+      html += pctHtml + annualNote;
+      html += '</div>';
+    } else if (displayValue != null) {
+      html += '<div style="margin-top:6px;font-size:12px;">';
+      html += '<span style="color:var(--text-dim);">New: </span>';
+      html += '<span class="impact-new">' + displayValue + ' ' + esc(unit) + '</span>';
+      html += annualNote;
+      html += '</div>';
+    }
+
+    // Show other years we have data for (context)
+    if (entity.financials && fieldId) {
+      const otherYears = Object.entries(entity.financials)
+        .filter(([y, data]) => data[fieldId] != null && y !== year)
+        .map(([y, data]) => y + ': ' + data[fieldId] + ' ' + unit)
+        .slice(0, 4);
+      if (otherYears.length > 0) {
+        html += '<div style="margin-top:4px;font-size:10px;color:var(--text-dim);">Also on file: ' + otherYears.join(' · ') + '</div>';
+      }
+    }
+
+    // Show if this is primary vs derived
+    if (fieldDef?.type === 'derived') {
+      const derivation = metricSchema.derived_fields?.[fieldId];
+      if (derivation) {
+        html += '<div style="margin-top:4px;font-size:10px;color:var(--cyan);">Derived: ' + esc(derivation.formula) + '</div>';
+      }
+    }
+
+    // Provenance — other sources for this same number
+    html += renderProvenance(entity, fieldId, year, item.id);
+
+    html += '</div>';
+    return html;
+  }
+
+  // No classification — try provenance from replaces
+  if (!classification && item.replaces) {
+    // handled in fallback below
+  }
+
+  // Classification matched an entity but no field — still useful context
+  if (classification && classification.entity) {
+    const { entity } = classification;
+    let html = '<div class="impact-row">';
+    html += '<div class="impact-label">' + esc(entity.name) + ' <span style="opacity:0.6;font-weight:400;">[' + entity.roles.join(', ') + ']</span></div>';
+    html += '<div style="margin-top:3px;font-size:10px;color:var(--text-dim);">Matched company but could not determine which field this claim updates.</div>';
+    html += '</div>';
+    return html;
+  }
+
+  // Fallback: replaces an existing vault data point
+  const existing = item.replaces ? vaultDataPoints[item.replaces] : null;
+  if (existing) {
+    let html = '<div class="impact-row">';
+    html += '<div class="impact-label">Updates existing data</div>';
+    html += '<div style="margin-top:4px;"><span class="impact-current">' + esc(existing.claim) + '</span></div>';
+    if (existing.value != null && item.value != null) {
+      const oldDisplay = existing.value + ' ' + (existing.unit || '');
+      const newDisplay = item.value + ' ' + (item.unit || '');
+      let pctHtml = '';
+      if (typeof existing.value === 'number' && typeof item.value === 'number' && existing.value !== 0) {
+        const pct = ((item.value - existing.value) / Math.abs(existing.value) * 100).toFixed(0);
+        const dir = Number(pct) >= 0 ? 'up' : 'down';
+        pctHtml = '<span class="impact-pct ' + dir + '">(' + (Number(pct) > 0 ? '+' : '') + pct + '%)</span>';
+      }
+      html += '<div style="margin-top:4px;font-size:12px;">';
+      html += '<span class="impact-current" style="text-decoration:line-through;">' + esc(oldDisplay) + '</span>';
+      html += '<span class="impact-arrow">→</span>';
+      html += '<span class="impact-new">' + esc(newDisplay) + '</span>';
+      html += pctHtml + '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  return '';
+}
+
+// ----- Provenance -----
+
+function renderProvenance(entity, fieldId, year, currentClaimId) {
+  if (!entity?.provenance) return '';
+
+  const key = year ? year + '.' + fieldId : fieldId;
+  const prov = entity.provenance[key];
+  if (!prov) return '';
+
+  // Filter out the current claim being reviewed
+  const otherClaims = prov.claims.filter(c => c.id !== currentClaimId);
+  if (otherClaims.length === 0) return '';
+
+  let html = '<div class="prov-section">';
+  html += '<div class="prov-header">';
+  html += 'Other sources for this number';
+  html += '<span class="prov-confidence prov-' + prov.confidence + '">' + prov.confidence + ' confidence</span>';
+  html += '<span style="font-weight:400;color:var(--text-dim);">' + prov.claim_count + ' source' + (prov.claim_count !== 1 ? 's' : '') + ' total</span>';
+  html += '</div>';
+
+  otherClaims.forEach(c => {
+    const roleClass = 'role-' + (c.role || 'context');
+    html += '<div class="prov-claim ' + roleClass + '">';
+    // Show claim text — try to get full text from vault if truncated
+    let claimText = c.claim || '';
+    let sourceAuthor = c.source || '';
+    const fullClaim = vaultDataPoints[c.id];
+    if (fullClaim) {
+      claimText = fullClaim.claim || claimText;
+      sourceAuthor = fullClaim.sourceAuthor || sourceAuthor;
+    }
+    html += '<span class="prov-text">"' + esc(claimText) + '"</span>';
+    if (c.value != null) html += '<span class="prov-val">' + c.value + ' ' + esc(c.unit || '') + '</span>';
+    html += '<span class="prov-weight pw-' + c.weight + '">' + c.weight + '</span>';
+    if (sourceAuthor) html += '<span style="font-size:9px;color:var(--text-dim);margin-left:4px;">— ' + esc(sourceAuthor) + '</span>';
+    if (c.date) html += '<span style="font-size:9px;color:var(--text-dim);margin-left:4px;">' + esc(c.date) + '</span>';
+    if (c.origin === 'pending') html += '<span style="font-size:8px;color:var(--orange);margin-left:4px;">PENDING</span>';
+    html += '</div>';
+  });
+
+  html += '</div>';
+  return html;
+}
+
+// ----- New Field Proposals -----
+
+function renderNewFieldBox(item) {
+  // Check if this claim has a proposed field attached
+  const proposed = proposedFields.find(f => f.proposed_from_claim === item.id);
+  if (!proposed) {
+    // Also check via classification — if entity matched but field is new
+    const c = classifyClaim(item);
+    if (!c || c.fieldId) return ''; // has a known field, no proposal needed
+    return '';
+  }
+
+  const fd = fieldDecisions[proposed.field_id] || '';
+
+  let html = '<div class="new-field-box">';
+  html += '<div class="new-field-header"><span class="new-field-badge">NEW FIELD</span> This claim suggests a metric we don\'t currently track</div>';
+  html += '<div class="new-field-detail">';
+  html += '<strong>Proposed field:</strong> ' + esc(proposed.label) + ' (' + esc(proposed.unit) + ')<br>';
+  html += '<strong>ID:</strong> <code>' + esc(proposed.field_id) + '</code><br>';
+  html += '<strong>Description:</strong> ' + esc(proposed.description) + '<br>';
+  html += '<strong>Yearly:</strong> ' + (proposed.yearly ? 'Yes (tracked per year)' : 'No (current snapshot)') + '<br>';
+  if (proposed.regex_pattern) {
+    html += '<strong>Auto-match pattern:</strong> <code>' + esc(proposed.regex_pattern) + '</code>';
+  }
+  html += '</div>';
+  html += '<div class="new-field-actions">';
+  html += '<button class="nf-btn nf-approve' + (fd === 'approved' ? ' active' : '') + '" onclick="setFieldDecision(\'' + esc(proposed.field_id) + '\', \'approved\')">Add to Schema</button>';
+  html += '<button class="nf-btn nf-reject' + (fd === 'rejected' ? ' active' : '') + '" onclick="setFieldDecision(\'' + esc(proposed.field_id) + '\', \'rejected\')">Don\'t Track</button>';
+  html += '<button class="nf-btn nf-remap' + (fd === 'remapped' ? ' active' : '') + '" onclick="setFieldDecision(\'' + esc(proposed.field_id) + '\', \'remapped\')">Map to Existing Field</button>';
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function setFieldDecision(fieldId, decision) {
+  if (fieldDecisions[fieldId] === decision) {
+    delete fieldDecisions[fieldId];
+  } else {
+    fieldDecisions[fieldId] = decision;
+  }
+  localStorage.setItem('field-decisions', JSON.stringify(fieldDecisions));
+  renderClaims();
+}
+
+// ----- Decisions -----
+
+function loadDecisions() {
+  try { decisions = JSON.parse(localStorage.getItem(DECISIONS_KEY) || '{}'); } catch(e) { decisions = {}; }
+}
+function saveDecisions() {
+  localStorage.setItem(DECISIONS_KEY, JSON.stringify(decisions));
+}
+
+function setDecision(id, decision) {
+  if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
+  if (decisions[id].decision === decision) {
+    decisions[id].decision = '';
+    if (!decisions[id].note) delete decisions[id];
+  } else {
+    decisions[id].decision = decision;
+  }
+  saveDecisions();
+  renderStats();
+  renderClaims();
+  updateSubmitBar();
+}
+
+function setNote(id, note) {
+  if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
+  decisions[id].note = note;
+  if (!decisions[id].decision && !note) delete decisions[id];
+  saveDecisions();
+}
+
+function setMonitor(id, checked) {
+  if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
+  decisions[id].monitor = checked;
+  saveDecisions();
+}
+
+// ----- Rendering -----
+
+function renderSourceTabs() {
+  // Count items per source
+  const counts = { all: allItems.length };
+  allItems.forEach(item => {
+    const key = item.source_id || 'unsourced';
+    counts[key] = (counts[key] || 0) + 1;
+  });
+
+  let html = '<button class="source-tab' + (activeSource === 'all' ? ' active' : '') + '" onclick="setSource(\'all\')">All <span class="tab-count">' + counts.all + '</span></button>';
+
+  // Add tabs for sources that have items
+  const seen = new Set();
+  allItems.forEach(item => {
+    const key = item.source_id || 'unsourced';
+    if (seen.has(key)) return;
+    seen.add(key);
+    const label = key === 'unsourced' ? 'One-off URLs' : (getSourceName(key) || key);
+    html += '<button class="source-tab' + (activeSource === key ? ' active' : '') + '" onclick="setSource(\'' + key + '\')">' + esc(label) + ' <span class="tab-count">' + (counts[key] || 0) + '</span></button>';
+  });
+
+  document.getElementById('source-tabs').innerHTML = html;
+}
+
+function renderStats() {
+  const decided = allItems.filter(i => decisions[i.id]?.decision).length;
+  const accepted = allItems.filter(i => decisions[i.id]?.decision === 'accepted').length;
+  const declined = allItems.filter(i => decisions[i.id]?.decision === 'declined').length;
+  const parked = allItems.filter(i => decisions[i.id]?.decision === 'parked').length;
+
+  let html = '<span class="stat-pill">Total: <strong>' + allItems.length + '</strong></span>';
+  html += '<span class="stat-pill">Reviewed: <strong>' + decided + '/' + allItems.length + '</strong></span>';
+  html += '<span class="stat-pill" style="border-color:rgba(16,185,129,0.3);">Accepted: <strong style="color:var(--green);">' + accepted + '</strong></span>';
+  html += '<span class="stat-pill" style="border-color:rgba(239,68,68,0.3);">Declined: <strong style="color:var(--red);">' + declined + '</strong></span>';
+  html += '<span class="stat-pill" style="border-color:rgba(245,158,11,0.3);">Parked: <strong style="color:var(--orange);">' + parked + '</strong></span>';
+  document.getElementById('stats-row').innerHTML = html;
+}
+
+function renderFilters() {
+  const filters = [
+    { key: 'all', label: 'All' },
+    { key: 'pending', label: 'Pending' },
+    { key: 'w:authoritative', label: 'Authoritative' },
+    { key: 'w:corroborating', label: 'Corroborating' },
+    { key: 'w:indicative', label: 'Indicative' },
+    { key: 'd:accepted', label: 'Accepted' },
+    { key: 'd:declined', label: 'Declined' },
+    { key: 'd:parked', label: 'Parked' },
+  ];
+
+  let html = '';
+  filters.forEach(f => {
+    html += '<button class="filter-btn' + (activeFilter === f.key ? ' active' : '') + '" onclick="setFilter(\'' + f.key + '\')">' + f.label + '</button>';
+  });
+  document.getElementById('filters').innerHTML = html;
+}
+
+function setSource(s) {
+  activeSource = s;
+  renderSourceTabs();
+  renderClaims();
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilters();
+  renderClaims();
+}
+
+function renderClaims() {
+  let filtered = allItems;
+
+  // Source filter
+  if (activeSource !== 'all') {
+    if (activeSource === 'unsourced') {
+      filtered = filtered.filter(i => !i.source_id);
+    } else {
+      filtered = filtered.filter(i => i.source_id === activeSource);
+    }
+  }
+
+  // Status/weight/decision filter
+  if (activeFilter === 'pending') {
+    filtered = filtered.filter(i => !decisions[i.id]?.decision);
+  } else if (activeFilter.startsWith('w:')) {
+    filtered = filtered.filter(i => i.weight === activeFilter.substring(2));
+  } else if (activeFilter.startsWith('d:')) {
+    filtered = filtered.filter(i => decisions[i.id]?.decision === activeFilter.substring(2));
+  }
+
+  if (filtered.length === 0) {
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No items match this filter.</div>';
+    return;
+  }
+
+  // Sort: newest first (by dateAdded, then dateOfClaim)
+  filtered.sort((a, b) => {
+    const da = a.dateAdded || a.dateOfClaim || '';
+    const db = b.dateAdded || b.dateOfClaim || '';
+    return db.localeCompare(da);
+  });
+
+  let html = '';
+  filtered.forEach(item => {
+    const d = decisions[item.id] || {};
+    const decidedClass = d.decision ? ' decided-' + d.decision : '';
+    const sourceName = getSourceName(item.source_id);
+
+    html += '<div class="claim-card w-' + item.weight + decidedClass + '">';
+
+    // Header
+    html += '<div class="claim-top">';
+    // Build header: Entity — Value — Field (Year)
+    const cls = classifyClaim(item);
+    let headerText = esc(item.entity);
+    if (item.value_display) headerText += ' — ' + esc(item.value_display);
+    if (cls) {
+      const fieldLabel = cls.fieldDef?.label || cls.fieldId || '';
+      const yearLabel = cls.year || '';
+      if (fieldLabel || yearLabel) {
+        headerText += ' <span style="color:var(--text-dim);font-weight:400;font-size:12px;">→ ';
+        if (fieldLabel) headerText += esc(fieldLabel);
+        if (yearLabel) headerText += ' (' + esc(yearLabel) + ')';
+        headerText += '</span>';
+      }
+    }
+    html += '<span class="claim-entity">' + headerText + '</span>';
+    html += '<div class="claim-badges">';
+    if (d.decision) {
+      const dBadge = d.decision === 'accepted' ? 'confirms' : d.decision === 'declined' ? 'conflicts' : 'medium';
+      html += '<span class="badge badge-' + dBadge + '">' + d.decision.toUpperCase() + '</span>';
+    }
+    html += '<span class="badge badge-' + item.weight + '">' + item.weight + '</span>';
+    html += '<span class="badge badge-' + item.confidence + '">' + item.confidence + '</span>';
+    if (item.origin === 'extraction') html += '<span class="badge badge-source">podcast</span>';
+    html += '</div></div>';
+
+    // Source row
+    html += '<div class="claim-source-row">';
+    if (sourceName) {
+      html += '<a class="source-link" href="sources.html?highlight=' + item.source_id + '">' + esc(sourceName) + '</a>';
+    }
+    html += '<span class="source-origin">';
+    if (item.sourceAuthor) html += esc(item.sourceAuthor);
+    if (item.dateOfClaim) html += ' · ' + esc(item.dateOfClaim);
+    html += '</span>';
+    if (item.sourceUrl) {
+      html += ' <a href="' + esc(item.sourceUrl) + '" target="_blank" style="color:var(--accent);font-size:10px;">source</a>';
+    }
+    html += '</div>';
+
+    // Claim text
+    html += '<div class="claim-quote">"' + esc(item.claim) + '"</div>';
+
+    // Metadata
+    html += '<div class="claim-meta">';
+    if (item.metric) html += '<strong>Metric:</strong> ' + esc(item.metric) + ' &nbsp; ';
+    if (item.speaker) html += '<strong>Speaker:</strong> ' + esc(item.speaker) + ' &nbsp; ';
+    if (item.original_source_cited) html += '<strong>Cites:</strong> ' + esc(item.original_source_cited) + ' &nbsp; ';
+    if (item.notes) html += '<br><span style="color:var(--text-dim);font-size:10px;">' + esc(item.notes) + '</span>';
+    html += '</div>';
+
+    // Impact preview — schema-aware: show entity, metric, current value, where it lands
+    html += renderImpactRow(item);
+
+    // New field proposal (if classifier couldn't match to existing field)
+    html += renderNewFieldBox(item);
+
+    // Conflict note
+    if (item.dedup_note) {
+      html += '<div class="claim-conflict">' + esc(item.dedup_note) + '</div>';
+    }
+
+    // Action buttons
+    html += '<div class="claim-actions">';
+    html += '<button class="action-btn act-accept' + (d.decision === 'accepted' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'accepted\')">Accept</button>';
+    html += '<button class="action-btn act-decline' + (d.decision === 'declined' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'declined\')">Decline</button>';
+    html += '<button class="action-btn act-park' + (d.decision === 'parked' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'parked\')">Park</button>';
+    html += '<input class="claim-note" placeholder="Add a note..." value="' + esc(d.note || '') + '" oninput="setNote(\'' + item.id + '\', this.value)">';
+    html += '</div>';
+
+    // Monitor toggle (only for items linked to a source)
+    if (item.source_id && sourcesRegistry[item.source_id]) {
+      const monitored = d.monitor !== false; // default true
+      html += '<div class="monitor-row">';
+      html += '<label class="toggle"><input type="checkbox"' + (monitored ? ' checked' : '') + ' onchange="setMonitor(\'' + item.id + '\', this.checked)"><span class="slider"></span></label>';
+      html += '<span>Keep monitoring <strong style="color:var(--text);">' + esc(getSourceName(item.source_id)) + '</strong></span>';
+      html += '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  document.getElementById('claims-list').innerHTML = html;
+}
+
+function updateSubmitBar() {
+  let accepted = 0, declined = 0, parked = 0, pending = 0;
+  allItems.forEach(i => {
+    const d = decisions[i.id]?.decision;
+    if (d === 'accepted') accepted++;
+    else if (d === 'declined') declined++;
+    else if (d === 'parked') parked++;
+    else pending++;
+  });
+
+  document.getElementById('submit-summary').innerHTML =
+    '<span class="s-green">Accept: <strong>' + accepted + '</strong></span> &nbsp; ' +
+    '<span class="s-red">Decline: <strong>' + declined + '</strong></span> &nbsp; ' +
+    '<span class="s-orange">Park: <strong>' + parked + '</strong></span> &nbsp; ' +
+    'Pending: <strong>' + pending + '</strong>';
+
+  document.getElementById('submit-btn').disabled = accepted === 0;
+}
+
+// ----- Submit -----
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function getImpact(item) {
+  const c = classifyClaim(item);
+  if (!c || !c.fieldId) return null;
+  if (item.value == null || typeof item.value !== 'number') return null;
+
+  const claimText = (item.claim || '').toLowerCase();
+
+  // Skip product-level claims that would wrongly compare to company totals
+  // e.g. "Claude Code $2.5B" should not compare against Anthropic total ARR
+  const productIndicators = ['claude code', 'chatgpt', 'copilot', 'gemini app', 'grok', 'le chat', 'bedrock', 'vertex'];
+  const isProductClaim = productIndicators.some(p => claimText.includes(p));
+  if (isProductClaim) return null; // product metrics don't replace company totals
+
+  // Skip subset claims (H1, Q1, monthly) — they're parts of an annual figure, not replacements
+  const subsetIndicators = /\b(h1|h2|q[1-4]|first.half|second.half|monthly|month of|january|february|march)\b/i;
+  if (subsetIndicators.test(claimText)) return null;
+
+  // Only compare within the same year — don't fall back to other years
+  const { entity, fieldId, year } = c;
+  if (!year || !entity) return null;
+
+  let currentVal = null;
+  if (entity.financials?.[year]?.[fieldId] != null) {
+    currentVal = entity.financials[year][fieldId];
+  } else if (year === new Date().getFullYear().toString() && entity.current?.[fieldId] != null) {
+    currentVal = entity.current[fieldId];
+  }
+
+  // No existing value for this exact year+field = new data point, not a change
+  if (currentVal == null || typeof currentVal !== 'number' || currentVal === 0) return null;
+
+  const pctChange = ((item.value - currentVal) / Math.abs(currentVal) * 100).toFixed(1);
+  return {
+    type: c.fieldId,
+    name: c.entity.name + ' → ' + (c.fieldDef?.label || c.fieldId) + ' (' + year + ')',
+    current: currentVal + ' ' + (c.fieldDef?.unit || ''),
+    proposed: item.value + ' ' + (item.unit || ''),
+    pctChange,
+    isMajor: Math.abs(parseFloat(pctChange)) > 15
+  };
+}
+
+function exportDecisions() {
+  const output = allItems.map(item => {
+    const d = decisions[item.id] || {};
+    return { ...item, review_decision: d.decision || 'pending', review_note: d.note || '', monitor: d.monitor !== false };
+  });
+  const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'review-decisions-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Decisions exported');
+}
+
+function submitDecisions() {
+  const accepted = [];
+  allItems.forEach(item => {
+    const d = decisions[item.id] || {};
+    if (d.decision === 'accepted') {
+      const impact = getImpact(item);
+      accepted.push({
+        ...item,
+        review_decision: 'accepted',
+        review_note: d.note || '',
+        reviewed_at: new Date().toISOString(),
+        major_change: impact?.isMajor || false,
+        confirmed: false,
+        impact,
+      });
+    }
+  });
+
+  if (accepted.length === 0) { showToast('No accepted items'); return; }
+
+  const major = accepted.filter(c => c.major_change);
+  if (major.length > 0) {
+    showImpactModal(major, accepted);
+    return;
+  }
+
+  writeApproved(accepted);
+}
+
+function showImpactModal(major, all) {
+  let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="impact-modal">';
+  html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;">';
+  html += '<h2 style="font-size:16px;margin-bottom:12px;">Impact Preview — Major Changes</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">' + major.length + ' change(s) exceed 15% threshold:</p>';
+
+  major.forEach(c => {
+    const imp = c.impact;
+    const color = imp && parseFloat(imp.pctChange) > 0 ? 'var(--green)' : 'var(--red)';
+    html += '<div style="padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;margin-bottom:8px;">';
+    // Use imp.name which includes entity + field label + year from getImpact()
+    html += '<strong>' + esc(imp?.name || (c.entity + ' — ' + (c.metric || ''))) + '</strong><br>';
+    // Show the claim text for context
+    html += '<div style="font-size:11px;color:var(--text-dim);margin:4px 0;font-style:italic;">"' + esc((c.claim || '').substring(0, 100)) + '"</div>';
+    if (imp) {
+      html += '<span style="color:var(--text-dim);font-size:13px;">Current: ' + imp.current + '</span>';
+      html += '<span style="color:var(--text-dim);margin:0 8px;">→</span>';
+      html += '<span style="color:' + color + ';font-weight:700;font-size:13px;">' + imp.proposed + ' (' + (parseFloat(imp.pctChange) > 0 ? '+' : '') + imp.pctChange + '%)</span>';
+    }
+    html += '</div>';
+  });
+
+  html += '<div style="margin-top:16px;display:flex;gap:8px;align-items:center;">';
+  html += '<label style="font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="impact-confirmed"> I confirm these changes</label>';
+  html += '</div><div style="margin-top:12px;display:flex;gap:8px;">';
+  html += '<button onclick="confirmSubmit()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--green);color:white;font-weight:600;cursor:pointer;">Apply</button>';
+  html += '<button onclick="document.getElementById(\'impact-modal\').remove()" style="padding:8px 20px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;">Cancel</button>';
+  html += '</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function confirmSubmit() {
+  if (!document.getElementById('impact-confirmed')?.checked) {
+    showToast('Check the confirmation box first');
+    return;
+  }
+  document.getElementById('impact-modal')?.remove();
+
+  const accepted = [];
+  allItems.forEach(item => {
+    const d = decisions[item.id] || {};
+    if (d.decision === 'accepted') {
+      accepted.push({
+        ...item,
+        review_decision: 'accepted',
+        review_note: d.note || '',
+        reviewed_at: new Date().toISOString(),
+        confirmed: true,
+        impact: getImpact(item),
+      });
+    }
+  });
+  writeApproved(accepted);
+}
+
+async function writeApproved(accepted) {
+  const declined = [];
+  const parked = [];
+  allItems.forEach(item => {
+    const d = decisions[item.id] || {};
+    if (d.decision === 'declined') declined.push(item);
+    if (d.decision === 'parked') parked.push(item);
+  });
+
+  const approvedFields = proposedFields
+    .filter(f => fieldDecisions[f.field_id] === 'approved')
+    .map(f => ({ ...f, status: 'approved' }));
+  const rejectedFields = proposedFields
+    .filter(f => fieldDecisions[f.field_id] === 'rejected')
+    .map(f => f.field_id);
+
+  const output = {
+    submitted_at: new Date().toISOString(),
+    accepted: accepted,
+    declined: declined.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
+    parked: parked.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
+    new_fields_approved: approvedFields,
+    new_fields_rejected: rejectedFields
+  };
+
+  // Show processing spinner
+  document.getElementById('claims-list').innerHTML =
+    '<div style="text-align:center;padding:40px;"><div style="display:inline-block;width:24px;height:24px;border:3px solid var(--card-border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;"></div>' +
+    '<div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Applying decisions...</div></div>' +
+    '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
+
+  // Try API (admin_server.py), fallback to file download
+  let applied = false;
+  let apiResult = null;
+  try {
+    const resp = await fetch('/api/submit-decisions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(output)
+    });
+    if (resp.ok) {
+      apiResult = await resp.json();
+      applied = apiResult.success;
+    }
+  } catch(e) { /* API not running — fallback below */ }
+
+  if (applied) {
+    localStorage.removeItem(DECISIONS_KEY);
+    localStorage.removeItem('field-decisions');
+    showToast('Applied: ' + apiResult.message);
+
+    let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
+    html += '<h3 style="font-size:16px;margin-bottom:16px;color:var(--green);">Decisions Applied</h3>';
+    html += '<div style="padding:12px 16px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;margin-bottom:10px;">';
+    html += '<div style="font-size:13px;color:var(--text);line-height:1.8;">';
+    html += '<strong style="color:var(--green);">' + accepted.length + ' accepted</strong> → vault-data + entities.json + site-data.json updated<br>';
+    if (declined.length > 0) html += '<strong style="color:var(--red);">' + declined.length + ' declined</strong> → marked in vault-inbox<br>';
+    if (parked.length > 0) html += '<strong style="color:var(--orange);">' + parked.length + ' parked</strong> → stays for next review<br>';
+    if (approvedFields.length > 0) html += '<strong style="color:var(--purple);">' + approvedFields.length + ' new field(s)</strong> → added to schema<br>';
+    html += '</div></div>';
+    if (apiResult.details) {
+      html += '<details style="margin-top:12px;"><summary style="font-size:11px;color:var(--text-dim);cursor:pointer;">Show log</summary>';
+      html += '<pre style="margin-top:8px;padding:12px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:10px;color:var(--text-dim);white-space:pre-wrap;max-height:200px;overflow-y:auto;">' + esc(apiResult.details) + '</pre></details>';
+    }
+    html += '<div style="margin-top:16px;display:flex;gap:10px;">';
+    html += '<button onclick="location.reload()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Reload Review</button>';
+    html += '</div></div>';
+    document.getElementById('claims-list').innerHTML = html;
+
+  } else {
+    // Fallback: download file
+    const jsonStr = JSON.stringify(output, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'review-decisions-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast(accepted.length + ' decisions exported');
+    let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
+    html += '<h3 style="font-size:16px;margin-bottom:12px;">Manual Apply Required</h3>';
+    html += '<div style="padding:12px 16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;">';
+    html += '<div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px;">Admin server not running</div>';
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.8;">';
+    html += 'For automatic apply, start the server:<br>';
+    html += '<code style="color:var(--accent);background:var(--bg);padding:4px 10px;border-radius:4px;display:inline-block;margin:6px 0;">python3 scripts/admin_server.py</code><br><br>';
+    html += 'Or apply manually:<br>';
+    html += '1. Move downloaded file to <code>beta/data-updates/</code><br>';
+    html += '2. Run: <code style="color:var(--accent);">python3 scripts/apply_decisions.py</code>';
+    html += '</div></div></div>';
+    document.getElementById('claims-list').innerHTML = html;
+  }
+}
+
+// ----- Utils -----
+
+function esc(s) {
+  if (s == null) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+// ----- Init -----
+loadAll();
+</script>
+</body>
+</html>

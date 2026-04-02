@@ -16,7 +16,7 @@ import json, re, sys, os
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-BETA_DIR = os.path.join(ROOT_DIR, "beta")
+SITE_DIR = ROOT_DIR
 
 def load_json(path):
     with open(path) as f:
@@ -211,8 +211,8 @@ def process_batch(inbox_path, entities_path, schema_path, api_key=None):
 
 # ── CLI ──
 if __name__ == "__main__":
-    entities_path = os.path.join(BETA_DIR, "entities.json")
-    schema_path = os.path.join(BETA_DIR, "metric-schema.json")
+    entities_path = os.path.join(SITE_DIR, "entities.json")
+    schema_path = os.path.join(SITE_DIR, "metric-schema.json")
 
     # Get API key
     api_key = os.environ.get("ANTHROPIC_API_KEY", "")
@@ -231,7 +231,7 @@ if __name__ == "__main__":
                 break
 
     if len(sys.argv) > 1 and sys.argv[1] == "--batch":
-        inbox_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(BETA_DIR, "vault-inbox.json")
+        inbox_path = sys.argv[2] if len(sys.argv) > 2 else os.path.join(SITE_DIR, "vault-inbox.json")
         print(f"classify_claim.py — batch mode")
         print(f"  Inbox: {inbox_path}")
         print(f"  API key: {'set' if api_key else 'NOT SET (field discovery disabled)'}")

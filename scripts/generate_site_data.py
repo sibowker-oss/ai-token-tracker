@@ -29,7 +29,7 @@ from datetime import datetime, timezone
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
-BETA_DIR = os.path.join(ROOT_DIR, "beta")
+SITE_DIR = ROOT_DIR
 
 def load_json(path):
     with open(path) as f:
@@ -183,9 +183,9 @@ def generate(entities_path, existing_site_data_path, output_path):
 
 if __name__ == "__main__":
     # Default paths: beta/entities.json → beta/site-data.json
-    entities_path = os.path.join(BETA_DIR, "entities.json")
-    existing_path = os.path.join(BETA_DIR, "site-data.json")
-    output_path = os.path.join(BETA_DIR, "site-data.json")
+    entities_path = os.path.join(SITE_DIR, "entities.json")
+    existing_path = os.path.join(SITE_DIR, "site-data.json")
+    output_path = os.path.join(SITE_DIR, "site-data.json")
 
     # Allow overriding via CLI args
     if len(sys.argv) > 1:
