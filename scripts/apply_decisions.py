@@ -113,6 +113,22 @@ def apply_accepted(claim, vault_data, entities, schema):
     year = match_year(search_text) or match_year(claim.get("dateOfClaim", ""))
 
     if entity_slug and field_id and claim.get("value") is not None:
+        # Annualise monthly/quarterly values before storing
+        value = claim["value"]
+        unit = (claim.get("unit") or "").lower()
+        claim_text = (claim.get("claim") or "").lower()
+
+        annualised = False
+        if isinstance(value, (int, float)):
+            if "/month" in unit or "per month" in unit or "per month" in claim_text or "/month" in claim_text:
+                value = value * 12
+                annualised = True
+                log(f"  ANNUALISE: {claim['value']} /month × 12 = {value} (annual)")
+            elif "/quarter" in unit or "per quarter" in unit or "per quarter" in claim_text or "/quarter" in claim_text:
+                value = value * 4
+                annualised = True
+                log(f"  ANNUALISE: {claim['value']} /quarter × 4 = {value} (annual)")
+
         # Find entity in entities.json
         entity = None
         for c in entities["companies"]:
@@ -127,12 +143,12 @@ def apply_accepted(claim, vault_data, entities, schema):
                     entity["financials"] = {}
                 if year not in entity["financials"]:
                     entity["financials"][year] = {}
-                entity["financials"][year][field_id] = claim["value"]
-                log(f"  ENTITY: {entity['name']} → {year}.{field_id} = {claim['value']}")
+                entity["financials"][year][field_id] = value
+                log(f"  ENTITY: {entity['name']} → {year}.{field_id} = {value}" + (" (annualised)" if annualised else ""))
             else:
                 if "current" not in entity:
                     entity["current"] = {}
-                entity["current"][field_id] = claim["value"]
+                entity["current"][field_id] = value
                 log(f"  ENTITY: {entity['name']} → current.{field_id} = {claim['value']}")
 
             # 4. Add provenance
@@ -145,9 +161,9 @@ def apply_accepted(claim, vault_data, entities, schema):
             prov = entity["provenance"][prov_key]
             prov["claims"].append({
                 "id": dp_id,
-                "claim": claim["claim"][:120],
-                "value": claim["value"],
-                "unit": claim.get("unit", ""),
+                "claim": claim["claim"][:120] + (f" [annualised: {value}]" if annualised else ""),
+                "value": value,
+                "unit": "$B" if annualised else claim.get("unit", ""),
                 "weight": infer_weight(claim),
                 "confidence": claim.get("confidence", "estimated"),
                 "source": claim.get("sourceAuthor", ""),

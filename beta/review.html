@@ -265,11 +265,21 @@ async function loadAll() {
   proposedFields = schema?.proposed_fields || [];
   try { fieldDecisions = JSON.parse(localStorage.getItem('field-decisions') || '{}'); } catch(e) { fieldDecisions = {}; }
 
+  // Debug: log what loaded
+  console.log('Review data loaded:', {
+    schema: !!metricSchema,
+    schemaRules: metricSchema?.field_match_rules?.length || 0,
+    entities: !!entitiesData,
+    entityCount: Object.keys(entitiesLookup).length,
+    inbox: allItems.length
+  });
+
   // Merge inbox items (pending only)
   if (inbox?.items) {
     inbox.items
       .filter(i => i.status === 'pending')
       .forEach(i => {
+        try {
         allItems.push({
           id: i.id,
           origin: 'inbox',
@@ -295,8 +305,9 @@ async function loadAll() {
           metricKey: i.metricKey || null,
           metric: inferMetric(i),
         });
+        } catch(e) { console.error('Failed to add inbox item:', i.id, e); }
       });
-  }
+      }
 
   // Merge candidate claims from extraction pipeline
   if (candidates.length > 0) {
@@ -342,11 +353,15 @@ async function loadAll() {
   }
 
   loadDecisions();
-  renderSourceTabs();
-  renderStats();
-  renderFilters();
-  renderClaims();
-  updateSubmitBar();
+  try {
+    renderSourceTabs();
+    renderStats();
+    renderFilters();
+      renderClaims();
+    updateSubmitBar();
+    } catch(e) {
+    document.getElementById('claims-list').innerHTML = '<div style="color:var(--red);padding:20px;">Error loading claims: ' + e.message + '</div>';
+  }
 }
 
 async function loadJSON(path) {
@@ -521,24 +536,40 @@ function renderImpactRow(item) {
       html += '<div style="margin-top:3px;font-size:10px;color:var(--text-dim);">' + esc(fieldDef.description) + '</div>';
     }
 
+    // Auto-annualise monthly/quarterly for display
+    let displayValue = item.value;
+    let annualNote = '';
+    const claimLower = (item.claim || '').toLowerCase();
+    const unitLower = (item.unit || '').toLowerCase();
+    if (typeof displayValue === 'number') {
+      if (unitLower.includes('/month') || claimLower.includes('per month') || unitLower.includes('$b/month')) {
+        displayValue = displayValue * 12;
+        annualNote = ' <span style="color:var(--cyan);font-size:10px;">(= ' + item.value + '/mo × 12)</span>';
+      } else if (unitLower.includes('/quarter') || claimLower.includes('per quarter')) {
+        displayValue = displayValue * 4;
+        annualNote = ' <span style="color:var(--cyan);font-size:10px;">(= ' + item.value + '/qtr × 4)</span>';
+      }
+    }
+
     // Current → New value comparison
-    if (currentVal != null && item.value != null) {
+    if (currentVal != null && displayValue != null) {
       let pctHtml = '';
-      if (typeof currentVal === 'number' && typeof item.value === 'number' && currentVal !== 0) {
-        const pct = ((item.value - currentVal) / Math.abs(currentVal) * 100).toFixed(0);
+      if (typeof currentVal === 'number' && typeof displayValue === 'number' && currentVal !== 0) {
+        const pct = ((displayValue - currentVal) / Math.abs(currentVal) * 100).toFixed(0);
         const dir = Number(pct) >= 0 ? 'up' : 'down';
         pctHtml = '<span class="impact-pct ' + dir + '">(' + (Number(pct) > 0 ? '+' : '') + pct + '%)</span>';
       }
       html += '<div style="margin-top:6px;font-size:12px;">';
       html += '<span class="impact-current" style="text-decoration:line-through;">' + currentVal + ' ' + esc(unit) + '</span>';
       html += '<span class="impact-arrow">→</span>';
-      html += '<span class="impact-new">' + item.value + ' ' + esc(unit) + '</span>';
-      html += pctHtml;
+      html += '<span class="impact-new">' + displayValue + ' ' + esc(unit) + '</span>';
+      html += pctHtml + annualNote;
       html += '</div>';
-    } else if (item.value != null) {
+    } else if (displayValue != null) {
       html += '<div style="margin-top:6px;font-size:12px;">';
       html += '<span style="color:var(--text-dim);">New: </span>';
-      html += '<span class="impact-new">' + esc(item.value + ' ' + (unit || '')) + '</span>';
+      html += '<span class="impact-new">' + displayValue + ' ' + esc(unit) + '</span>';
+      html += annualNote;
       html += '</div>';
     }
 
@@ -831,14 +862,11 @@ function renderClaims() {
     return;
   }
 
-  // Sort: conflicts first, then authoritative, then corroborating, then indicative
-  const weightOrder = { authoritative: 0, corroborating: 1, indicative: 2 };
-  const statusOrder = { conflicts: 0, new: 1, confirms: 2 };
+  // Sort: newest first (by dateAdded, then dateOfClaim)
   filtered.sort((a, b) => {
-    const sa = statusOrder[a.dedup_status] ?? 9;
-    const sb = statusOrder[b.dedup_status] ?? 9;
-    if (sa !== sb) return sa - sb;
-    return (weightOrder[a.weight] ?? 9) - (weightOrder[b.weight] ?? 9);
+    const da = a.dateAdded || a.dateOfClaim || '';
+    const db = b.dateAdded || b.dateOfClaim || '';
+    return db.localeCompare(da);
   });
 
   let html = '';
@@ -851,7 +879,21 @@ function renderClaims() {
 
     // Header
     html += '<div class="claim-top">';
-    html += '<span class="claim-entity">' + esc(item.entity) + (item.value_display ? ' — ' + esc(item.value_display) : '') + '</span>';
+    // Build header: Entity — Value — Field (Year)
+    const cls = classifyClaim(item);
+    let headerText = esc(item.entity);
+    if (item.value_display) headerText += ' — ' + esc(item.value_display);
+    if (cls) {
+      const fieldLabel = cls.fieldDef?.label || cls.fieldId || '';
+      const yearLabel = cls.year || '';
+      if (fieldLabel || yearLabel) {
+        headerText += ' <span style="color:var(--text-dim);font-weight:400;font-size:12px;">→ ';
+        if (fieldLabel) headerText += esc(fieldLabel);
+        if (yearLabel) headerText += ' (' + esc(yearLabel) + ')';
+        headerText += '</span>';
+      }
+    }
+    html += '<span class="claim-entity">' + headerText + '</span>';
     html += '<div class="claim-badges">';
     if (d.decision) {
       const dBadge = d.decision === 'accepted' ? 'confirms' : d.decision === 'declined' ? 'conflicts' : 'medium';

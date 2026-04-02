@@ -44,8 +44,16 @@
     <label>Title (optional — auto-filled if blank)</label>
     <input id="src-title" type="text" placeholder="e.g. State of AI Report 2025">
 
-    <button class="btn btn-primary" onclick="addSource()">Add Source</button>
+    <label>Article content (paste here if site blocks auto-fetch)</label>
+    <textarea id="src-content" rows="6" placeholder="Optional — paste the article text here if the site blocks automated access. Leave empty to auto-fetch." style="width:100%;padding:10px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:12px;font-family:inherit;outline:none;resize:vertical;"></textarea>
+
+    <button class="btn btn-primary" id="src-btn" onclick="addSource()">Add Source + Extract Claims</button>
     <div id="src-status"></div>
+    <div id="src-progress" style="display:none;margin-top:12px;font-size:12px;color:var(--text-dim);">
+      <div style="display:inline-block;width:16px;height:16px;border:2px solid var(--card-border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;"></div>
+      Fetching page and extracting claims via Claude...
+    </div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
   </div>
 
   <!-- ADD COMPANY -->
@@ -109,23 +117,39 @@ async function addSource() {
   if (!url) return;
   const title = document.getElementById('src-title').value.trim();
 
+  // Show progress
+  document.getElementById('src-btn').disabled = true;
+  document.getElementById('src-progress').style.display = 'block';
+  document.getElementById('src-status').innerHTML = '';
+
   try {
     const resp = await fetch('/api/add-source', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, title })
+      body: JSON.stringify({ url, title, content: document.getElementById('src-content').value })
     });
     const result = await resp.json();
+    document.getElementById('src-progress').style.display = 'none';
+    document.getElementById('src-btn').disabled = false;
+
     if (result.success) {
       document.getElementById('src-url').value = '';
       document.getElementById('src-title').value = '';
+      document.getElementById('src-content').value = '';
       document.getElementById('src-classify').style.display = 'none';
-      showStatus('src-status', result.message);
-      showToast('Source added');
+
+      let msg = result.message;
+      if (result.claims_extracted > 0) {
+        msg += '<br><a href="review.html" style="color:var(--accent);margin-top:8px;display:inline-block;">Go to Review tab to see extracted claims →</a>';
+      }
+      showStatus('src-status', msg);
+      showToast(result.claims_extracted > 0 ? result.claims_extracted + ' claims extracted' : 'Source added');
     } else {
       showStatus('src-status', 'Error: ' + result.message);
     }
   } catch(e) {
+    document.getElementById('src-progress').style.display = 'none';
+    document.getElementById('src-btn').disabled = false;
     showStatus('src-status', 'Server not running — start with: python3 scripts/admin_server.py');
   }
 }

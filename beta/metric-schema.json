@@ -783,11 +783,11 @@
   ],
   "field_match_rules": [
     {
-      "pattern": "\\barr\\b|annuali[sz]ed.*revenue|revenue.*run.rate|revenue.*forecast|revenue.*target|revenue.*projection|revenue.*guidance",
+      "pattern": "\\barr\\b|annuali[sz]ed.*revenue|revenue.*run.rate|revenue.*forecast|revenue.*target|revenue.*projection|revenue.*guidance|revenue.*per month|\\$.*per month|generating.*revenue|\\$.*revenue per|revenue.*month|\\$.*\\/month|\\$.*per quarter|revenue.*per quarter|\\$.*\\/quarter",
       "field": "arr"
     },
     {
-      "pattern": "collected.*revenue|actual.*revenue|full.year.*revenue",
+      "pattern": "collected.*revenue|actual.*revenue|full.year.*revenue|annual.*revenue|ended.*with.*revenue|yearly.*revenue",
       "field": "collected_revenue"
     },
     {
@@ -815,7 +815,7 @@
       "field": "tokens_per_day"
     },
     {
-      "pattern": "capex|capital.*expenditure|infrastructure.*spend",
+      "pattern": "capex|capital.*expenditure|infrastructure.*spend|invest.*infrastructure|infrastructure.*invest",
       "field": "capex"
     },
     {

@@ -154,14 +154,199 @@ class AdminHandler(SimpleHTTPRequestHandler):
             registry["sources"].append(new_source)
             save_json(registry_path, registry)
 
+            # ── Extract claims from the URL immediately ──
+            pasted_text = data.get("content", "").strip()
+            claims_extracted = 0
+            extract_error = None
+            try:
+                claims_extracted = self.extract_claims_from_url(url, new_id, title, pasted_text)
+                new_source["status"] = "active"
+                new_source["last_checked"] = datetime.now().strftime("%Y-%m-%d")
+                new_source["last_claims_count"] = claims_extracted
+                save_json(registry_path, registry)
+            except Exception as e:
+                extract_error = str(e)
+
+            msg = f"Added: {title}"
+            if claims_extracted > 0:
+                msg += f" — {claims_extracted} claim(s) extracted and ready for review"
+            elif extract_error:
+                msg += f" — extraction failed: {extract_error}"
+            else:
+                msg += " — no claims found"
+
             self.send_json({
                 "success": True,
-                "message": f"Added: {title} (type: {source_type}, freq: {freq})",
-                "source": new_source
+                "message": msg,
+                "source": new_source,
+                "claims_extracted": claims_extracted,
+                "extract_error": extract_error
             })
 
         except Exception as e:
             self.send_json({"success": False, "message": str(e)}, 500)
+
+    def extract_claims_from_url(self, url, source_id, source_title, pasted_text=None):
+        """Fetch a URL (or use pasted text), send to Claude, extract structured claims, add to vault-inbox."""
+        import re as _re
+        import urllib.request as _urllib_request
+
+        text = None
+
+        if pasted_text and len(pasted_text.strip()) > 50:
+            text = pasted_text.strip()[:8000]
+        else:
+            # Strategy 1: subprocess curl
+            try:
+                result = subprocess.run(
+                    ["curl", "-sL", "-m", "15",
+                     "-H", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+                     "-H", "Accept: text/html",
+                     url],
+                    capture_output=True, text=True, timeout=20
+                )
+                if result.returncode == 0 and len(result.stdout) > 200 and "Just a moment" not in result.stdout[:500]:
+                    html = result.stdout
+                    text = _re.sub(r'<script[^>]*>.*?</script>', '', html, flags=_re.DOTALL)
+                    text = _re.sub(r'<style[^>]*>.*?</style>', '', text, flags=_re.DOTALL)
+                    text = _re.sub(r'<[^>]+>', ' ', text)
+                    text = _re.sub(r'\s+', ' ', text).strip()[:8000]
+            except Exception:
+                pass
+
+            # Strategy 2: urllib
+            if not text:
+                try:
+                    req = _urllib_request.Request(url, headers={
+                        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+                        "Accept": "text/html,application/xhtml+xml",
+                    })
+                    with _urllib_request.urlopen(req, timeout=15) as resp:
+                        html = resp.read().decode("utf-8", errors="replace")
+                    text = _re.sub(r'<script[^>]*>.*?</script>', '', html, flags=_re.DOTALL)
+                    text = _re.sub(r'<style[^>]*>.*?</style>', '', text, flags=_re.DOTALL)
+                    text = _re.sub(r'<[^>]+>', ' ', text)
+                    text = _re.sub(r'\s+', ' ', text).strip()[:8000]
+                except Exception:
+                    pass
+
+            if not text or len(text) < 100:
+                raise Exception(
+                    "Could not fetch page (site may block automated access). "
+                    "Paste the article text into the content field and try again."
+                )
+
+        # 2. Get API key
+        api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+        if not api_key:
+            for key_file in [os.path.expanduser("~/.anthropic_api_key"), os.path.join(ROOT_DIR, ".env")]:
+                if os.path.exists(key_file):
+                    with open(key_file) as f:
+                        content = f.read().strip()
+                        if content.startswith("sk-ant-"):
+                            api_key = content
+                        elif "ANTHROPIC_API_KEY" in content:
+                            for line in content.split("\n"):
+                                if line.startswith("ANTHROPIC_API_KEY="):
+                                    api_key = line.split("=", 1)[1].strip().strip("\"'")
+                    break
+        if not api_key:
+            raise Exception("No API key found. Set ANTHROPIC_API_KEY or save key in Settings.")
+
+        # 3. Call Claude to extract claims
+        prompt = f"""Extract ALL specific quantitative claims from this web page. Focus on:
+- Revenue figures (ARR, annual revenue, monthly revenue, collected revenue)
+- User/customer counts
+- Growth rates
+- Financial projections, targets, or guidance
+- Token volumes, API usage stats
+- Funding, valuation
+- Cost figures, margins, losses
+- Employee counts
+
+For each claim, return a JSON array. Each item:
+{{
+  "claim": "ALWAYS start with the company name, e.g. 'OpenAI ended 2024 with $3.4B revenue' not 'We ended 2024...'",
+  "entity": "company name this is about",
+  "value": <numeric value — use billions for $B, millions for $M, raw number for counts>,
+  "unit": "unit — e.g. $B, $B ARR, %, count, T tokens/day",
+  "confidence": "verified|estimated|speculative",
+  "dateOfClaim": "YYYY-MM-DD or best guess",
+  "tags": ["relevant", "tags"]
+}}
+
+Return ONLY a valid JSON array. No markdown, no explanation. If no claims found, return [].
+
+PAGE CONTENT:
+{text}"""
+
+        body = json.dumps({
+            "model": "claude-sonnet-4-20250514",
+            "max_tokens": 2000,
+            "messages": [{"role": "user", "content": prompt}]
+        }).encode()
+
+        req = _urllib_request.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=body,
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": api_key,
+                "anthropic-version": "2023-06-01"
+            }
+        )
+
+        with _urllib_request.urlopen(req, timeout=30) as resp:
+            result = json.loads(resp.read())
+
+        response_text = result["content"][0]["text"].strip()
+        # Parse JSON (handle markdown wrapping)
+        if response_text.startswith("```"):
+            response_text = response_text.split("```")[1]
+            if response_text.startswith("json"):
+                response_text = response_text[4:]
+        claims = json.loads(response_text.strip())
+
+        if not isinstance(claims, list) or len(claims) == 0:
+            return 0
+
+        # 4. Add claims to vault-inbox.json
+        inbox_path = os.path.join(BETA_DIR, "vault-inbox.json")
+        inbox = load_json(inbox_path)
+        date_str = datetime.now().strftime("%Y%m%d")
+        added = 0
+
+        for i, claim in enumerate(claims):
+            claim_id = f"extract-{date_str}-{source_id}-{i+1}"
+
+            # Skip if already exists
+            if any(item["id"] == claim_id for item in inbox["items"]):
+                continue
+
+            inbox["items"].append({
+                "id": claim_id,
+                "claim": claim.get("claim", ""),
+                "value": claim.get("value"),
+                "unit": claim.get("unit", ""),
+                "sourceUrl": claim.get("sourceUrl", "") or self.path,
+                "sourceType": "official" if "openai.com" in (claim.get("sourceUrl", "") or self.path) else "reporting",
+                "sourceAuthor": claim.get("entity", source_title),
+                "confidence": claim.get("confidence", "estimated"),
+                "dateOfClaim": claim.get("dateOfClaim", datetime.now().strftime("%Y-%m-%d")),
+                "dateAdded": datetime.now().strftime("%Y-%m-%d"),
+                "usedOn": [],
+                "tags": claim.get("tags", []),
+                "notes": f"Auto-extracted from {source_title}",
+                "status": "pending",
+                "replaces": None,
+                "source_id": source_id,
+                "metricKey": None
+            })
+            added += 1
+
+        inbox["lastProcessed"] = datetime.now().strftime("%Y-%m-%d")
+        save_json(inbox_path, inbox)
+        return added
 
     # ── Add Company ──
 
@@ -207,9 +392,12 @@ class AdminHandler(SimpleHTTPRequestHandler):
 
     # Suppress noisy logs
     def log_message(self, format, *args):
-        if "/api/" in (args[0] if args else ""):
-            print(f"  API: {args[0]}")
-        # Suppress static file logs
+        try:
+            msg = str(args[0]) if args else ""
+            if "/api/" in msg:
+                print(f"  API: {msg}")
+        except Exception:
+            pass
 
 
 def main():
