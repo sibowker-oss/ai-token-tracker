@@ -273,15 +273,14 @@ async function loadAll() {
     inbox: allItems.length
   });
 
-  // Merge inbox items (pending only)
+  // Load all inbox items (filter by status in renderClaims)
   if (inbox?.items) {
-    inbox.items
-      .filter(i => i.status === 'pending')
-      .forEach(i => {
+    inbox.items.forEach(i => {
         try {
         allItems.push({
           id: i.id,
           origin: 'inbox',
+          inboxStatus: i.status || 'pending',
           entity: extractEntity(i),
           claim: i.claim,
           value: i.value,
@@ -290,7 +289,7 @@ async function loadAll() {
           weight: inferWeight(i),
           confidence: i.confidence || 'estimated',
           dedup_status: i.replaces ? 'conflicts' : 'new',
-          dedup_note: null, // impact shown via renderImpactRow instead
+          dedup_note: null,
           sourceUrl: i.sourceUrl,
           sourceAuthor: i.sourceAuthor,
           sourceType: i.sourceType,
@@ -727,10 +726,10 @@ function renderSourceTabs() {
 }
 
 function renderStats() {
-  const pending = allItems.filter(i => !decisions[i.id]?.decision).length;
-  const accepted = allItems.filter(i => decisions[i.id]?.decision === 'accepted').length;
-  const declined = allItems.filter(i => decisions[i.id]?.decision === 'declined').length;
-  const parked = allItems.filter(i => decisions[i.id]?.decision === 'parked').length;
+  const pending = allItems.filter(i => i.inboxStatus === 'pending').length;
+  const accepted = allItems.filter(i => i.inboxStatus === 'accepted').length;
+  const declined = allItems.filter(i => i.inboxStatus === 'declined').length;
+  const parked = allItems.filter(i => i.inboxStatus === 'parked').length;
 
   let html = '<span class="stat-pill">Pending: <strong>' + pending + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(16,185,129,0.3);">Accepted: <strong style="color:var(--green);">' + accepted + '</strong></span>';
@@ -740,15 +739,17 @@ function renderStats() {
 }
 
 function renderFilters() {
+  const pendingCount = allItems.filter(i => i.inboxStatus === 'pending').length;
+  const acceptedCount = allItems.filter(i => i.inboxStatus === 'accepted').length;
+  const declinedCount = allItems.filter(i => i.inboxStatus === 'declined').length;
+  const parkedCount = allItems.filter(i => i.inboxStatus === 'parked').length;
+
   const filters = [
-    { key: 'pending', label: 'Pending' },
-    { key: 'all', label: 'All' },
-    { key: 'w:authoritative', label: 'Authoritative' },
-    { key: 'w:corroborating', label: 'Corroborating' },
-    { key: 'w:indicative', label: 'Indicative' },
-    { key: 'd:accepted', label: 'Accepted' },
-    { key: 'd:declined', label: 'Declined' },
-    { key: 'd:parked', label: 'Parked' },
+    { key: 'pending', label: 'Pending (' + pendingCount + ')' },
+    { key: 'parked', label: 'Parked (' + parkedCount + ')' },
+    { key: 'accepted', label: 'Accepted (' + acceptedCount + ')' },
+    { key: 'declined', label: 'Declined (' + declinedCount + ')' },
+    { key: 'all', label: 'All (' + allItems.length + ')' },
   ];
 
   let html = '';
@@ -782,13 +783,9 @@ function renderClaims() {
     }
   }
 
-  // Status/weight/decision filter
-  if (activeFilter === 'pending') {
-    filtered = filtered.filter(i => !decisions[i.id]?.decision);
-  } else if (activeFilter.startsWith('w:')) {
-    filtered = filtered.filter(i => i.weight === activeFilter.substring(2));
-  } else if (activeFilter.startsWith('d:')) {
-    filtered = filtered.filter(i => decisions[i.id]?.decision === activeFilter.substring(2));
+  // Status filter (from vault-inbox status)
+  if (['pending', 'accepted', 'declined', 'parked'].includes(activeFilter)) {
+    filtered = filtered.filter(i => i.inboxStatus === activeFilter);
   }
 
   if (filtered.length === 0) {
