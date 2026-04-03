@@ -119,9 +119,26 @@ function classifyUrl(url) {
   return { type, method, freq };
 }
 
+async function fetchPageText(url) {
+  // Try fetching via CORS proxy
+  try {
+    const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+    const resp = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
+    if (!resp.ok) return null;
+    const html = await resp.text();
+    if (html.length < 200 || html.includes('Just a moment')) return null;
+    // Strip HTML to plaintext
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    doc.querySelectorAll('script,style,nav,footer,header').forEach(el => el.remove());
+    return (doc.body?.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 8000);
+  } catch (e) {
+    return null;
+  }
+}
+
 async function extractClaimsViaClaude(text, sourceId, sourceTitle) {
   const apiKey = localStorage.getItem(CLAUDE_KEY);
-  if (!apiKey) return { claims: [], error: 'No Claude API key — claims will be extracted by weekly workflow' };
+  if (!apiKey) return { claims: [], error: 'No Claude API key — claims will be extracted by daily scan' };
 
   const prompt = `Extract ALL specific quantitative claims from this web page. Focus on:
 - Revenue figures (ARR, annual revenue, monthly revenue, collected revenue)
@@ -194,7 +211,7 @@ async function addSource() {
 
   try {
     // Read current sources-registry from GitHub
-    const regFile = await GitHubAPI.readFile('beta/sources-registry.json');
+    const regFile = await GitHubAPI.readFile('sources-registry.json');
     const registry = JSON.parse(regFile.content);
 
     // Auto-classify
@@ -215,18 +232,24 @@ async function addSource() {
     };
 
     registry.sources.push(newSource);
-    const filesToCommit = [{ path: 'beta/sources-registry.json', content: registry }];
+    const filesToCommit = [{ path: 'sources-registry.json', content: registry }];
     let claimsExtracted = 0;
     let extractMsg = '';
 
-    // If content was pasted, extract claims client-side
-    if (pastedContent && pastedContent.length > 50) {
+    // Get content: pasted text, or auto-fetch the URL
+    let contentText = pastedContent;
+    if (!contentText || contentText.length < 50) {
+      document.querySelector('#src-progress div:last-child').textContent = 'Fetching page content...';
+      contentText = await fetchPageText(url);
+    }
+
+    if (contentText && contentText.length > 50) {
       document.querySelector('#src-progress div:last-child').textContent = 'Extracting claims via Claude...';
-      const { claims, error } = await extractClaimsViaClaude(pastedContent, newId, title);
+      const { claims, error } = await extractClaimsViaClaude(contentText, newId, title);
 
       if (claims.length > 0) {
         // Read current vault-inbox
-        const inboxFile = await GitHubAPI.readFile('beta/vault-inbox.json');
+        const inboxFile = await GitHubAPI.readFile('vault-inbox.json');
         const inbox = JSON.parse(inboxFile.content);
         const dateStr = today.replace(/-/g, '');
 
@@ -256,7 +279,7 @@ async function addSource() {
         });
 
         inbox.lastProcessed = today;
-        filesToCommit.push({ path: 'beta/vault-inbox.json', content: inbox });
+        filesToCommit.push({ path: 'vault-inbox.json', content: inbox });
 
         newSource.status = 'active';
         newSource.last_checked = today;
@@ -266,7 +289,7 @@ async function addSource() {
         extractMsg = error ? ' — ' + error : ' — no claims found in content';
       }
     } else {
-      extractMsg = ' — claims will be extracted by weekly workflow';
+      extractMsg = ' — could not fetch page. Claims will be extracted by daily scan';
     }
 
     // Commit to GitHub
@@ -305,7 +328,7 @@ async function addCompany() {
 
   try {
     // Read current entities from GitHub
-    const entFile = await GitHubAPI.readFile('beta/entities.json');
+    const entFile = await GitHubAPI.readFile('entities.json');
     const entities = JSON.parse(entFile.content);
 
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/\./g, '');
@@ -329,7 +352,7 @@ async function addCompany() {
     });
 
     const result = await GitHubAPI.commitFiles(
-      [{ path: 'beta/entities.json', content: entities }],
+      [{ path: 'entities.json', content: entities }],
       'Add company: ' + name + ' (' + role + ')'
     );
 

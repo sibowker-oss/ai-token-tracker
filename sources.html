@@ -148,7 +148,7 @@ async function loadAll() {
     loadJSON('vault-inbox.json')
   ]);
 
-  sources = registry?.sources || [];
+  sources = (registry?.sources || []).filter(s => s.status !== 'deleted');
   vaultData = vault?.dataPoints || [];
   inboxItems = inbox?.items || [];
 
@@ -246,6 +246,7 @@ function renderSources() {
     html += '<span class="badge badge-type">' + esc(src.type.replace(/_/g, ' ')) + '</span>';
     html += '<span class="badge badge-freq">' + esc(src.frequency) + '</span>';
     if (totalClaims > 0) html += '<span class="badge badge-claims">' + totalClaims + ' claims</span>';
+    html += '<button onclick="event.stopPropagation();deleteSource(\'' + src.id + '\',\'' + esc(src.title).replace(/'/g,'\\\'') + '\')" style="margin-left:8px;padding:2px 8px;border-radius:4px;border:1px solid rgba(239,68,68,0.3);background:transparent;color:var(--red);font-size:10px;cursor:pointer;opacity:0.6;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">Delete</button>';
     html += '</div></div>';
 
     // Meta row
@@ -372,7 +373,33 @@ function esc(s) {
   return d.innerHTML;
 }
 
+async function deleteSource(sourceId, sourceTitle) {
+  if (!confirm('Delete source "' + sourceTitle + '"? This will mark it as inactive.')) return;
+  if (!window.GitHubAPI || !GitHubAPI.hasToken()) {
+    alert('GitHub token not set — go to Settings tab first');
+    return;
+  }
+  try {
+    const regFile = await GitHubAPI.readFile('sources-registry.json');
+    const registry = JSON.parse(regFile.content);
+    const source = registry.sources.find(s => s.id === sourceId);
+    if (source) {
+      source.status = 'deleted';
+      await GitHubAPI.commitFiles(
+        [{ path: 'sources-registry.json', content: registry }],
+        'Delete source: ' + sourceTitle
+      );
+      // Remove from local array and re-render
+      sources = sources.filter(s => s.id !== sourceId);
+      renderSources();
+    }
+  } catch (e) {
+    alert('Error: ' + e.message);
+  }
+}
+
 loadAll();
 </script>
+<script src="github-api.js"></script>
 </body>
 </html>
