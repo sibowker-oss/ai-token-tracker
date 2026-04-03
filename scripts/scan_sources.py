@@ -111,7 +111,7 @@ def extract_claims(text, source_title, client):
     try:
         response = client.messages.create(
             model=MODEL,
-            max_tokens=2000,
+            max_tokens=4096,
             messages=[{"role": "user", "content": prompt}]
         )
         raw = response.content[0].text.strip()
