@@ -1,19 +1,19 @@
 {
   "date": "2026-04-03",
-  "timestamp": "2026-04-03T07:00:24.785010",
+  "timestamp": "2026-04-03T15:33:38.368743",
   "pypi": {
-    "openai": 229683525,
-    "anthropic": 82035440,
-    "langchain-core": 101862704,
-    "litellm": 94937466,
-    "google-generativeai": 17047295,
-    "vllm": 8036901,
-    "transformers": 126323582,
-    "ollama": 10608856,
-    "mistralai": 15928127,
-    "cohere": 24311057,
-    "together": 4969686,
-    "groq": 13510221
+    "openai": 230549661,
+    "anthropic": 82939987,
+    "langchain-core": null,
+    "litellm": 94636238,
+    "google-generativeai": 16995257,
+    "vllm": 7921230,
+    "transformers": 126698154,
+    "ollama": 10715949,
+    "mistralai": 16063526,
+    "cohere": null,
+    "together": 5193348,
+    "groq": 13700577
   },
   "npm": {
     "openai": 70710148,
@@ -37,9 +37,9 @@
     "google/gemma-2-9b-it": 246983
   },
   "openrouter": {
-    "total_models": 352,
+    "total_models": 349,
     "providers": 56,
-    "free_models": 29,
+    "free_models": 28,
     "min_output_price_per_m": -1000000.0,
     "max_output_price_per_m": 600.0,
     "median_output_price_per_m": 1.2
@@ -63,16 +63,16 @@
   },
   "github": {
     "ollama": {
-      "total_downloads": 3575926,
-      "latest_tag": "v0.19.0"
+      "total_downloads": 3738215,
+      "latest_tag": "v0.20.0"
     },
     "vllm": {
-      "total_downloads": 25482,
+      "total_downloads": 17774,
       "latest_tag": "v0.18.1"
     },
     "llama_cpp": {
-      "total_downloads": 7042,
-      "latest_tag": "b8639"
+      "total_downloads": 11844,
+      "latest_tag": "b8642"
     },
     "tgi": {
       "total_downloads": 0,
@@ -80,20 +80,20 @@
     }
   },
   "docker": {
-    "vllm": 16760134
+    "vllm": 16786122
   },
   "derived": {
-    "openai_total": 300393673,
-    "anthropic_total": 123122433,
-    "google_total": 27502865,
-    "anthropic_openai_ratio": 0.41,
-    "self_hosted_sdk": 20633172,
+    "openai_total": 301259809,
+    "anthropic_total": 124026980,
+    "google_total": 27450827,
+    "anthropic_openai_ratio": 0.412,
+    "self_hosted_sdk": 20624594,
     "self_hosted_sdk_basis": "monthly_rate",
-    "self_hosted_github": 3608450,
+    "self_hosted_github": 3767833,
     "self_hosted_github_basis": "cumulative_last_5_releases",
-    "self_hosted_docker": 16760134,
+    "self_hosted_docker": 16786122,
     "self_hosted_docker_basis": "cumulative_alltime",
     "hf_total_downloads": 15812851,
-    "litellm_downloads": 94937466
+    "litellm_downloads": 94636238
   }
 }
