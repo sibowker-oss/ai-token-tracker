@@ -124,12 +124,19 @@ const GitHubAPI = (() => {
    * @returns {Promise<{sha: string, url: string}>} — the new commit
    */
   async function commitFiles(files, message) {
-    const latestSha = await _getLatestCommitSha();
-    const baseTreeSha = await _getTreeSha(latestSha);
-    const newTreeSha = await _createTree(baseTreeSha, files);
-    const newCommitSha = await _createCommit(newTreeSha, latestSha, message);
-    await _updateRef(newCommitSha);
-    return { sha: newCommitSha, url: `https://github.com/${OWNER}/${REPO}/commit/${newCommitSha}` };
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const latestSha = await _getLatestCommitSha();
+      const baseTreeSha = await _getTreeSha(latestSha);
+      const newTreeSha = await _createTree(baseTreeSha, files);
+      const newCommitSha = await _createCommit(newTreeSha, latestSha, message);
+      try {
+        await _updateRef(newCommitSha);
+        return { sha: newCommitSha, url: `https://github.com/${OWNER}/${REPO}/commit/${newCommitSha}` };
+      } catch (e) {
+        if (attempt < 2 && e.message.includes('422')) continue; // ref moved, retry
+        throw e;
+      }
+    }
   }
 
   /**
