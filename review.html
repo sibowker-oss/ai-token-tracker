@@ -1129,6 +1129,9 @@ async function writeApproved(accepted) {
       'Review decisions: ' + accepted.length + ' accepted, ' + declined.length + ' declined, ' + parked.length + ' parked'
     );
 
+    // Trigger the Apply Decisions workflow (API commits don't trigger workflows automatically)
+    await GitHubAPI.triggerWorkflow('apply-decisions.yml');
+
     localStorage.removeItem(DECISIONS_KEY);
     localStorage.removeItem('field-decisions');
     showToast(accepted.length + ' decisions committed');
@@ -1143,7 +1146,7 @@ async function writeApproved(accepted) {
     if (approvedFields.length > 0) html += '<strong style="color:var(--purple);">' + approvedFields.length + ' new field(s)</strong><br>';
     html += '</div></div>';
     html += '<div style="margin-top:12px;font-size:11px;color:var(--text-dim);">';
-    html += 'Committed to GitHub — the Apply Decisions action will process automatically.<br>';
+    html += 'Committed to GitHub — Apply Decisions workflow triggered. Reload in ~1 minute.<br>';
     html += '<a href="' + esc(result.url) + '" target="_blank" style="color:var(--accent);">View commit →</a>';
     html += '</div>';
     html += '<div style="margin-top:16px;display:flex;gap:10px;">';

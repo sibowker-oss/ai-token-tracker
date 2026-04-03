@@ -164,5 +164,20 @@ const GitHubAPI = (() => {
     }
   }
 
-  return { getToken, setToken, clearToken, hasToken, commitFiles, readFile, validateToken, OWNER, REPO };
+  /**
+   * Trigger a workflow via workflow_dispatch.
+   * @param {string} workflowFile — e.g. "apply-decisions.yml"
+   * @returns {Promise<boolean>} — true if triggered
+   */
+  async function triggerWorkflow(workflowFile) {
+    const headers = await _headers();
+    const resp = await fetch(`${API}/repos/${OWNER}/${REPO}/actions/workflows/${workflowFile}/dispatches`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ ref: BRANCH })
+    });
+    return resp.status === 204;
+  }
+
+  return { getToken, setToken, clearToken, hasToken, commitFiles, readFile, validateToken, triggerWorkflow, OWNER, REPO };
 })();

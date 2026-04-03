@@ -1129,6 +1129,9 @@ async function writeApproved(accepted) {
       'Review decisions: ' + accepted.length + ' accepted, ' + declined.length + ' declined, ' + parked.length + ' parked'
     );
 
+    // Trigger the Apply Decisions workflow (API commits don't trigger workflows automatically)
+    await GitHubAPI.triggerWorkflow('apply-decisions.yml');
+
     localStorage.removeItem(DECISIONS_KEY);
     localStorage.removeItem('field-decisions');
     showToast(accepted.length + ' decisions committed');
