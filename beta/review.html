@@ -1096,84 +1096,67 @@ async function writeApproved(accepted) {
     '<div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Applying decisions...</div></div>' +
     '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
 
-  // Submit via GitHub API — commit decisions file, Action applies them
-  const dateStr = new Date().toISOString().split('T')[0];
-  const filePath = 'beta/data-updates/review-decisions-' + dateStr + '.json';
-
   if (!GitHubAPI.hasToken()) {
-    // No GitHub token — fall back to file download
-    const jsonStr = JSON.stringify(output, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const dlUrl = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = dlUrl; a.download = 'review-decisions-' + dateStr + '.json';
-    a.click();
-    URL.revokeObjectURL(dlUrl);
-
-    showToast(accepted.length + ' decisions exported');
-    let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
-    html += '<h3 style="font-size:16px;margin-bottom:12px;">GitHub Token Not Set</h3>';
-    html += '<div style="padding:12px 16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.15);border-radius:8px;">';
-    html += '<div style="font-size:12px;font-weight:700;color:var(--orange);margin-bottom:6px;">Decisions downloaded as file</div>';
-    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.8;">';
-    html += 'To submit directly from the browser, add a GitHub token in the <strong>Settings</strong> tab.<br>';
-    html += 'Or apply manually: move the downloaded file to <code>data-updates/</code> and push.';
-    html += '</div></div></div>';
-    document.getElementById('claims-list').innerHTML = html;
+    document.getElementById('claims-list').innerHTML =
+      '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">' +
+      '<h3 style="font-size:16px;margin-bottom:12px;color:var(--orange);">GitHub Token Not Set</h3>' +
+      '<p style="font-size:12px;color:var(--text-dim);">Add a GitHub token in the Settings tab to submit decisions.</p></div>';
     return;
   }
 
   try {
-    const result = await GitHubAPI.commitFiles(
-      [{ path: filePath, content: output }],
-      'Review decisions: ' + accepted.length + ' accepted, ' + declined.length + ' declined, ' + parked.length + ' parked'
-    );
+    // Read vault-inbox.json directly from GitHub
+    const inboxFile = await GitHubAPI.readFile('beta/vault-inbox.json');
+    const inbox = JSON.parse(inboxFile.content);
 
-    // Trigger the Apply Decisions workflow (API commits don't trigger workflows automatically)
-    await GitHubAPI.triggerWorkflow('apply-decisions.yml');
+    // Build lookup of decisions by ID
+    const acceptedIds = new Set(accepted.map(i => i.id));
+    const declinedIds = new Set(declined.map(i => i.id));
+    const parkedIds = new Set(parked.map(i => i.id));
+
+    // Update statuses in vault-inbox
+    let updated = 0;
+    inbox.items.forEach(item => {
+      if (acceptedIds.has(item.id)) { item.status = 'accepted'; updated++; }
+      else if (declinedIds.has(item.id)) { item.status = 'declined'; updated++; }
+      else if (parkedIds.has(item.id)) { item.status = 'parked'; updated++; }
+    });
+
+    inbox.lastProcessed = new Date().toISOString().split('T')[0];
+
+    // Commit updated vault-inbox.json directly
+    const result = await GitHubAPI.commitFiles(
+      [{ path: 'beta/vault-inbox.json', content: inbox }],
+      'Review: ' + accepted.length + ' accepted, ' + declined.length + ' declined, ' + parked.length + ' parked'
+    );
 
     localStorage.removeItem(DECISIONS_KEY);
     localStorage.removeItem('field-decisions');
-    showToast(accepted.length + ' decisions committed');
+    showToast(accepted.length + ' accepted, ' + declined.length + ' declined');
 
     let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
-    html += '<h3 style="font-size:16px;margin-bottom:16px;color:var(--green);">Decisions Committed</h3>';
+    html += '<h3 style="font-size:16px;margin-bottom:16px;color:var(--green);">Decisions Applied</h3>';
     html += '<div style="padding:12px 16px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;margin-bottom:10px;">';
     html += '<div style="font-size:13px;color:var(--text);line-height:1.8;">';
     html += '<strong style="color:var(--green);">' + accepted.length + ' accepted</strong><br>';
     if (declined.length > 0) html += '<strong style="color:var(--red);">' + declined.length + ' declined</strong><br>';
     if (parked.length > 0) html += '<strong style="color:var(--orange);">' + parked.length + ' parked</strong><br>';
-    if (approvedFields.length > 0) html += '<strong style="color:var(--purple);">' + approvedFields.length + ' new field(s)</strong><br>';
     html += '</div></div>';
     html += '<div style="margin-top:12px;font-size:11px;color:var(--text-dim);">';
-    html += 'Committed to GitHub — the Apply Decisions action will process automatically.<br>';
+    html += updated + ' items updated in vault-inbox.json<br>';
     html += '<a href="' + esc(result.url) + '" target="_blank" style="color:var(--accent);">View commit →</a>';
     html += '</div>';
     html += '<div style="margin-top:16px;display:flex;gap:10px;">';
-    html += '<button onclick="location.reload()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Reload Review</button>';
+    html += '<button onclick="location.reload()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Reload Inbox</button>';
     html += '</div></div>';
     document.getElementById('claims-list').innerHTML = html;
 
   } catch(e) {
-    // GitHub API failed — fall back to file download
-    const jsonStr = JSON.stringify(output, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const dlUrl = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = dlUrl; a.download = 'review-decisions-' + dateStr + '.json';
-    a.click();
-    URL.revokeObjectURL(dlUrl);
-
-    showToast('GitHub error — file downloaded');
-    let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
-    html += '<h3 style="font-size:16px;margin-bottom:12px;">GitHub Commit Failed</h3>';
-    html += '<div style="padding:12px 16px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:8px;">';
-    html += '<div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:6px;">' + esc(e.message) + '</div>';
-    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.8;">';
-    html += 'Decisions downloaded as file instead. Check your GitHub token in Settings.<br>';
-    html += 'To apply: move file to <code>data-updates/</code> and push.';
-    html += '</div></div></div>';
-    document.getElementById('claims-list').innerHTML = html;
+    showToast('Error: ' + e.message);
+    document.getElementById('claims-list').innerHTML =
+      '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">' +
+      '<h3 style="font-size:16px;margin-bottom:12px;color:var(--red);">Submit Failed</h3>' +
+      '<div style="font-size:12px;color:var(--text-dim);">' + esc(e.message) + '</div></div>';
   }
 }
 
