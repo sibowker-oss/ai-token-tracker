@@ -30,12 +30,8 @@ jobs:
       - name: Archive processed decisions
         run: |
           mkdir -p data-updates/archive beta/data-updates/archive
-          for f in data-updates/review-decisions-*.json; do
-            [ -f "$f" ] && mv "$f" data-updates/archive/
-          done
-          for f in beta/data-updates/review-decisions-*.json; do
-            [ -f "$f" ] && mv "$f" beta/data-updates/archive/
-          done
+          mv data-updates/review-decisions-*.json data-updates/archive/ 2>/dev/null || true
+          mv beta/data-updates/review-decisions-*.json beta/data-updates/archive/ 2>/dev/null || true
 
       - name: Commit and push
         run: |
