@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-03",
+  "lastProcessed": "2026-04-04",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -8445,6 +8445,489 @@
       "notes": "OpenAI enterprise now 40%+ of revenue (up from historically consumer-dominated). Targeting 50/50 consumer/enterprise parity by end-2026. Relevant for existing 'needs-source' resource-openai-current-biz_pct.",
       "status": "pending",
       "replaces": "resource-openai-current-biz_pct"
+    },
+    {
+      "id": "audit-20260404-gap-1",
+      "claim": "we closed our latest funding round with $122 billion in committed capital",
+      "value": 122,
+      "unit": "$122B",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "total_funding"
+      ],
+      "notes": "Audit gap: OpenAI.total_funding \u2014 March 31, 2026",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "total_funding"
+    },
+    {
+      "id": "audit-20260404-gap-2",
+      "claim": "OpenAI was the fastest technology platform to reach 10 million users",
+      "value": 10000000,
+      "unit": "10M",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "user_count"
+      ],
+      "notes": "Audit gap: OpenAI.user_count \u2014 historical milestone",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "user_count"
+    },
+    {
+      "id": "audit-20260404-gap-3",
+      "claim": "the fastest to 100 million users",
+      "value": 100000000,
+      "unit": "100M",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "user_count"
+      ],
+      "notes": "Audit gap: OpenAI.user_count \u2014 historical milestone",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "user_count"
+    },
+    {
+      "id": "audit-20260404-gap-4",
+      "claim": "soon the fastest to 1 billion weekly active users",
+      "value": 1000000000,
+      "unit": "1B",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "user_count"
+      ],
+      "notes": "Audit gap: OpenAI.user_count \u2014 2026 projected",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "user_count"
+    },
+    {
+      "id": "audit-20260404-gap-5",
+      "claim": "Within a year of launching ChatGPT, we reached $1B in revenue",
+      "value": 1,
+      "unit": "$1B",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "collected_revenue"
+      ],
+      "notes": "Audit gap: OpenAI.collected_revenue \u2014 2023",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "collected_revenue"
+    },
+    {
+      "id": "audit-20260404-gap-6",
+      "claim": "By the end of 2024 we were generating $1B per quarter",
+      "value": 1,
+      "unit": "$1B",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "collected_revenue"
+      ],
+      "notes": "Audit gap: OpenAI.collected_revenue \u2014 end of 2024",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "collected_revenue"
+    },
+    {
+      "id": "audit-20260404-gap-7",
+      "claim": "We are now generating $2B in revenue per month",
+      "value": 2,
+      "unit": "$2B",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "collected_revenue"
+      ],
+      "notes": "Audit gap: OpenAI.collected_revenue \u2014 March 2026",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "collected_revenue"
+    },
+    {
+      "id": "audit-20260404-gap-8",
+      "claim": "we are growing revenue four times faster than the companies who defined the Internet and mobile eras, including Alphabet and Meta",
+      "value": 4,
+      "unit": "4x",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "growth_rate"
+      ],
+      "notes": "Audit gap: OpenAI.growth_rate \u2014 2026",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "growth_rate"
+    },
+    {
+      "id": "audit-20260404-gap-9",
+      "claim": "raising over $3 billion from individual investors",
+      "value": 3,
+      "unit": "Over",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "total_funding"
+      ],
+      "notes": "Audit gap: OpenAI.total_funding \u2014 March 31, 2026",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "total_funding"
+    },
+    {
+      "id": "audit-20260404-gap-10",
+      "claim": "we have also expanded our existing revolving credit facility to approximately $4.7 billion",
+      "value": 4.7,
+      "unit": "$4.7B",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "collected_revenue"
+      ],
+      "notes": "Audit gap: OpenAI.collected_revenue \u2014 March 31, 2026",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "collected_revenue"
+    },
+    {
+      "id": "audit-20260404-gap-11",
+      "claim": "our ads pilot reached more than $100 million in ARR in under six weeks",
+      "value": 100,
+      "unit": "$100M+",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "ARR"
+      ],
+      "notes": "Audit gap: OpenAI.ARR \u2014 2026",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "ARR"
+    },
+    {
+      "id": "audit-20260404-gap-12",
+      "claim": "enterprise side, which now makes up more than 40% of our revenue",
+      "value": 40,
+      "unit": "Enterprise",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "enterprise_revenue"
+      ],
+      "notes": "Audit gap: OpenAI.enterprise_revenue \u2014 March 2026",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "enterprise_revenue"
+    },
+    {
+      "id": "audit-20260404-gap-13",
+      "claim": "10 weeks ago, it was 50-50 with OpenAI",
+      "value": 50,
+      "unit": "50%",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "market_share_pct"
+      ],
+      "notes": "Audit gap: OpenAI.market_share_pct \u2014 ~10 weeks before recording",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "market_share_pct"
+    },
+    {
+      "id": "audit-20260404-gap-14",
+      "claim": "Early December, it was 60-40 in OpenAI's favor",
+      "value": 60,
+      "unit": "60%",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "market_share_pct"
+      ],
+      "notes": "Audit gap: OpenAI.market_share_pct \u2014 early December 2024",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "market_share_pct"
+    },
+    {
+      "id": "audit-20260404-gap-15",
+      "claim": "they now plan to nearly double headcount to 8000 by the end of the year",
+      "value": 8000,
+      "unit": "~8,000",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "employee_count"
+      ],
+      "notes": "Audit gap: OpenAI.employee_count \u2014 end of 2025",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "employee_count"
+    },
+    {
+      "id": "audit-20260404-gap-16",
+      "claim": "5,000 other organizations use Metaview",
+      "value": 5000,
+      "unit": "5,000",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-23-20vc-inside-andurils-20bn-army-contract-why-anduril-must-go-.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "customer_count"
+      ],
+      "notes": "Audit gap: Metaview.customer_count \u2014 2025",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "customer_count"
+    },
+    {
+      "id": "audit-20260404-gap-17",
+      "claim": "Metaview customers close roles 30% faster",
+      "value": 30,
+      "unit": "30%",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-23-20vc-inside-andurils-20bn-army-contract-why-anduril-must-go-.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "growth_rate"
+      ],
+      "notes": "Audit gap: Metaview.growth_rate \u2014 2025",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "growth_rate"
+    },
+    {
+      "id": "audit-20260404-gap-18",
+      "claim": "Ramp data suggested that Anthropic now captures 73% of all spending among companies buying AI tools",
+      "value": 73,
+      "unit": "73%",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "market_share_pct"
+      ],
+      "notes": "Audit gap: Anthropic.market_share_pct \u2014 early 2025 (recent weeks as of recording)",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "market_share_pct"
+    },
+    {
+      "id": "audit-20260404-gap-19",
+      "claim": "10 weeks ago, it was 50-50 with OpenAI",
+      "value": 50,
+      "unit": "50%",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "market_share_pct"
+      ],
+      "notes": "Audit gap: Anthropic.market_share_pct \u2014 ~10 weeks before recording",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "market_share_pct"
+    },
+    {
+      "id": "audit-20260404-gap-20",
+      "claim": "Early December, it was 60-40 in OpenAI's favor",
+      "value": 40,
+      "unit": "40%",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "market_share_pct"
+      ],
+      "notes": "Audit gap: Anthropic.market_share_pct \u2014 early December 2024",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "market_share_pct"
+    },
+    {
+      "id": "audit-20260404-gap-21",
+      "claim": "the marginal person opting for AI today... the switches are moving towards Claude... people in the market today for a new AI went 70% on tropics",
+      "value": 70,
+      "unit": "~70%",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "market_share_pct"
+      ],
+      "notes": "Audit gap: Anthropic.market_share_pct \u2014 recent weeks as of recording",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "market_share_pct"
+    },
+    {
+      "id": "audit-20260404-gap-22",
+      "claim": "if Anthropic now is maybe a $22 billion run rate that the revenue does tie to these two conclusions",
+      "value": 22,
+      "unit": "$22B",
+      "sourceUrl": "",
+      "sourceType": "podcast_discussion",
+      "sourceAuthor": "2026-03-26-20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthrop.md",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "revenue"
+      ],
+      "notes": "Audit gap: Anthropic.revenue \u2014 as of early 2025",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "revenue"
+    },
+    {
+      "id": "audit-20260404-conflict-1",
+      "claim": "Our APIs now process more than 15 billion tokens per minute",
+      "value": 15000000000,
+      "unit": "15B tokens per minute via APIs",
+      "sourceUrl": "",
+      "sourceType": "official",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-04",
+      "dateAdded": "2026-04-04",
+      "usedOn": [],
+      "tags": [
+        "tokens_per_day"
+      ],
+      "notes": "Audit conflict: current=200, fresh=15B tokens per minute via APIs",
+      "status": "pending",
+      "replaces": null,
+      "source_id": null,
+      "metricKey": "tokens_per_day"
     }
   ]
 }
