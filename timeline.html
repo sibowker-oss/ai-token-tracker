@@ -194,10 +194,15 @@ function initCharts() {
     options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } }, scales: { y: { grid: darkGrid, title: { display: true, text: '$B' } }, x: { grid: { display: false } } } }
   });
 
+  // Calculate y-axis max as 1.2x the highest single bar across all quarters
+  const maxToken = Math.max(...TOKEN_DATA.flat()) * 1.2;
+  const maxRev = Math.max(...REV_DATA.flat()) * 1.2;
+  chartRev.options.scales.y.max = Math.ceil(maxRev);
+
   chartTokens = new Chart(document.getElementById('chart-tokens'), {
     type: 'bar',
     data: { labels: PROV_NAMES, datasets: [{ data: TOKEN_DATA[0], backgroundColor: PROV_COLORS.map(c => c + 'cc'), borderRadius: 4 }] },
-    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + 'T/day' } } }, scales: { y: { max: 300, grid: darkGrid, title: { display: true, text: 'T/day' } }, x: { grid: { display: false } } } }
+    options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y + 'T/day' } } }, scales: { y: { max: Math.ceil(maxToken), grid: darkGrid, title: { display: true, text: 'T/day' } }, x: { grid: { display: false } } } }
   });
 
   chartPrice = new Chart(document.getElementById('chart-price'), {
