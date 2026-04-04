@@ -430,6 +430,565 @@
       "last_checked": "2026-04-03",
       "last_claims_count": 0,
       "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-024",
+      "url": "https://seekingalpha.com/earnings/earnings-call-transcripts",
+      "title": "Seeking Alpha \u2014 AI Earnings Transcripts",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "earnings",
+        "revenue",
+        "guidance"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-025",
+      "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company=openai&CIK=&type=10-K&dateb=&owner=include&count=40",
+      "title": "SEC EDGAR \u2014 AI Company Filings",
+      "type": "sec_filing",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "sec",
+        "financials",
+        "official"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-026",
+      "url": "https://abc.xyz/investor/",
+      "title": "Alphabet Investor Relations",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "google",
+        "earnings",
+        "cloud"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-027",
+      "url": "https://www.microsoft.com/en-us/investor",
+      "title": "Microsoft Investor Relations",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "microsoft",
+        "azure",
+        "copilot"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-028",
+      "url": "https://investor.nvidia.com/",
+      "title": "NVIDIA Investor Relations",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "nvidia",
+        "gpu",
+        "data-center"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-029",
+      "url": "https://ir.amd.com/",
+      "title": "AMD Investor Relations",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "amd",
+        "gpu",
+        "mi300"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-030",
+      "url": "https://investor.salesforce.com/",
+      "title": "Salesforce Investor Relations",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "salesforce",
+        "agentforce",
+        "enterprise"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-031",
+      "url": "https://investors.servicenow.com/",
+      "title": "ServiceNow Investor Relations",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "servicenow",
+        "enterprise",
+        "ai-assist"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-032",
+      "url": "https://investor.meta.com/",
+      "title": "Meta Investor Relations",
+      "type": "earnings_aggregation",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "meta",
+        "llama",
+        "ai-spend"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-033",
+      "url": "https://sacra.com/research/anthropic/",
+      "title": "Sacra \u2014 Anthropic Deep Dive",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "anthropic",
+        "revenue",
+        "sacra"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-034",
+      "url": "https://sacra.com/research/openai/",
+      "title": "Sacra \u2014 OpenAI Deep Dive",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "openai",
+        "revenue",
+        "sacra"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-035",
+      "url": "https://sacra.com/research/cursor/",
+      "title": "Sacra \u2014 Cursor Deep Dive",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "cursor",
+        "ai-app",
+        "sacra"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-036",
+      "url": "https://sacra.com/research/perplexity/",
+      "title": "Sacra \u2014 Perplexity Deep Dive",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "perplexity",
+        "ai-app",
+        "sacra"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-037",
+      "url": "https://36kr.com/information/AI/",
+      "title": "36Kr \u2014 AI News (China)",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "china",
+        "bytedance",
+        "alibaba",
+        "deepseek"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "daily",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-038",
+      "url": "https://www.jiemian.com/lists/900.html",
+      "title": "Jiemian \u2014 Tech/AI Section (China)",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "china",
+        "ai-market"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "daily",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-039",
+      "url": "https://a16z.com/ai/",
+      "title": "a16z \u2014 AI Essays",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "vc",
+        "market-data",
+        "ai-trends"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-040",
+      "url": "https://www.sequoiacap.com/articles/",
+      "title": "Sequoia \u2014 Articles",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "vc",
+        "market-data"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-041",
+      "url": "https://www.bessemervp.com/atlas/",
+      "title": "Bessemer \u2014 Atlas (Cloud Index)",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "vc",
+        "saas",
+        "cloud"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-042",
+      "url": "https://www.cac.gov.cn/",
+      "title": "Cyberspace Administration of China",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "china",
+        "government",
+        "regulation",
+        "token-data"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-043",
+      "url": "https://aiindex.stanford.edu/report/",
+      "title": "Stanford AI Index Report",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "research",
+        "market-data",
+        "adoption"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "annual",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-044",
+      "url": "https://www.europarl.europa.eu/topics/en/article/20230601STO93804/eu-ai-act-first-regulation-on-artificial-intelligence",
+      "title": "EU AI Act \u2014 Parliament Updates",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "eu",
+        "regulation"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-045",
+      "url": "https://radar.cloudflare.com/domains",
+      "title": "Cloudflare Radar \u2014 Domain Rankings",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "traffic",
+        "proxy",
+        "api-usage"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-046",
+      "url": "https://www.similarweb.com/top-websites/category/computers-electronics-and-technology/artificial-intelligence/",
+      "title": "SimilarWeb \u2014 AI Website Rankings",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "traffic",
+        "proxy",
+        "usage"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-047",
+      "url": "https://pypistats.org/packages/openai",
+      "title": "PyPI Stats \u2014 OpenAI SDK",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "sdk",
+        "adoption",
+        "proxy"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-048",
+      "url": "https://pypistats.org/packages/anthropic",
+      "title": "PyPI Stats \u2014 Anthropic SDK",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "sdk",
+        "adoption",
+        "proxy"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-049",
+      "url": "https://pypistats.org/packages/google-generativeai",
+      "title": "PyPI Stats \u2014 Google GenAI SDK",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "sdk",
+        "adoption",
+        "proxy"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-050",
+      "url": "https://www.crunchbase.com/lists/top-ai-companies",
+      "title": "Crunchbase \u2014 Top AI Companies",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "funding",
+        "valuation",
+        "startups"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-051",
+      "url": "https://dealroom.co/guides/artificial-intelligence",
+      "title": "Dealroom \u2014 AI Landscape",
+      "type": "web_page",
+      "author": "",
+      "organization": "",
+      "added": "2026-04-04",
+      "tags": [
+        "funding",
+        "valuation",
+        "europe"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-04-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction"
     }
   ]
 }

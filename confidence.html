@@ -96,11 +96,23 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
   <p class="intro">How well-sourced is every number in the system? Green = multiple quality sources. Orange = single source or estimates only. Red = no source linked. Click any company to see field-level detail.</p>
 
   <div class="stats-row" id="stats-row"></div>
+
+  <!-- Tabs: Entities / Conflicts / Coverage -->
+  <div style="display:flex;gap:4px;margin-bottom:16px;">
+    <button class="filter-btn active" id="tab-entities" onclick="switchView('entities')">Entities</button>
+    <button class="filter-btn" id="tab-conflicts" onclick="switchView('conflicts')">Conflicts</button>
+    <button class="filter-btn" id="tab-coverage" onclick="switchView('coverage')">Source Coverage</button>
+    <button class="filter-btn" id="tab-stale" onclick="switchView('stale')">Stale Data</button>
+  </div>
+
   <div style="margin-bottom:12px;">
-    <input id="search" type="text" placeholder="Search companies..." oninput="renderEntities()" style="width:100%;max-width:400px;padding:8px 14px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:13px;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--card-border)'">
+    <input id="search" type="text" placeholder="Search companies..." oninput="renderCurrentView()" style="width:100%;max-width:400px;padding:8px 14px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:13px;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--card-border)'">
   </div>
   <div class="filters" id="filters"></div>
   <div id="entity-list"></div>
+  <div id="conflicts-view" style="display:none;"></div>
+  <div id="coverage-view" style="display:none;"></div>
+  <div id="stale-view" style="display:none;"></div>
 </div>
 
 <footer>AI Ledger v2 Beta</footer>
@@ -108,18 +120,44 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
 <script>
 let entitiesData = null;
 let metricSchema = null;
+let vaultInbox = null;
+let vaultData = null;
 let activeFilter = 'all';
+let currentView = 'entities';
 
 async function init() {
-  const [ents, schema] = await Promise.all([
+  const [ents, schema, inbox, vault] = await Promise.all([
     loadJSON('entities.json'),
-    loadJSON('metric-schema.json')
+    loadJSON('metric-schema.json'),
+    loadJSON('vault-inbox.json'),
+    loadJSON('vault-data.json')
   ]);
   entitiesData = ents;
   metricSchema = schema;
+  vaultInbox = inbox;
+  vaultData = vault;
   renderStats();
   renderFilters();
   renderEntities();
+}
+
+function switchView(view) {
+  currentView = view;
+  ['entities', 'conflicts', 'coverage', 'stale'].forEach(v => {
+    const el = document.getElementById(v === 'entities' ? 'entity-list' : v + '-view');
+    if (el) el.style.display = v === view ? 'block' : 'none';
+    const tab = document.getElementById('tab-' + v);
+    if (tab) tab.classList.toggle('active', v === view);
+  });
+  document.getElementById('filters').style.display = view === 'entities' ? 'flex' : 'none';
+  renderCurrentView();
+}
+
+function renderCurrentView() {
+  if (currentView === 'entities') renderEntities();
+  else if (currentView === 'conflicts') renderConflicts();
+  else if (currentView === 'coverage') renderCoverage();
+  else if (currentView === 'stale') renderStaleData();
 }
 
 async function loadJSON(path) {
@@ -333,6 +371,286 @@ function renderEntities() {
   }
 
   document.getElementById('entity-list').innerHTML = html;
+}
+
+// ===== IMPROVEMENT 1: Multi-source conflict detection =====
+function renderConflicts() {
+  const query = (document.getElementById('search')?.value || '').toLowerCase();
+  const items = (vaultInbox?.items || []).concat(
+    (vaultData?.dataPoints || []).map(dp => ({...dp, status: 'accepted', claim: dp.claim}))
+  );
+
+  // Group by entity + rough field match
+  const byEntityField = {};
+  items.forEach(item => {
+    if (!item.claim) return;
+    const entity = (item.sourceAuthor || item.entity || '').toLowerCase().replace(/[^a-z]/g, '');
+    if (!entity || entity.length < 3) return;
+    // Extract a rough metric key
+    const claim = item.claim.toLowerCase();
+    let field = 'general';
+    if (claim.includes('arr') || claim.includes('revenue') || claim.includes('$')) field = 'revenue';
+    else if (claim.includes('token')) field = 'tokens';
+    else if (claim.includes('user') || claim.includes('customer') || claim.includes('subscriber')) field = 'users';
+    else if (claim.includes('valuation') || claim.includes('funding')) field = 'funding';
+    else if (claim.includes('employee') || claim.includes('headcount')) field = 'employees';
+    else if (claim.includes('growth') || claim.includes('%')) field = 'growth';
+
+    const key = entity.slice(0, 15) + '|' + field;
+    byEntityField[key] = byEntityField[key] || [];
+    byEntityField[key].push(item);
+  });
+
+  // Find conflicts (2+ claims for same entity+field with different values)
+  let html = '<h2 style="font-size:16px;margin-bottom:16px;">Multi-Source Cross-Reference</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:20px;">Claims grouped by entity and metric. Highlights where multiple sources report different values for the same data point.</p>';
+
+  const conflicts = [];
+  for (const [key, claims] of Object.entries(byEntityField)) {
+    if (claims.length < 2) continue;
+    const withValues = claims.filter(c => c.value != null);
+    if (withValues.length < 2) continue;
+    const values = withValues.map(c => c.value);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    if (min === max) continue; // All agree
+    const spread = max > 0 ? ((max - min) / max * 100).toFixed(0) : 0;
+    conflicts.push({ key, claims: withValues, spread: parseFloat(spread), min, max });
+  }
+
+  conflicts.sort((a, b) => b.spread - a.spread);
+
+  if (query) {
+    conflicts.filter(c => c.key.toLowerCase().includes(query));
+  }
+
+  if (conflicts.length === 0) {
+    html += '<div style="text-align:center;padding:40px;color:var(--text-dim);">No conflicts found — all multi-source data points agree.</div>';
+  } else {
+    html += '<div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">' + conflicts.length + ' potential conflicts found</div>';
+    conflicts.forEach(c => {
+      const [entity, field] = c.key.split('|');
+      const spreadColor = c.spread > 50 ? 'var(--red)' : c.spread > 20 ? 'var(--orange)' : 'var(--green)';
+      html += '<div class="entity-block" onclick="this.classList.toggle(\'expanded\')" style="margin-bottom:8px;">';
+      html += '<div class="entity-header">';
+      html += '<div><div class="entity-name">' + esc(entity) + ' — ' + esc(field) + '</div>';
+      html += '<div class="entity-roles">' + c.claims.length + ' sources, values: ' + c.min + ' to ' + c.max + '</div></div>';
+      html += '<div class="entity-score"><span style="color:' + spreadColor + ';font-weight:700;font-size:14px;">' + c.spread + '% spread</span></div>';
+      html += '</div>';
+      html += '<div class="entity-fields">';
+      c.claims.forEach(cl => {
+        const statusColor = cl.status === 'accepted' ? 'var(--green)' : cl.status === 'declined' ? 'var(--red)' : cl.status === 'parked' ? 'var(--orange)' : 'var(--text-dim)';
+        html += '<div class="field-row">';
+        html += '<span class="field-key" style="min-width:100px;"><span style="color:' + statusColor + ';">' + (cl.status || 'vault') + '</span></span>';
+        html += '<span class="field-value" style="min-width:80px;font-weight:700;">' + cl.value + ' ' + (cl.unit || '') + '</span>';
+        html += '<span style="flex:1;font-size:11px;color:var(--text-dim);">' + esc(cl.claim?.slice(0, 120)) + '</span>';
+        html += '<span style="font-size:10px;color:var(--text-dim);">' + esc(cl.sourceAuthor || cl.source || '') + '</span>';
+        html += '</div>';
+      });
+      html += '</div></div>';
+    });
+  }
+
+  document.getElementById('conflicts-view').innerHTML = html;
+}
+
+// ===== IMPROVEMENT 2: Confidence decay based on data age =====
+function renderStaleData() {
+  const query = (document.getElementById('search')?.value || '').toLowerCase();
+  const now = new Date();
+  const DAY_MS = 86400000;
+
+  let html = '<h2 style="font-size:16px;margin-bottom:16px;">Stale Data — Confidence Decay</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:20px;">Data points degrade over time. Fields older than 90 days are flagged for re-sourcing. Sorted by staleness.</p>';
+
+  const staleItems = [];
+  for (const entity of entitiesData?.companies || []) {
+    if (query && !entity.name.toLowerCase().includes(query)) continue;
+    const fields = getFieldsForEntity(entity);
+    fields.forEach(f => {
+      // Try to find the date of the source
+      let dataDate = null;
+      if (f.claims && f.claims.length > 0) {
+        const dates = f.claims.map(c => c.dateOfClaim || c.dateAdded).filter(Boolean);
+        if (dates.length > 0) dataDate = dates.sort().pop(); // most recent
+      }
+      // Fallback: check year in key
+      if (!dataDate && f.year && f.year.match(/^\d{4}$/)) {
+        dataDate = f.year + '-12-31';
+      }
+      if (!dataDate) dataDate = '2025-01-01'; // assume old if no date
+
+      const age = Math.floor((now - new Date(dataDate)) / DAY_MS);
+      let decayLevel = 'fresh'; // < 30 days
+      if (age > 180) decayLevel = 'stale';
+      else if (age > 90) decayLevel = 'aging';
+      else if (age > 30) decayLevel = 'ok';
+
+      if (age > 60) { // Only show items older than 60 days
+        staleItems.push({
+          entity: entity.name,
+          slug: entity.slug,
+          roles: entity.roles,
+          field: f.field,
+          value: f.value,
+          confidence: f.confidence,
+          dataDate,
+          age,
+          decayLevel,
+        });
+      }
+    });
+  }
+
+  staleItems.sort((a, b) => b.age - a.age);
+
+  if (staleItems.length === 0) {
+    html += '<div style="text-align:center;padding:40px;color:var(--text-dim);">All data is less than 60 days old.</div>';
+  } else {
+    const staleCount = staleItems.filter(i => i.decayLevel === 'stale').length;
+    const agingCount = staleItems.filter(i => i.decayLevel === 'aging').length;
+    html += '<div style="display:flex;gap:12px;margin-bottom:16px;">';
+    html += '<div class="stat-card stat-red"><div class="stat-value">' + staleCount + '</div><div class="stat-label">Stale (>180d)</div></div>';
+    html += '<div class="stat-card stat-orange"><div class="stat-value">' + agingCount + '</div><div class="stat-label">Aging (>90d)</div></div>';
+    html += '</div>';
+
+    html += '<div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;">Showing ' + staleItems.length + ' fields older than 60 days</div>';
+
+    let currentEntity = '';
+    staleItems.forEach(item => {
+      if (item.entity !== currentEntity) {
+        if (currentEntity) html += '</div>';
+        currentEntity = item.entity;
+        html += '<div class="entity-block" style="margin-bottom:8px;">';
+        html += '<div class="entity-header" onclick="this.parentElement.classList.toggle(\'expanded\')">';
+        html += '<div><div class="entity-name">' + esc(item.entity) + '</div>';
+        html += '<div class="entity-roles">' + (item.roles || []).join(', ') + '</div></div>';
+        const entityStale = staleItems.filter(s => s.entity === item.entity);
+        const worstAge = Math.max(...entityStale.map(s => s.age));
+        const ageColor = worstAge > 180 ? 'var(--red)' : worstAge > 90 ? 'var(--orange)' : 'var(--text-dim)';
+        html += '<span style="color:' + ageColor + ';font-size:12px;font-weight:600;">' + worstAge + ' days old</span>';
+        html += '</div>';
+        html += '<div class="entity-fields">';
+      }
+
+      const ageColor = item.age > 180 ? 'var(--red)' : item.age > 90 ? 'var(--orange)' : 'var(--text-dim)';
+      html += '<div class="field-row">';
+      html += '<span class="field-key">' + esc(item.field) + '</span>';
+      html += '<span class="field-value">' + esc(String(item.value)) + '</span>';
+      html += '<span class="field-confidence"><span class="conf-badge conf-' + item.confidence + '">' + item.confidence + '</span></span>';
+      html += '<span style="color:' + ageColor + ';font-size:11px;font-weight:600;">' + item.age + ' days</span>';
+      html += '<span style="font-size:10px;color:var(--text-dim);">' + esc(item.dataDate) + '</span>';
+      html += '</div>';
+    });
+    if (currentEntity) html += '</div></div>';
+  }
+
+  document.getElementById('stale-view').innerHTML = html;
+}
+
+// ===== IMPROVEMENT 3: Source coverage scoring =====
+function renderCoverage() {
+  const query = (document.getElementById('search')?.value || '').toLowerCase();
+
+  // Key fields by role that we WANT to have authoritative sources for
+  const keyFields = {
+    model_provider: ['arr', 'collected_revenue', 'tokens_per_day', 'valuation', 'total_funding', 'growth_rate', 'customer_count', 'employees', 'operating_loss'],
+    ai_app: ['arr', 'valuation', 'total_funding', 'user_count', 'customer_count', 'employee_count'],
+    hyperscaler: ['ai_cloud_revenue', 'gpu_capacity', 'gpu_capex'],
+    neo_cloud: ['arr', 'valuation', 'total_funding', 'gpu_count'],
+    iaas_provider: ['arr', 'valuation', 'tokens_per_day'],
+    aggregator: ['arr', 'tokens_per_day', 'user_count'],
+    traditional_saas: ['ai_arr', 'paid_seats'],
+    gpu_provider: ['total_revenue', 'data_center_revenue', 'market_share_pct'],
+  };
+
+  let html = '<h2 style="font-size:16px;margin-bottom:16px;">Source Coverage Scorecard</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:20px;">For each entity, shows what % of key fields have data and how well-sourced they are. Target: every model provider should have 3+ authoritative fields.</p>';
+
+  const scores = [];
+  for (const entity of entitiesData?.companies || []) {
+    if (query && !entity.name.toLowerCase().includes(query)) continue;
+
+    const allData = {...(entity.current || {})};
+    for (const yearData of Object.values(entity.financials || {})) {
+      if (typeof yearData === 'object') Object.assign(allData, yearData);
+    }
+
+    const fields = getFieldsForEntity(entity);
+    const roles = entity.roles || [];
+    let targetFields = [];
+    roles.forEach(r => { targetFields = targetFields.concat(keyFields[r] || []); });
+    targetFields = [...new Set(targetFields)];
+
+    const filled = targetFields.filter(f => allData[f] != null && allData[f] !== 0).length;
+    const authFields = fields.filter(f => f.confidence === 'high').length;
+    const totalFields = fields.length;
+    const coveragePct = targetFields.length > 0 ? Math.round(filled / targetFields.length * 100) : 0;
+    const authPct = totalFields > 0 ? Math.round(authFields / totalFields * 100) : 0;
+
+    scores.push({
+      name: entity.name,
+      slug: entity.slug,
+      roles,
+      targetFields: targetFields.length,
+      filledFields: filled,
+      missingFields: targetFields.filter(f => !allData[f] || allData[f] === 0),
+      totalFields,
+      authFields,
+      coveragePct,
+      authPct,
+    });
+  }
+
+  // Sort: model providers first, then by coverage ascending (worst first)
+  const rolePriority = {model_provider: 0, hyperscaler: 1, gpu_provider: 2, neo_cloud: 3, iaas_provider: 4, aggregator: 5, ai_app: 6, traditional_saas: 7};
+  scores.sort((a, b) => {
+    const pa = Math.min(...a.roles.map(r => rolePriority[r] ?? 99));
+    const pb = Math.min(...b.roles.map(r => rolePriority[r] ?? 99));
+    if (pa !== pb) return pa - pb;
+    return a.coveragePct - b.coveragePct;
+  });
+
+  // Summary stats
+  const avgCoverage = scores.length > 0 ? Math.round(scores.reduce((s, x) => s + x.coveragePct, 0) / scores.length) : 0;
+  const wellSourced = scores.filter(s => s.authFields >= 3).length;
+  html += '<div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">';
+  html += '<div class="stat-card"><div class="stat-value">' + avgCoverage + '%</div><div class="stat-label">Avg Coverage</div></div>';
+  html += '<div class="stat-card stat-green"><div class="stat-value">' + wellSourced + '</div><div class="stat-label">Well-Sourced (3+ auth)</div></div>';
+  html += '<div class="stat-card stat-red"><div class="stat-value">' + (scores.length - wellSourced) + '</div><div class="stat-label">Needs Work</div></div>';
+  html += '</div>';
+
+  scores.forEach(s => {
+    const barColor = s.coveragePct >= 70 ? 'var(--green)' : s.coveragePct >= 40 ? 'var(--orange)' : 'var(--red)';
+    const authColor = s.authPct >= 50 ? 'var(--green)' : s.authPct >= 20 ? 'var(--orange)' : 'var(--red)';
+
+    html += '<div class="entity-block" style="margin-bottom:6px;" onclick="this.classList.toggle(\'expanded\')">';
+    html += '<div class="entity-header">';
+    html += '<div style="flex:1;"><div class="entity-name">' + esc(s.name) + '</div>';
+    html += '<div class="entity-roles">' + s.roles.join(', ') + ' · ' + s.filledFields + '/' + s.targetFields + ' key fields</div></div>';
+
+    // Coverage bar
+    html += '<div style="display:flex;align-items:center;gap:12px;">';
+    html += '<div style="width:120px;height:8px;background:#1e293b;border-radius:4px;overflow:hidden;">';
+    html += '<div style="width:' + s.coveragePct + '%;height:100%;background:' + barColor + ';border-radius:4px;"></div></div>';
+    html += '<span style="font-size:12px;font-weight:700;color:' + barColor + ';min-width:35px;">' + s.coveragePct + '%</span>';
+    html += '<span style="font-size:10px;color:' + authColor + ';">' + s.authFields + ' auth</span>';
+    html += '</div></div>';
+
+    // Expanded: show missing fields
+    if (s.missingFields.length > 0) {
+      html += '<div class="entity-fields">';
+      html += '<div class="field-row" style="color:var(--red);font-size:11px;font-weight:600;">Missing key fields:</div>';
+      s.missingFields.forEach(f => {
+        html += '<div class="field-row"><span class="field-key">' + esc(f) + '</span><span style="color:var(--red);font-size:11px;">no data</span></div>';
+      });
+      html += '</div>';
+    }
+
+    html += '</div>';
+  });
+
+  document.getElementById('coverage-view').innerHTML = html;
 }
 
 function esc(s) {
