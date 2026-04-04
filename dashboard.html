@@ -773,8 +773,8 @@ function updateConsumerTable() {
 
   // Model type filter (from global filter bar)
   if (modelTypeFilter !== 'all') {
-    const openProvs = ['meta', 'deepseek', 'mistral', 'own'];
-    const frontierProvs = ['openai', 'anthropic', 'google', 'xai'];
+    const openProvs = ['meta', 'deepseek', 'mistral', 'alibaba', 'qwen', 'own', 'self-hosted', 'others'];
+    const frontierProvs = ['openai', 'anthropic', 'google', 'xai', 'bytedance', 'tencent', 'baidu', 'minimax', 'moonshot'];
     const matchProvs = modelTypeFilter === 'open' ? openProvs : frontierProvs;
     filtered = filtered.filter(c => {
       const provArr = (c.providers || []).map(p => p.toLowerCase());
@@ -905,7 +905,7 @@ function renderModelTable() {
   let filtered = MODELS;
 
   if (modelTypeFilter !== 'all') {
-    const openProviders = ['Meta', 'DeepSeek', 'Mistral', 'Minimax', 'Moonshot'];
+    const openProviders = ['Meta', 'DeepSeek', 'Mistral', 'Alibaba/Qwen', 'Others/Self-hosted'];
     if (modelTypeFilter === 'open') { filtered = filtered.filter(m => openProviders.includes(m.prov)); }
     else { filtered = filtered.filter(m => !openProviders.includes(m.prov)); }
   }
