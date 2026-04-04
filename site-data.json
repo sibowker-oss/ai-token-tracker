@@ -491,135 +491,180 @@
   },
   "dashboard": {
     "providers": {
+      "ByteDance": {
+        "tokens": 110,
+        "rev": 0,
+        "color": "#ff4500",
+        "growth": "+1000x since May 2024",
+        "consumerPct": 70,
+        "bizPct": 30,
+        "modelType": "closed",
+        "region": "China"
+      },
+      "Google/Gemini": {
+        "tokens": 50,
+        "rev": 4.2,
+        "color": "#4285f4",
+        "growth": "+50% since Oct 2025",
+        "consumerPct": 60,
+        "bizPct": 40,
+        "modelType": "closed",
+        "region": "US"
+      },
       "OpenAI": {
-        "tokens": 200,
+        "tokens": 30,
         "rev": 25.0,
         "color": "#10a37f",
         "growth": "+150% YoY",
-        "consumerPct": 60,
-        "bizPct": 40,
-        "modelType": "frontier",
+        "consumerPct": 58,
+        "bizPct": 42,
+        "modelType": "closed",
         "region": "US"
+      },
+      "Alibaba/Qwen": {
+        "tokens": 25,
+        "rev": 0.5,
+        "color": "#ff6a00",
+        "growth": "+300% YoY",
+        "consumerPct": 30,
+        "bizPct": 70,
+        "modelType": "mixed",
+        "region": "China"
       },
       "Anthropic": {
-        "tokens": 110,
+        "tokens": 6,
         "rev": 19.0,
         "color": "#d97706",
-        "growth": "14x in 14mo",
-        "consumerPct": 35,
-        "bizPct": 65,
-        "modelType": "frontier",
+        "growth": "+400% YoY",
+        "consumerPct": 25,
+        "bizPct": 75,
+        "modelType": "closed",
         "region": "US"
       },
-      "Google/Gemini": {
-        "tokens": 90,
-        "rev": 4.2,
-        "color": "#4285f4",
-        "growth": "14x in '24",
-        "consumerPct": 40,
-        "bizPct": 60,
-        "modelType": "frontier",
-        "region": "US"
+      "Tencent": {
+        "tokens": 10,
+        "rev": 0.3,
+        "color": "#00c853",
+        "growth": "+200% YoY",
+        "consumerPct": 60,
+        "bizPct": 40,
+        "modelType": "closed",
+        "region": "China"
       },
       "Meta": {
-        "tokens": 80,
+        "tokens": 12,
         "rev": 0,
         "color": "#60a5fa",
-        "growth": "+400% YoY",
-        "consumerPct": 0,
-        "bizPct": 0,
-        "modelType": "open",
-        "region": "US"
-      },
-      "DeepSeek": {
-        "tokens": 40,
-        "rev": 0.3,
-        "color": "#a78bfa",
-        "growth": "+800% YoY",
+        "growth": "+100% YoY",
         "consumerPct": 50,
         "bizPct": 50,
         "modelType": "open",
-        "region": "Asia"
-      },
-      "Mistral": {
-        "tokens": 15,
-        "rev": 0.4,
-        "color": "#f97316",
-        "growth": "+250% YoY",
-        "consumerPct": 20,
-        "bizPct": 80,
-        "modelType": "frontier",
-        "region": "Europe"
-      },
-      "xAI": {
-        "tokens": 10,
-        "rev": 0.5,
-        "color": "#e2e8f0",
-        "growth": "+500% YoY",
-        "consumerPct": 70,
-        "bizPct": 30,
-        "modelType": "frontier",
         "region": "US"
       },
-      "Others": {
-        "tokens": 134,
-        "rev": 1.25,
-        "color": "#475569",
-        "growth": "+86% YoY",
-        "consumerPct": 20,
-        "bizPct": 80,
+      "Baidu": {
+        "tokens": 8,
+        "rev": 0.4,
+        "color": "#2932e1",
+        "growth": "+33x since Aug 2024",
+        "consumerPct": 50,
+        "bizPct": 50,
+        "modelType": "closed",
+        "region": "China"
+      },
+      "DeepSeek": {
+        "tokens": 8,
+        "rev": 0.3,
+        "color": "#a78bfa",
+        "growth": "+500% YoY",
+        "consumerPct": 40,
+        "bizPct": 60,
         "modelType": "open",
-        "region": "Mixed"
+        "region": "China"
       },
       "Minimax": {
-        "tokens": 30,
+        "tokens": 5,
         "rev": 0.15,
         "color": "#ec4899",
         "growth": "+400% YoY",
-        "consumerPct": 60,
-        "bizPct": 40,
-        "modelType": "open",
-        "region": "Asia"
+        "consumerPct": 40,
+        "bizPct": 60,
+        "modelType": "closed",
+        "region": "China"
       },
-      "Moonshot": {
-        "tokens": 8,
+      "xAI": {
+        "tokens": 3,
+        "rev": 0.5,
+        "color": "#e2e8f0",
+        "growth": "+200% YoY",
+        "consumerPct": 70,
+        "bizPct": 30,
+        "modelType": "closed",
+        "region": "US"
+      },
+      "Mistral": {
+        "tokens": 2,
+        "rev": 0.4,
+        "color": "#f97316",
+        "growth": "+150% YoY",
+        "consumerPct": 20,
+        "bizPct": 80,
+        "modelType": "open",
+        "region": "EU"
+      },
+      "Moonshot/Kimi": {
+        "tokens": 3,
         "rev": 0.1,
         "color": "#14b8a6",
         "growth": "+300% YoY",
         "consumerPct": 50,
         "bizPct": 50,
+        "modelType": "closed",
+        "region": "China"
+      },
+      "Others/Self-hosted": {
+        "tokens": 48,
+        "rev": 1.5,
+        "color": "#475569",
+        "growth": "+100% YoY",
+        "consumerPct": 30,
+        "bizPct": 70,
         "modelType": "open",
-        "region": "Asia"
+        "region": "Mixed"
       }
     },
     "regions": {
+      "China": {
+        "pct": 48,
+        "color": "#ef4444",
+        "growth": "+1000x since 2024"
+      },
       "North America": {
-        "pct": 40,
+        "pct": 27,
         "color": "#3b82f6",
         "growth": "+160% YoY"
       },
-      "Asia-Pacific": {
-        "pct": 30,
+      "Rest of Asia-Pacific": {
+        "pct": 9,
         "color": "#8b5cf6",
         "growth": "+280% YoY"
       },
       "Europe": {
-        "pct": 18,
+        "pct": 9,
         "color": "#06b6d4",
         "growth": "+140% YoY"
       },
       "Middle East": {
-        "pct": 5,
+        "pct": 3,
         "color": "#f59e0b",
         "growth": "+350% YoY"
       },
       "Latin America": {
-        "pct": 4,
+        "pct": 2,
         "color": "#10b981",
         "growth": "+200% YoY"
       },
       "Africa": {
-        "pct": 3,
+        "pct": 2,
         "color": "#ec4899",
         "growth": "+300% YoY"
       }
@@ -693,304 +738,438 @@
       }
     },
     "crossWeights": {
-      "OpenAI": {
+      "ByteDance": {
         "regions": {
-          "North America": 0.45,
-          "Asia-Pacific": 0.25,
-          "Europe": 0.18,
-          "Middle East": 0.05,
-          "Latin America": 0.04,
-          "Africa": 0.03
+          "China": 0.8,
+          "North America": 0.03,
+          "Rest of Asia-Pacific": 0.1,
+          "Europe": 0.02,
+          "Middle East": 0.02,
+          "Latin America": 0.02,
+          "Africa": 0.01
         },
         "industries": {
-          "Software & Tech": 0.3,
-          "Financial Services": 0.12,
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
           "Healthcare": 0.08,
           "Retail & E-commerce": 0.12,
-          "Marketing & Ads": 0.1,
-          "Customer Service": 0.08,
-          "Education": 0.07,
-          "Manufacturing": 0.04,
-          "Legal & Gov & Other": 0.09
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
         },
         "useCases": {
           "Coding & Dev Tools": 0.25,
-          "Chat & Assistants": 0.35,
+          "Chat & Assistants": 0.3,
           "Content & Writing": 0.15,
-          "Enterprise Agents": 0.08,
-          "Search & RAG": 0.07,
-          "Data Analysis": 0.05,
-          "Other": 0.05
-        }
-      },
-      "Anthropic": {
-        "regions": {
-          "North America": 0.5,
-          "Asia-Pacific": 0.22,
-          "Europe": 0.18,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
-          "Africa": 0.03
-        },
-        "industries": {
-          "Software & Tech": 0.45,
-          "Financial Services": 0.18,
-          "Healthcare": 0.06,
-          "Retail & E-commerce": 0.05,
-          "Marketing & Ads": 0.04,
-          "Customer Service": 0.05,
-          "Education": 0.03,
-          "Manufacturing": 0.03,
-          "Legal & Gov & Other": 0.11
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.45,
-          "Chat & Assistants": 0.2,
-          "Content & Writing": 0.08,
-          "Enterprise Agents": 0.12,
-          "Search & RAG": 0.05,
-          "Data Analysis": 0.06,
-          "Other": 0.04
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       },
       "Google/Gemini": {
         "regions": {
-          "North America": 0.35,
-          "Asia-Pacific": 0.3,
-          "Europe": 0.2,
-          "Middle East": 0.06,
-          "Latin America": 0.05,
-          "Africa": 0.04
-        },
-        "industries": {
-          "Software & Tech": 0.3,
-          "Financial Services": 0.1,
-          "Healthcare": 0.12,
-          "Retail & E-commerce": 0.1,
-          "Marketing & Ads": 0.1,
-          "Customer Service": 0.08,
-          "Education": 0.08,
-          "Manufacturing": 0.04,
-          "Legal & Gov & Other": 0.08
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.2,
-          "Chat & Assistants": 0.3,
-          "Content & Writing": 0.15,
-          "Enterprise Agents": 0.1,
-          "Search & RAG": 0.12,
-          "Data Analysis": 0.08,
-          "Other": 0.05
-        }
-      },
-      "Meta": {
-        "regions": {
-          "North America": 0.35,
-          "Asia-Pacific": 0.3,
+          "China": 0.05,
+          "North America": 0.4,
+          "Rest of Asia-Pacific": 0.2,
           "Europe": 0.2,
           "Middle East": 0.05,
           "Latin America": 0.05,
           "Africa": 0.05
         },
         "industries": {
-          "Software & Tech": 0.45,
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.2,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.15,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "OpenAI": {
+        "regions": {
+          "China": 0.02,
+          "North America": 0.45,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.22,
+          "Middle East": 0.06,
+          "Latin America": 0.05,
+          "Africa": 0.05
+        },
+        "industries": {
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.3,
+          "Chat & Assistants": 0.25,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Alibaba/Qwen": {
+        "regions": {
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
+        },
+        "industries": {
+          "Software & Tech": 0.35,
           "Financial Services": 0.15,
           "Healthcare": 0.08,
-          "Retail & E-commerce": 0.08,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.05,
-          "Education": 0.04,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
           "Manufacturing": 0.05,
           "Legal & Gov & Other": 0.05
         },
         "useCases": {
-          "Coding & Dev Tools": 0.35,
-          "Chat & Assistants": 0.25,
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Anthropic": {
+        "regions": {
+          "China": 0.01,
+          "North America": 0.5,
+          "Rest of Asia-Pacific": 0.12,
+          "Europe": 0.25,
+          "Middle East": 0.04,
+          "Latin America": 0.04,
+          "Africa": 0.04
+        },
+        "industries": {
+          "Software & Tech": 0.45,
+          "Financial Services": 0.18,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.05,
+          "Marketing & Ads": 0.04,
+          "Customer Service": 0.05,
+          "Education": 0.03,
+          "Manufacturing": 0.03,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.4,
+          "Chat & Assistants": 0.2,
           "Content & Writing": 0.1,
           "Enterprise Agents": 0.12,
           "Search & RAG": 0.08,
-          "Data Analysis": 0.05,
-          "Other": 0.05
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Tencent": {
+        "regions": {
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Meta": {
+        "regions": {
+          "China": 0.02,
+          "North America": 0.35,
+          "Rest of Asia-Pacific": 0.25,
+          "Europe": 0.2,
+          "Middle East": 0.05,
+          "Latin America": 0.08,
+          "Africa": 0.05
+        },
+        "industries": {
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Baidu": {
+        "regions": {
+          "China": 0.85,
+          "North America": 0.02,
+          "Rest of Asia-Pacific": 0.08,
+          "Europe": 0.02,
+          "Middle East": 0.01,
+          "Latin America": 0.01,
+          "Africa": 0.01
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       },
       "DeepSeek": {
         "regions": {
-          "North America": 0.2,
-          "Asia-Pacific": 0.55,
-          "Europe": 0.15,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
-          "Africa": 0.03
+          "China": 0.55,
+          "North America": 0.15,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.08,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
         },
         "industries": {
-          "Software & Tech": 0.5,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.08,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.05,
-          "Education": 0.07,
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
           "Manufacturing": 0.05,
           "Legal & Gov & Other": 0.05
         },
         "useCases": {
-          "Coding & Dev Tools": 0.4,
+          "Coding & Dev Tools": 0.25,
           "Chat & Assistants": 0.3,
-          "Content & Writing": 0.08,
-          "Enterprise Agents": 0.05,
-          "Search & RAG": 0.07,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Minimax": {
+        "regions": {
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "xAI": {
+        "regions": {
+          "China": 0.01,
+          "North America": 0.55,
+          "Rest of Asia-Pacific": 0.1,
+          "Europe": 0.2,
+          "Middle East": 0.05,
+          "Latin America": 0.05,
+          "Africa": 0.04
+        },
+        "industries": {
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
           "Data Analysis": 0.07,
           "Other": 0.03
         }
       },
       "Mistral": {
         "regions": {
-          "North America": 0.25,
-          "Asia-Pacific": 0.15,
-          "Europe": 0.45,
-          "Middle East": 0.06,
-          "Latin America": 0.05,
-          "Africa": 0.04
-        },
-        "industries": {
-          "Software & Tech": 0.4,
-          "Financial Services": 0.2,
-          "Healthcare": 0.08,
-          "Retail & E-commerce": 0.06,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.05,
-          "Education": 0.04,
-          "Manufacturing": 0.05,
-          "Legal & Gov & Other": 0.07
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.3,
-          "Chat & Assistants": 0.25,
-          "Content & Writing": 0.12,
-          "Enterprise Agents": 0.15,
-          "Search & RAG": 0.08,
-          "Data Analysis": 0.06,
-          "Other": 0.04
-        }
-      },
-      "xAI": {
-        "regions": {
-          "North America": 0.55,
-          "Asia-Pacific": 0.15,
-          "Europe": 0.18,
+          "China": 0.02,
+          "North America": 0.2,
+          "Rest of Asia-Pacific": 0.08,
+          "Europe": 0.55,
           "Middle East": 0.05,
-          "Latin America": 0.04,
-          "Africa": 0.03
+          "Latin America": 0.05,
+          "Africa": 0.05
         },
         "industries": {
-          "Software & Tech": 0.35,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.05,
-          "Marketing & Ads": 0.1,
-          "Customer Service": 0.05,
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
           "Education": 0.05,
-          "Manufacturing": 0.03,
-          "Legal & Gov & Other": 0.22
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
         },
         "useCases": {
-          "Coding & Dev Tools": 0.15,
-          "Chat & Assistants": 0.5,
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
           "Content & Writing": 0.15,
-          "Enterprise Agents": 0.05,
-          "Search & RAG": 0.05,
-          "Data Analysis": 0.05,
-          "Other": 0.05
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       },
-      "Others": {
+      "Moonshot/Kimi": {
         "regions": {
-          "North America": 0.3,
-          "Asia-Pacific": 0.35,
-          "Europe": 0.2,
-          "Middle East": 0.06,
-          "Latin America": 0.05,
-          "Africa": 0.04
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
         },
         "industries": {
           "Software & Tech": 0.35,
           "Financial Services": 0.15,
-          "Healthcare": 0.1,
-          "Retail & E-commerce": 0.1,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.08,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
           "Education": 0.05,
           "Manufacturing": 0.05,
-          "Legal & Gov & Other": 0.07
+          "Legal & Gov & Other": 0.05
         },
         "useCases": {
           "Coding & Dev Tools": 0.25,
           "Chat & Assistants": 0.3,
           "Content & Writing": 0.15,
           "Enterprise Agents": 0.1,
-          "Search & RAG": 0.08,
+          "Search & RAG": 0.1,
           "Data Analysis": 0.07,
-          "Other": 0.05
+          "Other": 0.03
         }
       },
-      "Minimax": {
+      "Others/Self-hosted": {
         "regions": {
-          "North America": 0.15,
-          "Asia-Pacific": 0.6,
+          "China": 0.3,
+          "North America": 0.3,
+          "Rest of Asia-Pacific": 0.15,
           "Europe": 0.15,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.04,
           "Africa": 0.03
         },
         "industries": {
-          "Software & Tech": 0.4,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.1,
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
           "Marketing & Ads": 0.08,
-          "Customer Service": 0.08,
-          "Education": 0.07,
-          "Manufacturing": 0.05,
-          "Legal & Gov & Other": 0.07
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.2,
-          "Chat & Assistants": 0.35,
-          "Content & Writing": 0.15,
-          "Enterprise Agents": 0.1,
-          "Search & RAG": 0.08,
-          "Data Analysis": 0.07,
-          "Other": 0.05
-        }
-      },
-      "Moonshot": {
-        "regions": {
-          "North America": 0.1,
-          "Asia-Pacific": 0.7,
-          "Europe": 0.1,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
-          "Africa": 0.03
-        },
-        "industries": {
-          "Software & Tech": 0.35,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.1,
-          "Marketing & Ads": 0.08,
-          "Customer Service": 0.1,
-          "Education": 0.08,
-          "Manufacturing": 0.05,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
           "Legal & Gov & Other": 0.09
         },
         "useCases": {
-          "Coding & Dev Tools": 0.25,
-          "Chat & Assistants": 0.35,
-          "Content & Writing": 0.12,
-          "Enterprise Agents": 0.08,
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
           "Search & RAG": 0.1,
-          "Data Analysis": 0.05,
-          "Other": 0.05
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       }
     },
@@ -3059,17 +3238,11 @@
       }
     },
     "demandWeights": {
-      "OpenAI": {
-        "Consumer Subs": 0.55,
-        "API / Developer": 0.15,
+      "ByteDance": {
+        "Consumer Subs": 0.7,
+        "API / Developer": 0.1,
         "Enterprise Platform": 0.15,
-        "Cloud Channel": 0.15
-      },
-      "Anthropic": {
-        "Consumer Subs": 0.2,
-        "API / Developer": 0.35,
-        "Enterprise Platform": 0.25,
-        "Cloud Channel": 0.2
+        "Cloud Channel": 0.05
       },
       "Google/Gemini": {
         "Consumer Subs": 0.35,
@@ -3077,9 +3250,39 @@
         "Enterprise Platform": 0.2,
         "Cloud Channel": 0.25
       },
+      "OpenAI": {
+        "Consumer Subs": 0.55,
+        "API / Developer": 0.15,
+        "Enterprise Platform": 0.15,
+        "Cloud Channel": 0.15
+      },
+      "Alibaba/Qwen": {
+        "Consumer Subs": 0.2,
+        "API / Developer": 0.3,
+        "Enterprise Platform": 0.4,
+        "Cloud Channel": 0.1
+      },
+      "Anthropic": {
+        "Consumer Subs": 0.2,
+        "API / Developer": 0.35,
+        "Enterprise Platform": 0.25,
+        "Cloud Channel": 0.2
+      },
+      "Tencent": {
+        "Consumer Subs": 0.6,
+        "API / Developer": 0.1,
+        "Enterprise Platform": 0.25,
+        "Cloud Channel": 0.05
+      },
       "Meta": {
         "Consumer Subs": 0.1,
         "API / Developer": 0.5,
+        "Enterprise Platform": 0.3,
+        "Cloud Channel": 0.1
+      },
+      "Baidu": {
+        "Consumer Subs": 0.4,
+        "API / Developer": 0.2,
         "Enterprise Platform": 0.3,
         "Cloud Channel": 0.1
       },
@@ -3089,34 +3292,34 @@
         "Enterprise Platform": 0.1,
         "Cloud Channel": 0.1
       },
-      "Mistral": {
-        "Consumer Subs": 0.1,
-        "API / Developer": 0.35,
-        "Enterprise Platform": 0.3,
-        "Cloud Channel": 0.25
-      },
-      "xAI": {
-        "Consumer Subs": 0.7,
-        "API / Developer": 0.15,
-        "Enterprise Platform": 0.1,
-        "Cloud Channel": 0.05
-      },
-      "Others": {
-        "Consumer Subs": 0.3,
-        "API / Developer": 0.3,
-        "Enterprise Platform": 0.2,
-        "Cloud Channel": 0.2
-      },
       "Minimax": {
-        "Consumer Subs": 0.45,
-        "API / Developer": 0.3,
-        "Enterprise Platform": 0.15,
+        "Consumer Subs": 0.3,
+        "API / Developer": 0.4,
+        "Enterprise Platform": 0.2,
         "Cloud Channel": 0.1
       },
-      "Moonshot": {
+      "xAI": {
+        "Consumer Subs": 0.6,
+        "API / Developer": 0.2,
+        "Enterprise Platform": 0.1,
+        "Cloud Channel": 0.1
+      },
+      "Mistral": {
+        "Consumer Subs": 0.15,
+        "API / Developer": 0.35,
+        "Enterprise Platform": 0.3,
+        "Cloud Channel": 0.2
+      },
+      "Moonshot/Kimi": {
         "Consumer Subs": 0.5,
         "API / Developer": 0.25,
-        "Enterprise Platform": 0.15,
+        "Enterprise Platform": 0.2,
+        "Cloud Channel": 0.05
+      },
+      "Others/Self-hosted": {
+        "Consumer Subs": 0.2,
+        "API / Developer": 0.5,
+        "Enterprise Platform": 0.2,
         "Cloud Channel": 0.1
       }
     }
