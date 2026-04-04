@@ -235,7 +235,7 @@ function updateToQuarter(idx) {
   const totalTok = toks.reduce((a, b) => a + b, 0);
   const topIdx = revs.indexOf(Math.max(...revs));
 
-  document.getElementById('h-tokens').textContent = '~' + totalTok + 'T';
+  document.getElementById('h-tokens').textContent = '~' + Math.ceil(totalTok) + 'T';
   document.getElementById('h-rev').textContent = '$' + totalRev.toFixed(1) + 'B';
   document.getElementById('h-top').textContent = PROV_NAMES[topIdx];
   const price = PRICE_DATA[idx];
@@ -251,7 +251,7 @@ function updateToQuarter(idx) {
 
   const ev = EVENTS[idx];
   const deltaHtml = ev.delta ? '<div style="margin-top:8px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:6px;font-size:11px;color:var(--accent);font-weight:600;">' + ev.delta + '</div>' : '';
-  document.getElementById('event-card').innerHTML = '<h3>' + ev.title + '</h3><p>' + ev.text + '</p>' + deltaHtml;
+  document.getElementById('event-card').innerHTML = '<h3>' + ev.title + '</h3><p>' + (ev.body || ev.text || '') + '</p>' + deltaHtml;
 }
 
 // Slider

@@ -517,7 +517,7 @@ function updateHeroStats() {
   const bullRev = (totalRev * 1.2).toFixed(1);
 
   document.getElementById('hero-stats').innerHTML =
-    '<div class="hero-stat"><div class="label">Est. Tokens / Day</div><div class="value" style="color:var(--accent);">~' + Math.round(totalTokens) + 'T</div><div class="detail" style="font-size:10px;">Bear: ' + bearTokens + 'T \u00b7 Bull: ' + bullTokens + 'T</div></div>' +
+    '<div class="hero-stat"><div class="label">Est. Tokens / Day</div><div class="value" style="color:var(--accent);">~' + Math.ceil(totalTokens) + 'T</div><div class="detail" style="font-size:10px;">Bear: ' + bearTokens + 'T \u00b7 Bull: ' + bullTokens + 'T</div></div>' +
     '<div class="hero-stat"><div class="label">Combined ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail" style="font-size:10px;">Bear: $' + bearRev + 'B \u00b7 Bull: $' + bullRev + 'B</div></div>' +
     '<div class="hero-stat"><div class="label">Active Providers</div><div class="value" style="color:var(--accent2);">' + provCount + '</div><div class="detail">tracked in this dashboard</div></div>' +
     '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">frontier-equivalent cost (ARK Invest)</div></div>';
