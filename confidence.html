@@ -96,6 +96,9 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
   <p class="intro">How well-sourced is every number in the system? Green = multiple quality sources. Orange = single source or estimates only. Red = no source linked. Click any company to see field-level detail.</p>
 
   <div class="stats-row" id="stats-row"></div>
+  <div style="margin-bottom:12px;">
+    <input id="search" type="text" placeholder="Search companies..." oninput="renderEntities()" style="width:100%;max-width:400px;padding:8px 14px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;color:var(--text);font-size:13px;outline:none;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--card-border)'">
+  </div>
   <div class="filters" id="filters"></div>
   <div id="entity-list"></div>
 </div>
@@ -245,6 +248,12 @@ function setFilter(f) {
 
 function renderEntities() {
   let companies = entitiesData?.companies || [];
+
+  // Search filter
+  const query = (document.getElementById('search')?.value || '').toLowerCase();
+  if (query) {
+    companies = companies.filter(c => c.name.toLowerCase().includes(query) || c.slug.toLowerCase().includes(query));
+  }
 
   // Filter by role
   if (activeFilter !== 'all' && !activeFilter.startsWith('c:')) {
