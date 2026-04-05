@@ -82,10 +82,19 @@ let activeYear = '2025';
 const yearColors = { '2025': '#3b82f6', '2026E': '#8b5cf6', '2027E': '#f59e0b' };
 
 async function init() {
-  try {
-    const resp = await fetch('data/sankey-projections.json?v=' + Date.now()).catch(() => fetch('../data/sankey-projections.json?v=' + Date.now()));
-    sankeyData = await resp.json();
-  } catch(e) {
+  async function loadJSON(relPath, parentPath) {
+    try {
+      const r = await fetch(relPath + '?v=' + Date.now());
+      if (r.ok) return await r.json();
+    } catch(e) {}
+    try {
+      const r = await fetch(parentPath + '?v=' + Date.now());
+      if (r.ok) return await r.json();
+    } catch(e) {}
+    return null;
+  }
+  sankeyData = await loadJSON('data/sankey-projections.json', '../data/sankey-projections.json');
+  if (!sankeyData) {
     document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Failed to load projection data</div>';
     return;
   }
