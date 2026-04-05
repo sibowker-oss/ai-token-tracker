@@ -90,21 +90,17 @@ Chart.defaults.borderColor = '#1e293b';
 const darkGrid = { color: 'rgba(255,255,255,0.05)' };
 
 async function init() {
-  async function loadJSON(relPath, parentPath) {
-    try {
-      const r = await fetch(relPath + '?v=' + Date.now());
-      if (r.ok) return await r.json();
-    } catch(e) {}
-    try {
-      const r = await fetch(parentPath + '?v=' + Date.now());
-      if (r.ok) return await r.json();
-    } catch(e) {}
-    return null;
-  }
-  const sd = await loadJSON('site-data.json', '../site-data.json');
-  const proj = await loadJSON('data/projections-2026-04.json', '../data/projections-2026-04.json');
-  if (!sd || !proj) {
-    document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Failed to load data. Check site-data.json and data/projections-2026-04.json paths.</div>';
+  let sd, proj;
+  try {
+    const [sdR, projR] = await Promise.all([
+      fetch('../site-data.json?v=' + Date.now()),
+      fetch('../data/projections-2026-04.json?v=' + Date.now())
+    ]);
+    sd = await sdR.json();
+    proj = await projR.json();
+  } catch(e) {
+    document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Error loading data: ' + e.message + '</div>';
+    console.error(e);
     return;
   }
 
