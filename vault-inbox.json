@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-05",
+  "lastProcessed": "2026-04-06",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -9529,6 +9529,74 @@
       "replaces": null,
       "source_id": null,
       "metricKey": "tokens_per_day"
+    },
+    {
+      "id": "scan-20260406-a1b",
+      "claim": "OpenAI funding round final close: $122B raised at $852B post-money valuation (March 31, 2026)",
+      "value": 852,
+      "unit": "$B valuation",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-03-31/openai-valued-at-852-billion-after-completing-122-billion-round",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg / CNBC",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-31",
+      "dateAdded": "2026-04-06",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "openai", "funding", "valuation", "2026"],
+      "notes": "Round closed at $852B (vs $840B preliminary in scan-20260330-b2c). $122B total (vs $120B preliminary). Amazon $50B, Nvidia $30B, SoftBank $30B, a16z. Retail tranche: $3B. IPO expected 2026.",
+      "status": "pending",
+      "replaces": "scan-20260330-b2c"
+    },
+    {
+      "id": "scan-20260406-b2c",
+      "claim": "OpenAI generating $2B/month revenue as of late March 2026 (~$24B annualized)",
+      "value": 2,
+      "unit": "$B/month revenue",
+      "sourceUrl": "https://www.cnbc.com/2026/03/31/openai-funding-round-ipo.html",
+      "sourceType": "reporting",
+      "sourceAuthor": "CNBC",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-31",
+      "dateAdded": "2026-04-06",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "openai", "revenue", "2026"],
+      "notes": "Self-reported at funding round close. $2B/month = ~$24B annualized. 2025 actual was $13.1B. Note: OpenAI ARR methodology uses best 4-week window x12 (dp-064) which may inflate vs monthly figure.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260406-c3d",
+      "claim": "Meta Llama cumulative downloads: 1B (March 2025), updated to 1.2B (April 2025)",
+      "value": 1200,
+      "unit": "M cumulative downloads",
+      "sourceUrl": "https://techcrunch.com/2025/04/29/meta-says-its-llama-ai-models-have-been-downloaded-1-2b-times/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch / Meta",
+      "confidence": "unverified",
+      "dateOfClaim": "2025-04-29",
+      "dateAdded": "2026-04-06",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "meta", "llama", "open-models", "downloads", "2025"],
+      "notes": "1B downloads announced March 2025, updated to 1.2B at April 2025 LlamaCon. Dwarfs Qwen (400M+) and DeepSeek (~50M) cumulative figures. Majority are Llama derivative models.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260406-d4e",
+      "claim": "OpenAI projects $111B additional cash burn through 2030; 2025 actual burn ~$8B (below $9B target)",
+      "value": 111,
+      "unit": "$B cumulative burn through 2030",
+      "sourceUrl": "https://www.theinformation.com/articles/openai-boost-revenue-forecasts-predicts-112-billion-cash-burn-2030",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Information",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-06",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "openai", "cash-burn", "losses", "2030", "forecast"],
+      "notes": "Updated forecast: $111B more burn through 2030. Compare to prior scan-20260331-b2c ($115B through 2029). Also: 2025 actual burn $8B (better than $9B target). Revenue forecasts raised alongside.",
+      "status": "pending",
+      "replaces": null
     }
   ]
 }
