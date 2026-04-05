@@ -1,0 +1,175 @@
+{
+  "2025": {
+    "label": "2025 Actual",
+    "total_system": 27.27,
+    "customer_revenue": 17.47,
+    "vc_subsidy": 9.8,
+    "buyers": {
+      "Consumer": 5.16,
+      "SME": 3.37,
+      "Enterprise": 8.94,
+      "VC/Investors": 9.8
+    },
+    "channels": {
+      "Model Subs": 5.31,
+      "Model API": 3.4,
+      "Hyperscalers": 2.15,
+      "AI Native Apps": 3.36,
+      "IaaS & Aggregators": 0.3,
+      "Traditional SaaS": 2.94
+    },
+    "providers": {
+      "OpenAI": {
+        "total": 13.65,
+        "customer": 7.65,
+        "subsidy": 6.0
+      },
+      "Anthropic": {
+        "total": 7.71,
+        "customer": 4.71,
+        "subsidy": 3.0
+      },
+      "Google": {
+        "total": 2.5,
+        "customer": 2.0,
+        "subsidy": 0.5
+      },
+      "IaaS/Open": {
+        "total": 0.8,
+        "customer": 0.5,
+        "subsidy": 0.3
+      }
+    },
+    "outcomes": {
+      "Inference": 14.03,
+      "People/SGA": 11.08,
+      "Margin": 2.15
+    }
+  },
+  "2026E": {
+    "label": "2026 Estimated",
+    "total_system": 65.0,
+    "customer_revenue": 52.0,
+    "vc_subsidy": 13.0,
+    "buyers": {
+      "Consumer": 15.0,
+      "SME": 8.0,
+      "Enterprise": 29.0,
+      "VC/Investors": 13.0
+    },
+    "channels": {
+      "Model Subs": 12.0,
+      "Model API": 10.0,
+      "Hyperscalers": 6.0,
+      "AI Native Apps": 8.0,
+      "IaaS & Aggregators": 2.0,
+      "Traditional SaaS": 14.0
+    },
+    "providers": {
+      "OpenAI": {
+        "total": 25.0,
+        "customer": 22.0,
+        "subsidy": 3.0
+      },
+      "Anthropic": {
+        "total": 16.0,
+        "customer": 14.0,
+        "subsidy": 2.0
+      },
+      "Google": {
+        "total": 5.0,
+        "customer": 4.5,
+        "subsidy": 0.5
+      },
+      "ByteDance": {
+        "total": 3.0,
+        "customer": 3.0,
+        "subsidy": 0.0
+      },
+      "Chinese Others": {
+        "total": 4.0,
+        "customer": 3.0,
+        "subsidy": 1.0
+      },
+      "IaaS/Open": {
+        "total": 3.0,
+        "customer": 2.5,
+        "subsidy": 0.5
+      },
+      "Trad SaaS": {
+        "total": 9.0,
+        "customer": 9.0,
+        "subsidy": 0.0
+      }
+    },
+    "outcomes": {
+      "Inference": 28.0,
+      "People/SGA": 20.0,
+      "Margin": 8.0,
+      "GPU Capex": 9.0
+    }
+  },
+  "2027E": {
+    "label": "2027 Estimated",
+    "total_system": 130.0,
+    "customer_revenue": 110.0,
+    "vc_subsidy": 20.0,
+    "buyers": {
+      "Consumer": 25.0,
+      "SME": 15.0,
+      "Enterprise": 70.0,
+      "VC/Investors": 20.0
+    },
+    "channels": {
+      "Model Subs": 20.0,
+      "Model API": 22.0,
+      "Hyperscalers": 12.0,
+      "AI Native Apps": 18.0,
+      "IaaS & Aggregators": 6.0,
+      "Traditional SaaS": 32.0
+    },
+    "providers": {
+      "OpenAI": {
+        "total": 42.0,
+        "customer": 40.0,
+        "subsidy": 2.0
+      },
+      "Anthropic": {
+        "total": 28.0,
+        "customer": 26.0,
+        "subsidy": 2.0
+      },
+      "Google": {
+        "total": 10.0,
+        "customer": 9.0,
+        "subsidy": 1.0
+      },
+      "ByteDance": {
+        "total": 8.0,
+        "customer": 8.0,
+        "subsidy": 0.0
+      },
+      "Chinese Others": {
+        "total": 10.0,
+        "customer": 8.0,
+        "subsidy": 2.0
+      },
+      "IaaS/Open": {
+        "total": 8.0,
+        "customer": 7.0,
+        "subsidy": 1.0
+      },
+      "Trad SaaS": {
+        "total": 24.0,
+        "customer": 24.0,
+        "subsidy": 0.0
+      }
+    },
+    "outcomes": {
+      "Inference": 48.0,
+      "People/SGA": 32.0,
+      "Margin": 25.0,
+      "GPU Capex": 25.0
+    }
+  }
+}

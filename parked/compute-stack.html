@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Compute Stack — The AI Ledger</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; }
+  .nav-link:hover { background:#334155; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:32px; line-height:1.6; }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:6px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); line-height:1.4; }
+  .section { margin-bottom:40px; }
+  .section h2 { font-size:20px; font-weight:700; margin-bottom:6px; }
+  .section .section-sub { font-size:13px; color:var(--text-dim); margin-bottom:20px; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .chart-wrap { height:300px; position:relative; }
+  .metric-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.03); font-size:13px; }
+  .metric-row:last-child { border-bottom:none; }
+  .metric-label { color:var(--text-dim); }
+  .metric-value { font-weight:700; }
+  .flow-arrow { text-align:center; font-size:32px; color:var(--card-border); padding:12px 0; }
+  .stack-layer { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; text-align:center; }
+  .stack-layer h3 { font-size:14px; margin-bottom:8px; }
+  .stack-layer .big-num { font-size:36px; font-weight:800; }
+  .stack-layer p { font-size:11px; color:var(--text-dim); margin-top:6px; line-height:1.5; }
+  .source-tag { font-size:9px; color:var(--text-dim); font-style:italic; }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .grid-2, .grid-3 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
+  <a href="sankey.html" class="nav-link">Follow the $</a>
+  <a href="timeline.html" class="nav-link">Time Machine</a>
+  <a href="openrouter.html" class="nav-link">Live Pricing</a>
+  <a href="feed.html" class="nav-link">Weekly Feed</a>
+</nav>
+
+<div class="container">
+  <h1>The Compute Stack</h1>
+  <div class="sub">From silicon to tokens to revenue. The infrastructure powering the AI market — who builds it, what it costs, and where the money goes.</div>
+
+  <!-- Hero stats -->
+  <div class="hero-grid">
+    <div class="hero-stat">
+      <div class="label">AI Capex (2025)</div>
+      <div class="value" style="color:var(--red);">$250B+</div>
+      <div class="detail">Mag 7 infrastructure spend<br><span class="source-tag">Source: Chamath / All-In Podcast</span></div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">AI Revenue (2025)</div>
+      <div class="value" style="color:var(--green);">$17.5B</div>
+      <div class="detail">Actual customer payments<br><span class="source-tag">Source: Consensus estimate</span></div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Capex : Revenue</div>
+      <div class="value" style="color:var(--orange);">14:1</div>
+      <div class="detail">$14 invested per $1 earned<br><span class="source-tag">Derived from capex / revenue</span></div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Inference Share</div>
+      <div class="value" style="color:var(--accent);">66%</div>
+      <div class="detail">Of all AI compute workloads<br><span class="source-tag">Source: GPUnex, 2026</span></div>
+    </div>
+  </div>
+
+  <!-- The Stack Visualization -->
+  <div class="section">
+    <h2>The Stack: Chips to Revenue</h2>
+    <div class="section-sub">AI infrastructure is a supply chain. Each layer takes input from below and delivers output above.</div>
+
+    <div class="stack-layer" style="border-color:var(--green);">
+      <h3 style="color:var(--green);">REVENUE</h3>
+      <div class="big-num" style="color:var(--green);">~$52B ARR</div>
+      <p>What customers pay for AI products and APIs. Growing ~3x YoY.</p>
+    </div>
+    <div class="flow-arrow">&#8595;</div>
+
+    <div class="stack-layer" style="border-color:var(--accent);">
+      <h3 style="color:var(--accent);">TOKENS</h3>
+      <div class="big-num" style="color:var(--accent);">~320T/day</div>
+      <p>Total inference tokens processed daily across 14+ providers. Each token requires GPU compute.</p>
+    </div>
+    <div class="flow-arrow">&#8595;</div>
+
+    <div class="stack-layer" style="border-color:var(--orange);">
+      <h3 style="color:var(--orange);">INFERENCE COMPUTE</h3>
+      <div class="big-num" style="color:var(--orange);">$14B/yr</div>
+      <p>The GPU cost of serving those tokens. 66% of all AI compute is inference (up from minority in 2023). Exceeds total customer revenue.</p>
+    </div>
+    <div class="flow-arrow">&#8595;</div>
+
+    <div class="stack-layer" style="border-color:var(--purple);">
+      <h3 style="color:var(--purple);">DATA CENTRES</h3>
+      <div class="big-num" style="color:var(--purple);">$50B/GW</div>
+      <p>All-in cost per gigawatt of data centre capacity. 5-year payback, profit in years 6-8. 40% of US-protested sites get cancelled.</p>
+    </div>
+    <div class="flow-arrow">&#8595;</div>
+
+    <div class="stack-layer" style="border-color:var(--red);">
+      <h3 style="color:var(--red);">GPU SILICON</h3>
+      <div class="big-num" style="color:var(--red);">$130B</div>
+      <p>NVIDIA data centre revenue (2025). 90% market share. H100 spot pricing fell 64-75% in 12 months to $2.99/hr.</p>
+    </div>
+  </div>
+
+  <!-- GPU Market -->
+  <div class="section">
+    <h2>GPU Supply Chain</h2>
+    <div class="section-sub">Who makes the chips that power AI inference.</div>
+    <div class="grid-2">
+      <div class="card">
+        <h2>Market Share</h2>
+        <div class="chart-wrap"><canvas id="chart-gpu-share"></canvas></div>
+      </div>
+      <div class="card">
+        <h2>GPU Provider Revenue ($B, 2025 est.)</h2>
+        <div class="metric-row"><span class="metric-label">NVIDIA Data Centre</span><span class="metric-value" style="color:var(--green);">$130B</span></div>
+        <div class="metric-row"><span class="metric-label">AMD Data Centre</span><span class="metric-value">$12B</span></div>
+        <div class="metric-row"><span class="metric-label">Google TPU (internal)</span><span class="metric-value" style="color:var(--text-dim);">Undisclosed</span></div>
+        <div class="metric-row"><span class="metric-label">Amazon Trainium (internal)</span><span class="metric-value" style="color:var(--text-dim);">Undisclosed</span></div>
+        <div class="metric-row"><span class="metric-label">OpenAI custom chip (Broadcom)</span><span class="metric-value" style="color:var(--text-dim);">In development</span></div>
+        <div style="margin-top:16px;font-size:11px;color:var(--text-dim);">
+          <strong>Key trend:</strong> H100 spot pricing fell from $8-10/hr (Q4 2024) to $2.99/hr (Q1 2026) — a 64-75% decline. Specialised GPU providers offer rates as low as $0.29/hr, 60-85% cheaper than hyperscalers.
+          <br><span class="source-tag">Source: ThunderCompute / GPUnex</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Centre Economics -->
+  <div class="section">
+    <h2>Data Centre Economics</h2>
+    <div class="section-sub">The unit economics of building AI infrastructure at scale.</div>
+    <div class="grid-3">
+      <div class="card" style="text-align:center;">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;">Cost per GW</div>
+        <div style="font-size:36px;font-weight:800;color:var(--red);margin:8px 0;">$50B</div>
+        <div style="font-size:11px;color:var(--text-dim);">Powered shell, land, permits, infrastructure</div>
+        <div class="source-tag">Source: Chamath (first-hand, building 1GW DC in Arizona)</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;">Revenue per GW</div>
+        <div style="font-size:36px;font-weight:800;color:var(--green);margin:8px 0;">$10B/yr</div>
+        <div style="font-size:11px;color:var(--text-dim);">Annual revenue at full utilisation</div>
+        <div class="source-tag">Source: Sarah Friar, Anthropic CFO</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;">Payback Period</div>
+        <div style="font-size:36px;font-weight:800;color:var(--orange);margin:8px 0;">5 yrs</div>
+        <div style="font-size:11px;color:var(--text-dim);">Profit in years 6-8</div>
+        <div class="source-tag">Source: Chamath (first-hand)</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h2>The Protest Risk</h2>
+      <div class="grid-2">
+        <div>
+          <div class="metric-row"><span class="metric-label">US DC sites facing community protest</span><span class="metric-value" style="color:var(--red);">~40%</span></div>
+          <div class="metric-row"><span class="metric-label">Capacity at risk</span><span class="metric-value" style="color:var(--red);">~7 GW</span></div>
+          <div class="metric-row"><span class="metric-label">Revenue at risk (7GW x $10B/GW)</span><span class="metric-value" style="color:var(--red);">$70B/yr</span></div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.7;">
+          Data centre construction is meeting significant community resistance across the US. Water usage, power grid strain, and noise are the primary concerns. An estimated 40% of protested projects face cancellation or significant delay. At $10B revenue per GW, this represents $70B in annual revenue capacity at risk.
+          <br><span class="source-tag">Source: Chamath (speculative estimate)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Infrastructure Providers -->
+  <div class="section">
+    <h2>Infrastructure Providers</h2>
+    <div class="section-sub">Companies building and operating AI compute infrastructure.</div>
+    <div class="card">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--card-border);">
+            <th style="text-align:left;padding:10px;">Provider</th>
+            <th style="text-align:left;padding:10px;">Type</th>
+            <th style="text-align:right;padding:10px;">ARR</th>
+            <th style="text-align:right;padding:10px;">Valuation</th>
+            <th style="text-align:right;padding:10px;">Funding</th>
+            <th style="text-align:left;padding:10px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:8px 10px;font-weight:600;">CoreWeave</td><td style="padding:8px 10px;">Neo Cloud (GPU)</td><td style="padding:8px 10px;text-align:right;">$1.9B</td><td style="padding:8px 10px;text-align:right;">$35B</td><td style="padding:8px 10px;text-align:right;">$12B</td><td style="padding:8px 10px;color:var(--orange);">S-1 filed (IPO)</td></tr>
+          <tr><td style="padding:8px 10px;font-weight:600;">Lambda Labs</td><td style="padding:8px 10px;">GPU Cloud</td><td style="padding:8px 10px;text-align:right;">$0.5B</td><td style="padding:8px 10px;text-align:right;">—</td><td style="padding:8px 10px;text-align:right;">$1.7B</td><td style="padding:8px 10px;">Private</td></tr>
+          <tr><td style="padding:8px 10px;font-weight:600;">Crusoe Energy</td><td style="padding:8px 10px;">Green DC</td><td style="padding:8px 10px;text-align:right;">—</td><td style="padding:8px 10px;text-align:right;">—</td><td style="padding:8px 10px;text-align:right;">$3.5B</td><td style="padding:8px 10px;">Private</td></tr>
+          <tr><td style="padding:8px 10px;font-weight:600;">Nscale</td><td style="padding:8px 10px;">AI Compute</td><td style="padding:8px 10px;text-align:right;">—</td><td style="padding:8px 10px;text-align:right;">$14.6B</td><td style="padding:8px 10px;text-align:right;">$2B</td><td style="padding:8px 10px;">Series C</td></tr>
+          <tr><td style="padding:8px 10px;font-weight:600;">Together AI</td><td style="padding:8px 10px;">Inference</td><td style="padding:8px 10px;text-align:right;">—</td><td style="padding:8px 10px;text-align:right;">$3.3B</td><td style="padding:8px 10px;text-align:right;">$0.4B</td><td style="padding:8px 10px;">Private</td></tr>
+          <tr><td style="padding:8px 10px;font-weight:600;">Groq</td><td style="padding:8px 10px;">LPU Inference</td><td style="padding:8px 10px;text-align:right;">—</td><td style="padding:8px 10px;text-align:right;">$2.8B</td><td style="padding:8px 10px;text-align:right;">$0.6B</td><td style="padding:8px 10px;">Private</td></tr>
+          <tr><td style="padding:8px 10px;font-weight:600;">Cerebras</td><td style="padding:8px 10px;">Wafer-scale</td><td style="padding:8px 10px;text-align:right;">—</td><td style="padding:8px 10px;text-align:right;">$4B</td><td style="padding:8px 10px;text-align:right;">$0.7B</td><td style="padding:8px 10px;">S-1 filed</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:12px;font-style:italic;">Revenue and valuation figures are from latest available disclosures. Many are editorial estimates — see Data Confidence page for source quality.</div>
+    </div>
+  </div>
+
+  <!-- Capex by Company -->
+  <div class="section">
+    <h2>Who's Spending What (2025-2026)</h2>
+    <div class="section-sub">AI infrastructure capital expenditure by major companies.</div>
+    <div class="card">
+      <div class="chart-wrap" style="height:350px;"><canvas id="chart-capex"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Data Gaps -->
+  <div class="section">
+    <h2>Data We Still Need</h2>
+    <div class="section-sub">Key infrastructure metrics we don't yet have authoritative sources for.</div>
+    <div class="card">
+      <div class="metric-row"><span class="metric-label">Total global inference GPU fleet count</span><span class="metric-value" style="color:var(--red);">Unknown</span></div>
+      <div class="metric-row"><span class="metric-label">Training vs inference GPU split</span><span class="metric-value" style="color:var(--red);">~66% inference (est.)</span></div>
+      <div class="metric-row"><span class="metric-label">Google TPU fleet size and capacity</span><span class="metric-value" style="color:var(--red);">Unknown</span></div>
+      <div class="metric-row"><span class="metric-label">Amazon Trainium deployment scale</span><span class="metric-value" style="color:var(--red);">Unknown</span></div>
+      <div class="metric-row"><span class="metric-label">Microsoft/OpenAI GPU allocation</span><span class="metric-value" style="color:var(--red);">Unknown</span></div>
+      <div class="metric-row"><span class="metric-label">NVIDIA quarterly GPU shipment volumes</span><span class="metric-value" style="color:var(--red);">Not disclosed</span></div>
+      <div class="metric-row"><span class="metric-label">Average GPU utilisation rate</span><span class="metric-value" style="color:var(--orange);">30-50% (est.)</span></div>
+      <div class="metric-row"><span class="metric-label">Custom chip roadmaps (OpenAI/Broadcom, etc.)</span><span class="metric-value" style="color:var(--red);">Speculative</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+
+// GPU Market Share
+new Chart(document.getElementById('chart-gpu-share'), {
+  type: 'doughnut',
+  data: {
+    labels: ['NVIDIA', 'AMD', 'Google TPU', 'Amazon Trainium', 'Other'],
+    datasets: [{
+      data: [90, 8, 1, 0.5, 0.5],
+      backgroundColor: ['#76b900', '#ed1c24', '#4285f4', '#ff9900', '#475569'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } }
+  }
+});
+
+// Capex chart
+new Chart(document.getElementById('chart-capex'), {
+  type: 'bar',
+  data: {
+    labels: ['Meta', 'Microsoft', 'Google', 'Amazon', 'Apple', 'NVIDIA', 'Oracle'],
+    datasets: [
+      {
+        label: '2025 Capex ($B)',
+        data: [38, 55, 50, 40, 15, 10, 8],
+        backgroundColor: '#3b82f6cc',
+        borderRadius: 4,
+      },
+      {
+        label: '2026E Capex ($B)',
+        data: [125, 80, 75, 60, 20, 15, 12],
+        backgroundColor: '#8b5cf6cc',
+        borderRadius: 4,
+      },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 11 } } } },
+    scales: {
+      y: { grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: '$B' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+</body>
+</html>

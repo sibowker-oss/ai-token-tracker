@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forward Look: AI Market 2026-2027 — The AI Ledger</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; }
+  .nav-link:hover { background:#334155; color:#f1f5f9; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:12px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .chart-wrap { height:350px; position:relative; }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:24px; font-weight:800; margin:4px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); }
+  .projected { border-left:3px solid var(--purple); }
+  .disclaimer { font-size:11px; color:var(--text-dim); background:rgba(139,92,246,0.05); border:1px solid rgba(139,92,246,0.15); border-radius:8px; padding:12px 16px; margin-bottom:20px; line-height:1.6; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th { text-align:left; padding:8px 12px; color:var(--text-dim); font-weight:600; border-bottom:1px solid var(--card-border); }
+  td { padding:8px 12px; border-bottom:1px solid rgba(255,255,255,0.03); }
+  .proj-badge { display:inline-block; padding:1px 6px; border-radius:4px; font-size:9px; font-weight:700; background:rgba(139,92,246,0.15); color:var(--purple); margin-left:4px; }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .grid-2 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
+  <a href="sankey.html" class="nav-link">Follow the $</a>
+  <a href="timeline.html" class="nav-link">Time Machine</a>
+  <a href="openrouter.html" class="nav-link">Live Pricing</a>
+  <a href="feed.html" class="nav-link">Weekly Feed</a>
+</nav>
+
+<div class="container">
+  <h1>Forward Look: AI Market 2026-2027 <span class="proj-badge">PROJECTED</span></h1>
+  <div class="sub">Where is the market heading? Projections based on observed growth rates, company guidance, and analyst estimates. Q1 2026 is the last actual data point — everything after is projected.</div>
+
+  <div class="disclaimer">
+    These projections use quarterly growth rates derived from authoritative data (OpenAI $50B 2027 target, Anthropic hyper-growth trajectory, ByteDance doubling cadence). Growth rates decelerate 3% per quarter. See <a href="model-assumptions.md" style="color:var(--accent);">model-assumptions.md</a> for full methodology and sources.
+  </div>
+
+  <div class="hero-grid">
+    <div class="hero-stat"><div class="label">Q4 2027 Tokens/Day</div><div class="value" style="color:var(--accent);" id="h-tokens">—</div><div class="detail">vs 320T today</div></div>
+    <div class="hero-stat"><div class="label">Q4 2027 Total ARR</div><div class="value" style="color:var(--green);" id="h-rev">—</div><div class="detail">vs $52B today</div></div>
+    <div class="hero-stat"><div class="label">Growth Multiple</div><div class="value" style="color:var(--orange);" id="h-mult">—</div><div class="detail">tokens: Q4'27 vs Q1'26</div></div>
+    <div class="hero-stat"><div class="label">China Share</div><div class="value" style="color:var(--red);" id="h-china">—</div><div class="detail">of global tokens</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Token Volume Projection (T/day)</h2>
+      <div class="chart-wrap"><canvas id="chart-tokens"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Revenue Projection ($B ARR)</h2>
+      <div class="chart-wrap"><canvas id="chart-rev"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Provider Trajectory — Tokens/Day</h2>
+    <div class="chart-wrap" style="height:400px;"><canvas id="chart-lines"></canvas></div>
+  </div>
+
+  <div class="card">
+    <h2>Growth Assumptions</h2>
+    <table>
+      <thead><tr><th>Provider</th><th>Token QoQ Growth</th><th>Rev QoQ Growth</th><th>Q1 2026 (Actual)</th><th>Q4 2027 (Projected)</th><th>Basis</th></tr></thead>
+      <tbody id="assumptions-table"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#1e293b';
+const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+
+async function init() {
+  const [sdResp, projResp] = await Promise.all([
+    fetch('site-data.json?v=' + Date.now()).catch(() => fetch('../site-data.json?v=' + Date.now())),
+    fetch('data/projections-2026-04.json?v=' + Date.now()).catch(() => fetch('../data/projections-2026-04.json?v=' + Date.now()))
+  ]);
+  const sd = await sdResp.json();
+  const proj = await projResp.json();
+
+  const t = sd.timeline;
+  const names = t.providerNames;
+  const colors = t.providerColors;
+
+  // Combine historical + projected
+  const allQuarters = t.quarters.map(q => q.q).concat(proj.projected_quarters.map(q => q.q));
+  const allTokens = t.tokenData.concat(proj.tokenData);
+  const allRevs = t.revData.concat(proj.revData);
+  const histLen = t.quarters.length;
+
+  // Hero stats
+  const lastTokens = allTokens[allTokens.length - 1];
+  const lastRevs = allRevs[allRevs.length - 1];
+  const totalTokens = lastTokens.reduce((a, b) => a + b, 0);
+  const totalRev = lastRevs.reduce((a, b) => a + b, 0);
+  const firstTokens = allTokens[histLen - 1].reduce((a, b) => a + b, 0);
+
+  // China = ByteDance + Alibaba + Tencent + Baidu + DeepSeek + Minimax + Moonshot
+  const chinaNames = ['ByteDance', 'Alibaba/Qwen', 'Tencent', 'Baidu', 'DeepSeek', 'Minimax', 'Moonshot/Kimi'];
+  const chinaTokens = names.reduce((s, n, i) => s + (chinaNames.includes(n) ? lastTokens[i] : 0), 0);
+
+  document.getElementById('h-tokens').textContent = '~' + Math.ceil(totalTokens) + 'T';
+  document.getElementById('h-rev').textContent = '$' + totalRev.toFixed(0) + 'B';
+  document.getElementById('h-mult').textContent = (totalTokens / firstTokens).toFixed(1) + 'x';
+  document.getElementById('h-china').textContent = Math.round(chinaTokens / totalTokens * 100) + '%';
+
+  // Stacked bar chart — tokens
+  const tokenDatasets = names.map((name, i) => ({
+    label: name,
+    data: allTokens.map(q => q[i]),
+    backgroundColor: colors[i] + 'cc',
+    borderRadius: 2,
+  }));
+
+  new Chart(document.getElementById('chart-tokens'), {
+    type: 'bar',
+    data: { labels: allQuarters, datasets: tokenDatasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { grid: { display: false }, stacked: true },
+        y: { stacked: true, grid: darkGrid, title: { display: true, text: 'T/day' } }
+      }
+    }
+  });
+
+  // Stacked bar — revenue
+  const revDatasets = names.filter((n, i) => allRevs[allRevs.length - 1][i] > 0).map((name, i) => {
+    const idx = names.indexOf(name);
+    return {
+      label: name,
+      data: allRevs.map(q => q[idx]),
+      backgroundColor: colors[idx] + 'cc',
+      borderRadius: 2,
+    };
+  });
+
+  new Chart(document.getElementById('chart-rev'), {
+    type: 'bar',
+    data: { labels: allQuarters, datasets: revDatasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { grid: { display: false }, stacked: true },
+        y: { stacked: true, grid: darkGrid, title: { display: true, text: '$B ARR' } }
+      }
+    }
+  });
+
+  // Line chart — top 6 providers by tokens
+  const top6 = names.map((n, i) => ({ name: n, idx: i, final: lastTokens[i] }))
+    .sort((a, b) => b.final - a.final)
+    .slice(0, 6);
+
+  new Chart(document.getElementById('chart-lines'), {
+    type: 'line',
+    data: {
+      labels: allQuarters,
+      datasets: top6.map(p => ({
+        label: p.name,
+        data: allTokens.map(q => q[p.idx]),
+        borderColor: colors[p.idx],
+        backgroundColor: colors[p.idx] + '22',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 3,
+        borderWidth: 2,
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: darkGrid, title: { display: true, text: 'T/day' } }
+      }
+    }
+  });
+
+  // Assumptions table
+  let tableHtml = '';
+  const ga = proj.growth_assumptions;
+  names.forEach((name, i) => {
+    const g = ga[name] || { token_qoq: 0, rev_qoq: 0 };
+    const actual = allTokens[histLen - 1][i];
+    const projected = lastTokens[i];
+    if (actual === 0 && projected === 0) return;
+    tableHtml += '<tr>';
+    tableHtml += '<td style="font-weight:600;">' + name + '</td>';
+    tableHtml += '<td>' + (g.token_qoq * 100).toFixed(0) + '%</td>';
+    tableHtml += '<td>' + (g.rev_qoq * 100).toFixed(0) + '%</td>';
+    tableHtml += '<td>' + actual + 'T</td>';
+    tableHtml += '<td style="color:var(--purple);font-weight:600;">' + projected.toFixed(1) + 'T</td>';
+    tableHtml += '<td style="font-size:10px;color:var(--text-dim);">' + (proj.known_targets[name] ? JSON.stringify(proj.known_targets[name]) : 'Extrapolated') + '</td>';
+    tableHtml += '</tr>';
+  });
+  document.getElementById('assumptions-table').innerHTML = tableHtml;
+}
+
+init();
+</script>
+</body>
+</html>

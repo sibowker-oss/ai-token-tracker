@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Follow the Dollar: Forward Look — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; }
+  .nav-link:hover { background:#334155; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
+  .year-toggle { display:flex; gap:4px; justify-content:center; margin-bottom:24px; }
+  .year-btn { padding:10px 28px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .year-btn:hover { border-color:var(--accent); color:var(--text); }
+  .year-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .year-btn .proj { font-size:9px; display:block; opacity:0.7; }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:4px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); }
+  .sankey-container { position:relative; width:100%; overflow-x:auto; }
+  canvas { display:block; }
+  .flow-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:20px; }
+  .flow-table th { text-align:left; padding:10px 14px; color:var(--text-dim); font-weight:600; border-bottom:2px solid var(--card-border); font-size:11px; text-transform:uppercase; }
+  .flow-table td { padding:8px 14px; border-bottom:1px solid rgba(255,255,255,0.03); }
+  .flow-table tr:hover td { background:rgba(59,130,246,0.03); }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:16px; }
+  .change-badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; }
+  .change-up { background:rgba(16,185,129,0.15); color:var(--green); }
+  .change-down { background:rgba(239,68,68,0.15); color:var(--red); }
+  .proj-badge { display:inline-block; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:700; background:rgba(139,92,246,0.15); color:var(--purple); }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .year-toggle { flex-wrap:wrap; } }
+</style>
+</head>
+<body>
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
+  <a href="sankey.html" class="nav-link">Follow the $</a>
+  <a href="timeline.html" class="nav-link">Time Machine</a>
+  <a href="openrouter.html" class="nav-link">Live Pricing</a>
+  <a href="feed.html" class="nav-link">Weekly Feed</a>
+</nav>
+
+<div class="container">
+  <h1>Follow the Dollar: Forward Look</h1>
+  <div class="sub">How does the AI revenue flow evolve from 2025 to 2027? Toggle between years to see how money shifts across buyers, channels, providers, and outcomes.</div>
+
+  <div class="year-toggle" id="year-toggle"></div>
+
+  <div class="hero-grid" id="hero-stats"></div>
+
+  <div class="card">
+    <h2 id="flow-title">Revenue Flow</h2>
+    <div class="sankey-container">
+      <canvas id="sankey" height="500"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Flow Detail</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="flow-tables"></div>
+  </div>
+
+  <div class="card" id="narrative-card">
+    <h2>What Changes</h2>
+    <div id="narrative"></div>
+  </div>
+</div>
+
+<script>
+let sankeyData = null;
+let activeYear = '2025';
+const yearColors = { '2025': '#3b82f6', '2026E': '#8b5cf6', '2027E': '#f59e0b' };
+
+async function init() {
+  try {
+    const resp = await fetch('data/sankey-projections.json?v=' + Date.now()).catch(() => fetch('../data/sankey-projections.json?v=' + Date.now()));
+    sankeyData = await resp.json();
+  } catch(e) {
+    document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Failed to load projection data</div>';
+    return;
+  }
+
+  // Build year toggles
+  let toggleHtml = '';
+  for (const [year, data] of Object.entries(sankeyData)) {
+    const isProj = year.includes('E');
+    toggleHtml += '<button class="year-btn' + (year === activeYear ? ' active' : '') + '" onclick="switchYear(\'' + year + '\')">' + data.label + (isProj ? '<span class="proj">Projected</span>' : '') + '</button>';
+  }
+  document.getElementById('year-toggle').innerHTML = toggleHtml;
+
+  renderYear(activeYear);
+}
+
+function switchYear(year) {
+  activeYear = year;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(sankeyData[year].label)));
+  renderYear(year);
+}
+
+function renderYear(year) {
+  const d = sankeyData[year];
+  const prevYear = year === '2026E' ? '2025' : year === '2027E' ? '2026E' : null;
+  const prev = prevYear ? sankeyData[prevYear] : null;
+
+  // Hero stats
+  const subsidyPct = Math.round(d.vc_subsidy / d.total_system * 100);
+  const marginPct = Math.round(d.outcomes.Margin / d.total_system * 100);
+  const invRatio = prev ? Math.round(d.total_system / d.customer_revenue) : Math.round(250 / d.customer_revenue);
+
+  let heroHtml = '';
+  heroHtml += '<div class="hero-stat"><div class="label">Total System</div><div class="value" style="color:var(--accent);">$' + d.total_system + 'B</div>';
+  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.total_system, prev.total_system) + ' vs ' + prev.label + '</div>';
+  heroHtml += '</div>';
+
+  heroHtml += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--green);">$' + d.customer_revenue + 'B</div>';
+  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.customer_revenue, prev.customer_revenue) + '</div>';
+  heroHtml += '</div>';
+
+  heroHtml += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$' + d.vc_subsidy + 'B</div><div class="detail">' + subsidyPct + '% of system</div></div>';
+
+  heroHtml += '<div class="hero-stat"><div class="label">Margin</div><div class="value" style="color:' + (d.outcomes.Margin > 5 ? 'var(--green)' : 'var(--orange)') + ';">$' + d.outcomes.Margin + 'B</div><div class="detail">' + marginPct + '% of system</div></div>';
+
+  document.getElementById('hero-stats').innerHTML = heroHtml;
+  document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
+
+  // Draw Sankey
+  drawSankey(d);
+
+  // Flow tables
+  let tablesHtml = '';
+
+  // Buyers table
+  tablesHtml += '<div><h3 style="font-size:14px;margin-bottom:12px;">Who Pays</h3><table class="flow-table"><thead><tr><th>Buyer</th><th>Value</th>';
+  if (prev) tablesHtml += '<th>Change</th>';
+  tablesHtml += '</tr></thead><tbody>';
+  for (const [name, val] of Object.entries(d.buyers)) {
+    tablesHtml += '<tr><td style="font-weight:600;">' + name + '</td><td>$' + val + 'B</td>';
+    if (prev && prev.buyers[name] != null) tablesHtml += '<td>' + changeBadge(val, prev.buyers[name]) + '</td>';
+    tablesHtml += '</tr>';
+  }
+  tablesHtml += '</tbody></table></div>';
+
+  // Providers table
+  tablesHtml += '<div><h3 style="font-size:14px;margin-bottom:12px;">Providers</h3><table class="flow-table"><thead><tr><th>Provider</th><th>Total</th><th>Customer</th><th>Subsidy</th>';
+  if (prev) tablesHtml += '<th>Change</th>';
+  tablesHtml += '</tr></thead><tbody>';
+  for (const [name, pdata] of Object.entries(d.providers)) {
+    tablesHtml += '<tr><td style="font-weight:600;">' + name + '</td><td>$' + pdata.total + 'B</td><td>$' + pdata.customer + 'B</td><td style="color:var(--red);">$' + pdata.subsidy + 'B</td>';
+    if (prev && prev.providers[name]) tablesHtml += '<td>' + changeBadge(pdata.total, prev.providers[name].total) + '</td>';
+    else if (prev) tablesHtml += '<td><span class="proj-badge">NEW</span></td>';
+    tablesHtml += '</tr>';
+  }
+  tablesHtml += '</tbody></table></div>';
+
+  document.getElementById('flow-tables').innerHTML = tablesHtml;
+
+  // Narrative
+  const narratives = {
+    '2025': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2025 was the year AI revenue became real — but the economics remained brutal. OpenAI and Anthropic generated $12B+ in combined customer revenue, yet both operated at significant losses. The $9.8B VC subsidy funded the gap between what customers paid and what it cost to serve them. Inference alone consumed $14B — more than total customer revenue. The only margin in the system ($2.15B) belonged to Traditional SaaS vendors and hyperscaler pass-through fees, not to the companies building the models.</p>',
+    '2026E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2026 marks the inflection toward sustainability. Customer revenue roughly triples to $52B as enterprise adoption moves past pilot stage. OpenAI crosses $20B+ in customer revenue; Anthropic follows at $14B+. Chinese providers (ByteDance, Alibaba, DeepSeek) enter the revenue picture for the first time. The VC subsidy grows in absolute terms ($13B) but shrinks as a percentage of the system (20% vs 36%). Margin emerges at $8B as inference costs per token continue falling. GPU capex becomes a separate $9B line item as providers build owned infrastructure.</p>',
+    '2027E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">By 2027, the AI market reaches $130B total system value — 4.8x the 2025 figure. Enterprise becomes the dominant buyer ($70B), and the channel mix shifts decisively toward API and platform usage. OpenAI targets $50B ARR (per their own guidance). Margin reaches $25B (19% of system) as inference efficiency, open model competition, and scale economics finally compound. The VC subsidy persists ($20B) but is now investment-for-growth rather than survival funding. The question shifts from "can AI be profitable?" to "who captures the margin?"</p>',
+  };
+  document.getElementById('narrative').innerHTML = narratives[year] || '';
+}
+
+function changeBadge(current, previous) {
+  if (!previous || previous === 0) return '';
+  const pct = Math.round((current - previous) / previous * 100);
+  const cls = pct >= 0 ? 'change-up' : 'change-down';
+  return '<span class="change-badge ' + cls + '">' + (pct >= 0 ? '+' : '') + pct + '%</span>';
+}
+
+function drawSankey(d) {
+  const canvas = document.getElementById('sankey');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth;
+  canvas.width = W;
+  canvas.height = 500;
+  ctx.clearRect(0, 0, W, 500);
+
+  const cols = [
+    { x: 60, w: 100, label: 'Who Pays', items: Object.entries(d.buyers).map(([n, v]) => ({ name: n, value: v })) },
+    { x: W * 0.28, w: 100, label: 'Channels', items: Object.entries(d.channels).map(([n, v]) => ({ name: n, value: v })) },
+    { x: W * 0.55, w: 100, label: 'Providers', items: Object.entries(d.providers).map(([n, v]) => ({ name: n, value: v.total })) },
+    { x: W - 160, w: 100, label: 'Outcomes', items: Object.entries(d.outcomes).map(([n, v]) => ({ name: n, value: v })) },
+  ];
+
+  const maxTotal = Math.max(...cols.map(c => c.items.reduce((s, i) => s + i.value, 0)));
+  const barH = 420;
+  const gap = 8;
+
+  const nodeColors = {
+    'Consumer': '#f59e0b', 'SME': '#3b82f6', 'Enterprise': '#10b981', 'VC/Investors': '#ef4444',
+    'Model Subs': '#60a5fa', 'Model API': '#34d399', 'Hyperscalers': '#a78bfa', 'AI Native Apps': '#f472b6',
+    'IaaS & Aggregators': '#8b5cf6', 'Traditional SaaS': '#06b6d4',
+    'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google': '#4285f4', 'IaaS/Open': '#8b5cf6',
+    'ByteDance': '#ff4500', 'Chinese Others': '#ff6a00', 'Trad SaaS': '#06b6d4',
+    'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Margin': '#10b981', 'GPU Capex': '#a78bfa',
+  };
+
+  // Layout nodes
+  cols.forEach(col => {
+    const total = col.items.reduce((s, i) => s + i.value, 0);
+    const scale = (barH - (col.items.length - 1) * gap) / total;
+    let y = 40;
+    col.items.forEach(item => {
+      item.h = item.value * scale;
+      item.y = y;
+      y += item.h + gap;
+    });
+  });
+
+  // Draw column labels
+  ctx.font = '11px -apple-system, sans-serif';
+  ctx.fillStyle = '#94a3b8';
+  cols.forEach(col => {
+    ctx.fillText(col.label, col.x + col.w / 2 - ctx.measureText(col.label).width / 2, 25);
+  });
+
+  // Draw nodes
+  cols.forEach(col => {
+    col.items.forEach(item => {
+      const color = nodeColors[item.name] || '#475569';
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.roundRect(col.x, item.y, col.w, Math.max(item.h, 2), 4);
+      ctx.fill();
+
+      // Label
+      if (item.h > 14) {
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 10px -apple-system, sans-serif';
+        const label = item.name.length > 14 ? item.name.slice(0, 12) + '..' : item.name;
+        ctx.fillText(label, col.x + 6, item.y + item.h / 2 + 3);
+
+        ctx.font = '9px -apple-system, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.fillText('$' + item.value + 'B', col.x + col.w - ctx.measureText('$' + item.value + 'B').width - 6, item.y + item.h / 2 + 3);
+      }
+    });
+  });
+
+  // Draw flows between columns (simplified — proportional connections)
+  for (let c = 0; c < cols.length - 1; c++) {
+    const left = cols[c];
+    const right = cols[c + 1];
+    const leftTotal = left.items.reduce((s, i) => s + i.value, 0);
+    const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
+
+    left.items.forEach(lItem => {
+      const lPct = lItem.value / leftTotal;
+      right.items.forEach(rItem => {
+        const rPct = rItem.value / rightTotal;
+        const flowH = Math.min(lItem.h * rPct, rItem.h * lPct) * 0.8;
+        if (flowH < 0.5) return;
+
+        const lColor = nodeColors[lItem.name] || '#475569';
+        ctx.globalAlpha = 0.12;
+        ctx.fillStyle = lColor;
+        ctx.beginPath();
+        const lx = left.x + left.w;
+        const rx = right.x;
+        const ly = lItem.y + lItem.h * (rItem.y / (right.items[right.items.length-1].y + right.items[right.items.length-1].h));
+        const ry = rItem.y + rItem.h * (lItem.y / (left.items[left.items.length-1].y + left.items[left.items.length-1].h));
+        const cp = (rx - lx) * 0.4;
+        ctx.moveTo(lx, ly);
+        ctx.bezierCurveTo(lx + cp, ly, rx - cp, ry, rx, ry);
+        ctx.lineTo(rx, ry + flowH);
+        ctx.bezierCurveTo(rx - cp, ry + flowH, lx + cp, ly + flowH, lx, ly + flowH);
+        ctx.closePath();
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      });
+    });
+  }
+}
+
+init();
+</script>
+</body>
+</html>
