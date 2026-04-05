@@ -153,16 +153,56 @@ def main():
     # Get existing claim IDs to avoid duplicates
     existing_ids = {item["id"] for item in inbox["items"]}
 
-    # Filter to sources we can fetch (web-based, active or pending)
+    # Filter to sources that are due for scanning
     fetchable_methods = {"web_extract", "pdf_export"}
-    sources = [
+    freq_days = {
+        "daily": 1,
+        "weekly": 7,
+        "monthly": 30,
+        "quarterly": 90,
+        "annual": 365,
+        "one_time": 999999,  # never re-scan
+    }
+
+    all_fetchable = [
         s for s in registry["sources"]
         if s.get("extraction_method") in fetchable_methods
         and s.get("status") in ("active", "pending_first_extraction")
         and s.get("url")
     ]
 
-    print(f"Sources to scan: {len(sources)} (of {len(registry['sources'])} total)\n")
+    sources = []
+    skipped = 0
+    for s in all_fetchable:
+        freq = s.get("frequency", "daily")
+        last = s.get("last_checked")
+        interval = freq_days.get(freq, 1)
+
+        # Always scan pending_first_extraction
+        if s.get("status") == "pending_first_extraction":
+            sources.append(s)
+            continue
+
+        # Skip one_time sources that have already been scanned
+        if freq == "one_time" and last:
+            skipped += 1
+            continue
+
+        # Check if enough time has passed since last scan
+        if last:
+            from datetime import datetime as _dt
+            try:
+                last_date = _dt.strptime(last, "%Y-%m-%d")
+                days_since = (datetime.now() - last_date).days
+                if days_since < interval:
+                    skipped += 1
+                    continue
+            except ValueError:
+                pass  # bad date format, scan anyway
+
+        sources.append(s)
+
+    print(f"Sources to scan: {len(sources)} (of {len(all_fetchable)} fetchable, {skipped} skipped — not due yet)\n")
 
     total_added = 0
     sources_updated = 0
@@ -187,6 +227,10 @@ def main():
         if not claims:
             print(f"     No claims found")
             source["last_checked"] = today
+            freq = source.get("frequency", "daily")
+            interval = freq_days.get(freq, 1)
+            from datetime import timedelta
+            source["next_check"] = (datetime.now() + timedelta(days=interval)).strftime("%Y-%m-%d")
             sources_updated += 1
             continue
 
@@ -235,6 +279,13 @@ def main():
         source["last_claims_count"] = len(claims)
         if source["status"] == "pending_first_extraction":
             source["status"] = "active"
+
+        # Set next_check based on frequency
+        freq = source.get("frequency", "daily")
+        interval = freq_days.get(freq, 1)
+        from datetime import timedelta
+        next_date = datetime.now() + timedelta(days=interval)
+        source["next_check"] = next_date.strftime("%Y-%m-%d")
 
         print(f"     ✅ {added} new claim(s) added to inbox")
 
