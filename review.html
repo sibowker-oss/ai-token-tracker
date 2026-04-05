@@ -673,6 +673,31 @@ function saveDecisions() {
   localStorage.setItem(DECISIONS_KEY, JSON.stringify(decisions));
 }
 
+async function deleteClaim(id) {
+  if (!confirm('Permanently delete this claim?')) return;
+  if (!GitHubAPI.hasToken()) { showToast('GitHub token not set'); return; }
+  try {
+    const inboxFile = await GitHubAPI.readFile('vault-inbox.json');
+    const inbox = JSON.parse(inboxFile.content);
+    inbox.items = inbox.items.filter(item => item.id !== id);
+    await GitHubAPI.commitFiles(
+      [{ path: 'vault-inbox.json', content: inbox }],
+      'Delete claim: ' + id
+    );
+    // Remove from local view
+    allItems = allItems.filter(item => item.id !== id);
+    delete decisions[id];
+    saveDecisions();
+    renderStats();
+    renderFilters();
+    renderClaims();
+    updateSubmitBar();
+    showToast('Claim deleted');
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+}
+
 function setDecision(id, decision) {
   if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
   if (decisions[id].decision === decision) {
@@ -876,6 +901,7 @@ function renderClaims() {
     html += '<button class="action-btn act-accept' + (d.decision === 'accepted' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'accepted\')">Accept</button>';
     html += '<button class="action-btn act-decline' + (d.decision === 'declined' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'declined\')">Decline</button>';
     html += '<button class="action-btn act-park' + (d.decision === 'parked' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'parked\')">Park</button>';
+    html += '<button class="action-btn" style="margin-left:auto;color:var(--red);border-color:rgba(239,68,68,0.3);font-size:10px;opacity:0.6;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" onclick="event.stopPropagation();deleteClaim(\'' + item.id + '\')">Delete</button>';
     html += '<input class="claim-note" placeholder="Add a note..." value="' + esc(d.note || '') + '" oninput="setNote(\'' + item.id + '\', this.value)">';
     html += '</div>';
 
