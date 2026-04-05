@@ -80,7 +80,10 @@
   <button class="tab" onclick="switchTab('add')" data-tab="add">
     <span class="tab-icon">&#43;</span>Add
   </button>
-  <button class="tab" onclick="switchTab('settings')" data-tab="settings" style="margin-left:auto;">
+  <button class="tab" onclick="switchTab('dev')" data-tab="dev" style="margin-left:auto;">
+    <span class="tab-icon">&#128736;</span>In Dev
+  </button>
+  <button class="tab" onclick="switchTab('settings')" data-tab="settings">
     <span class="tab-icon">&#9881;</span>Settings
   </button>
 </div>
@@ -92,6 +95,7 @@
   <iframe id="frame-archive" src="about:blank"></iframe>
   <iframe id="frame-ask" src="about:blank"></iframe>
   <iframe id="frame-add" src="about:blank"></iframe>
+  <iframe id="frame-dev" src="about:blank"></iframe>
   <iframe id="frame-settings" src="about:blank"></iframe>
 </div>
 
@@ -103,6 +107,7 @@ const TAB_PAGES = {
   archive: 'archive.html',
   ask: 'ask.html',
   add: 'add.html',
+  dev: 'in-development.html',
   settings: 'settings.html'
 };
 
