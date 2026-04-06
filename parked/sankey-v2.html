@@ -185,6 +185,7 @@ let sankeyNodes = [];  // stored for hit-testing
 let sankeyFlows = [];
 let currentSankeyData = null;
 let hoveredNode = null;
+let lockedNode = null;  // click to lock highlight
 
 const nodeColors = {
   'Consumer': '#f59e0b', 'SME': '#3b82f6', 'Enterprise': '#10b981', 'VC/Investors': '#ef4444',
@@ -257,7 +258,8 @@ function drawSankey(d) {
 
 function renderSankey(ctx, W, cols) {
   ctx.clearRect(0, 0, W, 500);
-  const hName = hoveredNode ? hoveredNode.name : null;
+  const activeNode = lockedNode || hoveredNode;
+  const hName = activeNode ? activeNode.name : null;
 
   // Column labels
   ctx.font = '11px -apple-system, sans-serif';
@@ -319,9 +321,9 @@ function renderSankey(ctx, W, cols) {
     ctx.globalAlpha = 1.0;
   });
 
-  // Tooltip on hover
-  if (hoveredNode) {
-    const item = hoveredNode;
+  // Tooltip on hover or lock
+  if (activeNode) {
+    const item = activeNode;
     const inflows = sankeyFlows.filter(f => f.rItem.name === item.name).map(f => f.lItem.name + ': $' + f.lItem.value + 'B');
     const outflows = sankeyFlows.filter(f => f.lItem.name === item.name).map(f => f.rItem.name + ': $' + f.rItem.value + 'B');
 
@@ -375,8 +377,31 @@ canvas.addEventListener('mousemove', function(e) {
   }
 });
 
+canvas.addEventListener('click', function(e) {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  let found = null;
+  for (const node of sankeyNodes) {
+    if (mx >= node.colX && mx <= node.colX + node.colW && my >= node.y && my <= node.y + node.h) {
+      found = node;
+      break;
+    }
+  }
+
+  if (found && lockedNode && found.name === lockedNode.name) {
+    lockedNode = null;  // click same node to unlock
+  } else {
+    lockedNode = found;  // lock new node, or null to clear
+  }
+
+  const ctx = canvas.getContext('2d');
+  renderSankey(ctx, canvas.width, null);
+});
+
 canvas.addEventListener('mouseleave', function() {
-  if (hoveredNode) {
+  if (hoveredNode && !lockedNode) {
     hoveredNode = null;
     const ctx = canvas.getContext('2d');
     renderSankey(ctx, canvas.width, null);
