@@ -62,18 +62,19 @@
       "Model API": 10.0,
       "Hyperscalers": 6.0,
       "AI Native Apps": 8.0,
-      "IaaS & Aggregators": 2.0,
-      "Traditional SaaS": 14.0
+      "IaaS & Aggregators": 6.0,
+      "Traditional SaaS": 10.0,
+      "Open Model API": 13.0
     },
     "providers": {
       "OpenAI": {
-        "total": 25.0,
-        "customer": 22.0,
-        "subsidy": 3.0
+        "total": 22.0,
+        "customer": 20.0,
+        "subsidy": 2.0
       },
       "Anthropic": {
-        "total": 16.0,
-        "customer": 14.0,
+        "total": 15.0,
+        "customer": 13.0,
         "subsidy": 2.0
       },
       "Google": {
@@ -81,20 +82,10 @@
         "customer": 4.5,
         "subsidy": 0.5
       },
-      "ByteDance": {
-        "total": 3.0,
-        "customer": 3.0,
-        "subsidy": 0.0
-      },
-      "Chinese Others": {
-        "total": 4.0,
-        "customer": 3.0,
-        "subsidy": 1.0
-      },
       "IaaS/Open": {
-        "total": 3.0,
-        "customer": 2.5,
-        "subsidy": 0.5
+        "total": 14.0,
+        "customer": 7.5,
+        "subsidy": 6.5
       },
       "Trad SaaS": {
         "total": 9.0,
@@ -103,9 +94,9 @@
       }
     },
     "outcomes": {
-      "Inference": 34.3,
-      "People/SGA": 22.7,
-      "Operating Cash Flow": 8.0
+      "Inference": 34.5,
+      "People/SGA": 22.8,
+      "Operating Cash Flow": 7.8
     }
   },
   "2027E": {
@@ -124,13 +115,14 @@
       "Model API": 22.0,
       "Hyperscalers": 12.0,
       "AI Native Apps": 18.0,
-      "IaaS & Aggregators": 6.0,
-      "Traditional SaaS": 32.0
+      "IaaS & Aggregators": 14.0,
+      "Traditional SaaS": 18.0,
+      "Open Model API": 26.0
     },
     "providers": {
       "OpenAI": {
-        "total": 42.0,
-        "customer": 40.0,
+        "total": 40.0,
+        "customer": 38.0,
         "subsidy": 2.0
       },
       "Anthropic": {
@@ -143,31 +135,21 @@
         "customer": 9.0,
         "subsidy": 1.0
       },
-      "ByteDance": {
-        "total": 8.0,
-        "customer": 8.0,
-        "subsidy": 0.0
-      },
-      "Chinese Others": {
-        "total": 10.0,
-        "customer": 8.0,
-        "subsidy": 2.0
-      },
       "IaaS/Open": {
-        "total": 8.0,
-        "customer": 7.0,
-        "subsidy": 1.0
+        "total": 34.0,
+        "customer": 22.0,
+        "subsidy": 12.0
       },
       "Trad SaaS": {
-        "total": 24.0,
-        "customer": 24.0,
+        "total": 18.0,
+        "customer": 18.0,
         "subsidy": 0.0
       }
     },
     "outcomes": {
-      "Inference": 65.5,
-      "People/SGA": 39.5,
-      "Operating Cash Flow": 25.0
+      "Inference": 65.0,
+      "People/SGA": 39.0,
+      "Operating Cash Flow": 26.0
     }
   }
 }
