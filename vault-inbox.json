@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-05",
+  "lastProcessed": "2026-04-07",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -9624,6 +9624,113 @@
         "forecast"
       ],
       "notes": "Updated forecast: $111B more burn through 2030. Compare to prior scan-20260331-b2c ($115B through 2029). Also: 2025 actual burn $8B (better than $9B target). Revenue forecasts raised alongside.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260407-a1b",
+      "claim": "OpenRouter weekly token rankings (Apr 7, 2026): Google #1 (26.6%), Anthropic #2 (18.5%), DeepSeek #3 (16.7%), Qwen #4 (10.3%), OpenAI #5 (10.2%)",
+      "value": 26.6,
+      "unit": "% token share (Google, weekly)",
+      "sourceUrl": "https://openrouter.ai/rankings",
+      "sourceType": "official",
+      "sourceAuthor": "OpenRouter",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-07",
+      "dateAdded": "2026-04-07",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openrouter",
+        "token-volume",
+        "market-share",
+        "google",
+        "anthropic",
+        "deepseek",
+        "qwen",
+        "openai",
+        "2026"
+      ],
+      "notes": "Major shift from Apr 1 snapshot (scan-20260401-g7h): Google now #1 at 26.6%, Anthropic fell to #2 (18.5%). DeepSeek #3 (16.7%), Qwen #4 (10.3%), OpenAI #5 (10.2%). OSS models gaining rapidly.",
+      "status": "pending",
+      "replaces": "scan-20260401-g7h"
+    },
+    {
+      "id": "scan-20260407-b2c",
+      "claim": "Microsoft pledges $5.5B AI investment in Singapore through 2029 for cloud and AI infrastructure",
+      "value": 5.5,
+      "unit": "$B",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-04-01/microsoft-pledges-5-5-billion-ai-investment-in-singapore",
+      "sourceType": "official",
+      "sourceAuthor": "Bloomberg / Microsoft",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-01",
+      "dateAdded": "2026-04-07",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "microsoft",
+        "investment",
+        "infrastructure",
+        "asia",
+        "singapore",
+        "2026"
+      ],
+      "notes": "Microsoft $5.5B into Singapore cloud/AI infra through 2029. Includes free AI tools for students. Part of Microsoft's broader APAC AI expansion alongside India ($17.5B) and Japan ($10B).",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260407-c3d",
+      "claim": "Microsoft drafts $10B AI investment plan in Japan (announced April 3, 2026)",
+      "value": 10,
+      "unit": "$B",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-04-03/microsoft-drafts-10-billion-investment-plan-in-ai-hungry-japan",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-03",
+      "dateAdded": "2026-04-07",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "microsoft",
+        "investment",
+        "infrastructure",
+        "asia",
+        "japan",
+        "2026"
+      ],
+      "notes": "Microsoft planning $10B investment in Japan AI/cloud infrastructure. Follows Singapore $5.5B (Apr 1). Microsoft APAC AI infra commitments now exceed $27B (India $17.5B + Japan $10B + Singapore $5.5B).",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260407-d4e",
+      "claim": "Anthropic gross margin: -94% in 2024, turned to ~+40% in 2025; targets 50% in 2026 and 77% in 2028",
+      "value": 40,
+      "unit": "% gross margin (2025 actual)",
+      "sourceUrl": "https://www.axios.com/2026/04/02/anthropic-usage-limits-openai",
+      "sourceType": "reporting",
+      "sourceAuthor": "Axios / The Information",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-02",
+      "dateAdded": "2026-04-07",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "gross-margin",
+        "profitability",
+        "inference-costs",
+        "2024",
+        "2025"
+      ],
+      "notes": "Anthropic gross margin swung from -94% (2024) to ~+40% (2025). Targets 50% (2026) and 77% (2028). Pressured by inference costs. Vault has -10pp revision (scan-20260331-e5f) but not the baseline -94% figure.",
       "status": "pending",
       "replaces": null
     }
