@@ -181,13 +181,27 @@ function changeBadge(current, previous) {
   return '<span class="change-badge ' + cls + '">' + (pct >= 0 ? '+' : '') + pct + '%</span>';
 }
 
+let sankeyNodes = [];  // stored for hit-testing
+let sankeyFlows = [];
+let currentSankeyData = null;
+let hoveredNode = null;
+
+const nodeColors = {
+  'Consumer': '#f59e0b', 'SME': '#3b82f6', 'Enterprise': '#10b981', 'VC/Investors': '#ef4444',
+  'Model Subs': '#60a5fa', 'Model API': '#34d399', 'Hyperscalers': '#a78bfa', 'AI Native Apps': '#f472b6',
+  'IaaS & Aggregators': '#8b5cf6', 'Traditional SaaS': '#06b6d4',
+  'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google': '#4285f4', 'IaaS/Open': '#8b5cf6',
+  'ByteDance': '#ff4500', 'Chinese Others': '#ff6a00', 'Trad SaaS': '#06b6d4',
+  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Margin': '#10b981', 'GPU Capex': '#a78bfa',
+};
+
 function drawSankey(d) {
+  currentSankeyData = d;
   const canvas = document.getElementById('sankey');
   const ctx = canvas.getContext('2d');
   const W = canvas.parentElement.clientWidth;
   canvas.width = W;
   canvas.height = 500;
-  ctx.clearRect(0, 0, W, 500);
 
   const cols = [
     { x: 60, w: 100, label: 'Who Pays', items: Object.entries(d.buyers).map(([n, v]) => ({ name: n, value: v })) },
@@ -196,95 +210,178 @@ function drawSankey(d) {
     { x: W - 160, w: 100, label: 'Outcomes', items: Object.entries(d.outcomes).map(([n, v]) => ({ name: n, value: v })) },
   ];
 
-  const maxTotal = Math.max(...cols.map(c => c.items.reduce((s, i) => s + i.value, 0)));
   const barH = 420;
   const gap = 8;
 
-  const nodeColors = {
-    'Consumer': '#f59e0b', 'SME': '#3b82f6', 'Enterprise': '#10b981', 'VC/Investors': '#ef4444',
-    'Model Subs': '#60a5fa', 'Model API': '#34d399', 'Hyperscalers': '#a78bfa', 'AI Native Apps': '#f472b6',
-    'IaaS & Aggregators': '#8b5cf6', 'Traditional SaaS': '#06b6d4',
-    'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google': '#4285f4', 'IaaS/Open': '#8b5cf6',
-    'ByteDance': '#ff4500', 'Chinese Others': '#ff6a00', 'Trad SaaS': '#06b6d4',
-    'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Margin': '#10b981', 'GPU Capex': '#a78bfa',
-  };
-
   // Layout nodes
-  cols.forEach(col => {
+  sankeyNodes = [];
+  cols.forEach((col, ci) => {
     const total = col.items.reduce((s, i) => s + i.value, 0);
     const scale = (barH - (col.items.length - 1) * gap) / total;
     let y = 40;
     col.items.forEach(item => {
       item.h = item.value * scale;
       item.y = y;
+      item.col = ci;
+      item.colX = col.x;
+      item.colW = col.w;
+      sankeyNodes.push(item);
       y += item.h + gap;
     });
   });
 
-  // Draw column labels
-  ctx.font = '11px -apple-system, sans-serif';
-  ctx.fillStyle = '#94a3b8';
-  cols.forEach(col => {
-    ctx.fillText(col.label, col.x + col.w / 2 - ctx.measureText(col.label).width / 2, 25);
-  });
-
-  // Draw nodes
-  cols.forEach(col => {
-    col.items.forEach(item => {
-      const color = nodeColors[item.name] || '#475569';
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.roundRect(col.x, item.y, col.w, Math.max(item.h, 2), 4);
-      ctx.fill();
-
-      // Label
-      if (item.h > 14) {
-        ctx.fillStyle = 'white';
-        ctx.font = 'bold 10px -apple-system, sans-serif';
-        const label = item.name.length > 14 ? item.name.slice(0, 12) + '..' : item.name;
-        ctx.fillText(label, col.x + 6, item.y + item.h / 2 + 3);
-
-        ctx.font = '9px -apple-system, sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.8)';
-        ctx.fillText('$' + item.value + 'B', col.x + col.w - ctx.measureText('$' + item.value + 'B').width - 6, item.y + item.h / 2 + 3);
-      }
-    });
-  });
-
-  // Draw flows between columns (simplified — proportional connections)
+  // Build flows
+  sankeyFlows = [];
   for (let c = 0; c < cols.length - 1; c++) {
     const left = cols[c];
     const right = cols[c + 1];
     const leftTotal = left.items.reduce((s, i) => s + i.value, 0);
     const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
-
     left.items.forEach(lItem => {
-      const lPct = lItem.value / leftTotal;
       right.items.forEach(rItem => {
         const rPct = rItem.value / rightTotal;
+        const lPct = lItem.value / leftTotal;
         const flowH = Math.min(lItem.h * rPct, rItem.h * lPct) * 0.8;
         if (flowH < 0.5) return;
-
-        const lColor = nodeColors[lItem.name] || '#475569';
-        ctx.globalAlpha = 0.12;
-        ctx.fillStyle = lColor;
-        ctx.beginPath();
         const lx = left.x + left.w;
         const rx = right.x;
         const ly = lItem.y + lItem.h * (rItem.y / (right.items[right.items.length-1].y + right.items[right.items.length-1].h));
         const ry = rItem.y + rItem.h * (lItem.y / (left.items[left.items.length-1].y + left.items[left.items.length-1].h));
-        const cp = (rx - lx) * 0.4;
-        ctx.moveTo(lx, ly);
-        ctx.bezierCurveTo(lx + cp, ly, rx - cp, ry, rx, ry);
-        ctx.lineTo(rx, ry + flowH);
-        ctx.bezierCurveTo(rx - cp, ry + flowH, lx + cp, ly + flowH, lx, ly + flowH);
-        ctx.closePath();
-        ctx.fill();
-        ctx.globalAlpha = 1.0;
+        sankeyFlows.push({ lItem, rItem, lx, rx, ly, ry, flowH, col: c });
       });
     });
   }
+
+  renderSankey(ctx, W, cols);
 }
+
+function renderSankey(ctx, W, cols) {
+  ctx.clearRect(0, 0, W, 500);
+  const hName = hoveredNode ? hoveredNode.name : null;
+
+  // Column labels
+  ctx.font = '11px -apple-system, sans-serif';
+  ctx.fillStyle = '#94a3b8';
+  if (cols) {
+    cols.forEach(col => {
+      ctx.fillText(col.label, col.x + col.w / 2 - ctx.measureText(col.label).width / 2, 25);
+    });
+  }
+
+  // Draw flows first (behind nodes)
+  sankeyFlows.forEach(f => {
+    const connected = hName && (f.lItem.name === hName || f.rItem.name === hName);
+    const dimmed = hName && !connected;
+    const color = nodeColors[f.lItem.name] || '#475569';
+    ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.35 : 0.12;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    const cp = (f.rx - f.lx) * 0.4;
+    ctx.moveTo(f.lx, f.ly);
+    ctx.bezierCurveTo(f.lx + cp, f.ly, f.rx - cp, f.ry, f.rx, f.ry);
+    ctx.lineTo(f.rx, f.ry + f.flowH);
+    ctx.bezierCurveTo(f.rx - cp, f.ry + f.flowH, f.lx + cp, f.ly + f.flowH, f.lx, f.ly + f.flowH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1.0;
+  });
+
+  // Draw nodes
+  sankeyNodes.forEach(item => {
+    const isHovered = item.name === hName;
+    const dimmed = hName && !isHovered && !sankeyFlows.some(f => (f.lItem.name === hName && f.rItem.name === item.name) || (f.rItem.name === hName && f.lItem.name === item.name));
+    const color = nodeColors[item.name] || '#475569';
+
+    ctx.globalAlpha = dimmed ? 0.25 : 1.0;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(item.colX, item.y, item.colW, Math.max(item.h, 2), 4);
+    ctx.fill();
+
+    // Border on hover
+    if (isHovered) {
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // Label
+    if (item.h > 14) {
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 10px -apple-system, sans-serif';
+      const label = item.name.length > 14 ? item.name.slice(0, 12) + '..' : item.name;
+      ctx.fillText(label, item.colX + 6, item.y + item.h / 2 + 3);
+      ctx.font = '9px -apple-system, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      const valText = '$' + item.value + 'B';
+      ctx.fillText(valText, item.colX + item.colW - ctx.measureText(valText).width - 6, item.y + item.h / 2 + 3);
+    }
+    ctx.globalAlpha = 1.0;
+  });
+
+  // Tooltip on hover
+  if (hoveredNode) {
+    const item = hoveredNode;
+    const inflows = sankeyFlows.filter(f => f.rItem.name === item.name).map(f => f.lItem.name + ': $' + f.lItem.value + 'B');
+    const outflows = sankeyFlows.filter(f => f.lItem.name === item.name).map(f => f.rItem.name + ': $' + f.rItem.value + 'B');
+
+    let tipLines = [item.name + ' — $' + item.value + 'B'];
+    if (inflows.length) tipLines.push('From: ' + inflows.join(', '));
+    if (outflows.length) tipLines.push('To: ' + outflows.join(', '));
+
+    const tipX = item.colX + item.colW + 12;
+    const tipY = Math.max(item.y, 40);
+    const tipW = Math.max(...tipLines.map(l => ctx.measureText(l).width)) + 24;
+    const tipH = tipLines.length * 16 + 16;
+
+    ctx.fillStyle = 'rgba(15,23,42,0.95)';
+    ctx.beginPath();
+    ctx.roundRect(tipX, tipY, tipW, tipH, 6);
+    ctx.fill();
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.font = '11px -apple-system, sans-serif';
+    tipLines.forEach((line, i) => {
+      ctx.fillStyle = i === 0 ? '#f1f5f9' : '#94a3b8';
+      if (i === 0) ctx.font = 'bold 11px -apple-system, sans-serif';
+      else ctx.font = '10px -apple-system, sans-serif';
+      ctx.fillText(line, tipX + 12, tipY + 16 + i * 16);
+    });
+  }
+}
+
+// Mouse interaction
+const canvas = document.getElementById('sankey');
+canvas.addEventListener('mousemove', function(e) {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  let found = null;
+  for (const node of sankeyNodes) {
+    if (mx >= node.colX && mx <= node.colX + node.colW && my >= node.y && my <= node.y + node.h) {
+      found = node;
+      break;
+    }
+  }
+
+  if (found !== hoveredNode) {
+    hoveredNode = found;
+    canvas.style.cursor = found ? 'pointer' : 'default';
+    const ctx = canvas.getContext('2d');
+    renderSankey(ctx, canvas.width, null);
+  }
+});
+
+canvas.addEventListener('mouseleave', function() {
+  if (hoveredNode) {
+    hoveredNode = null;
+    const ctx = canvas.getContext('2d');
+    renderSankey(ctx, canvas.width, null);
+  }
+});
 
 init();
 </script>
