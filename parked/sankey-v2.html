@@ -115,7 +115,8 @@ function renderYear(year) {
 
   // Hero stats
   const subsidyPct = Math.round(d.vc_subsidy / d.total_system * 100);
-  const marginPct = Math.round(d.outcomes.Margin / d.total_system * 100);
+  const cashFlow = d.outcomes['Operating Cash Flow'] || d.outcomes.Margin || 0;
+  const cashFlowPct = Math.round(cashFlow / d.total_system * 100);
   const invRatio = prev ? Math.round(d.total_system / d.customer_revenue) : Math.round(250 / d.customer_revenue);
 
   let heroHtml = '';
@@ -129,7 +130,7 @@ function renderYear(year) {
 
   heroHtml += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$' + d.vc_subsidy + 'B</div><div class="detail">' + subsidyPct + '% of system</div></div>';
 
-  heroHtml += '<div class="hero-stat"><div class="label">Margin</div><div class="value" style="color:' + (d.outcomes.Margin > 5 ? 'var(--green)' : 'var(--orange)') + ';">$' + d.outcomes.Margin + 'B</div><div class="detail">' + marginPct + '% of system</div></div>';
+  heroHtml += '<div class="hero-stat"><div class="label">Operating Cash Flow</div><div class="value" style="color:' + (cashFlow > 5 ? 'var(--green)' : 'var(--orange)') + ';">$' + cashFlow + 'B</div><div class="detail">' + cashFlowPct + '% of system (pre-capex depreciation)</div></div>';
 
   document.getElementById('hero-stats').innerHTML = heroHtml;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
@@ -167,9 +168,9 @@ function renderYear(year) {
 
   // Narrative
   const narratives = {
-    '2025': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2025 was the year AI revenue became real — but the economics remained brutal. OpenAI and Anthropic generated $12B+ in combined customer revenue, yet both operated at significant losses. The $9.8B VC subsidy funded the gap between what customers paid and what it cost to serve them. Inference alone consumed $14B — more than total customer revenue. The only margin in the system ($2.15B) belonged to Traditional SaaS vendors and hyperscaler pass-through fees, not to the companies building the models.</p>',
-    '2026E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2026 marks the inflection toward sustainability. Customer revenue roughly triples to $52B as enterprise adoption moves past pilot stage. OpenAI crosses $20B+ in customer revenue; Anthropic follows at $14B+. Chinese providers (ByteDance, Alibaba, DeepSeek) enter the revenue picture for the first time. The VC subsidy grows in absolute terms ($13B) but shrinks as a percentage of the system (20% vs 36%). Margin emerges at $8B as inference costs per token continue falling. GPU capex becomes a separate $9B line item as providers build owned infrastructure.</p>',
-    '2027E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">By 2027, the AI market reaches $130B total system value — 4.8x the 2025 figure. Enterprise becomes the dominant buyer ($70B), and the channel mix shifts decisively toward API and platform usage. OpenAI targets $50B ARR (per their own guidance). Margin reaches $25B (19% of system) as inference efficiency, open model competition, and scale economics finally compound. The VC subsidy persists ($20B) but is now investment-for-growth rather than survival funding. The question shifts from "can AI be profitable?" to "who captures the margin?"</p>',
+    '2025': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2025 was the year AI revenue became real — but the operating economics remained brutal. OpenAI and Anthropic generated $12B+ in combined customer revenue, yet both operated at significant losses. The $9.8B VC subsidy funded the gap between what customers paid and what it cost to serve them. Inference alone consumed $14B — more than total customer revenue. The $2.15B in positive operating cash flow belonged entirely to Traditional SaaS vendors and hyperscaler pass-through fees. None of these figures include the $250B+ in AI infrastructure capex being depreciated over 5-6 years — that sits on balance sheets, not in this operating flow.</p>',
+    '2026E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2026 marks the inflection toward operating sustainability. Customer revenue roughly triples to $52B as enterprise adoption moves past pilot stage. OpenAI crosses $20B+ in customer revenue; Anthropic follows at $14B+. Chinese providers (ByteDance, Alibaba, DeepSeek) enter the revenue picture for the first time. The VC subsidy grows in absolute terms ($13B) but shrinks as a share of the system (20% vs 36%). Operating cash flow reaches $8B as inference costs per token continue falling. This cash flow is pre-capex — the industry is still spending $500B+ on infrastructure that will depreciate over years.</p>',
+    '2027E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">By 2027, the AI market reaches $130B total system value — 4.8x 2025. Enterprise becomes the dominant buyer ($70B), and the channel mix shifts decisively toward API and platform usage. OpenAI targets $50B ARR (per their own guidance). Operating cash flow reaches $25B (19% of system) as inference efficiency, open model competition, and scale economics compound. The VC subsidy persists ($20B) but shifts from survival funding to growth investment. The key question: when does operating cash flow exceed annual capex depreciation? That is the point of true profitability — and it is not yet on the horizon.</p>',
   };
   document.getElementById('narrative').innerHTML = narratives[year] || '';
 }
@@ -193,7 +194,7 @@ const nodeColors = {
   'IaaS & Aggregators': '#8b5cf6', 'Traditional SaaS': '#06b6d4',
   'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google': '#4285f4', 'IaaS/Open': '#8b5cf6',
   'ByteDance': '#ff4500', 'Chinese Others': '#ff6a00', 'Trad SaaS': '#06b6d4',
-  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Margin': '#10b981', 'GPU Capex': '#a78bfa',
+  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Margin': '#10b981', 'Operating Cash Flow': '#10b981',
 };
 
 function drawSankey(d) {
