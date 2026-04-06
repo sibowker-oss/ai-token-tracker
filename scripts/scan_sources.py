@@ -62,6 +62,23 @@ def save_json(path, data):
         json.dump(data, f, indent=2)
 
 
+def _fuzzy_match(a, b):
+    """Check if two claim texts are essentially the same.
+    Matches if: exact match, or one contains the other, or >80% word overlap."""
+    if not a or not b:
+        return False
+    if a == b:
+        return True
+    if a in b or b in a:
+        return True
+    words_a = set(a.split())
+    words_b = set(b.split())
+    if not words_a or not words_b:
+        return False
+    overlap = len(words_a & words_b) / max(len(words_a), len(words_b))
+    return overlap > 0.80
+
+
 def fetch_page(url):
     """Fetch URL content, strip HTML, return plaintext."""
     text = None
@@ -241,12 +258,13 @@ def main():
             if claim_id in existing_ids:
                 continue
 
-            # Check for duplicate claims by content
+            # Check for duplicate claims by content (any status — not just pending)
             claim_text = claim.get("claim", "").lower().strip()
+            if not claim_text:
+                continue
             is_dupe = any(
-                item.get("claim", "").lower().strip() == claim_text
+                _fuzzy_match(claim_text, (item.get("claim", "") or "").lower().strip())
                 for item in inbox["items"]
-                if item.get("status") == "pending"
             )
             if is_dupe:
                 continue
