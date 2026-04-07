@@ -334,20 +334,35 @@ function drawSankey(d) {
   }
 
   // VC/Investors → Providers direct flows (bypassing channels)
+  // Only providers that NEED VC (costs > revenue, i.e. cost_pct >= 1.0)
   const vcBuyer = cols[0].items.find(i => i.name === 'VC/Investors');
   const provCol = cols[2];
-  if (vcBuyer && provCol) {
-    const provTotal = provCol.items.reduce((s, i) => s + i.value, 0);
-    provCol.items.forEach(pItem => {
-      const pPct = pItem.value / provTotal;
-      const flowH = vcBuyer.h * pPct * 0.8;
-      if (flowH < 0.5) return;
-      const lx = cols[0].x + cols[0].w;
-      const rx = provCol.x;
-      const ly = vcBuyer.y + vcBuyer.h * (pItem.y / (provCol.items[provCol.items.length-1].y + provCol.items[provCol.items.length-1].h));
-      const ry = pItem.y + pItem.h * (vcBuyer.y / (cols[0].items[cols[0].items.length-1].y + cols[0].items[cols[0].items.length-1].h));
-      sankeyFlows.push({ lItem: vcBuyer, rItem: pItem, lx, rx, ly, ry, flowH, col: -1 });
+  if (vcBuyer && provCol && vcBuyer.value > 0) {
+    const INFERENCE_PCT = 0.47;
+    const oocRatesVC = {
+      '2025': {'OpenAI': 0.79, 'Anthropic': 0.65, 'Google (Gemini)': 0.50, 'IaaS/Open': 0.45, 'Other Model Providers': 0.80},
+      '2026E': {'OpenAI': 0.55, 'Anthropic': 0.55, 'Google (Gemini)': 0.48, 'IaaS/Open': 0.42, 'Other Model Providers': 0.70},
+      '2027E': {'OpenAI': 0.48, 'Anthropic': 0.48, 'Google (Gemini)': 0.45, 'IaaS/Open': 0.40, 'Other Model Providers': 0.60},
+    };
+    const yearRatesVC = oocRatesVC[activeYear] || oocRatesVC['2025'];
+    // Filter to only loss-making providers
+    const vcReceivers = provCol.items.filter(pItem => {
+      const oocPct = yearRatesVC[pItem.name] || 0.55;
+      return (INFERENCE_PCT + oocPct) >= 1.0;
     });
+    const vcReceiverTotal = vcReceivers.reduce((s, i) => s + i.value, 0);
+    if (vcReceiverTotal > 0) {
+      vcReceivers.forEach(pItem => {
+        const pPct = pItem.value / vcReceiverTotal;
+        const flowH = vcBuyer.h * pPct * 0.8;
+        if (flowH < 0.5) return;
+        const lx = cols[0].x + cols[0].w;
+        const rx = provCol.x;
+        const ly = vcBuyer.y + vcBuyer.h * (pItem.y / (provCol.items[provCol.items.length-1].y + provCol.items[provCol.items.length-1].h));
+        const ry = pItem.y + pItem.h * (vcBuyer.y / (cols[0].items[cols[0].items.length-1].y + cols[0].items[cols[0].items.length-1].h));
+        sankeyFlows.push({ lItem: vcBuyer, rItem: pItem, lx, rx, ly, ry, flowH, col: -1 });
+      });
+    }
   }
 
   // Margin channels → Op. Cash Flow direct flows (bypassing providers)
