@@ -1,153 +1,309 @@
 {
   "2025": {
     "label": "2025 Actual",
-    "total_system": 27.2,
-    "customer_revenue": 17.4,
-    "vc_subsidy": 9.8,
-    "buyers": {
-      "Consumer": 5.16,
-      "SME": 3.37,
-      "Enterprise": 8.94,
-      "VC/Investors": 9.8
-    },
-    "channels": {
-      "Model Subs": 8.3,
-      "Model API": 5.3,
-      "Hyperscalers": 3.4,
-      "AI Native Apps": 5.3,
-      "IaaS & Open Model": 0.5,
-      "Traditional SaaS": 4.6
-    },
-    "providers": {
-      "OpenAI": {
-        "total": 15.2,
-        "customer": 9.2,
-        "subsidy": 6.0
+    "totalCustomerRevenue": 17.5,
+    "totalVCSubsidy": 9.8,
+    "totalSystem": 27.3,
+    "buyers": [
+      {
+        "label": "Consumer",
+        "value": 5.2,
+        "color": "#f59e0b"
       },
-      "Anthropic": {
-        "total": 8.2,
-        "customer": 5.2,
-        "subsidy": 3.0
+      {
+        "label": "SME",
+        "value": 3.4,
+        "color": "#8b5cf6"
       },
-      "Google (model)": {
-        "total": 2.9,
-        "customer": 2.4,
-        "subsidy": 0.5
+      {
+        "label": "Enterprise",
+        "value": 9.0,
+        "color": "#3b82f6"
       },
-      "IaaS/Open": {
-        "total": 0.9,
-        "customer": 0.6,
-        "subsidy": 0.3
+      {
+        "label": "VC/Investors",
+        "value": 9.8,
+        "color": "#dc2626"
       }
-    },
-    "outcomes": {
-      "Inference": 14.03,
-      "People/SGA": 11.08,
-      "Op. Cash Flow": 2.1
-    }
+    ],
+    "channels": [
+      {
+        "label": "Model Subs",
+        "value": 5.31,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Model API",
+        "value": 3.4,
+        "color": "#3b82f6"
+      },
+      {
+        "label": "Hyperscalers",
+        "value": 2.15,
+        "color": "#06b6d4"
+      },
+      {
+        "label": "AI Native Apps",
+        "value": 3.36,
+        "color": "#10b981"
+      },
+      {
+        "label": "IaaS & Agg.",
+        "value": 0.3,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Trad. SaaS",
+        "value": 2.95,
+        "color": "#ef4444"
+      }
+    ],
+    "providers": [
+      {
+        "label": "OpenAI",
+        "value": 15.3,
+        "color": "#10a37f"
+      },
+      {
+        "label": "Anthropic",
+        "value": 8.2,
+        "color": "#d97706"
+      },
+      {
+        "label": "Google (Gemini)",
+        "value": 2.9,
+        "color": "#4285f4"
+      },
+      {
+        "label": "IaaS/Open",
+        "value": 0.9,
+        "color": "#8b5cf6"
+      }
+    ],
+    "outcomes": [
+      {
+        "label": "Inference",
+        "value": 13.7,
+        "color": "#10b981"
+      },
+      {
+        "label": "People/SG&A",
+        "value": 9.6,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Op. Cash Flow",
+        "value": 4.0,
+        "color": "#94a3b8"
+      }
+    ]
   },
   "2026E": {
     "label": "2026 Estimated",
-    "buyers": {
-      "Consumer": 19.7,
-      "SME": 15.3,
-      "Enterprise": 38.2,
-      "VC/Investors": 5.7
-    },
-    "channels": {
-      "Model Subs": 17.8,
-      "Model API": 14.2,
-      "Hyperscalers": 20.2,
-      "AI Native Apps": 9.5,
-      "IaaS & Open Model": 5.9,
-      "Traditional SaaS": 11.3
-    },
-    "providers": {
-      "OpenAI": {
-        "total": 33.7,
-        "customer": 32.4,
-        "subsidy": 1.3
+    "totalCustomerRevenue": 61.5,
+    "totalVCSubsidy": 8.0,
+    "totalSystem": 69.5,
+    "buyers": [
+      {
+        "label": "Consumer",
+        "value": 14.6,
+        "color": "#f59e0b"
       },
-      "Anthropic": {
-        "total": 25.9,
-        "customer": 24.5,
-        "subsidy": 1.4
+      {
+        "label": "SME",
+        "value": 11.9,
+        "color": "#8b5cf6"
       },
-      "Google (model)": {
-        "total": 9.4,
-        "customer": 8.8,
-        "subsidy": 0.6
+      {
+        "label": "Enterprise",
+        "value": 35.0,
+        "color": "#3b82f6"
       },
-      "IaaS/Open": {
-        "total": 7.5,
-        "customer": 5.5,
-        "subsidy": 2.0
-      },
-      "Other Providers": {
-        "total": 2.4,
-        "customer": 2.0,
-        "subsidy": 0.4
+      {
+        "label": "VC/Investors",
+        "value": 8.0,
+        "color": "#dc2626"
       }
-    },
-    "outcomes": {
-      "Inference": 34.0,
-      "People/SGA": 28.0,
-      "Op. Cash Flow": 16.9
-    },
-    "total_system": 78.9,
-    "customer_revenue": 73.2,
-    "vc_subsidy": 5.7
+    ],
+    "channels": [
+      {
+        "label": "Model Subs",
+        "value": 15.0,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Model API",
+        "value": 14.0,
+        "color": "#3b82f6"
+      },
+      {
+        "label": "Hyperscalers",
+        "value": 10.0,
+        "color": "#06b6d4"
+      },
+      {
+        "label": "AI Native Apps",
+        "value": 8.0,
+        "color": "#10b981"
+      },
+      {
+        "label": "IaaS & Agg.",
+        "value": 5.0,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Trad. SaaS",
+        "value": 9.5,
+        "color": "#ef4444"
+      }
+    ],
+    "providers": [
+      {
+        "label": "OpenAI",
+        "value": 29.7,
+        "color": "#10a37f"
+      },
+      {
+        "label": "Anthropic",
+        "value": 22.8,
+        "color": "#d97706"
+      },
+      {
+        "label": "Google (Gemini)",
+        "value": 8.3,
+        "color": "#4285f4"
+      },
+      {
+        "label": "IaaS/Open",
+        "value": 6.6,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Other Providers",
+        "value": 2.1,
+        "color": "#475569"
+      }
+    ],
+    "outcomes": [
+      {
+        "label": "Inference",
+        "value": 34.8,
+        "color": "#10b981"
+      },
+      {
+        "label": "People/SG&A",
+        "value": 24.3,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Op. Cash Flow",
+        "value": 10.4,
+        "color": "#94a3b8"
+      }
+    ]
   },
   "2027E": {
     "label": "2027 Estimated",
-    "buyers": {
-      "Consumer": 29.4,
-      "SME": 26.2,
-      "Enterprise": 68.1,
-      "VC/Investors": 11.0
-    },
-    "channels": {
-      "Model Subs": 26.1,
-      "Model API": 23.7,
-      "Hyperscalers": 34.3,
-      "AI Native Apps": 17.8,
-      "IaaS & Open Model": 11.8,
-      "Traditional SaaS": 21.0
-    },
-    "providers": {
-      "OpenAI": {
-        "total": 52.6,
-        "customer": 50.3,
-        "subsidy": 2.3
+    "totalCustomerRevenue": 104.7,
+    "totalVCSubsidy": 12.0,
+    "totalSystem": 116.7,
+    "buyers": [
+      {
+        "label": "Consumer",
+        "value": 22.2,
+        "color": "#f59e0b"
       },
-      "Anthropic": {
-        "total": 43.5,
-        "customer": 42.0,
-        "subsidy": 1.5
+      {
+        "label": "SME",
+        "value": 19.5,
+        "color": "#8b5cf6"
       },
-      "Google (model)": {
-        "total": 16.7,
-        "customer": 15.2,
-        "subsidy": 1.5
+      {
+        "label": "Enterprise",
+        "value": 63.0,
+        "color": "#3b82f6"
       },
-      "IaaS/Open": {
-        "total": 14.9,
-        "customer": 10.9,
-        "subsidy": 4.0
-      },
-      "Other Providers": {
-        "total": 7.0,
-        "customer": 5.3,
-        "subsidy": 1.7
+      {
+        "label": "VC/Investors",
+        "value": 12.0,
+        "color": "#dc2626"
       }
-    },
-    "outcomes": {
-      "Inference": 50.0,
-      "People/SGA": 42.0,
-      "Op. Cash Flow": 42.7
-    },
-    "total_system": 134.7,
-    "customer_revenue": 123.7,
-    "vc_subsidy": 11.0
+    ],
+    "channels": [
+      {
+        "label": "Model Subs",
+        "value": 22.0,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Model API",
+        "value": 22.0,
+        "color": "#3b82f6"
+      },
+      {
+        "label": "Hyperscalers",
+        "value": 18.0,
+        "color": "#06b6d4"
+      },
+      {
+        "label": "AI Native Apps",
+        "value": 15.0,
+        "color": "#10b981"
+      },
+      {
+        "label": "IaaS & Agg.",
+        "value": 10.0,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Trad. SaaS",
+        "value": 17.7,
+        "color": "#ef4444"
+      }
+    ],
+    "providers": [
+      {
+        "label": "OpenAI",
+        "value": 45.6,
+        "color": "#10a37f"
+      },
+      {
+        "label": "Anthropic",
+        "value": 37.7,
+        "color": "#d97706"
+      },
+      {
+        "label": "Google (Gemini)",
+        "value": 14.5,
+        "color": "#4285f4"
+      },
+      {
+        "label": "IaaS/Open",
+        "value": 12.9,
+        "color": "#8b5cf6"
+      },
+      {
+        "label": "Other Providers",
+        "value": 6.1,
+        "color": "#475569"
+      }
+    ],
+    "outcomes": [
+      {
+        "label": "Inference",
+        "value": 58.4,
+        "color": "#10b981"
+      },
+      {
+        "label": "People/SG&A",
+        "value": 40.8,
+        "color": "#f59e0b"
+      },
+      {
+        "label": "Op. Cash Flow",
+        "value": 17.5,
+        "color": "#94a3b8"
+      }
+    ]
   }
 }
