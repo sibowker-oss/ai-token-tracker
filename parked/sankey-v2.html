@@ -63,6 +63,9 @@
     <div class="sankey-container">
       <canvas id="sankey" height="560"></canvas>
     </div>
+    <div id="tooltip-panel" style="min-height:60px;padding:12px 16px;margin-top:8px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);transition:all 0.15s;">
+      <span style="opacity:0.5;">Click or hover a node to see flow details</span>
+    </div>
   </div>
 
   <div class="card">
@@ -441,69 +444,56 @@ function renderSankey(ctx, W, cols) {
     ctx.globalAlpha = 1.0;
   });
 
-  // Tooltip — show proportional flows that sum to the node's value
-  if (activeNode) {
-    const item = activeNode;
+  // Update tooltip panel below canvas (doesn't obscure flows)
+  updateTooltipPanel(activeNode);
+}
 
-    // Calculate proportional inflows (how much of THIS node's value comes from each source)
-    const inFlows = sankeyFlows.filter(f => f.rItem.name === item.name);
-    const outFlows = sankeyFlows.filter(f => f.lItem.name === item.name);
+function updateTooltipPanel(activeNode) {
+  const panel = document.getElementById('tooltip-panel');
+  if (!panel) return;
 
-    // For inflows: each source contributes proportionally
-    const inTotal = inFlows.reduce((s, f) => s + f.lItem.value, 0);
-    const inItems = inFlows.map(f => {
-      const share = inTotal > 0 ? (f.lItem.value / inTotal) * item.value : 0;
-      return { name: f.lItem.name, value: share };
-    }).filter(x => x.value > 0.01).sort((a, b) => b.value - a.value);
-
-    // For outflows: each destination receives proportionally
-    const outTotal = outFlows.reduce((s, f) => s + f.rItem.value, 0);
-    const outItems = outFlows.map(f => {
-      const share = outTotal > 0 ? (f.rItem.value / outTotal) * item.value : 0;
-      return { name: f.rItem.name, value: share };
-    }).filter(x => x.value > 0.01).sort((a, b) => b.value - a.value);
-
-    let tipLines = [item.name + ' — $' + item.value.toFixed(1) + 'B'];
-    if (inItems.length) {
-      const inSum = inItems.reduce((s, x) => s + x.value, 0);
-      tipLines.push('Inflows ($' + inSum.toFixed(1) + 'B):');
-      inItems.forEach(x => tipLines.push('  ' + x.name + ': $' + x.value.toFixed(1) + 'B'));
-    }
-    if (outItems.length) {
-      const outSum = outItems.reduce((s, x) => s + x.value, 0);
-      tipLines.push('Outflows ($' + outSum.toFixed(1) + 'B):');
-      outItems.forEach(x => tipLines.push('  ' + x.name + ': $' + x.value.toFixed(1) + 'B'));
-    }
-
-    ctx.font = '10px -apple-system, sans-serif';
-    const tipW = Math.min(Math.max(...tipLines.map(l => ctx.measureText(l).width)) + 28, W * 0.4);
-    const lineH = 15;
-    const tipH = tipLines.length * lineH + 16;
-
-    // Position: try right of node, fall back to left if would overflow
-    let tipX = item.colX + item.colW + 14;
-    if (tipX + tipW > W - 10) {
-      tipX = item.colX - tipW - 14;
-    }
-    if (tipX < 5) tipX = 5;
-
-    let tipY = Math.max(item.y, 35);
-    if (tipY + tipH > 550) tipY = 550 - tipH;
-
-    ctx.fillStyle = 'rgba(15,23,42,0.96)';
-    ctx.beginPath();
-    ctx.roundRect(tipX, tipY, tipW, tipH, 6);
-    ctx.fill();
-    ctx.strokeStyle = '#475569';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    tipLines.forEach((line, i) => {
-      ctx.fillStyle = i === 0 ? '#f1f5f9' : line.startsWith('  ') ? '#94a3b8' : '#cbd5e1';
-      ctx.font = i === 0 ? 'bold 11px -apple-system, sans-serif' : '10px -apple-system, sans-serif';
-      ctx.fillText(line, tipX + 10, tipY + 14 + i * lineH);
-    });
+  if (!activeNode) {
+    panel.innerHTML = '<span style="opacity:0.4;">Click or hover a node to see flow details</span>';
+    return;
   }
+
+  const item = activeNode;
+  const inFlows = sankeyFlows.filter(f => f.rItem.name === item.name);
+  const outFlows = sankeyFlows.filter(f => f.lItem.name === item.name);
+
+  const inTotal = inFlows.reduce((s, f) => s + f.lItem.value, 0);
+  const inItems = inFlows.map(f => {
+    const share = inTotal > 0 ? (f.lItem.value / inTotal) * item.value : 0;
+    return { name: f.lItem.name, value: share };
+  }).filter(x => x.value > 0.05).sort((a, b) => b.value - a.value);
+
+  const outTotal = outFlows.reduce((s, f) => s + f.rItem.value, 0);
+  const outItems = outFlows.map(f => {
+    const share = outTotal > 0 ? (f.rItem.value / outTotal) * item.value : 0;
+    return { name: f.rItem.name, value: share };
+  }).filter(x => x.value > 0.05).sort((a, b) => b.value - a.value);
+
+  let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">';
+  html += '<div style="min-width:140px;"><strong style="color:#f1f5f9;font-size:15px;">' + item.name + '</strong><div style="color:var(--accent);font-weight:800;font-size:20px;margin-top:2px;">$' + item.value.toFixed(1) + 'B</div></div>';
+
+  if (inItems.length) {
+    const inSum = inItems.reduce((s, x) => s + x.value, 0);
+    html += '<div style="min-width:140px;"><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:6px;">Inflows $' + inSum.toFixed(1) + 'B</div>';
+    inItems.forEach(x => {
+      html += '<div style="font-size:12px;color:#cbd5e1;margin-bottom:2px;">' + x.name + ': <strong>$' + x.value.toFixed(1) + 'B</strong></div>';
+    });
+    html += '</div>';
+  }
+  if (outItems.length) {
+    const outSum = outItems.reduce((s, x) => s + x.value, 0);
+    html += '<div style="min-width:140px;"><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:6px;">Outflows $' + outSum.toFixed(1) + 'B</div>';
+    outItems.forEach(x => {
+      html += '<div style="font-size:12px;color:#cbd5e1;margin-bottom:2px;">' + x.name + ': <strong>$' + x.value.toFixed(1) + 'B</strong></div>';
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  panel.innerHTML = html;
 }
 
 // Mouse interaction
