@@ -206,12 +206,14 @@ function drawSankey(d) {
   canvas.width = W;
   canvas.height = 560;
 
-  const colW = Math.min(120, W * 0.12);
+  const colW = Math.min(120, W * 0.13);
+  const margin = 20;
+  const spacing = (W - margin * 2 - colW * 4) / 3;
   const cols = [
-    { x: 10, w: colW, label: 'Who Pays', items: Object.entries(d.buyers).map(([n, v]) => ({ name: n, value: v })) },
-    { x: W * 0.26, w: colW, label: 'Channels', items: Object.entries(d.channels).map(([n, v]) => ({ name: n, value: v })) },
-    { x: W * 0.52, w: colW, label: 'Providers', items: Object.entries(d.providers).map(([n, v]) => ({ name: n, value: v.total })) },
-    { x: W - colW - 10, w: colW, label: 'Where It Goes', items: Object.entries(d.outcomes).map(([n, v]) => ({ name: n, value: v })) },
+    { x: margin, w: colW, label: 'Who Pays', items: Object.entries(d.buyers).map(([n, v]) => ({ name: n, value: v })) },
+    { x: margin + colW + spacing, w: colW, label: 'Channels', items: Object.entries(d.channels).map(([n, v]) => ({ name: n, value: v })) },
+    { x: margin + (colW + spacing) * 2, w: colW, label: 'Providers', items: Object.entries(d.providers).map(([n, v]) => ({ name: n, value: v.total })) },
+    { x: margin + (colW + spacing) * 3, w: colW, label: 'Where It Goes', items: Object.entries(d.outcomes).map(([n, v]) => ({ name: n, value: v })) },
   ];
 
   const barH = 460;
@@ -355,21 +357,38 @@ function renderSankey(ctx, W, cols) {
     ctx.globalAlpha = 1.0;
   });
 
-  // Tooltip — positioned to stay within canvas bounds
+  // Tooltip — show proportional flows that sum to the node's value
   if (activeNode) {
     const item = activeNode;
-    const inflows = sankeyFlows.filter(f => f.rItem.name === item.name).map(f => f.lItem.name + ': $' + f.lItem.value + 'B');
-    const outflows = sankeyFlows.filter(f => f.lItem.name === item.name).map(f => f.rItem.name + ': $' + f.rItem.value + 'B');
 
-    // Build tooltip lines — wrap long lines
-    let tipLines = [item.name + ' — $' + item.value + 'B'];
-    if (inflows.length) {
-      tipLines.push('From:');
-      inflows.forEach(inf => tipLines.push('  ' + inf));
+    // Calculate proportional inflows (how much of THIS node's value comes from each source)
+    const inFlows = sankeyFlows.filter(f => f.rItem.name === item.name);
+    const outFlows = sankeyFlows.filter(f => f.lItem.name === item.name);
+
+    // For inflows: each source contributes proportionally
+    const inTotal = inFlows.reduce((s, f) => s + f.lItem.value, 0);
+    const inItems = inFlows.map(f => {
+      const share = inTotal > 0 ? (f.lItem.value / inTotal) * item.value : 0;
+      return { name: f.lItem.name, value: share };
+    }).filter(x => x.value > 0.01).sort((a, b) => b.value - a.value);
+
+    // For outflows: each destination receives proportionally
+    const outTotal = outFlows.reduce((s, f) => s + f.rItem.value, 0);
+    const outItems = outFlows.map(f => {
+      const share = outTotal > 0 ? (f.rItem.value / outTotal) * item.value : 0;
+      return { name: f.rItem.name, value: share };
+    }).filter(x => x.value > 0.01).sort((a, b) => b.value - a.value);
+
+    let tipLines = [item.name + ' — $' + item.value.toFixed(1) + 'B'];
+    if (inItems.length) {
+      const inSum = inItems.reduce((s, x) => s + x.value, 0);
+      tipLines.push('Inflows ($' + inSum.toFixed(1) + 'B):');
+      inItems.forEach(x => tipLines.push('  ' + x.name + ': $' + x.value.toFixed(1) + 'B'));
     }
-    if (outflows.length) {
-      tipLines.push('To:');
-      outflows.forEach(out => tipLines.push('  ' + out));
+    if (outItems.length) {
+      const outSum = outItems.reduce((s, x) => s + x.value, 0);
+      tipLines.push('Outflows ($' + outSum.toFixed(1) + 'B):');
+      outItems.forEach(x => tipLines.push('  ' + x.name + ': $' + x.value.toFixed(1) + 'B'));
     }
 
     ctx.font = '10px -apple-system, sans-serif';
