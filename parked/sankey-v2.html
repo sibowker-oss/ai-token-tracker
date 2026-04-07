@@ -205,7 +205,7 @@ const nodeColors = {
   'Hyperscaler Resale': '#a78bfa',
   'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google (model)': '#4285f4', 'IaaS/Open': '#8b5cf6',
   'Other Providers': '#475569', 'Trad SaaS': '#06b6d4',
-  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Op. Cash Flow': '#10b981', 'Operating Cash': '#10b981',
+  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Other Operating': '#f59e0b', 'Op. Cash Flow': '#10b981', 'Operating Cash': '#10b981',
 };
 
 function drawSankey(d) {
@@ -290,17 +290,36 @@ function drawSankey(d) {
       // Normal flow for non-VC, non-margin items
       const leftItems = left.items.filter(i => !(c === 0 && i.name === 'VC/Investors'));
       const leftTotal = leftItems.reduce((s, i) => s + i.value, 0);
-      // For Providers→Outcomes (col 2→3): ALL providers receive VC subsidy,
-      // so none can generate Operating Cash. Operating Cash comes only from
-      // channel margins (Hyperscalers/Trad SaaS bypass). Providers flow only
-      // to Inference and People/SGA.
-      const rightItems = (c === 2)
-        ? right.items.filter(rItem => !(rItem.name.includes('Cash') || rItem.name.includes('Margin')))
-        : right.items;
-      const rightTotal = rightItems.reduce((s, i) => s + i.value, 0);
+      // For Providers→Outcomes (col 2→3): providers flow ONLY to Inference
+      // and Other Operating. Operating Cash comes from channel margins bypass.
+      // Each provider's full bar height distributes across these two outcomes.
+      if (c === 2) {
+        const costItems = right.items.filter(rItem => !(rItem.name.includes('Cash') || rItem.name.includes('Margin')));
+        const costTotal = costItems.reduce((s, i) => s + i.value, 0);
+        if (costTotal === 0) return;
+
+        let lyOffset = 0;
+        costItems.forEach(rItem => {
+          const rShare = rItem.value / costTotal;  // share of costs
+          const flowH = lItem.h * rShare * 0.9;  // provider distributes its full height
+          if (flowH < 0.5) return;
+          const lx = left.x + left.w;
+          const rx = right.x;
+          const ly = lItem.y + lyOffset;
+          lyOffset += flowH;
+          // Right Y: stack into the outcome bar proportionally
+          const rItemUsed = costItems.reduce((s, ci) => s + (ci === rItem ? 0 : ci.value / costTotal * lItem.value), 0);
+          const ry = rItem.y + rItem.h * (lItem.y / (left.items[left.items.length-1].y + left.items[left.items.length-1].h));
+          sankeyFlows.push({ lItem, rItem, lx, rx, ly, ry, flowH, col: c });
+        });
+        return;
+      }
+
+      // Normal proportional flow for all other column transitions
+      const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
       if (leftTotal === 0 || rightTotal === 0) return;
 
-      rightItems.forEach(rItem => {
+      right.items.forEach(rItem => {
         const rPct = rItem.value / rightTotal;
         const lPct = lItem.value / leftTotal;
         const flowH = Math.min(lItem.h * rPct, rItem.h * lPct) * 0.8;
