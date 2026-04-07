@@ -244,13 +244,23 @@ function drawSankey(d) {
   });
 
   // Build flows
+  // Special handling: VC/Investors bypasses Channels and flows direct to Providers
   sankeyFlows = [];
   for (let c = 0; c < cols.length - 1; c++) {
     const left = cols[c];
     const right = cols[c + 1];
-    const leftTotal = left.items.reduce((s, i) => s + i.value, 0);
-    const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
+
     left.items.forEach(lItem => {
+      // VC/Investors skips Buyers→Channels flow (col 0→1)
+      // Instead it flows directly to Providers (col 0→2)
+      if (lItem.name === 'VC/Investors' && c === 0) return;
+
+      // Channels should not receive VC money — filter VC from left totals
+      const leftItems = left.items.filter(i => !(c === 0 && i.name === 'VC/Investors'));
+      const leftTotal = leftItems.reduce((s, i) => s + i.value, 0);
+      const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
+      if (leftTotal === 0 || rightTotal === 0) return;
+
       right.items.forEach(rItem => {
         const rPct = rItem.value / rightTotal;
         const lPct = lItem.value / leftTotal;
@@ -262,6 +272,23 @@ function drawSankey(d) {
         const ry = rItem.y + rItem.h * (lItem.y / (left.items[left.items.length-1].y + left.items[left.items.length-1].h));
         sankeyFlows.push({ lItem, rItem, lx, rx, ly, ry, flowH, col: c });
       });
+    });
+  }
+
+  // Add VC/Investors → Providers direct flows (bypassing channels)
+  const vcBuyer = cols[0].items.find(i => i.name === 'VC/Investors');
+  const provCol = cols[2];
+  if (vcBuyer && provCol) {
+    const provTotal = provCol.items.reduce((s, i) => s + i.value, 0);
+    provCol.items.forEach(pItem => {
+      const pPct = pItem.value / provTotal;
+      const flowH = vcBuyer.h * pPct * 0.8;
+      if (flowH < 0.5) return;
+      const lx = cols[0].x + cols[0].w;  // right edge of Buyers column
+      const rx = provCol.x;  // left edge of Providers column
+      const ly = vcBuyer.y + vcBuyer.h * (pItem.y / (provCol.items[provCol.items.length-1].y + provCol.items[provCol.items.length-1].h));
+      const ry = pItem.y + pItem.h * (vcBuyer.y / (cols[0].items[cols[0].items.length-1].y + cols[0].items[cols[0].items.length-1].h));
+      sankeyFlows.push({ lItem: vcBuyer, rItem: pItem, lx, rx, ly, ry, flowH, col: -1 });  // col -1 = special VC bypass
     });
   }
 
