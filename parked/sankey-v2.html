@@ -290,10 +290,17 @@ function drawSankey(d) {
       // Normal flow for non-VC, non-margin items
       const leftItems = left.items.filter(i => !(c === 0 && i.name === 'VC/Investors'));
       const leftTotal = leftItems.reduce((s, i) => s + i.value, 0);
-      const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
+      // For Providers→Outcomes (col 2→3): ALL providers receive VC subsidy,
+      // so none can generate Operating Cash. Operating Cash comes only from
+      // channel margins (Hyperscalers/Trad SaaS bypass). Providers flow only
+      // to Inference and People/SGA.
+      const rightItems = (c === 2)
+        ? right.items.filter(rItem => !(rItem.name.includes('Cash') || rItem.name.includes('Margin')))
+        : right.items;
+      const rightTotal = rightItems.reduce((s, i) => s + i.value, 0);
       if (leftTotal === 0 || rightTotal === 0) return;
 
-      right.items.forEach(rItem => {
+      rightItems.forEach(rItem => {
         const rPct = rItem.value / rightTotal;
         const lPct = lItem.value / leftTotal;
         const flowH = Math.min(lItem.h * rPct, rItem.h * lPct) * 0.8;
@@ -331,16 +338,20 @@ function drawSankey(d) {
     const channelCol = cols[1];
     const marginChannelNames = ['Hyperscalers', 'Trad. SaaS', 'Traditional SaaS'];
     const marginPcts = { 'Hyperscalers': 0.20, 'Trad. SaaS': 0.60, 'Traditional SaaS': 0.60 };
+    // Track cumulative offset into the Operating Cash bar for stacking
+    let cashFlowYOffset = 0;
     channelCol.items.forEach(chItem => {
       const mPct = marginPcts[chItem.name];
       if (!mPct) return;
-      const marginValue = chItem.value * mPct;
       const flowH = (chItem.h * mPct) * 0.8;
       if (flowH < 0.5) return;
       const lx = channelCol.x + channelCol.w;
       const rx = outCol.x;
-      const ly = chItem.y + chItem.h * 0.7;  // offset to bottom of channel bar
-      const ry = opCashFlow.y;
+      // Left Y: start from bottom portion of the channel bar (margin portion)
+      const ly = chItem.y + chItem.h * (1 - mPct);
+      // Right Y: stack into the Operating Cash bar
+      const ry = opCashFlow.y + cashFlowYOffset;
+      cashFlowYOffset += flowH + 2;
       sankeyFlows.push({ lItem: chItem, rItem: opCashFlow, lx, rx, ly, ry, flowH, col: -2 });
     });
   }
