@@ -1,8 +1,8 @@
 {
   "2025": {
     "label": "2025 Actual",
-    "total_system": 27.27,
-    "customer_revenue": 17.47,
+    "total_system": 27.3,
+    "customer_revenue": 17.5,
     "vc_subsidy": 9.8,
     "buyers": {
       "Consumer": 5.16,
@@ -11,12 +11,12 @@
       "VC/Investors": 9.8
     },
     "channels": {
-      "Model Subs": 5.31,
-      "Model API": 3.4,
-      "Hyperscalers": 2.15,
-      "AI Native Apps": 3.36,
-      "IaaS & Aggregators": 0.3,
-      "Traditional SaaS": 2.94
+      "Model Subs": 8.3,
+      "Model API": 5.3,
+      "Hyperscalers": 3.4,
+      "AI Native Apps": 5.3,
+      "IaaS & Open Model": 0.5,
+      "Traditional SaaS": 4.6
     },
     "providers": {
       "OpenAI": {
@@ -29,7 +29,7 @@
         "customer": 4.71,
         "subsidy": 3.0
       },
-      "Google": {
+      "Google (model)": {
         "total": 2.5,
         "customer": 2.0,
         "subsidy": 0.5
@@ -38,118 +38,133 @@
         "total": 0.8,
         "customer": 0.5,
         "subsidy": 0.3
+      },
+      "Trad SaaS": {
+        "total": 2.61,
+        "customer": 2.61,
+        "subsidy": 0.0
       }
     },
     "outcomes": {
       "Inference": 14.03,
       "People/SGA": 11.08,
-      "Operating Cash Flow": 2.15
+      "Op. Cash Flow": 2.16
     }
   },
   "2026E": {
     "label": "2026 Estimated",
-    "total_system": 65.0,
-    "customer_revenue": 52.0,
-    "vc_subsidy": 13.0,
     "buyers": {
-      "Consumer": 15.0,
-      "SME": 8.0,
-      "Enterprise": 29.0,
-      "VC/Investors": 13.0
+      "Consumer": 19.7,
+      "SME": 15.3,
+      "Enterprise": 38.2,
+      "VC/Investors": 5.7
     },
     "channels": {
-      "Model Subs": 12.0,
-      "Model API": 10.0,
-      "Hyperscalers": 6.0,
-      "AI Native Apps": 8.0,
-      "IaaS & Aggregators": 6.0,
-      "Traditional SaaS": 10.0,
-      "Open Model API": 13.0
+      "Model Subs": 17.8,
+      "Model API": 14.2,
+      "Hyperscalers": 11.9,
+      "AI Native Apps": 9.5,
+      "IaaS & Open Model": 5.9,
+      "Traditional SaaS": 11.3,
+      "Hyperscaler Resale": 8.3
     },
     "providers": {
       "OpenAI": {
-        "total": 22.0,
-        "customer": 20.0,
-        "subsidy": 2.0
+        "total": 28.0,
+        "customer": 26.7,
+        "subsidy": 1.3
       },
       "Anthropic": {
-        "total": 15.0,
-        "customer": 13.0,
-        "subsidy": 2.0
+        "total": 24.0,
+        "customer": 22.6,
+        "subsidy": 1.4
       },
-      "Google": {
-        "total": 5.0,
-        "customer": 4.5,
-        "subsidy": 0.5
+      "Google (model)": {
+        "total": 8.0,
+        "customer": 7.4,
+        "subsidy": 0.6
       },
       "IaaS/Open": {
-        "total": 14.0,
-        "customer": 7.5,
-        "subsidy": 6.5
+        "total": 7.0,
+        "customer": 5.0,
+        "subsidy": 2.0
       },
       "Trad SaaS": {
-        "total": 9.0,
-        "customer": 9.0,
+        "total": 9.5,
+        "customer": 9.5,
         "subsidy": 0.0
+      },
+      "Other Providers": {
+        "total": 2.4,
+        "customer": 2.0,
+        "subsidy": 0.4
       }
     },
     "outcomes": {
-      "Inference": 34.5,
-      "People/SGA": 22.8,
-      "Operating Cash Flow": 7.8
-    }
+      "Inference": 34.0,
+      "People/SGA": 28.0,
+      "Op. Cash Flow": 16.9
+    },
+    "total_system": 78.9,
+    "customer_revenue": 73.2,
+    "vc_subsidy": 5.7
   },
   "2027E": {
     "label": "2027 Estimated",
-    "total_system": 130.0,
-    "customer_revenue": 110.0,
-    "vc_subsidy": 20.0,
     "buyers": {
-      "Consumer": 25.0,
-      "SME": 15.0,
-      "Enterprise": 70.0,
-      "VC/Investors": 20.0
+      "Consumer": 29.4,
+      "SME": 26.2,
+      "Enterprise": 68.1,
+      "VC/Investors": 11.0
     },
     "channels": {
-      "Model Subs": 20.0,
-      "Model API": 22.0,
-      "Hyperscalers": 12.0,
-      "AI Native Apps": 18.0,
-      "IaaS & Aggregators": 14.0,
-      "Traditional SaaS": 18.0,
-      "Open Model API": 26.0
+      "Model Subs": 26.1,
+      "Model API": 23.7,
+      "Hyperscalers": 21.3,
+      "AI Native Apps": 17.8,
+      "IaaS & Open Model": 11.8,
+      "Traditional SaaS": 21.0,
+      "Hyperscaler Resale": 13.0
     },
     "providers": {
       "OpenAI": {
-        "total": 40.0,
-        "customer": 38.0,
-        "subsidy": 2.0
+        "total": 42.0,
+        "customer": 39.7,
+        "subsidy": 2.3
       },
       "Anthropic": {
-        "total": 28.0,
-        "customer": 26.0,
-        "subsidy": 2.0
+        "total": 40.0,
+        "customer": 38.5,
+        "subsidy": 1.5
       },
-      "Google": {
-        "total": 10.0,
-        "customer": 9.0,
-        "subsidy": 1.0
+      "Google (model)": {
+        "total": 14.0,
+        "customer": 12.5,
+        "subsidy": 1.5
       },
       "IaaS/Open": {
-        "total": 34.0,
-        "customer": 22.0,
-        "subsidy": 12.0
+        "total": 14.0,
+        "customer": 10.0,
+        "subsidy": 4.0
       },
       "Trad SaaS": {
-        "total": 18.0,
-        "customer": 18.0,
+        "total": 17.7,
+        "customer": 17.7,
         "subsidy": 0.0
+      },
+      "Other Providers": {
+        "total": 7.0,
+        "customer": 5.3,
+        "subsidy": 1.7
       }
     },
     "outcomes": {
-      "Inference": 65.0,
-      "People/SGA": 39.0,
-      "Operating Cash Flow": 26.0
-    }
+      "Inference": 50.0,
+      "People/SGA": 42.0,
+      "Op. Cash Flow": 42.7
+    },
+    "total_system": 134.7,
+    "customer_revenue": 123.7,
+    "vc_subsidy": 11.0
   }
 }

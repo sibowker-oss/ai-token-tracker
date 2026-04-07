@@ -61,7 +61,7 @@
   <div class="card">
     <h2 id="flow-title">Revenue Flow</h2>
     <div class="sankey-container">
-      <canvas id="sankey" height="500"></canvas>
+      <canvas id="sankey" height="560"></canvas>
     </div>
   </div>
 
@@ -115,7 +115,7 @@ function renderYear(year) {
 
   // Hero stats
   const subsidyPct = Math.round(d.vc_subsidy / d.total_system * 100);
-  const cashFlow = d.outcomes['Operating Cash Flow'] || d.outcomes.Margin || 0;
+  const cashFlow = d.outcomes['Op. Cash Flow'] || d.outcomes['Operating Cash Flow'] || d.outcomes.Margin || 0;
   const cashFlowPct = Math.round(cashFlow / d.total_system * 100);
   const invRatio = prev ? Math.round(d.total_system / d.customer_revenue) : Math.round(250 / d.customer_revenue);
 
@@ -191,10 +191,11 @@ let lockedNode = null;  // click to lock highlight
 const nodeColors = {
   'Consumer': '#f59e0b', 'SME': '#3b82f6', 'Enterprise': '#10b981', 'VC/Investors': '#ef4444',
   'Model Subs': '#60a5fa', 'Model API': '#34d399', 'Hyperscalers': '#a78bfa', 'AI Native Apps': '#f472b6',
-  'IaaS & Aggregators': '#8b5cf6', 'Traditional SaaS': '#06b6d4',
-  'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google': '#4285f4', 'IaaS/Open': '#8b5cf6',
-  'ByteDance': '#ff4500', 'Chinese Others': '#ff6a00', 'Trad SaaS': '#06b6d4',
-  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Margin': '#10b981', 'Operating Cash Flow': '#10b981',
+  'IaaS & Aggregators': '#8b5cf6', 'IaaS & Open Model': '#8b5cf6', 'Traditional SaaS': '#06b6d4',
+  'Hyperscaler Resale': '#a78bfa',
+  'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google (model)': '#4285f4', 'IaaS/Open': '#8b5cf6',
+  'Other Providers': '#475569', 'Trad SaaS': '#06b6d4',
+  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Op. Cash Flow': '#10b981',
 };
 
 function drawSankey(d) {
@@ -203,24 +204,25 @@ function drawSankey(d) {
   const ctx = canvas.getContext('2d');
   const W = canvas.parentElement.clientWidth;
   canvas.width = W;
-  canvas.height = 500;
+  canvas.height = 560;
 
+  const colW = Math.min(120, W * 0.12);
   const cols = [
-    { x: 60, w: 100, label: 'Who Pays', items: Object.entries(d.buyers).map(([n, v]) => ({ name: n, value: v })) },
-    { x: W * 0.28, w: 100, label: 'Channels', items: Object.entries(d.channels).map(([n, v]) => ({ name: n, value: v })) },
-    { x: W * 0.55, w: 100, label: 'Providers', items: Object.entries(d.providers).map(([n, v]) => ({ name: n, value: v.total })) },
-    { x: W - 160, w: 100, label: 'Outcomes', items: Object.entries(d.outcomes).map(([n, v]) => ({ name: n, value: v })) },
+    { x: 10, w: colW, label: 'Who Pays', items: Object.entries(d.buyers).map(([n, v]) => ({ name: n, value: v })) },
+    { x: W * 0.26, w: colW, label: 'Channels', items: Object.entries(d.channels).map(([n, v]) => ({ name: n, value: v })) },
+    { x: W * 0.52, w: colW, label: 'Providers', items: Object.entries(d.providers).map(([n, v]) => ({ name: n, value: v.total })) },
+    { x: W - colW - 10, w: colW, label: 'Where It Goes', items: Object.entries(d.outcomes).map(([n, v]) => ({ name: n, value: v })) },
   ];
 
-  const barH = 420;
-  const gap = 8;
+  const barH = 460;
+  const gap = 6;
 
   // Layout nodes
   sankeyNodes = [];
   cols.forEach((col, ci) => {
     const total = col.items.reduce((s, i) => s + i.value, 0);
     const scale = (barH - (col.items.length - 1) * gap) / total;
-    let y = 40;
+    let y = 45;
     col.items.forEach(item => {
       item.h = item.value * scale;
       item.y = y;
@@ -258,18 +260,33 @@ function drawSankey(d) {
 }
 
 function renderSankey(ctx, W, cols) {
-  ctx.clearRect(0, 0, W, 500);
+  ctx.clearRect(0, 0, W, 560);
   const activeNode = lockedNode || hoveredNode;
   const hName = activeNode ? activeNode.name : null;
 
-  // Column labels
-  ctx.font = '11px -apple-system, sans-serif';
-  ctx.fillStyle = '#94a3b8';
-  if (cols) {
-    cols.forEach(col => {
-      ctx.fillText(col.label, col.x + col.w / 2 - ctx.measureText(col.label).width / 2, 25);
-    });
-  }
+  // Column headers — bold, prominent
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 13px -apple-system, sans-serif';
+  ctx.fillStyle = '#e2e8f0';
+  const colPositions = [
+    { x: sankeyNodes.filter(n => n.col === 0)[0]?.colX || 60, w: sankeyNodes.filter(n => n.col === 0)[0]?.colW || 100, label: 'Who Pays' },
+    { x: sankeyNodes.filter(n => n.col === 1)[0]?.colX || 200, w: sankeyNodes.filter(n => n.col === 1)[0]?.colW || 100, label: 'Channels' },
+    { x: sankeyNodes.filter(n => n.col === 2)[0]?.colX || 400, w: sankeyNodes.filter(n => n.col === 2)[0]?.colW || 100, label: 'Providers' },
+    { x: sankeyNodes.filter(n => n.col === 3)[0]?.colX || 600, w: sankeyNodes.filter(n => n.col === 3)[0]?.colW || 100, label: 'Where It Goes' },
+  ];
+  colPositions.forEach(cp => {
+    ctx.fillText(cp.label, cp.x + cp.w / 2, 22);
+  });
+  // Underline
+  ctx.strokeStyle = '#334155';
+  ctx.lineWidth = 1;
+  colPositions.forEach(cp => {
+    ctx.beginPath();
+    ctx.moveTo(cp.x, 28);
+    ctx.lineTo(cp.x + cp.w, 28);
+    ctx.stroke();
+  });
+  ctx.textAlign = 'left';
 
   // Draw flows first (behind nodes)
   sankeyFlows.forEach(f => {
@@ -301,56 +318,87 @@ function renderSankey(ctx, W, cols) {
     ctx.roundRect(item.colX, item.y, item.colW, Math.max(item.h, 2), 4);
     ctx.fill();
 
-    // Border on hover
     if (isHovered) {
       ctx.strokeStyle = 'white';
       ctx.lineWidth = 2;
       ctx.stroke();
     }
 
-    // Label
-    if (item.h > 14) {
+    // Label — fit text to node width
+    if (item.h > 12) {
       ctx.fillStyle = 'white';
-      ctx.font = 'bold 10px -apple-system, sans-serif';
-      const label = item.name.length > 14 ? item.name.slice(0, 12) + '..' : item.name;
-      ctx.fillText(label, item.colX + 6, item.y + item.h / 2 + 3);
-      ctx.font = '9px -apple-system, sans-serif';
-      ctx.fillStyle = 'rgba(255,255,255,0.8)';
-      const valText = '$' + item.value + 'B';
-      ctx.fillText(valText, item.colX + item.colW - ctx.measureText(valText).width - 6, item.y + item.h / 2 + 3);
+      const maxLabelW = item.colW - 8;
+      const valText = '$' + (item.value < 1 ? item.value.toFixed(1) : Math.round(item.value)) + 'B';
+
+      if (item.h > 28) {
+        // Two lines: name on top, value below
+        ctx.font = 'bold 9px -apple-system, sans-serif';
+        let label = item.name;
+        while (ctx.measureText(label).width > maxLabelW && label.length > 3) label = label.slice(0, -1);
+        if (label !== item.name) label += '..';
+        ctx.fillText(label, item.colX + 4, item.y + item.h / 2 - 2);
+        ctx.font = '9px -apple-system, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.8)';
+        ctx.fillText(valText, item.colX + 4, item.y + item.h / 2 + 10);
+      } else {
+        // Single line: abbreviated name + value
+        ctx.font = 'bold 8px -apple-system, sans-serif';
+        let label = item.name;
+        const valW = ctx.measureText(' ' + valText).width;
+        while (ctx.measureText(label).width + valW > maxLabelW && label.length > 2) label = label.slice(0, -1);
+        ctx.fillText(label, item.colX + 3, item.y + item.h / 2 + 3);
+        ctx.font = '8px -apple-system, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.fillText(valText, item.colX + item.colW - ctx.measureText(valText).width - 3, item.y + item.h / 2 + 3);
+      }
     }
     ctx.globalAlpha = 1.0;
   });
 
-  // Tooltip on hover or lock
+  // Tooltip — positioned to stay within canvas bounds
   if (activeNode) {
     const item = activeNode;
     const inflows = sankeyFlows.filter(f => f.rItem.name === item.name).map(f => f.lItem.name + ': $' + f.lItem.value + 'B');
     const outflows = sankeyFlows.filter(f => f.lItem.name === item.name).map(f => f.rItem.name + ': $' + f.rItem.value + 'B');
 
+    // Build tooltip lines — wrap long lines
     let tipLines = [item.name + ' — $' + item.value + 'B'];
-    if (inflows.length) tipLines.push('From: ' + inflows.join(', '));
-    if (outflows.length) tipLines.push('To: ' + outflows.join(', '));
+    if (inflows.length) {
+      tipLines.push('From:');
+      inflows.forEach(inf => tipLines.push('  ' + inf));
+    }
+    if (outflows.length) {
+      tipLines.push('To:');
+      outflows.forEach(out => tipLines.push('  ' + out));
+    }
 
-    const tipX = item.colX + item.colW + 12;
-    const tipY = Math.max(item.y, 40);
-    const tipW = Math.max(...tipLines.map(l => ctx.measureText(l).width)) + 24;
-    const tipH = tipLines.length * 16 + 16;
+    ctx.font = '10px -apple-system, sans-serif';
+    const tipW = Math.min(Math.max(...tipLines.map(l => ctx.measureText(l).width)) + 28, W * 0.4);
+    const lineH = 15;
+    const tipH = tipLines.length * lineH + 16;
 
-    ctx.fillStyle = 'rgba(15,23,42,0.95)';
+    // Position: try right of node, fall back to left if would overflow
+    let tipX = item.colX + item.colW + 14;
+    if (tipX + tipW > W - 10) {
+      tipX = item.colX - tipW - 14;
+    }
+    if (tipX < 5) tipX = 5;
+
+    let tipY = Math.max(item.y, 35);
+    if (tipY + tipH > 550) tipY = 550 - tipH;
+
+    ctx.fillStyle = 'rgba(15,23,42,0.96)';
     ctx.beginPath();
     ctx.roundRect(tipX, tipY, tipW, tipH, 6);
     ctx.fill();
-    ctx.strokeStyle = '#334155';
+    ctx.strokeStyle = '#475569';
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    ctx.font = '11px -apple-system, sans-serif';
     tipLines.forEach((line, i) => {
-      ctx.fillStyle = i === 0 ? '#f1f5f9' : '#94a3b8';
-      if (i === 0) ctx.font = 'bold 11px -apple-system, sans-serif';
-      else ctx.font = '10px -apple-system, sans-serif';
-      ctx.fillText(line, tipX + 12, tipY + 16 + i * 16);
+      ctx.fillStyle = i === 0 ? '#f1f5f9' : line.startsWith('  ') ? '#94a3b8' : '#cbd5e1';
+      ctx.font = i === 0 ? 'bold 11px -apple-system, sans-serif' : '10px -apple-system, sans-serif';
+      ctx.fillText(line, tipX + 10, tipY + 14 + i * lineH);
     });
   }
 }
