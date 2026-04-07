@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-07",
+  "lastProcessed": "2026-04-08",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -9732,6 +9732,108 @@
       ],
       "notes": "Anthropic gross margin swung from -94% (2024) to ~+40% (2025). Targets 50% (2026) and 77% (2028). Pressured by inference costs. Vault has -10pp revision (scan-20260331-e5f) but not the baseline -94% figure.",
       "status": "parked",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260408-a1b",
+      "claim": "Anthropic revenue run rate topped $30B (April 6, 2026), up from $9B at end of 2025",
+      "value": 30,
+      "unit": "$B ARR",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-04-06/broadcom-confirms-deal-to-ship-google-tpu-chips-to-anthropic",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-06",
+      "dateAdded": "2026-04-08",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "revenue",
+        "ARR",
+        "2026"
+      ],
+      "notes": "Anthropic ARR hit $30B as of April 6, up 3x+ from $9B at end of 2025 and up from $19B in March (email-20260328-a1x). Bloomberg confirmed alongside Broadcom compute deal announcement.",
+      "status": "pending",
+      "replaces": "email-20260328-a1x"
+    },
+    {
+      "id": "scan-20260408-b2c",
+      "claim": "Anthropic: 1,000+ business customers spending >$1M/yr as of April 2026 (more than doubled since February)",
+      "value": 1000,
+      "unit": "customers >$1M/yr",
+      "sourceUrl": "https://techcrunch.com/2026/04/07/anthropic-compute-deal-google-broadcom-tpus/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch / Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-07",
+      "dateAdded": "2026-04-08",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "customers",
+        "enterprise",
+        "2026"
+      ],
+      "notes": "1,000+ customers at $1M+/yr (April 2026), more than doubling since February. Vault previously had 500 (Oct 2025, email-20260328-h8s). Significant enterprise acceleration.",
+      "status": "pending",
+      "replaces": "email-20260328-h8s"
+    },
+    {
+      "id": "scan-20260408-c3d",
+      "claim": "Anthropic signs 3.5GW TPU compute deal with Google and Broadcom; Mizuho estimates $21B AI revenue for Broadcom from Anthropic in 2026, $42B in 2027",
+      "value": 21,
+      "unit": "$B (Broadcom AI revenue from Anthropic, 2026 Mizuho est.)",
+      "sourceUrl": "https://www.cnbc.com/2026/04/06/broadcom-agrees-to-expanded-chip-deals-with-google-anthropic.html",
+      "sourceType": "reporting",
+      "sourceAuthor": "CNBC / Bloomberg / Mizuho",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-06",
+      "dateAdded": "2026-04-08",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "google",
+        "broadcom",
+        "tpu",
+        "compute",
+        "infrastructure",
+        "2026",
+        "2027"
+      ],
+      "notes": "Broadcom to supply 1GW of Google TPU capacity to Anthropic in 2026, expanding to 3.5GW in 2027. Mizuho: $21B Broadcom AI revenue from Anthropic in 2026, $42B in 2027. Confirms shift away from Nvidia GPUs.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260408-d4e",
+      "claim": "Microsoft Copilot ToS updated to 'entertainment purposes only'; not for professional or business-critical use (April 5, 2026)",
+      "value": null,
+      "unit": "qualitative",
+      "sourceUrl": "https://techcrunch.com/2026/04/05/copilot-is-for-entertainment-purposes-only-according-to-microsofts-terms-of-service/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04-05",
+      "dateAdded": "2026-04-08",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "microsoft",
+        "copilot",
+        "enterprise-ai",
+        "adoption",
+        "skepticism",
+        "2026"
+      ],
+      "notes": "Microsoft ToS (updated Oct 2025, widely noticed April 2026): Copilot is 'for entertainment purposes only', use 'at your own risk', 'not designed for professional or business-critical applications'. Microsoft says it will update the 'legacy language'. Directly supports low-enterprise-adoption thesis.",
+      "status": "pending",
       "replaces": null
     }
   ]
