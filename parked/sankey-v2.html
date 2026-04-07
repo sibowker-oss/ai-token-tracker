@@ -373,6 +373,29 @@ function drawSankey(d) {
       cashFlowYOffset += flowH + 2;
       sankeyFlows.push({ lItem: chItem, rItem: opCashFlow, lx, rx, ly, ry, flowH, col: -2 });
     });
+
+    // Provider surplus → Operating Cash (providers whose costs < revenue)
+    const INFERENCE_PCT = 0.47;
+    const oocRates = {
+      '2025': {'OpenAI': 0.79, 'Anthropic': 0.65, 'Google (Gemini)': 0.50, 'IaaS/Open': 0.45, 'Other Model Providers': 0.80},
+      '2026E': {'OpenAI': 0.55, 'Anthropic': 0.55, 'Google (Gemini)': 0.48, 'IaaS/Open': 0.42, 'Other Model Providers': 0.70},
+      '2027E': {'OpenAI': 0.48, 'Anthropic': 0.48, 'Google (Gemini)': 0.45, 'IaaS/Open': 0.40, 'Other Model Providers': 0.60},
+    };
+    const yearRates = oocRates[activeYear] || oocRates['2025'];
+    provCol.items.forEach(pItem => {
+      const oocPct = yearRates[pItem.name] || 0.55;
+      const totalCostPct = INFERENCE_PCT + oocPct;
+      if (totalCostPct >= 1.0) return;  // no surplus
+      const surplusPct = 1.0 - totalCostPct;
+      const flowH = pItem.h * surplusPct * 0.8;
+      if (flowH < 0.5) return;
+      const lx = provCol.x + provCol.w;
+      const rx = outCol.x;
+      const ly = pItem.y + pItem.h * totalCostPct;  // start below cost flows
+      const ry = opCashFlow.y + cashFlowYOffset;
+      cashFlowYOffset += flowH + 2;
+      sankeyFlows.push({ lItem: pItem, rItem: opCashFlow, lx, rx, ly, ry, flowH, col: -3 });
+    });
   }
 
   renderSankey(ctx, W, cols);
