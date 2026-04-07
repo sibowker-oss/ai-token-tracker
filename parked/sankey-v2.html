@@ -114,21 +114,22 @@ function renderYear(year) {
   const prev = prevYear ? sankeyData[prevYear] : null;
 
   // Hero stats
-  const subsidyPct = Math.round(d.vc_subsidy / d.total_system * 100);
-  const cashFlow = d.outcomes['Op. Cash Flow'] || d.outcomes['Operating Cash Flow'] || d.outcomes.Margin || 0;
-  const cashFlowPct = Math.round(cashFlow / d.total_system * 100);
-  const invRatio = prev ? Math.round(d.total_system / d.customer_revenue) : Math.round(250 / d.customer_revenue);
+  const subsidyPct = Math.round(d.totalVCSubsidy / d.totalSystem * 100);
+  const cashFlowItem = d.outcomes.find(o => o.label.includes('Cash Flow') || o.label === 'Margin') || d.outcomes[d.outcomes.length - 1];
+  const cashFlow = cashFlowItem ? cashFlowItem.value : 0;
+  const cashFlowPct = Math.round(cashFlow / d.totalSystem * 100);
+  const invRatio = prev ? Math.round(d.totalSystem / d.totalCustomerRevenue) : Math.round(250 / d.totalCustomerRevenue);
 
   let heroHtml = '';
-  heroHtml += '<div class="hero-stat"><div class="label">Total System</div><div class="value" style="color:var(--accent);">$' + d.total_system + 'B</div>';
-  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.total_system, prev.total_system) + ' vs ' + prev.label + '</div>';
+  heroHtml += '<div class="hero-stat"><div class="label">Total System</div><div class="value" style="color:var(--accent);">$' + d.totalSystem + 'B</div>';
+  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.totalSystem, prev.totalSystem) + ' vs ' + prev.label + '</div>';
   heroHtml += '</div>';
 
-  heroHtml += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--green);">$' + d.customer_revenue + 'B</div>';
-  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.customer_revenue, prev.customer_revenue) + '</div>';
+  heroHtml += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--green);">$' + d.totalCustomerRevenue + 'B</div>';
+  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.totalCustomerRevenue, prev.totalCustomerRevenue) + '</div>';
   heroHtml += '</div>';
 
-  heroHtml += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$' + d.vc_subsidy + 'B</div><div class="detail">' + subsidyPct + '% of system</div></div>';
+  heroHtml += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$' + d.totalVCSubsidy + 'B</div><div class="detail">' + subsidyPct + '% of system</div></div>';
 
   heroHtml += '<div class="hero-stat"><div class="label">Operating Cash Flow</div><div class="value" style="color:' + (cashFlow > 5 ? 'var(--green)' : 'var(--orange)') + ';">$' + cashFlow + 'B</div><div class="detail">' + cashFlowPct + '% of system (pre-capex depreciation)</div></div>';
 
@@ -145,23 +146,29 @@ function renderYear(year) {
   tablesHtml += '<div><h3 style="font-size:14px;margin-bottom:12px;">Who Pays</h3><table class="flow-table"><thead><tr><th>Buyer</th><th>Value</th>';
   if (prev) tablesHtml += '<th>Change</th>';
   tablesHtml += '</tr></thead><tbody>';
-  for (const [name, val] of Object.entries(d.buyers)) {
-    tablesHtml += '<tr><td style="font-weight:600;">' + name + '</td><td>$' + val + 'B</td>';
-    if (prev && prev.buyers[name] != null) tablesHtml += '<td>' + changeBadge(val, prev.buyers[name]) + '</td>';
+  d.buyers.forEach(b => {
+    tablesHtml += '<tr><td style="font-weight:600;">' + b.label + '</td><td>$' + b.value + 'B</td>';
+    if (prev) {
+      const prevB = prev.buyers.find(pb => pb.label === b.label);
+      if (prevB) tablesHtml += '<td>' + changeBadge(b.value, prevB.value) + '</td>';
+    }
     tablesHtml += '</tr>';
-  }
+  });
   tablesHtml += '</tbody></table></div>';
 
   // Providers table
-  tablesHtml += '<div><h3 style="font-size:14px;margin-bottom:12px;">Providers</h3><table class="flow-table"><thead><tr><th>Provider</th><th>Total</th><th>Customer</th><th>Subsidy</th>';
+  tablesHtml += '<div><h3 style="font-size:14px;margin-bottom:12px;">Providers</h3><table class="flow-table"><thead><tr><th>Provider</th><th>Value</th>';
   if (prev) tablesHtml += '<th>Change</th>';
   tablesHtml += '</tr></thead><tbody>';
-  for (const [name, pdata] of Object.entries(d.providers)) {
-    tablesHtml += '<tr><td style="font-weight:600;">' + name + '</td><td>$' + pdata.total + 'B</td><td>$' + pdata.customer + 'B</td><td style="color:var(--red);">$' + pdata.subsidy + 'B</td>';
-    if (prev && prev.providers[name]) tablesHtml += '<td>' + changeBadge(pdata.total, prev.providers[name].total) + '</td>';
-    else if (prev) tablesHtml += '<td><span class="proj-badge">NEW</span></td>';
+  d.providers.forEach(p => {
+    tablesHtml += '<tr><td style="font-weight:600;">' + p.label + '</td><td>$' + p.value + 'B</td>';
+    if (prev) {
+      const prevP = prev.providers.find(pp => pp.label === p.label);
+      if (prevP) tablesHtml += '<td>' + changeBadge(p.value, prevP.value) + '</td>';
+      else tablesHtml += '<td><span class="proj-badge">NEW</span></td>';
+    }
     tablesHtml += '</tr>';
-  }
+  });
   tablesHtml += '</tbody></table></div>';
 
   document.getElementById('flow-tables').innerHTML = tablesHtml;
@@ -210,10 +217,10 @@ function drawSankey(d) {
   const margin = 20;
   const spacing = (W - margin * 2 - colW * 4) / 3;
   const cols = [
-    { x: margin, w: colW, label: 'Who Pays', items: Object.entries(d.buyers).map(([n, v]) => ({ name: n, value: v })) },
-    { x: margin + colW + spacing, w: colW, label: 'Channels', items: Object.entries(d.channels).map(([n, v]) => ({ name: n, value: v })) },
-    { x: margin + (colW + spacing) * 2, w: colW, label: 'Providers', items: Object.entries(d.providers).map(([n, v]) => ({ name: n, value: v.total })) },
-    { x: margin + (colW + spacing) * 3, w: colW, label: 'Where It Goes', items: Object.entries(d.outcomes).map(([n, v]) => ({ name: n, value: v })) },
+    { x: margin, w: colW, label: 'Who Pays', items: d.buyers.map(b => ({ name: b.label, value: b.value })) },
+    { x: margin + colW + spacing, w: colW, label: 'Channels', items: d.channels.map(c => ({ name: c.label, value: c.value })) },
+    { x: margin + (colW + spacing) * 2, w: colW, label: 'Providers', items: d.providers.map(p => ({ name: p.label, value: p.value })) },
+    { x: margin + (colW + spacing) * 3, w: colW, label: 'Where It Goes', items: d.outcomes.map(o => ({ name: o.label, value: o.value })) },
   ];
 
   const barH = 460;
