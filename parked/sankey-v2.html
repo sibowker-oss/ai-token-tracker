@@ -134,7 +134,7 @@ function renderYear(year) {
 
   heroHtml += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$' + d.totalVCSubsidy + 'B</div><div class="detail">' + subsidyPct + '% of system</div></div>';
 
-  heroHtml += '<div class="hero-stat"><div class="label">Operating Cash</div><div class="value" style="color:' + (cashFlow > 5 ? 'var(--green)' : 'var(--orange)') + ';">$' + cashFlow + 'B</div><div class="detail">' + cashFlowPct + '% of system (pre-capex depreciation)</div></div>';
+  heroHtml += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:' + (cashFlow > 5 ? 'var(--green)' : 'var(--orange)') + ';">$' + cashFlow + 'B</div><div class="detail">' + cashFlowPct + '% of system (pre-capex depreciation)</div></div>';
 
   document.getElementById('hero-stats').innerHTML = heroHtml;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
@@ -205,7 +205,7 @@ const nodeColors = {
   'Hyperscaler Resale': '#a78bfa',
   'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google (model)': '#4285f4', 'IaaS/Open': '#8b5cf6',
   'Other Providers': '#475569', 'Trad SaaS': '#06b6d4',
-  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Other Operating': '#f59e0b', 'Op. Cash Flow': '#10b981', 'Operating Cash': '#10b981',
+  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Other Operating': '#f59e0b', 'Op. Cash Flow': '#10b981', 'Generated Cashflow': '#10b981',
 };
 
 function drawSankey(d) {
@@ -291,7 +291,7 @@ function drawSankey(d) {
       const leftItems = left.items.filter(i => !(c === 0 && i.name === 'VC/Investors'));
       const leftTotal = leftItems.reduce((s, i) => s + i.value, 0);
       // For Providers→Outcomes (col 2→3): providers flow ONLY to Inference
-      // and Other Operating. Operating Cash comes from channel margins bypass.
+      // and Other Operating. Generated Cashflow comes from channel margins bypass.
       // Each provider's full bar height distributes across these two outcomes.
       if (c === 2) {
         const costItems = right.items.filter(rItem => !(rItem.name.includes('Cash') || rItem.name.includes('Margin')));
@@ -357,7 +357,7 @@ function drawSankey(d) {
     const channelCol = cols[1];
     const marginChannelNames = ['Hyperscalers', 'Trad. SaaS', 'Traditional SaaS'];
     const marginPcts = { 'Hyperscalers': 0.20, 'Trad. SaaS': 0.60, 'Traditional SaaS': 0.60 };
-    // Track cumulative offset into the Operating Cash bar for stacking
+    // Track cumulative offset into the Generated Cashflow bar for stacking
     let cashFlowYOffset = 0;
     channelCol.items.forEach(chItem => {
       const mPct = marginPcts[chItem.name];
@@ -368,13 +368,13 @@ function drawSankey(d) {
       const rx = outCol.x;
       // Left Y: start from bottom portion of the channel bar (margin portion)
       const ly = chItem.y + chItem.h * (1 - mPct);
-      // Right Y: stack into the Operating Cash bar
+      // Right Y: stack into the Generated Cashflow bar
       const ry = opCashFlow.y + cashFlowYOffset;
       cashFlowYOffset += flowH + 2;
       sankeyFlows.push({ lItem: chItem, rItem: opCashFlow, lx, rx, ly, ry, flowH, col: -2 });
     });
 
-    // Provider surplus → Operating Cash (providers whose costs < revenue)
+    // Provider surplus → Generated Cashflow (providers whose costs < revenue)
     const INFERENCE_PCT = 0.47;
     const oocRates = {
       '2025': {'OpenAI': 0.79, 'Anthropic': 0.65, 'Google (Gemini)': 0.50, 'IaaS/Open': 0.45, 'Other Model Providers': 0.80},
