@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revenue Projection Review — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:32px 24px; }
+  .container { max-width:1200px; margin:0 auto; }
+  h1 { font-size:24px; font-weight:700; margin-bottom:8px; }
+  h2 { font-size:18px; font-weight:700; margin:32px 0 16px; color:var(--accent); }
+  h3 { font-size:14px; font-weight:600; margin:20px 0 10px; color:var(--text-dim); }
+  .sub { font-size:13px; color:var(--text-dim); margin-bottom:24px; }
+  table { width:100%; border-collapse:collapse; margin-bottom:24px; font-size:12px; }
+  th { text-align:left; padding:10px 12px; background:var(--card); color:var(--text-dim); font-weight:600; border:1px solid var(--card-border); font-size:11px; text-transform:uppercase; letter-spacing:0.3px; position:sticky; top:0; }
+  td { padding:8px 12px; border:1px solid var(--card-border); }
+  tr:hover td { background:rgba(59,130,246,0.03); }
+  .num { text-align:right; font-variant-numeric:tabular-nums; }
+  .auth { color:var(--green); font-weight:600; }
+  .editorial { color:var(--orange); font-style:italic; }
+  .derived { color:var(--purple); }
+  .total-row td { background:var(--card); font-weight:700; border-top:2px solid var(--accent); }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; text-align:center; }
+  .hero-stat .label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:6px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); }
+  .note { font-size:11px; color:var(--text-dim); background:rgba(59,130,246,0.05); border:1px solid rgba(59,130,246,0.15); border-radius:8px; padding:12px; margin:12px 0; line-height:1.6; }
+  .flag { display:inline-block; padding:1px 6px; border-radius:3px; font-size:9px; font-weight:700; }
+  .flag-auth { background:rgba(16,185,129,0.15); color:var(--green); }
+  .flag-edit { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .flag-derived { background:rgba(139,92,246,0.15); color:var(--purple); }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } table { font-size:11px; } th,td { padding:6px 8px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Revenue Projection Model — Review Tables</h1>
+  <div class="sub">All numbers derived from ARR data using the conversion framework in model-assumptions.md. Green = authoritative source. Orange = editorial estimate. Purple = derived calculation. Review and adjust before applying to visuals.</div>
+
+  <!-- Summary -->
+  <div class="hero-grid">
+    <div class="hero-stat">
+      <div class="label">2025 Actual</div>
+      <div class="value" style="color:var(--text);">$17.8B</div>
+      <div class="detail">Customer revenue</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">2026 Projected</div>
+      <div class="value" style="color:var(--accent);">$81.0B</div>
+      <div class="detail">+355% YoY</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">2027 Projected</div>
+      <div class="value" style="color:var(--purple);">$135.5B</div>
+      <div class="detail">+67% YoY</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Op Cash Flow 2027</div>
+      <div class="value" style="color:var(--green);">$36B</div>
+      <div class="detail">27% of system (pre-capex)</div>
+    </div>
+  </div>
+
+  <!-- Section 1: Model Providers -->
+  <h2>1. Model Providers — Input Data</h2>
+
+  <table>
+    <thead>
+      <tr><th>Provider</th><th>Exit ARR 2025</th><th>Latest ARR (Q1 2026)</th><th>Source</th><th>Growth Rate</th><th>Market Share Trend</th><th>Quality</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>OpenAI</strong></td><td class="num">$20B</td><td class="num auth">$25B (Mar 2026)</td><td>Sacra / press release</td><td>+150% YoY</td><td>Stable 40-50%</td><td><span class="flag flag-auth">Authoritative</span></td></tr>
+      <tr><td><strong>Anthropic</strong></td><td class="num">$4.5B (collected)</td><td class="num auth">$19B (Mar 2026)</td><td>Brad Gerstner / Sacra</td><td>14x in 14mo</td><td>Growing: 40%→73% new spend</td><td><span class="flag flag-auth">Authoritative</span></td></tr>
+      <tr><td><strong>Google/Gemini</strong></td><td class="num">~$4.2B</td><td class="num editorial">~$4.2B</td><td>Editorial</td><td>+48% YoY (Cloud total)</td><td>Stable</td><td><span class="flag flag-edit">Editorial</span></td></tr>
+      <tr><td><strong>DeepSeek</strong></td><td class="num">~$0.3B</td><td class="num editorial">~$0.3B</td><td>Editorial</td><td>+800% YoY (est.)</td><td>Growing in China</td><td><span class="flag flag-edit">Editorial</span></td></tr>
+      <tr><td><strong>Mistral</strong></td><td class="num">~$0.4B</td><td class="num editorial">~$0.4B</td><td>Editorial</td><td>+250% YoY (est.)</td><td>Stable (EU)</td><td><span class="flag flag-edit">Editorial</span></td></tr>
+      <tr><td><strong>xAI</strong></td><td class="num">~$0.5B</td><td class="num editorial">~$0.5B</td><td>Editorial</td><td>+500% YoY (est.)</td><td>Small but growing</td><td><span class="flag flag-edit">Editorial</span></td></tr>
+      <tr><td><strong>Minimax</strong></td><td class="num">~$0.15B</td><td class="num editorial">~$0.15B</td><td>Editorial</td><td>+400% YoY (est.)</td><td>Growing in China</td><td><span class="flag flag-edit">Editorial</span></td></tr>
+      <tr><td><strong>Moonshot/Kimi</strong></td><td class="num">~$0.1B</td><td class="num editorial">~$0.1B</td><td>Editorial</td><td>+300% YoY (est.)</td><td>Growing in China</td><td><span class="flag flag-edit">Editorial</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- ARR Conversion -->
+  <h2>2. ARR → Collected Revenue Conversion</h2>
+
+  <div class="note">
+    <strong>Method:</strong> ARR is adjusted for reporting methodology (OpenAI uses "best 4-week x 12" = 0.88 haircut), then converted to collected revenue using growth-adjusted calculation (log-mean for hyper-growth, simple average for moderate). Finally, segment collection factors are applied (API: 1.00, Consumer: 0.95, Enterprise: 0.80).
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Provider</th><th>Q1 2026 ARR</th><th>ARR Haircut</th><th>Adjusted ARR</th><th>Segment Mix</th><th>Collection Factor</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>OpenAI</strong></td><td class="num">$25B</td><td class="num">0.88</td><td class="num derived">$22.0B</td><td>15% API, 55% consumer, 15% SME, 15% enterprise</td><td class="num">0.93</td></tr>
+      <tr><td><strong>Anthropic</strong></td><td class="num">$19B</td><td class="num">1.00</td><td class="num derived">$19.0B</td><td>70% API, 15% consumer, 15% enterprise</td><td class="num">0.97</td></tr>
+      <tr><td><strong>Google</strong></td><td class="num">$4.2B</td><td class="num">1.00</td><td class="num derived">$4.2B</td><td>20% API, 50% consumer, 30% enterprise</td><td class="num">0.92</td></tr>
+      <tr><td><strong>Others</strong></td><td class="num">varies</td><td class="num">0.93</td><td class="num">varies</td><td>40% API, 20% consumer, 20% SME, 20% enterprise</td><td class="num">0.93</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 2026 Projection -->
+  <h2>3. Model Provider Revenue — 2026 Projected</h2>
+
+  <table>
+    <thead>
+      <tr><th>Provider</th><th>Start ARR (Jan 2026)</th><th>End ARR (Dec 2026)</th><th>Growth Type</th><th>Calc Method</th><th>Pre-Collection</th><th>2026 Collected</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>OpenAI</strong></td><td class="num">$22.0B</td><td class="num">$38.0B</td><td>Hyper (1.7x)</td><td>Log-mean</td><td class="num">$29.3B</td><td class="num derived"><strong>$27.2B</strong></td></tr>
+      <tr><td><strong>Anthropic</strong></td><td class="num">$19.0B</td><td class="num">$35.0B</td><td>Hyper (1.8x)</td><td>Log-mean</td><td class="num">$26.0B</td><td class="num derived"><strong>$25.2B</strong></td></tr>
+      <tr><td><strong>Google</strong></td><td class="num">$4.2B</td><td class="num">$6.2B</td><td>Moderate (1.5x)</td><td>Simple avg</td><td class="num">$5.2B</td><td class="num derived"><strong>$4.8B</strong></td></tr>
+      <tr><td><strong>DeepSeek</strong></td><td class="num">$0.3B</td><td class="num">$1.2B</td><td>Hyper (4x)</td><td>Log-mean</td><td class="num">$0.65B</td><td class="num editorial"><strong>$0.6B</strong></td></tr>
+      <tr><td><strong>Mistral</strong></td><td class="num">$0.4B</td><td class="num">$0.8B</td><td>Moderate (2x)</td><td>Simple avg</td><td class="num">$0.6B</td><td class="num editorial"><strong>$0.6B</strong></td></tr>
+      <tr><td><strong>xAI</strong></td><td class="num">$0.5B</td><td class="num">$1.5B</td><td>Hyper (3x)</td><td>Log-mean</td><td class="num">$0.91B</td><td class="num editorial"><strong>$0.8B</strong></td></tr>
+      <tr><td><strong>Minimax</strong></td><td class="num">$0.15B</td><td class="num">$0.4B</td><td>Hyper</td><td>Log-mean</td><td class="num">$0.26B</td><td class="num editorial"><strong>$0.2B</strong></td></tr>
+      <tr><td><strong>Moonshot/Kimi</strong></td><td class="num">$0.1B</td><td class="num">$0.25B</td><td>Hyper</td><td>Log-mean</td><td class="num">$0.16B</td><td class="num editorial"><strong>$0.15B</strong></td></tr>
+      <tr class="total-row"><td><strong>Model Provider Total</strong></td><td></td><td></td><td></td><td></td><td></td><td class="num"><strong>$59.6B</strong></td></tr>
+    </tbody>
+  </table>
+
+  <!-- 2027 Projection -->
+  <h2>4. Model Provider Revenue — 2027 Projected</h2>
+
+  <table>
+    <thead>
+      <tr><th>Provider</th><th>Start ARR</th><th>End ARR</th><th>Calc Method</th><th>2027 Collected</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>OpenAI</strong></td><td class="num">$38.0B</td><td class="num">$50.0B</td><td>Log-mean x 0.93</td><td class="num derived"><strong>$40.5B</strong></td><td>Company target $50B ARR</td></tr>
+      <tr><td><strong>Anthropic</strong></td><td class="num">$35.0B</td><td class="num">$55.0B</td><td>Log-mean x 0.97</td><td class="num derived"><strong>$42.9B</strong></td><td>May overtake OpenAI on collected</td></tr>
+      <tr><td><strong>Google</strong></td><td class="num">$6.2B</td><td class="num">$9.2B</td><td>Simple avg x 0.92</td><td class="num derived"><strong>$7.1B</strong></td><td>Steady cloud growth</td></tr>
+      <tr><td><strong>DeepSeek</strong></td><td class="num">$1.2B</td><td class="num">$3.0B</td><td>Log-mean x 0.93</td><td class="num editorial"><strong>$1.8B</strong></td><td></td></tr>
+      <tr><td><strong>Mistral</strong></td><td class="num">$0.8B</td><td class="num">$1.2B</td><td>Simple avg</td><td class="num editorial"><strong>$0.9B</strong></td><td></td></tr>
+      <tr><td><strong>xAI</strong></td><td class="num">$1.5B</td><td class="num">$3.0B</td><td>Log-mean x 0.93</td><td class="num editorial"><strong>$2.0B</strong></td><td></td></tr>
+      <tr><td><strong>Minimax</strong></td><td class="num">$0.4B</td><td class="num">$0.8B</td><td>Log-mean</td><td class="num editorial"><strong>$0.5B</strong></td><td></td></tr>
+      <tr><td><strong>Moonshot/Kimi</strong></td><td class="num">$0.25B</td><td class="num">$0.5B</td><td>Log-mean</td><td class="num editorial"><strong>$0.3B</strong></td><td></td></tr>
+      <tr class="total-row"><td><strong>Model Provider Total</strong></td><td></td><td></td><td></td><td class="num"><strong>$96.0B</strong></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <!-- Enterprise SaaS -->
+  <h2>5. Enterprise SaaS AI Revenue</h2>
+
+  <table>
+    <thead>
+      <tr><th>Company</th><th>Product</th><th>Latest ARR</th><th>Source Quality</th><th>Shelfware Adj</th><th>2026 Collected</th><th>2027 Collected</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Microsoft</strong></td><td>Copilot</td><td class="num auth">$13B</td><td><span class="flag flag-auth">Authoritative</span></td><td>0.80 (35.8% usage)</td><td class="num derived"><strong>$10.6B</strong></td><td class="num derived"><strong>$16.0B</strong></td></tr>
+      <tr><td><strong>Salesforce</strong></td><td>Agentforce</td><td class="num auth">$800M</td><td><span class="flag flag-auth">Authoritative</span></td><td>0.50 (50% free)</td><td class="num derived"><strong>$0.6B</strong></td><td class="num derived"><strong>$1.3B</strong></td></tr>
+      <tr><td><strong>ServiceNow</strong></td><td>Now Assist</td><td class="num auth">$600M+</td><td><span class="flag flag-auth">Authoritative</span></td><td>0.85</td><td class="num derived"><strong>$0.6B</strong></td><td class="num derived"><strong>$1.1B</strong></td></tr>
+      <tr><td><strong>SAP</strong></td><td>Joule AI</td><td class="num editorial">~$300M</td><td><span class="flag flag-edit">Editorial</span></td><td>0.80</td><td class="num editorial"><strong>$0.3B</strong></td><td class="num editorial"><strong>$0.6B</strong></td></tr>
+      <tr><td><strong>Adobe</strong></td><td>Firefly/GenAI</td><td class="num editorial">~$400M</td><td><span class="flag flag-edit">Editorial</span></td><td>0.90</td><td class="num editorial"><strong>$0.4B</strong></td><td class="num editorial"><strong>$0.7B</strong></td></tr>
+      <tr><td><strong>Others</strong></td><td>Zendesk, HubSpot, etc.</td><td class="num editorial">~$1.0B</td><td><span class="flag flag-edit">Editorial</span></td><td>0.75</td><td class="num editorial"><strong>$0.9B</strong></td><td class="num editorial"><strong>$1.8B</strong></td></tr>
+      <tr class="total-row"><td colspan="5"><strong>Enterprise SaaS Total</strong></td><td class="num"><strong>$13.4B</strong></td><td class="num"><strong>$21.5B</strong></td></tr>
+    </tbody>
+  </table>
+
+  <!-- AI Native Apps -->
+  <h2>6. AI Native Apps</h2>
+
+  <table>
+    <thead>
+      <tr><th>App</th><th>Category</th><th>Latest ARR</th><th>Growth Est.</th><th>2026 Collected</th><th>2027 Collected</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Cursor</strong></td><td>Coding</td><td class="num editorial">~$300M</td><td>+400% YoY</td><td class="num editorial">$0.9B</td><td class="num editorial">$2.0B</td></tr>
+      <tr><td><strong>Midjourney</strong></td><td>Image</td><td class="num editorial">~$200M</td><td>+50% YoY</td><td class="num editorial">$0.3B</td><td class="num editorial">$0.4B</td></tr>
+      <tr><td><strong>Character.ai</strong></td><td>Consumer</td><td class="num editorial">~$150M</td><td>+100% YoY</td><td class="num editorial">$0.3B</td><td class="num editorial">$0.5B</td></tr>
+      <tr><td><strong>Perplexity</strong></td><td>Search</td><td class="num editorial">~$100M</td><td>+300% YoY</td><td class="num editorial">$0.3B</td><td class="num editorial">$0.7B</td></tr>
+      <tr><td><strong>ElevenLabs</strong></td><td>Voice</td><td class="num editorial">~$100M</td><td>+200% YoY</td><td class="num editorial">$0.2B</td><td class="num editorial">$0.5B</td></tr>
+      <tr><td><strong>Replit</strong></td><td>Coding</td><td class="num editorial">~$100M</td><td>+150% YoY</td><td class="num editorial">$0.2B</td><td class="num editorial">$0.4B</td></tr>
+      <tr><td><strong>Harvey AI</strong></td><td>Legal</td><td class="num editorial">~$100M</td><td>+200% YoY</td><td class="num editorial">$0.2B</td><td class="num editorial">$0.5B</td></tr>
+      <tr><td><strong>Glean</strong></td><td>Enterprise Search</td><td class="num editorial">~$100M</td><td>+200% YoY</td><td class="num editorial">$0.2B</td><td class="num editorial">$0.5B</td></tr>
+      <tr><td><strong>Jasper</strong></td><td>Content</td><td class="num editorial">~$80M</td><td>+50% YoY</td><td class="num editorial">$0.1B</td><td class="num editorial">$0.1B</td></tr>
+      <tr><td><strong>Others (30+ apps)</strong></td><td>Mixed</td><td class="num editorial">~$1.0B</td><td>+150% YoY</td><td class="num editorial">$2.5B</td><td class="num editorial">$5.0B</td></tr>
+      <tr class="total-row"><td colspan="4"><strong>AI Native Total</strong></td><td class="num"><strong>$6.0B</strong></td><td class="num"><strong>$12.0B</strong></td></tr>
+    </tbody>
+  </table>
+
+  <!-- IaaS -->
+  <h2>7. IaaS / Aggregators / Open Model Serving</h2>
+
+  <table>
+    <thead>
+      <tr><th>Provider</th><th>Type</th><th>Known Data</th><th>Revenue Est.</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>OpenRouter</strong></td><td>Aggregator</td><td class="auth">$3.4M/week GMV, 10% take</td><td class="num">~$18M ARR</td></tr>
+      <tr><td><strong>Together AI</strong></td><td>IaaS</td><td>$425M funding, $3.3B val</td><td class="num editorial">~$100M ARR</td></tr>
+      <tr><td><strong>Fireworks AI</strong></td><td>IaaS</td><td>$77M funding</td><td class="num editorial">~$50M ARR</td></tr>
+      <tr><td><strong>Groq</strong></td><td>LPU Inference</td><td>$640M funding, $2.8B val</td><td class="num editorial">~$30M ARR</td></tr>
+      <tr><td><strong>Replicate</strong></td><td>IaaS</td><td>$58M funding</td><td class="num editorial">~$20M ARR</td></tr>
+      <tr><td><strong>Others</strong></td><td>Mixed</td><td>—</td><td class="num editorial">~$100M ARR</td></tr>
+    </tbody>
+  </table>
+
+  <table>
+    <thead>
+      <tr><th></th><th>2025 Collected</th><th>2026 Collected</th><th>2027 Collected</th></tr>
+    </thead>
+    <tbody>
+      <tr class="total-row"><td><strong>IaaS/Aggregator Total</strong></td><td class="num"><strong>$0.4B</strong></td><td class="num"><strong>$2.0B</strong></td><td class="num"><strong>$6.0B</strong></td></tr>
+    </tbody>
+  </table>
+
+  <!-- Grand Summary -->
+  <h2>8. Grand Summary</h2>
+
+  <table>
+    <thead>
+      <tr><th>Segment</th><th>2025 Actual</th><th>2026 Projected</th><th>YoY</th><th>2027 Projected</th><th>YoY</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Model Providers</strong></td><td class="num">$12.4B</td><td class="num derived">$59.6B</td><td class="num" style="color:var(--green);">+381%</td><td class="num derived">$96.0B</td><td class="num" style="color:var(--green);">+61%</td></tr>
+      <tr><td><strong>Enterprise SaaS</strong></td><td class="num">$2.8B</td><td class="num derived">$13.4B</td><td class="num" style="color:var(--green);">+379%</td><td class="num derived">$21.5B</td><td class="num" style="color:var(--green);">+60%</td></tr>
+      <tr><td><strong>AI Native Apps</strong></td><td class="num">$2.2B</td><td class="num derived">$6.0B</td><td class="num" style="color:var(--green);">+173%</td><td class="num derived">$12.0B</td><td class="num" style="color:var(--green);">+100%</td></tr>
+      <tr><td><strong>IaaS / Open</strong></td><td class="num">$0.4B</td><td class="num derived">$2.0B</td><td class="num" style="color:var(--green);">+400%</td><td class="num derived">$6.0B</td><td class="num" style="color:var(--green);">+200%</td></tr>
+      <tr class="total-row"><td><strong>Total Customer Revenue</strong></td><td class="num"><strong>$17.8B</strong></td><td class="num"><strong>$81.0B</strong></td><td class="num" style="color:var(--green);"><strong>+355%</strong></td><td class="num"><strong>$135.5B</strong></td><td class="num" style="color:var(--green);"><strong>+67%</strong></td></tr>
+    </tbody>
+  </table>
+
+  <h3>Revenue by Buyer Type</h3>
+  <table>
+    <thead>
+      <tr><th>Buyer</th><th>2025</th><th>%</th><th>2026E</th><th>%</th><th>2027E</th><th>%</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Consumer</td><td class="num">$5.2B</td><td class="num">29%</td><td class="num">$20B</td><td class="num">25%</td><td class="num">$30B</td><td class="num">22%</td></tr>
+      <tr><td>SME</td><td class="num">$3.4B</td><td class="num">19%</td><td class="num">$12B</td><td class="num">15%</td><td class="num">$20B</td><td class="num">15%</td></tr>
+      <tr><td>Enterprise</td><td class="num">$8.9B</td><td class="num">50%</td><td class="num">$42B</td><td class="num">52%</td><td class="num">$72B</td><td class="num">53%</td></tr>
+      <tr class="total-row"><td><strong>Total Customer</strong></td><td class="num"><strong>$17.5B</strong></td><td></td><td class="num"><strong>$74B</strong></td><td></td><td class="num"><strong>$122B</strong></td><td></td></tr>
+      <tr><td style="color:var(--red);">VC Subsidy</td><td class="num" style="color:var(--red);">$9.8B</td><td class="num">36%</td><td class="num" style="color:var(--red);">$7B</td><td class="num">9%</td><td class="num" style="color:var(--red);">$14B</td><td class="num">10%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Operating Outcomes</h3>
+  <table>
+    <thead>
+      <tr><th>Outcome</th><th>2025</th><th>%</th><th>2026E</th><th>%</th><th>2027E</th><th>%</th><th>Trend</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Inference</td><td class="num">$14.0B</td><td class="num">51%</td><td class="num">$38B</td><td class="num">47%</td><td class="num">$55B</td><td class="num">41%</td><td style="color:var(--green);">Shrinking % (efficiency)</td></tr>
+      <tr><td>People/SGA</td><td class="num">$11.1B</td><td class="num">41%</td><td class="num">$28B</td><td class="num">35%</td><td class="num">$45B</td><td class="num">33%</td><td style="color:var(--green);">Shrinking % (scale)</td></tr>
+      <tr><td style="color:var(--green);">Operating Cash Flow</td><td class="num" style="color:var(--green);">$2.2B</td><td class="num">8%</td><td class="num" style="color:var(--green);">$15B</td><td class="num">19%</td><td class="num" style="color:var(--green);">$36B</td><td class="num">27%</td><td style="color:var(--green);font-weight:700;">Growing (path to sustainability)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>Key question for review:</strong><br>
+    1. Anthropic $25.2B collected in 2026 — is this too aggressive? Based on $19B→$35B ARR trajectory.<br>
+    2. Enterprise SaaS $13.4B — Microsoft Copilot is 79% of this. Reasonable?<br>
+    3. IaaS/Open growing 15x to $6B by 2027 — biggest assumption in the model.<br>
+    4. VC subsidy dropping to 9% of system by 2026 — does this happen that fast?<br>
+    5. Operating cash flow reaching 27% by 2027 — is this realistic pre-capex depreciation?
+  </div>
+</div>
+</body>
+</html>
