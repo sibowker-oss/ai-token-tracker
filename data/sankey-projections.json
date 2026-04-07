@@ -1,8 +1,8 @@
 {
   "2025": {
     "label": "2025 Actual",
-    "total_system": 27.3,
-    "customer_revenue": 17.5,
+    "total_system": 27.2,
+    "customer_revenue": 17.4,
     "vc_subsidy": 9.8,
     "buyers": {
       "Consumer": 5.16,
@@ -20,35 +20,30 @@
     },
     "providers": {
       "OpenAI": {
-        "total": 13.65,
-        "customer": 7.65,
+        "total": 15.2,
+        "customer": 9.2,
         "subsidy": 6.0
       },
       "Anthropic": {
-        "total": 7.71,
-        "customer": 4.71,
+        "total": 8.2,
+        "customer": 5.2,
         "subsidy": 3.0
       },
       "Google (model)": {
-        "total": 2.5,
-        "customer": 2.0,
+        "total": 2.9,
+        "customer": 2.4,
         "subsidy": 0.5
       },
       "IaaS/Open": {
-        "total": 0.8,
-        "customer": 0.5,
+        "total": 0.9,
+        "customer": 0.6,
         "subsidy": 0.3
-      },
-      "Trad SaaS": {
-        "total": 2.61,
-        "customer": 2.61,
-        "subsidy": 0.0
       }
     },
     "outcomes": {
       "Inference": 14.03,
       "People/SGA": 11.08,
-      "Op. Cash Flow": 2.16
+      "Op. Cash Flow": 2.1
     }
   },
   "2026E": {
@@ -69,29 +64,24 @@
     },
     "providers": {
       "OpenAI": {
-        "total": 28.0,
-        "customer": 26.7,
+        "total": 33.7,
+        "customer": 32.4,
         "subsidy": 1.3
       },
       "Anthropic": {
-        "total": 24.0,
-        "customer": 22.6,
+        "total": 25.9,
+        "customer": 24.5,
         "subsidy": 1.4
       },
       "Google (model)": {
-        "total": 8.0,
-        "customer": 7.4,
+        "total": 9.4,
+        "customer": 8.8,
         "subsidy": 0.6
       },
       "IaaS/Open": {
-        "total": 7.0,
-        "customer": 5.0,
+        "total": 7.5,
+        "customer": 5.5,
         "subsidy": 2.0
-      },
-      "Trad SaaS": {
-        "total": 9.5,
-        "customer": 9.5,
-        "subsidy": 0.0
       },
       "Other Providers": {
         "total": 2.4,
@@ -126,29 +116,24 @@
     },
     "providers": {
       "OpenAI": {
-        "total": 42.0,
-        "customer": 39.7,
+        "total": 52.6,
+        "customer": 50.3,
         "subsidy": 2.3
       },
       "Anthropic": {
-        "total": 40.0,
-        "customer": 38.5,
+        "total": 43.5,
+        "customer": 42.0,
         "subsidy": 1.5
       },
       "Google (model)": {
-        "total": 14.0,
-        "customer": 12.5,
+        "total": 16.7,
+        "customer": 15.2,
         "subsidy": 1.5
       },
       "IaaS/Open": {
-        "total": 14.0,
-        "customer": 10.0,
+        "total": 14.9,
+        "customer": 10.9,
         "subsidy": 4.0
-      },
-      "Trad SaaS": {
-        "total": 17.7,
-        "customer": 17.7,
-        "subsidy": 0.0
       },
       "Other Providers": {
         "total": 7.0,
