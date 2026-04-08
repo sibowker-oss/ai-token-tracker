@@ -273,14 +273,13 @@ function drawSankey(d) {
   function addFlow(lItem, rItem, dollarValue, lCol, rCol, lyStart, ryStart) {
     const flowH = dollarValue * globalScale;
     if (flowH < 0.3) return flowH;
-    // Clamp: flow must start within source bar and end within target bar
-    const ly = Math.min(Math.max(lyStart, lItem.y), lItem.y + lItem.h - flowH);
-    const ry = Math.min(Math.max(ryStart, rItem.y), rItem.y + rItem.h - flowH);
+    // Keep Y within bar bounds but don't clamp flowH — it's sized by dollars
+    const ly = Math.max(lyStart, lItem.y);
+    const ry = Math.max(ryStart, rItem.y);
     sankeyFlows.push({
       lItem, rItem,
       lx: lCol.x + lCol.w, rx: rCol.x,
-      ly: Math.max(ly, lItem.y), ry: Math.max(ry, rItem.y),
-      flowH: Math.min(flowH, Math.min(lItem.h, rItem.h)),
+      ly, ry, flowH,
       col: lItem.col != null ? lItem.col : -1
     });
     return flowH;
