@@ -295,6 +295,7 @@ function drawSankey(d) {
   const custBuyers = buyerCol.items.filter(b => b.name !== 'VC/Investors');
   const custTotal = custBuyers.reduce((s, i) => s + i.value, 0);
   const chTotal = channelCol.items.reduce((s, i) => s + i.value, 0);
+  const provTotal = provCol.items.reduce((s, i) => s + i.value, 0);
 
   // Initialize all offset trackers
   buyerCol.items.forEach(i => { i._outOffset = 0; });
