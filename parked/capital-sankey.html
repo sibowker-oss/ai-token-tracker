@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Follow the Capital — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; }
+  .nav-link:hover { background:#334155; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; text-align:center; }
+  .hero-stat .label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:6px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:16px; }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
+  <a href="sankey.html" class="nav-link">Follow the $</a>
+  <a href="timeline.html" class="nav-link">Time Machine</a>
+  <a href="openrouter.html" class="nav-link">Live Pricing</a>
+</nav>
+<div class="container">
+  <h1>Follow the Capital <span style="font-size:12px;background:rgba(239,68,68,0.15);color:var(--red);padding:2px 8px;border-radius:4px;vertical-align:middle;">2025</span></h1>
+  <div class="sub">The revenue Sankey shows $27B flowing through operating costs. This shows the FULL $310B+ capital picture — from GPU silicon to data centres to models to tokens to the $17.5B customers actually pay.</div>
+
+  <div class="hero-grid">
+    <div class="hero-stat">
+      <div class="label">Total Capital Deployed</div>
+      <div class="value" style="color:var(--red);">~$310B</div>
+      <div class="detail">All sources, all uses</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">Customer Revenue</div>
+      <div class="value" style="color:var(--green);">$17.5B</div>
+      <div class="detail">5.6% of capital deployed</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">NVIDIA Revenue</div>
+      <div class="value" style="color:var(--accent);">$130B</div>
+      <div class="detail">42% of all capital → GPU silicon</div>
+    </div>
+    <div class="hero-stat">
+      <div class="label">True Economic Loss</div>
+      <div class="value" style="color:var(--red);">~-$92B</div>
+      <div class="detail">After depreciation & amortisation</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Capital Flow: Sources → Uses → Who → What It Produces</h2>
+    <div style="position:relative;width:100%;overflow-x:auto;">
+      <canvas id="sankey" height="620"></canvas>
+    </div>
+    <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:8px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
+      <span style="opacity:0.4;">Click or hover a node to see details</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>The Cross-Check: Does It Add Up?</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+      <div>
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;">NVIDIA DC Revenue</div>
+        <div style="font-size:24px;font-weight:800;color:var(--accent);">$130B</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">= total GPU purchases by everyone</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;">Our Estimate</div>
+        <div style="font-size:24px;font-weight:800;color:var(--green);">$115-150B</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Inference $40-60B + Training $30-50B + Cloud $30-40B</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px;">Match</div>
+        <div style="font-size:24px;font-weight:800;color:var(--green);">✓</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;">Within range — framework is consistent</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Depreciation Reality</h2>
+    <div style="font-size:13px;color:var(--text-dim);line-height:1.8;">
+      <p>The revenue Sankey shows $2.3B in Generated Cashflow. But the full capital picture:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;">
+        <div style="background:rgba(16,185,129,0.08);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:11px;color:var(--green);text-transform:uppercase;">Operating Cash</div>
+          <div style="font-size:28px;font-weight:800;color:var(--green);">$2.3B</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.08);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-size:11px;color:var(--red);text-transform:uppercase;">Annual Depreciation</div>
+          <div style="font-size:28px;font-weight:800;color:var(--red);">-$94B</div>
+          <div style="font-size:10px;color:var(--text-dim);">GPU $43B + Training $40B + DC $5B + Other $6B</div>
+        </div>
+      </div>
+      <p style="font-style:italic;">The industry needs operating cash to grow ~40x just to cover annual depreciation on current capex. This is why the $250B capex question is existential — it must generate returns over 5-20 years, not quarter by quarter.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS = {
+  'Customer Revenue':'#10b981', 'VC/Equity':'#dc2626', 'Hyperscaler Capex':'#3b82f6',
+  'Debt':'#8b5cf6',
+  'GPU Hardware':'#76b900', 'Data Centres':'#f59e0b', 'Training Compute':'#ef4444',
+  'People & Ops':'#06b6d4', 'Cash Reserves':'#475569',
+  'OpenAI':'#10a37f', 'Anthropic':'#d97706', 'Google':'#4285f4', 'Meta':'#60a5fa',
+  'Hyperscaler Cloud':'#3b82f6', 'Neo-Cloud & IaaS':'#8b5cf6', 'Enterprise/Other':'#475569',
+  'Inference (320T/day)':'#10b981', 'Next-Gen Models':'#ef4444',
+  'DC Infrastructure':'#f59e0b', 'Revenue ($17.5B)':'#10b981',
+};
+
+// Capital flow data (2025)
+const data = {
+  sources: [
+    {name:'Customer Revenue', value:17.5},
+    {name:'VC/Equity', value:34},
+    {name:'Hyperscaler Capex', value:250},
+    {name:'Debt', value:10},
+  ],
+  uses: [
+    {name:'GPU Hardware', value:130},
+    {name:'Data Centres', value:60},
+    {name:'Training Compute', value:40},
+    {name:'People & Ops', value:25},
+    {name:'Cash Reserves', value:25},
+  ],
+  who: [
+    {name:'OpenAI', value:45},
+    {name:'Anthropic', value:15},
+    {name:'Google', value:50},
+    {name:'Meta', value:38},
+    {name:'Hyperscaler Cloud', value:40},
+    {name:'Neo-Cloud & IaaS', value:15},
+    {name:'Enterprise/Other', value:20},
+  ],
+  produces: [
+    {name:'Inference (320T/day)', value:80},
+    {name:'Next-Gen Models', value:50},
+    {name:'DC Infrastructure', value:70},
+    {name:'Revenue ($17.5B)', value:17.5},
+  ],
+};
+
+let allNodes = [], allFlows = [], hoveredNode = null, lockedNode = null;
+
+function build() {
+  const canvas = document.getElementById('sankey');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth;
+  canvas.width = W; canvas.height = 620;
+
+  const colW = Math.min(130, W*0.13);
+  const margin = 15;
+  const spacing = (W - margin*2 - colW*4)/3;
+  const barH = 520, gap = 5, topY = 55;
+
+  const cols = [data.sources, data.uses, data.who, data.produces];
+  const labels = ['Capital Sources', 'What It Buys', 'Who Uses It', 'What It Produces'];
+  const maxTotal = Math.max(...cols.map(c=>c.reduce((s,i)=>s+i.value,0)));
+  const scale = (barH - 6*gap)/maxTotal;
+
+  allNodes = [];
+  cols.forEach((items, ci) => {
+    const total = items.reduce((s,i)=>s+i.value,0);
+    const colH = total*scale + (items.length-1)*gap;
+    let y = topY + (barH-colH)/2;
+    const x = margin + ci*(colW+spacing);
+    items.forEach(item => {
+      const h = item.value*scale;
+      allNodes.push({name:item.name, value:item.value, x, y, w:colW, h, col:ci, _out:0, _in:0});
+      y += h + gap;
+    });
+  });
+
+  function N(name,col) { return allNodes.find(n=>n.name===name&&n.col===col); }
+
+  // Build flows — proportional between adjacent columns
+  allFlows = [];
+  for(let c=0; c<3; c++) {
+    const leftNodes = allNodes.filter(n=>n.col===c);
+    const rightNodes = allNodes.filter(n=>n.col===c+1);
+    const lt = leftNodes.reduce((s,n)=>s+n.value,0);
+    const rt = rightNodes.reduce((s,n)=>s+n.value,0);
+
+    leftNodes.forEach(ln => {
+      rightNodes.forEach(rn => {
+        const v = ln.value * (rn.value/rt);
+        if(v < 0.5) return;
+        const flowH = v * scale;
+        allFlows.push({
+          from:ln, to:rn, value:v,
+          lx:ln.x+ln.w, rx:rn.x,
+          ly:ln.y+ln._out, ry:rn.y+rn._in,
+          flowH
+        });
+        ln._out += flowH;
+        rn._in += flowH;
+      });
+    });
+  }
+
+  render(ctx, W, labels, scale);
+}
+
+function render(ctx, W, labels, scale) {
+  ctx.clearRect(0,0,W,620);
+  const active = lockedNode||hoveredNode;
+  const aName = active?active.name:null;
+
+  // Headers
+  ctx.textAlign='center';
+  [0,1,2,3].forEach(ci => {
+    const nodes = allNodes.filter(n=>n.col===ci);
+    if(!nodes.length) return;
+    const x = nodes[0].x + nodes[0].w/2;
+    const total = nodes.reduce((s,n)=>s+n.value,0);
+    ctx.font='bold 13px -apple-system,sans-serif'; ctx.fillStyle='#e2e8f0';
+    ctx.fillText(labels[ci], x, 20);
+    ctx.font='11px -apple-system,sans-serif'; ctx.fillStyle='#64748b';
+    ctx.fillText('$'+total.toFixed(0)+'B', x, 35);
+    ctx.strokeStyle='#334155'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(nodes[0].x,40); ctx.lineTo(nodes[0].x+nodes[0].w,40); ctx.stroke();
+  });
+  ctx.textAlign='left';
+
+  // Flows
+  allFlows.forEach(f => {
+    const connected = aName && (f.from.name===aName||f.to.name===aName);
+    const dimmed = aName && !connected;
+    ctx.globalAlpha = dimmed?0.02:connected?0.5:0.15;
+    ctx.fillStyle = COLORS[f.from.name]||'#475569';
+    ctx.beginPath();
+    const cp = (f.rx-f.lx)*0.4;
+    ctx.moveTo(f.lx,f.ly);
+    ctx.bezierCurveTo(f.lx+cp,f.ly, f.rx-cp,f.ry, f.rx,f.ry);
+    ctx.lineTo(f.rx,f.ry+f.flowH);
+    ctx.bezierCurveTo(f.rx-cp,f.ry+f.flowH, f.lx+cp,f.ly+f.flowH, f.lx,f.ly+f.flowH);
+    ctx.closePath(); ctx.fill();
+    ctx.globalAlpha=1;
+  });
+
+  // Nodes
+  allNodes.forEach(n => {
+    const isActive = n.name===aName;
+    const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
+    ctx.globalAlpha = dimmed?0.25:1;
+    ctx.fillStyle = COLORS[n.name]||'#475569';
+    ctx.beginPath(); ctx.roundRect(n.x,n.y,n.w,Math.max(n.h,2),4); ctx.fill();
+    if(isActive){ctx.strokeStyle='white';ctx.lineWidth=2;ctx.stroke();}
+    if(n.h>14){
+      ctx.fillStyle='white'; ctx.font='bold 9px -apple-system,sans-serif';
+      let label=n.name;
+      while(ctx.measureText(label).width>n.w-6&&label.length>3)label=label.slice(0,-1);
+      ctx.fillText(label,n.x+3,n.y+n.h/2-2);
+      ctx.font='9px -apple-system,sans-serif';ctx.fillStyle='rgba(255,255,255,0.8)';
+      ctx.fillText('$'+n.value+'B',n.x+3,n.y+n.h/2+10);
+    }
+    ctx.globalAlpha=1;
+  });
+
+  // Tooltip
+  const panel = document.getElementById('tooltip-panel');
+  if(active&&panel){
+    const ins = allFlows.filter(f=>f.to.name===active.name);
+    const outs = allFlows.filter(f=>f.from.name===active.name);
+    let html='<div style="display:flex;gap:32px;flex-wrap:wrap;">';
+    html+='<div><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong><div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value+'B</div></div>';
+    if(ins.length){
+      html+='<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Sources</div>';
+      ins.forEach(f=>{html+='<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>';});
+      html+='</div>';
+    }
+    if(outs.length){
+      html+='<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Flows to</div>';
+      outs.forEach(f=>{html+='<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>';});
+      html+='</div>';
+    }
+    html+='</div>';
+    panel.innerHTML=html;
+  } else if(panel){
+    panel.innerHTML='<span style="opacity:0.4;">Click or hover a node to see details</span>';
+  }
+}
+
+// Mouse
+const canvas = document.getElementById('sankey');
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  const mx=e.clientX-r.left,my=e.clientY-r.top;
+  let found=null;
+  for(const n of allNodes){if(mx>=n.x&&mx<=n.x+n.w&&my>=n.y&&my<=n.y+n.h){found=n;break;}}
+  if(found!==hoveredNode){hoveredNode=found;canvas.style.cursor=found?'pointer':'default';render(canvas.getContext('2d'),canvas.width,['Capital Sources','What It Buys','Who Uses It','What It Produces'],null);}
+});
+canvas.addEventListener('click',e=>{
+  const r=canvas.getBoundingClientRect();
+  const mx=e.clientX-r.left,my=e.clientY-r.top;
+  let found=null;
+  for(const n of allNodes){if(mx>=n.x&&mx<=n.x+n.w&&my>=n.y&&my<=n.y+n.h){found=n;break;}}
+  lockedNode=(found&&lockedNode&&found.name===lockedNode.name)?null:found;
+  render(canvas.getContext('2d'),canvas.width,['Capital Sources','What It Buys','Who Uses It','What It Produces'],null);
+});
+canvas.addEventListener('mouseleave',()=>{
+  if(hoveredNode&&!lockedNode){hoveredNode=null;render(canvas.getContext('2d'),canvas.width,['Capital Sources','What It Buys','Who Uses It','What It Produces'],null);}
+});
+
+build();
+</script>
+</body>
+</html>
