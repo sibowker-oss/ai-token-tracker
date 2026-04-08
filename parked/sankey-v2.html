@@ -489,7 +489,7 @@ function renderSankey(ctx, W, cols) {
     const connected = hName && (f.lItem.name === hName || f.rItem.name === hName);
     const dimmed = hName && !connected;
     const color = nodeColors[f.lItem.name] || '#475569';
-    ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.35 : 0.12;
+    ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.45 : 0.18;
     ctx.fillStyle = color;
     ctx.beginPath();
     const cp = (f.rx - f.lx) * 0.4;
