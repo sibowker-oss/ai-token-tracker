@@ -17,7 +17,7 @@
   h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
   .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
   .year-toggle { display:flex; gap:4px; justify-content:center; margin-bottom:24px; }
-  .year-btn { padding:10px 28px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .year-btn { padding:10px 28px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:14px; font-weight:600; cursor:pointer; }
   .year-btn:hover { border-color:var(--accent); color:var(--text); }
   .year-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
   .year-btn .proj { font-size:9px; display:block; opacity:0.7; }
@@ -26,19 +26,9 @@
   .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
   .hero-stat .value { font-size:28px; font-weight:800; margin:4px 0; }
   .hero-stat .detail { font-size:10px; color:var(--text-dim); }
-  .sankey-container { position:relative; width:100%; overflow-x:auto; }
-  canvas { display:block; }
-  .flow-table { width:100%; border-collapse:collapse; font-size:12px; margin-top:20px; }
-  .flow-table th { text-align:left; padding:10px 14px; color:var(--text-dim); font-weight:600; border-bottom:2px solid var(--card-border); font-size:11px; text-transform:uppercase; }
-  .flow-table td { padding:8px 14px; border-bottom:1px solid rgba(255,255,255,0.03); }
-  .flow-table tr:hover td { background:rgba(59,130,246,0.03); }
   .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
   .card h2 { font-size:16px; margin-bottom:16px; }
-  .change-badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:700; }
-  .change-up { background:rgba(16,185,129,0.15); color:var(--green); }
-  .change-down { background:rgba(239,68,68,0.15); color:var(--red); }
-  .proj-badge { display:inline-block; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:700; background:rgba(139,92,246,0.15); color:var(--purple); }
-  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .year-toggle { flex-wrap:wrap; } }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } }
 </style>
 </head>
 <body>
@@ -49,30 +39,20 @@
   <a href="openrouter.html" class="nav-link">Live Pricing</a>
   <a href="feed.html" class="nav-link">Weekly Feed</a>
 </nav>
-
 <div class="container">
   <h1>Follow the Dollar: Forward Look</h1>
-  <div class="sub">How does the AI revenue flow evolve from 2025 to 2027? Toggle between years to see how money shifts across buyers, channels, providers, and outcomes.</div>
-
+  <div class="sub">Toggle between years to see how money shifts across buyers, channels, providers, and outcomes.</div>
   <div class="year-toggle" id="year-toggle"></div>
-
   <div class="hero-grid" id="hero-stats"></div>
-
   <div class="card">
     <h2 id="flow-title">Revenue Flow</h2>
-    <div class="sankey-container">
+    <div style="position:relative;width:100%;overflow-x:auto;">
       <canvas id="sankey" height="560"></canvas>
     </div>
-    <div id="tooltip-panel" style="min-height:60px;padding:12px 16px;margin-top:8px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);transition:all 0.15s;">
-      <span style="opacity:0.5;">Click or hover a node to see flow details</span>
+    <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:8px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
+      <span style="opacity:0.4;">Click or hover a node to see flow details</span>
     </div>
   </div>
-
-  <div class="card">
-    <h2>Flow Detail</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="flow-tables"></div>
-  </div>
-
   <div class="card" id="narrative-card">
     <h2>What Changes</h2>
     <div id="narrative"></div>
@@ -80,581 +60,331 @@
 </div>
 
 <script>
-let sankeyData = null;
-let activeYear = '2025';
-const yearColors = { '2025': '#3b82f6', '2026E': '#8b5cf6', '2027E': '#f59e0b' };
+let sankeyData = null, activeYear = '2025';
+let allNodes = [], allFlows = [], lockedNode = null, hoveredNode = null;
+
+const COLORS = {
+  'Consumer':'#f59e0b','SME':'#3b82f6','Enterprise':'#10b981','VC/Investors':'#dc2626',
+  'Model Subs':'#f59e0b','Model API':'#3b82f6','Hyperscalers':'#06b6d4','AI Native Apps':'#10b981',
+  'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444',
+  'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
+  'Other Model Providers':'#475569',
+  'Inference':'#ef4444','Other Operating':'#f59e0b','Generated Cashflow':'#10b981',
+};
 
 async function init() {
   try {
-    const resp = await fetch('../data/sankey-projections.json?v=' + Date.now());
-    sankeyData = await resp.json();
+    const r = await fetch('../data/sankey-projections.json?v=' + Date.now());
+    sankeyData = await r.json();
   } catch(e) {
-    document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Error loading data: ' + e.message + '</div>';
-    console.error(e);
+    document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Error: '+e.message+'</div>';
     return;
   }
-
-  // Build year toggles
-  let toggleHtml = '';
-  for (const [year, data] of Object.entries(sankeyData)) {
-    const isProj = year.includes('E');
-    toggleHtml += '<button class="year-btn' + (year === activeYear ? ' active' : '') + '" onclick="switchYear(\'' + year + '\')">' + data.label + (isProj ? '<span class="proj">Projected</span>' : '') + '</button>';
+  let html = '';
+  for (const [yr, d] of Object.entries(sankeyData)) {
+    html += '<button class="year-btn'+(yr===activeYear?' active':'')+'" onclick="switchYear(\''+yr+'\')">'+d.label+(yr.includes('E')?'<span class=proj>Projected</span>':'')+'</button>';
   }
-  document.getElementById('year-toggle').innerHTML = toggleHtml;
-
+  document.getElementById('year-toggle').innerHTML = html;
   renderYear(activeYear);
 }
 
-function switchYear(year) {
-  activeYear = year;
-  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(sankeyData[year].label)));
-  renderYear(year);
+function switchYear(yr) {
+  activeYear = yr;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(sankeyData[yr].label)));
+  lockedNode = null; hoveredNode = null;
+  renderYear(yr);
 }
 
-function renderYear(year) {
-  const d = sankeyData[year];
-  const prevYear = year === '2026E' ? '2025' : year === '2027E' ? '2026E' : null;
-  const prev = prevYear ? sankeyData[prevYear] : null;
+function renderYear(yr) {
+  const d = sankeyData[yr];
+  const prev = yr==='2026E'?sankeyData['2025']:yr==='2027E'?sankeyData['2026E']:null;
+  const cf = d.outcomes.find(o=>o.label.includes('Cash'))||d.outcomes[d.outcomes.length-1];
 
   // Hero stats
-  const subsidyPct = Math.round(d.totalVCSubsidy / d.totalSystem * 100);
-  const cashFlowItem = d.outcomes.find(o => o.label.includes('Cash') || o.label.includes('Margin')) || d.outcomes[d.outcomes.length - 1];
-  const cashFlow = cashFlowItem ? cashFlowItem.value : 0;
-  const cashFlowPct = Math.round(cashFlow / d.totalSystem * 100);
-  const invRatio = prev ? Math.round(d.totalSystem / d.totalCustomerRevenue) : Math.round(250 / d.totalCustomerRevenue);
-
-  let heroHtml = '';
-  heroHtml += '<div class="hero-stat"><div class="label">Total System</div><div class="value" style="color:var(--accent);">$' + d.totalSystem + 'B</div>';
-  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.totalSystem, prev.totalSystem) + ' vs ' + prev.label + '</div>';
-  heroHtml += '</div>';
-
-  heroHtml += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--green);">$' + d.totalCustomerRevenue + 'B</div>';
-  if (prev) heroHtml += '<div class="detail">' + changeBadge(d.totalCustomerRevenue, prev.totalCustomerRevenue) + '</div>';
-  heroHtml += '</div>';
-
-  heroHtml += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$' + d.totalVCSubsidy + 'B</div><div class="detail">' + subsidyPct + '% of system</div></div>';
-
-  heroHtml += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:' + (cashFlow > 5 ? 'var(--green)' : 'var(--orange)') + ';">$' + cashFlow + 'B</div><div class="detail">' + cashFlowPct + '% of system (pre-capex depreciation)</div></div>';
-
-  document.getElementById('hero-stats').innerHTML = heroHtml;
+  let h = '';
+  h += '<div class="hero-stat"><div class="label">Total System</div><div class="value" style="color:var(--accent);">$'+d.totalSystem+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--green);">$'+d.totalCustomerRevenue+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$'+d.totalVCSubsidy+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+(cf?cf.value:0)+'B</div></div>';
+  document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
 
-  // Draw Sankey
-  drawSankey(d);
-
-  // Flow tables
-  let tablesHtml = '';
-
-  // Buyers table
-  tablesHtml += '<div><h3 style="font-size:14px;margin-bottom:12px;">Who Pays</h3><table class="flow-table"><thead><tr><th>Buyer</th><th>Value</th>';
-  if (prev) tablesHtml += '<th>Change</th>';
-  tablesHtml += '</tr></thead><tbody>';
-  d.buyers.forEach(b => {
-    tablesHtml += '<tr><td style="font-weight:600;">' + b.label + '</td><td>$' + b.value + 'B</td>';
-    if (prev) {
-      const prevB = prev.buyers.find(pb => pb.label === b.label);
-      if (prevB) tablesHtml += '<td>' + changeBadge(b.value, prevB.value) + '</td>';
-    }
-    tablesHtml += '</tr>';
-  });
-  tablesHtml += '</tbody></table></div>';
-
-  // Providers table
-  tablesHtml += '<div><h3 style="font-size:14px;margin-bottom:12px;">Providers</h3><table class="flow-table"><thead><tr><th>Provider</th><th>Value</th>';
-  if (prev) tablesHtml += '<th>Change</th>';
-  tablesHtml += '</tr></thead><tbody>';
-  d.providers.forEach(p => {
-    tablesHtml += '<tr><td style="font-weight:600;">' + p.label + '</td><td>$' + p.value + 'B</td>';
-    if (prev) {
-      const prevP = prev.providers.find(pp => pp.label === p.label);
-      if (prevP) tablesHtml += '<td>' + changeBadge(p.value, prevP.value) + '</td>';
-      else tablesHtml += '<td><span class="proj-badge">NEW</span></td>';
-    }
-    tablesHtml += '</tr>';
-  });
-  tablesHtml += '</tbody></table></div>';
-
-  document.getElementById('flow-tables').innerHTML = tablesHtml;
+  // Build and draw
+  buildSankey(d);
 
   // Narrative
   const narratives = {
-    '2025': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2025 was the year AI revenue became real — but the operating economics remained brutal. OpenAI and Anthropic generated $12B+ in combined customer revenue, yet both operated at significant losses. The $9.8B VC subsidy funded the gap between what customers paid and what it cost to serve them. Inference alone consumed $14B — more than total customer revenue. The $2.15B in positive operating cash flow belonged entirely to Traditional SaaS vendors and hyperscaler pass-through fees. None of these figures include the $250B+ in AI infrastructure capex being depreciated over 5-6 years — that sits on balance sheets, not in this operating flow.</p>',
-    '2026E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2026 marks the inflection toward operating sustainability. Customer revenue roughly triples to $52B as enterprise adoption moves past pilot stage. OpenAI crosses $20B+ in customer revenue; Anthropic follows at $14B+. Chinese providers (ByteDance, Alibaba, DeepSeek) enter the revenue picture for the first time. The VC subsidy grows in absolute terms ($13B) but shrinks as a share of the system (20% vs 36%). Operating cash flow reaches $8B as inference costs per token continue falling. This cash flow is pre-capex — the industry is still spending $500B+ on infrastructure that will depreciate over years.</p>',
-    '2027E': '<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">By 2027, the AI market reaches $130B total system value — 4.8x 2025. Enterprise becomes the dominant buyer ($70B), and the channel mix shifts decisively toward API and platform usage. OpenAI targets $50B ARR (per their own guidance). Operating cash flow reaches $25B (19% of system) as inference efficiency, open model competition, and scale economics compound. The VC subsidy persists ($20B) but shifts from survival funding to growth investment. The key question: when does operating cash flow exceed annual capex depreciation? That is the point of true profitability — and it is not yet on the horizon.</p>',
+    '2025':'<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2025: The industry generates $17.5B in customer revenue but frontier providers operate at a loss. The $2.9B VC subsidy funds the gap. Generated Cashflow ($2.3B) comes entirely from Hyperscaler and Trad SaaS margins — not from model providers.</p>',
+    '2026E':'<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2026E: Customer revenue triples to $61.5B. VC subsidy shrinks dramatically as providers approach breakeven. IaaS/Open grows as open model adoption accelerates via AI Native Apps.</p>',
+    '2027E':'<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2027E: The industry approaches self-sustainability. VC drops near zero. Generated Cashflow reaches $20B as both channel margins and provider surplus contribute. But this is pre-capex — $250B+ in infrastructure depreciation is not included.</p>',
   };
-  document.getElementById('narrative').innerHTML = narratives[year] || '';
+  document.getElementById('narrative').innerHTML = narratives[yr]||'';
 }
 
-function changeBadge(current, previous) {
-  if (!previous || previous === 0) return '';
-  const pct = Math.round((current - previous) / previous * 100);
-  const cls = pct >= 0 ? 'change-up' : 'change-down';
-  return '<span class="change-badge ' + cls + '">' + (pct >= 0 ? '+' : '') + pct + '%</span>';
-}
-
-let sankeyNodes = [];  // stored for hit-testing
-let sankeyFlows = [];
-let currentSankeyData = null;
-let hoveredNode = null;
-let lockedNode = null;  // click to lock highlight
-
-const nodeColors = {
-  'Consumer': '#f59e0b', 'SME': '#3b82f6', 'Enterprise': '#10b981', 'VC/Investors': '#ef4444',
-  'Model Subs': '#60a5fa', 'Model API': '#34d399', 'Hyperscalers': '#a78bfa', 'AI Native Apps': '#f472b6',
-  'IaaS & Aggregators': '#8b5cf6', 'IaaS & Open Model': '#8b5cf6', 'Traditional SaaS': '#06b6d4',
-  'Hyperscaler Resale': '#a78bfa',
-  'OpenAI': '#10a37f', 'Anthropic': '#d97706', 'Google (model)': '#4285f4', 'IaaS/Open': '#8b5cf6',
-  'Other Providers': '#475569', 'Trad SaaS': '#06b6d4',
-  'Inference': '#ef4444', 'People/SGA': '#f59e0b', 'Other Operating': '#f59e0b', 'Op. Cash Flow': '#10b981', 'Generated Cashflow': '#10b981',
-};
-
-function drawSankey(d) {
-  currentSankeyData = d;
+function buildSankey(d) {
   const canvas = document.getElementById('sankey');
   const ctx = canvas.getContext('2d');
   const W = canvas.parentElement.clientWidth;
-  canvas.width = W;
-  canvas.height = 560;
+  canvas.width = W; canvas.height = 560;
 
-  const colW = Math.min(120, W * 0.13);
+  const colW = Math.min(120, W*0.13);
   const margin = 20;
-  const spacing = (W - margin * 2 - colW * 4) / 3;
-  const cols = [
-    { x: margin, w: colW, label: 'Who Pays', items: d.buyers.map(b => ({ name: b.label, value: b.value })) },
-    { x: margin + colW + spacing, w: colW, label: 'Channels', items: d.channels.map(c => ({ name: c.label, value: c.value })) },
-    { x: margin + (colW + spacing) * 2, w: colW, label: 'Model Providers', items: d.providers.map(p => ({ name: p.label, value: p.value })) },
-    { x: margin + (colW + spacing) * 3, w: colW, label: 'Where It Goes', items: d.outcomes.map(o => ({ name: o.label, value: o.value })) },
+  const spacing = (W - margin*2 - colW*4) / 3;
+  const barH = 450, gap = 5, topY = 50;
+
+  // Build columns
+  const colDefs = [
+    { label:'Who Pays', items: d.buyers.map(b=>({name:b.label, value:b.value})) },
+    { label:'Channels', items: d.channels.map(c=>({name:c.label, value:c.value})) },
+    { label:'Model Providers', items: d.providers.map(p=>({name:p.label, value:p.value})) },
+    { label:'Where It Goes', items: d.outcomes.map(o=>({name:o.label, value:o.value})) },
   ];
 
-  const barH = 460;
-  const gap = 6;
-
-  // Use SAME scale across all columns — based on largest column total
-  // This ensures bars are proportional and flows fit within them
-  const colTotals = cols.map(c => c.items.reduce((s, i) => s + i.value, 0));
-  const maxTotal = Math.max(...colTotals);
-  const maxGaps = Math.max(...cols.map(c => c.items.length - 1));
-  const globalScale = (barH - maxGaps * gap) / maxTotal;
+  // Global scale — all columns use same px/$B
+  const maxColTotal = Math.max(...colDefs.map(c=>c.items.reduce((s,i)=>s+i.value,0)));
+  const scale = (barH - 5*gap) / maxColTotal;
 
   // Layout nodes
-  sankeyNodes = [];
-  cols.forEach((col, ci) => {
-    const colTotal = col.items.reduce((s, i) => s + i.value, 0);
-    const colHeight = colTotal * globalScale + (col.items.length - 1) * gap;
-    let y = 45 + (barH - colHeight) / 2;  // center vertically
+  allNodes = [];
+  colDefs.forEach((col, ci) => {
+    const colTotal = col.items.reduce((s,i)=>s+i.value,0);
+    const colH = colTotal*scale + (col.items.length-1)*gap;
+    let y = topY + (barH - colH)/2;
+    const x = margin + ci*(colW + spacing);
     col.items.forEach(item => {
-      item.h = item.value * globalScale;
-      item.y = y;
-      item.col = ci;
-      item.colX = col.x;
-      item.colW = col.w;
-      sankeyNodes.push(item);
-      y += item.h + gap;
+      const h = item.value * scale;
+      allNodes.push({ name:item.name, value:item.value, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      y += h + gap;
     });
   });
 
-  // =================================================================
-  // BUILD ALL FLOWS — unified approach where every flow height is
-  // strictly proportional to its dollar value relative to the column
-  // =================================================================
-  sankeyFlows = [];
+  // Helper: find node
+  function N(name, col) { return allNodes.find(n=>n.name===name && (col==null||n.col===col)); }
 
-  // Constants
-  const INFERENCE_PCT = 0.47;
-  const channelMarginPct = { 'Hyperscalers': 0.20, 'Trad. SaaS': 0.60, 'Traditional SaaS': 0.60 };
-  const oocRatesAll = {
-    '2025': {'OpenAI': 0.79, 'Anthropic': 0.65, 'Google (Gemini)': 0.50, 'IaaS/Open': 0.45, 'Other Model Providers': 0.80},
-    '2026E': {'OpenAI': 0.55, 'Anthropic': 0.55, 'Google (Gemini)': 0.48, 'IaaS/Open': 0.42, 'Other Model Providers': 0.70},
-    '2027E': {'OpenAI': 0.48, 'Anthropic': 0.48, 'Google (Gemini)': 0.45, 'IaaS/Open': 0.40, 'Other Model Providers': 0.60},
-  };
-  const yearRates = oocRatesAll[activeYear] || oocRatesAll['2025'];
+  // Build explicit flows: [{from, to, value, fromCol, toCol}]
+  // Each flow has a dollar value. Visual height = value * scale.
+  const flowDefs = [];
 
-  // Helper: add a flow with height = $value * globalScale (1:1 with bar heights)
-  function addFlow(lItem, rItem, dollarValue, lCol, rCol, lyStart, ryStart) {
-    const flowH = dollarValue * globalScale;
-    if (flowH < 0.3) return flowH;
-    // Keep Y within bar bounds but don't clamp flowH — it's sized by dollars
-    const ly = Math.max(lyStart, lItem.y);
-    const ry = Math.max(ryStart, rItem.y);
-    sankeyFlows.push({
-      lItem, rItem,
-      lx: lCol.x + lCol.w, rx: rCol.x,
-      ly, ry, flowH,
-      col: lItem.col != null ? lItem.col : -1
-    });
-    return flowH;
-  }
-
-  const buyerCol = cols[0], channelCol = cols[1], provCol = cols[2], outCol = cols[3];
-  const cashItem = outCol.items.find(i => i.name.includes('Cash') || i.name.includes('Margin'));
-  const infItem = outCol.items.find(i => i.name === 'Inference');
-  const oocItem = outCol.items.find(i => i.name.includes('Other Operating') || i.name.includes('People'));
-
-  // --- FLOW 1: Customer Buyers → Channels (proportional) ---
-  const custBuyers = buyerCol.items.filter(b => b.name !== 'VC/Investors');
-  const custTotal = custBuyers.reduce((s, i) => s + i.value, 0);
-  const chTotal = channelCol.items.reduce((s, i) => s + i.value, 0);
-  const provTotal = provCol.items.reduce((s, i) => s + i.value, 0);
-
-  // Initialize all offset trackers
-  buyerCol.items.forEach(i => { i._outOffset = 0; });
-  channelCol.items.forEach(i => { i._inOffset = 0; i._outOffset = 0; });
-  provCol.items.forEach(i => { i._inOffset = 0; i._outOffset = 0; });
-  outCol.items.forEach(i => { i._inOffset = 0; });
-
+  // --- Buyers → Channels (proportional, skip VC) ---
+  const custBuyers = allNodes.filter(n=>n.col===0 && n.name!=='VC/Investors');
+  const chNodes = allNodes.filter(n=>n.col===1);
+  const chTotal = chNodes.reduce((s,n)=>s+n.value,0);
   custBuyers.forEach(buyer => {
-    channelCol.items.forEach(ch => {
-      const dollarFlow = buyer.value * (ch.value / chTotal);
-      const fh = addFlow(buyer, ch, dollarFlow, buyerCol, channelCol, buyer.y + buyer._outOffset, ch.y + ch._inOffset);
-      buyer._outOffset += fh;
-      ch._inOffset += fh;
+    chNodes.forEach(ch => {
+      const v = buyer.value * (ch.value / chTotal);
+      if(v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
     });
   });
 
-  // --- FLOW 2: Channels → Providers (channel-specific routing) ---
-  // IaaS & AI Native channels → IaaS/Open provider (open model hosting)
-  // All other channels → frontier providers (OpenAI, Anthropic, Google) + Other Model Providers
-  const iaasChannels = ['IaaS & Agg.', 'IaaS & Open Model'];
-  const aiNativeChannel = 'AI Native Apps';
-  const iaasProvider = provCol.items.find(p => p.name.includes('IaaS'));
-  const otherModelProv = provCol.items.find(p => p.name.includes('Other Model'));
-  const frontierProvs = provCol.items.filter(p => !p.name.includes('IaaS') && !p.name.includes('Other Model'));
-  const frontierTotal = frontierProvs.reduce((s, p) => s + p.value, 0);
+  // --- Channels → Providers (routed, minus margins) ---
+  const marginPcts = {'Hyperscalers':0.20, 'Trad. SaaS':0.60};
+  const provNodes = allNodes.filter(n=>n.col===2);
+  const frontierNodes = provNodes.filter(n=>!n.name.includes('IaaS')&&!n.name.includes('Other'));
+  const frontierTotal = frontierNodes.reduce((s,n)=>s+n.value,0);
+  const iaasNode = N('IaaS/Open',2);
+  const otherNode = N('Other Model Providers',2);
 
-  channelCol.items.forEach(ch => {
-    const mPct = channelMarginPct[ch.name] || 0;
-    const passValue = ch.value * (1 - mPct);
+  chNodes.forEach(ch => {
+    const mPct = marginPcts[ch.name]||0;
+    const pass = ch.value * (1-mPct);
 
-    if (iaasChannels.includes(ch.name)) {
-      // IaaS channel → IaaS/Open provider only
-      if (iaasProvider) {
-        const fh = addFlow(ch, iaasProvider, passValue, channelCol, provCol, ch.y + ch._outOffset, iaasProvider.y + iaasProvider._inOffset);
-        ch._outOffset += fh;
-        iaasProvider._inOffset += fh;
-      }
-    } else if (ch.name === aiNativeChannel) {
-      // AI Native Apps → split between IaaS/Open (open model portion) and frontier
-      // Estimate: 30% of AI native revenue goes via IaaS (open models), 70% to frontier
-      const iaasShare = 0.30;
-      if (iaasProvider) {
-        const iaasDollar = passValue * iaasShare;
-        const fh = addFlow(ch, iaasProvider, iaasDollar, channelCol, provCol, ch.y + ch._outOffset, iaasProvider.y + iaasProvider._inOffset);
-        ch._outOffset += fh;
-        iaasProvider._inOffset += fh;
-      }
-      // Remaining to frontier providers proportionally
-      const frontierDollar = passValue * (1 - iaasShare);
-      frontierProvs.forEach(prov => {
-        const dollarFlow = frontierDollar * (prov.value / frontierTotal);
-        const fh = addFlow(ch, prov, dollarFlow, channelCol, provCol, ch.y + ch._outOffset, prov.y + prov._inOffset);
-        ch._outOffset += fh;
-        prov._inOffset += fh;
+    if(ch.name==='IaaS & Agg.' && iaasNode) {
+      flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass, fc:1, tc:2});
+    } else if(ch.name==='AI Native Apps') {
+      if(iaasNode) flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass*0.3, fc:1, tc:2});
+      frontierNodes.forEach(p => {
+        flowDefs.push({from:ch.name, to:p.name, value:pass*0.7*(p.value/frontierTotal), fc:1, tc:2});
       });
+    } else if((ch.name==='Model API'||ch.name==='Model Subs') && otherNode) {
+      const recv = [...frontierNodes, otherNode];
+      const rt = recv.reduce((s,n)=>s+n.value,0);
+      recv.forEach(p => { flowDefs.push({from:ch.name, to:p.name, value:pass*(p.value/rt), fc:1, tc:2}); });
     } else {
-      // Model Subs, Model API, Hyperscalers, Trad SaaS → frontier providers + Other Model Providers
-      // Model API and Model Subs include Other Model Providers (DeepSeek, Mistral direct API/subs)
-      const allReceivers = [...frontierProvs];
-      if (otherModelProv && (ch.name === 'Model API' || ch.name === 'Model Subs')) {
-        allReceivers.push(otherModelProv);
-      }
-      const receiverTotal = allReceivers.reduce((s, p) => s + p.value, 0);
-      allReceivers.forEach(prov => {
-        const dollarFlow = passValue * (prov.value / receiverTotal);
-        const fh = addFlow(ch, prov, dollarFlow, channelCol, provCol, ch.y + ch._outOffset, prov.y + prov._inOffset);
-        ch._outOffset += fh;
-        prov._inOffset += fh;
+      frontierNodes.forEach(p => {
+        flowDefs.push({from:ch.name, to:p.name, value:pass*(p.value/frontierTotal), fc:1, tc:2});
       });
     }
+
+    // Margin → Generated Cashflow (bypass)
+    if(mPct > 0) {
+      flowDefs.push({from:ch.name, to:'Generated Cashflow', value:ch.value*mPct, fc:1, tc:3, bypass:true});
+    }
   });
 
-  // --- FLOW 3: VC → loss-making Providers (bypass channels) ---
-  const vcBuyer = buyerCol.items.find(i => i.name === 'VC/Investors');
-  if (vcBuyer && vcBuyer.value > 0) {
-    const vcReceivers = provCol.items.filter(p => {
-      const oocPct = yearRates[p.name] || 0.55;
-      return (INFERENCE_PCT + oocPct) >= 1.0;
-    });
-    vcReceivers.forEach(prov => {
-      const oocPct = yearRates[prov.name] || 0.55;
-      const costPct = INFERENCE_PCT + oocPct;
-      const channelShare = prov.value / provTotal;
-      const channelRev = (chTotal - Object.entries(channelMarginPct).reduce((s, [k, v]) => {
-        const ch = channelCol.items.find(c => c.name === k);
-        return s + (ch ? ch.value * v : 0);
-      }, 0)) * channelShare;
-      const vcNeed = Math.max(channelRev * (costPct - 1.0), 0);
-      if (vcNeed < 0.01) return;
-      const fh = addFlow(vcBuyer, prov, vcNeed, buyerCol, provCol, vcBuyer.y + vcBuyer._outOffset, prov.y + prov._inOffset);
-      vcBuyer._outOffset += fh;
-      prov._inOffset += fh;
+  // --- VC → loss-making Providers (bypass) ---
+  const INFERENCE_PCT = 0.47;
+  const oocRates = {
+    '2025':{'OpenAI':0.79,'Anthropic':0.65,'Google (Gemini)':0.50,'IaaS/Open':0.45,'Other Model Providers':0.80},
+    '2026E':{'OpenAI':0.55,'Anthropic':0.55,'Google (Gemini)':0.48,'IaaS/Open':0.42,'Other Model Providers':0.70},
+    '2027E':{'OpenAI':0.48,'Anthropic':0.48,'Google (Gemini)':0.45,'IaaS/Open':0.40,'Other Model Providers':0.60},
+  };
+  const rates = oocRates[activeYear]||oocRates['2025'];
+  const vcNode = N('VC/Investors',0);
+  if(vcNode && vcNode.value > 0) {
+    const chPass = chNodes.reduce((s,n)=>s+n.value*(1-(marginPcts[n.name]||0)),0);
+    const pt = provNodes.reduce((s,n)=>s+n.value,0);
+    provNodes.forEach(p => {
+      const costPct = INFERENCE_PCT + (rates[p.name]||0.55);
+      if(costPct < 1.0) return;
+      const share = p.value/pt;
+      const chRev = chPass * share;
+      const vcNeed = chRev * (costPct - 1.0);
+      if(vcNeed > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:vcNeed, fc:0, tc:2, bypass:true});
     });
   }
 
-  // --- FLOW 4: Providers → Inference + Other Operating (100% of provider) ---
-  provCol.items.forEach(prov => {
-    const oocPct = yearRates[prov.name] || 0.55;
-    const costPct = Math.min(INFERENCE_PCT + oocPct, 1.0);
+  // --- Providers → Inference + Other Operating ---
+  provNodes.forEach(p => {
+    const costPct = Math.min(INFERENCE_PCT + (rates[p.name]||0.55), 1.0);
     const infShare = INFERENCE_PCT / costPct;
-    const oocShare = 1 - infShare;
-
-    if (infItem) {
-      const infDollar = prov.value * infShare;
-      const fh = addFlow(prov, infItem, infDollar, provCol, outCol, prov.y + prov._outOffset, infItem.y + infItem._inOffset);
-      prov._outOffset += fh;
-      infItem._inOffset += fh;
-    }
-    if (oocItem) {
-      const oocDollar = prov.value * oocShare;
-      const fh = addFlow(prov, oocItem, oocDollar, provCol, outCol, prov.y + prov._outOffset, oocItem.y + oocItem._inOffset);
-      prov._outOffset += fh;
-      oocItem._inOffset += fh;
-    }
+    flowDefs.push({from:p.name, to:'Inference', value:p.value*infShare, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating', value:p.value*(1-infShare), fc:2, tc:3});
   });
 
-  // --- FLOW 5: Channel margins → Generated Cashflow (bypass providers) ---
-  if (cashItem) {
-    channelCol.items.forEach(ch => {
-      const mPct = channelMarginPct[ch.name];
-      if (!mPct) return;
-      const marginDollar = ch.value * mPct;
-      const fh = addFlow(ch, cashItem, marginDollar, channelCol, outCol, ch.y + ch._outOffset, cashItem.y + cashItem._inOffset);
-      ch._outOffset += fh;
-      cashItem._inOffset += fh;
-    });
-
-    // --- FLOW 6: Provider surplus → Generated Cashflow ---
-    provCol.items.forEach(prov => {
-      const oocPct = yearRates[prov.name] || 0.55;
-      const costPct = INFERENCE_PCT + oocPct;
-      if (costPct >= 1.0) return;
-      const surplusDollar = prov.value * (1.0 - costPct);
-      const fh = addFlow(prov, cashItem, surplusDollar, provCol, outCol, prov.y + prov._outOffset, cashItem.y + cashItem._inOffset);
-      prov._outOffset += fh;
-      cashItem._inOffset += fh;
-    });
-  }
-
-  // Clean up temp offsets
-  [...buyerCol.items, ...channelCol.items, ...provCol.items, ...outCol.items].forEach(i => {
-    delete i._inOffset; delete i._outOffset;
+  // --- Provider surplus → Generated Cashflow (bypass) ---
+  provNodes.forEach(p => {
+    const costPct = INFERENCE_PCT + (rates[p.name]||0.55);
+    if(costPct >= 1.0) return;
+    const surplus = p.value * (1.0 - costPct);
+    if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
   });
 
-  renderSankey(ctx, W, cols);
+  // Convert flowDefs to visual flows with Y positions
+  // Reset offsets
+  allNodes.forEach(n => { n._out = 0; n._in = 0; });
+
+  allFlows = [];
+  // Sort: normal flows first, then bypasses (so bypasses draw on top)
+  flowDefs.sort((a,b) => (a.bypass?1:0)-(b.bypass?1:0));
+
+  flowDefs.forEach(fd => {
+    if(fd.value < 0.01) return;
+    const fromNode = N(fd.from, fd.fc);
+    const toNode = N(fd.to, fd.tc);
+    if(!fromNode || !toNode) return;
+
+    const flowH = fd.value * scale;
+    const lx = fromNode.x + fromNode.w;
+    const rx = toNode.x;
+    const ly = fromNode.y + fromNode._out;
+    const ry = toNode.y + toNode._in;
+    fromNode._out += flowH;
+    toNode._in += flowH;
+
+    allFlows.push({ from:fromNode, to:toNode, lx, rx, ly, ry, flowH, value:fd.value, bypass:fd.bypass });
+  });
+
+  renderCanvas(ctx, W);
 }
 
-function renderSankey(ctx, W, cols) {
-  ctx.clearRect(0, 0, W, 560);
-  const activeNode = lockedNode || hoveredNode;
-  const hName = activeNode ? activeNode.name : null;
+function renderCanvas(ctx, W) {
+  ctx.clearRect(0,0,W,560);
+  const active = lockedNode || hoveredNode;
+  const aName = active ? active.name : null;
 
-  // Column headers — bold, prominent
+  // Column headers
   ctx.textAlign = 'center';
-  ctx.font = 'bold 13px -apple-system, sans-serif';
-  ctx.fillStyle = '#e2e8f0';
-  const colPositions = [
-    { x: sankeyNodes.filter(n => n.col === 0)[0]?.colX || 60, w: sankeyNodes.filter(n => n.col === 0)[0]?.colW || 100, label: 'Who Pays' },
-    { x: sankeyNodes.filter(n => n.col === 1)[0]?.colX || 200, w: sankeyNodes.filter(n => n.col === 1)[0]?.colW || 100, label: 'Channels' },
-    { x: sankeyNodes.filter(n => n.col === 2)[0]?.colX || 400, w: sankeyNodes.filter(n => n.col === 2)[0]?.colW || 100, label: 'Model Providers' },
-    { x: sankeyNodes.filter(n => n.col === 3)[0]?.colX || 600, w: sankeyNodes.filter(n => n.col === 3)[0]?.colW || 100, label: 'Where It Goes' },
-  ];
-  // Column totals
-  const colTotalValues = [
-    sankeyNodes.filter(n => n.col === 0).reduce((s, n) => s + n.value, 0),
-    sankeyNodes.filter(n => n.col === 1).reduce((s, n) => s + n.value, 0),
-    sankeyNodes.filter(n => n.col === 2).reduce((s, n) => s + n.value, 0),
-    sankeyNodes.filter(n => n.col === 3).reduce((s, n) => s + n.value, 0),
-  ];
-
-  colPositions.forEach((cp, i) => {
-    ctx.font = 'bold 13px -apple-system, sans-serif';
+  const labels = ['Who Pays','Channels','Model Providers','Where It Goes'];
+  const colTotals = [0,1,2,3].map(c => allNodes.filter(n=>n.col===c).reduce((s,n)=>s+n.value,0));
+  [0,1,2,3].forEach(ci => {
+    const nodes = allNodes.filter(n=>n.col===ci);
+    if(!nodes.length) return;
+    const x = nodes[0].x + nodes[0].w/2;
+    ctx.font = 'bold 13px -apple-system,sans-serif';
     ctx.fillStyle = '#e2e8f0';
-    ctx.fillText(cp.label, cp.x + cp.w / 2, 18);
-    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillText(labels[ci], x, 18);
+    ctx.font = '11px -apple-system,sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('$' + colTotalValues[i].toFixed(1) + 'B', cp.x + cp.w / 2, 33);
-  });
-  // Underline
-  ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 1;
-  colPositions.forEach(cp => {
-    ctx.beginPath();
-    ctx.moveTo(cp.x, 38);
-    ctx.lineTo(cp.x + cp.w, 38);
-    ctx.stroke();
+    ctx.fillText('$'+colTotals[ci].toFixed(1)+'B', x, 33);
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(nodes[0].x, 38); ctx.lineTo(nodes[0].x+nodes[0].w, 38); ctx.stroke();
   });
   ctx.textAlign = 'left';
 
-  // Draw flows first (behind nodes)
-  sankeyFlows.forEach(f => {
-    const connected = hName && (f.lItem.name === hName || f.rItem.name === hName);
-    const dimmed = hName && !connected;
-    const color = nodeColors[f.lItem.name] || '#475569';
-    ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.45 : 0.18;
-    ctx.fillStyle = color;
+  // Draw flows
+  allFlows.forEach(f => {
+    const connected = aName && (f.from.name===aName || f.to.name===aName);
+    const dimmed = aName && !connected;
+    ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.5 : 0.18;
+    ctx.fillStyle = COLORS[f.from.name] || '#475569';
     ctx.beginPath();
     const cp = (f.rx - f.lx) * 0.4;
     ctx.moveTo(f.lx, f.ly);
-    ctx.bezierCurveTo(f.lx + cp, f.ly, f.rx - cp, f.ry, f.rx, f.ry);
-    ctx.lineTo(f.rx, f.ry + f.flowH);
-    ctx.bezierCurveTo(f.rx - cp, f.ry + f.flowH, f.lx + cp, f.ly + f.flowH, f.lx, f.ly + f.flowH);
+    ctx.bezierCurveTo(f.lx+cp, f.ly, f.rx-cp, f.ry, f.rx, f.ry);
+    ctx.lineTo(f.rx, f.ry+f.flowH);
+    ctx.bezierCurveTo(f.rx-cp, f.ry+f.flowH, f.lx+cp, f.ly+f.flowH, f.lx, f.ly+f.flowH);
     ctx.closePath();
     ctx.fill();
-    ctx.globalAlpha = 1.0;
+    ctx.globalAlpha = 1;
   });
 
   // Draw nodes
-  sankeyNodes.forEach(item => {
-    const isHovered = item.name === hName;
-    const dimmed = hName && !isHovered && !sankeyFlows.some(f => (f.lItem.name === hName && f.rItem.name === item.name) || (f.rItem.name === hName && f.lItem.name === item.name));
-    const color = nodeColors[item.name] || '#475569';
-
-    ctx.globalAlpha = dimmed ? 0.25 : 1.0;
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.roundRect(item.colX, item.y, item.colW, Math.max(item.h, 2), 4);
-    ctx.fill();
-
-    if (isHovered) {
-      ctx.strokeStyle = 'white';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    // Label — fit text to node width
-    if (item.h > 12) {
+  allNodes.forEach(n => {
+    const isActive = n.name === aName;
+    const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
+    ctx.globalAlpha = dimmed ? 0.25 : 1;
+    ctx.fillStyle = COLORS[n.name] || '#475569';
+    ctx.beginPath(); ctx.roundRect(n.x, n.y, n.w, Math.max(n.h,2), 4); ctx.fill();
+    if(isActive) { ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke(); }
+    if(n.h > 16) {
       ctx.fillStyle = 'white';
-      const maxLabelW = item.colW - 8;
-      const valText = '$' + (item.value < 1 ? item.value.toFixed(1) : Math.round(item.value)) + 'B';
-
-      if (item.h > 28) {
-        // Two lines: name on top, value below
-        ctx.font = 'bold 9px -apple-system, sans-serif';
-        let label = item.name;
-        while (ctx.measureText(label).width > maxLabelW && label.length > 3) label = label.slice(0, -1);
-        if (label !== item.name) label += '..';
-        ctx.fillText(label, item.colX + 4, item.y + item.h / 2 - 2);
-        ctx.font = '9px -apple-system, sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.8)';
-        ctx.fillText(valText, item.colX + 4, item.y + item.h / 2 + 10);
-      } else {
-        // Single line: abbreviated name + value
-        ctx.font = 'bold 8px -apple-system, sans-serif';
-        let label = item.name;
-        const valW = ctx.measureText(' ' + valText).width;
-        while (ctx.measureText(label).width + valW > maxLabelW && label.length > 2) label = label.slice(0, -1);
-        ctx.fillText(label, item.colX + 3, item.y + item.h / 2 + 3);
-        ctx.font = '8px -apple-system, sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.7)';
-        ctx.fillText(valText, item.colX + item.colW - ctx.measureText(valText).width - 3, item.y + item.h / 2 + 3);
-      }
+      ctx.font = 'bold 9px -apple-system,sans-serif';
+      let label = n.name;
+      while(ctx.measureText(label).width > n.w-6 && label.length>3) label = label.slice(0,-1);
+      ctx.fillText(label, n.x+3, n.y+n.h/2-2);
+      ctx.font = '9px -apple-system,sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      const vt = '$'+n.value.toFixed(n.value<10?1:0)+'B';
+      ctx.fillText(vt, n.x+3, n.y+n.h/2+10);
     }
-    ctx.globalAlpha = 1.0;
+    ctx.globalAlpha = 1;
   });
 
-  // Update tooltip panel below canvas (doesn't obscure flows)
-  updateTooltipPanel(activeNode);
-}
-
-function updateTooltipPanel(activeNode) {
+  // Tooltip panel
   const panel = document.getElementById('tooltip-panel');
-  if (!panel) return;
-
-  if (!activeNode) {
+  if(active && panel) {
+    const inflows = allFlows.filter(f=>f.to.name===active.name);
+    const outflows = allFlows.filter(f=>f.from.name===active.name);
+    let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;">';
+    html += '<div><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong><div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div></div>';
+    if(inflows.length) {
+      const inTotal = inflows.reduce((s,f)=>s+f.value,0);
+      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows $'+inTotal.toFixed(1)+'B</div>';
+      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '</div>';
+    }
+    if(outflows.length) {
+      const outTotal = outflows.reduce((s,f)=>s+f.value,0);
+      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows $'+outTotal.toFixed(1)+'B</div>';
+      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '</div>';
+    }
+    html += '</div>';
+    panel.innerHTML = html;
+  } else if(panel) {
     panel.innerHTML = '<span style="opacity:0.4;">Click or hover a node to see flow details</span>';
-    return;
   }
-
-  const item = activeNode;
-  const inFlows = sankeyFlows.filter(f => f.rItem.name === item.name);
-  const outFlows = sankeyFlows.filter(f => f.lItem.name === item.name);
-
-  const inTotal = inFlows.reduce((s, f) => s + f.lItem.value, 0);
-  const inItems = inFlows.map(f => {
-    const share = inTotal > 0 ? (f.lItem.value / inTotal) * item.value : 0;
-    return { name: f.lItem.name, value: share };
-  }).filter(x => x.value > 0.05).sort((a, b) => b.value - a.value);
-
-  const outTotal = outFlows.reduce((s, f) => s + f.rItem.value, 0);
-  const outItems = outFlows.map(f => {
-    const share = outTotal > 0 ? (f.rItem.value / outTotal) * item.value : 0;
-    return { name: f.rItem.name, value: share };
-  }).filter(x => x.value > 0.05).sort((a, b) => b.value - a.value);
-
-  let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">';
-  html += '<div style="min-width:140px;"><strong style="color:#f1f5f9;font-size:15px;">' + item.name + '</strong><div style="color:var(--accent);font-weight:800;font-size:20px;margin-top:2px;">$' + item.value.toFixed(1) + 'B</div></div>';
-
-  if (inItems.length) {
-    const inSum = inItems.reduce((s, x) => s + x.value, 0);
-    html += '<div style="min-width:140px;"><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:6px;">Inflows $' + inSum.toFixed(1) + 'B</div>';
-    inItems.forEach(x => {
-      html += '<div style="font-size:12px;color:#cbd5e1;margin-bottom:2px;">' + x.name + ': <strong>$' + x.value.toFixed(1) + 'B</strong></div>';
-    });
-    html += '</div>';
-  }
-  if (outItems.length) {
-    const outSum = outItems.reduce((s, x) => s + x.value, 0);
-    html += '<div style="min-width:140px;"><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:6px;">Outflows $' + outSum.toFixed(1) + 'B</div>';
-    outItems.forEach(x => {
-      html += '<div style="font-size:12px;color:#cbd5e1;margin-bottom:2px;">' + x.name + ': <strong>$' + x.value.toFixed(1) + 'B</strong></div>';
-    });
-    html += '</div>';
-  }
-  html += '</div>';
-  panel.innerHTML = html;
 }
 
-// Mouse interaction
+// Mouse
 const canvas = document.getElementById('sankey');
-canvas.addEventListener('mousemove', function(e) {
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
   let found = null;
-  for (const node of sankeyNodes) {
-    if (mx >= node.colX && mx <= node.colX + node.colW && my >= node.y && my <= node.y + node.h) {
-      found = node;
-      break;
-    }
-  }
-
-  if (found !== hoveredNode) {
-    hoveredNode = found;
-    canvas.style.cursor = found ? 'pointer' : 'default';
-    const ctx = canvas.getContext('2d');
-    renderSankey(ctx, canvas.width, null);
-  }
+  for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
+  if(found !== hoveredNode) { hoveredNode=found; canvas.style.cursor=found?'pointer':'default'; renderCanvas(canvas.getContext('2d'),canvas.width); }
 });
-
-canvas.addEventListener('click', function(e) {
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-
+canvas.addEventListener('click', e => {
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
   let found = null;
-  for (const node of sankeyNodes) {
-    if (mx >= node.colX && mx <= node.colX + node.colW && my >= node.y && my <= node.y + node.h) {
-      found = node;
-      break;
-    }
-  }
-
-  if (found && lockedNode && found.name === lockedNode.name) {
-    lockedNode = null;  // click same node to unlock
-  } else {
-    lockedNode = found;  // lock new node, or null to clear
-  }
-
-  const ctx = canvas.getContext('2d');
-  renderSankey(ctx, canvas.width, null);
+  for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
+  lockedNode = (found && lockedNode && found.name===lockedNode.name) ? null : found;
+  renderCanvas(canvas.getContext('2d'),canvas.width);
 });
-
-canvas.addEventListener('mouseleave', function() {
-  if (hoveredNode && !lockedNode) {
-    hoveredNode = null;
-    const ctx = canvas.getContext('2d');
-    renderSankey(ctx, canvas.width, null);
-  }
+canvas.addEventListener('mouseleave', () => {
+  if(hoveredNode && !lockedNode) { hoveredNode=null; renderCanvas(canvas.getContext('2d'),canvas.width); }
 });
 
 init();

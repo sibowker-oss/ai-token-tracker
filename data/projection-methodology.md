@@ -241,7 +241,61 @@ All changes should be logged in the revision log of model-assumptions.md (Sectio
 
 ---
 
-## 10. Verified Balance Rules (Automated Check)
+## 10. Sankey v2 Architecture & Routing Decisions
+
+### 10.1 Clean Architecture (sankey-v2-new.html)
+
+The v2 rewrite uses explicit `flowDefs` — every flow is a named connection with a hard-coded dollar value. No proportional splitting or auto-allocation. The tooltip shows the actual routed value for each flow, not a proportional estimate.
+
+### 10.2 Channel-to-Provider Routing Rules
+
+| Channel | Routes to | Logic |
+|---|---|---|
+| **IaaS & Agg** | IaaS/Open only | These platforms (Together, Fireworks, Groq, OpenRouter) host open-weight models exclusively |
+| **AI Native Apps** | 30% IaaS/Open + 70% frontier | Apps like Cursor/Perplexity use a mix of open models (cost) and frontier models (quality) |
+| **Model API** | Frontier providers + Other Model Providers | Direct API access to any model provider (OpenAI, Anthropic, DeepSeek, Mistral) |
+| **Model Subs** | Frontier providers + Other Model Providers | Consumer subscriptions direct to model providers |
+| **Hyperscalers** | Frontier only | Azure OpenAI, Bedrock, Vertex resell frontier models. **80% pass-through** to providers, **20% margin** flows directly to Generated Cashflow |
+| **Trad SaaS** | Frontier only | Copilot M365, Agentforce, Now Assist. **40% pass-through** to providers, **60% margin** flows directly to Generated Cashflow |
+
+### 10.3 Chinese & Open Models
+
+Chinese models (Qwen, DeepSeek) and open-weight models flow through the **IaaS channel** — they are served by inference platforms, not sold direct. The IaaS & Agg channel is the only channel that feeds the IaaS/Open provider node.
+
+### 10.4 VC Subsidy Routing
+
+VC flows **only to loss-making providers** — those whose cost% >= 100% of revenue. VC bypasses all channels and flows directly from the Buyers column to the Providers column. Once a provider becomes profitable, it stops receiving VC subsidy.
+
+### 10.5 Provider Surplus & Generated Cashflow
+
+- Providers that are **loss-making**: all inflows go to Inference + People/SGA (no surplus)
+- Providers that are **profitable**: surplus above costs flows to **Generated Cashflow**
+- Generated Cashflow also receives channel margins (Hyperscaler 20%, Trad SaaS 60%)
+
+### 10.6 Inference Cost Allocation
+
+**Inference = 47% of provider revenue (flat across all providers).** This is a simplification — actual inference share varies by provider maturity — but 47% is the blended industry benchmark for the current period.
+
+### 10.7 Other Operating Costs
+
+Other Operating Costs (People, SGA, R&D) are based on **SaaS benchmarks by ARR stage**:
+
+| ARR Stage | Operating Cost % of Revenue |
+|---|---|
+| Pre-revenue / <$100M | 150-300%+ (deeply loss-making) |
+| $100M-$500M | 100-150% |
+| $500M-$2B | 80-110% |
+| $2B+ | 60-80% |
+
+These benchmarks determine which providers are loss-making (and therefore receive VC) vs profitable (and therefore generate cashflow).
+
+### 10.8 Tooltip Behaviour
+
+Hover tooltips show the **actual routed dollar value** for each flow, not a proportional estimate. Each flow is a discrete connection defined in `flowDefs` with explicit source, target, and value.
+
+---
+
+## 11. Verified Balance Rules (Automated Check)
 
 Run this check after any data change:
 
