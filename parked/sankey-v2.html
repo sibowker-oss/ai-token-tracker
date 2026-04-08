@@ -246,179 +246,157 @@ function drawSankey(d) {
     });
   });
 
-  // Build flows
-  // Special handling: VC/Investors bypasses Channels and flows direct to Providers
+  // =================================================================
+  // BUILD ALL FLOWS — unified approach where every flow height is
+  // strictly proportional to its dollar value relative to the column
+  // =================================================================
   sankeyFlows = [];
-  for (let c = 0; c < cols.length - 1; c++) {
-    const left = cols[c];
-    const right = cols[c + 1];
 
-    // Margin channels: Hyperscalers and Trad SaaS have margin that bypasses Providers
-    const marginChannels = ['Hyperscalers', 'Trad. SaaS', 'Traditional SaaS'];
-    // Estimate margin %: Hyperscalers ~20% margin, Trad SaaS ~60% margin
-    const channelMarginPct = { 'Hyperscalers': 0.20, 'Trad. SaaS': 0.60, 'Traditional SaaS': 0.60 };
+  // Constants
+  const INFERENCE_PCT = 0.47;
+  const channelMarginPct = { 'Hyperscalers': 0.20, 'Trad. SaaS': 0.60, 'Traditional SaaS': 0.60 };
+  const oocRatesAll = {
+    '2025': {'OpenAI': 0.79, 'Anthropic': 0.65, 'Google (Gemini)': 0.50, 'IaaS/Open': 0.45, 'Other Model Providers': 0.80},
+    '2026E': {'OpenAI': 0.55, 'Anthropic': 0.55, 'Google (Gemini)': 0.48, 'IaaS/Open': 0.42, 'Other Model Providers': 0.70},
+    '2027E': {'OpenAI': 0.48, 'Anthropic': 0.48, 'Google (Gemini)': 0.45, 'IaaS/Open': 0.40, 'Other Model Providers': 0.60},
+  };
+  const yearRates = oocRatesAll[activeYear] || oocRatesAll['2025'];
 
-    left.items.forEach(lItem => {
-      // VC/Investors skips Buyers→Channels (col 0→1)
-      if (lItem.name === 'VC/Investors' && c === 0) return;
-
-      // Margin channels skip part of Channels→Providers (col 1→2) — that part goes to Op Cash Flow
-      if (c === 1 && marginChannels.includes(lItem.name)) {
-        const marginPct = channelMarginPct[lItem.name] || 0;
-        const passThrough = 1 - marginPct;  // portion that flows to providers
-
-        // Only flow the pass-through portion to providers
-        const leftItems = left.items.filter(i => !(c === 0 && i.name === 'VC/Investors'));
-        const leftTotal = leftItems.reduce((s, i) => s + i.value, 0);
-        const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
-        if (leftTotal === 0 || rightTotal === 0) return;
-
-        right.items.forEach(rItem => {
-          const rPct = rItem.value / rightTotal;
-          const lPct = lItem.value / leftTotal;
-          const flowH = Math.min(lItem.h * rPct, rItem.h * lPct) * passThrough * 0.8;
-          if (flowH < 0.5) return;
-          const lx = left.x + left.w;
-          const rx = right.x;
-          const ly = lItem.y + lItem.h * (rItem.y / (right.items[right.items.length-1].y + right.items[right.items.length-1].h));
-          const ry = rItem.y + rItem.h * (lItem.y / (left.items[left.items.length-1].y + left.items[left.items.length-1].h));
-          sankeyFlows.push({ lItem, rItem, lx, rx, ly, ry, flowH, col: c });
-        });
-        return;  // don't process again below
-      }
-
-      // Normal flow for non-VC, non-margin items
-      const leftItems = left.items.filter(i => !(c === 0 && i.name === 'VC/Investors'));
-      const leftTotal = leftItems.reduce((s, i) => s + i.value, 0);
-      // For Providers→Outcomes (col 2→3): providers flow ONLY to Inference
-      // and Other Operating. Generated Cashflow comes from channel margins bypass.
-      // Each provider's full bar height distributes across these two outcomes.
-      if (c === 2) {
-        const costItems = right.items.filter(rItem => !(rItem.name.includes('Cash') || rItem.name.includes('Margin')));
-        const costTotal = costItems.reduce((s, i) => s + i.value, 0);
-        if (costTotal === 0) return;
-
-        let lyOffset = 0;
-        costItems.forEach(rItem => {
-          const rShare = rItem.value / costTotal;  // share of costs
-          const flowH = lItem.h * rShare * 0.9;  // provider distributes its full height
-          if (flowH < 0.5) return;
-          const lx = left.x + left.w;
-          const rx = right.x;
-          const ly = lItem.y + lyOffset;
-          lyOffset += flowH;
-          // Right Y: stack into the outcome bar proportionally
-          const rItemUsed = costItems.reduce((s, ci) => s + (ci === rItem ? 0 : ci.value / costTotal * lItem.value), 0);
-          const ry = rItem.y + rItem.h * (lItem.y / (left.items[left.items.length-1].y + left.items[left.items.length-1].h));
-          sankeyFlows.push({ lItem, rItem, lx, rx, ly, ry, flowH, col: c });
-        });
-        return;
-      }
-
-      // Normal proportional flow for all other column transitions
-      const rightTotal = right.items.reduce((s, i) => s + i.value, 0);
-      if (leftTotal === 0 || rightTotal === 0) return;
-
-      right.items.forEach(rItem => {
-        const rPct = rItem.value / rightTotal;
-        const lPct = lItem.value / leftTotal;
-        const flowH = Math.min(lItem.h * rPct, rItem.h * lPct) * 0.8;
-        if (flowH < 0.5) return;
-        const lx = left.x + left.w;
-        const rx = right.x;
-        const ly = lItem.y + lItem.h * (rItem.y / (right.items[right.items.length-1].y + right.items[right.items.length-1].h));
-        const ry = rItem.y + rItem.h * (lItem.y / (left.items[left.items.length-1].y + left.items[left.items.length-1].h));
-        sankeyFlows.push({ lItem, rItem, lx, rx, ly, ry, flowH, col: c });
-      });
-    });
+  // Helper: pixels per dollar for a column
+  function pxPerDollar(col) {
+    const total = col.items.reduce((s, i) => s + i.value, 0);
+    const totalH = col.items.reduce((s, i) => s + i.h, 0);
+    return total > 0 ? totalH / total : 1;
   }
 
-  // VC/Investors → Providers direct flows (bypassing channels)
-  // Only providers that NEED VC (costs > revenue, i.e. cost_pct >= 1.0)
-  const vcBuyer = cols[0].items.find(i => i.name === 'VC/Investors');
-  const provCol = cols[2];
-  if (vcBuyer && provCol && vcBuyer.value > 0) {
-    const INFERENCE_PCT = 0.47;
-    const oocRatesVC = {
-      '2025': {'OpenAI': 0.79, 'Anthropic': 0.65, 'Google (Gemini)': 0.50, 'IaaS/Open': 0.45, 'Other Model Providers': 0.80},
-      '2026E': {'OpenAI': 0.55, 'Anthropic': 0.55, 'Google (Gemini)': 0.48, 'IaaS/Open': 0.42, 'Other Model Providers': 0.70},
-      '2027E': {'OpenAI': 0.48, 'Anthropic': 0.48, 'Google (Gemini)': 0.45, 'IaaS/Open': 0.40, 'Other Model Providers': 0.60},
-    };
-    const yearRatesVC = oocRatesVC[activeYear] || oocRatesVC['2025'];
-    // Filter to only loss-making providers
-    const vcReceivers = provCol.items.filter(pItem => {
-      const oocPct = yearRatesVC[pItem.name] || 0.55;
+  // Helper: add a flow with height = $value * scale
+  function addFlow(lItem, rItem, dollarValue, lCol, rCol, lyStart, ryStart) {
+    const lScale = pxPerDollar(lCol);
+    const rScale = pxPerDollar(rCol);
+    const flowH = dollarValue * Math.min(lScale, rScale) * 0.85;
+    if (flowH < 0.3) return flowH;
+    sankeyFlows.push({
+      lItem, rItem,
+      lx: lCol.x + lCol.w, rx: rCol.x,
+      ly: lyStart, ry: ryStart,
+      flowH, col: lItem.col != null ? lItem.col : -1
+    });
+    return flowH;
+  }
+
+  const buyerCol = cols[0], channelCol = cols[1], provCol = cols[2], outCol = cols[3];
+  const cashItem = outCol.items.find(i => i.name.includes('Cash') || i.name.includes('Margin'));
+  const infItem = outCol.items.find(i => i.name === 'Inference');
+  const oocItem = outCol.items.find(i => i.name.includes('Other Operating') || i.name.includes('People'));
+
+  // --- FLOW 1: Customer Buyers → Channels (proportional) ---
+  const custBuyers = buyerCol.items.filter(b => b.name !== 'VC/Investors');
+  const custTotal = custBuyers.reduce((s, i) => s + i.value, 0);
+  const chTotal = channelCol.items.reduce((s, i) => s + i.value, 0);
+
+  custBuyers.forEach(buyer => {
+    let byOffset = 0;
+    channelCol.items.forEach(ch => {
+      const dollarFlow = buyer.value * (ch.value / chTotal);
+      const fh = addFlow(buyer, ch, dollarFlow, buyerCol, channelCol, buyer.y + byOffset, ch.y + ch._inOffset || 0);
+      byOffset += fh;
+      ch._inOffset = (ch._inOffset || 0) + fh;
+    });
+  });
+
+  // --- FLOW 2: Channels → Providers (pass-through only, minus margins) ---
+  channelCol.items.forEach(ch => {
+    ch._outOffset = 0;
+  });
+  provCol.items.forEach(p => { p._inOffset = 0; });
+
+  const provTotal = provCol.items.reduce((s, i) => s + i.value, 0);
+  channelCol.items.forEach(ch => {
+    const mPct = channelMarginPct[ch.name] || 0;
+    const passValue = ch.value * (1 - mPct);  // dollar amount passing to providers
+    let chOffset = 0;
+    provCol.items.forEach(prov => {
+      const dollarFlow = passValue * (prov.value / provTotal);
+      const fh = addFlow(ch, prov, dollarFlow, channelCol, provCol, ch.y + chOffset, prov.y + prov._inOffset);
+      chOffset += fh;
+      prov._inOffset += fh;
+    });
+  });
+
+  // --- FLOW 3: VC → loss-making Providers (bypass channels) ---
+  const vcBuyer = buyerCol.items.find(i => i.name === 'VC/Investors');
+  if (vcBuyer && vcBuyer.value > 0) {
+    const vcReceivers = provCol.items.filter(p => {
+      const oocPct = yearRates[p.name] || 0.55;
       return (INFERENCE_PCT + oocPct) >= 1.0;
     });
-    const vcReceiverTotal = vcReceivers.reduce((s, i) => s + i.value, 0);
-    if (vcReceiverTotal > 0) {
-      // Calculate VC needed per receiver based on their cost gap
-      let vcYOffset = 0;
-      vcReceivers.forEach(pItem => {
-        const oocPct = yearRatesVC[pItem.name] || 0.55;
-        const costPct = INFERENCE_PCT + oocPct;
-        // VC needed = provider value * (costPct - 1.0) / costPct — the gap
-        const vcShare = pItem.value * (costPct - 1.0) / costPct;
-        // Scale flow height relative to VC bar
-        const vcTotal = vcBuyer.value || 1;
-        const flowH = Math.max(vcBuyer.h * (vcShare / vcTotal) * 0.8, 2);
-        const lx = cols[0].x + cols[0].w;
-        const rx = provCol.x;
-        const ly = vcBuyer.y + vcYOffset;
-        vcYOffset += flowH + 2;
-        const ry = pItem.y + pItem.h * 0.5 - flowH / 2;  // center on provider bar
-        sankeyFlows.push({ lItem: vcBuyer, rItem: pItem, lx, rx, ly, ry, flowH, col: -1 });
-      });
+    let vcOffset = 0;
+    vcReceivers.forEach(prov => {
+      const oocPct = yearRates[prov.name] || 0.55;
+      const costPct = INFERENCE_PCT + oocPct;
+      const channelShare = prov.value / provTotal;
+      const channelRev = (chTotal - Object.entries(channelMarginPct).reduce((s, [k, v]) => {
+        const ch = channelCol.items.find(c => c.name === k);
+        return s + (ch ? ch.value * v : 0);
+      }, 0)) * channelShare;
+      const vcNeed = Math.max(channelRev * (costPct - 1.0), 0);
+      if (vcNeed < 0.01) return;
+      const fh = addFlow(vcBuyer, prov, vcNeed, buyerCol, provCol, vcBuyer.y + vcOffset, prov.y + prov._inOffset);
+      vcOffset += fh;
+      prov._inOffset += fh;
+    });
+  }
+
+  // --- FLOW 4: Providers → Inference + Other Operating (100% of provider) ---
+  outCol.items.forEach(o => { o._inOffset = 0; });
+  provCol.items.forEach(prov => {
+    const oocPct = yearRates[prov.name] || 0.55;
+    const costPct = Math.min(INFERENCE_PCT + oocPct, 1.0);  // cap at 100%
+    const infShare = INFERENCE_PCT / costPct;
+    const oocShare = 1 - infShare;
+
+    let pOffset = 0;
+    if (infItem) {
+      const infDollar = prov.value * infShare;
+      const fh = addFlow(prov, infItem, infDollar, provCol, outCol, prov.y + pOffset, infItem.y + infItem._inOffset);
+      pOffset += fh;
+      infItem._inOffset += fh;
     }
-  }
+    if (oocItem) {
+      const oocDollar = prov.value * oocShare;
+      const fh = addFlow(prov, oocItem, oocDollar, provCol, outCol, prov.y + pOffset, oocItem.y + oocItem._inOffset);
+      pOffset += fh;
+      oocItem._inOffset += fh;
+    }
+  });
 
-  // Margin channels → Op. Cash Flow direct flows (bypassing providers)
-  const outCol = cols[3];
-  const opCashFlow = outCol ? outCol.items.find(i => i.name.includes('Cash') || i.name.includes('Margin')) : null;
-  if (opCashFlow) {
-    const channelCol = cols[1];
-    const marginChannelNames = ['Hyperscalers', 'Trad. SaaS', 'Traditional SaaS'];
-    const marginPcts = { 'Hyperscalers': 0.20, 'Trad. SaaS': 0.60, 'Traditional SaaS': 0.60 };
-    // Track cumulative offset into the Generated Cashflow bar for stacking
-    let cashFlowYOffset = 0;
-    channelCol.items.forEach(chItem => {
-      const mPct = marginPcts[chItem.name];
+  // --- FLOW 5: Channel margins → Generated Cashflow (bypass providers) ---
+  if (cashItem) {
+    channelCol.items.forEach(ch => {
+      const mPct = channelMarginPct[ch.name];
       if (!mPct) return;
-      const flowH = (chItem.h * mPct) * 0.8;
-      if (flowH < 0.5) return;
-      const lx = channelCol.x + channelCol.w;
-      const rx = outCol.x;
-      // Left Y: start from bottom portion of the channel bar (margin portion)
-      const ly = chItem.y + chItem.h * (1 - mPct);
-      // Right Y: stack into the Generated Cashflow bar
-      const ry = opCashFlow.y + cashFlowYOffset;
-      cashFlowYOffset += flowH + 2;
-      sankeyFlows.push({ lItem: chItem, rItem: opCashFlow, lx, rx, ly, ry, flowH, col: -2 });
+      const marginDollar = ch.value * mPct;
+      const ly = ch.y + ch.h * (1 - mPct);  // bottom of channel bar
+      addFlow(ch, cashItem, marginDollar, channelCol, outCol, ly, cashItem.y + cashItem._inOffset);
+      cashItem._inOffset += marginDollar * pxPerDollar(outCol) * 0.85;
     });
 
-    // Provider surplus → Generated Cashflow (providers whose costs < revenue)
-    const INFERENCE_PCT = 0.47;
-    const oocRates = {
-      '2025': {'OpenAI': 0.79, 'Anthropic': 0.65, 'Google (Gemini)': 0.50, 'IaaS/Open': 0.45, 'Other Model Providers': 0.80},
-      '2026E': {'OpenAI': 0.55, 'Anthropic': 0.55, 'Google (Gemini)': 0.48, 'IaaS/Open': 0.42, 'Other Model Providers': 0.70},
-      '2027E': {'OpenAI': 0.48, 'Anthropic': 0.48, 'Google (Gemini)': 0.45, 'IaaS/Open': 0.40, 'Other Model Providers': 0.60},
-    };
-    const yearRates = oocRates[activeYear] || oocRates['2025'];
-    provCol.items.forEach(pItem => {
-      const oocPct = yearRates[pItem.name] || 0.55;
-      const totalCostPct = INFERENCE_PCT + oocPct;
-      if (totalCostPct >= 1.0) return;  // no surplus
-      const surplusPct = 1.0 - totalCostPct;
-      const flowH = pItem.h * surplusPct * 0.8;
-      if (flowH < 0.5) return;
-      const lx = provCol.x + provCol.w;
-      const rx = outCol.x;
-      const ly = pItem.y + pItem.h * totalCostPct;  // start below cost flows
-      const ry = opCashFlow.y + cashFlowYOffset;
-      cashFlowYOffset += flowH + 2;
-      sankeyFlows.push({ lItem: pItem, rItem: opCashFlow, lx, rx, ly, ry, flowH, col: -3 });
+    // --- FLOW 6: Provider surplus → Generated Cashflow ---
+    provCol.items.forEach(prov => {
+      const oocPct = yearRates[prov.name] || 0.55;
+      const costPct = INFERENCE_PCT + oocPct;
+      if (costPct >= 1.0) return;
+      const surplusDollar = prov.value * (1.0 - costPct);
+      const ly = prov.y + prov.h * costPct;
+      addFlow(prov, cashItem, surplusDollar, provCol, outCol, ly, cashItem.y + cashItem._inOffset);
+      cashItem._inOffset += surplusDollar * pxPerDollar(outCol) * 0.85;
     });
   }
+
+  // Clean up temp offsets
+  [...buyerCol.items, ...channelCol.items, ...provCol.items, ...outCol.items].forEach(i => {
+    delete i._inOffset; delete i._outOffset;
+  });
 
   renderSankey(ctx, W, cols);
 }
