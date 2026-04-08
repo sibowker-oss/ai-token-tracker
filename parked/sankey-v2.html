@@ -269,18 +269,19 @@ function drawSankey(d) {
   };
   const yearRates = oocRatesAll[activeYear] || oocRatesAll['2025'];
 
-  // Helper: add a flow with height = $value * globalScale
+  // Helper: add a flow with height = $value * globalScale (1:1 with bar heights)
   function addFlow(lItem, rItem, dollarValue, lCol, rCol, lyStart, ryStart) {
-    const flowH = dollarValue * globalScale * 0.9;
+    const flowH = dollarValue * globalScale;
     if (flowH < 0.3) return flowH;
-    // Clamp Y positions to stay within bar bounds
-    const ly = Math.max(lyStart, lItem.y);
-    const ry = Math.max(ryStart, rItem.y);
+    // Clamp: flow must start within source bar and end within target bar
+    const ly = Math.min(Math.max(lyStart, lItem.y), lItem.y + lItem.h - flowH);
+    const ry = Math.min(Math.max(ryStart, rItem.y), rItem.y + rItem.h - flowH);
     sankeyFlows.push({
       lItem, rItem,
       lx: lCol.x + lCol.w, rx: rCol.x,
-      ly, ry,
-      flowH, col: lItem.col != null ? lItem.col : -1
+      ly: Math.max(ly, lItem.y), ry: Math.max(ry, rItem.y),
+      flowH: Math.min(flowH, Math.min(lItem.h, rItem.h)),
+      col: lItem.col != null ? lItem.col : -1
     });
     return flowH;
   }
@@ -295,31 +296,30 @@ function drawSankey(d) {
   const custTotal = custBuyers.reduce((s, i) => s + i.value, 0);
   const chTotal = channelCol.items.reduce((s, i) => s + i.value, 0);
 
+  // Initialize all offset trackers
+  buyerCol.items.forEach(i => { i._outOffset = 0; });
+  channelCol.items.forEach(i => { i._inOffset = 0; i._outOffset = 0; });
+  provCol.items.forEach(i => { i._inOffset = 0; i._outOffset = 0; });
+  outCol.items.forEach(i => { i._inOffset = 0; });
+
   custBuyers.forEach(buyer => {
-    let byOffset = 0;
     channelCol.items.forEach(ch => {
       const dollarFlow = buyer.value * (ch.value / chTotal);
-      const fh = addFlow(buyer, ch, dollarFlow, buyerCol, channelCol, buyer.y + byOffset, ch.y + ch._inOffset || 0);
-      byOffset += fh;
-      ch._inOffset = (ch._inOffset || 0) + fh;
+      const fh = addFlow(buyer, ch, dollarFlow, buyerCol, channelCol, buyer.y + buyer._outOffset, ch.y + ch._inOffset);
+      buyer._outOffset += fh;
+      ch._inOffset += fh;
     });
   });
 
   // --- FLOW 2: Channels → Providers (pass-through only, minus margins) ---
-  channelCol.items.forEach(ch => {
-    ch._outOffset = 0;
-  });
-  provCol.items.forEach(p => { p._inOffset = 0; });
-
   const provTotal = provCol.items.reduce((s, i) => s + i.value, 0);
   channelCol.items.forEach(ch => {
     const mPct = channelMarginPct[ch.name] || 0;
-    const passValue = ch.value * (1 - mPct);  // dollar amount passing to providers
-    let chOffset = 0;
+    const passValue = ch.value * (1 - mPct);
     provCol.items.forEach(prov => {
       const dollarFlow = passValue * (prov.value / provTotal);
-      const fh = addFlow(ch, prov, dollarFlow, channelCol, provCol, ch.y + chOffset, prov.y + prov._inOffset);
-      chOffset += fh;
+      const fh = addFlow(ch, prov, dollarFlow, channelCol, provCol, ch.y + ch._outOffset, prov.y + prov._inOffset);
+      ch._outOffset += fh;
       prov._inOffset += fh;
     });
   });
@@ -331,7 +331,6 @@ function drawSankey(d) {
       const oocPct = yearRates[p.name] || 0.55;
       return (INFERENCE_PCT + oocPct) >= 1.0;
     });
-    let vcOffset = 0;
     vcReceivers.forEach(prov => {
       const oocPct = yearRates[prov.name] || 0.55;
       const costPct = INFERENCE_PCT + oocPct;
@@ -342,31 +341,29 @@ function drawSankey(d) {
       }, 0)) * channelShare;
       const vcNeed = Math.max(channelRev * (costPct - 1.0), 0);
       if (vcNeed < 0.01) return;
-      const fh = addFlow(vcBuyer, prov, vcNeed, buyerCol, provCol, vcBuyer.y + vcOffset, prov.y + prov._inOffset);
-      vcOffset += fh;
+      const fh = addFlow(vcBuyer, prov, vcNeed, buyerCol, provCol, vcBuyer.y + vcBuyer._outOffset, prov.y + prov._inOffset);
+      vcBuyer._outOffset += fh;
       prov._inOffset += fh;
     });
   }
 
   // --- FLOW 4: Providers → Inference + Other Operating (100% of provider) ---
-  outCol.items.forEach(o => { o._inOffset = 0; });
   provCol.items.forEach(prov => {
     const oocPct = yearRates[prov.name] || 0.55;
-    const costPct = Math.min(INFERENCE_PCT + oocPct, 1.0);  // cap at 100%
+    const costPct = Math.min(INFERENCE_PCT + oocPct, 1.0);
     const infShare = INFERENCE_PCT / costPct;
     const oocShare = 1 - infShare;
 
-    let pOffset = 0;
     if (infItem) {
       const infDollar = prov.value * infShare;
-      const fh = addFlow(prov, infItem, infDollar, provCol, outCol, prov.y + pOffset, infItem.y + infItem._inOffset);
-      pOffset += fh;
+      const fh = addFlow(prov, infItem, infDollar, provCol, outCol, prov.y + prov._outOffset, infItem.y + infItem._inOffset);
+      prov._outOffset += fh;
       infItem._inOffset += fh;
     }
     if (oocItem) {
       const oocDollar = prov.value * oocShare;
-      const fh = addFlow(prov, oocItem, oocDollar, provCol, outCol, prov.y + pOffset, oocItem.y + oocItem._inOffset);
-      pOffset += fh;
+      const fh = addFlow(prov, oocItem, oocDollar, provCol, outCol, prov.y + prov._outOffset, oocItem.y + oocItem._inOffset);
+      prov._outOffset += fh;
       oocItem._inOffset += fh;
     }
   });
@@ -377,9 +374,9 @@ function drawSankey(d) {
       const mPct = channelMarginPct[ch.name];
       if (!mPct) return;
       const marginDollar = ch.value * mPct;
-      const ly = ch.y + ch.h * (1 - mPct);  // bottom of channel bar
-      addFlow(ch, cashItem, marginDollar, channelCol, outCol, ly, cashItem.y + cashItem._inOffset);
-      cashItem._inOffset += marginDollar * pxPerDollar(outCol) * 0.85;
+      const fh = addFlow(ch, cashItem, marginDollar, channelCol, outCol, ch.y + ch._outOffset, cashItem.y + cashItem._inOffset);
+      ch._outOffset += fh;
+      cashItem._inOffset += fh;
     });
 
     // --- FLOW 6: Provider surplus → Generated Cashflow ---
@@ -388,9 +385,9 @@ function drawSankey(d) {
       const costPct = INFERENCE_PCT + oocPct;
       if (costPct >= 1.0) return;
       const surplusDollar = prov.value * (1.0 - costPct);
-      const ly = prov.y + prov.h * costPct;
-      addFlow(prov, cashItem, surplusDollar, provCol, outCol, ly, cashItem.y + cashItem._inOffset);
-      cashItem._inOffset += surplusDollar * pxPerDollar(outCol) * 0.85;
+      const fh = addFlow(prov, cashItem, surplusDollar, provCol, outCol, prov.y + prov._outOffset, cashItem.y + cashItem._inOffset);
+      prov._outOffset += fh;
+      cashItem._inOffset += fh;
     });
   }
 
