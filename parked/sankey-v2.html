@@ -222,7 +222,7 @@ function drawSankey(d) {
   const cols = [
     { x: margin, w: colW, label: 'Who Pays', items: d.buyers.map(b => ({ name: b.label, value: b.value })) },
     { x: margin + colW + spacing, w: colW, label: 'Channels', items: d.channels.map(c => ({ name: c.label, value: c.value })) },
-    { x: margin + (colW + spacing) * 2, w: colW, label: 'Providers', items: d.providers.map(p => ({ name: p.label, value: p.value })) },
+    { x: margin + (colW + spacing) * 2, w: colW, label: 'Model Providers', items: d.providers.map(p => ({ name: p.label, value: p.value })) },
     { x: margin + (colW + spacing) * 3, w: colW, label: 'Where It Goes', items: d.outcomes.map(o => ({ name: o.label, value: o.value })) },
   ];
 
@@ -411,19 +411,32 @@ function renderSankey(ctx, W, cols) {
   const colPositions = [
     { x: sankeyNodes.filter(n => n.col === 0)[0]?.colX || 60, w: sankeyNodes.filter(n => n.col === 0)[0]?.colW || 100, label: 'Who Pays' },
     { x: sankeyNodes.filter(n => n.col === 1)[0]?.colX || 200, w: sankeyNodes.filter(n => n.col === 1)[0]?.colW || 100, label: 'Channels' },
-    { x: sankeyNodes.filter(n => n.col === 2)[0]?.colX || 400, w: sankeyNodes.filter(n => n.col === 2)[0]?.colW || 100, label: 'Providers' },
+    { x: sankeyNodes.filter(n => n.col === 2)[0]?.colX || 400, w: sankeyNodes.filter(n => n.col === 2)[0]?.colW || 100, label: 'Model Providers' },
     { x: sankeyNodes.filter(n => n.col === 3)[0]?.colX || 600, w: sankeyNodes.filter(n => n.col === 3)[0]?.colW || 100, label: 'Where It Goes' },
   ];
-  colPositions.forEach(cp => {
-    ctx.fillText(cp.label, cp.x + cp.w / 2, 22);
+  // Column totals
+  const colTotalValues = [
+    sankeyNodes.filter(n => n.col === 0).reduce((s, n) => s + n.value, 0),
+    sankeyNodes.filter(n => n.col === 1).reduce((s, n) => s + n.value, 0),
+    sankeyNodes.filter(n => n.col === 2).reduce((s, n) => s + n.value, 0),
+    sankeyNodes.filter(n => n.col === 3).reduce((s, n) => s + n.value, 0),
+  ];
+
+  colPositions.forEach((cp, i) => {
+    ctx.font = 'bold 13px -apple-system, sans-serif';
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(cp.label, cp.x + cp.w / 2, 18);
+    ctx.font = '11px -apple-system, sans-serif';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('$' + colTotalValues[i].toFixed(1) + 'B', cp.x + cp.w / 2, 33);
   });
   // Underline
   ctx.strokeStyle = '#334155';
   ctx.lineWidth = 1;
   colPositions.forEach(cp => {
     ctx.beginPath();
-    ctx.moveTo(cp.x, 28);
-    ctx.lineTo(cp.x + cp.w, 28);
+    ctx.moveTo(cp.x, 38);
+    ctx.lineTo(cp.x + cp.w, 38);
     ctx.stroke();
   });
   ctx.textAlign = 'left';
