@@ -326,15 +326,12 @@ function drawSankey(d) {
     const passValue = ch.value * (1 - mPct);
 
     if (iaasChannels.includes(ch.name)) {
-      // IaaS channel → IaaS/Open + Other Model Providers
-      const iaasReceivers = [iaasProvider, otherModelProv].filter(Boolean);
-      const iaasRecvTotal = iaasReceivers.reduce((s, p) => s + p.value, 0);
-      iaasReceivers.forEach(prov => {
-        const dollarFlow = passValue * (prov.value / iaasRecvTotal);
-        const fh = addFlow(ch, prov, dollarFlow, channelCol, provCol, ch.y + ch._outOffset, prov.y + prov._inOffset);
+      // IaaS channel → IaaS/Open provider only
+      if (iaasProvider) {
+        const fh = addFlow(ch, iaasProvider, passValue, channelCol, provCol, ch.y + ch._outOffset, iaasProvider.y + iaasProvider._inOffset);
         ch._outOffset += fh;
-        prov._inOffset += fh;
-      });
+        iaasProvider._inOffset += fh;
+      }
     } else if (ch.name === aiNativeChannel) {
       // AI Native Apps → split between IaaS/Open (open model portion) and frontier
       // Estimate: 30% of AI native revenue goes via IaaS (open models), 70% to frontier
@@ -355,7 +352,11 @@ function drawSankey(d) {
       });
     } else {
       // Model Subs, Model API, Hyperscalers, Trad SaaS → frontier providers + Other Model Providers
+      // Model API and Model Subs include Other Model Providers (DeepSeek, Mistral direct API/subs)
       const allReceivers = [...frontierProvs];
+      if (otherModelProv && (ch.name === 'Model API' || ch.name === 'Model Subs')) {
+        allReceivers.push(otherModelProv);
+      }
       const receiverTotal = allReceivers.reduce((s, p) => s + p.value, 0);
       allReceivers.forEach(prov => {
         const dollarFlow = passValue * (prov.value / receiverTotal);
