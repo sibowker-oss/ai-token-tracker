@@ -352,14 +352,21 @@ function drawSankey(d) {
     });
     const vcReceiverTotal = vcReceivers.reduce((s, i) => s + i.value, 0);
     if (vcReceiverTotal > 0) {
+      // Calculate VC needed per receiver based on their cost gap
+      let vcYOffset = 0;
       vcReceivers.forEach(pItem => {
-        const pPct = pItem.value / vcReceiverTotal;
-        const flowH = vcBuyer.h * pPct * 0.8;
-        if (flowH < 0.5) return;
+        const oocPct = yearRatesVC[pItem.name] || 0.55;
+        const costPct = INFERENCE_PCT + oocPct;
+        // VC needed = provider value * (costPct - 1.0) / costPct — the gap
+        const vcShare = pItem.value * (costPct - 1.0) / costPct;
+        // Scale flow height relative to VC bar
+        const vcTotal = vcBuyer.value || 1;
+        const flowH = Math.max(vcBuyer.h * (vcShare / vcTotal) * 0.8, 2);
         const lx = cols[0].x + cols[0].w;
         const rx = provCol.x;
-        const ly = vcBuyer.y + vcBuyer.h * (pItem.y / (provCol.items[provCol.items.length-1].y + provCol.items[provCol.items.length-1].h));
-        const ry = pItem.y + pItem.h * (vcBuyer.y / (cols[0].items[cols[0].items.length-1].y + cols[0].items[cols[0].items.length-1].h));
+        const ly = vcBuyer.y + vcYOffset;
+        vcYOffset += flowH + 2;
+        const ry = pItem.y + pItem.h * 0.5 - flowH / 2;  // center on provider bar
         sankeyFlows.push({ lItem: vcBuyer, rItem: pItem, lx, rx, ly, ry, flowH, col: -1 });
       });
     }
