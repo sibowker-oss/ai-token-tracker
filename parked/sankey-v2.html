@@ -229,14 +229,21 @@ function drawSankey(d) {
   const barH = 460;
   const gap = 6;
 
+  // Use SAME scale across all columns — based on largest column total
+  // This ensures bars are proportional and flows fit within them
+  const colTotals = cols.map(c => c.items.reduce((s, i) => s + i.value, 0));
+  const maxTotal = Math.max(...colTotals);
+  const maxGaps = Math.max(...cols.map(c => c.items.length - 1));
+  const globalScale = (barH - maxGaps * gap) / maxTotal;
+
   // Layout nodes
   sankeyNodes = [];
   cols.forEach((col, ci) => {
-    const total = col.items.reduce((s, i) => s + i.value, 0);
-    const scale = (barH - (col.items.length - 1) * gap) / total;
-    let y = 45;
+    const colTotal = col.items.reduce((s, i) => s + i.value, 0);
+    const colHeight = colTotal * globalScale + (col.items.length - 1) * gap;
+    let y = 45 + (barH - colHeight) / 2;  // center vertically
     col.items.forEach(item => {
-      item.h = item.value * scale;
+      item.h = item.value * globalScale;
       item.y = y;
       item.col = ci;
       item.colX = col.x;
@@ -262,23 +269,17 @@ function drawSankey(d) {
   };
   const yearRates = oocRatesAll[activeYear] || oocRatesAll['2025'];
 
-  // Helper: pixels per dollar for a column
-  function pxPerDollar(col) {
-    const total = col.items.reduce((s, i) => s + i.value, 0);
-    const totalH = col.items.reduce((s, i) => s + i.h, 0);
-    return total > 0 ? totalH / total : 1;
-  }
-
-  // Helper: add a flow with height = $value * scale
+  // Helper: add a flow with height = $value * globalScale
   function addFlow(lItem, rItem, dollarValue, lCol, rCol, lyStart, ryStart) {
-    const lScale = pxPerDollar(lCol);
-    const rScale = pxPerDollar(rCol);
-    const flowH = dollarValue * Math.min(lScale, rScale) * 0.85;
+    const flowH = dollarValue * globalScale * 0.9;
     if (flowH < 0.3) return flowH;
+    // Clamp Y positions to stay within bar bounds
+    const ly = Math.max(lyStart, lItem.y);
+    const ry = Math.max(ryStart, rItem.y);
     sankeyFlows.push({
       lItem, rItem,
       lx: lCol.x + lCol.w, rx: rCol.x,
-      ly: lyStart, ry: ryStart,
+      ly, ry,
       flowH, col: lItem.col != null ? lItem.col : -1
     });
     return flowH;
