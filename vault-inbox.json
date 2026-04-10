@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-10",
+  "lastProcessed": "2026-04-11",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -10067,6 +10067,136 @@
       ],
       "notes": "By Jan 2026 Meta Llama had zero OpenRouter inference market share (down from 37.4% peak in Jan 2025). Replaced by DeepSeek (31.1%) and Xiaomi (27.2%). Chinese models now dominate open model inference volume.",
       "status": "declined",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260411-a1b",
+      "claim": "Cursor (Anysphere) ARR hit $2B in March 2026, doubling from $1B in November 2025 in just 3 months",
+      "value": 2,
+      "unit": "$B ARR",
+      "sourceUrl": "https://techcrunch.com/2026/03/02/cursor-has-reportedly-surpassed-2b-in-annualized-revenue/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch / Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-02",
+      "dateAdded": "2026-04-11",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "cursor",
+        "anysphere",
+        "developer-tools",
+        "revenue",
+        "ARR",
+        "2026"
+      ],
+      "notes": "Cursor doubled ARR from $1B (Nov 2025) to $2B (Mar 2026) in ~3 months. TechCrunch + Bloomberg confirmed. Vault had $1B placeholder from NEEDS SOURCE entry. Claude Code at ~$2.5B ARR for comparison.",
+      "status": "pending",
+      "replaces": "resource-cursor-(anysphere)-2025-arr"
+    },
+    {
+      "id": "scan-20260411-b2c",
+      "claim": "Cursor (Anysphere) raising up to $5B at $60B valuation in early 2026",
+      "value": 60,
+      "unit": "$B valuation",
+      "sourceUrl": "https://tech-insider.org/cursor-60-billion-valuation-anysphere-ai-coding-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Tech-Insider",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-01",
+      "dateAdded": "2026-04-11",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "cursor",
+        "anysphere",
+        "developer-tools",
+        "valuation",
+        "funding",
+        "2026"
+      ],
+      "notes": "Cursor reportedly raising up to $5B new capital at $60B valuation. Vault resource entry had stale $10B valuation placeholder. Source is secondary — needs verification from Bloomberg/TechCrunch.",
+      "status": "pending",
+      "replaces": "resource-cursor-(anysphere)-current-valuation"
+    },
+    {
+      "id": "scan-20260411-c3d",
+      "claim": "xAI + X (Twitter) combined ARR $3.83B at end of 2025; xAI standalone ~$500M of that",
+      "value": 3.83,
+      "unit": "$B ARR (combined xAI + X)",
+      "sourceUrl": "https://sacra-pdfs.s3.us-east-2.amazonaws.com/xai.pdf",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-06",
+      "dateAdded": "2026-04-11",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "xai",
+        "grok",
+        "elon-musk",
+        "revenue",
+        "ARR",
+        "2025"
+      ],
+      "notes": "Sacra equity report (Apr 6 2026): xAI + X combined = $3.83B ARR end-2025. xAI standalone Grok/API revenue ~$500M of that; rest is X advertising/subscriptions. Critical to distinguish blended figure.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260411-d4e",
+      "claim": "SpaceX acquired xAI in early April 2026; combined SpaceX + xAI entity valued at $1.25T; xAI component at $250B",
+      "value": 250,
+      "unit": "$B (xAI component post-SpaceX acquisition)",
+      "sourceUrl": "https://sacra-pdfs.s3.us-east-2.amazonaws.com/xai.pdf",
+      "sourceType": "reporting",
+      "sourceAuthor": "Sacra",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-06",
+      "dateAdded": "2026-04-11",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "xai",
+        "spacex",
+        "elon-musk",
+        "valuation",
+        "acquisition",
+        "2026"
+      ],
+      "notes": "Sacra (Apr 6 2026): SpaceX absorbed xAI; combined entity ~$1.25T valuation; xAI portion = $250B vs. $230B at Series E in Jan 2026. Needs primary source confirmation — significant structural change.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260411-e5f",
+      "claim": "OpenAI projects $2.5B in ad revenue for 2026, growing to $53B by 2029 and $100B by 2030",
+      "value": 2.5,
+      "unit": "$B projected ad revenue (2026)",
+      "sourceUrl": "https://thetechportal.com/2026/04/09/openai-projects-100bn-in-ad-revenue-by-2030-around-2-5bn-in-2026-report",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Tech Portal / Axios",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-09",
+      "dateAdded": "2026-04-11",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "advertising",
+        "revenue",
+        "projections",
+        "2026",
+        "2030"
+      ],
+      "notes": "Axios reported OpenAI internal projections: $2.5B ad revenue 2026, $53B by 2029, $100B by 2030. Complements confirmed $100M+ ARR from ads pilot (2 months). New diversification stream beyond API/subscriptions.",
+      "status": "pending",
       "replaces": null
     }
   ]
