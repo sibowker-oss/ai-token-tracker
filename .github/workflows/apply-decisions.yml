@@ -27,6 +27,9 @@ jobs:
       - name: Regenerate site-data.json
         run: python scripts/generate_site_data.py
 
+      - name: Regenerate feed data
+        run: python scripts/generate_feed.py
+
       - name: Archive processed decisions
         run: |
           mkdir -p data-updates/archive beta/data-updates/archive
@@ -37,6 +40,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A data-updates/ beta/ entities.json vault-data.json vault-inbox.json site-data.json sources-registry.json
+          git add -A data-updates/ beta/ entities.json vault-data.json vault-inbox.json site-data.json sources-registry.json feed-data.json
           git diff --cached --quiet || git commit -m "Auto-apply review decisions $(date +%Y-%m-%d)"
           git push
