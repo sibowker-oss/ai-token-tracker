@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-14",
+  "lastProcessed": "2026-04-16",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -10197,6 +10197,40 @@
       ],
       "notes": "Axios reported OpenAI internal projections: $2.5B ad revenue 2026, $53B by 2029, $100B by 2030. Complements confirmed $100M+ ARR from ads pilot (2 months). New diversification stream beyond API/subscriptions.",
       "status": "parked",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260416-a1b",
+      "claim": "Anthropic drawing investor offers at $800B+ valuation (April 2026), up from $350B pre-money valuation at February Series G",
+      "value": 800,
+      "unit": "$B (investor offer valuation)",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-04-14/anthropic-attracts-investor-offers-at-a-800-billion-valuation",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-14",
+      "dateAdded": "2026-04-16",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "anthropic", "valuation", "funding", "2026"],
+      "notes": "Bloomberg Apr 14: Anthropic received VC/investor offers at $800B+ valuation but hasn't accepted. Would be >2x the $350B pre-money valuation from Feb 2026 Series G. Driven by $30B ARR milestone. Offers resisted as of publication.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260416-b2c",
+      "claim": "Anthropic Project Glasswing: $100M+ in Claude Mythos Preview credits distributed to 50+ organizations (April 7, 2026); model withheld from public due to cybersecurity risk",
+      "value": 100,
+      "unit": "$M+ (usage credits)",
+      "sourceUrl": "https://techcrunch.com/2026/04/07/anthropic-mythos-ai-model-preview-security/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-07",
+      "dateAdded": "2026-04-16",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "anthropic", "claude", "mythos", "product", "enterprise", "credits", "2026"],
+      "notes": "Anthropic's Mythos Preview restricted from public release — found thousands of zero-day vulns across major OSes and browsers. Project Glasswing: $100M+ credits to 50+ orgs incl. Amazon, Apple, Microsoft, Cisco, CrowdStrike. Enterprise revenue/cost data point.",
+      "status": "pending",
       "replaces": null
     }
   ]
