@@ -16,19 +16,33 @@
   .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
   h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
   .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
-  .year-toggle { display:flex; gap:4px; justify-content:center; margin-bottom:24px; }
-  .year-btn { padding:10px 28px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:14px; font-weight:600; cursor:pointer; }
+  .year-toggle { display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
+  .year-btn { padding:8px 22px; border-radius:8px; border:1px solid var(--card-border); background:rgba(15,23,42,0.6); color:var(--text-dim); font-size:14px; font-weight:600; cursor:pointer; }
   .year-btn:hover { border-color:var(--accent); color:var(--text); }
   .year-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
-  .year-btn .proj { font-size:9px; display:block; opacity:0.7; }
   .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
   .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px; text-align:center; }
   .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
   .hero-stat .value { font-size:28px; font-weight:800; margin:4px 0; }
   .hero-stat .detail { font-size:10px; color:var(--text-dim); }
   .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
-  .card h2 { font-size:16px; margin-bottom:16px; }
-  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } }
+  .card h2 { font-size:16px; margin-bottom:14px; }
+  .iceberg-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  .iceberg-grid.three { grid-template-columns:1.1fr 1.1fr 0.8fr; }
+  .iceberg-card { background:rgba(15,23,42,0.5); border:1px solid var(--card-border); border-radius:10px; padding:18px; }
+  .iceberg-card h3 { font-size:13px; font-weight:700; margin-bottom:6px; color:#f1f5f9; }
+  .iceberg-card .sub { font-size:11px; color:var(--text-dim); margin-bottom:14px; }
+  .iceberg-bar-wrap { position:relative; height:36px; background:rgba(0,0,0,0.3); border-radius:6px; overflow:hidden; margin:6px 0 4px; }
+  .iceberg-bar-fill { position:absolute; left:0; top:0; height:100%; display:flex; align-items:center; padding:0 8px; font-size:11px; font-weight:700; color:white; }
+  .iceberg-row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--text-dim); margin-top:4px; }
+  .iceberg-row strong { color:#f1f5f9; }
+  .iceberg-big { font-size:24px; font-weight:800; color:#f1f5f9; }
+  .iceberg-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid var(--card-border); }
+  .iceberg-stat { text-align:center; }
+  .iceberg-stat .v { font-size:18px; font-weight:800; }
+  .iceberg-stat .l { font-size:9px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); margin-top:2px; }
+  .iceberg-foot { font-size:11px; color:var(--text-dim); line-height:1.5; margin-top:12px; padding-top:12px; border-top:1px solid var(--card-border); }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .iceberg-grid, .iceberg-grid.three { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -40,22 +54,33 @@
   <a href="feed.html" class="nav-link">Weekly Feed</a>
 </nav>
 <div class="container">
-  <h1>Follow the Dollar: Forward Look</h1>
+  <h1>Follow the Dollar</h1>
   <div class="sub">Toggle between years to see how money shifts across buyers, channels, providers, and outcomes.</div>
-  <div class="year-toggle" id="year-toggle"></div>
   <div class="hero-grid" id="hero-stats"></div>
   <div class="card">
     <h2 id="flow-title">Revenue Flow</h2>
+    <div class="year-toggle" id="year-toggle"></div>
     <div style="position:relative;width:100%;overflow-x:auto;">
       <canvas id="sankey" height="560"></canvas>
     </div>
-    <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:8px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
-      <span style="opacity:0.4;">Click or hover a node to see flow details</span>
+    <div id="tier-legend" style="display:flex;flex-wrap:wrap;gap:10px;font-size:10px;color:var(--text-dim);margin-top:14px;padding:8px 12px;background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:6px;align-items:center;">
+      <strong style="color:#cbd5e1;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Provenance tier:</strong>
+      <span><span style="display:inline-block;background:#10b981;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">1</span> Sourced (<b>A</b> = first-party disclosure, <b>B</b> = ≥2 corroborating sources)</span>
+      <span><span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">2</span> Derived (<b>A</b> = deterministic calc from Tier 1, <b>B</b> = triangulated)</span>
+      <span><span style="display:inline-block;background:#f59e0b;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">3</span> Projected (<b>A</b> = anchored extrapolation, <b>B</b> = interpolated, <b>C</b> = scenario assumption)</span>
+      <span><span style="display:inline-block;background:#ef4444;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">4</span> Editorial (replace ASAP)</span>
+      <span style="opacity:0.6;">— hover any node for source citation</span>
+    </div>
+    <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
+      <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
     </div>
   </div>
-  <div class="card" id="narrative-card">
-    <h2>What Changes</h2>
-    <div id="narrative"></div>
+
+  <div class="card" id="iceberg-card">
+    <h2>What's Above the Waterline: The Capital Stack Funding the Flow</h2>
+    <p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:8px;">The sankey above shows <strong>operating flow</strong> — dollars in from customers, dollars out this year. It excludes the two stacks of capital funding the build-out from above, and the date by which Generated Cashflow could plausibly cover infrastructure depreciation (the standard accounting test for true profitability).</p>
+    <div class="iceberg-grid three" id="iceberg-grid"></div>
+    <p class="iceberg-foot" id="iceberg-foot"></p>
   </div>
 </div>
 
@@ -66,7 +91,7 @@ let allNodes = [], allFlows = [], lockedNode = null, hoveredNode = null;
 const COLORS = {
   'Consumer':'#f59e0b','SME':'#3b82f6','Enterprise':'#10b981','VC/Investors':'#dc2626',
   'Model Subs':'#f59e0b','Model API':'#3b82f6','Hyperscalers':'#06b6d4','AI Native Apps':'#10b981',
-  'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444',
+  'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
   'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
   'Other Model Providers':'#475569',
   'Inference':'#ef4444','Other Operating':'#f59e0b','Generated Cashflow':'#10b981',
@@ -82,15 +107,17 @@ async function init() {
   }
   let html = '';
   for (const [yr, d] of Object.entries(sankeyData)) {
-    html += '<button class="year-btn'+(yr===activeYear?' active':'')+'" onclick="switchYear(\''+yr+'\')">'+d.label+(yr.includes('E')?'<span class=proj>Projected</span>':'')+'</button>';
+    if (yr.startsWith('_')) continue; // skip _schema and other meta keys
+    html += '<button class="year-btn" data-yr="'+yr+'" onclick="switchYear(\''+yr+'\')">'+d.label+'</button>';
   }
   document.getElementById('year-toggle').innerHTML = html;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === activeYear));
   renderYear(activeYear);
 }
 
 function switchYear(yr) {
   activeYear = yr;
-  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.textContent.includes(sankeyData[yr].label)));
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === yr));
   lockedNode = null; hoveredNode = null;
   renderYear(yr);
 }
@@ -100,11 +127,16 @@ function renderYear(yr) {
   const prev = yr==='2026E'?sankeyData['2025']:yr==='2027E'?sankeyData['2026E']:null;
   const cf = d.outcomes.find(o=>o.label.includes('Cash'))||d.outcomes[d.outcomes.length-1];
 
-  // Hero stats
+  // Hero stats — Revenue (customer-facing buyers only), Total Capex (infrastructure),
+  // VC Operating Subsidy (operating losses funded by investors), Generated Cashflow.
+  const revenue = d.buyers
+    .filter(b => b.label !== 'VC/Investors')
+    .reduce((s,b) => s + b.value, 0);
+  const capex = (d.infrastructureCapex || {}).value || 0;
   let h = '';
-  h += '<div class="hero-stat"><div class="label">Total System</div><div class="value" style="color:var(--accent);">$'+d.totalSystem+'B</div></div>';
-  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--green);">$'+d.totalCustomerRevenue+'B</div></div>';
-  h += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$'+d.totalVCSubsidy+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Total Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+d.totalVCSubsidy+'B</div></div>';
   h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+(cf?cf.value:0)+'B</div></div>';
   document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
@@ -112,14 +144,188 @@ function renderYear(yr) {
   // Build and draw
   buildSankey(d);
 
-  // Narrative
-  const narratives = {
-    '2025':'<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2025: The industry generates $17.5B in customer revenue but frontier providers operate at a loss. The $2.9B VC subsidy funds the gap. Generated Cashflow ($2.3B) comes entirely from Hyperscaler and Trad SaaS margins — not from model providers.</p>',
-    '2026E':'<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2026E: Customer revenue triples to $61.5B. VC subsidy shrinks dramatically as providers approach breakeven. IaaS/Open grows as open model adoption accelerates via AI Native Apps.</p>',
-    '2027E':'<p style="font-size:13px;color:var(--text-dim);line-height:1.8;">2027E: The industry approaches self-sustainability. VC drops near zero. Generated Cashflow reaches $20B as both channel margins and provider surplus contribute. But this is pre-capex — $250B+ in infrastructure depreciation is not included.</p>',
-  };
-  document.getElementById('narrative').innerHTML = narratives[yr]||'';
+  // Iceberg cards: capex vs cashflow paydown, profitability crossover, war chest
+  renderIceberg(d, yr);
 }
+
+// ─── Iceberg cards: capex paydown + frontier funding ────────────────
+const TIER_COLOR = (t) => {
+  if(!t) return '#475569';
+  if(t.startsWith('1')) return '#10b981';
+  if(t.startsWith('2')) return '#3b82f6';
+  if(t.startsWith('3')) return '#f59e0b';
+  if(t.startsWith('4')) return '#ef4444';
+  return '#475569';
+};
+
+// Default Crossover scenario controls (per-page state)
+let crossoverDepYrs = 10;   // GAAP-conservative 10yr by default
+let crossoverGrowth = 'recent'; // 'recent' = 2026→27 1.9×, 'mean' = geomean ≈ 2.7×
+
+// Compute the projected profitability crossover year given a set of cashflow→capex
+// data points and the chosen depreciation horizon + growth assumption.
+function computeCrossover(allYears, depYrs, growthMode) {
+  // Build [{year, cashflow, capex}] for sankey years
+  const series = allYears.map(yr => ({
+    year: yr.year,
+    cashflow: yr.cashflow,
+    capex: yr.capex,
+  }));
+  // Sort by year
+  series.sort((a,b) => a.year - b.year);
+  // Compute growth multiplier
+  let growth;
+  if (growthMode === 'recent') {
+    // Most recent year-on-year cashflow growth
+    const last = series[series.length-1];
+    const prev = series[series.length-2];
+    growth = (prev && prev.cashflow > 0) ? (last.cashflow / prev.cashflow) : 1;
+  } else {
+    // Geometric mean across all year-on-year ratios
+    let prod = 1, n = 0;
+    for (let i = 1; i < series.length; i++) {
+      if (series[i-1].cashflow > 0) {
+        prod *= (series[i].cashflow / series[i-1].cashflow);
+        n++;
+      }
+    }
+    growth = n > 0 ? Math.pow(prod, 1/n) : 1;
+  }
+  // Use the most recent capex as the depreciation base (assume capex flat going forward
+  // — conservative because real capex is still growing, which would push the date later;
+  // explicit assumption shown to user).
+  const lastYr = series[series.length-1];
+  const annualDep = lastYr.capex / depYrs;
+  // Project cashflow forward
+  const projection = [];
+  let cf = lastYr.cashflow;
+  let yr = lastYr.year;
+  let crossYear = null;
+  projection.push({year: yr, cashflow: cf, dep: annualDep});
+  while (yr < lastYr.year + 12) { // cap at 12 years out
+    yr++;
+    cf = cf * growth;
+    projection.push({year: yr, cashflow: cf, dep: annualDep});
+    if (cf >= annualDep && crossYear === null) {
+      crossYear = yr;
+    }
+  }
+  return { crossYear, growth, annualDep, projection };
+}
+
+function renderIceberg(d, yr) {
+  const cf = d.outcomes.find(o=>o.label.includes('Cash'))||{value:0};
+  const cashflow = cf.value || 0;
+  const cap = d.infrastructureCapex || {value:0, tier:'4', src:''};
+  const ff  = d.frontierFunding || {cumulative:0, components:{}, tier:'4', src:''};
+
+  // Build series across all years for crossover calc
+  const allYrs = [];
+  for (const k of Object.keys(sankeyData)) {
+    if (k.startsWith('_')) continue;
+    const yd = sankeyData[k];
+    const ycf = (yd.outcomes.find(o=>o.label.includes('Cash'))||{value:0}).value;
+    const ycap = (yd.infrastructureCapex||{}).value || 0;
+    const numYr = parseInt(k.replace(/[^0-9]/g,''));
+    allYrs.push({year: numYr, cashflow: ycf, capex: ycap});
+  }
+
+  const cashflowPctOfCapex = cap.value > 0 ? (cashflow / cap.value * 100) : 0;
+
+  let html = '';
+
+  // ─── Card A: Infrastructure Capex ─────────────────────────────
+  const capBadge = '<span style="display:inline-block;background:'+TIER_COLOR(cap.tier)+';color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER '+cap.tier+'</span>';
+  html += '<div class="iceberg-card">';
+  html += '<h3>Infrastructure Capex'+capBadge+'</h3>';
+  html += '<div class="sub">Mag 7 + AI-native datacentre, GPU and networking spend this year. Funded from corporate balance sheets, not customer revenue.</div>';
+  html += '<div class="iceberg-big" style="color:#ef4444;">$'+cap.value+'B</div>';
+  const fillPct = Math.min(100, cashflowPctOfCapex);
+  html += '<div class="iceberg-bar-wrap" title="Generated cashflow as % of this year\'s capex">';
+  html += '<div class="iceberg-bar-fill" style="width:'+fillPct+'%;background:#10b981;">'+(fillPct >= 8 ? '$'+cashflow.toFixed(1)+'B' : '')+'</div>';
+  html += '</div>';
+  html += '<div class="iceberg-row"><span>Generated Cashflow recovers</span><strong>$'+cashflow.toFixed(1)+'B ('+cashflowPctOfCapex.toFixed(1)+'%)</strong></div>';
+  html += '<div class="iceberg-stat-row">';
+  html += '<div class="iceberg-stat"><div class="v" style="color:#ef4444;">$'+(cap.value - cashflow).toFixed(0)+'B</div><div class="l">Unrecovered this year</div></div>';
+  html += '<div class="iceberg-stat"><div class="v" style="color:#94a3b8;">$'+(cap.value/10).toFixed(0)+'B</div><div class="l">Annual dep if straight-line 10yr</div></div>';
+  html += '<div class="iceberg-stat"><div class="v" style="color:#94a3b8;">$'+(cap.value/4).toFixed(0)+'B</div><div class="l">Annual dep if straight-line 4yr (GPU)</div></div>';
+  html += '</div>';
+  html += '<div class="iceberg-foot">' + (cap.src||'') + '</div>';
+  html += '</div>';
+
+  // ─── Card B: Profitability Crossover ─────────────────────────
+  const cross = computeCrossover(allYrs, crossoverDepYrs, crossoverGrowth);
+  const crossDisplay = cross.crossYear ? cross.crossYear : '>12 yrs';
+  const growthDisplay = (cross.growth).toFixed(1) + '× / yr';
+  html += '<div class="iceberg-card" style="border-color:#10b981;">';
+  html += '<h3>Projected Profitability Crossover<span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER 2A</span></h3>';
+  html += '<div class="sub">The year Generated Cashflow first covers annual infrastructure depreciation — the GAAP test for true profitability. Derived from this page\'s cashflow trajectory + capex.</div>';
+  html += '<div class="iceberg-big" style="color:#10b981;">'+crossDisplay+'</div>';
+  // Mini bar chart of projection vs depreciation line
+  const maxVal = Math.max(cross.annualDep, ...cross.projection.map(p=>p.cashflow));
+  html += '<div style="display:flex;align-items:flex-end;gap:3px;height:60px;margin:8px 0 4px;border-bottom:1px dashed rgba(148,163,184,0.3);position:relative;">';
+  // Depreciation line marker
+  const depHpct = (cross.annualDep / maxVal) * 100;
+  html += '<div style="position:absolute;left:0;right:0;bottom:'+depHpct+'%;border-top:2px dashed #ef4444;z-index:2;"></div>';
+  html += '<div style="position:absolute;right:0;bottom:'+depHpct+'%;font-size:9px;color:#ef4444;font-weight:700;background:var(--card);padding:0 4px;transform:translateY(-50%);">Dep $'+cross.annualDep.toFixed(0)+'B</div>';
+  for (const p of cross.projection) {
+    const barH = (p.cashflow / maxVal) * 100;
+    const isCross = (p.year === cross.crossYear);
+    const barColor = p.cashflow >= cross.annualDep ? '#10b981' : '#475569';
+    html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">';
+    html += '<div style="width:100%;height:'+barH+'%;background:'+barColor+';border-radius:2px 2px 0 0;'+(isCross?'box-shadow:0 0 0 1.5px white;':'')+'" title="'+p.year+': $'+p.cashflow.toFixed(1)+'B"></div>';
+    html += '<div style="font-size:8px;color:var(--text-dim);margin-top:2px;">'+(""+p.year).slice(-2)+'</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  // Toggles
+  html += '<div style="display:flex;gap:6px;font-size:10px;margin-top:8px;flex-wrap:wrap;">';
+  html += '<span style="color:var(--text-dim);align-self:center;">Dep:</span>';
+  html += '<button onclick="setCrossDep(10)" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverDepYrs===10?'#10b981':'var(--card-border)')+';background:'+(crossoverDepYrs===10?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverDepYrs===10?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">10yr GAAP</button>';
+  html += '<button onclick="setCrossDep(4)" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverDepYrs===4?'#10b981':'var(--card-border)')+';background:'+(crossoverDepYrs===4?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverDepYrs===4?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">4yr GPU</button>';
+  html += '<span style="color:var(--text-dim);align-self:center;margin-left:6px;">Growth:</span>';
+  html += '<button onclick="setCrossGrowth(\'recent\')" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverGrowth==='recent'?'#10b981':'var(--card-border)')+';background:'+(crossoverGrowth==='recent'?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverGrowth==='recent'?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">Recent ('+(allYrs.length>1?(allYrs[allYrs.length-1].cashflow/allYrs[allYrs.length-2].cashflow).toFixed(1):'?')+'×)</button>';
+  html += '<button onclick="setCrossGrowth(\'mean\')" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverGrowth==='mean'?'#10b981':'var(--card-border)')+';background:'+(crossoverGrowth==='mean'?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverGrowth==='mean'?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">Mean</button>';
+  html += '</div>';
+  html += '<div class="iceberg-foot">Assumes capex flat at $'+cap.value+'B (the latest year) and cashflow compounds at '+growthDisplay+'. Capex actually rising in trend → real crossover later. Earlier dates require growth to hold up; later dates assume faster GPU replacement. Tier 2A — derived deterministically from sankey cashflow + capex inputs.</div>';
+  html += '</div>';
+
+  // ─── Card C: Frontier Lab War Chest (static, no burn calc) ─────
+  const ffBadge = '<span style="display:inline-block;background:'+TIER_COLOR(ff.tier)+';color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER '+ff.tier+'</span>';
+  html += '<div class="iceberg-card">';
+  html += '<h3>Frontier Lab War Chest'+ffBadge+'</h3>';
+  html += '<div class="sub">Cumulative committed funding through end of this year. Reference number — runway depends on future burn rate, not shown.</div>';
+  html += '<div class="iceberg-big" style="color:#dc2626;">$'+ff.cumulative+'B</div>';
+  // Component stacked bar
+  const compTotal = Object.values(ff.components||{}).reduce((s,v)=>s+v,0);
+  const compColors = {'OpenAI':'#10a37f','Anthropic':'#d97706','xAI':'#a855f7','Other frontier labs':'#64748b','AI-native startups':'#475569'};
+  if (compTotal > 0) {
+    html += '<div class="iceberg-bar-wrap" style="height:24px;">';
+    let off = 0;
+    for (const [k,v] of Object.entries(ff.components)) {
+      const pct = v/compTotal*100;
+      html += '<div style="position:absolute;left:'+off+'%;top:0;height:100%;width:'+pct+'%;background:'+(compColors[k]||'#475569')+';display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white;border-right:1px solid rgba(0,0,0,0.4);" title="'+k+': $'+v+'B">'+(pct >= 14 ? '$'+v+'B' : '')+'</div>';
+      off += pct;
+    }
+    html += '</div>';
+    html += '<div style="display:flex;flex-direction:column;gap:3px;font-size:10px;color:var(--text-dim);margin-top:6px;">';
+    for (const [k,v] of Object.entries(ff.components)) {
+      html += '<div><span style="display:inline-block;width:8px;height:8px;background:'+(compColors[k]||'#475569')+';border-radius:2px;margin-right:4px;vertical-align:middle;"></span>'+k+' — <strong style="color:#cbd5e1;">$'+v+'B</strong></div>';
+    }
+    html += '</div>';
+  }
+  html += '<div class="iceberg-foot">' + (ff.src||'') + '</div>';
+  html += '</div>';
+
+  document.getElementById('iceberg-grid').innerHTML = html;
+
+  // Footer synthesis line
+  document.getElementById('iceberg-foot').innerHTML =
+    '<strong style="color:#f1f5f9;">Reading ' + d.label + ':</strong> Customers generate <strong style="color:#10b981;">$'+cashflow.toFixed(1)+'B</strong> of recoverable cashflow against <strong style="color:#ef4444;">$'+cap.value+'B</strong> of fresh capex. On the page\'s own trajectory, that crossover into GAAP profitability lands around <strong style="color:#10b981;">'+crossDisplay+'</strong> (using a '+crossoverDepYrs+'yr depreciation horizon and the '+(crossoverGrowth==='recent'?'most recent':'geometric mean')+' cashflow growth rate). The $'+ff.cumulative+'B war chest is shown as a static reference — the date this page projects matters more than how fast labs burn through it.';
+}
+
+function setCrossDep(yrs) { crossoverDepYrs = yrs; renderYear(activeYear); }
+function setCrossGrowth(mode) { crossoverGrowth = mode; renderYear(activeYear); }
 
 function buildSankey(d) {
   const canvas = document.getElementById('sankey');
@@ -132,12 +338,13 @@ function buildSankey(d) {
   const spacing = (W - margin*2 - colW*4) / 3;
   const barH = 450, gap = 5, topY = 50;
 
-  // Build columns
+  // Build columns — carry tier+src through for the tooltip provenance badge
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null}));
   const colDefs = [
-    { label:'Who Pays', items: d.buyers.map(b=>({name:b.label, value:b.value})) },
-    { label:'Channels', items: d.channels.map(c=>({name:c.label, value:c.value})) },
-    { label:'Model Providers', items: d.providers.map(p=>({name:p.label, value:p.value})) },
-    { label:'Where It Goes', items: d.outcomes.map(o=>({name:o.label, value:o.value})) },
+    { label:'Who Pays', items: wrap(d.buyers) },
+    { label:'Channels', items: wrap(d.channels) },
+    { label:'Model Providers', items: wrap(d.providers) },
+    { label:'Where It Goes', items: wrap(d.outcomes) },
   ];
 
   // Global scale — all columns use same px/$B
@@ -153,7 +360,7 @@ function buildSankey(d) {
     const x = margin + ci*(colW + spacing);
     col.items.forEach(item => {
       const h = item.value * scale;
-      allNodes.push({ name:item.name, value:item.value, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, x, y, w:colW, h, col:ci, _in:0, _out:0 });
       y += h + gap;
     });
   });
@@ -166,42 +373,75 @@ function buildSankey(d) {
   const flowDefs = [];
 
   // --- Buyers → Channels (proportional, skip VC) ---
+  // Ad spend is funded by businesses (Enterprise, sometimes SME), not consumers.
+  // d.adsRouting maps buyer name → dollars sent to the Ads channel; the rest of
+  // each buyer's value splits proportionally across non-Ads channels.
   const custBuyers = allNodes.filter(n=>n.col===0 && n.name!=='VC/Investors');
   const chNodes = allNodes.filter(n=>n.col===1);
-  const chTotal = chNodes.reduce((s,n)=>s+n.value,0);
+  const adsCh = chNodes.filter(c=>c.name==='Ads');
+  const nonAdsCh = chNodes.filter(c=>c.name!=='Ads');
+  const nonAdsChTotal = nonAdsCh.reduce((s,n)=>s+n.value,0);
+  const adsRouting = d.adsRouting || {};
   custBuyers.forEach(buyer => {
-    chNodes.forEach(ch => {
-      const v = buyer.value * (ch.value / chTotal);
-      if(v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
-    });
+    const adContrib = adsRouting[buyer.name] || 0;
+    const remaining = Math.max(0, buyer.value - adContrib);
+    if(adContrib > 0) {
+      adsCh.forEach(ch => {
+        flowDefs.push({from:buyer.name, to:ch.name, value:adContrib, fc:0, tc:1});
+      });
+    }
+    if(remaining > 0 && nonAdsChTotal > 0) {
+      nonAdsCh.forEach(ch => {
+        const v = remaining * (ch.value / nonAdsChTotal);
+        if(v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
+      });
+    }
   });
 
   // --- Channels → Providers (routed, minus margins) ---
-  const marginPcts = {'Hyperscalers':0.20, 'Trad. SaaS':0.60};
+  // All cost params come from the data file (d.costParams), not hardcoded constants.
+  // See data/sankey-projections.json _schema.tier_legend for the provenance system.
+  const cp = d.costParams || {};
+  const INFERENCE_PCT = (cp.inferencePct != null) ? cp.inferencePct : 0.47;
+  const marginPcts = cp.marginPcts || {'Hyperscalers':0.20, 'Trad. SaaS':0.60};
+  const aiNativeIaasShare = (cp.aiNativeIaasShare != null) ? cp.aiNativeIaasShare : 0.30;
+  const rates = cp.providerRates || {};
+  const explicitVCSubsidy = cp.vcSubsidy || null; // when present, overrides rate-based calc
+
   const provNodes = allNodes.filter(n=>n.col===2);
   const frontierNodes = provNodes.filter(n=>!n.name.includes('IaaS')&&!n.name.includes('Other'));
-  const frontierTotal = frontierNodes.reduce((s,n)=>s+n.value,0);
   const iaasNode = N('IaaS/Open',2);
   const otherNode = N('Other Model Providers',2);
+
+  // OpenAI's provider value includes ad revenue (Ads channel routes 100% to it).
+  // Non-Ads channels must distribute on the *base* provider mix, otherwise the
+  // ad bump would also pull a bigger share of token/sub revenue toward OpenAI.
+  const adsChNodeForBase = N('Ads', 1);
+  const adsBump = adsChNodeForBase ? adsChNodeForBase.value : 0;
+  const baseValue = (p) => (p.name==='OpenAI' ? Math.max(p.value - adsBump, 0) : p.value);
+  const frontierBaseTotal = frontierNodes.reduce((s,n)=>s+baseValue(n),0);
 
   chNodes.forEach(ch => {
     const mPct = marginPcts[ch.name]||0;
     const pass = ch.value * (1-mPct);
 
-    if(ch.name==='IaaS & Agg.' && iaasNode) {
+    if(ch.name==='Ads') {
+      // Ads revenue flows entirely to OpenAI (only player in this space).
+      flowDefs.push({from:ch.name, to:'OpenAI', value:pass, fc:1, tc:2});
+    } else if(ch.name==='IaaS & Agg.' && iaasNode) {
       flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass, fc:1, tc:2});
     } else if(ch.name==='AI Native Apps') {
-      if(iaasNode) flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass*0.3, fc:1, tc:2});
+      if(iaasNode) flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass*aiNativeIaasShare, fc:1, tc:2});
       frontierNodes.forEach(p => {
-        flowDefs.push({from:ch.name, to:p.name, value:pass*0.7*(p.value/frontierTotal), fc:1, tc:2});
+        flowDefs.push({from:ch.name, to:p.name, value:pass*(1-aiNativeIaasShare)*(baseValue(p)/frontierBaseTotal), fc:1, tc:2});
       });
     } else if((ch.name==='Model API'||ch.name==='Model Subs') && otherNode) {
       const recv = [...frontierNodes, otherNode];
-      const rt = recv.reduce((s,n)=>s+n.value,0);
-      recv.forEach(p => { flowDefs.push({from:ch.name, to:p.name, value:pass*(p.value/rt), fc:1, tc:2}); });
+      const rt = recv.reduce((s,n)=>s+baseValue(n),0);
+      recv.forEach(p => { flowDefs.push({from:ch.name, to:p.name, value:pass*(baseValue(p)/rt), fc:1, tc:2}); });
     } else {
       frontierNodes.forEach(p => {
-        flowDefs.push({from:ch.name, to:p.name, value:pass*(p.value/frontierTotal), fc:1, tc:2});
+        flowDefs.push({from:ch.name, to:p.name, value:pass*(baseValue(p)/frontierBaseTotal), fc:1, tc:2});
       });
     }
 
@@ -212,41 +452,46 @@ function buildSankey(d) {
   });
 
   // --- VC → loss-making Providers (bypass) ---
-  const INFERENCE_PCT = 0.47;
-  const oocRates = {
-    '2025':{'OpenAI':0.79,'Anthropic':0.65,'Google (Gemini)':0.50,'IaaS/Open':0.45,'Other Model Providers':0.80},
-    '2026E':{'OpenAI':0.55,'Anthropic':0.55,'Google (Gemini)':0.48,'IaaS/Open':0.42,'Other Model Providers':0.70},
-    '2027E':{'OpenAI':0.48,'Anthropic':0.48,'Google (Gemini)':0.45,'IaaS/Open':0.40,'Other Model Providers':0.60},
-  };
-  const rates = oocRates[activeYear]||oocRates['2025'];
+  // If costParams.vcSubsidy is present (typically Tier 1B sourced years), use the
+  // explicit per-provider amounts. Otherwise compute from rate-based vcNeed.
   const vcNode = N('VC/Investors',0);
   if(vcNode && vcNode.value > 0) {
-    const chPass = chNodes.reduce((s,n)=>s+n.value*(1-(marginPcts[n.name]||0)),0);
-    const pt = provNodes.reduce((s,n)=>s+n.value,0);
-    provNodes.forEach(p => {
-      const costPct = INFERENCE_PCT + (rates[p.name]||0.55);
-      if(costPct < 1.0) return;
-      const share = p.value/pt;
-      const chRev = chPass * share;
-      const vcNeed = chRev * (costPct - 1.0);
-      if(vcNeed > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:vcNeed, fc:0, tc:2, bypass:true});
-    });
+    if(explicitVCSubsidy) {
+      provNodes.forEach(p => {
+        const v = explicitVCSubsidy[p.name];
+        if(v && v > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:v, fc:0, tc:2, bypass:true});
+      });
+    } else {
+      const chPass = chNodes.reduce((s,n)=>s+n.value*(1-(marginPcts[n.name]||0)),0);
+      const pt = provNodes.reduce((s,n)=>s+n.value,0);
+      provNodes.forEach(p => {
+        const costPct = INFERENCE_PCT + (rates[p.name]||0.55);
+        if(costPct < 1.0) return;
+        const share = p.value/pt;
+        const chRev = chPass * share;
+        const vcNeed = chRev * (costPct - 1.0);
+        if(vcNeed > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:vcNeed, fc:0, tc:2, bypass:true});
+      });
+    }
   }
 
-  // --- Providers → Inference + Other Operating ---
+  // --- Providers → Inference + Other Operating + (Surplus → Cashflow) ---
+  // Conservation: inf + op + surplus = p.value (always). Unified formula:
+  //   inf = p.value × INFERENCE_PCT  (always; INF is modelled as an absolute fraction of revenue)
+  //   op  = p.value × min(rate, 1 − INFERENCE_PCT)  (capped so inf+op ≤ value for loss-makers)
+  //   surplus = p.value × max(0, 1 − costPct)
+  // For loss-makers (costPct ≥ 1) op = p.value × (1 − INF) and surplus = 0.
+  // For profitable providers op = p.value × rate and surplus = p.value × (1 − costPct).
   provNodes.forEach(p => {
-    const costPct = Math.min(INFERENCE_PCT + (rates[p.name]||0.55), 1.0);
-    const infShare = INFERENCE_PCT / costPct;
-    flowDefs.push({from:p.name, to:'Inference', value:p.value*infShare, fc:2, tc:3});
-    flowDefs.push({from:p.name, to:'Other Operating', value:p.value*(1-infShare), fc:2, tc:3});
-  });
-
-  // --- Provider surplus → Generated Cashflow (bypass) ---
-  provNodes.forEach(p => {
-    const costPct = INFERENCE_PCT + (rates[p.name]||0.55);
-    if(costPct >= 1.0) return;
-    const surplus = p.value * (1.0 - costPct);
-    if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
+    const r = rates[p.name] || 0.55;
+    const costPct = INFERENCE_PCT + r;
+    const opShare = Math.min(r, 1 - INFERENCE_PCT);
+    flowDefs.push({from:p.name, to:'Inference', value:p.value*INFERENCE_PCT, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating', value:p.value*opShare, fc:2, tc:3});
+    if (costPct < 1.0) {
+      const surplus = p.value * (1.0 - costPct);
+      if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
+    }
   });
 
   // Convert flowDefs to visual flows with Y positions
@@ -318,6 +563,16 @@ function renderCanvas(ctx, W) {
     ctx.globalAlpha = 1;
   });
 
+  // Tier colour helper (shared with tooltip)
+  const tierColor = (t) => {
+    if(!t) return '#475569';
+    if(t.startsWith('1')) return '#10b981';
+    if(t.startsWith('2')) return '#3b82f6';
+    if(t.startsWith('3')) return '#f59e0b';
+    if(t.startsWith('4')) return '#ef4444';
+    return '#475569';
+  };
+
   // Draw nodes
   allNodes.forEach(n => {
     const isActive = n.name === aName;
@@ -337,6 +592,17 @@ function renderCanvas(ctx, W) {
       const vt = '$'+n.value.toFixed(n.value<10?1:0)+'B';
       ctx.fillText(vt, n.x+3, n.y+n.h/2+10);
     }
+    // Tier corner badge — small coloured square in top-right of node
+    if(n.tier && n.h >= 10) {
+      const bw = 14, bh = 9;
+      ctx.fillStyle = tierColor(n.tier);
+      ctx.beginPath(); ctx.roundRect(n.x + n.w - bw - 1, n.y + 1, bw, bh, 2); ctx.fill();
+      ctx.fillStyle = '#0a0e1a';
+      ctx.font = 'bold 7px -apple-system,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.tier, n.x + n.w - bw/2 - 1, n.y + bh - 1);
+      ctx.textAlign = 'left';
+    }
     ctx.globalAlpha = 1;
   });
 
@@ -345,8 +611,24 @@ function renderCanvas(ctx, W) {
   if(active && panel) {
     const inflows = allFlows.filter(f=>f.to.name===active.name);
     const outflows = allFlows.filter(f=>f.from.name===active.name);
+    // Tier badge colour map: 1 = green (sourced), 2 = blue (derived), 3 = amber (projected), 4 = red (editorial)
+    const tierColor = (t) => {
+      if(!t) return '#475569';
+      if(t.startsWith('1')) return '#10b981';
+      if(t.startsWith('2')) return '#3b82f6';
+      if(t.startsWith('3')) return '#f59e0b';
+      if(t.startsWith('4')) return '#ef4444';
+      return '#475569';
+    };
+    const badge = active.tier
+      ? '<span style="display:inline-block;background:'+tierColor(active.tier)+';color:#0a0e1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;">TIER '+active.tier+'</span>'
+      : '';
     let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;">';
-    html += '<div><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong><div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div></div>';
+    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div>';
+    if(active.src) {
+      html += '<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:4px;max-width:240px;">'+active.src+'</div>';
+    }
+    html += '</div>';
     if(inflows.length) {
       const inTotal = inflows.reduce((s,f)=>s+f.value,0);
       html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows $'+inTotal.toFixed(1)+'B</div>';
@@ -362,7 +644,7 @@ function renderCanvas(ctx, W) {
     html += '</div>';
     panel.innerHTML = html;
   } else if(panel) {
-    panel.innerHTML = '<span style="opacity:0.4;">Click or hover a node to see flow details</span>';
+    panel.innerHTML = '<span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>';
   }
 }
 

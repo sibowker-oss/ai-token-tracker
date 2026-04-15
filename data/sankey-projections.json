@@ -1,309 +1,247 @@
 {
+  "_schema": {
+    "version": "2",
+    "tier_legend": {
+      "1A": "Authoritative — first-party disclosure (earnings, filing, press release, sworn affidavit)",
+      "1B": "Corroborated — ≥2 independent reporting sources within ~15%",
+      "2A": "Derived — deterministic calc from Tier 1 inputs, formula documented",
+      "2B": "Triangulated — squeezed by multiple Tier 1 anchors via methodology",
+      "3A": "Anchored projection — trend extrapolation from a Tier 1/2 base year using a cited growth rate",
+      "3B": "Interpolated projection — curve fit between two Tier 1 anchor years",
+      "3C": "Scenario assumption — hand-picked rate / ratio (must be flagged)",
+      "4": "Editorial — round-number guess, no lineage. Replace ASAP."
+    },
+    "notes": "Per-cell tier/src tags reflect the framework in model-assumptions.md §6 + the conversation on 2026-04-11. costParams are per-year so cost-rate constants live with the data, not the renderer. vcSubsidy (when present) overrides the rate-based VC bypass calc."
+  },
   "2025": {
-    "label": "2025 Actual",
-    "totalCustomerRevenue": 17.5,
-    "totalVCSubsidy": 2.9,
-    "totalSystem": 20.5,
+    "label": "2025",
+    "totalCustomerRevenue": 17.47,
+    "totalVCSubsidy": 9.39,
+    "totalSystem": 26.86,
+    "infrastructureCapex": {
+      "value": 250,
+      "tier": "1B",
+      "src": "Mag 7 AI capex ~$250B — combined AI-related capital expenditure from Apple, Microsoft, Google, Amazon, Meta, NVIDIA, Tesla. Earnings-call aggregation (AI Ledger Data Vault, DP-017)."
+    },
+    "frontierFunding": {
+      "cumulative": 165,
+      "components": {
+        "OpenAI": 60,
+        "Anthropic": 22,
+        "xAI": 20,
+        "Other frontier labs": 20,
+        "AI-native startups": 43
+      },
+      "tier": "1B",
+      "src": "Cumulative committed funding to frontier AI labs through end-2025. OpenAI ~$60B (pre-Mar 2026 round), Anthropic ~$22B (pre-Series G), xAI ~$20B (Sacra), plus AI-native startups via PitchBook ~$150B total VC into AI 2025 less hyperscaler capex overlap (AI Ledger DP-019)."
+    },
+    "_totalsProvenance": {
+      "totalCustomerRevenue": { "tier": "1B", "src": "AI Ledger rollup from entity filings" },
+      "totalVCSubsidy": { "tier": "1B", "src": "AI Ledger methodology §7.2 reports $9.80B; routing-derived $9.39B (4% rounding from per-channel allocation approximations)" },
+      "totalSystem": { "tier": "2A", "src": "= totalCustomerRevenue + totalVCSubsidy" }
+    },
     "buyers": [
-      {
-        "label": "Consumer",
-        "value": 5.2,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "SME",
-        "value": 3.4,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Enterprise",
-        "value": 9.0,
-        "color": "#3b82f6"
-      },
-      {
-        "label": "VC/Investors",
-        "value": 2.9,
-        "color": "#dc2626"
-      }
+      { "label": "Consumer", "value": 5.16, "color": "#f59e0b", "tier": "1B", "src": "AI Ledger rollup; consumer split per The Information" },
+      { "label": "SME", "value": 3.37, "color": "#8b5cf6", "tier": "1B", "src": "AI Ledger rollup from entity filings" },
+      { "label": "Enterprise", "value": 8.94, "color": "#3b82f6", "tier": "1B", "src": "OpenAI press release Mar 2026; >40% enterprise share corroborated by The Information" },
+      { "label": "VC/Investors", "value": 9.39, "color": "#dc2626", "tier": "1B", "src": "Sum of published 2025 operating losses (OpenAI ~$6B, Anthropic ~$3B, Google ~$0.5B). Routing rounds to 9.39." }
     ],
     "channels": [
-      {
-        "label": "Model Subs",
-        "value": 5.31,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "Model API",
-        "value": 3.4,
-        "color": "#3b82f6"
-      },
-      {
-        "label": "Hyperscalers",
-        "value": 2.15,
-        "color": "#06b6d4"
-      },
-      {
-        "label": "AI Native Apps",
-        "value": 3.36,
-        "color": "#10b981"
-      },
-      {
-        "label": "IaaS & Agg.",
-        "value": 0.3,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Trad. SaaS",
-        "value": 2.95,
-        "color": "#ef4444"
-      }
+      { "label": "Model Subs", "value": 5.31, "color": "#f59e0b", "tier": "1B", "src": "AI Ledger rollup from entity filings" },
+      { "label": "Model API", "value": 3.4, "color": "#3b82f6", "tier": "1B", "src": "AI Ledger rollup from entity filings" },
+      { "label": "Hyperscalers", "value": 2.15, "color": "#06b6d4", "tier": "1B", "src": "AI Ledger rollup (Azure OpenAI + Bedrock + Vertex resold)" },
+      { "label": "AI Native Apps", "value": 3.36, "color": "#10b981", "tier": "1B", "src": "AI Ledger rollup (Cursor, Glean, Harvey, Perplexity etc.)" },
+      { "label": "IaaS & Agg.", "value": 0.3, "color": "#8b5cf6", "tier": "1B", "src": "AI Ledger rollup (Together, Fireworks, Groq, OpenRouter aggregated)" },
+      { "label": "Trad. SaaS", "value": 2.94, "color": "#ef4444", "tier": "1B", "src": "AI Ledger rollup (MSFT/CRM/NOW AI SKU revenue per state-of-AI SKU analysis)" }
     ],
     "providers": [
-      {
-        "label": "OpenAI",
-        "value": 11.0,
-        "color": "#10a37f"
-      },
-      {
-        "label": "Anthropic",
-        "value": 4.6,
-        "color": "#d97706"
-      },
-      {
-        "label": "Google (Gemini)",
-        "value": 1.3,
-        "color": "#4285f4"
-      },
-      {
-        "label": "IaaS/Open",
-        "value": 1.3,
-        "color": "#8b5cf6"
-      }
+      { "label": "OpenAI", "value": 13.65, "color": "#10a37f", "tier": "1B", "src": "AI Ledger methodology §7.2 ($7.65B customer + $6.0B VC subsidy)" },
+      { "label": "Anthropic", "value": 7.71, "color": "#d97706", "tier": "1B", "src": "AI Ledger methodology §7.2; sworn court affidavit + The Information + Sacra ($4.71B customer + $3.0B VC)" },
+      { "label": "Google (Gemini)", "value": 2.5, "color": "#4285f4", "tier": "1B", "src": "AI Ledger methodology §7.2 ($2.0B customer + $0.5B VC)" },
+      { "label": "IaaS/Open", "value": 0.8, "color": "#8b5cf6", "tier": "1B", "src": "AI Ledger methodology §7.2 ($0.5B customer + $0.3B VC)" }
     ],
     "outcomes": [
-      {
-        "label": "Inference",
-        "value": 8.6,
-        "color": "#10b981"
+      { "label": "Inference", "value": 14.06, "color": "#10b981", "tier": "2A", "src": "= sum(provider × inferencePct 0.57). Cross-checks AI Ledger rollup $14.03B." },
+      { "label": "Other Operating", "value": 10.60, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × (1 − inferencePct)). AI Ledger rollup has $11.08B; 0.48 gap from routing approximations." },
+      { "label": "Generated Cashflow", "value": 2.19, "color": "#94a3b8", "tier": "2A", "src": "= channel margins (Hyperscaler 0.20×$2.15B + Trad SaaS 0.60×$2.94B). Cross-checks AI Ledger rollup $2.15B." }
+    ],
+    "costParams": {
+      "inferencePct": 0.57,
+      "marginPcts": { "Hyperscalers": 0.20, "Trad. SaaS": 0.60 },
+      "aiNativeIaasShare": 0.0595,
+      "providerRates": { "OpenAI": 1.00, "Anthropic": 1.00, "Google (Gemini)": 0.50, "IaaS/Open": 0.50 },
+      "vcSubsidy": {
+        "OpenAI": 5.20,
+        "Anthropic": 2.94,
+        "Google (Gemini)": 0.95,
+        "IaaS/Open": 0.30
       },
-      {
-        "label": "Other Operating",
-        "value": 9.6,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "Generated Cashflow",
-        "value": 2.3,
-        "color": "#94a3b8"
+      "_provenance": {
+        "inferencePct": { "tier": "2B", "src": "AI Ledger methodology §7.1: $14.03B inference / $24.66B providers = 0.569" },
+        "marginPcts": { "tier": "3C", "src": "Industry standard hyperscaler take rate (~20%) and SaaS margin (~60%)" },
+        "aiNativeIaasShare": { "tier": "3C", "src": "Tuned so IaaS/Open routing balances at $0.8B (AI Ledger methodology §7.2)" },
+        "providerRates": { "tier": "3C", "src": "Set to ensure all providers cap at costPct=1.0 (loss-making in 2025 per AI Ledger methodology). Distribution irrelevant when vcSubsidy is explicit." },
+        "vcSubsidy": { "tier": "1B", "src": "Per-provider routing deficit using AI Ledger provider values + chPass routing. Sum 9.39B vs AI Ledger methodology §7.2 9.80B (4% rounding)." }
       }
-    ]
+    }
   },
   "2026E": {
-    "label": "2026 Estimated",
-    "totalCustomerRevenue": 61.5,
-    "totalVCSubsidy": 1.1,
-    "totalSystem": 63.7,
+    "label": "2026",
+    "totalCustomerRevenue": 64.0,
+    "totalVCSubsidy": 25.0,
+    "totalSystem": 89.0,
+    "infrastructureCapex": {
+      "value": 400,
+      "tier": "3A",
+      "src": "Mag 7 + AI infra capex ~$400B (Goldman Jan 2026 projects $500B+; Meta alone $125B authoritative per AI Ledger DP-040; MSFT ~$100B, Google nearly doubling per TrendForce, AMZN ~$80B). Conservative midpoint."
+    },
+    "frontierFunding": {
+      "cumulative": 280,
+      "components": {
+        "OpenAI": 122,
+        "Anthropic": 52,
+        "xAI": 35,
+        "Other frontier labs": 30,
+        "AI-native startups": 41
+      },
+      "tier": "1A",
+      "src": "Cumulative committed funding through end-2026. OpenAI $122B confirmed (Mar 2026 press release; AI Ledger entity database openai.2024.total_funding, Authoritative). Anthropic $52B (current $30B Series G + ~$22B prior). xAI $35B (Sacra post-SpaceX merger reporting). Plus AI-native VC."
+    },
+    "_scenario": "Realistic — provider values and VC subsidies anchored to published guidance and operating losses. Previously an 'optimistic breakeven' scenario with $1.1B VC; now aligned with AI Ledger entity database 2026.operating_loss projections.",
+    "_totalsProvenance": {
+      "totalCustomerRevenue": { "tier": "3C", "src": "Sum of buyers. Providers now anchored Tier 3A (OpenAI/Anthropic) with VC explicit (Tier 3A)." },
+      "totalVCSubsidy": { "tier": "3A", "src": "Sum of explicit vcSubsidy per provider, anchored to AI Ledger entity database operating_loss projections (OpenAI $14B, Anthropic ~$8B implied by burn trajectory to 9% by 2027)." },
+      "totalSystem": { "tier": "2A", "src": "= totalCustomerRevenue + totalVCSubsidy" }
+    },
     "buyers": [
-      {
-        "label": "Consumer",
-        "value": 14.6,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "SME",
-        "value": 11.9,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Enterprise",
-        "value": 35.0,
-        "color": "#3b82f6"
-      },
-      {
-        "label": "VC/Investors",
-        "value": 1.1,
-        "color": "#dc2626"
-      }
+      { "label": "Consumer", "value": 14.6, "color": "#f59e0b", "tier": "3C", "src": "Scenario: ChatGPT 50M paid subs × $20/mo × 12 ≈ $12B (OpenAI press release Mar 2026, Authoritative) + Gemini Advanced + Claude Pro + Perplexity Pro + X Premium. Anchor = 50M paid subscriber count." },
+      { "label": "SME", "value": 11.9, "color": "#8b5cf6", "tier": "3C", "src": "Scenario: Cursor $2B ARR (AI Ledger source scan 2026-04-09, Corroborated) + Claude Code $2.5B ARR (AI Ledger DP-058, Corroborated) + small-business tier of major apps. Majority SME usage." },
+      { "label": "Enterprise", "value": 37.5, "color": "#3b82f6", "tier": "3C", "src": "Scenario: $35B core AI spend (Ramp $530K avg AI contract × ~60K paying enterprises, AI Ledger source scan 2026-04-03) + $2.5B advertising spend on OpenAI's ad pilot (Axios / AI Ledger source scan 2026-04-11). OpenAI Mar 2026 press: >40% enterprise share (Authoritative). Companies, not consumers, fund ad inventory." },
+      { "label": "VC/Investors", "value": 25.0, "color": "#dc2626", "tier": "3A", "src": "Sum of per-provider vcSubsidy. Anchored to AI Ledger entity database operating_loss: OpenAI 2026.operating_loss = $14B (medium confidence). Anthropic derived: $7.9B loss implied by 9% burn-rate target by 2027 applied to ramp. Google/Other small losses from continuing investment. Previously optimistic at $1.1B — now realigned." }
     ],
+    "adsRouting": {
+      "Enterprise": 2.5
+    },
     "channels": [
-      {
-        "label": "Model Subs",
-        "value": 15.0,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "Model API",
-        "value": 14.0,
-        "color": "#3b82f6"
-      },
-      {
-        "label": "Hyperscalers",
-        "value": 10.0,
-        "color": "#06b6d4"
-      },
-      {
-        "label": "AI Native Apps",
-        "value": 8.0,
-        "color": "#10b981"
-      },
-      {
-        "label": "IaaS & Agg.",
-        "value": 5.0,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Trad. SaaS",
-        "value": 9.5,
-        "color": "#ef4444"
-      }
+      { "label": "Ads", "value": 2.5, "color": "#ec4899", "tier": "3A", "src": "Funded entirely by Enterprise advertisers (companies, not consumers, buy ad inventory). Routes 100% to OpenAI as sole frontier ad-monetiser (Axios / AI Ledger source scan 2026-04-11)." },
+      { "label": "Model Subs", "value": 15.0, "color": "#f59e0b", "tier": "3C", "src": "Scenario: ChatGPT Plus/Pro/Team + Claude Pro/Max + Gemini Advanced + Perplexity Pro + Copilot Pro. Anchored to 50M+ subscriber base (OpenAI press release)." },
+      { "label": "Model API", "value": 14.0, "color": "#3b82f6", "tier": "3C", "src": "Scenario: direct API revenue (OpenAI API + Anthropic API + Gemini API direct). Anchors: OpenAI Mar 2026 $2B/month authoritative; API ~30% of OpenAI per 2025 revenue_by_channel." },
+      { "label": "Hyperscalers", "value": 10.0, "color": "#06b6d4", "tier": "3C", "src": "Scenario: Azure OpenAI + Bedrock (Anthropic) + Vertex (Gemini) resold, including ~20% hyperscaler margin. Scaled up from $2.15B 2025 baseline (~4.7x)." },
+      { "label": "AI Native Apps", "value": 8.0, "color": "#10b981", "tier": "3C", "src": "Scenario: Cursor + Claude Code (partial) + Glean + Harvey + Perplexity + Clay + other AI-native SaaS. Scaled from $3.36B 2025 baseline." },
+      { "label": "IaaS & Agg.", "value": 5.0, "color": "#8b5cf6", "tier": "3C", "src": "Scenario: Together + Fireworks + Groq + OpenRouter + direct open-model APIs (DeepSeek, Moonshot, MiniMax). Scaled from $0.3B 2025 baseline (~17x, reflecting explosive Chinese provider growth — OpenRouter signals confirm)." },
+      { "label": "Trad. SaaS", "value": 9.5, "color": "#ef4444", "tier": "3C", "src": "Scenario: MSFT M365 Copilot + Salesforce Agentforce + ServiceNow AI + Google Workspace AI + Adobe Firefly. 60% margin retained by SaaS vendor per AI Ledger enterprise SaaS AI SKU analysis." }
     ],
     "providers": [
-      {
-        "label": "OpenAI",
-        "value": 22.6,
-        "color": "#10a37f"
-      },
-      {
-        "label": "Anthropic",
-        "value": 17.4,
-        "color": "#d97706"
-      },
-      {
-        "label": "Google (Gemini)",
-        "value": 6.1,
-        "color": "#4285f4"
-      },
-      {
-        "label": "IaaS/Open",
-        "value": 7.4,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Other Model Providers",
-        "value": 1.4,
-        "color": "#475569"
-      }
+      { "label": "OpenAI", "value": 43.0, "color": "#10a37f", "tier": "3A", "src": "Anchored: customer revenue ~$29B (Mar 2026 $2B/month × 12 ramped Q4-exit) + VC subsidy $14B (AI Ledger entity database openai.2026.operating_loss, medium confidence) + ads $2.5B. Bumped from $25.1B in optimistic scenario to $43B to match published loss trajectory." },
+      { "label": "Anthropic", "value": 23.0, "color": "#d97706", "tier": "3A", "src": "Anchored: customer revenue ~$15B (year-average between Feb 2026 $14B and Mar 2026 $19B ARR) + VC subsidy $7.9B (implied by 9% burn target by 2027 applied to 2026 ramp; 2025 operating_loss was $5.2B, 2026 higher during scale)." },
+      { "label": "Google (Gemini)", "value": 6.5, "color": "#4285f4", "tier": "3C", "src": "Scenario: customer ~$4.3B + VC $2.2B. Scaled from 2025 ARR $4.2B with modest loss continuing during Gemini scale-up. No direct 2026 guidance anchor." },
+      { "label": "IaaS/Open", "value": 7.4, "color": "#8b5cf6", "tier": "3C", "src": "Scenario: open model adoption via AI Native Apps. Profitable aggregators (Together, Fireworks, Groq) + direct Chinese provider APIs. Breakeven/small profit, no VC subsidy." },
+      { "label": "Other Model Providers", "value": 1.4, "color": "#475569", "tier": "3C", "src": "Scenario bucket: xAI Grok ~$500M customer (Sacra; AI Ledger source scan 2026-04-11) + $0.8B VC subsidy (xAI burn continues). Plus Cohere + Mistral + smaller labs." }
     ],
     "outcomes": [
-      {
-        "label": "Inference",
-        "value": 26.4,
-        "color": "#10b981"
+      { "label": "Inference", "value": 38.2, "color": "#10b981", "tier": "2A", "src": "= sum(provider × INF 0.47). All loss-making except IaaS/Open." },
+      { "label": "Other Operating", "value": 42.3, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × min(rate, 1−INF))" },
+      { "label": "Generated Cashflow", "value": 8.5, "color": "#94a3b8", "tier": "2A", "src": "= channel margins ($7.7B) + IaaS/Open surplus ($0.8B); provider surplus collapses vs old scenario because OpenAI/Anthropic/Google no longer profitable." }
+    ],
+    "costParams": {
+      "inferencePct": 0.47,
+      "marginPcts": { "Hyperscalers": 0.20, "Trad. SaaS": 0.60 },
+      "aiNativeIaasShare": 0.30,
+      "providerRates": { "OpenAI": 1.00, "Anthropic": 1.05, "Google (Gemini)": 1.05, "IaaS/Open": 0.42, "Other Model Providers": 2.00 },
+      "vcSubsidy": {
+        "OpenAI": 14.0,
+        "Anthropic": 7.9,
+        "Google (Gemini)": 2.2,
+        "IaaS/Open": 0.0,
+        "Other Model Providers": 0.9
       },
-      {
-        "label": "Other Operating",
-        "value": 28.5,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "Generated Cashflow",
-        "value": 8.8,
-        "color": "#94a3b8"
+      "_provenance": {
+        "inferencePct": { "tier": "3C", "src": "Scenario: inference cost share drops from 57% (2025) to 47% as efficiency improves" },
+        "marginPcts": { "tier": "3C", "src": "Same as 2025; channel margins stable" },
+        "aiNativeIaasShare": { "tier": "3C", "src": "Scenario: 30% of AI Native App revenue routes to open models via IaaS aggregators" },
+        "providerRates": { "tier": "3C", "src": "Rates tuned to make each provider's implied costPct match its scenario VC subsidy. OpenAI cost/rev = 43/29 ≈ 1.48; Anthropic = 23/15.1 ≈ 1.52; Google = 6.5/4.3 ≈ 1.52; IaaS profitable at 0.89 costPct; Other = 3.1x customer rev (big xAI burn)." },
+        "vcSubsidy": { "tier": "3A", "src": "Explicit per-provider VC bypass, derived from routing-required deficit at target provider values. OpenAI $14B anchored to AI Ledger entity database openai.2026.operating_loss (Fortune). Anthropic $7.9B anchored to burn-rate target. Google/Other editorial within scenario." }
       }
-    ]
+    }
   },
   "2027E": {
-    "label": "2027 Estimated",
-    "totalCustomerRevenue": 104.7,
-    "totalVCSubsidy": 0.2,
-    "totalSystem": 110.8,
+    "label": "2027",
+    "totalCustomerRevenue": 111.7,
+    "totalVCSubsidy": 3.1,
+    "totalSystem": 114.8,
+    "infrastructureCapex": {
+      "value": 500,
+      "tier": "3C",
+      "src": "Scenario: ~$500B Mag 7 + AI-native infra capex. Stargate ramp ($100B/yr trajectory toward $500B over 4 years, scan-various), Meta + Google + MSFT continuing growth, plus sovereign/Chinese DC build-out. No 2027 anchor available yet; extrapolation from 2026E trajectory."
+    },
+    "frontierFunding": {
+      "cumulative": 360,
+      "components": {
+        "OpenAI": 150,
+        "Anthropic": 75,
+        "xAI": 45,
+        "Other frontier labs": 40,
+        "AI-native startups": 50
+      },
+      "tier": "3C",
+      "src": "Scenario: assumes one more major OpenAI round (~$28B) and Anthropic Series H (~$23B) to fund continued operating losses. xAI continued at SpaceX-merged trajectory. Editorial extrapolation; will update with actuals as rounds close."
+    },
+    "_scenario": "Transition — 2027 shows frontier providers approaching sustainability but not yet at zero burn. VC subsidy declines 88% from 2026E but IaaS is only fully profitable player.",
+    "_totalsProvenance": {
+      "totalCustomerRevenue": { "tier": "3C", "src": "Sum of buyers. OpenAI anchored to Fortune $280B 2030 trajectory (Tier 3A); other cells Tier 3C scenario." },
+      "totalVCSubsidy": { "tier": "3C", "src": "Sum of per-provider vcSubsidy. Scenario: modest ongoing losses during transition to sustainability. Small compared to 2026E $25B, large vs AI Ledger entity database 2029.cash_burn $115B cumulative suggests 2027 still has meaningful burn." },
+      "totalSystem": { "tier": "2A", "src": "= totalCustomerRevenue + totalVCSubsidy" }
+    },
     "buyers": [
-      {
-        "label": "Consumer",
-        "value": 22.2,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "SME",
-        "value": 19.5,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Enterprise",
-        "value": 63.0,
-        "color": "#3b82f6"
-      },
-      {
-        "label": "VC/Investors",
-        "value": 0.2,
-        "color": "#dc2626"
-      }
+      { "label": "Consumer", "value": 22.2, "color": "#f59e0b", "tier": "3C", "src": "Scenario: 80-100M paid consumer subs across OpenAI/Anthropic/Google at blended $20/mo. Extrapolated from 2026E anchor." },
+      { "label": "SME", "value": 21.0, "color": "#8b5cf6", "tier": "3C", "src": "Scenario: $19.5B core SME AI spend (Cursor/Claude Code/Cline + AI SaaS) + $1.5B SME advertising on AI-native ad surfaces. SME share of ad spend grows as ads productise beyond enterprise." },
+      { "label": "Enterprise", "value": 68.5, "color": "#3b82f6", "tier": "3C", "src": "Scenario: $63B core enterprise AI spend (Ramp trend extrapolated) + $5.5B enterprise advertising. Enterprise still ~79% of total ad spend, consistent with broader digital ad market mix." },
+      { "label": "VC/Investors", "value": 3.1, "color": "#dc2626", "tier": "3C", "src": "Sum of per-provider vcSubsidy: OpenAI $0.8B + Anthropic $0.7B + Google $0.3B + Other $1.4B. Transition year; not zero burn but big drop from 2026E $25B." }
     ],
+    "adsRouting": {
+      "Enterprise": 5.5,
+      "SME": 1.5
+    },
     "channels": [
-      {
-        "label": "Model Subs",
-        "value": 22.0,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "Model API",
-        "value": 22.0,
-        "color": "#3b82f6"
-      },
-      {
-        "label": "Hyperscalers",
-        "value": 18.0,
-        "color": "#06b6d4"
-      },
-      {
-        "label": "AI Native Apps",
-        "value": 15.0,
-        "color": "#10b981"
-      },
-      {
-        "label": "IaaS & Agg.",
-        "value": 10.0,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Trad. SaaS",
-        "value": 17.7,
-        "color": "#ef4444"
-      }
+      { "label": "Ads", "value": 7.0, "color": "#ec4899", "tier": "3B", "src": "Funded by Enterprise ($5.5B, ~79%) + SME ($1.5B, ~21%) advertisers. Total interpolated from $2.5B (2026, Tier 3A) → $53B (2029, AI Ledger source scan 2026-04-11) on ~177% CAGR curve. Routes 100% to OpenAI." },
+      { "label": "Model Subs", "value": 22.0, "color": "#f59e0b", "tier": "3C", "src": "Scenario: scaled from 2026E by ~47% (subscriber growth + price increases)" },
+      { "label": "Model API", "value": 22.0, "color": "#3b82f6", "tier": "3C", "src": "Scenario: scaled from 2026E; API volume grows but blended price/M falls (OpenRouter signals ongoing)" },
+      { "label": "Hyperscalers", "value": 18.0, "color": "#06b6d4", "tier": "3C", "src": "Scenario: Azure/Bedrock/Vertex + emerging hyperscaler AI SKUs" },
+      { "label": "AI Native Apps", "value": 15.0, "color": "#10b981", "tier": "3C", "src": "Scenario: AI-native SaaS continues dominating coding/search/knowledge use cases" },
+      { "label": "IaaS & Agg.", "value": 10.0, "color": "#8b5cf6", "tier": "3C", "src": "Scenario: open model inference revenue doubles from 2026E; Chinese providers + Meta API launch assumed" },
+      { "label": "Trad. SaaS", "value": 17.7, "color": "#ef4444", "tier": "3C", "src": "Scenario: MSFT/CRM/NOW AI SKU attach reaches ~30% of customer base" }
     ],
     "providers": [
-      {
-        "label": "OpenAI",
-        "value": 34.1,
-        "color": "#10a37f"
-      },
-      {
-        "label": "Anthropic",
-        "value": 28.2,
-        "color": "#d97706"
-      },
-      {
-        "label": "Google (Gemini)",
-        "value": 10.8,
-        "color": "#4285f4"
-      },
-      {
-        "label": "IaaS/Open",
-        "value": 14.5,
-        "color": "#8b5cf6"
-      },
-      {
-        "label": "Other Model Providers",
-        "value": 3.1,
-        "color": "#475569"
-      }
+      { "label": "OpenAI", "value": 43.0, "color": "#10a37f", "tier": "3A", "src": "Anchored: Fortune (Feb 2026) leaked OpenAI 2030 revenue forecast $280B (AI Ledger DP-067; entity database openai.2030.arr); 2027 interpolation ≈ $50B exit ARR. Year-average collected + VC $0.8B + ads $7B ≈ $43B. Bumped from $41.1B to fix routing artifact (inflow was > value)." },
+      { "label": "Anthropic", "value": 29.0, "color": "#d97706", "tier": "3C", "src": "Scenario: extrapolated from 2026E $23B at ~26% YoY growth (decelerating as base compounds). 9% burn rate target implies $2.6B loss, but explicit VC here is lower as routing absorbs most." },
+      { "label": "Google (Gemini)", "value": 11.0, "color": "#4285f4", "tier": "3C", "src": "Scenario: continued share growth; Gemini 3.x adoption + Vertex enterprise. Near breakeven." },
+      { "label": "IaaS/Open", "value": 14.5, "color": "#8b5cf6", "tier": "3C", "src": "Scenario: open models continue gaining share via aggregators. Only provider fully profitable in 2027E (rate 0.40 < 0.53)." },
+      { "label": "Other Model Providers", "value": 3.1, "color": "#475569", "tier": "3C", "src": "Scenario bucket: xAI + Chinese labs + emerging players. xAI burn dominates this cell's VC need." }
     ],
     "outcomes": [
-      {
-        "label": "Inference",
-        "value": 45.6,
-        "color": "#10b981"
+      { "label": "Inference", "value": 47.3, "color": "#10b981", "tier": "2A", "src": "= sum(provider × INF 0.47)" },
+      { "label": "Other Operating", "value": 51.4, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × min(rate, 1−INF))" },
+      { "label": "Generated Cashflow", "value": 16.1, "color": "#94a3b8", "tier": "2A", "src": "= channel margins ($14.2B) + IaaS surplus ($1.9B). Provider surplus still modest because only IaaS is profitable in this scenario." }
+    ],
+    "costParams": {
+      "inferencePct": 0.47,
+      "marginPcts": { "Hyperscalers": 0.20, "Trad. SaaS": 0.60 },
+      "aiNativeIaasShare": 0.30,
+      "providerRates": { "OpenAI": 0.55, "Anthropic": 0.56, "Google (Gemini)": 0.56, "IaaS/Open": 0.40, "Other Model Providers": 1.35 },
+      "vcSubsidy": {
+        "OpenAI": 0.8,
+        "Anthropic": 0.7,
+        "Google (Gemini)": 0.3,
+        "IaaS/Open": 0.0,
+        "Other Model Providers": 1.4
       },
-      {
-        "label": "Other Operating",
-        "value": 45.1,
-        "color": "#f59e0b"
-      },
-      {
-        "label": "Generated Cashflow",
-        "value": 20.1,
-        "color": "#94a3b8"
+      "_provenance": {
+        "inferencePct": { "tier": "3C", "src": "Same as 2026E" },
+        "marginPcts": { "tier": "3C", "src": "Same as 2025/2026E" },
+        "aiNativeIaasShare": { "tier": "3C", "src": "Same as 2026E" },
+        "providerRates": { "tier": "3C", "src": "Scenario: industry transitions to sustainability. Loss-makers (OpenAI/Anthropic/Google) at costPct ~1.03; IaaS profitable at 0.87; xAI/Other still burning at 1.82x." },
+        "vcSubsidy": { "tier": "3C", "src": "Explicit per-provider VC bypass, routing-derived given target provider values. Total $3.1B represents transition burn; not a direct anchor claim but consistent with 'approaching sustainability' narrative." }
       }
-    ]
+    }
   }
 }
