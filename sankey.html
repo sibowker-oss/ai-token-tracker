@@ -4,56 +4,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Follow the Dollar — The AI Ledger</title>
-<style>
-  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-  nav { display:flex; gap:16px; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); font-size:13px; flex-wrap:wrap; }
-  nav a { color:var(--text-dim); text-decoration:none; } nav a:hover { color:var(--accent); } nav a.active { color:var(--accent); font-weight:600; }
-  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
-  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
-  .sub { font-size:14px; color:var(--text-dim); margin-bottom:32px; }
-  .sankey-container { position:relative; width:100%; overflow-x:auto; }
-  canvas { display:block; }
-  .insight-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:32px; }
-  .insight { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; }
-  .insight h3 { font-size:14px; margin-bottom:8px; }
-  .insight p { font-size:12px; color:var(--text-dim); line-height:1.6; }
-  .insight .stat { font-size:28px; font-weight:800; margin:8px 0; }
-  .legend { display:flex; flex-wrap:wrap; gap:16px; margin-top:24px; font-size:12px; }
-  .legend-item { display:flex; align-items:center; gap:6px; }
-  .legend-dot { width:12px; height:12px; border-radius:3px; }
-
-  /* Mobile responsive */
-  @media(max-width:768px) {
-    nav { padding:8px 12px !important; gap:6px !important; }
-    nav a { font-size:10px !important; padding:6px 10px !important; min-height:44px; display:inline-flex; align-items:center; }
-    .container { padding:16px 12px; }
-    h1 { font-size:22px; }
-    .sub { font-size:12px; }
-    .sankey-container { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    .insight-cards { grid-template-columns:1fr; }
-    .insight .stat { font-size:22px; }
-    .insight h3 { font-size:13px; }
-    .insight p { font-size:11px; }
-    .insight { padding:16px; }
-    .legend { font-size:11px; }
-  }
-</style>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-211EY55BEQ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-211EY55BEQ");</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; }
+  .nav-link:hover { background:#334155; }
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
+  .year-toggle { display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
+  .year-btn { padding:8px 22px; border-radius:8px; border:1px solid var(--card-border); background:rgba(15,23,42,0.6); color:var(--text-dim); font-size:14px; font-weight:600; cursor:pointer; }
+  .year-btn:hover { border-color:var(--accent); color:var(--text); }
+  .year-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:4px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:14px; }
+  .iceberg-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  .iceberg-grid.three { grid-template-columns:1.1fr 1.1fr 0.8fr; }
+  .iceberg-card { background:rgba(15,23,42,0.5); border:1px solid var(--card-border); border-radius:10px; padding:18px; }
+  .iceberg-card h3 { font-size:13px; font-weight:700; margin-bottom:6px; color:#f1f5f9; }
+  .iceberg-card .sub { font-size:11px; color:var(--text-dim); margin-bottom:14px; }
+  .iceberg-bar-wrap { position:relative; height:36px; background:rgba(0,0,0,0.3); border-radius:6px; overflow:hidden; margin:6px 0 4px; }
+  .iceberg-bar-fill { position:absolute; left:0; top:0; height:100%; display:flex; align-items:center; padding:0 8px; font-size:11px; font-weight:700; color:white; }
+  .iceberg-row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--text-dim); margin-top:4px; }
+  .iceberg-row strong { color:#f1f5f9; }
+  .iceberg-big { font-size:24px; font-weight:800; color:#f1f5f9; }
+  .iceberg-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid var(--card-border); }
+  .iceberg-stat { text-align:center; }
+  .iceberg-stat .v { font-size:18px; font-weight:800; }
+  .iceberg-stat .l { font-size:9px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); margin-top:2px; }
+  .iceberg-foot { font-size:11px; color:var(--text-dim); line-height:1.5; margin-top:12px; padding-top:12px; border-top:1px solid var(--card-border); }
+  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } .iceberg-grid, .iceberg-grid.three { grid-template-columns:1fr; } }
+</style>
 </head>
 <body>
-<style>
-  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
-  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
-  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
-  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
-  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
-  @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
-</style>
 <nav class="nav-bar">
   <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
   <a href="sankey.html" class="nav-link active">Follow the $</a>
@@ -61,626 +56,631 @@
   <a href="openrouter.html" class="nav-link">Live Pricing</a>
   <a href="feed.html" class="nav-link">Weekly Feed</a>
 </nav>
-
 <div class="container">
   <h1>Follow the Dollar</h1>
-  <div class="sub" id="sankeySubtitle">2025 actual revenue collected (not exit ARR). Consensus-weighted estimates. Hover to explore.</div>
-
-  <!-- Headline callout -->
-  <div style="text-align:center;padding:16px 20px;margin:12px 0;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:10px;">
-    <div style="font-size:13px;color:var(--text-dim);">2025 investment-to-revenue ratio</div>
-    <div style="font-size:28px;font-weight:700;color:var(--text);margin-top:4px;"><span style="color:var(--accent);">$15</span> invested for every <span style="color:var(--accent);">$1</span> of customer revenue</div>
-    <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">Total system cost (capex + operating subsidy + inference) vs. actual customer payments</div>
-  </div>
-
-  <div class="sankey-container">
-    <canvas id="sankey" height="600"></canvas>
-  </div>
-
-  <!-- IaaS / Open Models note -->
-  <div style="display:flex; align-items:flex-start; gap:10px; margin-top:20px; padding:14px 18px; background:rgba(139,92,246,0.08); border:1px solid rgba(139,92,246,0.2); border-radius:10px;">
-    <div style="width:14px; height:14px; min-width:14px; border-radius:3px; background:#8b5cf6; margin-top:2px;"></div>
-    <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;"><strong style="color:#8b5cf6;">IaaS Providers &amp; Aggregators</strong> — inference providers (Together, Fireworks, Groq) and aggregators like OpenRouter remain a major commercial route for open-weight models. However, several model creators now monetize inference directly — DeepSeek, Mistral, Moonshot (Kimi) and MiniMax all operate paid APIs alongside their open releases. Chinese providers in particular have seen explosive API revenue growth in early 2026, with Moonshot and MiniMax now ranking #1 and #2 globally on OpenRouter by token volume. Meta remains the notable exception — Llama generates $0 in direct inference revenue for Meta.</p>
-  </div>
-
-  <!-- VC definition -->
-  <div style="display:flex; align-items:flex-start; gap:10px; margin-top:12px; padding:14px 18px; background:rgba(220,38,38,0.08); border:1px solid rgba(220,38,38,0.2); border-radius:10px;">
-    <div style="width:14px; height:14px; min-width:14px; border-radius:3px; background:#dc2626; margin-top:2px;"></div>
-    <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;"><strong style="color:#dc2626;">VC/Investor subsidy ($12B)</strong> is purely the gap between what customers spend on AI and the published, calculated and estimated operating expense to provide that service. It excludes training compute capex, data centre construction, and GPU procurement — which are funded separately and dwarf customer revenue.</p>
-  </div>
-
-  <!-- The real economics -->
-  <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:20px; margin-top:16px;">
-    <h3 style="color:var(--green); font-size:16px; margin-bottom:12px;">The Real Economics</h3>
-    <p style="font-size:13px; color:var(--text-dim); margin-bottom:16px;">Strip away the VC subsidy and the Trad SaaS revenue that ends up as margin (not token consumption), and the picture becomes stark:</p>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;">
-      <div style="text-align:center;">
-        <div style="font-size:28px; font-weight:800; color:var(--green);">~$12B</div>
-        <div style="font-size:12px; color:var(--text-dim);">True AI revenue</div>
-        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">Subs + API + Tokens actually consumed</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:28px; font-weight:800; color:var(--red);">~$13B</div>
-        <div style="font-size:12px; color:var(--text-dim);">Inference costs to serve it</div>
-        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">The variable cost of running these models</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:28px; font-weight:800; color:var(--red);">-$1B</div>
-        <div style="font-size:12px; color:var(--text-dim);">Gross margin on real AI</div>
-        <div style="font-size:11px; color:var(--text-dim); margin-top:4px;">Before a single engineer is paid</div>
-      </div>
+  <div class="sub" id="page-subtitle">In 24 months, businesses and consumers will be spending $112B on AI — a third of what they spend on all SaaS today. Where does that money come from?</div>
+  <div class="hero-grid" id="hero-stats"></div>
+  <div class="card">
+    <h2 id="flow-title">Revenue Flow</h2>
+    <div class="year-toggle" id="year-toggle"></div>
+    <div style="position:relative;width:100%;overflow-x:auto;">
+      <canvas id="sankey" height="560"></canvas>
     </div>
-    <p style="font-size:12px; color:var(--text-dim); margin-top:16px; font-style:italic;">Even ignoring people costs, R&D, and SG&A — the core AI inference business loses money at the gross margin level. Every token served costs more than customers pay for it. The $2.15B of "margin" in the system belongs entirely to Trad SaaS vendors and hyperscaler cloud fees — not to the companies building the models.</p>
-
-    <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(16,185,129,0.15);">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-        <span style="background:var(--accent);color:white;font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;">Editor's View</span>
-        <h4 style="color:var(--green); font-size:14px;">This is unsustainable. Only three things fix it:</h4>
-      </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px;">
-        <div style="background:rgba(16,185,129,0.06); border-radius:8px; padding:14px;">
-          <div style="font-size:13px; font-weight:700; color:var(--green); margin-bottom:6px;">1. Inference costs fall ~35%</div>
-          <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;">Inference costs need to drop from ~$13B to ~$8.4B for a minimally viable 30% gross margin. This means cheaper silicon, better hardware utilisation, and model efficiency gains. If this happens, NVIDIA's pricing power collapses — and that's where most of the $13B ends up today.</p>
-        </div>
-        <div style="background:rgba(139,92,246,0.06); border-radius:8px; padding:14px;">
-          <div style="font-size:13px; font-weight:700; color:#8b5cf6; margin-bottom:6px;">2. Shift to open models</div>
-          <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;">Open models (Llama, DeepSeek, Qwen) via IaaS providers have a thin but positive gross margin on inference (est. 15-35%, vs negative for closed models). No IaaS provider has operating margin yet — the GM is consumed by people and ops. But they're 5-10x cheaper per token, the fastest-growing segment (1.2B Llama downloads, 61% of OpenRouter token volume), and trail frontier by just ~3 months. A shift of <strong>~20-30%</strong> of workloads to open models reaches system breakeven — without any hardware cost reduction.</p>
-        </div>
-        <div style="background:rgba(239,68,68,0.06); border-radius:8px; padding:14px;">
-          <div style="font-size:13px; font-weight:700; color:var(--red); margin-bottom:6px;">3. Prices go up substantially</div>
-          <p style="font-size:12px; color:var(--text-dim); line-height:1.6; margin:0;">At current inference costs and model mix, token and subscription prices need to rise <strong>~55%</strong> to achieve 30% gross margin. Even breakeven requires an 8% price increase. But prices have been falling ~80% year-on-year as providers undercut each other with VC-subsidised pricing. Raising prices risks accelerating the shift to open models — the very thing that threatens closed providers' relevance.</p>
-        </div>
-      </div>
-      <p style="font-size:12px; color:var(--text-dim); margin-top:12px; font-style:italic;">In practice, all three are happening simultaneously — but in opposing directions. Inference costs are falling (good), open model adoption is accelerating (bad for closed providers), and prices are falling not rising (terrible for margins). The current closed-model economics — where every token costs more to serve than customers pay — cannot survive without a fundamental structural shift.</p>
+    <div id="tier-legend" style="display:flex;flex-wrap:wrap;gap:10px;font-size:10px;color:var(--text-dim);margin-top:14px;padding:8px 12px;background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:6px;align-items:center;">
+      <strong style="color:#cbd5e1;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Provenance tier:</strong>
+      <span><span style="display:inline-block;background:#10b981;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">1</span> Sourced (<b>A</b> = first-party disclosure, <b>B</b> = ≥2 corroborating sources)</span>
+      <span><span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">2</span> Derived (<b>A</b> = deterministic calc from Tier 1, <b>B</b> = triangulated)</span>
+      <span><span style="display:inline-block;background:#f59e0b;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">3</span> Projected (<b>A</b> = anchored extrapolation, <b>B</b> = interpolated, <b>C</b> = scenario assumption)</span>
+      <span><span style="display:inline-block;background:#ef4444;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">4</span> Editorial (replace ASAP)</span>
+      <span style="opacity:0.6;">— hover any node for source citation</span>
+    </div>
+    <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
+      <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
     </div>
   </div>
 
-  <!-- What's NOT in this chart -->
-  <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:12px; padding:20px; margin-top:16px;">
-    <h3 style="color:var(--red); font-size:16px; margin-bottom:12px;">What's NOT in this chart</h3>
-    <p style="font-size:13px; color:var(--text-dim); margin-bottom:12px;">This diagram only shows the <strong>customer revenue dollar flow</strong>. The AI industry's total investment is dramatically larger:</p>
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px;">
-      <div style="text-align:center;">
-        <div style="font-size:24px; font-weight:800; color:var(--red);">~$250B+</div>
-        <div style="font-size:11px; color:var(--text-dim);">Mag 7 AI capex (2025)</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:24px; font-weight:800; color:var(--red);">~$30-50B</div>
-        <div style="font-size:11px; color:var(--text-dim);">Model training compute</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:24px; font-weight:800; color:var(--red);">~$150B+</div>
-        <div style="font-size:11px; color:var(--text-dim);">Total VC into AI (2025)</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-size:24px; font-weight:800; color:var(--text);">$15.6B</div>
-        <div style="font-size:11px; color:var(--text-dim);">Actual customer revenue (this chart)</div>
-      </div>
-    </div>
-    <p style="font-size:12px; color:var(--text-dim); margin-top:12px; font-style:italic;">For every $1 customers spend on AI, investors spend $15+ building it. Training compute, data centre construction, and GPU procurement are funded by VC rounds, corporate capex, and sovereign wealth — not customer revenue.</p>
-  </div>
-
-  <div class="insight-cards">
-    <div class="insight">
-      <h3 style="color:var(--green);">Inference Costs Dominate</h3>
-      <div class="stat" style="color:var(--green);">~$13B</div>
-      <p>47% of all AI spending flows to inference compute — the variable cost of serving models to customers. NVIDIA and the cloud providers capture this regardless of which model wins.</p>
-    </div>
-    <div class="insight">
-      <h3 style="color:var(--red);">VC Keeps The Lights On</h3>
-      <div class="stat" style="color:var(--red);">~$12B</div>
-      <p>The AI industry earned $15.6B but spent $27.6B. Investors covered the $12B operating gap. OpenAI lost ~$6B, Anthropic ~$5.2B. This subsidises free tiers, price wars, and the talent arms race.</p>
-    </div>
-    <div class="insight">
-      <h3 style="color:var(--orange);">Only SaaS Makes Money</h3>
-      <div class="stat" style="color:var(--orange);">$2.15B</div>
-      <p>The only margin in the entire system comes from Trad SaaS vendors (Microsoft, Salesforce, ServiceNow) and hyperscaler cloud margins. Frontier providers and IaaS providers have zero operating margin — IaaS has a thin positive gross margin on inference, but it's entirely consumed by people and ops costs.</p>
-    </div>
+  <div class="card" id="iceberg-card">
+    <h2>What's Above the Waterline: The Capital Stack Funding the Flow</h2>
+    <p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:8px;">The sankey above shows <strong>operating flow</strong> — dollars in from customers, dollars out this year. It excludes the two stacks of capital funding the build-out from above, and the date by which Generated Cashflow could plausibly cover infrastructure depreciation (the standard accounting test for true profitability).</p>
+    <div class="iceberg-grid three" id="iceberg-grid"></div>
+    <p class="iceberg-foot" id="iceberg-foot"></p>
   </div>
 </div>
 
 <script>
-// Custom Sankey-style visualization drawn on canvas
-const canvas = document.getElementById('sankey');
-const ctx = canvas.getContext('2d');
+let sankeyData = null, activeYear = '2025';
+let allNodes = [], allFlows = [], lockedNode = null, hoveredNode = null;
 
-// Responsive sizing — read container's actual rendered width so canvas aligns exactly
-const sankeyContainer = canvas.parentElement;
-const W = Math.max(400, sankeyContainer.clientWidth);
-const isMobile = W < 768;
-const H = isMobile ? 400 : 600;
-canvas.width = W * 2; canvas.height = H * 2;
-canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-ctx.scale(2, 2);
-
-// Column positions
-const nw = 80; // node width
-const gap = (W - nw) / 3; // equal spacing so col1 left=0, col4 right=W
-const COL = [0, gap, gap * 2, W - nw];
-
-// Data loaded from site-data.json (single source of truth)
-let BUYERS, CHANNELS, PROVIDERS, OUTCOMES, FLOWS, COLUMNS, COL_LABELS;
-
-// Layout: position nodes vertically
-function layoutColumn(col, x) {
-  const totalValue = col.reduce((a, n) => a + n.value, 0);
-  const availH = H - 80;
-  const gap = 12;
-  const totalGap = (col.length - 1) * gap;
-  const scale = (availH - totalGap) / totalValue;
-  let y = 40;
-  col.forEach(node => {
-    node.y = y;
-    node.h = node.value * scale;
-    node.x = x;
-    y += node.h + gap;
-  });
-}
-
-async function loadSankeyData() {
-  try {
-    const resp = await fetch('site-data.json?v=' + Date.now());
-    if (!resp.ok) throw new Error('Failed to load');
-    const all = await resp.json();
-    const s = all.sankey;
-
-    // Add y:0 to all nodes (layout state, computed later)
-    BUYERS = s.buyers.map(n => ({...n, y: 0}));
-    CHANNELS = s.channels.map(n => ({...n, y: 0}));
-    PROVIDERS = s.providers.map(n => ({...n, y: 0}));
-    OUTCOMES = s.outcomes.map(n => ({...n, y: 0}));
-    FLOWS = s.flows; // Already in [fromCol, fromIdx, toCol, toIdx, value, color] format
-    COL_LABELS = s.colLabels;
-
-    // Update subtitle with live numbers from data
-    const sub = document.getElementById('sankeySubtitle');
-    if (sub) {
-      sub.innerHTML = `2025 actual revenue collected (not exit ARR). $${s.totalCustomerRevenue}B customer revenue + $${s.totalVCSubsidy}B VC operating subsidy = $${s.totalSystem}B flowing through the system. Consensus-weighted estimates. <span style="font-size:11px;color:#64748b;margin-left:4px;">Data: ${(all.meta?.generatedAt||'').slice(0,10)}</span>`;
-    }
-
-    // Update narrative sections with live numbers
-    const updateText = (selector, text) => { const el = document.querySelector(selector); if (el) el.innerHTML = text; };
-    // VC callout — find by background color to avoid fragile index
-    document.querySelectorAll('.container > div').forEach(el => {
-      if (el.style.background?.includes('220,38,38') || el.outerHTML?.includes('rgba(220,38,38')) {
-        const vcP = el.querySelector('p');
-        if (vcP) vcP.innerHTML = `<strong style="color:#dc2626;">VC/Investor subsidy ($${s.totalVCSubsidy}B)</strong> is purely the gap between what customers spend on AI and the published, calculated and estimated operating expense to provide that service. It excludes training compute capex, data centre construction, and GPU procurement — which are funded separately and dwarf customer revenue.`;
-      }
-    });
-    // Real Economics summary stats — find by green background
-    let statEls = null;
-    document.querySelectorAll('.container > div').forEach(el => {
-      if (el.style.background?.includes('16,185,129') || el.outerHTML?.includes('rgba(16,185,129,0.08)')) {
-        statEls = el.querySelectorAll('div[style*="text-align:center"] > div:first-child');
-      }
-    });
-    if (statEls && statEls.length >= 3) {
-      const trueRev = Math.round((s.totalCustomerRevenue - (s.outcomes[2]?.value || 0)) * 10) / 10;
-      const infCost = s.outcomes[0]?.value || 13;
-      const gm = Math.round((trueRev - infCost) * 10) / 10;
-      statEls[0].textContent = '~$' + trueRev + 'B';
-      statEls[1].textContent = '~$' + infCost + 'B';
-      statEls[2].textContent = (gm >= 0 ? '$' : '-$') + Math.abs(gm) + 'B';
-    }
-    // What's NOT — customer revenue figure
-    const notSection = document.querySelectorAll('.container > div')[5];
-    if (notSection) {
-      const revEl = notSection.querySelectorAll('div[style*="text-align:center"]')[3];
-      if (revEl) {
-        const numEl = revEl.querySelector('div:first-child');
-        if (numEl) numEl.textContent = '$' + s.totalCustomerRevenue + 'B';
-      }
-    }
-    // Insight cards
-    const insights = document.querySelectorAll('.insight .stat');
-    if (insights.length >= 3) {
-      insights[0].textContent = '~$' + (s.outcomes[0]?.value || 13) + 'B';
-      insights[1].textContent = '~$' + s.totalVCSubsidy + 'B';
-      insights[2].textContent = '$' + (s.outcomes[2]?.value || 2.15) + 'B';
-    }
-    // Insight card descriptions
-    const insightPs = document.querySelectorAll('.insight p');
-    if (insightPs.length >= 2) {
-      insightPs[1].textContent = `The AI industry earned $${s.totalCustomerRevenue}B but spent $${s.totalSystem}B. Investors covered the $${s.totalVCSubsidy}B operating gap. This subsidises free tiers, price wars, and the talent arms race.`;
-    }
-  } catch(e) {
-    console.warn('site-data.json not found, check deployment');
-    return;
-  }
-
-  COLUMNS = [BUYERS, CHANNELS, PROVIDERS, OUTCOMES];
-  COL.forEach((x, i) => { if (i < COLUMNS.length) layoutColumn(COLUMNS[i], x); });
-
-// Helper: draw text wrapped within maxW, returns number of lines drawn
-function drawWrappedText(ctx, text, x, y, maxW, lineH) {
-  const words = text.split(' ');
-  let line = '';
-  let lines = 0;
-  for (let i = 0; i < words.length; i++) {
-    const test = line + (line ? ' ' : '') + words[i];
-    if (ctx.measureText(test).width > maxW && line) {
-      ctx.fillText(line, x, y + lines * lineH);
-      line = words[i];
-      lines++;
-    } else {
-      line = test;
-    }
-  }
-  ctx.fillText(line, x, y + lines * lineH);
-  return lines + 1;
-}
-
-// Track output ports for flow positioning
-function resetPorts() {
-  COLUMNS.forEach(col => col.forEach(n => { n.outY = n.y; n.inY = n.y; }));
-}
-
-// Draw
-function draw() {
-  ctx.clearRect(0, 0, W, H);
-
-  resetPorts();
-
-  // Draw flows
-  FLOWS.forEach(f => {
-    const [fromCol, fromIdx, toCol, toIdx, value, color] = f;
-    const from = COLUMNS[fromCol][fromIdx];
-    const to = COLUMNS[toCol][toIdx];
-    const fromScale = from.h / from.value;
-    const toScale = to.h / to.value;
-    const fh = value * fromScale;
-    const th = value * toScale;
-
-    const nodeW = 80;
-    const x1 = from.x + nodeW;
-    const y1 = from.outY;
-    const x2 = to.x;
-    const y2 = to.inY;
-    // Wider bezier for flows that skip columns
-    const colSpan = toCol - fromCol;
-    const cp = colSpan > 1 ? (x2 - x1) * 0.35 : (x2 - x1) * 0.5;
-
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.bezierCurveTo(x1 + cp, y1, x2 - cp, y2, x2, y2);
-    ctx.lineTo(x2, y2 + th);
-    ctx.bezierCurveTo(x2 - cp, y2 + th, x1 + cp, y1 + fh, x1, y1 + fh);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-
-    from.outY += fh;
-    to.inY += th;
-  });
-
-  // Draw nodes
-  COLUMNS.forEach((col, ci) => {
-    col.forEach(node => {
-      // Rounded rect (manual for browser compat)
-      const r = 4;
-      const w = 80;
-      const nx = node.x, ny = node.y, nh = node.h;
-      ctx.beginPath();
-      ctx.moveTo(nx + r, ny);
-      ctx.lineTo(nx + w - r, ny);
-      ctx.quadraticCurveTo(nx + w, ny, nx + w, ny + r);
-      ctx.lineTo(nx + w, ny + nh - r);
-      ctx.quadraticCurveTo(nx + w, ny + nh, nx + w - r, ny + nh);
-      ctx.lineTo(nx + r, ny + nh);
-      ctx.quadraticCurveTo(nx, ny + nh, nx, ny + nh - r);
-      ctx.lineTo(nx, ny + r);
-      ctx.quadraticCurveTo(nx, ny, nx + r, ny);
-      ctx.closePath();
-      ctx.fillStyle = node.color;
-      ctx.fill();
-
-      // Label (wrapped to fit within node width)
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 11px -apple-system,sans-serif';
-      ctx.textAlign = ci < 2 ? 'left' : 'right';
-      const tx = ci < 2 ? node.x + 6 : node.x + w - 6;
-      const maxLabelW = w - 12;
-
-      if (node.h > 20) {
-        const labelLines = Math.ceil(ctx.measureText(node.label).width / maxLabelW);
-        const totalH = labelLines * 12 + 14; // label lines + value line
-        const startY = node.y + (node.h - totalH) / 2 + 10;
-        const nLines = drawWrappedText(ctx, node.label, tx, startY, maxLabelW, 12);
-        ctx.font = '10px -apple-system,sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,0.7)';
-        ctx.fillText('$' + node.value + 'B', tx, startY + nLines * 12 + 2);
-      }
-    });
-  });
-
-  // Column headers
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = 'bold 12px -apple-system,sans-serif';
-  ctx.textAlign = 'center';
-  COL_LABELS.forEach((label, i) => {
-    if (i < COL.length) ctx.fillText(label, COL[i] + 40, 28);
-  });
-}
-
-// State
-let hoverNode = null;    // { colIdx, nodeIdx }
-let hoverFlow = null;    // index into FLOWS
-let activeNode = null;   // clicked/locked node
-
-function draw(highlight) {
-  ctx.clearRect(0, 0, W, H);
-  resetPorts();
-
-  // Determine which flows to highlight
-  let highlightFlows = new Set();
-  if (highlight) {
-    FLOWS.forEach((f, i) => {
-      const [fc, fi, tc, ti] = f;
-      if (highlight.colIdx === fc && highlight.nodeIdx === fi) highlightFlows.add(i);
-      if (highlight.colIdx === tc && highlight.nodeIdx === ti) highlightFlows.add(i);
-    });
-  }
-  if (hoverFlow !== null) highlightFlows.add(hoverFlow);
-
-  // Store flow geometry for hit testing
-  flowPaths = [];
-
-  // Draw flows
-  FLOWS.forEach((f, fi) => {
-    const [fromCol, fromIdx, toCol, toIdx, value, baseColor] = f;
-    const from = COLUMNS[fromCol][fromIdx];
-    const to = COLUMNS[toCol][toIdx];
-    const fromScale = from.h / from.value;
-    const toScale = to.h / to.value;
-    const fh = value * fromScale;
-    const th = value * toScale;
-
-    const nodeW = 80;
-    const x1 = from.x + nodeW;
-    const y1 = from.outY;
-    const x2 = to.x;
-    const y2 = to.inY;
-
-    // Store for hit testing
-    flowPaths.push({ x1, y1, fh, x2, y2, th, fromCol, fromIdx, toCol, toIdx, value, fi });
-
-    const isHighlighted = highlightFlows.has(fi);
-    const isDimmed = highlight && !isHighlighted && highlightFlows.size > 0;
-
-    let color = baseColor;
-    if (isHighlighted) {
-      // Make brighter
-      color = from.color + '88';
-    } else if (isDimmed) {
-      color = baseColor.slice(0, 7) + '08';
-    }
-
-    const colSpan = toCol - fromCol;
-    const cp = colSpan > 1 ? (x2 - x1) * 0.35 : (x2 - x1) * 0.5;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.bezierCurveTo(x1 + cp, y1, x2 - cp, y2, x2, y2);
-    ctx.lineTo(x2, y2 + th);
-    ctx.bezierCurveTo(x2 - cp, y2 + th, x1 + cp, y1 + fh, x1, y1 + fh);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-
-    // Draw value label on highlighted flows
-    if (isHighlighted && value >= 1) {
-      const mx = (x1 + x2) / 2;
-      const my = (y1 + y2 + fh/2 + th/2) / 2;
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 10px -apple-system,sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('$' + value + 'B', mx, my + 4);
-    }
-
-    from.outY += fh;
-    to.inY += th;
-  });
-
-  // Draw nodes
-  COLUMNS.forEach((col, ci) => {
-    col.forEach((node, ni) => {
-      const isActive = highlight && highlight.colIdx === ci && highlight.nodeIdx === ni;
-      const isDimmed = highlight && !isActive && highlightFlows.size > 0 &&
-        !Array.from(highlightFlows).some(fi => {
-          const f = FLOWS[fi];
-          return (f[0] === ci && f[1] === ni) || (f[2] === ci && f[3] === ni);
-        });
-
-      const r = 4, w = 80;
-      const nx = node.x, ny = node.y, nh = node.h;
-      ctx.beginPath();
-      ctx.moveTo(nx + r, ny);
-      ctx.lineTo(nx + w - r, ny);
-      ctx.quadraticCurveTo(nx + w, ny, nx + w, ny + r);
-      ctx.lineTo(nx + w, ny + nh - r);
-      ctx.quadraticCurveTo(nx + w, ny + nh, nx + w - r, ny + nh);
-      ctx.lineTo(nx + r, ny + nh);
-      ctx.quadraticCurveTo(nx, ny + nh, nx, ny + nh - r);
-      ctx.lineTo(nx, ny + r);
-      ctx.quadraticCurveTo(nx, ny, nx + r, ny);
-      ctx.closePath();
-
-      ctx.fillStyle = isDimmed ? node.color + '33' : node.color;
-      ctx.fill();
-
-      if (isActive) {
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-      }
-
-      // Label (wrapped to fit within node width)
-      const textAlpha = isDimmed ? '55' : '';
-      ctx.fillStyle = '#fff' + textAlpha;
-      ctx.font = 'bold 11px -apple-system,sans-serif';
-      ctx.textAlign = ci < 2 ? 'left' : 'right';
-      const tx = ci < 2 ? node.x + 6 : node.x + w - 6;
-      const maxLabelW = w - 12;
-
-      if (node.h > 20) {
-        const labelLines = Math.ceil(ctx.measureText(node.label).width / maxLabelW);
-        const totalH = labelLines * 12 + 14;
-        const startY = node.y + (node.h - totalH) / 2 + 10;
-        const nLines = drawWrappedText(ctx, node.label, tx, startY, maxLabelW, 12);
-        ctx.font = '10px -apple-system,sans-serif';
-        ctx.fillStyle = 'rgba(255,255,255,' + (isDimmed ? '0.2' : '0.7') + ')';
-        ctx.fillText('$' + node.value + 'B', tx, startY + nLines * 12 + 2);
-      }
-    });
-  });
-
-  // Column headers
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = 'bold 12px -apple-system,sans-serif';
-  ctx.textAlign = 'center';
-  COL_LABELS.forEach((label, i) => {
-    if (i < COL.length) ctx.fillText(label, COL[i] + 40, 28);
-  });
-}
-
-let flowPaths = [];
-
-draw(null);
-
-// Tooltip
-const tooltip = document.createElement('div');
-tooltip.style.cssText = 'position:fixed;background:#1e293b;border:1px solid #334155;border-radius:8px;padding:12px 16px;font-size:12px;color:#e2e8f0;pointer-events:none;display:none;z-index:999;max-width:300px;line-height:1.6;';
-document.body.appendChild(tooltip);
-
-// Flow descriptions for rich tooltips
-const FLOW_LABELS = {
-  '0-0-1-0': 'Consumers buying ChatGPT Plus, Claude Pro, Gemini Advanced',
-  '0-0-1-2': 'Consumers using Perplexity, Canva AI, Monica AI, Wrtn',
-  '0-0-1-3': 'Consumers with bundled AI in Canva, Grammarly, Notion',
-  '0-1-1-0': 'SME teams buying ChatGPT Team, Claude Team',
-  '0-1-1-1': 'Startups and dev agencies calling APIs directly',
-  '0-1-1-2': 'SMEs using Cursor, Replit, Jasper, Intercom Fin',
-  '0-1-1-3': 'SMEs with HubSpot Breeze, Zoho Zia, Freshworks Freddy',
-  '0-2-1-0': 'Enterprises buying ChatGPT Enterprise, Claude Enterprise',
-  '0-2-1-1': 'Enterprises calling APIs directly (Morgan Stanley, Klarna, etc.)',
-  '0-2-1-2': 'Enterprise Cursor, Harvey, Cognition/Devin deals',
-  '0-2-1-3': 'M365 Copilot, Salesforce Agentforce, ServiceNow Now Assist, SAP Joule — HIGH SHELFWARE',
-  '2-0-3-0': 'OpenAI tokens actually consumed by end users',
-  '2-0-3-1': 'OpenAI revenue from shelfware (M365 Copilot, bundled deals)',
-  '2-1-3-0': 'Anthropic tokens actually consumed (coding, enterprise agents)',
-  '2-1-3-1': 'Anthropic revenue from low-usage enterprise deals',
-  '2-0-3-2': 'OpenAI margin, R&D, and operating costs',
-  '2-1-3-2': 'Anthropic margin, R&D, and operating costs',
+const COLORS = {
+  'Consumer':'#f59e0b','SME':'#3b82f6','Enterprise':'#10b981','VC/Investors':'#dc2626',
+  'Model Subs':'#f59e0b','Model API':'#3b82f6','Hyperscalers':'#06b6d4','AI Native Apps':'#10b981',
+  'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
+  'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
+  'Other Model Providers':'#475569',
+  'Inference':'#ef4444','Other Operating':'#f59e0b','Generated Cashflow':'#10b981',
 };
 
-function hitTestNode(mx, my) {
-  for (let ci = 0; ci < COLUMNS.length; ci++) {
-    for (let ni = 0; ni < COLUMNS[ci].length; ni++) {
-      const node = COLUMNS[ci][ni];
-      if (mx >= node.x && mx <= node.x + 80 && my >= node.y && my <= node.y + node.h) {
-        return { colIdx: ci, nodeIdx: ni, node };
+async function init() {
+  try {
+    const r = await fetch('data/sankey-projections.json?v=' + Date.now());
+    sankeyData = await r.json();
+  } catch(e) {
+    document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Error: '+e.message+'</div>';
+    return;
+  }
+  let html = '';
+  for (const [yr, d] of Object.entries(sankeyData)) {
+    if (yr.startsWith('_')) continue; // skip _schema and other meta keys
+    html += '<button class="year-btn" data-yr="'+yr+'" onclick="switchYear(\''+yr+'\')">'+d.label+'</button>';
+  }
+  document.getElementById('year-toggle').innerHTML = html;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === activeYear));
+  renderYear(activeYear);
+}
+
+function switchYear(yr) {
+  activeYear = yr;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === yr));
+  lockedNode = null; hoveredNode = null;
+  renderYear(yr);
+}
+
+function renderYear(yr) {
+  const d = sankeyData[yr];
+  const prev = yr==='2026E'?sankeyData['2025']:yr==='2027E'?sankeyData['2026E']:null;
+  const cf = d.outcomes.find(o=>o.label.includes('Cash'))||d.outcomes[d.outcomes.length-1];
+
+  // Hero stats — Revenue (customer-facing buyers only), Total Capex (infrastructure),
+  // VC Operating Subsidy (operating losses funded by investors), Generated Cashflow.
+  const revenue = d.buyers
+    .filter(b => b.label !== 'VC/Investors')
+    .reduce((s,b) => s + b.value, 0);
+  const capex = (d.infrastructureCapex || {}).value || 0;
+  let h = '';
+  h += '<div class="hero-stat"><div class="label">Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Total Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+d.totalVCSubsidy+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+(cf?cf.value:0)+'B</div></div>';
+  document.getElementById('hero-stats').innerHTML = h;
+  document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
+
+  const subtitles = {
+    '2025': '<b>Year zero.</b> $17B in customer revenue — but $9B of that is operating losses funded by VC, not paying customers. A third of "AI revenue" is actually investor subsidy.',
+    '2026E': '<b>Scale year.</b> Customer spend ramps ~4x to $64B; VC subsidy peaks at $25B as OpenAI and Anthropic burn hardest before burn-rate targets start biting.',
+    '2027E': '<b>First customer-funded year.</b> $112B in customer spend — roughly a third of today\'s entire global SaaS market. VC share collapses 88% to just 3%. Where is this money coming from?'
+  };
+  const subtitleEl = document.getElementById('page-subtitle');
+  if (subtitleEl && subtitles[yr]) subtitleEl.innerHTML = subtitles[yr];
+
+  // Build and draw
+  buildSankey(d);
+
+  // Iceberg cards: capex vs cashflow paydown, profitability crossover, war chest
+  renderIceberg(d, yr);
+}
+
+// ─── Iceberg cards: capex paydown + frontier funding ────────────────
+const TIER_COLOR = (t) => {
+  if(!t) return '#475569';
+  if(t.startsWith('1')) return '#10b981';
+  if(t.startsWith('2')) return '#3b82f6';
+  if(t.startsWith('3')) return '#f59e0b';
+  if(t.startsWith('4')) return '#ef4444';
+  return '#475569';
+};
+
+// Default Crossover scenario controls (per-page state)
+let crossoverDepYrs = 10;   // GAAP-conservative 10yr by default
+let crossoverGrowth = 'recent'; // 'recent' = 2026→27 1.9×, 'mean' = geomean ≈ 2.7×
+
+// Compute the projected profitability crossover year given a set of cashflow→capex
+// data points and the chosen depreciation horizon + growth assumption.
+function computeCrossover(allYears, depYrs, growthMode) {
+  // Build [{year, cashflow, capex}] for sankey years
+  const series = allYears.map(yr => ({
+    year: yr.year,
+    cashflow: yr.cashflow,
+    capex: yr.capex,
+  }));
+  // Sort by year
+  series.sort((a,b) => a.year - b.year);
+  // Compute growth multiplier
+  let growth;
+  if (growthMode === 'recent') {
+    // Most recent year-on-year cashflow growth
+    const last = series[series.length-1];
+    const prev = series[series.length-2];
+    growth = (prev && prev.cashflow > 0) ? (last.cashflow / prev.cashflow) : 1;
+  } else {
+    // Geometric mean across all year-on-year ratios
+    let prod = 1, n = 0;
+    for (let i = 1; i < series.length; i++) {
+      if (series[i-1].cashflow > 0) {
+        prod *= (series[i].cashflow / series[i-1].cashflow);
+        n++;
       }
     }
+    growth = n > 0 ? Math.pow(prod, 1/n) : 1;
   }
-  return null;
-}
-
-function hitTestFlow(mx, my) {
-  // Simple: check if point is between flow start and end Y ranges at the X midpoint
-  for (const fp of flowPaths) {
-    const midX = (fp.x1 + fp.x2) / 2;
-    if (mx > fp.x1 && mx < fp.x2) {
-      const t = (mx - fp.x1) / (fp.x2 - fp.x1);
-      const topY = fp.y1 * (1 - t) + fp.y2 * t;
-      const botY = (fp.y1 + fp.fh) * (1 - t) + (fp.y2 + fp.th) * t;
-      if (my >= topY && my <= botY) return fp;
+  // Use the most recent capex as the depreciation base (assume capex flat going forward
+  // — conservative because real capex is still growing, which would push the date later;
+  // explicit assumption shown to user).
+  const lastYr = series[series.length-1];
+  const annualDep = lastYr.capex / depYrs;
+  // Project cashflow forward
+  const projection = [];
+  let cf = lastYr.cashflow;
+  let yr = lastYr.year;
+  let crossYear = null;
+  projection.push({year: yr, cashflow: cf, dep: annualDep});
+  while (yr < lastYr.year + 12) { // cap at 12 years out
+    yr++;
+    cf = cf * growth;
+    projection.push({year: yr, cashflow: cf, dep: annualDep});
+    if (cf >= annualDep && crossYear === null) {
+      crossYear = yr;
     }
   }
-  return null;
+  return { crossYear, growth, annualDep, projection };
 }
 
-canvas.addEventListener('mousemove', e => {
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
+function renderIceberg(d, yr) {
+  const cf = d.outcomes.find(o=>o.label.includes('Cash'))||{value:0};
+  const cashflow = cf.value || 0;
+  const cap = d.infrastructureCapex || {value:0, tier:'4', src:''};
+  const ff  = d.frontierFunding || {cumulative:0, components:{}, tier:'4', src:''};
 
-  const hitNode = hitTestNode(mx, my);
-  const hitFlow = !hitNode ? hitTestFlow(mx, my) : null;
+  // Build series across all years for crossover calc
+  const allYrs = [];
+  for (const k of Object.keys(sankeyData)) {
+    if (k.startsWith('_')) continue;
+    const yd = sankeyData[k];
+    const ycf = (yd.outcomes.find(o=>o.label.includes('Cash'))||{value:0}).value;
+    const ycap = (yd.infrastructureCapex||{}).value || 0;
+    const numYr = parseInt(k.replace(/[^0-9]/g,''));
+    allYrs.push({year: numYr, cashflow: ycf, capex: ycap});
+  }
 
-  const highlight = activeNode || (hitNode ? { colIdx: hitNode.colIdx, nodeIdx: hitNode.nodeIdx } : null);
+  const cashflowPctOfCapex = cap.value > 0 ? (cashflow / cap.value * 100) : 0;
 
-  if (hitNode || hitFlow || activeNode) {
-    hoverFlow = hitFlow ? hitFlow.fi : null;
-    draw(highlight);
-    canvas.style.cursor = 'pointer';
+  let html = '';
 
-    tooltip.style.display = 'block';
-    tooltip.style.left = (e.clientX + 16) + 'px';
-    tooltip.style.top = (e.clientY - 10) + 'px';
+  // ─── Card A: Infrastructure Capex ─────────────────────────────
+  const capBadge = '<span style="display:inline-block;background:'+TIER_COLOR(cap.tier)+';color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER '+cap.tier+'</span>';
+  html += '<div class="iceberg-card">';
+  html += '<h3>Infrastructure Capex'+capBadge+'</h3>';
+  html += '<div class="sub">Mag 7 + AI-native datacentre, GPU and networking spend this year. Funded from corporate balance sheets, not customer revenue.</div>';
+  html += '<div class="iceberg-big" style="color:#ef4444;">$'+cap.value+'B</div>';
+  const fillPct = Math.min(100, cashflowPctOfCapex);
+  html += '<div class="iceberg-bar-wrap" title="Generated cashflow as % of this year\'s capex">';
+  html += '<div class="iceberg-bar-fill" style="width:'+fillPct+'%;background:#10b981;">'+(fillPct >= 8 ? '$'+cashflow.toFixed(1)+'B' : '')+'</div>';
+  html += '</div>';
+  html += '<div class="iceberg-row"><span>Generated Cashflow recovers</span><strong>$'+cashflow.toFixed(1)+'B ('+cashflowPctOfCapex.toFixed(1)+'%)</strong></div>';
+  html += '<div class="iceberg-stat-row">';
+  html += '<div class="iceberg-stat"><div class="v" style="color:#ef4444;">$'+(cap.value - cashflow).toFixed(0)+'B</div><div class="l">Unrecovered this year</div></div>';
+  html += '<div class="iceberg-stat"><div class="v" style="color:#94a3b8;">$'+(cap.value/10).toFixed(0)+'B</div><div class="l">Annual dep if straight-line 10yr</div></div>';
+  html += '<div class="iceberg-stat"><div class="v" style="color:#94a3b8;">$'+(cap.value/4).toFixed(0)+'B</div><div class="l">Annual dep if straight-line 4yr (GPU)</div></div>';
+  html += '</div>';
+  html += '<div class="iceberg-foot">' + (cap.src||'') + '</div>';
+  html += '</div>';
 
-    if (hitNode) {
-      const n = hitNode.node;
-      // Count connected flows
-      let inflows = 0, outflows = 0;
-      FLOWS.forEach(f => {
-        if (f[2] === hitNode.colIdx && f[3] === hitNode.nodeIdx) inflows += f[4];
-        if (f[0] === hitNode.colIdx && f[1] === hitNode.nodeIdx) outflows += f[4];
+  // ─── Card B: Profitability Crossover ─────────────────────────
+  const cross = computeCrossover(allYrs, crossoverDepYrs, crossoverGrowth);
+  const crossDisplay = cross.crossYear ? cross.crossYear : '>12 yrs';
+  const growthDisplay = (cross.growth).toFixed(1) + '× / yr';
+  html += '<div class="iceberg-card" style="border-color:#10b981;">';
+  html += '<h3>Projected Profitability Crossover<span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER 2A</span></h3>';
+  html += '<div class="sub">The year Generated Cashflow first covers annual infrastructure depreciation — the GAAP test for true profitability. Derived from this page\'s cashflow trajectory + capex.</div>';
+  html += '<div class="iceberg-big" style="color:#10b981;">'+crossDisplay+'</div>';
+  // Mini bar chart of projection vs depreciation line
+  const maxVal = Math.max(cross.annualDep, ...cross.projection.map(p=>p.cashflow));
+  html += '<div style="display:flex;align-items:flex-end;gap:3px;height:60px;margin:8px 0 4px;border-bottom:1px dashed rgba(148,163,184,0.3);position:relative;">';
+  // Depreciation line marker
+  const depHpct = (cross.annualDep / maxVal) * 100;
+  html += '<div style="position:absolute;left:0;right:0;bottom:'+depHpct+'%;border-top:2px dashed #ef4444;z-index:2;"></div>';
+  html += '<div style="position:absolute;right:0;bottom:'+depHpct+'%;font-size:9px;color:#ef4444;font-weight:700;background:var(--card);padding:0 4px;transform:translateY(-50%);">Dep $'+cross.annualDep.toFixed(0)+'B</div>';
+  for (const p of cross.projection) {
+    const barH = (p.cashflow / maxVal) * 100;
+    const isCross = (p.year === cross.crossYear);
+    const barColor = p.cashflow >= cross.annualDep ? '#10b981' : '#475569';
+    html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">';
+    html += '<div style="width:100%;height:'+barH+'%;background:'+barColor+';border-radius:2px 2px 0 0;'+(isCross?'box-shadow:0 0 0 1.5px white;':'')+'" title="'+p.year+': $'+p.cashflow.toFixed(1)+'B"></div>';
+    html += '<div style="font-size:8px;color:var(--text-dim);margin-top:2px;">'+(""+p.year).slice(-2)+'</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  // Toggles
+  html += '<div style="display:flex;gap:6px;font-size:10px;margin-top:8px;flex-wrap:wrap;">';
+  html += '<span style="color:var(--text-dim);align-self:center;">Dep:</span>';
+  html += '<button onclick="setCrossDep(10)" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverDepYrs===10?'#10b981':'var(--card-border)')+';background:'+(crossoverDepYrs===10?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverDepYrs===10?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">10yr GAAP</button>';
+  html += '<button onclick="setCrossDep(4)" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverDepYrs===4?'#10b981':'var(--card-border)')+';background:'+(crossoverDepYrs===4?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverDepYrs===4?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">4yr GPU</button>';
+  html += '<span style="color:var(--text-dim);align-self:center;margin-left:6px;">Growth:</span>';
+  html += '<button onclick="setCrossGrowth(\'recent\')" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverGrowth==='recent'?'#10b981':'var(--card-border)')+';background:'+(crossoverGrowth==='recent'?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverGrowth==='recent'?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">Recent ('+(allYrs.length>1?(allYrs[allYrs.length-1].cashflow/allYrs[allYrs.length-2].cashflow).toFixed(1):'?')+'×)</button>';
+  html += '<button onclick="setCrossGrowth(\'mean\')" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverGrowth==='mean'?'#10b981':'var(--card-border)')+';background:'+(crossoverGrowth==='mean'?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverGrowth==='mean'?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">Mean</button>';
+  html += '</div>';
+  html += '<div class="iceberg-foot">Assumes capex flat at $'+cap.value+'B (the latest year) and cashflow compounds at '+growthDisplay+'. Capex actually rising in trend → real crossover later. Earlier dates require growth to hold up; later dates assume faster GPU replacement. Tier 2A — derived deterministically from sankey cashflow + capex inputs.</div>';
+  html += '</div>';
+
+  // ─── Card C: Frontier Lab War Chest (static, no burn calc) ─────
+  const ffBadge = '<span style="display:inline-block;background:'+TIER_COLOR(ff.tier)+';color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER '+ff.tier+'</span>';
+  html += '<div class="iceberg-card">';
+  html += '<h3>Frontier Lab War Chest'+ffBadge+'</h3>';
+  html += '<div class="sub">Cumulative committed funding through end of this year. Reference number — runway depends on future burn rate, not shown.</div>';
+  html += '<div class="iceberg-big" style="color:#dc2626;">$'+ff.cumulative+'B</div>';
+  // Component stacked bar
+  const compTotal = Object.values(ff.components||{}).reduce((s,v)=>s+v,0);
+  const compColors = {'OpenAI':'#10a37f','Anthropic':'#d97706','xAI':'#a855f7','Other frontier labs':'#64748b','AI-native startups':'#475569'};
+  if (compTotal > 0) {
+    html += '<div class="iceberg-bar-wrap" style="height:24px;">';
+    let off = 0;
+    for (const [k,v] of Object.entries(ff.components)) {
+      const pct = v/compTotal*100;
+      html += '<div style="position:absolute;left:'+off+'%;top:0;height:100%;width:'+pct+'%;background:'+(compColors[k]||'#475569')+';display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white;border-right:1px solid rgba(0,0,0,0.4);" title="'+k+': $'+v+'B">'+(pct >= 14 ? '$'+v+'B' : '')+'</div>';
+      off += pct;
+    }
+    html += '</div>';
+    html += '<div style="display:flex;flex-direction:column;gap:3px;font-size:10px;color:var(--text-dim);margin-top:6px;">';
+    for (const [k,v] of Object.entries(ff.components)) {
+      html += '<div><span style="display:inline-block;width:8px;height:8px;background:'+(compColors[k]||'#475569')+';border-radius:2px;margin-right:4px;vertical-align:middle;"></span>'+k+' — <strong style="color:#cbd5e1;">$'+v+'B</strong></div>';
+    }
+    html += '</div>';
+  }
+  html += '<div class="iceberg-foot">' + (ff.src||'') + '</div>';
+  html += '</div>';
+
+  document.getElementById('iceberg-grid').innerHTML = html;
+
+  // Footer synthesis line
+  document.getElementById('iceberg-foot').innerHTML =
+    '<strong style="color:#f1f5f9;">Reading ' + d.label + ':</strong> Customers generate <strong style="color:#10b981;">$'+cashflow.toFixed(1)+'B</strong> of recoverable cashflow against <strong style="color:#ef4444;">$'+cap.value+'B</strong> of fresh capex. On the page\'s own trajectory, that crossover into GAAP profitability lands around <strong style="color:#10b981;">'+crossDisplay+'</strong> (using a '+crossoverDepYrs+'yr depreciation horizon and the '+(crossoverGrowth==='recent'?'most recent':'geometric mean')+' cashflow growth rate). The $'+ff.cumulative+'B war chest is shown as a static reference — the date this page projects matters more than how fast labs burn through it.';
+}
+
+function setCrossDep(yrs) { crossoverDepYrs = yrs; renderYear(activeYear); }
+function setCrossGrowth(mode) { crossoverGrowth = mode; renderYear(activeYear); }
+
+function buildSankey(d) {
+  const canvas = document.getElementById('sankey');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.clientWidth;
+  canvas.width = W; canvas.height = 560;
+
+  const colW = Math.min(120, W*0.13);
+  const margin = 20;
+  const spacing = (W - margin*2 - colW*4) / 3;
+  const barH = 450, gap = 5, topY = 50;
+
+  // Build columns — carry tier+src through for the tooltip provenance badge
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null}));
+  const colDefs = [
+    { label:'Who Pays', items: wrap(d.buyers) },
+    { label:'Channels', items: wrap(d.channels) },
+    { label:'Model Providers', items: wrap(d.providers) },
+    { label:'Where It Goes', items: wrap(d.outcomes) },
+  ];
+
+  // Global scale — all columns use same px/$B
+  const maxColTotal = Math.max(...colDefs.map(c=>c.items.reduce((s,i)=>s+i.value,0)));
+  const scale = (barH - 5*gap) / maxColTotal;
+
+  // Layout nodes
+  allNodes = [];
+  colDefs.forEach((col, ci) => {
+    const colTotal = col.items.reduce((s,i)=>s+i.value,0);
+    const colH = colTotal*scale + (col.items.length-1)*gap;
+    let y = topY + (barH - colH)/2;
+    const x = margin + ci*(colW + spacing);
+    col.items.forEach(item => {
+      const h = item.value * scale;
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      y += h + gap;
+    });
+  });
+
+  // Helper: find node
+  function N(name, col) { return allNodes.find(n=>n.name===name && (col==null||n.col===col)); }
+
+  // Build explicit flows: [{from, to, value, fromCol, toCol}]
+  // Each flow has a dollar value. Visual height = value * scale.
+  const flowDefs = [];
+
+  // --- Buyers → Channels (proportional, skip VC) ---
+  // Ad spend is funded by businesses (Enterprise, sometimes SME), not consumers.
+  // d.adsRouting maps buyer name → dollars sent to the Ads channel; the rest of
+  // each buyer's value splits proportionally across non-Ads channels.
+  const custBuyers = allNodes.filter(n=>n.col===0 && n.name!=='VC/Investors');
+  const chNodes = allNodes.filter(n=>n.col===1);
+  const adsCh = chNodes.filter(c=>c.name==='Ads');
+  const nonAdsCh = chNodes.filter(c=>c.name!=='Ads');
+  const nonAdsChTotal = nonAdsCh.reduce((s,n)=>s+n.value,0);
+  const adsRouting = d.adsRouting || {};
+  custBuyers.forEach(buyer => {
+    const adContrib = adsRouting[buyer.name] || 0;
+    const remaining = Math.max(0, buyer.value - adContrib);
+    if(adContrib > 0) {
+      adsCh.forEach(ch => {
+        flowDefs.push({from:buyer.name, to:ch.name, value:adContrib, fc:0, tc:1});
       });
-      tooltip.innerHTML = `<strong style="font-size:14px;">${n.label}</strong><br>
-        <span style="font-size:16px;font-weight:800;color:${n.color};">$${n.value}B</span><br>
-        ${inflows > 0 ? `<span style="color:#94a3b8;">Inflows: $${inflows.toFixed(1)}B</span><br>` : ''}
-        ${outflows > 0 ? `<span style="color:#94a3b8;">Outflows: $${outflows.toFixed(1)}B</span><br>` : ''}
-        <span style="font-size:10px;color:#64748b;">Click to lock/unlock highlight</span>`;
-    } else if (hitFlow) {
-      const f = FLOWS[hitFlow.fi];
-      const from = COLUMNS[f[0]][f[1]];
-      const to = COLUMNS[f[2]][f[3]];
-      const key = `${f[0]}-${f[1]}-${f[2]}-${f[3]}`;
-      const desc = FLOW_LABELS[key] || '';
-      tooltip.innerHTML = `<strong>${from.label} → ${to.label}</strong><br>
-        <span style="font-size:16px;font-weight:800;">$${f[4]}B</span><br>
-        ${desc ? `<span style="color:#94a3b8;font-size:11px;">${desc}</span>` : ''}`;
     }
-  } else {
-    hoverFlow = null;
-    if (!activeNode) draw(null);
-    canvas.style.cursor = 'default';
-    tooltip.style.display = 'none';
-  }
-});
+    if(remaining > 0 && nonAdsChTotal > 0) {
+      nonAdsCh.forEach(ch => {
+        const v = remaining * (ch.value / nonAdsChTotal);
+        if(v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
+      });
+    }
+  });
 
-canvas.addEventListener('click', e => {
-  const rect = canvas.getBoundingClientRect();
-  const mx = e.clientX - rect.left;
-  const my = e.clientY - rect.top;
-  const hitNode = hitTestNode(mx, my);
+  // --- Channels → Providers (routed, minus margins) ---
+  // All cost params come from the data file (d.costParams), not hardcoded constants.
+  // See data/sankey-projections.json _schema.tier_legend for the provenance system.
+  const cp = d.costParams || {};
+  const INFERENCE_PCT = (cp.inferencePct != null) ? cp.inferencePct : 0.47;
+  const marginPcts = cp.marginPcts || {'Hyperscalers':0.20, 'Trad. SaaS':0.60};
+  const aiNativeIaasShare = (cp.aiNativeIaasShare != null) ? cp.aiNativeIaasShare : 0.30;
+  const rates = cp.providerRates || {};
+  const explicitVCSubsidy = cp.vcSubsidy || null; // when present, overrides rate-based calc
 
-  if (hitNode) {
-    if (activeNode && activeNode.colIdx === hitNode.colIdx && activeNode.nodeIdx === hitNode.nodeIdx) {
-      activeNode = null; // toggle off
-      draw(null);
+  const provNodes = allNodes.filter(n=>n.col===2);
+  const frontierNodes = provNodes.filter(n=>!n.name.includes('IaaS')&&!n.name.includes('Other'));
+  const iaasNode = N('IaaS/Open',2);
+  const otherNode = N('Other Model Providers',2);
+
+  // OpenAI's provider value includes ad revenue (Ads channel routes 100% to it).
+  // Non-Ads channels must distribute on the *base* provider mix, otherwise the
+  // ad bump would also pull a bigger share of token/sub revenue toward OpenAI.
+  const adsChNodeForBase = N('Ads', 1);
+  const adsBump = adsChNodeForBase ? adsChNodeForBase.value : 0;
+  const baseValue = (p) => (p.name==='OpenAI' ? Math.max(p.value - adsBump, 0) : p.value);
+  const frontierBaseTotal = frontierNodes.reduce((s,n)=>s+baseValue(n),0);
+
+  chNodes.forEach(ch => {
+    const mPct = marginPcts[ch.name]||0;
+    const pass = ch.value * (1-mPct);
+
+    if(ch.name==='Ads') {
+      // Ads revenue flows entirely to OpenAI (only player in this space).
+      flowDefs.push({from:ch.name, to:'OpenAI', value:pass, fc:1, tc:2});
+    } else if(ch.name==='IaaS & Agg.' && iaasNode) {
+      flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass, fc:1, tc:2});
+    } else if(ch.name==='AI Native Apps') {
+      if(iaasNode) flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass*aiNativeIaasShare, fc:1, tc:2});
+      frontierNodes.forEach(p => {
+        flowDefs.push({from:ch.name, to:p.name, value:pass*(1-aiNativeIaasShare)*(baseValue(p)/frontierBaseTotal), fc:1, tc:2});
+      });
+    } else if((ch.name==='Model API'||ch.name==='Model Subs') && otherNode) {
+      const recv = [...frontierNodes, otherNode];
+      const rt = recv.reduce((s,n)=>s+baseValue(n),0);
+      recv.forEach(p => { flowDefs.push({from:ch.name, to:p.name, value:pass*(baseValue(p)/rt), fc:1, tc:2}); });
     } else {
-      activeNode = { colIdx: hitNode.colIdx, nodeIdx: hitNode.nodeIdx };
-      draw(activeNode);
+      frontierNodes.forEach(p => {
+        flowDefs.push({from:ch.name, to:p.name, value:pass*(baseValue(p)/frontierBaseTotal), fc:1, tc:2});
+      });
     }
-  } else {
-    activeNode = null;
-    draw(null);
+
+    // Margin → Generated Cashflow (bypass)
+    if(mPct > 0) {
+      flowDefs.push({from:ch.name, to:'Generated Cashflow', value:ch.value*mPct, fc:1, tc:3, bypass:true});
+    }
+  });
+
+  // --- VC → loss-making Providers (bypass) ---
+  // If costParams.vcSubsidy is present (typically Tier 1B sourced years), use the
+  // explicit per-provider amounts. Otherwise compute from rate-based vcNeed.
+  const vcNode = N('VC/Investors',0);
+  if(vcNode && vcNode.value > 0) {
+    if(explicitVCSubsidy) {
+      provNodes.forEach(p => {
+        const v = explicitVCSubsidy[p.name];
+        if(v && v > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:v, fc:0, tc:2, bypass:true});
+      });
+    } else {
+      const chPass = chNodes.reduce((s,n)=>s+n.value*(1-(marginPcts[n.name]||0)),0);
+      const pt = provNodes.reduce((s,n)=>s+n.value,0);
+      provNodes.forEach(p => {
+        const costPct = INFERENCE_PCT + (rates[p.name]||0.55);
+        if(costPct < 1.0) return;
+        const share = p.value/pt;
+        const chRev = chPass * share;
+        const vcNeed = chRev * (costPct - 1.0);
+        if(vcNeed > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:vcNeed, fc:0, tc:2, bypass:true});
+      });
+    }
   }
-});
 
+  // --- Providers → Inference + Other Operating + (Surplus → Cashflow) ---
+  // Conservation: inf + op + surplus = p.value (always). Unified formula:
+  //   inf = p.value × INFERENCE_PCT  (always; INF is modelled as an absolute fraction of revenue)
+  //   op  = p.value × min(rate, 1 − INFERENCE_PCT)  (capped so inf+op ≤ value for loss-makers)
+  //   surplus = p.value × max(0, 1 − costPct)
+  // For loss-makers (costPct ≥ 1) op = p.value × (1 − INF) and surplus = 0.
+  // For profitable providers op = p.value × rate and surplus = p.value × (1 − costPct).
+  provNodes.forEach(p => {
+    const r = rates[p.name] || 0.55;
+    const costPct = INFERENCE_PCT + r;
+    const opShare = Math.min(r, 1 - INFERENCE_PCT);
+    flowDefs.push({from:p.name, to:'Inference', value:p.value*INFERENCE_PCT, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating', value:p.value*opShare, fc:2, tc:3});
+    if (costPct < 1.0) {
+      const surplus = p.value * (1.0 - costPct);
+      if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
+    }
+  });
+
+  // Convert flowDefs to visual flows with Y positions
+  // Reset offsets
+  allNodes.forEach(n => { n._out = 0; n._in = 0; });
+
+  allFlows = [];
+  // Sort: normal flows first, then bypasses (so bypasses draw on top)
+  flowDefs.sort((a,b) => (a.bypass?1:0)-(b.bypass?1:0));
+
+  flowDefs.forEach(fd => {
+    if(fd.value < 0.01) return;
+    const fromNode = N(fd.from, fd.fc);
+    const toNode = N(fd.to, fd.tc);
+    if(!fromNode || !toNode) return;
+
+    const flowH = fd.value * scale;
+    const lx = fromNode.x + fromNode.w;
+    const rx = toNode.x;
+    const ly = fromNode.y + fromNode._out;
+    const ry = toNode.y + toNode._in;
+    fromNode._out += flowH;
+    toNode._in += flowH;
+
+    allFlows.push({ from:fromNode, to:toNode, lx, rx, ly, ry, flowH, value:fd.value, bypass:fd.bypass });
+  });
+
+  renderCanvas(ctx, W);
+}
+
+function renderCanvas(ctx, W) {
+  ctx.clearRect(0,0,W,560);
+  const active = lockedNode || hoveredNode;
+  const aName = active ? active.name : null;
+
+  // Column headers
+  ctx.textAlign = 'center';
+  const labels = ['Who Pays','Channels','Model Providers','Where It Goes'];
+  const colTotals = [0,1,2,3].map(c => allNodes.filter(n=>n.col===c).reduce((s,n)=>s+n.value,0));
+  [0,1,2,3].forEach(ci => {
+    const nodes = allNodes.filter(n=>n.col===ci);
+    if(!nodes.length) return;
+    const x = nodes[0].x + nodes[0].w/2;
+    ctx.font = 'bold 13px -apple-system,sans-serif';
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(labels[ci], x, 18);
+    ctx.font = '11px -apple-system,sans-serif';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('$'+colTotals[ci].toFixed(1)+'B', x, 33);
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(nodes[0].x, 38); ctx.lineTo(nodes[0].x+nodes[0].w, 38); ctx.stroke();
+  });
+  ctx.textAlign = 'left';
+
+  // Draw flows
+  allFlows.forEach(f => {
+    const connected = aName && (f.from.name===aName || f.to.name===aName);
+    const dimmed = aName && !connected;
+    ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.5 : 0.18;
+    ctx.fillStyle = COLORS[f.from.name] || '#475569';
+    ctx.beginPath();
+    const cp = (f.rx - f.lx) * 0.4;
+    ctx.moveTo(f.lx, f.ly);
+    ctx.bezierCurveTo(f.lx+cp, f.ly, f.rx-cp, f.ry, f.rx, f.ry);
+    ctx.lineTo(f.rx, f.ry+f.flowH);
+    ctx.bezierCurveTo(f.rx-cp, f.ry+f.flowH, f.lx+cp, f.ly+f.flowH, f.lx, f.ly+f.flowH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+
+  // Tier colour helper (shared with tooltip)
+  const tierColor = (t) => {
+    if(!t) return '#475569';
+    if(t.startsWith('1')) return '#10b981';
+    if(t.startsWith('2')) return '#3b82f6';
+    if(t.startsWith('3')) return '#f59e0b';
+    if(t.startsWith('4')) return '#ef4444';
+    return '#475569';
+  };
+
+  // Draw nodes
+  allNodes.forEach(n => {
+    const isActive = n.name === aName;
+    const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
+    ctx.globalAlpha = dimmed ? 0.25 : 1;
+    ctx.fillStyle = COLORS[n.name] || '#475569';
+    ctx.beginPath(); ctx.roundRect(n.x, n.y, n.w, Math.max(n.h,2), 4); ctx.fill();
+    if(isActive) { ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke(); }
+    if(n.h > 16) {
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 9px -apple-system,sans-serif';
+      let label = n.name;
+      while(ctx.measureText(label).width > n.w-6 && label.length>3) label = label.slice(0,-1);
+      ctx.fillText(label, n.x+3, n.y+n.h/2-2);
+      ctx.font = '9px -apple-system,sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      const vt = '$'+n.value.toFixed(n.value<10?1:0)+'B';
+      ctx.fillText(vt, n.x+3, n.y+n.h/2+10);
+    }
+    // Tier corner badge — small coloured square in top-right of node
+    if(n.tier && n.h >= 10) {
+      const bw = 14, bh = 9;
+      ctx.fillStyle = tierColor(n.tier);
+      ctx.beginPath(); ctx.roundRect(n.x + n.w - bw - 1, n.y + 1, bw, bh, 2); ctx.fill();
+      ctx.fillStyle = '#0a0e1a';
+      ctx.font = 'bold 7px -apple-system,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.tier, n.x + n.w - bw/2 - 1, n.y + bh - 1);
+      ctx.textAlign = 'left';
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // Tooltip panel
+  const panel = document.getElementById('tooltip-panel');
+  if(active && panel) {
+    const inflows = allFlows.filter(f=>f.to.name===active.name);
+    const outflows = allFlows.filter(f=>f.from.name===active.name);
+    // Tier badge colour map: 1 = green (sourced), 2 = blue (derived), 3 = amber (projected), 4 = red (editorial)
+    const tierColor = (t) => {
+      if(!t) return '#475569';
+      if(t.startsWith('1')) return '#10b981';
+      if(t.startsWith('2')) return '#3b82f6';
+      if(t.startsWith('3')) return '#f59e0b';
+      if(t.startsWith('4')) return '#ef4444';
+      return '#475569';
+    };
+    const badge = active.tier
+      ? '<span style="display:inline-block;background:'+tierColor(active.tier)+';color:#0a0e1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;">TIER '+active.tier+'</span>'
+      : '';
+    let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;">';
+    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div>';
+    if(active.src) {
+      html += '<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:4px;max-width:240px;">'+active.src+'</div>';
+    }
+    html += '</div>';
+    if(inflows.length) {
+      const inTotal = inflows.reduce((s,f)=>s+f.value,0);
+      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows $'+inTotal.toFixed(1)+'B</div>';
+      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '</div>';
+    }
+    if(outflows.length) {
+      const outTotal = outflows.reduce((s,f)=>s+f.value,0);
+      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows $'+outTotal.toFixed(1)+'B</div>';
+      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '</div>';
+    }
+    html += '</div>';
+    panel.innerHTML = html;
+  } else if(panel) {
+    panel.innerHTML = '<span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>';
+  }
+}
+
+// Mouse
+const canvas = document.getElementById('sankey');
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
+  let found = null;
+  for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
+  if(found !== hoveredNode) { hoveredNode=found; canvas.style.cursor=found?'pointer':'default'; renderCanvas(canvas.getContext('2d'),canvas.width); }
+});
+canvas.addEventListener('click', e => {
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
+  let found = null;
+  for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
+  lockedNode = (found && lockedNode && found.name===lockedNode.name) ? null : found;
+  renderCanvas(canvas.getContext('2d'),canvas.width);
+});
 canvas.addEventListener('mouseleave', () => {
-  hoverFlow = null;
-  if (!activeNode) draw(null);
-  tooltip.style.display = 'none';
+  if(hoveredNode && !lockedNode) { hoveredNode=null; renderCanvas(canvas.getContext('2d'),canvas.width); }
 });
 
-// Legend removed — replaced with inline callout boxes in HTML
-
-} // end loadSankeyData()
-
-// Boot
-loadSankeyData();
+init();
 </script>
-<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice. Built by <a href="https://hepburnadvisory.com.au" style="color:#64748b;text-decoration:underline;" target="_blank">Hepburn Advisory</a></footer>
 </body>
 </html>
