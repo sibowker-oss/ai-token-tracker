@@ -17,7 +17,7 @@
   .nav-logo { margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none; color:#cbd5e1; font-size:13px; font-weight:600; opacity:0.7; transition:opacity 0.15s; }
   .nav-logo:hover { opacity:1; }
   .container { max-width:1320px; margin:0 auto; padding:28px 24px; }
-  h1 { font-size:36px; font-weight:800; margin-bottom:4px; letter-spacing:-0.5px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
 
   .hook { font-size:22px; font-weight:700; color:#f8fafc; margin-bottom:6px; letter-spacing:-0.3px; }
   .hook .spent { color:var(--accent); }
@@ -65,7 +65,34 @@
   .tooltip { position:fixed; pointer-events:none; background:#1e293b; border:1px solid #334155; border-radius:8px; padding:10px 14px; font-size:12px; color:#e2e8f0; line-height:1.5; max-width:280px; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.4); opacity:0; transition:opacity 0.12s; }
   .tooltip .tt-label { font-weight:700; margin-bottom:2px; }
   .tooltip .tt-dim { color:#94a3b8; font-size:11px; }
-  @media(max-width:768px) { .hero-grid { grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:768px) {
+    .nav-bar { padding:10px 12px; gap:4px; }
+    .nav-link { font-size:11px; padding:6px 12px; }
+    .nav-brand { font-size:13px; margin-right:8px; }
+    .nav-logo { font-size:11px; gap:5px; }
+    .nav-logo svg { width:18px; height:18px; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .hook { font-size:17px; }
+    .sub { font-size:13px; }
+    .hero-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+    .hero-stat { padding:14px 10px; }
+    .hero-stat .value { font-size:24px; }
+    .hero-stat .label { font-size:10px; }
+    .hero-stat .detail { font-size:10px; }
+    .card { padding:14px; margin-bottom:14px; }
+    .card h2 { font-size:14px; }
+    #chart-wrap { -webkit-overflow-scrolling:touch; }
+    .legend-row { font-size:10px; gap:8px; padding:6px 8px; }
+    .convergence-table { font-size:11px; }
+    .convergence-table th { font-size:9px; padding:5px 6px; }
+    .convergence-table td { padding:5px 6px; }
+    .verdict-pill { font-size:10px; padding:2px 6px; }
+    .bridge { padding:12px 14px; font-size:11px; }
+    .notes { font-size:11px; }
+    .notes ul { padding-left:14px; }
+    #lag-chart { height:280px; }
+  }
 </style>
 </head>
 <body>
