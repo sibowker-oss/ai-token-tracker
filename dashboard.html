@@ -187,8 +187,11 @@
 
 <!-- ===== CAPEX CROSS-LINK ===== -->
 <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-  <div style="font-size:13px;color:var(--text-dim);"><strong style="color:var(--text);">This dashboard shows the revenue side.</strong> Where did the $745B of CapEx behind it actually go? <strong style="color:var(--red);">$34 spent for every $1 earned.</strong></div>
-  <a href="beta/chips.html" style="padding:8px 18px;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;">Follow the CapEx &rarr;</a>
+  <div style="font-size:13px;color:var(--text-dim);"><strong style="color:var(--text);">Two views of the same system.</strong> <a href="sankey.html" style="color:var(--green);font-weight:600;">Follow the Revenue</a> traces $22B of AI customer revenue from buyer to provider. <a href="beta/chips.html" style="color:var(--accent);font-weight:600;">Follow the CapEx</a> traces the $745B of infrastructure behind it. <strong style="color:var(--red);">$34 spent for every $1 earned.</strong></div>
+  <div style="display:flex;gap:8px;flex-shrink:0;">
+    <a href="sankey.html" style="padding:8px 16px;border-radius:8px;background:var(--green);color:white;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap;">Revenue &rarr;</a>
+    <a href="beta/chips.html" style="padding:8px 16px;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap;">CapEx &rarr;</a>
+  </div>
 </div>
 
 <!-- ===== MAIN CHARTS ===== -->
