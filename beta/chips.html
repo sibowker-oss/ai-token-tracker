@@ -367,7 +367,7 @@ function render() {
   document.getElementById('hero').innerHTML=`
     <div class="hero-stat"><div class="label">2023–25 AI CapEx</div><div class="value" style="color:var(--accent)">$${v.t0}B</div><div class="detail">cumulative balance sheet</div></div>
     <div class="hero-stat"><div class="label">NVIDIA's share</div><div class="value" style="color:#22c55e">$${nvidiaTotal}B</div><div class="detail">${nvidiaShare}% of total · GPU $${nvidiaGpu}B + networking $${nvidiaNet}B</div></div>
-    <div class="hero-stat"><div class="label">Inference (Paid) fleet</div><div class="value" style="color:#10a37f">$${paid}B</div><div class="detail">${((paid/v.t0)*100).toFixed(0)}% of CapEx · → $${annualCOGS}B/yr COGS on Follow the Revenue</div></div>
+    <div class="hero-stat"><div class="label">CapEx per $1 earned</div><div class="value" style="color:var(--red)">$${Math.round(v.t0/22)}</div><div class="detail">$${v.t0}B cumulative CapEx ÷ $22B cumulative AI revenue</div></div>
     <div class="hero-stat"><div class="label">Idle + In Build</div><div class="value" style="color:var(--red)">$${idle+inBuild}B</div><div class="detail">${((idle+inBuild)/v.t0*100).toFixed(0)}% of CapEx · not generating revenue</div></div>
   `;
 
