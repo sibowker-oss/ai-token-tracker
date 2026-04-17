@@ -42,6 +42,7 @@
   .filter-pill.active[data-dim="demandTypes"] { background:var(--pink); border-color:var(--pink); }
   .filter-pill.active[data-dim="modelType"] { background:#8b5cf6; border-color:#8b5cf6; }
   .filter-reset { padding:4px 10px; border-radius:16px; border:1px solid rgba(239,68,68,0.3); background:transparent; color:var(--red); font-size:10px; cursor:pointer; }
+  .filter-bar.collapsed { display:none; }
 
   /* Cards */
   .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
@@ -170,30 +171,42 @@
 
 <header style="text-align:center;">
   <h1 style="font-size:28px;font-weight:800;letter-spacing:-0.5px;">The AI Ledger</h1>
-  <p style="font-size:13px;color:var(--text-dim);margin-top:4px;">The live economics of AI — updated weekly</p>
-  <div id="data-refresh" style="font-size:11px;color:var(--accent);margin-top:8px;font-weight:600;"></div>
-  <p style="font-size:10px;color:var(--text-dim);line-height:1.5;margin-top:6px;">Triangulated from public filings, API observations, and industry disclosures. Directional indicators, not audited financials. ARR figures throughout. See <a href="sankey.html" style="color:#3b82f6;">Follow the Revenue</a> for actual collected.</p>
+  <div id="hook-line" style="font-size:16px;font-weight:700;color:#f8fafc;margin-top:8px;letter-spacing:-0.2px;"></div>
+  <p style="font-size:12px;color:var(--text-dim);margin-top:6px;">Triangulated from public filings, API observations, and industry disclosures. Not audited financials. <a href="sankey.html" style="color:#3b82f6;">Follow the Revenue</a> · <a href="beta/chips.html" style="color:#3b82f6;">Follow the CapEx</a></p>
+  <div id="data-refresh" style="font-size:10px;color:var(--accent);margin-top:4px;font-weight:600;"></div>
 </header>
 
 <!-- ===== FILTER BAR ===== -->
-<div class="filter-bar" id="filter-bar"></div>
+<div style="text-align:center;margin-bottom:8px;">
+  <button id="filter-toggle" onclick="document.getElementById('filter-bar').classList.toggle('collapsed');this.textContent=document.getElementById('filter-bar').classList.contains('collapsed')?'Show Filters \u25BC':'Hide Filters \u25B2'" style="padding:6px 18px;border-radius:8px;border:1px solid var(--card-border);background:var(--card);color:var(--text-dim);font-size:12px;font-weight:600;cursor:pointer;">Show Filters \u25BC</button>
+</div>
+<div class="filter-bar collapsed" id="filter-bar"></div>
 
 <!-- ===== HERO STATS ===== -->
 <div class="hero-grid" id="hero-stats"></div>
 
+<!-- ===== CAPEX CROSS-LINK ===== -->
+<div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+  <div style="font-size:13px;color:var(--text-dim);"><strong style="color:var(--text);">This dashboard shows the revenue side.</strong> Where did the $745B of CapEx behind it actually go? <strong style="color:var(--red);">$34 spent for every $1 earned.</strong></div>
+  <a href="beta/chips.html" style="padding:8px 18px;border-radius:8px;background:var(--accent);color:white;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;">Follow the CapEx &rarr;</a>
+</div>
+
 <!-- ===== MAIN CHARTS ===== -->
 <div class="card">
   <h2>Token Volume &amp; ARR by Provider <span class="sub">&mdash; click bars to filter</span></h2>
+  <div id="insight-provider" style="font-size:12px;color:var(--text-dim);margin-bottom:10px;font-style:italic;"></div>
   <div class="chart-wrap"><canvas id="chart-provider"></canvas></div>
 </div>
 
 <div class="grid-2">
   <div class="card">
     <h2>ARR by Demand Type</h2>
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-style:italic;">Consumer subscriptions still lead, but API/developer spend is closing fast.</div>
     <div class="chart-wrap"><canvas id="chart-demand"></canvas></div>
   </div>
   <div class="card">
     <h2>Consumer vs Business Split by Provider</h2>
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-style:italic;">OpenAI skews consumer (ChatGPT). Anthropic is almost pure business/API.</div>
     <div class="chart-wrap"><canvas id="chart-biz-consumer"></canvas></div>
   </div>
 </div>
@@ -202,14 +215,17 @@
 <div class="grid-3">
   <div class="card">
     <h2>By Region</h2>
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-style:italic;">North America dominates, but Asia is growing fastest.</div>
     <div class="chart-wrap"><canvas id="chart-region"></canvas></div>
   </div>
   <div class="card">
     <h2>By Industry</h2>
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-style:italic;">Tech/SaaS is the primary buyer. Financial services is #2.</div>
     <div class="chart-wrap"><canvas id="chart-industry"></canvas></div>
   </div>
   <div class="card">
     <h2>By Use Case</h2>
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;font-style:italic;">Code generation is the killer app. Chat/assistant is volume, not value.</div>
     <div class="chart-wrap"><canvas id="chart-usecase"></canvas></div>
   </div>
 </div>
@@ -523,10 +539,20 @@ function updateHeroStats() {
   const bearRev = (totalRev * 0.6).toFixed(1);
   const bullRev = (totalRev * 1.2).toFixed(1);
 
+  // Revenue concentration: top 3 share
+  const sorted = Object.entries(data).sort((a,b) => b[1].rev - a[1].rev);
+  const top3Rev = sorted.slice(0,3).reduce((a,d) => a + d[1].rev, 0);
+  const top3Pct = totalRev > 0 ? Math.round(top3Rev / totalRev * 100) : 0;
+  const top3Names = sorted.slice(0,3).map(d => d[0].split('/')[0]).join(', ');
+
+  // Hook line
+  const hookEl = document.getElementById('hook-line');
+  if (hookEl) hookEl.innerHTML = provCount + ' providers. ~' + Math.ceil(totalTokens) + 'T tokens/day. <span style="color:var(--green);">$' + totalRev.toFixed(1) + 'B ARR.</span> Here\'s who\'s real and who\'s pretending.';
+
   document.getElementById('hero-stats').innerHTML =
     '<div class="hero-stat"><div class="label">Est. Tokens / Day</div><div class="value" style="color:var(--accent);">~' + Math.ceil(totalTokens) + 'T</div><div class="detail" style="font-size:10px;">Bear: ' + bearTokens + 'T \u00b7 Bull: ' + bullTokens + 'T</div></div>' +
     '<div class="hero-stat"><div class="label">Combined ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail" style="font-size:10px;">Bear: $' + bearRev + 'B \u00b7 Bull: $' + bullRev + 'B</div></div>' +
-    '<div class="hero-stat"><div class="label">Active Providers</div><div class="value" style="color:var(--accent2);">' + provCount + '</div><div class="detail">tracked in this dashboard</div></div>' +
+    '<div class="hero-stat"><div class="label">Top 3 Revenue Share</div><div class="value" style="color:var(--accent2);">' + top3Pct + '%</div><div class="detail">' + top3Names + '</div></div>' +
     '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">frontier-equivalent cost (ARK Invest)</div></div>';
 }
 
@@ -536,6 +562,17 @@ function updateProviderChart() {
   const tokenVals = labels.map(l => data[l].tokens);
   const revVals = labels.map(l => data[l].rev);
   const colors = labels.map(l => data[l].color);
+
+  // Dynamic insight
+  const sortedByTokens = labels.slice().sort((a,b) => data[b].tokens - data[a].tokens);
+  const sortedByRev = labels.slice().sort((a,b) => data[b].rev - data[a].rev);
+  const insightEl = document.getElementById('insight-provider');
+  if (insightEl && sortedByTokens.length >= 2) {
+    const topToken = sortedByTokens[0].split('/')[0];
+    const topRev = sortedByRev[0].split('/')[0];
+    const ratio = data[sortedByTokens[0]].tokens > 0 && data[sortedByTokens[1]] ? (data[sortedByTokens[0]].tokens / data[sortedByTokens[1]].tokens).toFixed(1) : '?';
+    insightEl.textContent = topToken + ' processes ' + ratio + 'x more tokens than #2. ' + (topToken !== topRev ? topRev + ' leads on revenue.' : 'Also leads on revenue.');
+  }
 
   if (charts.provider) {
     charts.provider.data.labels = labels;
