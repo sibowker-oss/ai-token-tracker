@@ -3,10 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Follow the Revenue — The AI Ledger</title>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-211EY55BEQ"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-211EY55BEQ");</script>
+<title>Follow the Revenue: Forward Look — The AI Ledger</title>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -53,8 +50,7 @@
 <body>
 <nav class="nav-bar">
   <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
-  <a href="sankey.html" class="nav-link active">Follow the Revenue</a>
-  <a href="beta/chips.html" class="nav-link">Follow the CapEx</a>
+  <a href="sankey.html" class="nav-link">Follow the Revenue</a>
   <a href="timeline.html" class="nav-link">Time Machine</a>
   <a href="openrouter.html" class="nav-link">Live Pricing</a>
   <a href="feed.html" class="nav-link">Weekly Feed</a>
@@ -65,7 +61,7 @@
 </nav>
 <div class="container">
   <h1>Follow the Revenue</h1>
-  <div class="sub" id="page-subtitle">In 24 months, businesses and consumers will be spending $112B on AI — a third of what they spend on all SaaS today. Where does that money come from?</div>
+  <div class="sub">Toggle between years to see how money shifts across buyers, channels, providers, and outcomes.</div>
   <div class="hero-grid" id="hero-stats"></div>
   <div class="card">
     <h2 id="flow-title">Revenue Flow</h2>
@@ -75,9 +71,9 @@
     </div>
     <div id="tier-legend" style="display:flex;flex-wrap:wrap;gap:10px;font-size:10px;color:var(--text-dim);margin-top:14px;padding:8px 12px;background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:6px;align-items:center;">
       <strong style="color:#cbd5e1;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Provenance tier:</strong>
-      <span><span style="display:inline-block;background:#10b981;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">1</span> Sourced (<b>A</b> = first-party disclosure, <b>B</b> = ≥2 corroborating sources)</span>
-      <span><span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">2</span> Derived (<b>A</b> = deterministic calc from Tier 1, <b>B</b> = triangulated)</span>
-      <span><span style="display:inline-block;background:#f59e0b;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">3</span> Projected (<b>A</b> = anchored extrapolation, <b>B</b> = interpolated, <b>C</b> = scenario assumption)</span>
+      <span><span style="display:inline-block;background:#10b981;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">1</span> Sourced (authoritative / corroborated)</span>
+      <span><span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">2</span> Derived (calculated from Tier 1)</span>
+      <span><span style="display:inline-block;background:#f59e0b;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">3</span> Projected (anchored / interpolated / scenario)</span>
       <span><span style="display:inline-block;background:#ef4444;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">4</span> Editorial (replace ASAP)</span>
       <span style="opacity:0.6;">— hover any node for source citation</span>
     </div>
@@ -109,7 +105,7 @@ const COLORS = {
 
 async function init() {
   try {
-    const r = await fetch('data/sankey-projections.json?v=' + Date.now());
+    const r = await fetch('../data/sankey-projections.json?v=' + Date.now());
     sankeyData = await r.json();
   } catch(e) {
     document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Error: '+e.message+'</div>';
@@ -137,27 +133,18 @@ function renderYear(yr) {
   const prev = yr==='2026E'?sankeyData['2025']:yr==='2027E'?sankeyData['2026E']:null;
   const cf = d.outcomes.find(o=>o.label.includes('Cash'))||d.outcomes[d.outcomes.length-1];
 
-  // Hero stats — Revenue (customer-facing buyers only), Total Capex (infrastructure),
-  // VC Operating Subsidy (operating losses funded by investors), Generated Cashflow.
-  const revenue = d.buyers
+  // Hero stats — Total Revenue is the sum of customer-facing buyers (Consumer + SME + Enterprise),
+  // explicitly excluding VC/Investors from the headline.
+  const totalRevenue = d.buyers
     .filter(b => b.label !== 'VC/Investors')
     .reduce((s,b) => s + b.value, 0);
-  const capex = (d.infrastructureCapex || {}).value || 0;
   let h = '';
-  h += '<div class="hero-stat"><div class="label">Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div></div>';
-  h += '<div class="hero-stat"><div class="label">Total Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div></div>';
-  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+d.totalVCSubsidy+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Total Revenue</div><div class="value" style="color:var(--accent);">$'+totalRevenue.toFixed(1)+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--green);">$'+d.totalCustomerRevenue+'B</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Subsidy</div><div class="value" style="color:var(--red);">$'+d.totalVCSubsidy+'B</div></div>';
   h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+(cf?cf.value:0)+'B</div></div>';
   document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
-
-  const subtitles = {
-    '2025': '<b>Year zero.</b> $17B in customer revenue — but $9B of that is operating losses funded by VC, not paying customers. A third of "AI revenue" is actually investor subsidy.',
-    '2026E': '<b>Scale year.</b> Customer spend ramps ~4x to $64B; VC subsidy peaks at $25B as OpenAI and Anthropic burn hardest before burn-rate targets start biting.',
-    '2027E': '<b>First customer-funded year.</b> $112B in customer spend — roughly a third of today\'s entire global SaaS market. VC share collapses 88% to just 3%. Where is this money coming from?'
-  };
-  const subtitleEl = document.getElementById('page-subtitle');
-  if (subtitleEl && subtitles[yr]) subtitleEl.innerHTML = subtitles[yr];
 
   // Build and draw
   buildSankey(d);

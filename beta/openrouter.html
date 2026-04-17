@@ -94,15 +94,21 @@
   .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
   .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
   .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
+  .nav-logo { margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none; color:#cbd5e1; font-size:13px; font-weight:600; opacity:0.7; transition:opacity 0.15s; }
+  .nav-logo:hover { opacity:1; }
   .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
   @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
 </style>
 <nav class="nav-bar">
   <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
-  <a href="sankey.html" class="nav-link">Follow the $</a>
+  <a href="sankey.html" class="nav-link">Follow the Revenue</a>
   <a href="timeline.html" class="nav-link">Time Machine</a>
   <a href="openrouter.html" class="nav-link active">Live Pricing</a>
   <a href="feed.html" class="nav-link">Weekly Feed</a>
+  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
+    Hepburn Advisory
+  </a>
 </nav>
 
 <div class="container">
