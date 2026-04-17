@@ -74,8 +74,10 @@
 <nav class="nav-bar">
   <a href="../dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
   <a href="../sankey.html" class="nav-link">Follow the Revenue</a>
-  <a href="sankey-v2.html" class="nav-link">Revenue v2</a>
-  <a href="in-development.html" class="nav-link">In development</a>
+  <a href="chips.html" class="nav-link active">Follow the CapEx</a>
+  <a href="../timeline.html" class="nav-link">Time Machine</a>
+  <a href="../openrouter.html" class="nav-link">Live Pricing</a>
+  <a href="../feed.html" class="nav-link">Weekly Feed</a>
   <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
     <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
     Hepburn Advisory
@@ -83,7 +85,7 @@
 </nav>
 <div class="container">
   <h1>Follow the CapEx</h1>
-  <div class="hook"><span class="spent">$745B spent.</span> <span class="earned">$20B earned.</span></div>
+  <div class="hook"><span class="spent">$745B spent.</span> <span class="earned">$22B earned.</span></div>
   <div class="sub">
     Every dollar of cumulative 2023–25 AI capital expenditure — from spender → silicon → current workload — and where the rest went.
     The <strong>balance-sheet mirror</strong> of <a href="../sankey.html" style="color:var(--accent);">Follow the Revenue</a>. Anchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.
@@ -116,11 +118,11 @@
 
       <div style="margin-bottom:6px;">
         <strong style="color:#ef4444; font-size:13px;">3. Can AI revenue close the gap?</strong>
-        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx hit ~$380B in 2025 alone. Today's AI customer revenue is ~$20B/yr.</span>
+        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx hit ~$380B in 2025 alone. Today's AI customer revenue is ~$17.5B/yr.</span>
       </div>
       <table class="convergence-table" style="margin-top:8px;">
         <tr><th>Question</th><th>What it requires</th><th style="text-align:right;">Verdict</th></tr>
-        <tr><td>Can revenue compound fast enough?</td><td>3–4× annual growth to cover depreciation</td><td class="num"><span class="verdict-pill verdict-no">No</span> <span style="color:var(--text-dim);font-size:11px;">$20B rev vs $41B dep</span></td></tr>
+        <tr><td>Can revenue compound fast enough?</td><td>3–4× annual growth to cover depreciation</td><td class="num"><span class="verdict-pill verdict-no">No</span> <span style="color:var(--text-dim);font-size:11px;">$17.5B rev vs $41B dep</span></td></tr>
         <tr><td>Do ad/cloud workloads cover their share?</td><td>Existing business models justify the CapEx</td><td class="num"><span class="verdict-pill verdict-yes">Yes</span> <span style="color:var(--text-dim);font-size:11px;">~$170B self-funding</span></td></tr>
         <tr><td>Will CapEx growth flatten?</td><td>New purchases stop growing so dep stabilises</td><td class="num"><span class="verdict-pill verdict-no">No</span> <span style="color:var(--text-dim);font-size:11px;">FY27 $368B, accelerating</span></td></tr>
       </table>
@@ -524,9 +526,9 @@ const LAG_RAW = [
   //   CY26 $311B→$77.8B/yr | CY27 $400B→$100B/yr | CY28 $470B→$117.5B/yr
   //
   // AI revenue: 2025 $17.5B (sankey-projections.json), 2026E $64B, 2027E extrapolated.
-  { year:'2023',  nvidia: 48, totalCapex:160, nvDep:  0, totalDep:   0, revenue:  3  },
-  { year:'2024',  nvidia:115, totalCapex:280, nvDep: 12, totalDep:  22, revenue: 10  },
-  { year:'2025',  nvidia:194, totalCapex:380, nvDep: 41, totalDep:  74, revenue: 20  },
+  { year:'2023',  nvidia: 48, totalCapex:160, nvDep:  0, totalDep:   0, revenue:  1  },
+  { year:'2024',  nvidia:115, totalCapex:280, nvDep: 12, totalDep:  22, revenue:  4  },
+  { year:'2025',  nvidia:194, totalCapex:380, nvDep: 41, totalDep:  74, revenue: 17  },
   { year:'2026E', nvidia:311, totalCapex:550, nvDep: 89, totalDep: 160, revenue: 64  },
   { year:'2027E', nvidia:400, totalCapex:700, nvDep:167, totalDep: 300, revenue:115  },
   { year:'2028E', nvidia:470, totalCapex:750, nvDep:255, totalDep: 460, revenue:200  },
