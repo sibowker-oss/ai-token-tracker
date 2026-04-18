@@ -95,7 +95,7 @@
     .bridge { padding:12px 14px; font-size:11px; }
     .notes { font-size:11px; }
     .notes ul { padding-left:14px; }
-    #lag-chart { height:280px; }
+    #lag-chart { height:340px; }
   }
 </style>
 </head>
@@ -574,7 +574,8 @@ function renderLagChart() {
   const { width } = svg.node().getBoundingClientRect();
   const height = 380;
   svg.attr('viewBox', `0 0 ${width} ${height}`);
-  const margin = { top: 20, right: 20, bottom: 50, left: 60 };
+  const isMobile = width < 500;
+  const margin = { top: 15, right: isMobile ? 8 : 20, bottom: isMobile ? 40 : 50, left: isMobile ? 36 : 60 };
   const W = width - margin.left - margin.right;
   const H = height - margin.top - margin.bottom;
 
@@ -596,13 +597,14 @@ function renderLagChart() {
   const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
   // Axes
-  g.append('g').call(d3.axisLeft(y).ticks(6).tickFormat(v=>'$'+v+'B'))
-    .selectAll('text').style('font-size','11px').style('fill','#94a3b8');
+  const tickSize = isMobile ? '9px' : '11px';
+  g.append('g').call(d3.axisLeft(y).ticks(isMobile?4:6).tickFormat(v=>'$'+v+(isMobile?'':'B')))
+    .selectAll('text').style('font-size',tickSize).style('fill','#94a3b8');
   g.selectAll('.domain,line').style('stroke','#334155');
-  g.append('text').attr('x',-H/2).attr('y',-45).attr('transform','rotate(-90)')
+  if (!isMobile) g.append('text').attr('x',-H/2).attr('y',-45).attr('transform','rotate(-90)')
     .attr('text-anchor','middle').style('font-size','11px').style('fill','#94a3b8').text('Annual $B');
   g.append('g').attr('transform',`translate(0,${H})`).call(d3.axisBottom(x))
-    .selectAll('text').style('font-size','11px').style('fill','#e2e8f0').style('font-weight','600');
+    .selectAll('text').style('font-size',tickSize).style('fill','#e2e8f0').style('font-weight','600');
   g.select('.domain').style('stroke','#334155');
 
   for (const d of data) {
