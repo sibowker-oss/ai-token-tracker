@@ -34,11 +34,28 @@ CHUNK_SIZE = 40_000
 
 SYSTEM_PROMPT = """You are a financial data extraction assistant specialising in the AI industry.
 
-Your task: read a podcast transcript and extract structured data points relevant to tracking AI provider revenue, token volumes, infrastructure economics, and enterprise adoption.
+Your task: read a podcast transcript and extract ONLY data points directly relevant to tracking the AI/ML inference economy — specifically AI provider revenue, token/API volumes, model pricing, GPU/compute infrastructure costs, and enterprise AI adoption spend.
+
+SCOPE — extract claims about:
+- AI provider financials: revenue, ARR, growth rates, margins for companies whose primary business is AI/ML (OpenAI, Anthropic, Google DeepMind/Gemini, Meta AI, Mistral, Cohere, xAI, Perplexity, Stability, Midjourney, etc.)
+- Cloud AI services: AWS Bedrock, Azure OpenAI, GCP Vertex AI spend and usage
+- Token/inference economics: tokens/day, API call volumes, cost per token, inference pricing
+- GPU/compute infrastructure: GPU counts, cluster sizes, training costs, data center power for AI workloads, chip supply (NVIDIA, AMD, TSMC, etc.)
+- Enterprise AI adoption: AI spend as % of IT budget, seats/licenses for AI tools, AI-driven revenue
+- AI model metrics: benchmark scores, context windows, throughput — only when tied to commercial impact
+- AI valuations/funding: only for AI-native companies
+
+DO NOT extract:
+- Historical financials predating 2023 (e.g. "Google did $86M revenue in 2001") — unless explicitly compared to current AI metrics
+- Non-AI business metrics (defense contracts, banking revenue, retail sales, oil production, etc.) even if mentioned by a tech investor
+- General macroeconomic claims (GDP, interest rates, government spending) unless directly about AI policy/investment
+- Company metrics for non-AI businesses (Anduril defense, traditional SaaS, fintech, crypto) unless specifically about their AI/ML division
+- Biographical facts, headcounts, or org charts unless tied to an AI spending figure
+- Vague market commentary without specific numbers
 
 For each concrete claim found, output a JSON object with these fields:
 - "claim": verbatim or lightly paraphrased quote (1-2 sentences)
-- "category": one of: provider_revenue | token_volume | pricing | gpu_infrastructure | enterprise_adoption | skeptical_bear_case | valuation_funding | other
+- "category": one of: provider_revenue | token_volume | pricing | gpu_infrastructure | enterprise_adoption | skeptical_bear_case | valuation_funding (pick the closest match — do NOT use "other")
 - "entity": company or product name (e.g. "OpenAI", "Claude", "Copilot")
 - "metric": what is being measured (e.g. "ARR", "tokens/day", "seats", "H100 count")
 - "value": numeric value as a number, or null if unclear
@@ -61,6 +78,7 @@ Rules:
 - A speaker saying "our ARR is X" about their own company is weight "authoritative"
 - A speaker saying "per their earnings call, X" with a named source is weight "corroborating"
 - Do not hallucinate — if a number isn't stated, don't estimate it
+- When in doubt about relevance, SKIP the claim — fewer high-quality extractions are better than a large noisy set
 - Return a JSON array of claim objects, or [] if no relevant claims found
 - Return ONLY the JSON array, no other text"""
 
@@ -192,6 +210,68 @@ def extract_from_transcript(filepath, client):
 
     print(f"     ✅ {len(all_claims)} claim(s) extracted")
     return all_claims
+
+
+# Entities and keywords used for post-extraction relevance filtering
+AI_ENTITIES = {
+    'openai', 'anthropic', 'google', 'deepmind', 'gemini', 'microsoft', 'azure', 'meta',
+    'amazon', 'aws', 'bedrock', 'nvidia', 'deepseek', 'mistral', 'cohere', 'stability',
+    'midjourney', 'perplexity', 'claude', 'gpt', 'llama', 'databricks', 'snowflake',
+    'salesforce', 'oracle', 'bytedance', 'baidu', 'alibaba', 'tencent', 'xai', 'grok',
+    'inflection', 'adobe', 'palantir', 'hugging face', 'huggingface', 'together ai',
+    'groq', 'cerebras', 'replicate', 'ai21', 'character.ai', 'runway', 'openrouter',
+    'samsung', 'tsmc', 'intel', 'amd', 'broadcom', 'asml', 'arm', 'qualcomm',
+    'sk hynix', 'micron', 'copilot', 'chatgpt', 'vertex', 'sagemaker',
+}
+AI_KEYWORDS = {
+    'artificial intelligence', 'machine learning', 'llm', 'large language model',
+    'neural network', 'transformer', 'token', 'inference', 'training run',
+    'gpu cluster', 'data center', 'compute', 'fine-tun', 'embedding', 'chatbot',
+    'copilot', 'ai agent', 'generative ai', 'foundation model', 'model api',
+    'ai spend', 'ai revenue', 'ai infrastructure', 'gpu', 'h100', 'h200', 'b200',
+    'gb200', 'tpu', 'ai chip', 'accelerator',
+}
+AI_CATEGORIES = {
+    'provider_revenue', 'token_volume', 'pricing', 'gpu_infrastructure',
+    'enterprise_adoption', 'skeptical_bear_case', 'valuation_funding',
+}
+
+
+def filter_relevant_claims(claims):
+    """Post-extraction filter: drop claims that aren't about AI/ML industry.
+
+    This catches anything the model extracted despite the scoping instructions.
+    Returns only claims where the entity, claim text, or category signals AI relevance.
+    """
+    kept = []
+    dropped = 0
+    for claim in claims:
+        entity = (claim.get('entity') or '').lower()
+        text = (claim.get('claim') or '').lower()
+        category = (claim.get('category') or '').lower()
+
+        is_relevant = (
+            category in AI_CATEGORIES
+            or any(e in entity for e in AI_ENTITIES)
+            or any(e in text for e in AI_ENTITIES)
+            or any(k in text for k in AI_KEYWORDS)
+        )
+
+        # Extra check: reject "other" category unless text has strong AI signal
+        if category == 'other' and not any(k in text for k in AI_KEYWORDS) and not any(e in text for e in AI_ENTITIES):
+            is_relevant = False
+
+        if is_relevant:
+            # Drop the "other" category — force re-bucket into a real category
+            if category == 'other':
+                claim['category'] = 'enterprise_adoption'
+            kept.append(claim)
+        else:
+            dropped += 1
+
+    if dropped:
+        print(f"     🔍 Relevance filter: kept {len(kept)}, dropped {dropped} off-topic")
+    return kept
 
 
 def deduplicate_claims(claims):
@@ -402,6 +482,15 @@ def main():
 
     if not all_claims:
         print("\nNo claims extracted.")
+        return
+
+    # Filter out off-topic claims before dedup
+    pre_count = len(all_claims)
+    all_claims = filter_relevant_claims(all_claims)
+    print(f"\n🔍 Relevance filter: {pre_count} → {len(all_claims)} claims")
+
+    if not all_claims:
+        print("No relevant claims after filtering.")
         return
 
     # Deduplicate against existing site-data.json
