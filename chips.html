@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Follow the CapEx — The AI Ledger</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; }
+  .nav-link:hover { background:#334155; }
+  .nav-logo { margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none; color:#cbd5e1; font-size:13px; font-weight:600; opacity:0.7; transition:opacity 0.15s; }
+  .nav-logo:hover { opacity:1; }
+  .container { max-width:1320px; margin:0 auto; padding:28px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+
+  .hook { font-size:22px; font-weight:700; color:#f8fafc; margin-bottom:6px; letter-spacing:-0.3px; }
+  .hook .spent { color:var(--accent); }
+  .hook .earned { color:var(--red); }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; max-width:1000px; }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:18px 14px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:2px; }
+  .hero-stat .value { font-size:34px; font-weight:800; margin:6px 0; letter-spacing:-0.5px; }
+  .hero-stat .detail { font-size:11px; color:var(--text-dim); line-height:1.4; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:18px; }
+  .card h2 { font-size:17px; margin-bottom:12px; font-weight:700; }
+  #chart-wrap { width:100%; overflow-x:auto; overflow-y:visible; }
+  #chart { width:100%; height:740px; min-width:1200px; overflow:visible; }
+  .node rect { cursor:pointer; stroke-width:0; }
+  .node text { font-size:12px; font-weight:600; fill:#e2e8f0; pointer-events:none; }
+  .link { fill:none; stroke-opacity:0.35; transition:stroke-opacity 0.15s; }
+  .link.dimmed { stroke-opacity:0.08; }
+  .link.highlighted { stroke-opacity:0.85; }
+  .node.dimmed rect { opacity:0.2; }
+  .node.dimmed text { opacity:0.25; }
+  .legend-row { display:flex; flex-wrap:wrap; gap:14px; font-size:11px; color:var(--text-dim); padding:8px 12px; background:rgba(15,23,42,0.5); border:1px solid var(--card-border); border-radius:6px; align-items:center; margin-top:12px; }
+  .legend-row .sw { display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:middle; margin-right:5px; }
+  #validation { margin-top:12px; padding:10px 14px; border-radius:8px; font-size:11px; line-height:1.5; font-family:ui-monospace,SFMono-Regular,monospace; }
+  #validation.ok { background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.35); color:#a7f3d0; }
+  #validation.bad { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.35); color:#fecaca; }
+  .bridge { border-radius:10px; padding:14px 18px; margin-top:16px; font-size:12px; color:var(--text-dim); line-height:1.7; }
+  .bridge strong { color:#f1f5f9; }
+  .bridge a { color:var(--green); }
+  .bridge-green { background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.3); }
+  .bridge-red { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.3); }
+  .bridge-amber { background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.3); }
+  .convergence-table { width:100%; border-collapse:collapse; margin:10px 0; font-size:12px; }
+  .convergence-table th { text-align:left; padding:6px 10px; border-bottom:1px solid var(--card-border); color:var(--text-dim); font-size:10px; text-transform:uppercase; letter-spacing:0.5px; }
+  .convergence-table td { padding:6px 10px; border-bottom:1px solid rgba(30,41,59,0.5); }
+  .convergence-table .num { text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  .convergence-table .gap { color:var(--red); font-weight:700; }
+  .convergence-table .improving { color:var(--green); font-weight:700; }
+  .verdict-pill { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:700; letter-spacing:0.3px; }
+  .verdict-no { background:rgba(239,68,68,0.15); color:#fca5a5; }
+  .verdict-yes { background:rgba(16,185,129,0.15); color:#6ee7b7; }
+  .notes { font-size:12px; color:var(--text-dim); line-height:1.6; }
+  .notes ul { padding-left:18px; margin-top:6px; }
+  .notes li { margin-bottom:4px; }
+  .tooltip { position:fixed; pointer-events:none; background:#1e293b; border:1px solid #334155; border-radius:8px; padding:10px 14px; font-size:12px; color:#e2e8f0; line-height:1.5; max-width:280px; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.4); opacity:0; transition:opacity 0.12s; }
+  .tooltip .tt-label { font-weight:700; margin-bottom:2px; }
+  .tooltip .tt-dim { color:#94a3b8; font-size:11px; }
+  .mobile-hint { display:none; }
+  @media(max-width:768px) {
+    .nav-bar { padding:8px 12px; gap:4px; justify-content:center; }
+    .nav-brand { font-size:13px; margin-right:auto; }
+    .nav-logo { margin-left:0; font-size:11px; gap:5px; }
+    .nav-logo svg { width:18px; height:18px; }
+    .nav-link { font-size:10px; padding:5px 8px; border-radius:6px; }
+    html, body { overflow-x:hidden; }
+    .container { padding:16px 12px; max-width:100vw; overflow-x:hidden; }
+    h1 { font-size:22px; }
+    .hook { font-size:17px; }
+    .sub { font-size:13px; }
+    .hero-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+    .hero-stat { padding:14px 10px; }
+    .hero-stat .value { font-size:24px; }
+    .hero-stat .label { font-size:10px; }
+    .hero-stat .detail { font-size:10px; }
+    .card { padding:14px; margin-bottom:14px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .card h2 { font-size:14px; }
+    #chart-wrap { -webkit-overflow-scrolling:touch; border-radius:8px; }
+    #chart { height:500px; }
+    .mobile-hint { display:block !important; text-align:center; font-size:11px; color:var(--text-dim); font-style:italic; padding:8px 0; }
+    .legend-row { font-size:10px; gap:8px; padding:6px 8px; flex-wrap:wrap; }
+    .convergence-table { font-size:11px; }
+    .convergence-table th { font-size:9px; padding:5px 6px; }
+    .convergence-table td { padding:5px 6px; }
+    .verdict-pill { font-size:10px; padding:2px 6px; }
+    .bridge { padding:12px 14px; font-size:11px; }
+    .notes { font-size:11px; }
+    .notes ul { padding-left:14px; }
+    #lag-chart { height:340px; }
+  }
+</style>
+</head>
+<body>
+<div class="tooltip" id="tip"></div>
+
+<nav class="nav-bar">
+  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
+  <a href="sankey.html" class="nav-link">Follow the Revenue</a>
+  <a href="chips.html" class="nav-link active">Follow the CapEx</a>
+  <a href="timeline.html" class="nav-link">Time Machine</a>
+  <a href="openrouter.html" class="nav-link">Live Pricing</a>
+  <a href="feed.html" class="nav-link">Weekly Feed</a>
+  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
+    Hepburn Advisory
+  </a>
+</nav>
+<div class="container">
+  <h1>Follow the CapEx</h1>
+  <div class="hook"><span class="spent">$745B spent.</span> <span class="earned">$22B earned.</span></div>
+  <div class="sub">
+    Every dollar of cumulative 2023–25 AI capital expenditure — from spender → silicon → current workload — and where the rest went.
+    The <strong>balance-sheet mirror</strong> of <a href="sankey.html" style="color:var(--accent);">Follow the Revenue</a>. Anchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.
+  </div>
+
+  <div class="hero-grid" id="hero"></div>
+
+  <div class="card">
+    <h2>Cumulative 2023–25 AI CapEx · Balance-sheet view · Current state of each asset</h2>
+    <div class="mobile-hint">Scroll horizontally to explore the Sankey, or rotate to landscape.</div>
+    <div id="chart-wrap"><svg id="chart"></svg></div>
+    <div class="legend-row">
+      <strong style="color:#cbd5e1;text-transform:uppercase;letter-spacing:0.5px;font-size:10px;">Current asset state:</strong>
+      <span><span class="sw" style="background:#10a37f"></span>Inference (Paid)</span>
+      <span><span class="sw" style="background:#34d399"></span>Inference (Free Tier)</span>
+      <span><span class="sw" style="background:#06b6d4"></span>Inference (Ad Platform)</span>
+      <span><span class="sw" style="background:#8b5cf6"></span>Model Training</span>
+      <span><span class="sw" style="background:#ef4444"></span>Idle</span>
+      <span><span class="sw" style="background:#f59e0b"></span>In build / in transit</span>
+    </div>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:6px;text-align:center;font-style:italic;">Click any node to isolate its flows. Click again or the background to reset.</div>
+    <div id="validation"></div>
+
+    <!-- So What? — consolidated narrative -->
+    <div style="background:rgba(15,23,42,0.6); border:1px solid var(--card-border); border-radius:12px; padding:22px 24px; margin-top:18px;">
+      <div style="font-size:18px; font-weight:800; color:#f8fafc; margin-bottom:14px; letter-spacing:-0.3px;">So what does the Sankey tell us?</div>
+
+      <div style="margin-bottom:14px;" id="bridge-pl"></div>
+
+      <div style="margin-bottom:14px;" id="bridge-ads"></div>
+
+      <div style="margin-bottom:6px;">
+        <strong style="color:#ef4444; font-size:13px;">3. Can AI revenue close the gap?</strong>
+        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx hit ~$380B in 2025 alone. Today's AI customer revenue is ~$17.5B/yr.</span>
+      </div>
+      <table class="convergence-table" style="margin-top:8px;">
+        <tr><th>Question</th><th>What it requires</th><th style="text-align:right;">Verdict</th></tr>
+        <tr><td>Can revenue compound fast enough?</td><td>3–4× annual growth to cover depreciation</td><td class="num"><span class="verdict-pill verdict-no">No</span> <span style="color:var(--text-dim);font-size:11px;">$17.5B rev vs $41B dep</span></td></tr>
+        <tr><td>Do ad/cloud workloads cover their share?</td><td>Existing business models justify the CapEx</td><td class="num"><span class="verdict-pill verdict-yes">Yes</span> <span style="color:var(--text-dim);font-size:11px;">~$170B self-funding</span></td></tr>
+        <tr><td>Will CapEx growth flatten?</td><td>New purchases stop growing so dep stabilises</td><td class="num"><span class="verdict-pill verdict-no">No</span> <span style="color:var(--text-dim);font-size:11px;">FY27 $368B, accelerating</span></td></tr>
+      </table>
+      <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
+        <strong>Jensen's $1T target:</strong> cumulative NVIDIA AI-chip revenue through CY2027 = ~$1.07T at projected rates. That's $1T of silicon that needs to earn its keep over a 3–4yr depreciation window.
+      </div>
+    </div>
+
+    <!-- Stock vs Flow bridge -->
+    <div style="font-size:11px;color:var(--text-dim);margin-top:16px;margin-bottom:-6px;text-align:center;font-style:italic;">
+      The Sankey above shows the <strong style="color:#e2e8f0;">stock</strong> (cumulative CapEx). The chart below shows the <strong style="color:#e2e8f0;">flow</strong> (annual) — and where it's heading.
+    </div>
+
+    <!-- THE THREE-STAGE LAG CHART -->
+    <div class="bridge bridge-amber" style="padding:18px 22px;">
+      <div style="font-size:18px;font-weight:800;color:#f8fafc;letter-spacing:-0.3px;">The Three-Stage Lag</div>
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;">Why the gap widens before it closes</div>
+      <div style="font-size:12px;margin:6px 0 14px;color:var(--text-dim);line-height:1.6;">
+        <strong style="color:#3b82f6;">CapEx</strong> is when the money leaves the bank account — NVIDIA gets paid first and most. <strong style="color:#ef4444;">Depreciation</strong> is when that money hits the P&amp;L, spread over 3–4 years of useful life. <strong style="color:#10b981;">AI revenue</strong> is when the bet pays back. Three conveyor belts, each one trailing the last.
+      </div>
+      <svg id="lag-chart" width="100%" height="380" style="display:block;"></svg>
+      <div style="font-size:11px;margin-top:10px;color:var(--text-dim);line-height:1.6;">
+        <strong>The red–green gap is the convergence problem.</strong> Revenue is compounding fast but the depreciation wave hasn't crested yet. Convergence requires CapEx growth to flatten AND revenue to keep compounding — optimistically 2030+, if ever for pure AI revenue alone.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Structure notes</h2>
+    <div class="notes">
+      <ul>
+        <li><strong>LHS = 8 source buckets, cumulative 2023–25 CapEx</strong> ($745B). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
+        <li><strong>Middle = 5 nodes</strong> — what the money physically bought. NVIDIA GPU $240B cross-checks against calendarised NVIDIA DC revenue (Tier 1A).</li>
+        <li><strong>RHS = 6 nodes = current physical state of each asset</strong> (balance-sheet view, full purchase price):
+          <ul>
+            <li><strong>Inference (Paid) ($40B)</strong> — fleet currently serving paid API + subscription queries</li>
+            <li><strong>Inference (Free Tier) ($20B)</strong> — fleet serving free-tier ChatGPT, Gemini in search, Meta AI</li>
+            <li><strong>Inference (Ad Platform) ($170B)</strong> — fleet running ads, feed ranking, search, reco. The real chip-eater.</li>
+            <li><strong>Model Training ($84B)</strong> — fleet currently dedicated to training runs</li>
+            <li><strong>Idle ($50B)</strong> — commissioned, powered, no current workload</li>
+            <li><strong>In build / in transit ($240B)</strong> — CapEx committed, not yet commissioned. Mostly 2025 DC shell + substations.</li>
+          </ul>
+        </li>
+        <li><strong>Bridge to Follow the Revenue:</strong> Paid + Consumer fleet ($60B) → generates ~$14B/yr COGS via depreciation + hosting + electricity. Ratio ~4.3× = ~3.5yr asset life + operating overhead.</li>
+        <li><strong>Ad Platform justification:</strong> Meta/Google/MSFT don't need inference revenue to justify this CapEx — their ads/search/cloud revenue already covers it. That $170B is self-funding through existing business models.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <details>
+      <summary style="cursor:pointer;font-size:15px;font-weight:700;color:#e2e8f0;">Key Assumptions</summary>
+      <div class="notes" style="margin-top:12px;">
+        <table class="convergence-table">
+          <tr><th>Assumption</th><th>Value used</th><th>Source / rationale</th><th style="text-align:center;">Tier</th></tr>
+          <tr>
+            <td>NVIDIA DC revenue (cumulative 2023–25)</td>
+            <td class="num">$356B</td>
+            <td>FY24 $47.5B + FY25 $115.2B + FY26 $193.7B — quarterly earnings</td>
+            <td style="text-align:center;color:#10b981;font-weight:700;">1A</td>
+          </tr>
+          <tr>
+            <td>NVIDIA revenue split (GPU vs networking)</td>
+            <td class="num">~85% / ~15%</td>
+            <td>NVIDIA segment reporting; networking = InfiniBand + NVLink</td>
+            <td style="text-align:center;color:#10b981;font-weight:700;">1B</td>
+          </tr>
+          <tr>
+            <td>Silicon as % of total AI CapEx</td>
+            <td class="num">~55%</td>
+            <td>Industry rule of thumb; cross-checked against hyperscaler 10-K CapEx vs known GPU purchases</td>
+            <td style="text-align:center;color:#3b82f6;font-weight:700;">2A</td>
+          </tr>
+          <tr>
+            <td>GPU useful life (depreciation period)</td>
+            <td class="num">3.5–4 years</td>
+            <td>MSFT/GOOG extended from 4→6yr for servers but GPU-specific life shorter; Meta uses 5yr blended</td>
+            <td style="text-align:center;color:#3b82f6;font-weight:700;">2B</td>
+          </tr>
+          <tr>
+            <td>Commissioning lag (purchase → production)</td>
+            <td class="num">6–18 months</td>
+            <td>DC construction timelines; substation permitting is the critical path</td>
+            <td style="text-align:center;color:#f59e0b;font-weight:700;">3A</td>
+          </tr>
+          <tr>
+            <td>AI-attributable CapEx method</td>
+            <td class="num">Growth above 2022 baseline</td>
+            <td>Hyperscalers don't cleanly split AI vs non-AI CapEx; using pre-AI-boom baseline as proxy</td>
+            <td style="text-align:center;color:#f59e0b;font-weight:700;">3A</td>
+          </tr>
+          <tr>
+            <td>Inference fleet → annual COGS</td>
+            <td class="num">$14B/yr</td>
+            <td>From <a href="sankey.html" style="color:var(--accent);">Follow the Revenue</a> 2025 inference spend; cross-checks at ~4× ratio to fleet value</td>
+            <td style="text-align:center;color:#3b82f6;font-weight:700;">2A</td>
+          </tr>
+          <tr>
+            <td>Ad Platform fleet allocation</td>
+            <td class="num">~$170B</td>
+            <td>Meta ($55B GPU + ads infra), Google (TPU fleet for search/ads), MSFT (Bing/Copilot). Largest single workload.</td>
+            <td style="text-align:center;color:#f59e0b;font-weight:700;">3B</td>
+          </tr>
+          <tr>
+            <td>China smuggled NVIDIA GPUs</td>
+            <td class="num">474K H100e</td>
+            <td>Epoch AI tentative estimate; export controls make this inherently uncertain</td>
+            <td style="text-align:center;color:#f59e0b;font-weight:700;">3C</td>
+          </tr>
+          <tr>
+            <td>Idle compute (utilisation gap)</td>
+            <td class="num">~$50B</td>
+            <td>Residual after allocating to known workloads. Public utilisation data is scarce — CoreWeave S-1, earnings commentary</td>
+            <td style="text-align:center;color:#f59e0b;font-weight:700;">3C</td>
+          </tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:var(--text-dim);line-height:1.6;">
+          <strong>Tier key:</strong>
+          <span style="color:#10b981;">1A/1B</span> = directly sourced from filings or earnings.
+          <span style="color:#3b82f6;">2A/2B</span> = derived from sourced data with clear methodology.
+          <span style="color:#f59e0b;">3A/3B/3C</span> = modeled estimates with stated assumptions.
+        </div>
+      </div>
+    </details>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12"></script>
+<script>
+// ─── CUMULATIVE 2023–25 DATA (USD billions) ────────────────────────
+// ANCHORED FROM NVIDIA DC REVENUE (Tier 1A):
+//   FY24 $47.5B + FY25 $115.2B + FY26 $193.7B = $356.4B cumulative
+//   ~85% GPU ($303B) + ~15% networking ($53B)
+// Total silicon: NVIDIA $303B + AMD ~$25B + custom (TPU/Trainium/MTIA) ~$45B = $370B
+// Silicon ≈ 55% of total → Total industry AI CapEx ~$745B
+// Inference (Paid) fleet $50B ÷ 3.5yr dep = $14.3B/yr ≈ revenue Sankey $14.06B ✓
+const FLOWS = [
+  // ── Stage 1 → Stage 2 ──
+  // See ASSUMPTIONS.md §3 for full derivation of each source.
+  // Microsoft CapEx (160) — Epoch: 21% of NVIDIA fleet → silicon $79B → CapEx $144B. Rounded up for Azure DC build.
+  ['Microsoft CapEx','NVIDIA GPUs',85],['Microsoft CapEx','Other silicon',5],['Microsoft CapEx','Networking',12],['Microsoft CapEx','Data Centre Costs',40],['Microsoft CapEx','Electricity & ops',18],
+  // AWS CapEx (120) — 10-K: $262B total cumul 2023-25; ~50-60% AI-attributable = $130-155B. Use $120B conservative. Epoch: 9.6% NVIDIA fleet + Trainium $10B.
+  ['AWS CapEx','NVIDIA GPUs',38],['AWS CapEx','Other silicon',20],['AWS CapEx','Networking',10],['AWS CapEx','Data Centre Costs',37],['AWS CapEx','Electricity & ops',15],
+  // Google CapEx (125) — Epoch: 8.2% NVIDIA + 3.81M TPU H100e ($38B). Silicon $67B → CapEx $122B, rounded.
+  ['Google CapEx','NVIDIA GPUs',22],['Google CapEx','Other silicon',35],['Google CapEx','Networking',12],['Google CapEx','Data Centre Costs',38],['Google CapEx','Electricity & ops',18],
+  // Meta CapEx (90) — AI-attributable only. Total CapEx ~$128B but ~$40B is Reality Labs/non-AI. Epoch: silicon $52B → CapEx $94B.
+  ['Meta CapEx','NVIDIA GPUs',55],['Meta CapEx','Other silicon',2],['Meta CapEx','Networking',8],['Meta CapEx','Data Centre Costs',16],['Meta CapEx','Electricity & ops',9],
+  // Neoclouds (60) — CoreWeave ($35B+ raised), Lambda, Crusoe, Nebius. Subset of Epoch "Other."
+  ['Neoclouds','NVIDIA GPUs',35],['Neoclouds','Networking',5],['Neoclouds','Data Centre Costs',15],['Neoclouds','Electricity & ops',5],
+  // AI labs direct (25) — REDUCED from $40B. Most OpenAI/Anthropic runs on Azure/AWS (counted there). Only xAI Colossus + small direct leases.
+  ['AI labs direct','NVIDIA GPUs',13],['AI labs direct','Networking',2],['AI labs direct','Data Centre Costs',7],['AI labs direct','Electricity & ops',3],
+  // Oracle CapEx (50) — INCREASED from $35B. Epoch: 1.03M H100e. Silicon $26.5B → CapEx $48B, rounded.
+  ['Oracle CapEx','NVIDIA GPUs',25],['Oracle CapEx','Other silicon',2],['Oracle CapEx','Networking',3],['Oracle CapEx','Data Centre Costs',15],['Oracle CapEx','Electricity & ops',5],
+  // China (40) — Official Huawei 708K H100e + smuggled NVIDIA 474K H100e [TENTATIVE]. Heavy on custom silicon (Huawei Ascend).
+  ['China','NVIDIA GPUs',12],['China','Other silicon',7],['China','Networking',2],['China','Data Centre Costs',14],['China','Electricity & ops',5],
+  // Sovereign / Gov (25) — G42 (UAE), Saudi Aramco/NEOM, Stargate gov partners, India/Singapore national compute.
+  ['Sovereign / Gov','NVIDIA GPUs',5],['Sovereign / Gov','Other silicon',1],['Sovereign / Gov','Networking',1],['Sovereign / Gov','Data Centre Costs',15],['Sovereign / Gov','Electricity & ops',3],
+  // Enterprise (50) — Long tail: banks, pharma, auto, defence, research. 70% AI-attributed from Epoch "Other" bucket.
+  ['Enterprise','NVIDIA GPUs',13],['Enterprise','Networking',2],['Enterprise','Data Centre Costs',22],['Enterprise','Electricity & ops',13],
+
+  // ── Stage 2 → Stage 3 (current physical state, full purchase price) ──
+  // NVIDIA GPUs — 303. Ad Platform reduced from $82B→$65B: only Meta ($35-40B) + MSFT/others (~$25B) buy NVIDIA for ads. Inference (Paid) held at $35B (anchored to $14B/yr COGS).
+  ['NVIDIA GPUs','Inference (Paid)',35],['NVIDIA GPUs','Inference (Free Tier)',25],['NVIDIA GPUs','Inference (Ad Platform)',65],['NVIDIA GPUs','Model Training',58],['NVIDIA GPUs','Idle',32],['NVIDIA GPUs','In build / in transit',88],
+  // Other silicon — 72 (TPU/Trainium — heavy on ad platform for Google/AWS internal)
+  ['Other silicon','Inference (Paid)',3],['Other silicon','Inference (Free Tier)',5],['Other silicon','Inference (Ad Platform)',31],['Other silicon','Model Training',8],['Other silicon','Idle',5],['Other silicon','In build / in transit',20],
+  // Networking — 57
+  ['Networking','Inference (Paid)',4],['Networking','Inference (Free Tier)',2],['Networking','Inference (Ad Platform)',17],['Networking','Model Training',5],['Networking','Idle',5],['Networking','In build / in transit',24],
+  // Data Centre Costs — 219 (construction takes 18–36mo: ~60% still in build)
+  ['Data Centre Costs','Inference (Paid)',5],['Data Centre Costs','Inference (Ad Platform)',57],['Data Centre Costs','Model Training',9],['Data Centre Costs','Idle',16],['Data Centre Costs','In build / in transit',132],
+  // Electricity & ops — 94 (follows DC build: ~49% not yet online)
+  ['Electricity & ops','Inference (Paid)',3],['Electricity & ops','Inference (Ad Platform)',31],['Electricity & ops','Model Training',4],['Electricity & ops','Idle',10],['Electricity & ops','In build / in transit',46],
+];
+
+const NODE_COLOR = {
+  'Microsoft CapEx':'#0ea5e9','AWS CapEx':'#f59e0b','Google CapEx':'#ef4444','Meta CapEx':'#1877f2',
+  'Neoclouds':'#8b5cf6','AI labs direct':'#10b981','Oracle CapEx':'#dc2626',
+  'China':'#e11d48','Sovereign / Gov':'#64748b','Enterprise':'#a78bfa',
+  'NVIDIA GPUs':'#22c55e','Other silicon':'#0ea5e9','Networking':'#14b8a6','Data Centre Costs':'#a16207','Electricity & ops':'#d97706',
+  'Inference (Paid)':'#10a37f','Inference (Free Tier)':'#34d399','Inference (Ad Platform)':'#06b6d4','Model Training':'#8b5cf6',
+  'Idle':'#ef4444','In build / in transit':'#f59e0b',
+};
+
+const NODE_TIER = {
+  'Microsoft CapEx':'1B','AWS CapEx':'1B','Google CapEx':'1B','Meta CapEx':'1B','Oracle CapEx':'1B',
+  'Neoclouds':'2B','AI labs direct':'2B','China':'3B','Sovereign / Gov':'3C','Enterprise':'3C',
+  'NVIDIA GPUs':'1A','Other silicon':'2A','Networking':'2A','Data Centre Costs':'2B','Electricity & ops':'3A',
+  'Inference (Paid)':'2A','Inference (Free Tier)':'3A','Inference (Ad Platform)':'2B','Model Training':'3A',
+  'Idle':'3C','In build / in transit':'3B',
+};
+const TIER_COLOR = {'1A':'#10b981','1B':'#10b981','2A':'#3b82f6','2B':'#3b82f6','3A':'#f59e0b','3B':'#f59e0b','3C':'#f59e0b','4':'#ef4444'};
+
+const STAGE = {
+  'Microsoft CapEx':0,'AWS CapEx':0,'Google CapEx':0,'Meta CapEx':0,'Neoclouds':0,'AI labs direct':0,'Oracle CapEx':0,
+  'China':0,'Sovereign / Gov':0,'Enterprise':0,
+  'NVIDIA GPUs':1,'Other silicon':1,'Networking':1,'Data Centre Costs':1,'Electricity & ops':1,
+  'Inference (Paid)':2,'Inference (Free Tier)':2,'Inference (Ad Platform)':2,'Model Training':2,'Idle':2,'In build / in transit':2,
+};
+
+const NODE_ORDER = [
+  'Microsoft CapEx','AWS CapEx','Google CapEx','Meta CapEx','Enterprise','Neoclouds','China','Oracle CapEx','AI labs direct','Sovereign / Gov',
+  'NVIDIA GPUs','Data Centre Costs','Other silicon','Electricity & ops','Networking',
+  'In build / in transit','Model Training','Inference (Ad Platform)','Inference (Paid)','Inference (Free Tier)','Idle',
+];
+
+function validate() {
+  const inSum = {}, outSum = {};
+  for (const [s,t,v] of FLOWS) { outSum[s]=(outSum[s]||0)+v; inSum[t]=(inSum[t]||0)+v; }
+  const errors = [];
+  for (const n of Object.keys(STAGE)) {
+    if (STAGE[n]===1) { const i=inSum[n]||0,o=outSum[n]||0; if(Math.abs(i-o)>0.5) errors.push(`${n}: in=${i} out=${o}`); }
+  }
+  const t0=Object.entries(STAGE).filter(([_,s])=>s===0).reduce((a,[n])=>a+(outSum[n]||0),0);
+  const t2=Object.entries(STAGE).filter(([_,s])=>s===2).reduce((a,[n])=>a+(inSum[n]||0),0);
+  if(Math.abs(t0-t2)>0.5) errors.push(`LHS=${t0} ≠ RHS=${t2}`);
+  return {errors,t0,t2,inSum,outSum};
+}
+
+function render() {
+  const v = validate();
+  const vEl = document.getElementById('validation');
+  const paid = v.inSum['Inference (Paid)']||0;
+  const consumer = v.inSum['Inference (Free Tier)']||0;
+  const fleet = paid + consumer;
+  const idle = v.inSum['Idle']||0;
+  const inBuild = v.inSum['In build / in transit']||0;
+  const adPlatform = v.inSum['Inference (Ad Platform)']||0;
+  const annualCOGS = 14; // from revenue Sankey 2025
+  const ratio = (fleet / annualCOGS).toFixed(1);
+  if (v.errors.length===0) {
+    vEl.className='ok';
+    vEl.innerHTML=`✓ Conservation OK · $${v.t0}B in = $${v.t2}B out · Inference fleet (Paid $${paid}B + Consumer $${consumer}B) = $${fleet}B → generates $${annualCOGS}B/yr COGS → ratio ${ratio}× (≈3.5yr life + ops overhead) ✓`;
+  } else {
+    vEl.className='bad';
+    vEl.innerHTML='✗ '+v.errors.join('<br>');
+  }
+
+  const nvidiaGpu = v.inSum['NVIDIA GPUs']||0;
+  const nvidiaNet = v.inSum['Networking']||0;
+  const nvidiaTotal = nvidiaGpu + nvidiaNet;
+  const nvidiaShare = ((nvidiaTotal/v.t0)*100).toFixed(0);
+  document.getElementById('hero').innerHTML=`
+    <div class="hero-stat"><div class="label">2023–25 AI CapEx</div><div class="value" style="color:var(--accent)">$${v.t0}B</div><div class="detail">cumulative balance sheet</div></div>
+    <div class="hero-stat"><div class="label">NVIDIA's share</div><div class="value" style="color:#22c55e">$${nvidiaTotal}B</div><div class="detail">${nvidiaShare}% of total · GPU $${nvidiaGpu}B + networking $${nvidiaNet}B</div></div>
+    <div class="hero-stat"><div class="label">CapEx per $1 earned</div><div class="value" style="color:var(--red)">$${Math.round(v.t0/22)}</div><div class="detail">$${v.t0}B cumulative CapEx ÷ $22B cumulative AI revenue</div></div>
+    <div class="hero-stat"><div class="label">Idle + In Build</div><div class="value" style="color:var(--red)">$${idle+inBuild}B</div><div class="detail">${((idle+inBuild)/v.t0*100).toFixed(0)}% of CapEx · not generating revenue</div></div>
+  `;
+
+  // Dynamic bridge sections
+  document.getElementById('bridge-pl').innerHTML=`
+    <div><strong style="color:#10b981;font-size:13px;">1. How much is earning?</strong></div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">The <a href="sankey.html" style="color:#10b981;">Follow the Revenue</a> page reports <strong style="color:#e2e8f0;">$${annualCOGS}B inference COGS</strong> in 2025. This chart shows the <strong style="color:#e2e8f0;">$${fleet}B fleet</strong> (Paid $${paid}B + Free $${consumer}B) that generates it. Ratio: ${ratio}× — consistent with ~3.5yr GPU life + ops overhead.</div>
+  `;
+
+  document.getElementById('bridge-ads').innerHTML=`
+    <div><strong style="color:#f59e0b;font-size:13px;">2. The biggest chip-eater isn't AI — it's ads.</strong></div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">At <strong style="color:#e2e8f0;">$${adPlatform}B</strong> (${((adPlatform/v.t0)*100).toFixed(0)}% of total CapEx), the Ad Platform fleet is the largest RHS node. Self-funding through existing ad/cloud revenue.</div>
+  `;
+
+  const nodeNames = NODE_ORDER.filter(n=>FLOWS.some(r=>r[0]===n||r[1]===n));
+  const nodes = nodeNames.map(n=>({name:n}));
+  const idx = Object.fromEntries(nodeNames.map((n,i)=>[n,i]));
+  const links = FLOWS.map(([s,t,v])=>({source:idx[s],target:idx[t],value:v}));
+
+  const svg = d3.select('#chart');
+  svg.selectAll('*').remove();
+  const {width,height} = svg.node().getBoundingClientRect();
+  svg.attr('viewBox',`0 0 ${width} ${height}`);
+
+  // Wider margins for labels
+  const marginL = 200, marginR = 220;
+  const sankey = d3.sankey()
+    .nodeWidth(20).nodePadding(8)
+    .extent([[marginL,10],[width-marginR,height-10]])
+    .nodeAlign(d3.sankeyJustify).nodeSort(null);
+
+  const graph = sankey({nodes:nodes.map(d=>({...d})),links:links.map(d=>({...d}))});
+
+  // Store refs for interaction
+  const linkEls = svg.append('g').selectAll('path')
+    .data(graph.links).join('path')
+    .attr('class','link')
+    .attr('d',d3.sankeyLinkHorizontal())
+    .attr('stroke',d=>NODE_COLOR[d.target.name]||'#475569')
+    .attr('stroke-width',d=>Math.max(1,d.width));
+
+  const nodeGs = svg.append('g').selectAll('g')
+    .data(graph.nodes).join('g').attr('class','node');
+
+  nodeGs.append('rect')
+    .attr('x',d=>d.x0).attr('y',d=>d.y0)
+    .attr('height',d=>Math.max(1,d.y1-d.y0))
+    .attr('width',d=>d.x1-d.x0)
+    .attr('fill',d=>NODE_COLOR[d.name]||'#475569');
+
+  // Labels: LHS right-aligned before node, RHS left-aligned after node
+  const labelGs = nodeGs.append('text')
+    .attr('x',d=>STAGE[d.name]===0?d.x0-8: STAGE[d.name]===2?d.x1+8: d.x1+8)
+    .attr('y',d=>(d.y0+d.y1)/2)
+    .attr('dy','0.35em')
+    .attr('text-anchor',d=>STAGE[d.name]===0?'end':'start');
+  labelGs.append('tspan').text(d=>`${d.name} · $${d.value}B `);
+  labelGs.append('tspan')
+    .attr('fill',d=>TIER_COLOR[NODE_TIER[d.name]]||'#94a3b8')
+    .style('font-size','10px')
+    .text(d=>NODE_TIER[d.name]||'');
+
+  // ── Tooltip ──
+  const tip = document.getElementById('tip');
+  function showTip(ev, html) {
+    tip.innerHTML = html;
+    tip.style.opacity = '1';
+    tip.style.left = (ev.clientX + 14) + 'px';
+    tip.style.top = (ev.clientY - 10) + 'px';
+  }
+  function hideTip() { tip.style.opacity = '0'; }
+
+  // Node tooltips
+  nodeGs.on('mousemove', function(ev,d) {
+    const pct = ((d.value/v.t0)*100).toFixed(1);
+    const tier = NODE_TIER[d.name];
+    const tierHtml = tier ? `<span style="color:${TIER_COLOR[tier]};font-size:10px;font-weight:700;"> ${tier}</span>` : '';
+    showTip(ev, `<div class="tt-label" style="color:${NODE_COLOR[d.name]||'#e2e8f0'}">${d.name}${tierHtml}</div><div>$${d.value}B · ${pct}% of total CapEx</div>`);
+  });
+
+  // Link tooltips
+  linkEls.on('mousemove', function(ev,d) {
+    showTip(ev, `<div class="tt-label">${d.source.name} → ${d.target.name}</div><div>$${d.value}B</div>`);
+  }).on('mouseleave', hideTip);
+
+  // ── Click-to-lock highlight ──
+  let lockedNode = null;
+
+  function getConnected(nodeData) {
+    const connected = new Set();
+    const connLinks = new Set();
+    connected.add(nodeData.index);
+
+    // All nodes: show direct connections only (one hop)
+    // Source → middle, middle → both directions, RHS → middle
+    graph.links.forEach((l,i) => {
+      if (l.source.index === nodeData.index || l.target.index === nodeData.index) {
+        connLinks.add(i);
+        connected.add(l.source.index);
+        connected.add(l.target.index);
+      }
+    });
+    return {connected, connLinks};
+  }
+
+  function highlight(nodeData) {
+    if (!nodeData) {
+      // Clear
+      linkEls.attr('class','link');
+      nodeGs.attr('class','node');
+      return;
+    }
+    const {connected, connLinks} = getConnected(nodeData);
+    linkEls.attr('class',(d,i) => connLinks.has(i) ? 'link highlighted' : 'link dimmed');
+    nodeGs.attr('class',d => connected.has(d.index) ? 'node' : 'node dimmed');
+  }
+
+  // Click: lock/unlock
+  nodeGs.on('click', function(ev,d) {
+    ev.stopPropagation();
+    if (lockedNode && lockedNode.index === d.index) {
+      lockedNode = null;
+      highlight(null);
+    } else {
+      lockedNode = d;
+      highlight(d);
+    }
+  });
+
+  // Hover: preview (only if nothing locked)
+  nodeGs.on('mouseenter', function(ev,d) {
+    if (!lockedNode) highlight(d);
+  }).on('mouseleave', function() {
+    if (!lockedNode) highlight(null);
+    hideTip();
+  });
+
+  // Click background to unlock
+  svg.on('click', function() {
+    lockedNode = null;
+    highlight(null);
+  });
+}
+
+// ─── The Three-Stage Lag chart ─────────────────────────────────────
+// All values USD billions.
+const LAG_RAW = [
+  // NVIDIA DC revenue: HARD ANCHORS (Tier 1A)
+  //   FY24 (≈CY23) $47.5B | FY25 (≈CY24) $115.2B | FY26 (≈CY25) $193.7B
+  //   FY27E (≈CY26) ~$311B (consensus) | Q1 FY27 guided $78B total ($70B DC)
+  //   Jensen: "$1T cumulative AI chips through 2027" → our CY23-27 = $1,067B ✓
+  //
+  // Total AI CapEx: NVIDIA ≈ 55% of total industry (rest: AMD, custom silicon, DC, power, ops)
+  // Dep model: 4yr GPU life, 1yr commissioning lag. totalDep = all-fleet ×1.8 multiplier.
+  //   CY23 $47.5B→$11.9B/yr | CY24 $115.2B→$28.8B/yr | CY25 $193.7B→$48.4B/yr
+  //   CY26 $311B→$77.8B/yr | CY27 $400B→$100B/yr | CY28 $470B→$117.5B/yr
+  //
+  // AI revenue: 2025 $17.5B (sankey-projections.json), 2026E $64B, 2027E extrapolated.
+  { year:'2023',  nvidia: 48, totalCapex:160, nvDep:  0, totalDep:   0, revenue:  1  },
+  { year:'2024',  nvidia:115, totalCapex:280, nvDep: 12, totalDep:  22, revenue:  4  },
+  { year:'2025',  nvidia:194, totalCapex:380, nvDep: 41, totalDep:  74, revenue: 17  },
+  { year:'2026E', nvidia:311, totalCapex:550, nvDep: 89, totalDep: 160, revenue: 64  },
+  { year:'2027E', nvidia:400, totalCapex:700, nvDep:167, totalDep: 300, revenue:115  },
+  { year:'2028E', nvidia:470, totalCapex:750, nvDep:255, totalDep: 460, revenue:200  },
+  { year:'2029E', nvidia:500, totalCapex:750, nvDep:344, totalDep: 620, revenue:300  },
+  { year:'2030E', nvidia:480, totalCapex:700, nvDep:415, totalDep: 747, revenue:420  },
+];
+
+function renderLagChart() {
+  const svg = d3.select('#lag-chart');
+  svg.selectAll('*').remove();
+  const { width } = svg.node().getBoundingClientRect();
+  const height = 380;
+  svg.attr('viewBox', `0 0 ${width} ${height}`);
+  const isMobile = width < 500;
+  const margin = { top: 15, right: isMobile ? 8 : 20, bottom: isMobile ? 40 : 50, left: isMobile ? 36 : 60 };
+  const W = width - margin.left - margin.right;
+  const H = height - margin.top - margin.bottom;
+
+  const data = LAG_RAW.map(d => ({
+    year: d.year,
+    bar1: d.totalCapex,
+    bar2: d.totalDep,
+    bar3: d.revenue,
+  }));
+  const COLORS = { bar1: '#3b82f6', bar2: '#ef4444', bar3: '#10b981' };
+  const LABELS = { bar1:'Total AI CapEx', bar2:'Total fleet depreciation', bar3:'AI customer revenue' };
+
+  const maxVal = d3.max(data, d => Math.max(d.bar1, d.bar2, d.bar3)) * 1.1;
+  const x = d3.scaleBand().domain(data.map(d=>d.year)).range([0, W]).padding(0.22);
+  const y = d3.scaleLinear().domain([0, maxVal]).range([H, 0]);
+  const keys = ['bar1','bar2','bar3'];
+  const xSub = d3.scaleBand().domain(keys).range([0, x.bandwidth()]).padding(0.08);
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // Axes
+  const tickSize = isMobile ? '9px' : '11px';
+  g.append('g').call(d3.axisLeft(y).ticks(isMobile?4:6).tickFormat(v=>'$'+v+(isMobile?'':'B')))
+    .selectAll('text').style('font-size',tickSize).style('fill','#94a3b8');
+  g.selectAll('.domain,line').style('stroke','#334155');
+  if (!isMobile) g.append('text').attr('x',-H/2).attr('y',-45).attr('transform','rotate(-90)')
+    .attr('text-anchor','middle').style('font-size','11px').style('fill','#94a3b8').text('Annual $B');
+  g.append('g').attr('transform',`translate(0,${H})`).call(d3.axisBottom(x))
+    .selectAll('text').style('font-size',tickSize).style('fill','#e2e8f0').style('font-weight','600');
+  g.select('.domain').style('stroke','#334155');
+
+  for (const d of data) {
+    const isE = d.year.includes('E');
+
+    // Solid bars
+    for (const key of keys) {
+      const val = d[key];
+      if (!val || val <= 0) continue;
+      g.append('rect')
+        .attr('x', x(d.year)+xSub(key)).attr('y', y(val))
+        .attr('width', xSub.bandwidth()).attr('height', H-y(val))
+        .attr('fill', COLORS[key]).attr('opacity', isE?0.65:0.95)
+        .append('title').text(`${d.year} · ${LABELS[key]}: $${val}B`);
+      if (val >= maxVal * 0.05) {
+        g.append('text')
+          .attr('x', x(d.year)+xSub(key)+xSub.bandwidth()/2)
+          .attr('y', y(val)-3)
+          .attr('text-anchor','middle')
+          .style('font-size','10px').style('font-weight','700').style('fill',COLORS[key])
+          .text('$'+val);
+      }
+    }
+
+    // Gap line: dep → revenue
+    const gap = d.bar2 - d.bar3;
+    if (gap > 0 && gap > maxVal * 0.06) {
+      const xc = x(d.year) + x.bandwidth()/2;
+      g.append('line')
+        .attr('x1',xc).attr('x2',xc)
+        .attr('y1',y(d.bar3)).attr('y2',y(d.bar2))
+        .attr('stroke','#ef4444').attr('stroke-width',1.5).attr('stroke-dasharray','2,2')
+        .attr('opacity',0.35);
+    }
+  }
+
+  // Convergence annotation on last year
+  const last = data[data.length-1];
+  const gapLast = last.bar2 - last.bar3;
+  const xc2 = x(last.year) + x.bandwidth()/2;
+  if (gapLast > 30) {
+    g.append('text').attr('x',xc2).attr('y',y(last.bar2)-18)
+      .attr('text-anchor','middle')
+      .style('font-size','9px').style('font-weight','700').style('fill','#fca5a5')
+      .text('$'+gapLast+'B gap');
+  } else if (Math.abs(gapLast) <= 30) {
+    g.append('text').attr('x',xc2).attr('y',y(last.bar2)-18)
+      .attr('text-anchor','middle')
+      .style('font-size','10px').style('font-weight','700').style('fill','#fbbf24')
+      .text('Convergence?');
+  }
+
+  // Legend
+  const legend = svg.append('g').attr('transform',`translate(${margin.left},${height-14})`);
+  let lx = 0;
+  for (const k of keys) {
+    legend.append('rect').attr('x',lx).attr('y',-6).attr('width',12).attr('height',10).attr('fill',COLORS[k]);
+    legend.append('text').attr('x',lx+16).attr('y',3).style('font-size','11px').style('fill','#cbd5e1').text(LABELS[k]);
+    lx += LABELS[k].length * 7 + 36;
+  }
+  legend.append('text').attr('x',lx+10).attr('y',3).style('font-size','10px').style('fill','#94a3b8').style('font-style','italic').text('(E = projected)');
+}
+
+window.addEventListener('resize',()=>{render(); renderLagChart();});
+render();
+renderLagChart();
+</script>
+</body>
+</html>
