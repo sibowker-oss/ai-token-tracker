@@ -555,6 +555,9 @@ function renderImpactRow(item) {
       }
     }
 
+    // Provenance tier guard warning
+    html += renderProvenanceGuard(entity, fieldId, year, item);
+
     // Provenance — other sources for this same number
     html += renderProvenance(entity, fieldId, year, item.id);
 
@@ -603,6 +606,40 @@ function renderImpactRow(item) {
   }
 
   return '';
+}
+
+// ----- Provenance tier guard -----
+
+const WEIGHT_RANK = { authoritative: 3, corroborating: 2, indicative: 1 };
+
+function renderProvenanceGuard(entity, fieldId, year, item) {
+  if (!entity?.provenance) return '';
+  const key = year ? year + '.' + fieldId : fieldId;
+  const prov = entity.provenance[key];
+  if (!prov || !prov.claims || prov.claims.length === 0) return '';
+
+  // Determine this claim's weight
+  const newWeight = item.weight || 'indicative';
+  const newRank = WEIGHT_RANK[newWeight] || 0;
+
+  // Find strongest existing source
+  let bestWeight = null;
+  let bestSource = null;
+  prov.claims.forEach(c => {
+    const w = c.weight || 'indicative';
+    if ((WEIGHT_RANK[w] || 0) > (WEIGHT_RANK[bestWeight] || 0)) {
+      bestWeight = w;
+      bestSource = c.source || 'unknown';
+    }
+  });
+
+  const bestRank = WEIGHT_RANK[bestWeight] || 0;
+  if (newRank >= bestRank) return ''; // OK to overwrite
+
+  return '<div style="margin-top:6px;padding:8px 12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:8px;font-size:11px;">' +
+    '<strong style="color:var(--red);">PROVENANCE GUARD</strong> ' +
+    '<span style="color:var(--text-dim);">This claim is <strong style="color:var(--text);">' + newWeight + '</strong> (tier ' + newRank + ') but the existing value comes from a <strong style="color:var(--text);">' + bestWeight + '</strong> source (tier ' + bestRank + ', ' + esc(bestSource) + '). ' +
+    'Accepting will add to provenance trail but <strong style="color:var(--red);">will NOT overwrite</strong> the existing value.</span></div>';
 }
 
 // ----- Provenance -----

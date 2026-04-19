@@ -68,8 +68,12 @@ def match_field(text, rules):
     return None
 
 def match_year(text):
-    m = re.search(r'\b(20[2-3]\d)\b', text)
-    return m.group(1) if m else None
+    """Extract the most relevant year from claim text.
+    Grabs the LAST year mentioned, since claims like
+    '$1B in 2024 to $9B in 2025' should key to 2025, not 2024.
+    """
+    matches = re.findall(r'\b(20[2-3]\d)\b', text)
+    return matches[-1] if matches else None
 
 def infer_weight(claim):
     st = (claim.get("sourceType") or "").lower()
@@ -78,6 +82,50 @@ def infer_weight(claim):
     if st in ("reporting", "platform-data", "earnings-aggregation"):
         return "corroborating"
     return "indicative"
+
+
+# Provenance tier ranks — higher number = stronger source, cannot be overwritten by lower
+WEIGHT_RANK = {
+    "authoritative": 3,  # sworn affidavit, official filing, CEO on own company
+    "corroborating": 2,  # named primary source (Bloomberg, earnings call, The Information)
+    "indicative": 1,     # podcast discussion, market colour, estimates
+}
+
+
+def check_provenance_guard(entity, prov_key, new_weight):
+    """Check if existing provenance for this field has a stronger source.
+
+    Returns (allowed, reason):
+      - (True, None) if overwrite is allowed
+      - (False, reason_str) if a higher-tier source already exists
+    """
+    prov = entity.get("provenance", {}).get(prov_key)
+    if not prov or not prov.get("claims"):
+        return True, None  # No existing data, safe to write
+
+    new_rank = WEIGHT_RANK.get(new_weight, 0)
+
+    # Find the strongest existing source
+    best_existing_weight = None
+    best_existing_source = None
+    for existing in prov["claims"]:
+        w = existing.get("weight", "indicative")
+        if WEIGHT_RANK.get(w, 0) > WEIGHT_RANK.get(best_existing_weight, 0):
+            best_existing_weight = w
+            best_existing_source = existing.get("source", "unknown")
+
+    best_rank = WEIGHT_RANK.get(best_existing_weight, 0)
+
+    if new_rank < best_rank:
+        return False, (
+            f"BLOCKED: new source is '{new_weight}' (rank {new_rank}) "
+            f"but existing has '{best_existing_weight}' (rank {best_rank}) "
+            f"from {best_existing_source}. "
+            f"Lower-tier source cannot overwrite higher-tier. "
+            f"Claim added to provenance trail but value NOT updated."
+        )
+
+    return True, None
 
 
 def apply_accepted(claim, vault_data, entities, schema):
@@ -137,19 +185,26 @@ def apply_accepted(claim, vault_data, entities, schema):
                 break
 
         if entity:
-            # 3. Update entity financials
-            if year:
-                if "financials" not in entity:
-                    entity["financials"] = {}
-                if year not in entity["financials"]:
-                    entity["financials"][year] = {}
-                entity["financials"][year][field_id] = value
-                log(f"  ENTITY: {entity['name']} → {year}.{field_id} = {value}" + (" (annualised)" if annualised else ""))
+            # 3. Update entity financials — with provenance guard
+            new_weight = infer_weight(claim)
+            prov_key = f"{year}.{field_id}" if year else f"current.{field_id}"
+            allowed, guard_reason = check_provenance_guard(entity, prov_key, new_weight)
+
+            if allowed:
+                if year:
+                    if "financials" not in entity:
+                        entity["financials"] = {}
+                    if year not in entity["financials"]:
+                        entity["financials"][year] = {}
+                    entity["financials"][year][field_id] = value
+                    log(f"  ENTITY: {entity['name']} → {year}.{field_id} = {value}" + (" (annualised)" if annualised else ""))
+                else:
+                    if "current" not in entity:
+                        entity["current"] = {}
+                    entity["current"][field_id] = value
+                    log(f"  ENTITY: {entity['name']} → current.{field_id} = {claim['value']}")
             else:
-                if "current" not in entity:
-                    entity["current"] = {}
-                entity["current"][field_id] = value
-                log(f"  ENTITY: {entity['name']} → current.{field_id} = {claim['value']}")
+                log(f"  GUARD: {entity['name']} → {prov_key}: {guard_reason}")
 
             # 4. Add provenance
             if "provenance" not in entity:
