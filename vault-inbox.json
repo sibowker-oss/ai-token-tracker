@@ -36336,6 +36336,147 @@
       "notes": "80% of AI GPU spend is inference (2026). Complements existing item: inference = 55% of AI infrastructure spend (broader category). Training increasingly off-cycle; inference spend dominates GPU fleet utilization.",
       "status": "pending",
       "replaces": null
+    },
+    {
+      "id": "scan-20260419-a1b",
+      "claim": "DeepSeek and Qwen combined global AI market share grew from ~1% (Jan 2025) to ~15% (Jan 2026), with open model downloads switching from USA-dominant to China-dominant during summer 2025",
+      "value": 15,
+      "unit": "%",
+      "sourceUrl": "https://arxiv.org/html/2604.07190",
+      "sourceType": "reporting",
+      "sourceAuthor": "ATOM Report (arXiv)",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04",
+      "dateAdded": "2026-04-19",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "open-models",
+        "deepseek",
+        "qwen",
+        "market-share"
+      ],
+      "notes": "ATOM Report April 2026. Qwen ~1B cumulative HuggingFace downloads; DeepSeek leads OpenRouter inference measurements. 2.04B total open model downloads by March 2026.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260419-b2c",
+      "claim": "OpenAI enterprise revenue exceeds 40% of total revenue (Q1 2026), up from ~30% a year prior, on track for parity with consumer by end of 2026",
+      "value": 40,
+      "unit": "%",
+      "sourceUrl": "https://futuresearch.ai/openai-revenue-forecast/",
+      "sourceType": "reporting",
+      "sourceAuthor": "FutureSearch / CNBC",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03",
+      "dateAdded": "2026-04-19",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "enterprise",
+        "revenue-mix"
+      ],
+      "notes": "OpenAI enterprise share of revenue growing. Paying business users surpassed 9M as of Feb 2026, up from 5M in Aug 2025.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260419-c3d",
+      "claim": "GPT-5 token pricing on OpenRouter: $1.25/1M input tokens, $10.00/1M output tokens (400K context window)",
+      "value": 1.25,
+      "unit": "$/1M tokens input",
+      "sourceUrl": "https://openrouter.ai/pricing",
+      "sourceType": "primary",
+      "sourceAuthor": "OpenRouter",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04",
+      "dateAdded": "2026-04-19",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "token-pricing",
+        "gpt-5"
+      ],
+      "notes": "GPT-5 on OpenRouter April 2026: $1.25/1M input, $10/1M output, 400K context. For comparison: Claude Sonnet 4.5 $3/$15, DeepSeek Chat $0.32/$0.89.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260419-d4e",
+      "claim": "DeepSeek Chat token pricing on OpenRouter: $0.32/1M input tokens, $0.89/1M output tokens (164K context window) \u2014 dramatically cheaper than frontier models",
+      "value": 0.32,
+      "unit": "$/1M tokens input",
+      "sourceUrl": "https://openrouter.ai/pricing",
+      "sourceType": "primary",
+      "sourceAuthor": "OpenRouter",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04",
+      "dateAdded": "2026-04-19",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "deepseek",
+        "token-pricing",
+        "open-models"
+      ],
+      "notes": "DeepSeek Chat Apr 2026: $0.32/$0.89 per 1M tokens. vs GPT-5 $1.25/$10 and Claude Sonnet 4.5 $3/$15. ~75x cheaper output than Claude Sonnet 4.5.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260419-e5f",
+      "claim": "Specialized AI cloud GPU rental rates (April 2026): H100 $2.00/hr, H200 $2.60/hr, B200 $4.00/hr, GB200 $8.00/hr \u2014 significantly cheaper than AWS ($12.30/hr for H100)",
+      "value": 2.0,
+      "unit": "$/GPU-hr (H100)",
+      "sourceUrl": "https://www.spheron.network/blog/ai-inference-cost-economics-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Spheron Blog",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-30",
+      "dateAdded": "2026-04-19",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "gpu-pricing",
+        "compute-costs",
+        "infrastructure"
+      ],
+      "notes": "Specialized cloud providers (not AWS/Azure/GCP). H100 spot instances as low as $1.25/hr. B200 availability tight globally through mid-2026; most providers on waitlists.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260419-f6g",
+      "claim": "Midjourney, Anthropic, and Meta migrating from Nvidia GPUs to Google TPUs for inference, cutting costs by ~65%",
+      "value": 65,
+      "unit": "%",
+      "sourceUrl": "https://byteiota.com/ai-inference-costs-2026-the-hidden-15-20x-gpu-crisis/",
+      "sourceType": "reporting",
+      "sourceAuthor": "ByteIota",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04",
+      "dateAdded": "2026-04-19",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "compute-costs",
+        "nvidia",
+        "google",
+        "tpu",
+        "anthropic"
+      ],
+      "notes": "Major AI labs moving inference to Google TPUs to cut costs. If confirmed, significant threat to Nvidia inference revenue dominance.",
+      "status": "pending",
+      "replaces": null
     }
   ]
 }
