@@ -1021,6 +1021,29 @@
       "last_checked": "2026-04-19",
       "last_claims_count": 0,
       "status": "pending_first_extraction"
+    },
+    {
+      "id": "src-054",
+      "url": "https://platformonomics.com",
+      "title": "Platformonomics — Hyperscaler CapEx Tracker",
+      "type": "web_page",
+      "author": "Charles Fitzgerald",
+      "organization": "Platformonomics",
+      "added": "2026-04-20",
+      "tags": [
+        "capex",
+        "hyperscaler",
+        "data-center",
+        "quarterly-tracker",
+        "cross-check"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-07-20",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Key cross-check source for Follow the CapEx page. Publishes quarterly big-5 hyperscaler capex breakdowns from 10-K/10-Q filings. Pioneered DC-share-of-total-capex methodology."
     }
   ]
 }

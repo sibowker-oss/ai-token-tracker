@@ -77,6 +77,10 @@
       <span><span style="display:inline-block;background:#ef4444;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">4</span> Editorial (replace ASAP)</span>
       <span style="opacity:0.6;">— hover any node for source citation</span>
     </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:11px;color:var(--text-dim);line-height:1.6;">
+      <span style="color:#f59e0b;font-weight:700;font-size:13px;margin-top:-1px;">?</span>
+      <span><strong style="color:#f1f5f9;">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers — Hyperscalers clip ~20%, Trad. SaaS ~60%. That retained margin flows directly to Generated Cashflow (bottom right), bypassing Model Providers entirely. So each column is smaller than the one before it — the drop <em>is</em> the channel margin.</span>
+    </div>
     <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
       <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
     </div>
@@ -465,7 +469,7 @@ function renderLadder(d) {
       // Negative subtotal: red bar with striped pattern to emphasise the loss
       html += '<div style="height:100%;width:'+barW+'%;background:repeating-linear-gradient(135deg,rgba(239,68,68,0.3),rgba(239,68,68,0.3) 4px,rgba(239,68,68,0.15) 4px,rgba(239,68,68,0.15) 8px);border:1px dashed var(--red);border-radius:4px;"></div>';
     } else if (s.isSub) {
-      html += '<div style="height:100%;width:'+barW+'%;border:1px dashed rgba(255,255,255,0.2);background:rgba(30,41,59,0.8);border-radius:4px;"></div>';
+      html += '<div style="height:100%;width:'+barW+'%;border:1px dashed rgba(16,185,129,0.5);background:rgba(16,185,129,0.15);border-radius:4px;"></div>';
     } else if (s.isVC) {
       // VC bar: distinct style — pulsing red border
       html += '<div style="height:100%;width:'+barW+'%;background:repeating-linear-gradient(135deg,rgba(220,38,38,0.25),rgba(220,38,38,0.25) 4px,rgba(220,38,38,0.1) 4px,rgba(220,38,38,0.1) 8px);border:1px solid var(--red);border-radius:4px;"></div>';
