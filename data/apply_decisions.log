@@ -171,3 +171,61 @@
 [2026-04-02 16:26:35]   Archived: review-decisions-2026-04-02.json
 [2026-04-02 16:26:35]   Regenerating site-data.json from entities.json...
 [2026-04-02 16:26:35]   Done. 2 accepted, 2 declined, 2 parked, 0 new fields.
+[2026-04-20 12:26:30] apply_decisions.py — Processing data-updates/review-decisions-2026-04-20.json
+[2026-04-20 12:26:44]   Accepted: 32, Declined: 0, Parked: 0, New fields: 0
+[2026-04-20 12:26:44]   VAULT: Added dp-115: Ramp data suggested that Anthropic now captures 73% of all n
+[2026-04-20 12:26:44]   VAULT: Added dp-116: 10 weeks ago Anthropic and OpenAI were 50/50 in new AI tool 
+[2026-04-20 12:26:44]   VAULT: Added dp-117: Early December, OpenAI had 60% vs Anthropic's 40% of new AI 
+[2026-04-20 12:26:44]   VAULT: Added dp-118: OpenAI is still ahead of Anthropic in terms of total spend, 
+[2026-04-20 12:26:44]   VAULT: Added dp-119: Groq was acquired by Nvidia for $20 billion; Groq had less t
+[2026-04-20 12:26:44]   ENTITY: NVIDIA → 2026.arr = 20000000000
+[2026-04-20 12:26:44]   PROVENANCE: NVIDIA → 2026.arr: low (1 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-120: Groq had approximately $100 million in revenue at the time o
+[2026-04-20 12:26:44]   VAULT: Added dp-121: Groq's last funding round valued the company at $6.9 billion
+[2026-04-20 12:26:44]   ENTITY: NVIDIA → 2026.valuation = 6900000000
+[2026-04-20 12:26:44]   PROVENANCE: NVIDIA → 2026.valuation: low (1 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-122: Crusoe has over a million GPUs in their fleet and they're va
+[2026-04-20 12:26:44]   VAULT: Added dp-123: Crusoe has an astonishing total of 45 gigawatts in their pip
+[2026-04-20 12:26:44]   VAULT: Added dp-124: NVIDIA spent approximately $20 billion acquiring Groq becaus
+[2026-04-20 12:26:44]   ENTITY: NVIDIA → 2026.valuation = 20000000000
+[2026-04-20 12:26:44]   PROVENANCE: NVIDIA → 2026.valuation: low (2 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-125: Crusoe has over 45 gigawatts in its pipeline of power infras
+[2026-04-20 12:26:44]   VAULT: Added dp-126: The current generation of Blackwell chips requires 130 kW pe
+[2026-04-20 12:26:44]   VAULT: Added dp-127: The next generation Vera Rubin chips are expected to require
+[2026-04-20 12:26:44]   VAULT: Added dp-128: The expected CapEx for this year from just the four leading 
+[2026-04-20 12:26:44]   VAULT: Added dp-129: Anthropic hit a $14 billion run rate last month (February), 
+[2026-04-20 12:26:44]   GUARD: Anthropic → 2026.arr: BLOCKED: new source is 'indicative' (rank 1) but existing has 'corroborating' (rank 2) from Jason Calacanis (All-In Podcast). Lower-tier source cannot overwrite higher-tier. Claim added to provenance trail but value NOT updated.
+[2026-04-20 12:26:44]   PROVENANCE: Anthropic → 2026.arr: high (7 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-130: Anthropic had a $6 billion month in February 2026, which is 
+[2026-04-20 12:26:44]   ENTITY: Anthropic → 2026.collected_revenue = 6000000000
+[2026-04-20 12:26:44]   PROVENANCE: Anthropic → 2026.collected_revenue: low (1 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-131: Sarah Friar said that for every gigawatt of data center capa
+[2026-04-20 12:26:44]   VAULT: Added dp-132: Anthropic has a $30B run rate, the fastest revenue ramp ever
+[2026-04-20 12:26:44]   VAULT: Added dp-133: GPU hardware represents approximately 75% of the total cost 
+[2026-04-20 12:26:44]   VAULT: Added dp-134: GitHub Copilot subscriptions grew from 20 to 26 million in t
+[2026-04-20 12:26:44]   VAULT: Added dp-135: AI coding agents have grown from $500 million run rate at th
+[2026-04-20 12:26:44]   VAULT: Added dp-136: AI coding agent market grew approximately 10x from ~$500M ru
+[2026-04-20 12:26:44]   VAULT: Added dp-137: Anthropic saw exit ARR growth from $100 million in 2023, $10
+[2026-04-20 12:26:44]   ENTITY: Anthropic → 2025.exit_arr = 9500000000
+[2026-04-20 12:26:44]   PROVENANCE: Anthropic → 2025.exit_arr: low (1 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-138: Anthropic's revenue was approximately $1 billion in 2024.
+[2026-04-20 12:26:44]   VAULT: Added dp-139: Anthropic has approximately 2,500 employees.
+[2026-04-20 12:26:44]   ENTITY: Anthropic → 2026.employees = 2500
+[2026-04-20 12:26:44]   PROVENANCE: Anthropic → 2026.employees: low (1 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-140: Anthropic saw ~10x per year exit ARR growth: ~$0 to $100M in
+[2026-04-20 12:26:44]   ENTITY: Anthropic → 2025.exit_arr = 9500
+[2026-04-20 12:26:44]   PROVENANCE: Anthropic → 2025.exit_arr: low (2 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-141: Anthropic revenue grew from $100M to $1B in 2024.
+[2026-04-20 12:26:44]   VAULT: Added dp-142: Nvidia is making $60 billion a quarter primarily from AI.
+[2026-04-20 12:26:44]   VAULT: Added dp-143: 60% of Nvidia's revenue is coming from the big five hypersca
+[2026-04-20 12:26:44]   VAULT: Added dp-144: Nvidia's gross margins are approximately 70%.
+[2026-04-20 12:26:44]   VAULT: Added dp-145: Nvidia is backstopping CoreWeave up to $6.3 billion and has 
+[2026-04-20 12:26:44]   ENTITY: NVIDIA → 2026.valuation = 6300000000
+[2026-04-20 12:26:44]   PROVENANCE: NVIDIA → 2026.valuation: low (3 sources)
+[2026-04-20 12:26:44]   VAULT: Added dp-146: Nvidia is generating approximately $60 billion a quarter in 
+[2026-04-20 12:26:44]   ENTITY: NVIDIA → 2026.arr = 60
+[2026-04-20 12:26:44]   PROVENANCE: NVIDIA → 2026.arr: low (2 sources)
+[2026-04-20 12:26:44]   Saved: vault-data, vault-inbox, entities, metric-schema
+[2026-04-20 12:26:44]   Archived: review-decisions-2026-04-20.json
+[2026-04-20 12:26:44]   Regenerating site-data.json from entities.json...
+[2026-04-20 12:26:50]   Done. 32 accepted, 0 declined, 0 parked, 0 new fields.
