@@ -101,7 +101,7 @@ const COLORS = {
   'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
   'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
   'Other Model Providers':'#475569',
-  'Inference':'#ef4444','Other Operating':'#f59e0b','Generated Cashflow':'#10b981',
+  'Inference':'#ef4444','Other Operating Costs':'#f59e0b','Generated Cashflow':'#10b981',
 };
 
 async function init() {
@@ -493,7 +493,7 @@ function buildSankey(d) {
     const costPct = INFERENCE_PCT + r;
     const opShare = Math.min(r, 1 - INFERENCE_PCT);
     flowDefs.push({from:p.name, to:'Inference', value:p.value*INFERENCE_PCT, fc:2, tc:3});
-    flowDefs.push({from:p.name, to:'Other Operating', value:p.value*opShare, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating Costs', value:p.value*opShare, fc:2, tc:3});
     if (costPct < 1.0) {
       const surplus = p.value * (1.0 - costPct);
       if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});

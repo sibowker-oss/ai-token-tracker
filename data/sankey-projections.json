@@ -23,6 +23,11 @@
       "tier": "1B",
       "src": "Mag 7 AI capex ~$250B — combined AI-related capital expenditure from Apple, Microsoft, Google, Amazon, Meta, NVIDIA, Tesla. Earnings-call aggregation (AI Ledger Data Vault, DP-017)."
     },
+    "totalCapex": {
+      "value": 380,
+      "tier": "2A",
+      "src": "Full industry AI CapEx $380B — Mag 7 ($250B) + neoclouds, China, sovereign, Oracle, enterprise. Aligned with Follow the CapEx page. NVIDIA DC revenue ($194B) ≈ 55% of total."
+    },
     "frontierFunding": {
       "cumulative": 165,
       "components": {
@@ -62,7 +67,7 @@
     ],
     "outcomes": [
       { "label": "Inference", "value": 14.06, "color": "#10b981", "tier": "2A", "src": "= sum(provider × inferencePct 0.57). Cross-checks AI Ledger rollup $14.03B." },
-      { "label": "Other Operating", "value": 10.60, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × (1 − inferencePct)). AI Ledger rollup has $11.08B; 0.48 gap from routing approximations." },
+      { "label": "Other Operating Costs", "value": 10.60, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × (1 − inferencePct)). AI Ledger rollup has $11.08B; 0.48 gap from routing approximations." },
       { "label": "Generated Cashflow", "value": 2.19, "color": "#94a3b8", "tier": "2A", "src": "= channel margins (Hyperscaler 0.20×$2.15B + Trad SaaS 0.60×$2.94B). Cross-checks AI Ledger rollup $2.15B." }
     ],
     "costParams": {
@@ -94,6 +99,11 @@
       "value": 400,
       "tier": "3A",
       "src": "Mag 7 + AI infra capex ~$400B (Goldman Jan 2026 projects $500B+; Meta alone $125B authoritative per AI Ledger DP-040; MSFT ~$100B, Google nearly doubling per TrendForce, AMZN ~$80B). Conservative midpoint."
+    },
+    "totalCapex": {
+      "value": 550,
+      "tier": "3A",
+      "src": "Full industry AI CapEx $550B — Mag 7 ($400B) + neoclouds, China, sovereign, enterprise. Aligned with Follow the CapEx page."
     },
     "frontierFunding": {
       "cumulative": 280,
@@ -140,7 +150,7 @@
     ],
     "outcomes": [
       { "label": "Inference", "value": 38.2, "color": "#10b981", "tier": "2A", "src": "= sum(provider × INF 0.47). All loss-making except IaaS/Open." },
-      { "label": "Other Operating", "value": 42.3, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × min(rate, 1−INF))" },
+      { "label": "Other Operating Costs", "value": 42.3, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × min(rate, 1−INF))" },
       { "label": "Generated Cashflow", "value": 8.5, "color": "#94a3b8", "tier": "2A", "src": "= channel margins ($7.7B) + IaaS/Open surplus ($0.8B); provider surplus collapses vs old scenario because OpenAI/Anthropic/Google no longer profitable." }
     ],
     "costParams": {
@@ -173,6 +183,11 @@
       "value": 500,
       "tier": "3C",
       "src": "Scenario: ~$500B Mag 7 + AI-native infra capex. Stargate ramp ($100B/yr trajectory toward $500B over 4 years, scan-various), Meta + Google + MSFT continuing growth, plus sovereign/Chinese DC build-out. No 2027 anchor available yet; extrapolation from 2026E trajectory."
+    },
+    "totalCapex": {
+      "value": 700,
+      "tier": "3C",
+      "src": "Full industry AI CapEx $700B — Mag 7 ($500B) + neoclouds, China, sovereign, enterprise. Aligned with Follow the CapEx page."
     },
     "frontierFunding": {
       "cumulative": 360,
@@ -220,7 +235,7 @@
     ],
     "outcomes": [
       { "label": "Inference", "value": 47.3, "color": "#10b981", "tier": "2A", "src": "= sum(provider × INF 0.47)" },
-      { "label": "Other Operating", "value": 51.4, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × min(rate, 1−INF))" },
+      { "label": "Other Operating Costs", "value": 51.4, "color": "#f59e0b", "tier": "2A", "src": "= sum(provider × min(rate, 1−INF))" },
       { "label": "Generated Cashflow", "value": 16.1, "color": "#94a3b8", "tier": "2A", "src": "= channel margins ($14.2B) + IaaS surplus ($1.9B). Provider surplus still modest because only IaaS is profitable in this scenario." }
     ],
     "costParams": {

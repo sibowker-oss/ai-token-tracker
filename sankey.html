@@ -32,28 +32,17 @@
   .hero-stat .detail { font-size:10px; color:var(--text-dim); }
   .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
   .card h2 { font-size:16px; margin-bottom:14px; }
-  .iceberg-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
-  .iceberg-grid.three { grid-template-columns:1.1fr 1.1fr 0.8fr; }
-  .iceberg-card { background:rgba(15,23,42,0.5); border:1px solid var(--card-border); border-radius:10px; padding:18px; }
-  .iceberg-card h3 { font-size:13px; font-weight:700; margin-bottom:6px; color:#f1f5f9; }
-  .iceberg-card .sub { font-size:11px; color:var(--text-dim); margin-bottom:14px; }
-  .iceberg-bar-wrap { position:relative; height:36px; background:rgba(0,0,0,0.3); border-radius:6px; overflow:hidden; margin:6px 0 4px; }
-  .iceberg-bar-fill { position:absolute; left:0; top:0; height:100%; display:flex; align-items:center; padding:0 8px; font-size:11px; font-weight:700; color:white; }
-  .iceberg-row { display:flex; justify-content:space-between; align-items:baseline; font-size:11px; color:var(--text-dim); margin-top:4px; }
-  .iceberg-row strong { color:#f1f5f9; }
-  .iceberg-big { font-size:24px; font-weight:800; color:#f1f5f9; }
-  .iceberg-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; padding-top:12px; border-top:1px solid var(--card-border); }
-  .iceberg-stat { text-align:center; }
-  .iceberg-stat .v { font-size:18px; font-weight:800; }
-  .iceberg-stat .l { font-size:9px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); margin-top:2px; }
-  .iceberg-foot { font-size:11px; color:var(--text-dim); line-height:1.5; margin-top:12px; padding-top:12px; border-top:1px solid var(--card-border); }
   @media(max-width:768px) {
     .nav-bar { padding:8px 12px; gap:4px; justify-content:center; }
     .nav-brand { font-size:13px; margin-right:auto; }
     .nav-logo { margin-left:0; font-size:11px; gap:5px; }
     .nav-logo svg { width:18px; height:18px; }
     .nav-link { font-size:10px; padding:5px 8px; border-radius:6px; }
-    .hero-grid { grid-template-columns:repeat(2,1fr); } .iceberg-grid, .iceberg-grid.three { grid-template-columns:1fr; }
+    .hero-grid { grid-template-columns:repeat(2,1fr); }
+    #crossover-content > div:first-of-type { grid-template-columns:1fr !important; }
+    #ladder-viz .ladder-compare { grid-template-columns:1fr !important; }
+    #ladder-viz .ladder-row { grid-template-columns:20px 1fr !important; }
+    #ladder-viz .ladder-row .ladder-label { font-size:10px !important; }
   }
 </style>
 </head>
@@ -93,11 +82,14 @@
     </div>
   </div>
 
-  <div class="card" id="iceberg-card">
-    <h2>What's Above the Waterline: The Capital Stack Funding the Flow</h2>
-    <p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:8px;">The sankey above shows <strong>operating flow</strong> — dollars in from customers, dollars out this year. It excludes the two stacks of capital funding the build-out from above, and the date by which Generated Cashflow could plausibly cover infrastructure depreciation (the standard accounting test for true profitability).</p>
-    <div class="iceberg-grid three" id="iceberg-grid"></div>
-    <p class="iceberg-foot" id="iceberg-foot"></p>
+  <div class="card" id="ladder-card">
+    <h2>The Profitability Ladder: Reading the "Where It Goes" Column</h2>
+    <p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:16px;">The right column of the sankey breaks every dollar into three buckets. Here's how they stack up — and why the gap between them matters more in AI than in traditional software.</p>
+    <div id="ladder-viz"></div>
+  </div>
+
+  <div class="card" id="crossover-card">
+    <div id="crossover-content"></div>
   </div>
 </div>
 
@@ -111,7 +103,7 @@ const COLORS = {
   'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
   'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
   'Other Model Providers':'#475569',
-  'Inference':'#ef4444','Other Operating':'#f59e0b','Generated Cashflow':'#10b981',
+  'Inference':'#ef4444','Other Operating Costs':'#f59e0b','Generated Cashflow':'#10b981',
 };
 
 async function init() {
@@ -170,187 +162,360 @@ function renderYear(yr) {
   buildSankey(d);
 
   // Iceberg cards: capex vs cashflow paydown, profitability crossover, war chest
-  renderIceberg(d, yr);
-}
+  renderCrossover(d, yr);
 
-// ─── Iceberg cards: capex paydown + frontier funding ────────────────
-const TIER_COLOR = (t) => {
-  if(!t) return '#475569';
-  if(t.startsWith('1')) return '#10b981';
-  if(t.startsWith('2')) return '#3b82f6';
-  if(t.startsWith('3')) return '#f59e0b';
-  if(t.startsWith('4')) return '#ef4444';
-  return '#475569';
-};
+  // Profitability ladder explainer
+  renderLadder(d);
+}
 
 // Default Crossover scenario controls (per-page state)
 let crossoverDepYrs = 10;   // GAAP-conservative 10yr by default
 let crossoverGrowth = 'recent'; // 'recent' = 2026→27 1.9×, 'mean' = geomean ≈ 2.7×
 
-// Compute the projected profitability crossover year given a set of cashflow→capex
-// data points and the chosen depreciation horizon + growth assumption.
+// Compute the projected profitability crossover year.
+// Uses operating result (revenue − inference − other operating costs) which can be
+// negative in early years, then projects forward to find when operating result first
+// exceeds annual infrastructure depreciation.
+//
+// Growth model: initial revenue growth rate decays each year toward a 15% mature-
+// industry terminal rate (roughly global SaaS growth). This prevents the absurdity
+// of compounding 75%+ growth for a decade. Cost growth decays at 0.7× the revenue
+// decay rate (scale leverage — costs grow slower than revenue).
 function computeCrossover(allYears, depYrs, growthMode) {
-  // Build [{year, cashflow, capex}] for sankey years
   const series = allYears.map(yr => ({
     year: yr.year,
-    cashflow: yr.cashflow,
+    opResult: yr.opResult,
+    revenue: yr.revenue,
     capex: yr.capex,
   }));
-  // Sort by year
   series.sort((a,b) => a.year - b.year);
-  // Compute growth multiplier
-  let growth;
+
+  // Starting growth multiplier based on revenue growth
+  let initialGrowth;
   if (growthMode === 'recent') {
-    // Most recent year-on-year cashflow growth
     const last = series[series.length-1];
     const prev = series[series.length-2];
-    growth = (prev && prev.cashflow > 0) ? (last.cashflow / prev.cashflow) : 1;
+    initialGrowth = (prev && prev.revenue > 0) ? (last.revenue / prev.revenue) : 1;
   } else {
-    // Geometric mean across all year-on-year ratios
     let prod = 1, n = 0;
     for (let i = 1; i < series.length; i++) {
-      if (series[i-1].cashflow > 0) {
-        prod *= (series[i].cashflow / series[i-1].cashflow);
+      if (series[i-1].revenue > 0) {
+        prod *= (series[i].revenue / series[i-1].revenue);
         n++;
       }
     }
-    growth = n > 0 ? Math.pow(prod, 1/n) : 1;
+    initialGrowth = n > 0 ? Math.pow(prod, 1/n) : 1;
   }
-  // Use the most recent capex as the depreciation base (assume capex flat going forward
-  // — conservative because real capex is still growing, which would push the date later;
-  // explicit assumption shown to user).
+
   const lastYr = series[series.length-1];
   const annualDep = lastYr.capex / depYrs;
-  // Project cashflow forward
+
+  // Tapering: growth decays 25% of the gap toward terminal each year
+  // e.g. 1.75× → 1.60 → 1.49 → 1.40 → ... → converges on 1.15×
+  const terminalGrowth = 1.15;
+  const decayRate = 0.25; // how fast we converge to terminal
+
   const projection = [];
-  let cf = lastYr.cashflow;
-  let yr = lastYr.year;
   let crossYear = null;
-  projection.push({year: yr, cashflow: cf, dep: annualDep});
-  while (yr < lastYr.year + 12) { // cap at 12 years out
-    yr++;
-    cf = cf * growth;
-    projection.push({year: yr, cashflow: cf, dep: annualDep});
-    if (cf >= annualDep && crossYear === null) {
-      crossYear = yr;
-    }
+  let breakevenYear = null;
+
+  // Include all known data years
+  for (const s of series) {
+    projection.push({ year: s.year, opResult: s.opResult, revenue: s.revenue, isActual: true });
+    if (s.opResult >= annualDep && crossYear === null) crossYear = s.year;
+    if (s.opResult >= 0 && breakevenYear === null) breakevenYear = s.year;
   }
-  return { crossYear, growth, annualDep, projection };
+
+  // Project forward with tapering growth
+  let rev = lastYr.revenue;
+  let costs = lastYr.revenue - lastYr.opResult;
+  let curGrowth = initialGrowth;
+  let yr = lastYr.year;
+  while (yr < lastYr.year + 7) {
+    yr++;
+    // Taper growth toward terminal rate
+    curGrowth = terminalGrowth + (curGrowth - terminalGrowth) * (1 - decayRate);
+    const costGrowth = 1 + (curGrowth - 1) * 0.7; // costs grow slower (scale leverage)
+    rev = rev * curGrowth;
+    costs = costs * costGrowth;
+    const op = rev - costs;
+    projection.push({ year: yr, opResult: op, revenue: rev, isActual: false });
+    if (op >= annualDep && crossYear === null) crossYear = yr;
+    if (op >= 0 && breakevenYear === null) breakevenYear = yr;
+  }
+
+  return { crossYear, breakevenYear, growth: initialGrowth, annualDep, projection };
 }
 
-function renderIceberg(d, yr) {
-  const cf = d.outcomes.find(o=>o.label.includes('Cash'))||{value:0};
-  const cashflow = cf.value || 0;
-  const cap = d.infrastructureCapex || {value:0, tier:'4', src:''};
+function renderCrossover(d, yr) {
+  const el = document.getElementById('crossover-content');
+  if (!el) return;
+
+  // Use totalCapex (full industry, aligned with Follow the CapEx page) for depreciation;
+  // fall back to infrastructureCapex (Mag 7 only) if totalCapex not present.
+  const cap = d.totalCapex || d.infrastructureCapex || {value:0, tier:'4', src:''};
   const ff  = d.frontierFunding || {cumulative:0, components:{}, tier:'4', src:''};
 
-  // Build series across all years for crossover calc
+  // Compute operating result per year: customer revenue − inference − other operating costs
   const allYrs = [];
   for (const k of Object.keys(sankeyData)) {
     if (k.startsWith('_')) continue;
     const yd = sankeyData[k];
-    const ycf = (yd.outcomes.find(o=>o.label.includes('Cash'))||{value:0}).value;
-    const ycap = (yd.infrastructureCapex||{}).value || 0;
+    const rev = yd.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+    const inf = (yd.outcomes.find(o => o.label === 'Inference') || {value:0}).value;
+    const op = (yd.outcomes.find(o => o.label === 'Other Operating Costs') || {value:0}).value;
+    const ycap = (yd.totalCapex || yd.infrastructureCapex || {}).value || 0;
     const numYr = parseInt(k.replace(/[^0-9]/g,''));
-    allYrs.push({year: numYr, cashflow: ycf, capex: ycap});
+    allYrs.push({ year: numYr, revenue: rev, opResult: rev - inf - op, capex: ycap });
   }
 
-  const cashflowPctOfCapex = cap.value > 0 ? (cashflow / cap.value * 100) : 0;
+  const cross = computeCrossover(allYrs, crossoverDepYrs, crossoverGrowth);
+  const crossDisplay = cross.crossYear ? cross.crossYear : '>' + (allYrs[allYrs.length-1]?.year + 7);
+  const breakevenDisplay = cross.breakevenYear ? cross.breakevenYear : '—';
+  const growthDisplay = (cross.growth).toFixed(1) + '× / yr';
+
+  // Current year operating result
+  const curYrData = allYrs.find(y => y.year === parseInt(yr.replace(/[^0-9]/g,'')));
+  const curOpResult = curYrData ? curYrData.opResult : 0;
 
   let html = '';
+  html += '<h2>Projected Profitability Crossover <span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER 2A</span></h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:16px;">When does Generated Cashflow (revenue minus all costs) first cover annual infrastructure depreciation? The chart starts from the operating loss shown in the ladder above, then projects revenue growth forward. For the full capital stack, see <a href="chips.html" style="color:var(--accent);text-decoration:underline;">Follow the CapEx</a>.</p>';
 
-  // ─── Card A: Infrastructure Capex ─────────────────────────────
-  const capBadge = '<span style="display:inline-block;background:'+TIER_COLOR(cap.tier)+';color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER '+cap.tier+'</span>';
-  html += '<div class="iceberg-card">';
-  html += '<h3>Infrastructure Capex'+capBadge+'</h3>';
-  html += '<div class="sub">Mag 7 + AI-native datacentre, GPU and networking spend this year. Funded from corporate balance sheets, not customer revenue.</div>';
-  html += '<div class="iceberg-big" style="color:#ef4444;">$'+cap.value+'B</div>';
-  const fillPct = Math.min(100, cashflowPctOfCapex);
-  html += '<div class="iceberg-bar-wrap" title="Generated cashflow as % of this year\'s capex">';
-  html += '<div class="iceberg-bar-fill" style="width:'+fillPct+'%;background:#10b981;">'+(fillPct >= 8 ? '$'+cashflow.toFixed(1)+'B' : '')+'</div>';
-  html += '</div>';
-  html += '<div class="iceberg-row"><span>Generated Cashflow recovers</span><strong>$'+cashflow.toFixed(1)+'B ('+cashflowPctOfCapex.toFixed(1)+'%)</strong></div>';
-  html += '<div class="iceberg-stat-row">';
-  html += '<div class="iceberg-stat"><div class="v" style="color:#ef4444;">$'+(cap.value - cashflow).toFixed(0)+'B</div><div class="l">Unrecovered this year</div></div>';
-  html += '<div class="iceberg-stat"><div class="v" style="color:#94a3b8;">$'+(cap.value/10).toFixed(0)+'B</div><div class="l">Annual dep if straight-line 10yr</div></div>';
-  html += '<div class="iceberg-stat"><div class="v" style="color:#94a3b8;">$'+(cap.value/4).toFixed(0)+'B</div><div class="l">Annual dep if straight-line 4yr (GPU)</div></div>';
-  html += '</div>';
-  html += '<div class="iceberg-foot">' + (cap.src||'') + '</div>';
-  html += '</div>';
+  // Layout: big number + chart side by side
+  html += '<div style="display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:end;">';
 
-  // ─── Card B: Profitability Crossover ─────────────────────────
-  const cross = computeCrossover(allYrs, crossoverDepYrs, crossoverGrowth);
-  const crossDisplay = cross.crossYear ? cross.crossYear : '>12 yrs';
-  const growthDisplay = (cross.growth).toFixed(1) + '× / yr';
-  html += '<div class="iceberg-card" style="border-color:#10b981;">';
-  html += '<h3>Projected Profitability Crossover<span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER 2A</span></h3>';
-  html += '<div class="sub">The year Generated Cashflow first covers annual infrastructure depreciation — the GAAP test for true profitability. Derived from this page\'s cashflow trajectory + capex.</div>';
-  html += '<div class="iceberg-big" style="color:#10b981;">'+crossDisplay+'</div>';
-  // Mini bar chart of projection vs depreciation line
-  const maxVal = Math.max(cross.annualDep, ...cross.projection.map(p=>p.cashflow));
-  html += '<div style="display:flex;align-items:flex-end;gap:3px;height:60px;margin:8px 0 4px;border-bottom:1px dashed rgba(148,163,184,0.3);position:relative;">';
-  // Depreciation line marker
-  const depHpct = (cross.annualDep / maxVal) * 100;
-  html += '<div style="position:absolute;left:0;right:0;bottom:'+depHpct+'%;border-top:2px dashed #ef4444;z-index:2;"></div>';
-  html += '<div style="position:absolute;right:0;bottom:'+depHpct+'%;font-size:9px;color:#ef4444;font-weight:700;background:var(--card);padding:0 4px;transform:translateY(-50%);">Dep $'+cross.annualDep.toFixed(0)+'B</div>';
-  for (const p of cross.projection) {
-    const barH = (p.cashflow / maxVal) * 100;
-    const isCross = (p.year === cross.crossYear);
-    const barColor = p.cashflow >= cross.annualDep ? '#10b981' : '#475569';
-    html += '<div style="flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;">';
-    html += '<div style="width:100%;height:'+barH+'%;background:'+barColor+';border-radius:2px 2px 0 0;'+(isCross?'box-shadow:0 0 0 1.5px white;':'')+'" title="'+p.year+': $'+p.cashflow.toFixed(1)+'B"></div>';
-    html += '<div style="font-size:8px;color:var(--text-dim);margin-top:2px;">'+(""+p.year).slice(-2)+'</div>';
-    html += '</div>';
+  // Left: big numbers + context
+  html += '<div>';
+  html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-bottom:4px;">GAAP Crossover</div>';
+  html += '<div style="font-size:42px;font-weight:800;color:#10b981;line-height:1;">'+crossDisplay+'</div>';
+  html += '<div style="font-size:11px;color:var(--text-dim);margin-top:12px;">Generated Cashflow now: <strong style="color:'+(curOpResult >= 0 ? 'var(--green)' : 'var(--red)')+';">'+(curOpResult >= 0 ? '$' : '−$')+Math.abs(curOpResult).toFixed(1)+'B</strong></div>';
+  html += '<div style="font-size:11px;color:var(--text-dim);">Breakeven year: <strong style="color:#cbd5e1;">'+breakevenDisplay+'</strong></div>';
+  html += '<div style="font-size:11px;color:var(--text-dim);">Annual depreciation: <strong style="color:#ef4444;">$'+cross.annualDep.toFixed(0)+'B</strong></div>';
+  html += '<div style="font-size:11px;color:var(--text-dim);">Capex this year: <strong style="color:#ef4444;">$'+cap.value+'B</strong></div>';
+  if (ff.cumulative > 0) {
+    html += '<div style="font-size:11px;color:var(--text-dim);margin-top:4px;">War chest: <strong style="color:#dc2626;">$'+ff.cumulative+'B</strong> committed</div>';
   }
   html += '</div>';
+
+  // Right: bar chart with negative bars
+  const vals = cross.projection.map(p => p.opResult);
+  const maxPos = Math.max(cross.annualDep, ...vals.filter(v => v > 0), 1);
+  const maxNeg = Math.max(...vals.filter(v => v < 0).map(v => Math.abs(v)), 0);
+  const totalRange = maxPos + maxNeg;
+  // Zero line position as % from bottom
+  const zeroFromBottom = totalRange > 0 ? (maxNeg / totalRange * 100) : 50;
+  const chartH = 160;
+
+  html += '<div>';
+  // Chart title
+  html += '<div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-bottom:6px;">Generated Cashflow (Revenue − Inference − Other Operating Costs)</div>';
+  // Value labels above/below bars
+  html += '<div style="position:relative;height:'+chartH+'px;">';
+  // Depreciation line
+  const depFromBottom = totalRange > 0 ? ((maxNeg + cross.annualDep) / totalRange * 100) : 50;
+  html += '<div style="position:absolute;left:0;right:0;bottom:'+depFromBottom+'%;border-top:2px dashed #ef4444;z-index:2;"></div>';
+  html += '<div style="position:absolute;right:0;bottom:'+depFromBottom+'%;font-size:10px;color:#ef4444;font-weight:700;background:var(--card);padding:0 6px;transform:translateY(-50%);z-index:3;">Dep $'+cross.annualDep.toFixed(0)+'B/yr</div>';
+  // Zero line
+  if (maxNeg > 0) {
+    html += '<div style="position:absolute;left:0;right:0;bottom:'+zeroFromBottom+'%;border-top:1px solid rgba(148,163,184,0.4);z-index:2;"></div>';
+    html += '<div style="position:absolute;left:0;bottom:'+zeroFromBottom+'%;font-size:9px;color:#64748b;background:var(--card);padding:0 4px;transform:translateY(-50%);z-index:3;">$0</div>';
+  }
+  // Bars container
+  html += '<div style="position:absolute;inset:0;display:flex;gap:4px;align-items:stretch;">';
+  cross.projection.forEach((p, i) => {
+    const isNeg = p.opResult < 0;
+    const barPct = totalRange > 0 ? (Math.abs(p.opResult) / totalRange * 100) : 0;
+    const isCross = (p.year === cross.crossYear);
+    const isBreakeven = (p.year === cross.breakevenYear);
+    const barColor = p.opResult >= cross.annualDep ? '#10b981' : p.opResult >= 0 ? '#475569' : '#ef4444';
+    const opacity = p.isActual ? '0.9' : '0.6';
+    const valLabel = (isNeg ? '−$' : '$') + Math.abs(p.opResult).toFixed(0) + 'B';
+    const labelColor = p.opResult >= cross.annualDep ? '#10b981' : p.opResult >= 0 ? '#94a3b8' : '#ef4444';
+
+    html += '<div style="flex:1;position:relative;">';
+    if (isNeg) {
+      // Bar grows downward from zero line
+      html += '<div style="position:absolute;top:' + (100 - zeroFromBottom) + '%;left:10%;width:80%;height:'+barPct+'%;background:'+barColor+';opacity:'+opacity+';border-radius:0 0 3px 3px;'+(isBreakeven?'box-shadow:0 0 0 2px white;':'')+'"></div>';
+      // Value below bar
+      const labelTop = (100 - zeroFromBottom) + barPct;
+      html += '<div style="position:absolute;top:'+Math.min(labelTop, 92)+'%;left:0;right:0;text-align:center;font-size:9px;font-weight:600;color:'+labelColor+';">'+valLabel+'</div>';
+    } else {
+      // Bar grows upward from zero line
+      const barBottom = zeroFromBottom;
+      html += '<div style="position:absolute;bottom:'+barBottom+'%;left:10%;width:80%;height:'+barPct+'%;background:'+barColor+';opacity:'+opacity+';border-radius:3px 3px 0 0;'+(isCross?'box-shadow:0 0 0 2px white;':'')+(isBreakeven && !isCross?'box-shadow:0 0 0 1px rgba(255,255,255,0.5);':'')+'"></div>';
+      // Value above bar
+      const labelBottom = barBottom + barPct;
+      html += '<div style="position:absolute;bottom:'+Math.min(labelBottom, 92)+'%;left:0;right:0;text-align:center;font-size:9px;font-weight:600;color:'+labelColor+';">'+valLabel+'</div>';
+    }
+    html += '</div>';
+  });
+  html += '</div>'; // bars container
+  html += '</div>'; // chart
+
+  // Year labels
+  html += '<div style="display:flex;gap:4px;margin-top:4px;">';
+  cross.projection.forEach(p => {
+    const isCross = (p.year === cross.crossYear);
+    const isBreakeven = (p.year === cross.breakevenYear);
+    const highlight = isCross || isBreakeven;
+    html += '<div style="flex:1;text-align:center;font-size:10px;color:'+(isCross?'#10b981':isBreakeven?'#f1f5f9':'var(--text-dim)')+';font-weight:'+(highlight?'700':'400')+';">'+(p.isActual ? p.year : p.year+'E')+'</div>';
+  });
+  html += '</div>';
+  // Legend
+  html += '<div style="display:flex;gap:14px;font-size:9px;color:var(--text-dim);margin-top:8px;">';
+  html += '<span><span style="display:inline-block;width:8px;height:8px;background:#ef4444;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>Negative cashflow (VC-funded)</span>';
+  html += '<span><span style="display:inline-block;width:8px;height:8px;background:#475569;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>Positive cashflow, below depreciation</span>';
+  html += '<span><span style="display:inline-block;width:8px;height:8px;background:#10b981;border-radius:2px;margin-right:3px;vertical-align:middle;"></span>Covers depreciation (GAAP profitable)</span>';
+  html += '</div>';
+  html += '</div>'; // right column
+
+  html += '</div>'; // close grid
+
   // Toggles
-  html += '<div style="display:flex;gap:6px;font-size:10px;margin-top:8px;flex-wrap:wrap;">';
-  html += '<span style="color:var(--text-dim);align-self:center;">Dep:</span>';
+  html += '<div style="display:flex;gap:6px;font-size:10px;margin-top:12px;flex-wrap:wrap;">';
+  html += '<span style="color:var(--text-dim);align-self:center;">Depreciation:</span>';
   html += '<button onclick="setCrossDep(10)" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverDepYrs===10?'#10b981':'var(--card-border)')+';background:'+(crossoverDepYrs===10?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverDepYrs===10?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">10yr GAAP</button>';
   html += '<button onclick="setCrossDep(4)" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverDepYrs===4?'#10b981':'var(--card-border)')+';background:'+(crossoverDepYrs===4?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverDepYrs===4?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">4yr GPU</button>';
-  html += '<span style="color:var(--text-dim);align-self:center;margin-left:6px;">Growth:</span>';
-  html += '<button onclick="setCrossGrowth(\'recent\')" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverGrowth==='recent'?'#10b981':'var(--card-border)')+';background:'+(crossoverGrowth==='recent'?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverGrowth==='recent'?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">Recent ('+(allYrs.length>1?(allYrs[allYrs.length-1].cashflow/allYrs[allYrs.length-2].cashflow).toFixed(1):'?')+'×)</button>';
+  html += '<span style="color:var(--text-dim);align-self:center;margin-left:8px;">Revenue growth:</span>';
+  html += '<button onclick="setCrossGrowth(\'recent\')" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverGrowth==='recent'?'#10b981':'var(--card-border)')+';background:'+(crossoverGrowth==='recent'?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverGrowth==='recent'?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">Recent ('+cross.growth.toFixed(1)+'×)</button>';
   html += '<button onclick="setCrossGrowth(\'mean\')" style="padding:3px 8px;border-radius:4px;border:1px solid '+(crossoverGrowth==='mean'?'#10b981':'var(--card-border)')+';background:'+(crossoverGrowth==='mean'?'rgba(16,185,129,0.15)':'transparent')+';color:'+(crossoverGrowth==='mean'?'#10b981':'var(--text-dim)')+';font-size:10px;font-weight:600;cursor:pointer;">Mean</button>';
   html += '</div>';
-  html += '<div class="iceberg-foot">Assumes capex flat at $'+cap.value+'B (the latest year) and cashflow compounds at '+growthDisplay+'. Capex actually rising in trend → real crossover later. Earlier dates require growth to hold up; later dates assume faster GPU replacement. Tier 2A — derived deterministically from sankey cashflow + capex inputs.</div>';
-  html += '</div>';
 
-  // ─── Card C: Frontier Lab War Chest (static, no burn calc) ─────
-  const ffBadge = '<span style="display:inline-block;background:'+TIER_COLOR(ff.tier)+';color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;margin-left:6px;vertical-align:middle;">TIER '+ff.tier+'</span>';
-  html += '<div class="iceberg-card">';
-  html += '<h3>Frontier Lab War Chest'+ffBadge+'</h3>';
-  html += '<div class="sub">Cumulative committed funding through end of this year. Reference number — runway depends on future burn rate, not shown.</div>';
-  html += '<div class="iceberg-big" style="color:#dc2626;">$'+ff.cumulative+'B</div>';
-  // Component stacked bar
-  const compTotal = Object.values(ff.components||{}).reduce((s,v)=>s+v,0);
-  const compColors = {'OpenAI':'#10a37f','Anthropic':'#d97706','xAI':'#a855f7','Other frontier labs':'#64748b','AI-native startups':'#475569'};
-  if (compTotal > 0) {
-    html += '<div class="iceberg-bar-wrap" style="height:24px;">';
-    let off = 0;
-    for (const [k,v] of Object.entries(ff.components)) {
-      const pct = v/compTotal*100;
-      html += '<div style="position:absolute;left:'+off+'%;top:0;height:100%;width:'+pct+'%;background:'+(compColors[k]||'#475569')+';display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:white;border-right:1px solid rgba(0,0,0,0.4);" title="'+k+': $'+v+'B">'+(pct >= 14 ? '$'+v+'B' : '')+'</div>';
-      off += pct;
-    }
-    html += '</div>';
-    html += '<div style="display:flex;flex-direction:column;gap:3px;font-size:10px;color:var(--text-dim);margin-top:6px;">';
-    for (const [k,v] of Object.entries(ff.components)) {
-      html += '<div><span style="display:inline-block;width:8px;height:8px;background:'+(compColors[k]||'#475569')+';border-radius:2px;margin-right:4px;vertical-align:middle;"></span>'+k+' — <strong style="color:#cbd5e1;">$'+v+'B</strong></div>';
-    }
-    html += '</div>';
-  }
-  html += '<div class="iceberg-foot">' + (ff.src||'') + '</div>';
-  html += '</div>';
+  // Footer
+  html += '<p style="font-size:11px;color:var(--text-dim);line-height:1.5;margin-top:12px;padding-top:12px;border-top:1px solid var(--card-border);">';
+  html += 'Starting revenue growth of '+growthDisplay+' tapers toward 15% (mature SaaS); costs grow at 0.7× the revenue rate (scale leverage). Total industry capex held flat at $'+cap.value+'B (aligned with <a href="chips.html" style="color:var(--accent);">Follow the CapEx</a>). Solid bars = actual data; faded = projected. Two milestones: <strong style="color:#f1f5f9;">breakeven</strong> (Generated Cashflow turns positive) and <strong style="color:#10b981;">GAAP crossover</strong> (covers depreciation). Tier 2A — derived from this page\'s inputs.';
+  html += '</p>';
 
-  document.getElementById('iceberg-grid').innerHTML = html;
-
-  // Footer synthesis line
-  document.getElementById('iceberg-foot').innerHTML =
-    '<strong style="color:#f1f5f9;">Reading ' + d.label + ':</strong> Customers generate <strong style="color:#10b981;">$'+cashflow.toFixed(1)+'B</strong> of recoverable cashflow against <strong style="color:#ef4444;">$'+cap.value+'B</strong> of fresh capex. On the page\'s own trajectory, that crossover into GAAP profitability lands around <strong style="color:#10b981;">'+crossDisplay+'</strong> (using a '+crossoverDepYrs+'yr depreciation horizon and the '+(crossoverGrowth==='recent'?'most recent':'geometric mean')+' cashflow growth rate). The $'+ff.cumulative+'B war chest is shown as a static reference — the date this page projects matters more than how fast labs burn through it.';
+  el.innerHTML = html;
 }
 
 function setCrossDep(yrs) { crossoverDepYrs = yrs; renderYear(activeYear); }
 function setCrossGrowth(mode) { crossoverGrowth = mode; renderYear(activeYear); }
+
+// ─── Profitability Ladder ──────────────────────────────────────────
+function renderLadder(d) {
+  const el = document.getElementById('ladder-viz');
+  if (!el) return;
+
+  // Pull values from the sankey data
+  const revenue = d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  const vcSubsidy = d.totalVCSubsidy || 0;
+  const inference = d.outcomes.find(o => o.label === 'Inference');
+  const otherOp = d.outcomes.find(o => o.label === 'Other Operating Costs');
+  const cashflow = d.outcomes.find(o => o.label.includes('Cash'));
+
+  const infVal = inference ? inference.value : 0;
+  const opVal = otherOp ? otherOp.value : 0;
+  const cfVal = cashflow ? cashflow.value : 0;
+
+  // The real economics: customer revenue alone vs total system costs
+  const grossProfit = revenue - infVal;
+  const operatingResult = grossProfit - opVal; // negative when losing money
+  const grossMargin = revenue > 0 ? (grossProfit / revenue * 100) : 0;
+  const opMargin = revenue > 0 ? (operatingResult / revenue * 100) : 0;
+
+  // Widths: normalise to the largest absolute value for visual clarity
+  const maxAbs = Math.max(revenue, infVal, opVal, Math.abs(operatingResult), vcSubsidy, cfVal);
+  const pct = v => maxAbs > 0 ? (Math.abs(v) / maxAbs * 100) : 0;
+
+  let html = '';
+
+  // Step rows
+  const steps = [
+    { label: 'Revenue', sublabel: 'Customer subscriptions + API fees + ads', value: revenue, color: 'var(--accent)', sign: '' },
+    { label: 'Inference', sublabel: 'Variable production costs — GPU compute, cloud networking', value: -infVal, color: 'var(--red)', sign: '−' },
+    { label: 'Gross Profit', sublabel: null, value: grossProfit, color: grossProfit >= 0 ? '#cbd5e1' : 'var(--red)', sign: '=', isSub: true, margin: grossMargin },
+    { label: 'Other Operating Costs', sublabel: 'R&D, model training, SG&A, sales', value: -opVal, color: 'var(--orange)', sign: '−' },
+    { label: 'Operating Result', sublabel: null, value: operatingResult, color: operatingResult >= 0 ? 'var(--green)' : 'var(--red)', sign: '=', isSub: true, margin: opMargin },
+  ];
+
+  // Only show VC + Generated Cashflow rows when there's a VC subsidy
+  if (vcSubsidy > 0) {
+    steps.push({ label: 'VC Operating Subsidy', sublabel: 'Investor cash burning to cover the loss', value: vcSubsidy, color: 'var(--red)', sign: '+', isVC: true });
+    steps.push({ label: 'Generated Cashflow', sublabel: null, value: cfVal, color: 'var(--green)', sign: '=', isSub: true });
+  } else {
+    // Rename Operating Result to Generated Cashflow when no VC needed
+    steps[steps.length-1].label = 'Generated Cashflow';
+  }
+
+  html += '<div style="display:flex;flex-direction:column;gap:2px;">';
+  steps.forEach(s => {
+    const absVal = Math.abs(s.value);
+    const barW = pct(s.value);
+    const isNeg = s.value < 0;
+    const displayColor = s.color;
+    const displayVal = (isNeg ? '−$' : '$') + absVal.toFixed(1) + 'B';
+    const marginBadge = s.margin != null && s.isSub
+      ? '<span style="font-size:11px;font-weight:700;color:'+displayColor+';margin-left:8px;">'+s.margin.toFixed(0)+'%</span>'
+      : '';
+
+    html += '<div style="display:grid;grid-template-columns:24px 190px 1fr;align-items:center;gap:8px;padding:6px 0;'+(s.isSub?'border-top:1px solid var(--card-border);border-bottom:1px solid var(--card-border);background:rgba(15,23,42,0.4);margin:2px 0;padding:8px 4px;':'')+'">';
+    // Sign
+    html += '<div style="font-size:16px;font-weight:700;color:'+displayColor+';text-align:center;">'+s.sign+'</div>';
+    // Label
+    html += '<div>';
+    html += '<div style="font-size:12px;font-weight:600;color:'+(s.isSub?'#f1f5f9':'#cbd5e1')+';">'+s.label+marginBadge+'</div>';
+    if (s.sublabel) html += '<div style="font-size:10px;color:var(--text-dim);">'+s.sublabel+'</div>';
+    html += '</div>';
+    // Bar + value
+    html += '<div style="display:flex;align-items:center;gap:8px;">';
+    html += '<div style="flex:1;height:24px;position:relative;background:rgba(0,0,0,0.2);border-radius:4px;overflow:hidden;">';
+    if (s.isSub && isNeg) {
+      // Negative subtotal: red bar with striped pattern to emphasise the loss
+      html += '<div style="height:100%;width:'+barW+'%;background:repeating-linear-gradient(135deg,rgba(239,68,68,0.3),rgba(239,68,68,0.3) 4px,rgba(239,68,68,0.15) 4px,rgba(239,68,68,0.15) 8px);border:1px dashed var(--red);border-radius:4px;"></div>';
+    } else if (s.isSub) {
+      html += '<div style="height:100%;width:'+barW+'%;border:1px dashed rgba(255,255,255,0.2);background:rgba(30,41,59,0.8);border-radius:4px;"></div>';
+    } else if (s.isVC) {
+      // VC bar: distinct style — pulsing red border
+      html += '<div style="height:100%;width:'+barW+'%;background:repeating-linear-gradient(135deg,rgba(220,38,38,0.25),rgba(220,38,38,0.25) 4px,rgba(220,38,38,0.1) 4px,rgba(220,38,38,0.1) 8px);border:1px solid var(--red);border-radius:4px;"></div>';
+    } else {
+      html += '<div style="height:100%;width:'+barW+'%;background:'+displayColor+';opacity:0.7;border-radius:4px;"></div>';
+    }
+    html += '</div>';
+    html += '<div style="font-size:13px;font-weight:700;color:'+displayColor+';min-width:70px;text-align:right;">'+displayVal+'</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // AI Gap comparison
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid var(--card-border);">';
+
+  // AI column
+  const opMarginDisplay = opMargin.toFixed(0);
+  html += '<div style="background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:8px;padding:14px;">';
+  html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-bottom:8px;">AI Model Providers</div>';
+  html += '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">';
+  html += '<div><div style="font-size:9px;color:var(--text-dim);">Gross Margin</div><div style="font-size:22px;font-weight:800;color:'+(grossMargin >= 0 ? '#cbd5e1' : 'var(--red)')+';">'+grossMargin.toFixed(0)+'%</div></div>';
+  html += '<div style="font-size:18px;color:var(--text-dim);">→</div>';
+  html += '<div><div style="font-size:9px;color:var(--text-dim);">Operating Margin</div><div style="font-size:22px;font-weight:800;color:'+(opMargin >= 0 ? 'var(--green)' : 'var(--red)')+';">'+opMarginDisplay+'%</div></div>';
+  html += '</div>';
+  if (vcSubsidy > 0) {
+    html += '<div style="font-size:10px;color:var(--red);">$'+vcSubsidy+'B of VC cash burned to cover the gap</div>';
+  }
+  html += '</div>';
+
+  // Traditional SaaS column
+  html += '<div style="background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:8px;padding:14px;">';
+  html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-bottom:8px;">Traditional SaaS (Typical)</div>';
+  html += '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px;">';
+  html += '<div><div style="font-size:9px;color:var(--text-dim);">Gross Margin</div><div style="font-size:22px;font-weight:800;color:#cbd5e1;">78%</div></div>';
+  html += '<div style="font-size:18px;color:var(--text-dim);">→</div>';
+  html += '<div><div style="font-size:9px;color:var(--text-dim);">Operating Margin</div><div style="font-size:22px;font-weight:800;color:var(--green);">22%</div></div>';
+  html += '</div>';
+  html += '<div style="font-size:10px;color:var(--text-dim);">Production costs near-zero — margin lost to sales & R&D, not compute</div>';
+  html += '</div>';
+
+  html += '</div>';
+
+  // Explainer text
+  html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-top:14px;padding:10px 12px;background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:6px;">';
+  html += '<strong style="color:#f1f5f9;">Why this matters:</strong> In traditional software, production costs are negligible — almost all margin erosion happens in sales and R&D. In AI, <strong style="color:var(--red);">Inference</strong> is a massive variable cost that scales with every query, pushing Gross Margin structurally lower. Then <strong style="color:var(--orange);">Other Operating Costs</strong> (especially model training at $100M+ per frontier run) push the industry deep into loss. The gap is filled by <strong style="color:var(--red);">VC cash that is being burned</strong> — not reinvested, not building equity, just keeping the lights on. <strong style="color:var(--green);">Generated Cashflow</strong> only exists at the margins, from channel resellers (hyperscalers, SaaS vendors) who clip a margin before passing revenue through.';
+  html += '</div>';
+
+  el.innerHTML = html;
+}
 
 function buildSankey(d) {
   const canvas = document.getElementById('sankey');
@@ -512,7 +677,7 @@ function buildSankey(d) {
     const costPct = INFERENCE_PCT + r;
     const opShare = Math.min(r, 1 - INFERENCE_PCT);
     flowDefs.push({from:p.name, to:'Inference', value:p.value*INFERENCE_PCT, fc:2, tc:3});
-    flowDefs.push({from:p.name, to:'Other Operating', value:p.value*opShare, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating Costs', value:p.value*opShare, fc:2, tc:3});
     if (costPct < 1.0) {
       const surplus = p.value * (1.0 - costPct);
       if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
