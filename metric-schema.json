@@ -227,6 +227,13 @@
           "type": "primary",
           "yearly": false,
           "description": "Headcount."
+        },
+        "exit_arr": {
+          "label": "Exit ARR",
+          "unit": "$B",
+          "type": "primary",
+          "yearly": true,
+          "description": "ARR run-rate at end of calendar year. Distinct from collected_revenue (total cash received during year)."
         }
       }
     },
@@ -782,6 +789,10 @@
     }
   ],
   "field_match_rules": [
+    {
+      "pattern": "exit.arr|exit arr|end.of.year.*arr|year.end.*run.rate|exit.*run.rate",
+      "field": "exit_arr"
+    },
     {
       "pattern": "\\barr\\b|annuali[sz]ed.*revenue|revenue.*run.rate|revenue.*forecast|revenue.*target|revenue.*projection|revenue.*guidance|revenue.*per month|\\$.*per month|generating.*revenue|\\$.*revenue per|revenue.*month|\\$.*\\/month|\\$.*per quarter|revenue.*per quarter|\\$.*\\/quarter",
       "field": "arr"

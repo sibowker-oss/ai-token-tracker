@@ -1555,13 +1555,16 @@
             "subscription_pct": 13,
             "enterprise_pct": 15
           },
-          "customer_count": 300000
+          "customer_count": 300000,
+          "exit_arr": 9.5
         },
         "2026": {
           "arr": 18,
           "valuation": 380,
           "subscription_revenue": 72.5,
-          "inference_cost": -10
+          "inference_cost": -10,
+          "employees": 2500,
+          "monthly_revenue_peak": 6
         }
       },
       "current": {
@@ -1703,7 +1706,7 @@
         },
         "2026.arr": {
           "confidence": "high",
-          "claim_count": 6,
+          "claim_count": 7,
           "claims": [
             {
               "id": "dp-026",
@@ -1780,6 +1783,19 @@
               "source": "Seeking Alpha",
               "source_url": "https://seekingalpha.com/news/4543624-anthropic-raises-2026-revenue-forecast-by-20-to-18b",
               "date": "2026-03-01",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-129",
+              "claim": "Anthropic hit a $14 billion run rate last month (February), growing revenue from $1 billion to $14 billion in 14 months ",
+              "value": 14000000000,
+              "unit": "USD",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Jason Calacanis",
+              "source_url": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+              "date": "2026-03-13",
               "origin": "accepted",
               "role": "supports"
             }
@@ -2488,6 +2504,79 @@
               "role": "supports"
             }
           ]
+        },
+        "2026.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-130",
+              "claim": "Anthropic had a $6 billion month in February 2026, which is more revenue than the annual revenue of Databricks and Snowf",
+              "value": 6000000000,
+              "unit": "USD",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Brad Gerstner",
+              "source_url": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
+              "date": "2026-03-13",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2025.exit_arr": {
+          "confidence": "low",
+          "claim_count": 2,
+          "claims": [
+            {
+              "id": "dp-137",
+              "claim": "Anthropic saw exit ARR growth from $100 million in 2023, $100 million to $1 billion in 2024, and $1 billion to $9-10 bil",
+              "value": 9500000000,
+              "unit": "USD",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Dario Amodei",
+              "source_url": "https://www.dwarkesh.com/p/dario-amodei-2",
+              "date": "2026-02-13",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-140",
+              "claim": "Anthropic saw ~10x per year exit ARR growth: ~$0 to $100M in 2023, $100M to $1B in 2024, and $1B to $9-10B in 2025.",
+              "value": 9500,
+              "unit": "USD millions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Dario Amodei",
+              "source_url": "https://www.dwarkesh.com/p/dario-amodei-2",
+              "date": "2026-02-13",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2026.employees": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-139",
+              "claim": "Anthropic has approximately 2,500 employees.",
+              "value": 2500,
+              "unit": "employees",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Dario Amodei",
+              "source_url": "https://www.dwarkesh.com/p/dario-amodei-2",
+              "date": "2026-02-13",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
         }
       }
     },
@@ -4937,7 +5026,10 @@
       "products": [],
       "financials": {},
       "current": {
-        "total_funding": 3.5
+        "total_funding": 3.5,
+        "valuation": 10,
+        "gpu_count": 1000000,
+        "power_pipeline_gw": 45
       },
       "provenance": {
         "current.total_funding": {
@@ -5374,7 +5466,14 @@
         "gpu_provider"
       ],
       "products": [],
-      "financials": {},
+      "financials": {
+        "2026": {
+          "data_center_revenue_quarterly": 60,
+          "data_center_revenue": 240,
+          "gross_margin_pct": 70,
+          "hyperscaler_revenue_pct": 60
+        }
+      },
       "current": {
         "market_share_pct": 90,
         "key_products": [
@@ -5504,6 +5603,85 @@
               "role": "supports"
             }
           ]
+        },
+        "2026.arr": {
+          "confidence": "low",
+          "claim_count": 2,
+          "claims": [
+            {
+              "id": "dp-119",
+              "claim": "Groq was acquired by Nvidia for $20 billion; Groq had less than $100 million in ARR at the time of the deal.",
+              "value": 20000000000,
+              "unit": "USD",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Harry Stebbings",
+              "source_url": "https://thetwentyminutevc.libsyn.com/20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthropic-who-wins-enterprise-spacex-at-2trn-and-data-centers-in-space-the-20bn-groq-deal-broken-down-jeff-bezos-100bn-new-fund",
+              "date": "2026-03-26",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-146",
+              "claim": "Nvidia is generating approximately $60 billion a quarter in revenue from AI.",
+              "value": 60,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Dwarkesh Patel",
+              "source_url": "https://www.dwarkesh.com/p/jensen-huang",
+              "date": "2026-04-15",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2026.valuation": {
+          "confidence": "low",
+          "claim_count": 3,
+          "claims": [
+            {
+              "id": "dp-121",
+              "claim": "Groq's last funding round valued the company at $6.9 billion before the $20 billion Nvidia acquisition.",
+              "value": 6900000000,
+              "unit": "USD",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Jason Lemkin",
+              "source_url": "https://thetwentyminutevc.libsyn.com/20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthropic-who-wins-enterprise-spacex-at-2trn-and-data-centers-in-space-the-20bn-groq-deal-broken-down-jeff-bezos-100bn-new-fund",
+              "date": "2026-03-26",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-124",
+              "claim": "NVIDIA spent approximately $20 billion acquiring Groq because they lacked a fast inference answer; fast inference requir",
+              "value": 20000000000,
+              "unit": "USD",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Andrew Feldman",
+              "source_url": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/coinbase-ceo-s-top-3-crypto-trends-for-2026-more-from-davos",
+              "date": "2026-01-23",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-145",
+              "claim": "Nvidia is backstopping CoreWeave up to $6.3 billion and has invested $2 billion in CoreWeave.",
+              "value": 6300000000,
+              "unit": "USD",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Dwarkesh Patel",
+              "source_url": "https://www.dwarkesh.com/p/jensen-huang",
+              "date": "2026-04-15",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
         }
       }
     },
@@ -7658,7 +7836,10 @@
         "founded": 2016,
         "valuation": 3.0,
         "total_funding": "$640M+",
-        "confidence": "Low"
+        "confidence": "Low",
+        "acquired_by": "nvidia",
+        "acquisition_price": 20,
+        "arr_at_acquisition": 0.1
       },
       "provenance": {
         "current.tokens_per_day": {
