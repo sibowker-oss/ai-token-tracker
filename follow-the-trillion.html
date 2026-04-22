@@ -338,35 +338,30 @@ const CURRENT_ARR = 17.47; // $B, from Ledger
 const IT_CAGR = 0.05; // 5% default
 
 // Presets: Bear/Base/Bull revenue by year (in $B)
-// Growth decelerates over time (high early, matures later)
-// Bear: 30% early -> 20%. Base: 80% early -> 30%. Bull: 120% early -> 40%.
-function decayGrowth(baseRate, endRate, yearsFromNow, span) {
-  const t = Math.min(yearsFromNow / span, 1); // 0..1 over span years
-  const rate = baseRate + (endRate - baseRate) * t;
-  return rate;
+// 2025-2030 anchored to Ledger data: Capital lag table (base), Revenue page scenarios (bear/bull).
+// 2031-2035 extrapolated with decelerating growth from last anchor.
+const BASE_ANCHORS = { 2025:17, 2026:64, 2027:115, 2028:200, 2029:300, 2030:420 };
+// Bear: Revenue page multipliers applied to base (0.55x 2026, 0.40x 2027, then decelerating)
+const BEAR_ANCHORS = { 2025:17, 2026:35, 2027:46, 2028:65, 2029:85, 2030:110 };
+// Bull: Revenue page multipliers (1.35x 2026, 1.80x 2027, then accelerating)
+const BULL_ANCHORS = { 2025:17, 2026:86, 2027:207, 2028:400, 2029:650, 2030:950 };
+
+function interpolatePreset(anchors, y) {
+  if (y <= 2030) return anchors[y] || anchors[2030];
+  // Extrapolate 2031-2035: use growth rate from 2029->2030, decaying 15%/yr
+  const g2930 = (anchors[2030] / anchors[2029]) - 1;
+  let rev = anchors[2030];
+  for (let yr = 2031; yr <= y; yr++) {
+    const decay = Math.pow(0.85, yr - 2030);
+    rev *= 1 + g2930 * decay;
+  }
+  return Math.round(rev);
 }
+
 const PRESETS = {
-  bear: function(y) {
-    let rev = CURRENT_ARR;
-    for (let yr = 2026; yr <= y; yr++) {
-      rev *= 1 + decayGrowth(0.30, 0.15, yr - 2025, 10);
-    }
-    return Math.round(rev);
-  },
-  base: function(y) {
-    let rev = CURRENT_ARR;
-    for (let yr = 2026; yr <= y; yr++) {
-      rev *= 1 + decayGrowth(0.80, 0.25, yr - 2025, 10);
-    }
-    return Math.round(rev);
-  },
-  bull: function(y) {
-    let rev = CURRENT_ARR;
-    for (let yr = 2026; yr <= y; yr++) {
-      rev *= 1 + decayGrowth(1.20, 0.35, yr - 2025, 10);
-    }
-    return Math.round(rev);
-  },
+  bear: y => interpolatePreset(BEAR_ANCHORS, y),
+  base: y => interpolatePreset(BASE_ANCHORS, y),
+  bull: y => interpolatePreset(BULL_ANCHORS, y),
 };
 
 let currentPreset = 'base';
