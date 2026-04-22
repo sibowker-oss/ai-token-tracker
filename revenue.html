@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revenue Ledger — AI Ledger v2</title>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --text-bright:#f8fafc; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  /* ── Nav ── */
+  .nav-bar{display:flex;align-items:center;gap:6px;padding:12px 24px;background:#0f172a;border-bottom:2px solid #1e293b;flex-wrap:wrap;}
+  .nav-brand{font-size:15px;font-weight:700;color:#f8fafc;text-decoration:none;margin-right:12px;}
+  .nav-brand span{background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .nav-link{padding:8px 18px;border-radius:8px;background:#1e293b;color:#cbd5e1;text-decoration:none;font-size:13px;font-weight:500;border:1px solid #334155;transition:all 0.15s;}
+  .nav-link:hover{background:#334155;}
+  .nav-link.active{background:#3b82f6;color:white;border-color:#3b82f6;}
+  .nav-link.disabled{opacity:0.4;pointer-events:none;font-style:italic;}
+  .nav-scenario{margin-left:12px;display:flex;align-items:center;gap:4px;padding:4px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid #334155;}
+  .nav-scenario label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;padding:0 6px;}
+  .scenario-btn{padding:5px 12px;border-radius:6px;border:none;background:transparent;color:#94a3b8;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1px solid transparent;}
+  .scenario-btn:hover{color:#e2e8f0;background:var(--card);}
+  .scenario-btn.active{background:#3b82f6;color:white;}
+  .scenario-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .nav-logo{margin-left:auto;display:flex;align-items:center;gap:8px;text-decoration:none;color:#cbd5e1;font-size:13px;font-weight:600;opacity:0.7;transition:opacity 0.15s;}
+  .nav-logo:hover{opacity:1;}
+
+  /* ── Layout ── */
+  .container { max-width:1200px; margin:0 auto; padding:32px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:8px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:24px; line-height:1.6; }
+  .year-toggle { display:flex; gap:6px; margin-bottom:18px; flex-wrap:wrap; }
+  .year-btn { padding:8px 22px; border-radius:8px; border:1px solid var(--card-border); background:rgba(15,23,42,0.6); color:var(--text-dim); font-size:14px; font-weight:600; cursor:pointer; }
+  .year-btn:hover { border-color:var(--accent); color:var(--text); }
+  .year-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .hero-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .hero-stat { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:16px; text-align:center; }
+  .hero-stat .label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); }
+  .hero-stat .value { font-size:28px; font-weight:800; margin:4px 0; }
+  .hero-stat .detail { font-size:10px; color:var(--text-dim); }
+  .kpi-period { font-size:11px; color:var(--text-dim); letter-spacing:0.04em; text-transform:uppercase; margin-top:2px; opacity:0.7; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:20px; }
+  .card h2 { font-size:16px; margin-bottom:14px; }
+
+  /* ── Tier pills ── */
+  .tier-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;}
+  .tier-1{background:rgba(16,185,129,0.15);color:#10b981;}
+  .tier-2{background:rgba(59,130,246,0.15);color:#3b82f6;}
+  .tier-3{background:rgba(245,158,11,0.15);color:#f59e0b;}
+  .tier-4{background:rgba(239,68,68,0.15);color:#ef4444;}
+
+  /* ── Footer ── */
+  footer{text-align:center;padding:32px 0 16px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--card-border);margin-top:24px;}
+  footer a{color:var(--accent);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+
+  .mobile-scroll-hint { display:none; }
+
+  .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:left;margin-bottom:24px;}
+  .footer-grid h4{font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-bottom:6px;font-weight:700;}
+  .footer-grid a{display:block;margin-bottom:3px;font-size:12px;}
+
+  /* ── Mobile ── */
+  @media(max-width:768px) {
+    .nav-bar{padding:8px 12px;gap:4px;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,black 85%,transparent 100%);-webkit-mask-image:linear-gradient(to right,black 85%,transparent 100%);}
+    .nav-bar::-webkit-scrollbar{display:none;}
+    .nav-bar>*{flex:0 0 auto;}
+    .nav-brand{font-size:13px;margin-right:auto;}
+    .nav-link{font-size:10px;padding:6px 10px;min-height:44px;display:inline-flex;align-items:center;}
+    .nav-logo{margin-left:0;font-size:11px;gap:5px;}
+    .nav-logo svg{width:18px;height:18px;}
+    .nav-scenario{margin-left:0;width:100%;justify-content:center;}
+    .container{padding:16px 12px;}
+    .hero-grid { grid-template-columns:repeat(2,1fr); }
+    #wwhbt-grid { grid-template-columns:1fr !important; }
+    .mobile-scroll-hint { display:block; font-size:12px; color:var(--text-dim); margin-bottom:8px; }
+    .footer-grid{grid-template-columns:1fr;gap:16px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="capital.html" class="nav-link">Capital</a>
+  <a href="revenue.html" class="nav-link active">Revenue</a>
+  <a href="usage.html" class="nav-link">Usage</a>
+  <a href="methodology.html" class="nav-link">Methodology</a>
+  <a href="changelog.html" class="nav-link">Changelog</a>
+  <a href="power.html" class="nav-link disabled">Power (v3)</a>
+  <a href="about.html" class="nav-link">About</a>
+  <div class="nav-scenario">
+    <label>Scenario:</label>
+    <button class="scenario-btn" data-s="bear" onclick="setScenario('bear')" title="Current trajectory continues. Revenue grows 20-30% annually.">Bear</button>
+    <button class="scenario-btn active" data-s="base" onclick="setScenario('base')" title="Enterprise adoption picks up through 2026-27. Revenue grows 80-100% annually.">Base</button>
+    <button class="scenario-btn" data-s="bull" onclick="setScenario('bull')" title="Agent workflows drive step-change in usage. Revenue grows 200%+.">Bull</button>
+  </div>
+  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
+    Hepburn Advisory
+  </a>
+</nav>
+
+<div class="container">
+  <h1>Revenue Ledger</h1>
+  <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
+  <div class="sub" id="page-subtitle">AI-specific revenue by buyer segment, channel, provider, and cost outcome.</div>
+
+  <div class="hero-grid" id="hero-stats"></div>
+
+  <div class="card">
+    <h2 id="flow-title">Revenue Flow</h2>
+    <div class="year-toggle" id="year-toggle"></div>
+    <p class="mobile-scroll-hint">Scroll horizontally to explore the Sankey, or rotate to landscape.</p>
+    <div style="position:relative;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">
+      <canvas id="sankey" height="560"></canvas>
+    </div>
+    <div id="tier-legend" style="display:flex;flex-wrap:wrap;gap:10px;font-size:10px;color:var(--text-dim);margin-top:14px;padding:8px 12px;background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:6px;align-items:center;">
+      <strong style="color:#cbd5e1;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;">Provenance tier:</strong>
+      <span><span style="display:inline-block;background:#10b981;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">1</span> Sourced (<b>A</b> = first-party disclosure, <b>B</b> = corroborating sources)</span>
+      <span><span style="display:inline-block;background:#3b82f6;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">2</span> Derived (<b>A</b> = deterministic calc from Tier 1, <b>B</b> = triangulated)</span>
+      <span><span style="display:inline-block;background:#f59e0b;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">3</span> Projected (<b>A</b> = anchored extrapolation, <b>B</b> = interpolated, <b>C</b> = scenario assumption)</span>
+      <span><span style="display:inline-block;background:#ef4444;color:#0a0e1a;font-weight:700;padding:1px 6px;border-radius:3px;font-size:9px;">4</span> Editorial (replace ASAP)</span>
+      <span style="opacity:0.6;"> &mdash; hover any node for source citation</span>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:11px;color:var(--text-dim);line-height:1.6;">
+      <span style="color:#f59e0b;font-weight:700;font-size:13px;margin-top:-1px;">?</span>
+      <span><strong style="color:#f1f5f9;">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers &mdash; Hyperscalers clip ~20%, Trad. SaaS ~60%. That retained margin flows directly to Generated Cashflow (bottom right), bypassing Model Providers entirely. So each column is smaller than the one before it &mdash; the drop <em>is</em> the channel margin.</span>
+    </div>
+    <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
+      <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
+    </div>
+  </div>
+
+  <!-- What Would Have to Be True -->
+  <div class="card" id="wwhbt-card">
+    <h2>What Would Have to Be True</h2>
+    <p style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:16px;">Convergence signals that would confirm or disconfirm the revenue trajectory in the selected year. Each signal has a defined threshold and a current observed value.</p>
+    <div id="wwhbt-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;"></div>
+  </div>
+
+<div style="text-align:center;margin:24px 0 0;"><button class="cite-btn" data-path="/revenue" style="background:transparent;border:1px solid var(--card-border);color:var(--text-dim);padding:6px 16px;border-radius:6px;font-size:11px;cursor:pointer;">Cite this page</button></div>
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>Hepburn Advisory</h4>
+        <a href="about.html">About the firm</a>
+        <a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a>
+      </div>
+      <div>
+        <h4>The Ledger</h4>
+        <a href="capital.html">Capital</a>
+        <a href="revenue.html">Revenue</a>
+        <a href="usage.html">Usage</a>
+        <a href="power.html">Power (v3)</a>
+      </div>
+      <div>
+        <h4>Reference</h4>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+    </div>
+    <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
+    <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
+  </footer>
+</div>
+
+<script>
+// ── Scenario data ──
+// Scenario multipliers: 2025 is actual (no flex). 2026E/2027E flex by scenario.
+// Bear = current trajectory decelerates. Base = data as modeled. Bull = agent-driven acceleration.
+const SCENARIOS = {
+  bear:  { revenue: 17, label: 'Bear', growth: '20-30%', multiplier: { '2025': 1.0, '2026E': 0.55, '2027E': 0.40 } },
+  base:  { revenue: 22, label: 'Base', growth: '80-100%', multiplier: { '2025': 1.0, '2026E': 1.0, '2027E': 1.0 } },
+  bull:  { revenue: 27, label: 'Bull', growth: '200%+', multiplier: { '2025': 1.0, '2026E': 1.35, '2027E': 1.80 } }
+};
+// Bear 2026E: $64B * 0.55 = ~$35B (growth decelerates to ~2x from $17.5B)
+// Bear 2027E: $112B * 0.40 = ~$45B (growth continues at ~30% from bear-26)
+// Bull 2026E: $64B * 1.35 = ~$86B (agent workflows accelerate adoption)
+// Bull 2027E: $112B * 1.80 = ~$201B (step-change in enterprise + consumer)
+
+let currentScenario = 'base';
+
+function getScenario() {
+  const p = new URLSearchParams(location.search).get('s');
+  if (p && SCENARIOS[p]) return p;
+  return localStorage.getItem('ai-ledger-scenario') || 'base';
+}
+
+function setScenario(s) {
+  currentScenario = s;
+  localStorage.setItem('ai-ledger-scenario', s);
+  const url = new URL(location);
+  url.searchParams.set('s', s);
+  history.replaceState(null, '', url);
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === s));
+  renderYear(activeYear);
+}
+
+// ── Sankey state ──
+let sankeyData = null, activeYear = '2025';
+let allNodes = [], allFlows = [], lockedNode = null, hoveredNode = null;
+
+const COLORS = {
+  'Consumer':'#f59e0b','SME':'#3b82f6','Enterprise':'#10b981','VC/Investors':'#dc2626',
+  'Model Subs':'#f59e0b','Model API':'#3b82f6','Hyperscalers':'#06b6d4','AI Native Apps':'#10b981',
+  'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
+  'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
+  'Other Model Providers':'#475569',
+  'Inference':'#ef4444','Other Operating Costs':'#f59e0b','Generated Cashflow':'#10b981',
+};
+
+async function init() {
+  currentScenario = getScenario();
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === currentScenario));
+
+  try {
+    const r = await fetch('data/sankey-projections.json?v=' + Date.now());
+    sankeyData = await r.json();
+  } catch(e) {
+    document.querySelector('.container').innerHTML += '<div style="color:var(--red);text-align:center;padding:40px;">Error loading data: '+e.message+'</div>';
+    return;
+  }
+  let html = '';
+  for (const [yr, d] of Object.entries(sankeyData)) {
+    if (yr.startsWith('_')) continue;
+    html += '<button class="year-btn" data-yr="'+yr+'" onclick="switchYear(\''+yr+'\')">'+d.label+'</button>';
+  }
+  document.getElementById('year-toggle').innerHTML = html;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === activeYear));
+  renderYear(activeYear);
+}
+
+function switchYear(yr) {
+  activeYear = yr;
+  document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === yr));
+  lockedNode = null; hoveredNode = null;
+  renderYear(yr);
+}
+
+function tierPill(tier) {
+  if (!tier) return '';
+  let cls = 'tier-3';
+  if (tier.startsWith('1')) cls = 'tier-1';
+  else if (tier.startsWith('2')) cls = 'tier-2';
+  else if (tier.startsWith('4')) cls = 'tier-4';
+  return '<span class="tier-pill '+cls+'" style="margin-left:6px;vertical-align:middle;">'+tier+'</span>';
+}
+
+function renderYear(yr) {
+  const d = sankeyData[yr];
+  const cf = d.outcomes.find(o=>o.label.includes('Cash'))||d.outcomes[d.outcomes.length-1];
+
+  // Scenario multiplier: scale buyer/channel/provider values by scenario factor
+  // Base scenario = the data as-is. Bear/bull scale the customer revenue headline.
+  const scenarioData = SCENARIOS[currentScenario];
+  const mult = scenarioData.multiplier[yr] || 1.0;
+  const baseRevenue = d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  const revenue = baseRevenue * mult;
+
+  // VC subsidy scales inversely with revenue growth (higher revenue = less subsidy needed)
+  const baseVC = d.totalVCSubsidy || 0;
+  const vcMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 1.3 : currentScenario === 'bull' ? 0.5 : 1.0);
+  const vcSubsidy = (baseVC * vcMultiplier).toFixed(1);
+
+  // Cashflow scales with revenue scenario
+  const baseCF = cf ? cf.value : 0;
+  const cfMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 0.4 : currentScenario === 'bull' ? 2.2 : 1.0);
+  const cashflow = (baseCF * cfMultiplier).toFixed(1);
+
+  const capex = (d.infrastructureCapex || {}).value || 0;
+  const capexTier = (d.infrastructureCapex || {}).tier || '';
+  const revTier = (d._totalsProvenance || {}).totalCustomerRevenue || {};
+  const vcTier = (d._totalsProvenance || {}).totalVCSubsidy || {};
+
+  // Tier degrades for non-base scenarios on projected years
+  const scenarioTier = (yr === '2025' || currentScenario === 'base') ? '' : ' (scenario)';
+
+  let h = '';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+vcSubsidy+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+cashflow+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  document.getElementById('hero-stats').innerHTML = h;
+  document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
+
+  // Dynamic subtitles incorporating scenario
+  let subtitle = '';
+  if (yr === '2025') {
+    subtitle = '$17.5B in customer revenue and $9.4B in VC-funded operating losses across frontier AI providers.';
+  } else {
+    subtitle = scenarioData.label + ' case: $' + revenue.toFixed(0) + 'B in customer revenue. VC subsidy $' + vcSubsidy + 'B. Growth assumption: ' + scenarioData.growth + ' annually.';
+  }
+  const subtitleEl = document.getElementById('page-subtitle');
+  if (subtitleEl) subtitleEl.textContent = subtitle;
+
+  buildSankey(d);
+  renderWWHBT(d, yr);
+}
+
+// ── WWHBT (What Would Have to Be True) ──
+function renderWWHBT(d, yr) {
+  const el = document.getElementById('wwhbt-grid');
+  if (!el) return;
+
+  const signals = {
+    '2025': [
+      { title: 'Enterprise AI seat attach rate', threshold: '5% of Fortune 500 seats', observed: '~3-4% (MSFT Copilot + Salesforce Agentforce)', status: 'tracking', note: 'Microsoft reports 2M+ Copilot seats; Salesforce Agentforce at 5,000 deals (Q4 FY26 earnings).' },
+      { title: 'Frontier lab combined ARR', threshold: '$20B+ combined exit-ARR', observed: '$18-22B (OpenAI ~$12B, Anthropic ~$4.5B, Google ~$2B+)', status: 'met', note: 'OpenAI Mar 2026 press release confirms $2B/month; Anthropic court affidavit anchors $4.5B collected.' },
+      { title: 'Revenue growth rate', threshold: '50%+ YoY from 2024 baseline', observed: '~75% YoY (AI Ledger entity rollup)', status: 'met', note: '2024 estimated at ~$10B; 2025 at $17.5B customer revenue represents ~75% growth.' }
+    ],
+    '2026E': [
+      { title: 'Copilot + Agentforce combined ARR', threshold: '$8B+ by end of 2026', observed: '$3.2B (Apr 2026)', status: 'tracking', note: 'Microsoft Copilot ~$2.4B ARR (2M seats x ~$100/mo blended); Salesforce Agentforce ~$0.8B. Needs to 2.5x in 9 months.' },
+      { title: 'Enterprise seat penetration', threshold: '15%+ of addressable seats', observed: '~6-8% estimated', status: 'below', note: 'Copilot at ~2M of estimated 50M+ addressable M365 seats. Agentforce adoption remains early.' },
+      { title: 'Revenue growth compounding', threshold: '3.5x+ YoY ($17B to $64B)', observed: 'On pace if H2 ramp sustains', status: 'tracking', note: 'OpenAI alone at $24B annualised run-rate. Requires continued enterprise adoption acceleration.' }
+    ],
+    '2027E': [
+      { title: 'Copilot + Agentforce combined ARR', threshold: '$20B+ by end of 2027', observed: 'Projected from current trajectory', status: 'projected', note: 'Requires ~2.5x growth from 2026E threshold. Dependent on enterprise renewal rates and expansion.' },
+      { title: 'Enterprise seat penetration', threshold: '30%+ of addressable seats', observed: 'Projected', status: 'projected', note: 'Requires broad adoption beyond early movers. AI coding tools (Cursor, Claude Code) contribute to SME penetration.' },
+      { title: 'VC subsidy decline', threshold: 'VC share < 5% of total system', observed: 'Projected at 2.7%', status: 'projected', note: 'Requires OpenAI and Anthropic to reach near-breakeven. Burn-rate targets of 9% (Anthropic) need to hold.' }
+    ]
+  };
+
+  const yearSignals = signals[yr] || signals['2025'];
+  const statusColors = { met: '#10b981', tracking: '#3b82f6', below: '#f59e0b', projected: '#8b5cf6' };
+  const statusLabels = { met: 'Met', tracking: 'Tracking', below: 'Below pace', projected: 'Projected' };
+
+  let html = '';
+  yearSignals.forEach(sig => {
+    const col = statusColors[sig.status] || '#94a3b8';
+    html += '<div style="background:rgba(15,23,42,0.5);border:1px solid var(--card-border);border-radius:8px;padding:16px;">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+    html += '<div style="font-size:13px;font-weight:600;color:var(--text-bright);">'+sig.title+'</div>';
+    html += '<span style="display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;background:rgba('+hexToRgb(col)+',0.15);color:'+col+';">'+statusLabels[sig.status]+'</span>';
+    html += '</div>';
+    html += '<div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;"><strong style="color:#cbd5e1;">Threshold:</strong> '+sig.threshold+'</div>';
+    html += '<div style="font-size:11px;color:var(--text-dim);margin-bottom:8px;"><strong style="color:#cbd5e1;">Observed:</strong> '+sig.observed+'</div>';
+    // Progress bar
+    const pct = sig.status === 'met' ? 100 : sig.status === 'tracking' ? 55 : sig.status === 'below' ? 30 : 20;
+    html += '<div style="height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-bottom:8px;"><div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:2px;"></div></div>';
+    html += '<div style="font-size:10px;color:var(--text-dim);line-height:1.5;">'+sig.note+'</div>';
+    html += '</div>';
+  });
+
+  // Counterweight panel: bullish and bearish signals equally
+  html += '<div style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px;">';
+  // Bullish
+  html += '<div style="background:rgba(16,185,129,0.04);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:14px;">';
+  html += '<div style="font-size:11px;font-weight:700;color:#10b981;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Upside factors</div>';
+  if (yr === '2025') {
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">OpenAI revenue growing faster than any SaaS company in history. Anthropic tripling YoY. Enterprise pilots converting to production at 60%+ rates (Ramp data).</div>';
+  } else if (yr === '2026E') {
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">AI coding tools (Cursor $2B ARR, Claude Code $2.5B ARR) establishing new category. Advertising revenue ($2.5B) a net-new monetisation surface. Enterprise contract sizes growing 40% YoY (Ramp).</div>';
+  } else {
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Revenue at $112B would represent ~30% of current global SaaS market. AI-native apps replacing traditional SaaS in multiple categories. Agent-based workflows expanding addressable use cases.</div>';
+  }
+  html += '</div>';
+  // Bearish
+  html += '<div style="background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px;">';
+  html += '<div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Downside factors</div>';
+  if (yr === '2025') {
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">35% of total system revenue is VC-funded operating losses, not customer payments. Consumer churn rates unknown. Enterprise seat expansion slower than vendor guidance implies.</div>';
+  } else if (yr === '2026E') {
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">$25B VC subsidy is the highest absolute burn in the projection. Enterprise seat attach at 6-8% well below the 15% needed. Price compression on inference (OpenRouter data shows 40%+ YoY declines) pressures revenue per token.</div>';
+  } else {
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Requires sustained 75%+ growth from a $64B base. Enterprise budget cycles typically 12-18 months, limiting ramp speed. Open-source model competition may cap pricing power for frontier labs.</div>';
+  }
+  html += '</div>';
+  html += '</div>';
+
+  el.innerHTML = html;
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return r+','+g+','+b;
+}
+
+// ── Sankey rendering ──
+function buildSankey(d) {
+  const canvas = document.getElementById('sankey');
+  const ctx = canvas.getContext('2d');
+  const containerW = canvas.parentElement.clientWidth;
+  const W = Math.max(720, containerW); // ensure readable minimum width
+  const H = 560;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
+
+  const colW = Math.min(120, W*0.13);
+  const margin = 20;
+  const spacing = (W - margin*2 - colW*4) / 3;
+  const barH = 450, gap = 5, topY = 50;
+
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null}));
+  const colDefs = [
+    { label:'Who Pays', items: wrap(d.buyers) },
+    { label:'Channels', items: wrap(d.channels) },
+    { label:'Model Providers', items: wrap(d.providers) },
+    { label:'Where It Goes', items: wrap(d.outcomes) },
+  ];
+
+  const maxColTotal = Math.max(...colDefs.map(c=>c.items.reduce((s,i)=>s+i.value,0)));
+  const scale = (barH - 5*gap) / maxColTotal;
+
+  allNodes = [];
+  colDefs.forEach((col, ci) => {
+    const colTotal = col.items.reduce((s,i)=>s+i.value,0);
+    const colH = colTotal*scale + (col.items.length-1)*gap;
+    let y = topY + (barH - colH)/2;
+    const x = margin + ci*(colW + spacing);
+    col.items.forEach(item => {
+      const h = item.value * scale;
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      y += h + gap;
+    });
+  });
+
+  function N(name, col) { return allNodes.find(n=>n.name===name && (col==null||n.col===col)); }
+
+  const flowDefs = [];
+
+  // Buyers -> Channels
+  const custBuyers = allNodes.filter(n=>n.col===0 && n.name!=='VC/Investors');
+  const chNodes = allNodes.filter(n=>n.col===1);
+  const adsCh = chNodes.filter(c=>c.name==='Ads');
+  const nonAdsCh = chNodes.filter(c=>c.name!=='Ads');
+  const nonAdsChTotal = nonAdsCh.reduce((s,n)=>s+n.value,0);
+  const adsRouting = d.adsRouting || {};
+  custBuyers.forEach(buyer => {
+    const adContrib = adsRouting[buyer.name] || 0;
+    const remaining = Math.max(0, buyer.value - adContrib);
+    if(adContrib > 0) {
+      adsCh.forEach(ch => { flowDefs.push({from:buyer.name, to:ch.name, value:adContrib, fc:0, tc:1}); });
+    }
+    if(remaining > 0 && nonAdsChTotal > 0) {
+      nonAdsCh.forEach(ch => {
+        const v = remaining * (ch.value / nonAdsChTotal);
+        if(v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
+      });
+    }
+  });
+
+  // Channels -> Providers
+  const cp = d.costParams || {};
+  const INFERENCE_PCT = (cp.inferencePct != null) ? cp.inferencePct : 0.47;
+  const marginPcts = cp.marginPcts || {'Hyperscalers':0.20, 'Trad. SaaS':0.60};
+  const aiNativeIaasShare = (cp.aiNativeIaasShare != null) ? cp.aiNativeIaasShare : 0.30;
+  const rates = cp.providerRates || {};
+  const explicitVCSubsidy = cp.vcSubsidy || null;
+
+  const provNodes = allNodes.filter(n=>n.col===2);
+  const frontierNodes = provNodes.filter(n=>!n.name.includes('IaaS')&&!n.name.includes('Other'));
+  const iaasNode = N('IaaS/Open',2);
+  const otherNode = N('Other Model Providers',2);
+
+  const adsChNodeForBase = N('Ads', 1);
+  const adsBump = adsChNodeForBase ? adsChNodeForBase.value : 0;
+  const baseValue = (p) => (p.name==='OpenAI' ? Math.max(p.value - adsBump, 0) : p.value);
+  const frontierBaseTotal = frontierNodes.reduce((s,n)=>s+baseValue(n),0);
+
+  chNodes.forEach(ch => {
+    const mPct = marginPcts[ch.name]||0;
+    const pass = ch.value * (1-mPct);
+
+    if(ch.name==='Ads') {
+      flowDefs.push({from:ch.name, to:'OpenAI', value:pass, fc:1, tc:2});
+    } else if(ch.name==='IaaS & Agg.' && iaasNode) {
+      flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass, fc:1, tc:2});
+    } else if(ch.name==='AI Native Apps') {
+      if(iaasNode) flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass*aiNativeIaasShare, fc:1, tc:2});
+      frontierNodes.forEach(p => {
+        flowDefs.push({from:ch.name, to:p.name, value:pass*(1-aiNativeIaasShare)*(baseValue(p)/frontierBaseTotal), fc:1, tc:2});
+      });
+    } else if((ch.name==='Model API'||ch.name==='Model Subs') && otherNode) {
+      const recv = [...frontierNodes, otherNode];
+      const rt = recv.reduce((s,n)=>s+baseValue(n),0);
+      recv.forEach(p => { flowDefs.push({from:ch.name, to:p.name, value:pass*(baseValue(p)/rt), fc:1, tc:2}); });
+    } else {
+      frontierNodes.forEach(p => {
+        flowDefs.push({from:ch.name, to:p.name, value:pass*(baseValue(p)/frontierBaseTotal), fc:1, tc:2});
+      });
+    }
+
+    if(mPct > 0) {
+      flowDefs.push({from:ch.name, to:'Generated Cashflow', value:ch.value*mPct, fc:1, tc:3, bypass:true});
+    }
+  });
+
+  // VC -> Providers
+  const vcNode = N('VC/Investors',0);
+  if(vcNode && vcNode.value > 0) {
+    if(explicitVCSubsidy) {
+      provNodes.forEach(p => {
+        const v = explicitVCSubsidy[p.name];
+        if(v && v > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:v, fc:0, tc:2, bypass:true});
+      });
+    } else {
+      const chPass = chNodes.reduce((s,n)=>s+n.value*(1-(marginPcts[n.name]||0)),0);
+      const pt = provNodes.reduce((s,n)=>s+n.value,0);
+      provNodes.forEach(p => {
+        const costPct = INFERENCE_PCT + (rates[p.name]||0.55);
+        if(costPct < 1.0) return;
+        const share = p.value/pt;
+        const chRev = chPass * share;
+        const vcNeed = chRev * (costPct - 1.0);
+        if(vcNeed > 0.01) flowDefs.push({from:'VC/Investors', to:p.name, value:vcNeed, fc:0, tc:2, bypass:true});
+      });
+    }
+  }
+
+  // Providers -> Outcomes
+  provNodes.forEach(p => {
+    const r = rates[p.name] || 0.55;
+    const costPct = INFERENCE_PCT + r;
+    const opShare = Math.min(r, 1 - INFERENCE_PCT);
+    flowDefs.push({from:p.name, to:'Inference', value:p.value*INFERENCE_PCT, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating Costs', value:p.value*opShare, fc:2, tc:3});
+    if (costPct < 1.0) {
+      const surplus = p.value * (1.0 - costPct);
+      if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
+    }
+  });
+
+  // Convert to visual flows
+  allNodes.forEach(n => { n._out = 0; n._in = 0; });
+  allFlows = [];
+  flowDefs.sort((a,b) => (a.bypass?1:0)-(b.bypass?1:0));
+
+  flowDefs.forEach(fd => {
+    if(fd.value < 0.01) return;
+    const fromNode = N(fd.from, fd.fc);
+    const toNode = N(fd.to, fd.tc);
+    if(!fromNode || !toNode) return;
+    const flowH = fd.value * scale;
+    const lx = fromNode.x + fromNode.w;
+    const rx = toNode.x;
+    const ly = fromNode.y + fromNode._out;
+    const ry = toNode.y + toNode._in;
+    fromNode._out += flowH;
+    toNode._in += flowH;
+    allFlows.push({ from:fromNode, to:toNode, lx, rx, ly, ry, flowH, value:fd.value, bypass:fd.bypass });
+  });
+
+  renderCanvas(ctx, W);
+}
+
+function renderCanvas(ctx, W) {
+  ctx.clearRect(0,0,W,560);
+  const active = lockedNode || hoveredNode;
+  const aName = active ? active.name : null;
+
+  // Column headers
+  ctx.textAlign = 'center';
+  const labels = ['Who Pays','Channels','Model Providers','Where It Goes'];
+  const colTotals = [0,1,2,3].map(c => allNodes.filter(n=>n.col===c).reduce((s,n)=>s+n.value,0));
+  [0,1,2,3].forEach(ci => {
+    const nodes = allNodes.filter(n=>n.col===ci);
+    if(!nodes.length) return;
+    const x = nodes[0].x + nodes[0].w/2;
+    ctx.font = 'bold 13px -apple-system,sans-serif';
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillText(labels[ci], x, 18);
+    ctx.font = '11px -apple-system,sans-serif';
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('$'+colTotals[ci].toFixed(1)+'B', x, 33);
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(nodes[0].x, 38); ctx.lineTo(nodes[0].x+nodes[0].w, 38); ctx.stroke();
+  });
+  ctx.textAlign = 'left';
+
+  // Flows
+  allFlows.forEach(f => {
+    const connected = aName && (f.from.name===aName || f.to.name===aName);
+    const dimmed = aName && !connected;
+    ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.5 : 0.18;
+    ctx.fillStyle = COLORS[f.from.name] || '#475569';
+    ctx.beginPath();
+    const cp = (f.rx - f.lx) * 0.4;
+    ctx.moveTo(f.lx, f.ly);
+    ctx.bezierCurveTo(f.lx+cp, f.ly, f.rx-cp, f.ry, f.rx, f.ry);
+    ctx.lineTo(f.rx, f.ry+f.flowH);
+    ctx.bezierCurveTo(f.rx-cp, f.ry+f.flowH, f.lx+cp, f.ly+f.flowH, f.lx, f.ly+f.flowH);
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+
+  const tierColor = (t) => {
+    if(!t) return '#475569';
+    if(t.startsWith('1')) return '#10b981';
+    if(t.startsWith('2')) return '#3b82f6';
+    if(t.startsWith('3')) return '#f59e0b';
+    if(t.startsWith('4')) return '#ef4444';
+    return '#475569';
+  };
+
+  // Nodes
+  allNodes.forEach(n => {
+    const isActive = n.name === aName;
+    const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
+    ctx.globalAlpha = dimmed ? 0.25 : 1;
+    ctx.fillStyle = COLORS[n.name] || '#475569';
+    ctx.beginPath(); ctx.roundRect(n.x, n.y, n.w, Math.max(n.h,2), 4); ctx.fill();
+    if(isActive) { ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke(); }
+    if(n.h > 16) {
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 9px -apple-system,sans-serif';
+      let label = n.name;
+      while(ctx.measureText(label).width > n.w-6 && label.length>3) label = label.slice(0,-1);
+      ctx.fillText(label, n.x+3, n.y+n.h/2-2);
+      ctx.font = '9px -apple-system,sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      const vt = '$'+n.value.toFixed(n.value<10?1:0)+'B';
+      ctx.fillText(vt, n.x+3, n.y+n.h/2+10);
+    }
+    // Tier badge
+    if(n.tier && n.h >= 10) {
+      const bw = 14, bh = 9;
+      ctx.fillStyle = tierColor(n.tier);
+      ctx.beginPath(); ctx.roundRect(n.x + n.w - bw - 1, n.y + 1, bw, bh, 2); ctx.fill();
+      ctx.fillStyle = '#0a0e1a';
+      ctx.font = 'bold 7px -apple-system,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.tier, n.x + n.w - bw/2 - 1, n.y + bh - 1);
+      ctx.textAlign = 'left';
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // Tooltip panel
+  const panel = document.getElementById('tooltip-panel');
+  if(active && panel) {
+    const inflows = allFlows.filter(f=>f.to.name===active.name);
+    const outflows = allFlows.filter(f=>f.from.name===active.name);
+    const badge = active.tier
+      ? '<span style="display:inline-block;background:'+tierColor(active.tier)+';color:#0a0e1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;">TIER '+active.tier+'</span>'
+      : '';
+    let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;">';
+    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div>';
+    if(active.src) {
+      html += '<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:4px;max-width:240px;">'+active.src+'</div>';
+    }
+    html += '</div>';
+    if(inflows.length) {
+      const inTotal = inflows.reduce((s,f)=>s+f.value,0);
+      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows $'+inTotal.toFixed(1)+'B</div>';
+      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '</div>';
+    }
+    if(outflows.length) {
+      const outTotal = outflows.reduce((s,f)=>s+f.value,0);
+      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows $'+outTotal.toFixed(1)+'B</div>';
+      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '</div>';
+    }
+    html += '</div>';
+    panel.innerHTML = html;
+  } else if(panel) {
+    panel.innerHTML = '<span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>';
+  }
+}
+
+// Mouse interaction
+const canvas = document.getElementById('sankey');
+canvas.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
+  let found = null;
+  for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
+  if(found !== hoveredNode) { hoveredNode=found; canvas.style.cursor=found?'pointer':'default'; renderCanvas(canvas.getContext('2d'),canvas.width/(window.devicePixelRatio||1)); }
+});
+canvas.addEventListener('click', e => {
+  const r = canvas.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
+  let found = null;
+  for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
+  lockedNode = (found && lockedNode && found.name===lockedNode.name) ? null : found;
+  renderCanvas(canvas.getContext('2d'),canvas.width/(window.devicePixelRatio||1));
+});
+canvas.addEventListener('mouseleave', () => {
+  if(hoveredNode && !lockedNode) { hoveredNode=null; renderCanvas(canvas.getContext('2d'),canvas.width/(window.devicePixelRatio||1)); }
+});
+
+init();
+
+// Resize handler — redraw Sankey on viewport change
+let _resizeTimer;
+window.addEventListener('resize', () => { clearTimeout(_resizeTimer); _resizeTimer = setTimeout(init, 150); });
+window.addEventListener('orientationchange', () => setTimeout(init, 200));
+</script>
+<script>
+document.querySelectorAll('.cite-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const path = btn.dataset.path;
+    const text = 'Hepburn Advisory, "The AI Ledger — ' + path.slice(1) + '," 2026. https://ai-index.hepburnadvisory.com.au' + path;
+    navigator.clipboard.writeText(text);
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = 'Cite this page', 2000);
+  });
+});
+</script>
+</body>
+</html>
