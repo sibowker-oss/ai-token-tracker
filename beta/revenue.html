@@ -385,7 +385,11 @@ function buildSankey(d) {
   const canvas = document.getElementById('sankey');
   const ctx = canvas.getContext('2d');
   const W = canvas.parentElement.clientWidth;
-  canvas.width = W; canvas.height = 560;
+  const H = 560;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.scale(dpr, dpr);
 
   const colW = Math.min(120, W*0.13);
   const margin = 20;
@@ -668,7 +672,7 @@ canvas.addEventListener('mousemove', e => {
   const mx = e.clientX-r.left, my = e.clientY-r.top;
   let found = null;
   for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
-  if(found !== hoveredNode) { hoveredNode=found; canvas.style.cursor=found?'pointer':'default'; renderCanvas(canvas.getContext('2d'),canvas.width); }
+  if(found !== hoveredNode) { hoveredNode=found; canvas.style.cursor=found?'pointer':'default'; renderCanvas(canvas.getContext('2d'),canvas.width/(window.devicePixelRatio||1)); }
 });
 canvas.addEventListener('click', e => {
   const r = canvas.getBoundingClientRect();
@@ -676,10 +680,10 @@ canvas.addEventListener('click', e => {
   let found = null;
   for(const n of allNodes) { if(mx>=n.x && mx<=n.x+n.w && my>=n.y && my<=n.y+n.h) { found=n; break; } }
   lockedNode = (found && lockedNode && found.name===lockedNode.name) ? null : found;
-  renderCanvas(canvas.getContext('2d'),canvas.width);
+  renderCanvas(canvas.getContext('2d'),canvas.width/(window.devicePixelRatio||1));
 });
 canvas.addEventListener('mouseleave', () => {
-  if(hoveredNode && !lockedNode) { hoveredNode=null; renderCanvas(canvas.getContext('2d'),canvas.width); }
+  if(hoveredNode && !lockedNode) { hoveredNode=null; renderCanvas(canvas.getContext('2d'),canvas.width/(window.devicePixelRatio||1)); }
 });
 
 init();
