@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Usage Ledger — The AI Ledger v2</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg:#0a0e1a; --card:#111827; --card-border:#1e293b;
+    --text:#e2e8f0; --text-dim:#94a3b8; --text-bright:#f8fafc;
+    --accent:#3b82f6; --accent2:#8b5cf6; --accent3:#06b6d4;
+    --green:#10b981; --orange:#f59e0b; --red:#ef4444; --pink:#ec4899;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;}
+
+  /* ── Nav ── */
+  .nav-bar{display:flex;align-items:center;gap:6px;padding:12px 24px;background:#0f172a;border-bottom:2px solid #1e293b;flex-wrap:wrap;}
+  .nav-brand{font-size:15px;font-weight:700;color:var(--text-bright);text-decoration:none;margin-right:12px;}
+  .nav-brand span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .nav-link{padding:8px 18px;border-radius:8px;background:#1e293b;color:#cbd5e1;text-decoration:none;font-size:13px;font-weight:500;border:1px solid #334155;transition:all 0.15s;}
+  .nav-link:hover{background:#334155;}
+  .nav-link.active{background:var(--accent);color:white;border-color:var(--accent);}
+  .nav-link.disabled{opacity:0.4;pointer-events:none;font-style:italic;}
+  .nav-scenario{margin-left:12px;display:flex;align-items:center;gap:4px;padding:4px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid #334155;}
+  .nav-scenario label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;padding:0 6px;}
+  .scenario-btn{padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1px solid transparent;}
+  .scenario-btn:hover{color:var(--text);background:var(--card);}
+  .scenario-btn.active{background:var(--accent);color:white;}
+  .scenario-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .nav-logo{margin-left:auto;display:flex;align-items:center;gap:8px;text-decoration:none;color:#cbd5e1;font-size:13px;font-weight:600;opacity:0.7;transition:opacity 0.15s;}
+  .nav-logo:hover{opacity:1;}
+
+  .container{max-width:1400px;margin:0 auto;padding:24px;}
+
+  /* ── Hero ── */
+  .hero-strip{text-align:center;padding:24px 0 20px;border-bottom:1px solid var(--card-border);margin-bottom:24px;}
+  .hero-strip h1{font-size:28px;font-weight:700;margin-bottom:4px;}
+  .hero-strip .sub{font-size:13px;color:var(--text-dim);}
+  .hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0;}
+  .hero-stat{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:20px;text-align:center;}
+  .hero-stat .label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);}
+  .hero-stat .value{font-size:28px;font-weight:800;margin:4px 0;}
+  .hero-stat .detail{font-size:11px;color:var(--text-dim);}
+  .kpi-period{font-size:11px;color:var(--text-dim);letter-spacing:0.04em;text-transform:uppercase;margin-top:2px;opacity:0.7;}
+  .tier-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;}
+  .tier-2a{background:rgba(59,130,246,0.15);color:#3b82f6;}
+  .tier-3a{background:rgba(245,158,11,0.15);color:#f59e0b;}
+
+  /* ── Filter Bar ── */
+  .filter-bar{position:sticky;top:0;z-index:100;background:rgba(17,24,39,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--card-border);padding:12px 0;margin-bottom:24px;}
+  .filter-bar.collapsed{max-height:0;overflow:hidden;padding:0;border:none;margin:0;}
+  .filter-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+  .filter-group:last-child{margin-bottom:0;}
+  .filter-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);min-width:70px;font-weight:600;}
+  .filter-pill{padding:4px 12px;border-radius:16px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:11px;cursor:pointer;transition:all 0.15s;user-select:none;}
+  .filter-pill:hover{border-color:var(--accent);color:var(--text);}
+  .filter-pill.active{background:var(--accent);color:white;border-color:var(--accent);}
+  .filter-pill.active[data-dim="regions"]{background:var(--accent2);border-color:var(--accent2);}
+  .filter-pill.active[data-dim="industries"]{background:var(--green);border-color:var(--green);}
+  .filter-pill.active[data-dim="useCases"]{background:var(--orange);border-color:var(--orange);}
+  .filter-pill.active[data-dim="demandTypes"]{background:var(--pink);border-color:var(--pink);}
+  .filter-pill.active[data-dim="modelType"]{background:#8b5cf6;border-color:#8b5cf6;}
+  .filter-reset{padding:4px 10px;border-radius:16px;border:1px solid rgba(239,68,68,0.3);background:transparent;color:var(--red);font-size:10px;cursor:pointer;}
+
+  /* ── Cards ── */
+  .card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:20px;margin-bottom:20px;}
+  .card h2{font-size:16px;margin-bottom:12px;color:var(--text);}
+  .card h2 .sub{font-size:12px;font-weight:400;color:var(--text-dim);}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .chart-wrap{position:relative;height:320px;}
+  .chart-wrap-tall{position:relative;height:400px;}
+
+  /* ── Tab group ── */
+  .tab-group{display:flex;gap:4px;margin-bottom:16px;}
+  .tab-btn{padding:8px 18px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .tab-btn:hover{border-color:var(--accent);color:var(--text);}
+  .tab-btn.active{background:var(--accent);color:white;border-color:var(--accent);}
+  .tab-pane{display:none;}
+  .tab-pane.active{display:block;}
+
+  /* ── Matrix table ── */
+  .matrix-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .matrix-table th{padding:10px;background:#1e3a5f;color:white;text-align:center;border:1px solid #334155;width:22%;}
+  .matrix-table th:first-child{background:#1e293b;text-align:left;width:12%;}
+  .matrix-table td{max-width:0;overflow-wrap:break-word;padding:10px;border:1px solid #334155;vertical-align:top;}
+  .matrix-cell-rev{font-size:16px;font-weight:800;}
+  .matrix-cell-conv{font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600;}
+
+  /* ── Detail tables ── */
+  table.detail{width:100%;border-collapse:collapse;}
+  table.detail th{text-align:left;padding:8px 10px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);border-bottom:1px solid var(--card-border);}
+  table.detail td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:12px;}
+
+  /* ── Badges ── */
+  .badge{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;}
+  .badge-openai{background:rgba(16,163,127,0.15);color:#10a37f;}
+  .badge-anthropic{background:rgba(217,119,6,0.15);color:#d97706;}
+  .badge-google{background:rgba(66,133,244,0.15);color:#4285f4;}
+  .badge-meta{background:rgba(96,165,250,0.15);color:#60a5fa;}
+  .badge-deepseek{background:rgba(167,139,250,0.15);color:#a78bfa;}
+
+  /* ── WWHBT Panel ── */
+  .wwhbt{background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:12px;padding:24px;margin-top:24px;}
+  .wwhbt h3{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--text-bright);}
+  .signal-row{display:grid;grid-template-columns:1fr auto auto auto;gap:16px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+  .signal-row:last-child{border-bottom:none;}
+  .signal-condition{font-size:13px;font-weight:500;}
+  .signal-current{font-size:14px;font-weight:700;text-align:right;}
+  .signal-target{font-size:12px;color:var(--text-dim);text-align:right;}
+  .signal-pace{padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;text-align:center;}
+  .pace-on-track{background:rgba(16,185,129,0.15);color:#10b981;}
+  .pace-lagging{background:rgba(239,68,68,0.15);color:#ef4444;}
+  .pace-ahead{background:rgba(59,130,246,0.15);color:#3b82f6;}
+
+  footer{text-align:center;padding:32px 0 16px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--card-border);margin-top:32px;}
+  footer a{color:var(--accent);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+
+  .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:left;margin-bottom:24px;}
+  .footer-grid h4{font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-bottom:6px;font-weight:700;}
+  .footer-grid a{display:block;margin-bottom:3px;font-size:12px;}
+
+  @media(max-width:768px){
+    .nav-bar{padding:8px 12px;gap:4px;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,black 85%,transparent 100%);-webkit-mask-image:linear-gradient(to right,black 85%,transparent 100%);}
+    .nav-bar::-webkit-scrollbar{display:none;}
+    .nav-bar>*{flex:0 0 auto;}
+    .nav-brand{font-size:13px;margin-right:auto;}
+    .nav-link{font-size:10px;padding:6px 10px;min-height:44px;display:inline-flex;align-items:center;}
+    .nav-logo{margin-left:0;font-size:11px;gap:5px;}
+    .nav-logo svg{width:18px;height:18px;}
+    .nav-scenario{margin-left:0;width:100%;justify-content:center;}
+    .container{padding:16px 12px;}
+    .hero-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .hero-stat{padding:14px 10px;}
+    .hero-stat .value{font-size:22px;}
+    .hero-stat .label{font-size:10px;}
+    .grid-2{grid-template-columns:1fr;}
+    .chart-wrap,.chart-wrap-tall{min-height:250px;height:300px;max-width:100%;}
+    .card{padding:14px;margin-bottom:14px;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    .card h2{font-size:14px;}
+    .matrix-table{font-size:11px;min-width:600px;}
+    .signal-row{grid-template-columns:1fr;gap:8px;}
+    .filter-bar{position:relative;top:auto;padding:8px 0;max-height:120px;overflow-y:auto;}
+    .filter-pill{font-size:9px;padding:4px 8px;min-height:36px;display:inline-flex;align-items:center;}
+    .mobile-hint{display:block !important;text-align:center;font-size:11px;color:var(--text-dim);font-style:italic;padding:6px 0;}
+    .chart-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+    .chart-wrap canvas{min-width:0;max-width:100%;}
+    .tab-pane .chart-wrap{height:280px;}
+    table.detail{min-width:600px;}
+    .footer-grid{grid-template-columns:1fr;gap:16px;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="capital.html" class="nav-link">Capital</a>
+  <a href="revenue.html" class="nav-link">Revenue</a>
+  <a href="usage.html" class="nav-link active">Usage</a>
+  <a href="methodology.html" class="nav-link">Methodology</a>
+  <a href="changelog.html" class="nav-link">Changelog</a>
+  <a href="power.html" class="nav-link disabled">Power (v3)</a>
+  <a href="about.html" class="nav-link">About</a>
+  <div class="nav-scenario">
+    <label>Scenario:</label>
+    <button class="scenario-btn" data-s="bear" onclick="setScenario('bear')" title="Current trajectory continues. Revenue grows 20-30% annually.">Bear</button>
+    <button class="scenario-btn active" data-s="base" onclick="setScenario('base')" title="Enterprise adoption picks up through 2026-27. Revenue grows 80-100% annually.">Base</button>
+    <button class="scenario-btn" data-s="bull" onclick="setScenario('bull')" title="Agent workflows drive step-change in usage. Revenue grows 200%+.">Bull</button>
+  </div>
+  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
+    Hepburn Advisory
+  </a>
+</nav>
+
+<div class="container">
+
+<!-- ── HERO ── -->
+<section class="hero-strip">
+  <h1>Usage Ledger</h1>
+  <div class="sub">Token volume, pricing, model mix, and demand quality across the AI inference economy.</div>
+  <div id="data-refresh" style="font-size:10px;color:var(--accent);margin-top:4px;font-weight:600;"></div>
+  <div class="hero-grid" id="hero-stats"></div>
+  <div id="token-reconciliation" style="font-size:11px;color:var(--text-dim);text-align:center;margin-top:10px;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;"></div>
+  <p class="reconciliation-note" style="font-size:11px;color:var(--text-dim);line-height:1.6;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;margin-top:6px;text-align:center;">
+    <strong>Revenue reconciliation:</strong> This page shows combined provider ARR (annualised Q4 run-rate, includes inference from ad-platform workloads). The home page shows $22B customer revenue (CY23–25 cumulative, collected). See <a href="methodology.html" style="color:var(--accent);">Methodology</a> for the reconciliation.
+  </p>
+</section>
+
+<!-- ── FILTER BAR ── -->
+<div style="text-align:center;margin-bottom:8px;">
+  <button id="filter-toggle" onclick="document.getElementById('filter-bar').classList.toggle('collapsed');this.textContent=document.getElementById('filter-bar').classList.contains('collapsed')?'Show Filters \u25BC':'Hide Filters \u25B2'" style="padding:6px 18px;border-radius:8px;border:1px solid var(--card-border);background:var(--card);color:var(--text-dim);font-size:12px;font-weight:600;cursor:pointer;">Show Filters &#9660;</button>
+</div>
+<div class="filter-bar collapsed" id="filter-bar"></div>
+
+<!-- ══════ SECTION 1: TOKEN DEMAND QUALITY MATRIX (elevated) ══════ -->
+<div class="card">
+  <h2>Token Demand Quality Matrix <span class="sub">&mdash; who buys &times; how they buy. Actual 2025 collected revenue. Not all "$1 of AI revenue" is equal.</span></h2>
+  <div class="mobile-hint" style="display:none;">Scroll horizontally to view full table.</div>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="matrix-table" id="demand-matrix"></table>
+  </div>
+</div>
+
+<!-- ══════ SECTION 2: PROVIDER VOLUME & ARR ══════ -->
+<div class="card">
+  <h2>Token Volume &amp; ARR by Provider <span class="sub">&mdash; click bars to filter</span></h2>
+  <div id="insight-provider" style="font-size:12px;color:var(--text-dim);margin-bottom:10px;font-style:italic;"></div>
+  <div class="chart-wrap"><canvas id="chart-provider"></canvas></div>
+</div>
+
+<!-- ══════ SECTION 3: DEMAND COMPOSITION (tabbed) ══════ -->
+<div class="card">
+  <h2>Demand Composition</h2>
+  <div class="tab-group">
+    <button class="tab-btn active" onclick="switchTab('biz-consumer',this)">Consumer / Business</button>
+    <button class="tab-btn" onclick="switchTab('region',this)">Region</button>
+    <button class="tab-btn" onclick="switchTab('industry',this)">Industry</button>
+    <button class="tab-btn" onclick="switchTab('usecase',this)">Use Case</button>
+    <button class="tab-btn" onclick="switchTab('demand-type',this)">Demand Type</button>
+  </div>
+  <div id="tab-biz-consumer" class="tab-pane active">
+    <div class="chart-wrap" style="width:100%;min-width:0;"><canvas id="chart-biz-consumer"></canvas></div>
+  </div>
+  <div id="tab-region" class="tab-pane">
+    <div class="chart-wrap" style="width:100%;min-width:0;"><canvas id="chart-region"></canvas></div>
+  </div>
+  <div id="tab-industry" class="tab-pane">
+    <div class="chart-wrap" style="width:100%;min-width:0;"><canvas id="chart-industry"></canvas></div>
+  </div>
+  <div id="tab-usecase" class="tab-pane">
+    <div class="chart-wrap" style="width:100%;min-width:0;"><canvas id="chart-usecase"></canvas></div>
+  </div>
+  <div id="tab-demand-type" class="tab-pane">
+    <div class="chart-wrap" style="width:100%;min-width:0;"><canvas id="chart-demand"></canvas></div>
+  </div>
+</div>
+
+<!-- ══════ SECTION 4: PRICING & MODEL MIX ══════ -->
+<div class="card">
+  <h2>Model Pricing &amp; Estimated Volume</h2>
+  <div class="mobile-hint" style="display:none;">Rotate to landscape or scroll horizontally to view full table.</div>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="detail" id="model-table"></table>
+  </div>
+</div>
+
+<!-- ══════ SECTION 5: ENTERPRISE REALITY CHECK ══════ -->
+<div class="card">
+  <h2>Enterprise AI Adoption <span class="sub">&mdash; Booked ARR vs. actual token consumption</span></h2>
+  <div class="mobile-hint" style="display:none;">Rotate to landscape or scroll horizontally to view full table.</div>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="detail" id="enterprise-table"></table>
+  </div>
+</div>
+
+<!-- ══════ SECTION 6: TOP CONSUMERS ══════ -->
+<div class="card">
+  <h2>Top Token Consumers <span class="sub" id="consumer-filter-label"></span></h2>
+  <div id="consumer-stats" style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;"></div>
+  <div id="consumer-filters" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;"></div>
+  <div class="mobile-hint" style="display:none;">Rotate to landscape or scroll horizontally to view full table.</div>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+    <table class="detail" id="consumer-table"></table>
+  </div>
+</div>
+
+<!-- ══════ SECTION 7: WHAT WOULD HAVE TO BE TRUE ══════ -->
+<div class="wwhbt">
+  <h3>What would have to be true</h3>
+  <div style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">Data points that would confirm or challenge the usage growth trajectory.</div>
+  <div class="signal-row">
+    <div class="signal-condition">Token volume growth compounding &ge; 80% YoY</div>
+    <div class="signal-current" style="color:var(--green);">~120% YoY</div>
+    <div class="signal-target">Target: &ge;80%</div>
+    <div class="signal-pace pace-ahead">Ahead</div>
+  </div>
+  <div class="signal-row">
+    <div class="signal-condition">Paid vs. free token share &ge; 35%</div>
+    <div class="signal-current" style="color:var(--orange);">~28%</div>
+    <div class="signal-target">Target: &ge;35%</div>
+    <div class="signal-pace pace-lagging">Lagging</div>
+  </div>
+  <div class="signal-row">
+    <div class="signal-condition">Price-per-token decline slowing (cost floor approaching)</div>
+    <div class="signal-current" style="color:var(--accent);">~10x/yr decline</div>
+    <div class="signal-target">Threshold: &le;3x/yr</div>
+    <div class="signal-pace pace-lagging">Lagging</div>
+  </div>
+  <div style="font-size:10px;color:var(--text-dim);margin-top:12px;">Sources: OpenRouter API, provider earnings calls, AI Ledger multi-model consensus. <a href="methodology.html" style="color:var(--accent);">See methodology &rarr;</a></div>
+</div>
+
+<div style="text-align:center;margin:24px 0 0;"><button class="cite-btn" data-path="/usage" style="background:transparent;border:1px solid var(--card-border);color:var(--text-dim);padding:6px 16px;border-radius:6px;font-size:11px;cursor:pointer;">Cite this page</button></div>
+<footer>
+    <div class="footer-grid">
+      <div>
+        <h4>Hepburn Advisory</h4>
+        <a href="about.html">About the firm</a>
+        <a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a>
+      </div>
+      <div>
+        <h4>The Ledger</h4>
+        <a href="capital.html">Capital</a>
+        <a href="revenue.html">Revenue</a>
+        <a href="usage.html">Usage</a>
+        <a href="power.html">Power (v3)</a>
+      </div>
+      <div>
+        <h4>Reference</h4>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Changelog</a>
+      </div>
+    </div>
+    <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
+    <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
+</footer>
+
+</div>
+
+<script>
+// ── Scenario infrastructure ──
+function getScenario() {
+  const p = new URLSearchParams(location.search).get('s');
+  if (p && ['bear','base','bull'].includes(p)) return p;
+  return localStorage.getItem('ai-ledger-scenario') || 'base';
+}
+function setScenario(s) {
+  localStorage.setItem('ai-ledger-scenario', s);
+  const url = new URL(location);
+  url.searchParams.set('s', s);
+  history.replaceState(null, '', url);
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === s));
+}
+(function(){ const s = getScenario(); document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === s)); })();
+
+// ── Tab switching ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  // Trigger chart resize for hidden canvases
+  const chartKey = id === 'biz-consumer' ? 'bizConsumer' : id === 'demand-type' ? 'demand' : id;
+  if (charts[chartKey]) charts[chartKey].resize();
+}
+
+// ── DATA ──
+let PROVIDERS, REGIONS, INDUSTRIES, USE_CASES, CROSS_WEIGHTS;
+let DEMAND_MATRIX, ENTERPRISE_REALITY, TOP_CONSUMERS, MODELS;
+let DEMAND_TYPES, DEMAND_WEIGHTS;
+let SANKEY_BC_FLOWS = {};
+
+const filters = { providers: [], providerRegion: [], regions: [], industries: [], useCases: [], demandTypes: [] };
+let modelTypeFilter = 'all';
+const charts = {};
+
+async function loadDashboardData() {
+  try {
+    const resp = await fetch('site-data.json?v=' + Date.now());
+    if (!resp.ok) throw new Error('Failed to load site-data.json: ' + resp.status);
+    const all = await resp.json();
+    const d = all.dashboard;
+
+    PROVIDERS = d.providers;
+    REGIONS = d.regions;
+    INDUSTRIES = d.industries;
+    USE_CASES = d.useCases;
+    CROSS_WEIGHTS = d.crossWeights;
+    DEMAND_MATRIX = d.demandMatrix;
+    ENTERPRISE_REALITY = d.enterpriseReality;
+    TOP_CONSUMERS = d.topConsumers;
+    MODELS = d.models;
+    DEMAND_TYPES = d.demandTypes;
+    DEMAND_WEIGHTS = d.demandWeights;
+
+    if (all.sankey && all.sankey.flows) {
+      SANKEY_BC_FLOWS = {};
+      all.sankey.flows.forEach(f => {
+        if (f[0] === 0 && f[2] === 1) {
+          const key = f[1] + ',' + f[3];
+          SANKEY_BC_FLOWS[key] = (SANKEY_BC_FLOWS[key] || 0) + f[4];
+        }
+      });
+    }
+
+    if (all.meta && all.meta.generatedAt) {
+      const el = document.getElementById('data-refresh');
+      if (el) el.textContent = 'Data refreshed: ' + all.meta.generatedAt.replace('T', ' ').substring(0, 19) + ' UTC';
+    }
+  } catch(e) {
+    document.getElementById('hero-stats').innerHTML = '<div class="hero-stat" style="grid-column:1/-1;"><div class="label" style="color:var(--red);">Failed to load data</div></div>';
+    return;
+  }
+
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.borderColor = '#1e293b';
+  Chart.defaults.font.family = '-apple-system,BlinkMacSystemFont,sans-serif';
+
+  buildFilterBar();
+  updateAll();
+}
+
+const darkGrid = { color: 'rgba(255,255,255,0.05)' };
+const noGrid = { display: false };
+
+function getFilteredProviderData() {
+  let activeProviders = filters.providers.length > 0 ? filters.providers : Object.keys(PROVIDERS);
+  if (modelTypeFilter !== 'all') activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
+  if (filters.providerRegion.length > 0) activeProviders = activeProviders.filter(p => { const r = PROVIDERS[p]?.region || 'US'; return filters.providerRegion.includes(r) || r === 'Mixed'; });
+
+  const result = {};
+  activeProviders.forEach(p => {
+    let t = PROVIDERS[p].tokens, r = PROVIDERS[p].rev;
+    if (filters.regions.length > 0) { const s = filters.regions.reduce((a, rg) => a + (CROSS_WEIGHTS[p]?.regions?.[rg] || 0), 0); t *= s; r *= s; }
+    if (filters.industries.length > 0) { const s = filters.industries.reduce((a, ind) => a + (CROSS_WEIGHTS[p]?.industries?.[ind] || 0), 0); t *= s; r *= s; }
+    if (filters.useCases.length > 0) { const s = filters.useCases.reduce((a, uc) => a + (CROSS_WEIGHTS[p]?.useCases?.[uc] || 0), 0); t *= s; r *= s; }
+    if (filters.demandTypes.length > 0) { const s = filters.demandTypes.reduce((a, dt) => a + (DEMAND_WEIGHTS[p]?.[dt] || 0), 0); t *= s; r *= s; }
+    result[p] = { tokens: t, rev: r, color: PROVIDERS[p].color, growth: PROVIDERS[p].growth };
+  });
+  return result;
+}
+
+function getFilteredDimensionData(dimObj, dimKey) {
+  let activeProviders = filters.providers.length > 0 ? filters.providers : Object.keys(PROVIDERS);
+  if (modelTypeFilter !== 'all') activeProviders = activeProviders.filter(p => PROVIDERS[p]?.modelType === modelTypeFilter);
+  if (filters.providerRegion.length > 0) activeProviders = activeProviders.filter(p => { const r = PROVIDERS[p]?.region || 'US'; return filters.providerRegion.includes(r) || r === 'Mixed'; });
+
+  const result = {};
+  Object.keys(dimObj).forEach(key => {
+    let weighted = 0;
+    activeProviders.forEach(p => { weighted += PROVIDERS[p].tokens * (CROSS_WEIGHTS[p]?.[dimKey]?.[key] || 0); });
+    let scale = 1;
+    if (dimKey !== 'regions' && filters.regions.length > 0) { let s = 0; activeProviders.forEach(p => { filters.regions.forEach(r => { s += CROSS_WEIGHTS[p]?.regions?.[r] || 0; }); }); scale *= s / activeProviders.length; }
+    if (dimKey !== 'industries' && filters.industries.length > 0) { let s = 0; activeProviders.forEach(p => { filters.industries.forEach(i => { s += CROSS_WEIGHTS[p]?.industries?.[i] || 0; }); }); scale *= s / activeProviders.length; }
+    if (dimKey !== 'useCases' && filters.useCases.length > 0) { let s = 0; activeProviders.forEach(p => { filters.useCases.forEach(u => { s += CROSS_WEIGHTS[p]?.useCases?.[u] || 0; }); }); scale *= s / activeProviders.length; }
+    if (filters.demandTypes.length > 0) { let s = 0; activeProviders.forEach(p => { filters.demandTypes.forEach(dt => { s += DEMAND_WEIGHTS[p]?.[dt] || 0; }); }); scale *= s / activeProviders.length; }
+    result[key] = { tokens: weighted * scale, color: dimObj[key].color };
+  });
+  return result;
+}
+
+function buildFilterBar() {
+  const bar = document.getElementById('filter-bar');
+  const mtGroup = document.createElement('div');
+  mtGroup.className = 'filter-group';
+  mtGroup.innerHTML = '<span class="filter-label">Model Type</span>';
+  ['All', 'Frontier', 'Open'].forEach(label => {
+    const pill = document.createElement('button');
+    pill.className = 'filter-pill' + (label === 'All' ? ' active' : '');
+    pill.textContent = label;
+    pill.dataset.dim = 'modelType';
+    pill.dataset.value = label.toLowerCase();
+    pill.onclick = () => { modelTypeFilter = label.toLowerCase(); document.querySelectorAll('.filter-pill[data-dim="modelType"]').forEach(p => p.classList.remove('active')); pill.classList.add('active'); updateAll(); };
+    mtGroup.appendChild(pill);
+  });
+  bar.appendChild(mtGroup);
+
+  const dims = [
+    { key: 'providers', label: 'Provider', items: Object.keys(PROVIDERS) },
+    { key: 'providerRegion', label: 'Provider HQ', items: ['US', 'Asia', 'Europe'] },
+    { key: 'regions', label: 'Demand Region', items: Object.keys(REGIONS) },
+    { key: 'industries', label: 'Industry', items: Object.keys(INDUSTRIES) },
+    { key: 'useCases', label: 'Use Case', items: Object.keys(USE_CASES) },
+    { key: 'demandTypes', label: 'Demand Type', items: Object.keys(DEMAND_TYPES) },
+  ];
+
+  dims.forEach(d => {
+    const group = document.createElement('div');
+    group.className = 'filter-group';
+    group.innerHTML = '<span class="filter-label">' + d.label + '</span>';
+    d.items.forEach(item => {
+      const pill = document.createElement('button');
+      pill.className = 'filter-pill';
+      pill.textContent = item;
+      pill.dataset.dim = d.key;
+      pill.dataset.value = item;
+      pill.onclick = () => toggleFilter(d.key, item, pill);
+      group.appendChild(pill);
+    });
+    const reset = document.createElement('button');
+    reset.className = 'filter-reset';
+    reset.textContent = '\u2715 Clear';
+    reset.onclick = () => clearFilter(d.key);
+    group.appendChild(reset);
+    bar.appendChild(group);
+  });
+}
+
+function toggleFilter(dim, value, pill) {
+  const idx = filters[dim].indexOf(value);
+  if (idx >= 0) { filters[dim].splice(idx, 1); pill.classList.remove('active'); }
+  else { filters[dim].push(value); pill.classList.add('active'); }
+  updateAll();
+}
+
+function clearFilter(dim) {
+  filters[dim] = [];
+  document.querySelectorAll('.filter-pill[data-dim="' + dim + '"]').forEach(p => p.classList.remove('active'));
+  updateAll();
+}
+
+// ── RENDER FUNCTIONS ──
+function updateHeroStats() {
+  const data = getFilteredProviderData();
+  const totalTokens = Object.values(data).reduce((a, d) => a + d.tokens, 0);
+  const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
+  const provCount = Object.keys(data).length;
+  const sorted = Object.entries(data).sort((a,b) => b[1].rev - a[1].rev);
+  const top3Rev = sorted.slice(0,3).reduce((a,d) => a + d[1].rev, 0);
+  const top3Pct = totalRev > 0 ? Math.round(top3Rev / totalRev * 100) : 0;
+  const top3Names = sorted.slice(0,3).map(d => d[0].split('/')[0]).join(', ');
+
+  document.getElementById('hero-stats').innerHTML =
+    '<div class="hero-stat"><div class="label">Provider Rollup</div><div class="value" style="color:var(--accent);">~' + Math.ceil(totalTokens) + 'T/day</div><div class="detail">' + provCount + ' providers tracked <span class="tier-pill tier-3a">Tier 2A/3A</span></div><div class="kpi-period">Current run-rate</div></div>' +
+    '<div class="hero-stat"><div class="label">Combined Provider ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail">Current annualised run-rate <span class="tier-pill tier-2a">Tier 1B/2A</span></div><div class="kpi-period">Annualised</div></div>' +
+    '<div class="hero-stat"><div class="label">Top 3 Revenue Share</div><div class="value" style="color:var(--accent2);">' + top3Pct + '%</div><div class="detail">' + top3Names + '</div><div class="kpi-period">Current</div></div>' +
+    '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">Frontier-equivalent cost (ARK Invest)</div><div class="kpi-period">YoY</div></div>';
+
+  // Reconciliation note: provider rollup methodology
+  const noteEl = document.getElementById('token-reconciliation');
+  if (noteEl) {
+    noteEl.innerHTML = 'Provider-level rollup from ' + provCount + ' tracked providers. Multi-model consensus range: <strong>280\u2013370T/day</strong> (v3 model, Apr 2026). Bear scenario (~280T) reflects possible overcounting; Bull (~500T) reflects unmeasured self-hosted and enterprise on-prem volume. See <a href="methodology.html" style="color:var(--accent);">Methodology</a>.';
+  }
+}
+
+function updateProviderChart() {
+  const data = getFilteredProviderData();
+  const labels = Object.keys(data);
+  const tokenVals = labels.map(l => data[l].tokens);
+  const revVals = labels.map(l => data[l].rev);
+  const colors = labels.map(l => data[l].color);
+
+  const sortedByTokens = labels.slice().sort((a,b) => data[b].tokens - data[a].tokens);
+  const sortedByRev = labels.slice().sort((a,b) => data[b].rev - data[a].rev);
+  const insightEl = document.getElementById('insight-provider');
+  if (insightEl && sortedByTokens.length >= 2) {
+    const topToken = sortedByTokens[0].split('/')[0];
+    const topRev = sortedByRev[0].split('/')[0];
+    const ratio = data[sortedByTokens[0]].tokens > 0 && data[sortedByTokens[1]] ? (data[sortedByTokens[0]].tokens / data[sortedByTokens[1]].tokens).toFixed(1) : '?';
+    insightEl.textContent = topToken + ' processes ' + ratio + 'x more tokens than #2. ' + (topToken !== topRev ? topRev + ' leads on revenue.' : 'Also leads on revenue.');
+  }
+
+  if (charts.provider) { charts.provider.data.labels = labels; charts.provider.data.datasets[0].data = tokenVals; charts.provider.data.datasets[0].backgroundColor = colors.map(c => c + 'cc'); charts.provider.data.datasets[1].data = revVals; charts.provider.data.datasets[1].backgroundColor = colors.map(c => c + '55'); charts.provider.update('active'); return; }
+
+  charts.provider = new Chart(document.getElementById('chart-provider'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Tokens (T/day)', data: tokenVals, backgroundColor: colors.map(c => c + 'cc'), yAxisID: 'y', borderRadius: 4, order: 1 },
+      { label: 'ARR ($B)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      onClick: (e, els) => { if (els.length > 0) { const label = charts.provider.data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="providers"][data-value="' + label + '"]'); if (pill) pill.click(); } },
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR' } } },
+      scales: { y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid }, y1: { position: 'right', title: { display: true, text: 'ARR ($B)' }, grid: noGrid }, x: { grid: noGrid } }
+    }
+  });
+}
+
+function updateDemandChart() {
+  const data = getFilteredProviderData();
+  const totalRev = Object.values(data).reduce((a, d) => a + d.rev, 0);
+  const labels = ['Consumer Subs', 'API / Developer', 'Enterprise Platform', 'Cloud Channel'];
+  const values = [totalRev * 0.38, totalRev * 0.30, totalRev * 0.18, totalRev * 0.14];
+  const colors = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
+
+  if (charts.demand) { charts.demand.data.datasets[0].data = values; charts.demand.update('active'); return; }
+
+  charts.demand = new Chart(document.getElementById('chart-demand'), {
+    type: 'bar',
+    data: { labels, datasets: [{ data: values, backgroundColor: colors.map(c => c + 'bb'), borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => '$' + Math.abs(ctx.parsed.x).toFixed(1) + 'B ARR' } } },
+      scales: { x: { title: { display: true, text: '$B ARR' }, grid: darkGrid }, y: { grid: noGrid } }
+    }
+  });
+}
+
+function updateBizConsumerChart() {
+  const data = getFilteredProviderData();
+  const labels = Object.keys(data).filter(p => data[p].rev > 0);
+  const consumerVals = labels.map(l => data[l].rev * (PROVIDERS[l].consumerPct / 100));
+  const bizVals = labels.map(l => data[l].rev * (PROVIDERS[l].bizPct / 100));
+
+  if (charts.bizConsumer) { charts.bizConsumer.data.labels = labels; charts.bizConsumer.data.datasets[0].data = consumerVals; charts.bizConsumer.data.datasets[1].data = bizVals; charts.bizConsumer.update('active'); return; }
+
+  charts.bizConsumer = new Chart(document.getElementById('chart-biz-consumer'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Consumer', data: consumerVals, backgroundColor: '#f59e0bbb', borderRadius: 4 },
+      { label: 'Business/API', data: bizVals, backgroundColor: '#10b981bb', borderRadius: 4 },
+    ]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } }, tooltip: { callbacks: { label: ctx => '$' + ctx.parsed.y.toFixed(1) + 'B' } } },
+      scales: { x: { stacked: true, grid: noGrid }, y: { stacked: true, title: { display: true, text: '$B ARR' }, grid: darkGrid } }
+    }
+  });
+}
+
+function updateDimensionChart(canvasId, chartKey, dimObj, dimKey, chartType) {
+  const data = getFilteredDimensionData(dimObj, dimKey);
+  const labels = Object.keys(data);
+  const values = labels.map(l => data[l].tokens);
+  const colors = labels.map(l => data[l].color + 'cc');
+
+  if (charts[chartKey]) { charts[chartKey].data.labels = labels; charts[chartKey].data.datasets[0].data = values; charts[chartKey].data.datasets[0].backgroundColor = colors; charts[chartKey].update('active'); return; }
+
+  charts[chartKey] = new Chart(document.getElementById(canvasId), {
+    type: chartType,
+    data: { labels, datasets: [{ data: values, backgroundColor: colors, borderRadius: chartType === 'bar' ? 4 : 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      ...(chartType === 'bar' ? { indexAxis: 'y' } : {}),
+      plugins: {
+        legend: { display: chartType === 'doughnut', position: 'right', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + (ctx.parsed.toFixed ? ctx.parsed.toFixed(0) : (ctx.parsed.y || ctx.parsed).toFixed(0)) + 'T tokens/day' } }
+      },
+      scales: chartType === 'bar' ? { x: { title: { display: true, text: 'T tokens/day' }, grid: darkGrid }, y: { grid: noGrid } } : undefined,
+    }
+  });
+}
+
+function renderDemandMatrix() {
+  const t = document.getElementById('demand-matrix');
+  const m = DEMAND_MATRIX;
+  const hasSankey = Object.keys(SANKEY_BC_FLOWS).length > 0;
+  const chMap = m.sankeyChannelMap || [[0],[1,2,4],[3],[5]];
+  const bMap = m.sankeyBuyerMap || { Consumer: 0, SME: 1, Enterprise: 2 };
+
+  let colTotals = new Array(m.columns.length).fill(0);
+  let grandTotal = 0;
+  const cellValues = [];
+  m.rows.forEach((row) => {
+    const rowVals = [];
+    const buyerIdx = bMap[row.segment];
+    row.cells.forEach((cell, ci) => {
+      let val = 0;
+      if (hasSankey && buyerIdx !== undefined) { chMap[ci].forEach(ch => { val += SANKEY_BC_FLOWS[buyerIdx + ',' + ch] || 0; }); }
+      rowVals.push(val);
+      colTotals[ci] += val;
+      grandTotal += val;
+    });
+    cellValues.push(rowVals);
+  });
+
+  let html = '<thead><tr><th></th>';
+  m.columns.forEach((c, i) => {
+    const colTotal = hasSankey ? '<div style="font-size:11px;color:var(--green);margin-top:2px;">$' + colTotals[i].toFixed(1) + 'B collected</div>' : '';
+    html += '<th><div style="font-size:13px;font-weight:700;">' + c + '</div><div style="font-size:10px;opacity:0.7;margin-top:2px;">' + m.colSubs[i] + '</div>' + colTotal + '</th>';
+  });
+  html += '</tr></thead><tbody>';
+
+  m.rows.forEach((row, ri) => {
+    const rowTotal = cellValues[ri].reduce((a, b) => a + b, 0);
+    html += '<tr><td style="background:#1a2332;color:white;font-weight:700;font-size:13px;">' + row.segment + '<div style="font-size:10px;font-weight:400;color:var(--green);margin-top:4px;">$' + rowTotal.toFixed(1) + 'B total</div></td>';
+    row.cells.forEach((cell, ci) => {
+      const val = cellValues[ri][ci];
+      const rgb = cell.color === '#10b981' ? '16,185,129' : cell.color === '#f59e0b' ? '249,159,11' : cell.color === '#ef4444' ? '239,68,68' : cell.color === '#3b82f6' ? '59,130,246' : '71,85,105';
+      const revDisplay = hasSankey ? '$' + val.toFixed(1) + 'B' : (cell.arrEstimate || '\u2014');
+      html += '<td style="background:rgba(' + rgb + ',0.06);">' +
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;flex-wrap:wrap;">' +
+          '<span class="matrix-cell-rev" style="color:' + cell.color + ';">' + revDisplay + '</span>' +
+          '<span class="matrix-cell-conv" style="background:rgba(' + rgb + ',0.15);color:' + cell.color + ';">' + cell.conv + ' tokens</span>' +
+        '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;">' + cell.ex + '</div>' +
+        '<div style="font-size:10px;color:var(--text-dim);opacity:0.8;font-style:italic;">' + cell.note + '</div></td>';
+    });
+    html += '</tr>';
+  });
+
+  html += '<tr><td style="background:#1a2332;color:var(--green);font-weight:700;font-size:13px;">TOTAL<div style="font-size:10px;font-weight:400;margin-top:4px;">$' + grandTotal.toFixed(1) + 'B</div></td>';
+  colTotals.forEach((ct) => {
+    const pct = grandTotal > 0 ? Math.round(ct / grandTotal * 100) : 0;
+    html += '<td style="background:rgba(16,185,129,0.08);text-align:center;font-weight:700;color:var(--green);font-size:14px;">$' + ct.toFixed(1) + 'B<div style="font-size:10px;font-weight:400;color:var(--text-dim);">' + pct + '% of total</div></td>';
+  });
+  html += '</tr></tbody>';
+  t.innerHTML = html;
+}
+
+function renderEnterpriseTable() {
+  const t = document.getElementById('enterprise-table');
+  let html = '<thead><tr><th>Company</th><th>Reported AI ARR</th><th>Observed Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Notes</th></tr></thead><tbody>';
+  ENTERPRISE_REALITY.forEach(c => {
+    html += '<tr><td><strong>' + c.name + '</strong> <span style="color:var(--text-dim);font-size:11px;">' + c.ticker + '</span></td><td style="font-size:12px;">' + c.claimed + '</td><td style="font-size:12px;color:var(--orange);">' + c.usage + '</td><td style="font-size:12px;color:var(--green);font-weight:600;">' + c.real + '</td><td style="font-size:12px;">' + (c.growth || '\u2014') + '</td><td style="font-size:11px;color:var(--text-dim);">' + c.flags + '</td></tr>';
+  });
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+let consumerSort = 'tokens', consumerSortAsc = false, consumerCatFilter = 'all', consumerVintage = 'all';
+
+function toggleConsumerSort(col) { if (consumerSort === col) consumerSortAsc = !consumerSortAsc; else { consumerSort = col; consumerSortAsc = col === 'co'; } updateConsumerTable(); }
+function setConsumerCat(cat) { consumerCatFilter = cat; updateConsumerTable(); }
+function toggleVintage() { consumerVintage = consumerVintage === 'all' ? 'ai-era' : 'all'; updateConsumerTable(); }
+
+function updateConsumerTable() {
+  const t = document.getElementById('consumer-table');
+  const label = document.getElementById('consumer-filter-label');
+  let filtered = TOP_CONSUMERS;
+
+  if (modelTypeFilter !== 'all') {
+    const openProvs = ['meta', 'deepseek', 'mistral', 'alibaba', 'qwen', 'own', 'self-hosted', 'others'];
+    const frontierProvs = ['openai', 'anthropic', 'google', 'xai', 'bytedance', 'tencent', 'baidu', 'minimax', 'moonshot'];
+    const matchProvs = modelTypeFilter === 'open' ? openProvs : frontierProvs;
+    filtered = filtered.filter(c => { const provArr = (c.providers || []).map(p => p.toLowerCase()); if (provArr.length === 0) return c.prov.toLowerCase().split(',').some(s => matchProvs.some(m => s.trim().includes(m))); return provArr.some(p => matchProvs.includes(p)); });
+  }
+
+  if (filters.providers.length > 0) {
+    filtered = filtered.filter(c => { const provArr = (c.providers || []).map(p => p.toLowerCase()); return filters.providers.some(fp => { const fpLower = fp.toLowerCase().split('/')[0]; if (provArr.length > 0) return provArr.some(p => p.includes(fpLower)); return c.prov.toLowerCase().includes(fpLower); }); });
+    label.textContent = '\u2014 filtered by: ' + filters.providers.join(', ');
+  } else { label.textContent = modelTypeFilter !== 'all' ? '\u2014 showing ' + modelTypeFilter + ' models' : ''; }
+
+  if (consumerCatFilter !== 'all') filtered = filtered.filter(c => c.category === consumerCatFilter);
+  if (consumerVintage === 'ai-era') filtered = filtered.filter(c => c.founded && c.founded >= 2023);
+
+  filtered.sort((a, b) => {
+    let cmp = 0;
+    if (consumerSort === 'co') cmp = (a.co || '').localeCompare(b.co || '');
+    else if (consumerSort === 'arr') cmp = (b.arrNumeric || 0) - (a.arrNumeric || 0);
+    else if (consumerSort === 'founded') cmp = (b.founded || 0) - (a.founded || 0);
+    else cmp = (b.tokensNumeric || 0) - (a.tokensNumeric || 0);
+    return consumerSortAsc ? -cmp : cmp;
+  });
+
+  const totalTokens = filtered.reduce((s, c) => s + (c.tokensNumeric || 0), 0);
+  const withArr = filtered.filter(c => c.arrNumeric);
+  const totalArr = withArr.reduce((s, c) => s + c.arrNumeric, 0);
+  const aiEraCount = filtered.filter(c => c.founded && c.founded >= 2023).length;
+  document.getElementById('consumer-stats').innerHTML =
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;"><strong style="color:var(--accent);">' + filtered.length + '</strong> companies</div>' +
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;">Est. tokens: <strong style="color:var(--accent);">' + (totalTokens/1e12).toFixed(1) + 'T/day</strong></div>' +
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;">Known ARR: <strong style="color:var(--green);">$' + (totalArr/1e9).toFixed(1) + 'B</strong></div>' +
+    '<div style="padding:6px 14px;border-radius:8px;background:var(--card);border:1px solid var(--card-border);font-size:12px;">AI-era (2023+): <strong style="color:var(--green);">' + aiEraCount + '</strong></div>';
+
+  const cats = [...new Set(TOP_CONSUMERS.map(c => c.category).filter(Boolean))].sort();
+  let filterHtml = '<span style="font-size:10px;color:var(--text-dim);margin-right:4px;">Category:</span>';
+  ['all', ...cats].forEach(cat => {
+    const lbl = cat === 'all' ? 'All' : cat.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const active = consumerCatFilter === cat ? ' style="background:var(--accent);color:white;border-color:var(--accent);"' : '';
+    filterHtml += '<button onclick="setConsumerCat(\'' + cat + '\')" style="padding:3px 9px;border-radius:5px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:10px;cursor:pointer;"' + active + '>' + lbl + '</button> ';
+  });
+  filterHtml += '<span style="margin-left:12px;font-size:10px;color:var(--text-dim);">Vintage:</span>';
+  filterHtml += '<button onclick="toggleVintage()" style="padding:3px 9px;border-radius:5px;border:1px solid ' + (consumerVintage === 'ai-era' ? 'var(--green)' : 'var(--card-border)') + ';background:' + (consumerVintage === 'ai-era' ? 'rgba(16,185,129,0.15)' : 'transparent') + ';color:' + (consumerVintage === 'ai-era' ? 'var(--green)' : 'var(--text-dim)') + ';font-size:10px;cursor:pointer;font-weight:600;">' + (consumerVintage === 'ai-era' ? 'AI Era Only (2023+)' : 'All Companies') + '</button>';
+  document.getElementById('consumer-filters').innerHTML = filterHtml;
+
+  const sortArrow = (col) => consumerSort === col ? (consumerSortAsc ? ' \u25B2' : ' \u25BC') : '';
+
+  let html = '<thead><tr>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'co\')">Company' + sortArrow('co') + '</th>' +
+    '<th>HQ</th><th>Type</th>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'founded\')">Founded' + sortArrow('founded') + '</th>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'tokens\')">Tokens/Day' + sortArrow('tokens') + '</th>' +
+    '<th style="cursor:pointer" onclick="toggleConsumerSort(\'arr\')">ARR' + sortArrow('arr') + '</th>' +
+    '<th>Providers</th></tr></thead><tbody>';
+
+  filtered.forEach((c, i) => {
+    const foundedBadge = c.founded ? (c.founded >= 2023 ? '<span style="color:var(--green);font-weight:600;">' + c.founded + '</span>' : '' + c.founded) : '\u2014';
+    const statusDot = c.status === 'public' ? '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:4px;" title="Public"></span>' : c.status === 'pre-ipo' ? '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--orange);margin-left:4px;" title="Pre-IPO"></span>' : '';
+    const catBadge = c.category ? '<div style="font-size:9px;color:var(--text-dim);margin-top:1px;">' + (c.category || '').replace(/-/g, ' ') + '</div>' : '';
+
+    html += '<tr style="cursor:pointer" onclick="toggleConsumerDetail(' + i + ',this)">' +
+      '<td><strong>' + c.co + '</strong>' + statusDot + catBadge + '</td>' +
+      '<td>' + c.hq + '</td><td style="font-size:11px;">' + c.type + '</td>' +
+      '<td style="font-size:11px;">' + foundedBadge + '</td>' +
+      '<td style="font-weight:600;color:var(--accent);">' + c.tokens + '</td>' +
+      '<td style="font-size:11px;">' + (c.arr || '\u2014') + '</td>' +
+      '<td style="font-size:11px;">' + c.prov + '</td></tr>';
+
+    const freshDays = c.lastUpdated ? Math.floor((Date.now() - new Date(c.lastUpdated).getTime()) / 86400000) : null;
+    const freshDot = freshDays !== null ? (freshDays < 30 ? 'var(--green)' : freshDays < 90 ? 'var(--orange)' : 'var(--text-dim)') : 'var(--text-dim)';
+    html += '<tr class="consumer-detail" style="display:none;"><td colspan="7" style="padding:12px 20px;background:rgba(59,130,246,0.03);font-size:12px;line-height:1.7;color:var(--text-dim);">' +
+      '<strong style="color:var(--text);">Evidence:</strong> ' + (c.ev || '\u2014') + '<br>' +
+      (c.valuation ? '<strong style="color:var(--text);">Valuation:</strong> ' + c.valuation + ' &nbsp; ' : '') +
+      (c.totalFunding ? '<strong style="color:var(--text);">Funding:</strong> ' + c.totalFunding + ' &nbsp; ' : '') +
+      (c.website ? '<strong style="color:var(--text);">Website:</strong> <a href="' + c.website + '" target="_blank" style="color:var(--accent);">' + c.website.replace('https://','') + '</a> &nbsp; ' : '') +
+      '<br><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:' + freshDot + ';margin-right:4px;"></span>' +
+      '<strong style="color:var(--text);">Updated:</strong> ' + (c.lastUpdated || 'Unknown') +
+      '</td></tr>';
+  });
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+function toggleConsumerDetail(idx, row) {
+  const detail = row.nextElementSibling;
+  if (detail && detail.classList.contains('consumer-detail')) detail.style.display = detail.style.display === 'none' ? '' : 'none';
+}
+
+function renderModelTable() {
+  const t = document.getElementById('model-table');
+  let filtered = MODELS;
+  if (modelTypeFilter !== 'all') {
+    const openProviders = ['Meta', 'DeepSeek', 'Mistral', 'Alibaba/Qwen', 'Others/Self-hosted'];
+    if (modelTypeFilter === 'open') filtered = filtered.filter(m => openProviders.includes(m.prov));
+    else filtered = filtered.filter(m => !openProviders.includes(m.prov));
+  }
+  if (filters.providers.length > 0) filtered = filtered.filter(m => filters.providers.some(p => p.startsWith(m.prov) || m.prov.startsWith(p.split('/')[0])));
+
+  const regionColors = { 'US': '#3b82f6', 'Asia': '#f59e0b', 'Europe': '#8b5cf6' };
+  let html = '<thead><tr><th>Model</th><th>Provider</th><th>Region</th><th>Est. Tokens/Day</th><th>Input $/1M</th><th>Output $/1M</th><th>Primary Use</th><th>Trend</th></tr></thead><tbody>';
+  filtered.forEach(m => {
+    const badge = m.prov === 'OpenAI' ? 'badge-openai' : m.prov === 'Anthropic' ? 'badge-anthropic' : m.prov === 'Google' ? 'badge-google' : m.prov === 'Meta' ? 'badge-meta' : 'badge-deepseek';
+    const regionClr = regionColors[m.region] || '#94a3b8';
+    const regionBadge = '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:600;background:' + regionClr + '22;color:' + regionClr + ';">' + (m.region || '?') + '</span>';
+    html += '<tr><td><strong>' + m.model + '</strong></td><td><span class="badge ' + badge + '">' + m.prov + '</span></td><td>' + regionBadge + '</td><td style="font-weight:600;">' + m.tokens + '</td><td>' + m.inP + '</td><td>' + m.outP + '</td><td style="font-size:11px;">' + m.use + '</td><td>' + m.trend + '</td></tr>';
+  });
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+function updateAll() {
+  updateHeroStats();
+  updateProviderChart();
+  updateDemandChart();
+  updateBizConsumerChart();
+  updateDimensionChart('chart-region', 'region', REGIONS, 'regions', 'bar');
+  updateDimensionChart('chart-industry', 'industry', INDUSTRIES, 'industries', 'doughnut');
+  updateDimensionChart('chart-usecase', 'usecase', USE_CASES, 'useCases', 'doughnut');
+  updateConsumerTable();
+  renderModelTable();
+  renderDemandMatrix();
+  renderEnterpriseTable();
+}
+
+loadDashboardData();
+</script>
+<script>
+document.querySelectorAll('.cite-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const path = btn.dataset.path;
+    const text = 'Hepburn Advisory, "The AI Ledger — ' + path.slice(1) + '," 2026. https://ai-index.hepburnadvisory.com.au' + path;
+    navigator.clipboard.writeText(text);
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = 'Cite this page', 2000);
+  });
+});
+</script>
+</body>
+</html>

@@ -89,23 +89,48 @@
 </head>
 <body>
 <style>
-  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
-  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
-  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
-  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
-  .nav-logo { margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none; color:#cbd5e1; font-size:13px; font-weight:600; opacity:0.7; transition:opacity 0.15s; }
-  .nav-logo:hover { opacity:1; }
-  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
-  @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
+  .nav-bar{display:flex;align-items:center;gap:6px;padding:12px 24px;background:#0f172a;border-bottom:2px solid #1e293b;flex-wrap:wrap;}
+  .nav-brand{font-size:15px;font-weight:700;color:#f8fafc;text-decoration:none;margin-right:12px;}
+  .nav-brand span{background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .nav-link{padding:8px 18px;border-radius:8px;background:#1e293b;color:#cbd5e1;text-decoration:none;font-size:13px;font-weight:500;border:1px solid #334155;transition:all 0.15s;}
+  .nav-link:hover{background:#334155;}
+  .nav-link.active{background:#3b82f6;color:white;border-color:#3b82f6;}
+  .nav-link.disabled{opacity:0.4;pointer-events:none;font-style:italic;}
+  .nav-scenario{margin-left:12px;display:flex;align-items:center;gap:4px;padding:4px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid #334155;}
+  .nav-scenario label{font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;padding:0 6px;}
+  .scenario-btn{padding:5px 12px;border-radius:6px;border:none;background:transparent;color:#94a3b8;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1px solid transparent;}
+  .scenario-btn:hover{color:#e2e8f0;background:#111827;}
+  .scenario-btn.active{background:#3b82f6;color:white;}
+  .scenario-btn:focus-visible{outline:2px solid #3b82f6;outline-offset:2px;}
+  .nav-logo{margin-left:auto;display:flex;align-items:center;gap:8px;text-decoration:none;color:#cbd5e1;font-size:13px;font-weight:600;opacity:0.7;transition:opacity 0.15s;}
+  .nav-logo:hover{opacity:1;}
+  .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:left;margin-bottom:24px;}
+  .footer-grid h4{font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:#94a3b8;margin-bottom:6px;font-weight:700;}
+  .footer-grid a{display:block;margin-bottom:3px;font-size:12px;}
+  @media(max-width:768px){
+    .nav-bar{padding:8px 12px;gap:4px;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,black 85%,transparent 100%);-webkit-mask-image:linear-gradient(to right,black 85%,transparent 100%);}
+    .nav-bar::-webkit-scrollbar{display:none;}
+    .nav-bar>*{flex:0 0 auto;}
+    .nav-scenario{margin-left:0;width:100%;justify-content:center;}
+    .footer-grid{grid-template-columns:1fr;gap:16px;}
+  }
 </style>
 <nav class="nav-bar">
-  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
-  <a href="sankey.html" class="nav-link">Follow the Revenue</a>
-  <a href="chips.html" class="nav-link">Follow the CapEx</a>
-  <a href="timeline.html" class="nav-link">Time Machine</a>
-  <a href="openrouter.html" class="nav-link active">Live Pricing</a>
-  <a href="feed.html" class="nav-link">Weekly Feed</a>
+  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="capital.html" class="nav-link">Capital</a>
+  <a href="revenue.html" class="nav-link">Revenue</a>
+  <a href="usage.html" class="nav-link">Usage</a>
+  <a href="methodology.html" class="nav-link">Methodology</a>
+  <a href="changelog.html" class="nav-link">Changelog</a>
+  <a href="power.html" class="nav-link disabled">Power (v3)</a>
+  <a href="about.html" class="nav-link">About</a>
+  <div class="nav-scenario">
+    <label>Scenario:</label>
+    <button class="scenario-btn" data-s="bear">Bear</button>
+    <button class="scenario-btn active" data-s="base">Base</button>
+    <button class="scenario-btn" data-s="bull">Bull</button>
+  </div>
   <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
     <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
     Hepburn Advisory
@@ -744,6 +769,14 @@ loadGatewayData();
 // Init OpenRouter live data (separate API fetch — untouched)
 fetchData();
 </script>
-<footer style="text-align:center;padding:20px;font-size:11px;color:#64748b;border-top:1px solid #1e293b;margin-top:40px;">The AI Ledger — Directional estimates only. Not investment advice. Built by <a href="https://hepburnadvisory.com.au" style="color:#64748b;text-decoration:underline;" target="_blank">Hepburn Advisory</a></footer>
+<footer style="text-align:center;padding:32px 0 16px;font-size:12px;color:#94a3b8;border-top:1px solid #1e293b;margin-top:40px;">
+  <div class="footer-grid">
+    <div><h4>Hepburn Advisory</h4><a href="about.html">About the firm</a><a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a><a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a></div>
+    <div><h4>The Ledger</h4><a href="capital.html">Capital</a><a href="revenue.html">Revenue</a><a href="usage.html">Usage</a><a href="power.html">Power (v3)</a></div>
+    <div><h4>Reference</h4><a href="methodology.html">Methodology</a><a href="changelog.html">Changelog</a></div>
+  </div>
+  <div>Published by <a href="about.html" style="color:#3b82f6;">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
+  <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html" style="color:#3b82f6;">Methodology</a> &middot; <a href="changelog.html" style="color:#3b82f6;">Changelog</a> &middot; <a href="about.html" style="color:#3b82f6;">About</a></div>
+</footer>
 </body>
 </html>
