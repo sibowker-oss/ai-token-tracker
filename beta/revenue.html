@@ -75,7 +75,6 @@
     .hero-grid { grid-template-columns:repeat(2,1fr); }
     #wwhbt-grid { grid-template-columns:1fr !important; }
     .mobile-scroll-hint { display:block; font-size:12px; color:var(--text-dim); margin-bottom:8px; }
-    #sankey { min-width:720px; }
     .footer-grid{grid-template-columns:1fr;gap:16px;}
   }
 </style>
@@ -384,7 +383,8 @@ function hexToRgb(hex) {
 function buildSankey(d) {
   const canvas = document.getElementById('sankey');
   const ctx = canvas.getContext('2d');
-  const W = canvas.parentElement.clientWidth;
+  const containerW = canvas.parentElement.clientWidth;
+  const W = Math.max(720, containerW); // ensure readable minimum width
   const H = 560;
   const dpr = window.devicePixelRatio || 1;
   canvas.width = W * dpr; canvas.height = H * dpr;
