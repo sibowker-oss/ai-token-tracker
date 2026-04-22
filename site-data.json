@@ -4238,5 +4238,167 @@
         }
       ]
     }
+  },
+  "globalBenchmarks": {
+    "lastReviewed": "2026-04-22",
+    "nextReview": "2026-07-22",
+    "entries": [
+      {
+        "key": "global_gdp",
+        "label": "Global GDP",
+        "value": 110000000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "World Bank / IMF WEO",
+        "sourceUrl": "https://www.imf.org/external/datamapper/NGDPD@WEO",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "Nominal USD, rounded",
+        "confidence": "High"
+      },
+      {
+        "key": "global_services_gdp",
+        "label": "Services-sector GDP",
+        "value": 70000000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "World Bank national accounts",
+        "sourceUrl": "https://data.worldbank.org/indicator/NV.SRV.TOTL.CD",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "~64% of global GDP",
+        "confidence": "High"
+      },
+      {
+        "key": "global_payroll",
+        "label": "Global labor compensation",
+        "value": 60000000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "ILO Global Wage Report / OECD",
+        "sourceUrl": "https://www.ilo.org/global/research/global-reports/global-wage-report",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "Total employee compensation globally",
+        "confidence": "Medium"
+      },
+      {
+        "key": "knowledge_worker_payroll",
+        "label": "Knowledge-worker wage bill",
+        "value": 27000000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "ILO / McKinsey Global Institute",
+        "sourceUrl": "https://www.mckinsey.com/mgi/our-research",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "~45% of global payroll; the subset most exposed to AI automation",
+        "confidence": "Medium"
+      },
+      {
+        "key": "global_it_spend",
+        "label": "Total global IT spend",
+        "value": 5700000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "Gartner IT Spending Forecast",
+        "sourceUrl": "https://www.gartner.com/en/newsroom/press-releases",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "Includes devices, data centre, software, IT services, telecom",
+        "confidence": "High"
+      },
+      {
+        "key": "enterprise_software",
+        "label": "Enterprise software",
+        "value": 1200000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "Gartner / IDC",
+        "sourceUrl": "https://www.gartner.com/en/newsroom/press-releases",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "What AI is most likely to cannibalize first",
+        "confidence": "High"
+      },
+      {
+        "key": "global_saas",
+        "label": "SaaS market",
+        "value": 300000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "Synergy Research / Gartner",
+        "sourceUrl": "https://www.srgresearch.com",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "Subscription software; rebundling / shelfware frame",
+        "confidence": "Medium"
+      },
+      {
+        "key": "public_cloud",
+        "label": "Public cloud services",
+        "value": 700000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "Synergy Research / Gartner",
+        "sourceUrl": "https://www.srgresearch.com",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "IaaS + PaaS + SaaS; infrastructure parent market",
+        "confidence": "High"
+      },
+      {
+        "key": "global_advertising",
+        "label": "Global ad market",
+        "value": 1000000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "GroupM / WARC",
+        "sourceUrl": "https://www.groupm.com/this-year-next-year",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "Scale reference; not a primary displacement target",
+        "confidence": "High"
+      },
+      {
+        "key": "hyperscaler_capex",
+        "label": "Top-5 hyperscaler capex",
+        "value": 350000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "Company 10-K filings (MSFT, GOOG, AMZN, META, ORCL)",
+        "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "Supply-side check — is build-out coherent with revenue path",
+        "confidence": "High"
+      },
+      {
+        "key": "sp500_mcap",
+        "label": "S&P 500 market cap",
+        "value": 50000000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "S&P Global",
+        "sourceUrl": "https://www.spglobal.com/spdji/en/indices/equity/sp-500",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "For valuation sanity checks",
+        "confidence": "High"
+      },
+      {
+        "key": "us_gdp",
+        "label": "US GDP",
+        "value": 28000000000000,
+        "unit": "USD",
+        "year": 2025,
+        "source": "BEA / IMF WEO",
+        "sourceUrl": "https://www.bea.gov/data/gdp/gross-domestic-product",
+        "retrievedAt": "2026-04-22",
+        "nextReview": "2026-10-22",
+        "note": "Regional denominator",
+        "confidence": "High"
+      }
+    ]
   }
 }

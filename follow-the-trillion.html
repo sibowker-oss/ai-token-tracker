@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Follow the Trillion — The AI Ledger</title>
+<meta name="description" content="If AI revenue hits $X by year Y, what share of the global economy does that imply? Interactive benchmarks against GDP, IT spend, payroll, and more.">
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --text-bright:#f8fafc; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  /* ── Nav ── */
+  .nav-bar{display:flex;align-items:center;gap:6px;padding:12px 24px;background:#0f172a;border-bottom:2px solid #1e293b;flex-wrap:wrap;}
+  .nav-brand{font-size:15px;font-weight:700;color:#f8fafc;text-decoration:none;margin-right:12px;}
+  .nav-brand span{background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .nav-link{padding:8px 18px;border-radius:8px;background:#1e293b;color:#cbd5e1;text-decoration:none;font-size:13px;font-weight:500;border:1px solid #334155;transition:all 0.15s;}
+  .nav-link:hover{background:#334155;}
+  .nav-link.active{background:#3b82f6;color:white;border-color:#3b82f6;}
+  .nav-link.disabled{opacity:0.4;pointer-events:none;font-style:italic;}
+  .nav-logo{margin-left:auto;display:flex;align-items:center;gap:8px;text-decoration:none;color:#cbd5e1;font-size:13px;font-weight:600;opacity:0.7;transition:opacity 0.15s;}
+  .nav-logo:hover{opacity:1;}
+
+  /* ── Layout ── */
+  .container { max-width:1200px; margin:0 auto; padding:28px 24px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; }
+  .sub { font-size:14px; color:var(--text-dim); margin-bottom:6px; line-height:1.6; max-width:900px; }
+  .hero-hook { font-size:18px; font-weight:700; color:var(--text-bright); margin-bottom:8px; line-height:1.4; }
+  .hero-hook .hl-blue { color:var(--accent); }
+  .hero-hook .hl-orange { color:var(--orange); }
+  .hero-hook .hl-purple { color:var(--purple); }
+
+  /* ── Controls ── */
+  .controls { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px 24px; margin-bottom:24px; }
+  .control-row { display:flex; gap:24px; align-items:flex-end; flex-wrap:wrap; }
+  .control-group { flex:1; min-width:200px; }
+  .control-group label { display:block; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:6px; font-weight:600; }
+  .slider-wrap { display:flex; align-items:center; gap:12px; }
+  .slider-wrap input[type="range"] { flex:1; accent-color:var(--accent); height:6px; cursor:pointer; }
+  .slider-val { font-size:28px; font-weight:800; color:var(--text-bright); min-width:60px; text-align:right; letter-spacing:-0.5px; }
+  .preset-row { display:flex; gap:6px; margin-top:6px; }
+  .preset-btn { padding:6px 14px; border-radius:6px; border:1px solid #334155; background:#1e293b; color:#cbd5e1; font-size:12px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .preset-btn:hover { background:#334155; }
+  .preset-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .revenue-input { background:#1e293b; border:1px solid #334155; color:var(--text-bright); font-size:18px; font-weight:700; padding:8px 12px; border-radius:8px; width:120px; text-align:right; }
+  .revenue-input:focus { outline:2px solid var(--accent); outline-offset:2px; }
+  .unit-label { font-size:13px; color:var(--text-dim); margin-left:4px; }
+
+  /* ── FTBT Cards ── */
+  .ftbt-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px; }
+  .ftbt-card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:18px 16px; transition:border-color 0.3s; }
+  .ftbt-card.flash { border-color:var(--accent); }
+  .ftbt-card .ftbt-label { font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-dim); margin-bottom:4px; }
+  .ftbt-card .ftbt-value { font-size:32px; font-weight:800; letter-spacing:-0.5px; margin-bottom:4px; transition:color 0.3s; }
+  .ftbt-card .ftbt-detail { font-size:12px; color:var(--text-dim); line-height:1.5; }
+  .ftbt-card .ftbt-source { font-size:10px; color:#475569; margin-top:6px; }
+  .val-blue { color:var(--accent); }
+  .val-orange { color:var(--orange); }
+  .val-purple { color:var(--purple); }
+  .val-green { color:var(--green); }
+  .val-cyan { color:var(--cyan); }
+  .val-red { color:var(--red); }
+
+  /* ── Zoom Chart ── */
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:20px; margin-bottom:18px; }
+  .card h2 { font-size:17px; margin-bottom:12px; font-weight:700; }
+  .zoom-row { display:flex; align-items:center; gap:0; margin-bottom:6px; }
+  .zoom-label { min-width:140px; font-size:12px; color:var(--text-dim); text-align:right; padding-right:12px; line-height:1.3; }
+  .zoom-label strong { color:var(--text-bright); font-weight:700; display:block; }
+  .zoom-bar-wrap { flex:1; height:38px; background:rgba(255,255,255,0.03); border-radius:6px; position:relative; overflow:hidden; }
+  .zoom-bar-fill { height:100%; border-radius:6px; transition:width 0.5s ease; display:flex; align-items:center; justify-content:flex-end; padding-right:8px; min-width:2px; }
+  .zoom-bar-fill span { font-size:11px; font-weight:700; color:rgba(255,255,255,0.9); white-space:nowrap; }
+  .zoom-connector { min-width:140px; padding-right:12px; display:flex; align-items:center; justify-content:flex-end; }
+  .zoom-connector svg { display:block; }
+  .zoom-pct { min-width:60px; font-size:13px; font-weight:800; text-align:left; padding-left:10px; letter-spacing:-0.3px; font-variant-numeric:tabular-nums; }
+  .zoom-divider { display:flex; align-items:center; gap:8px; margin:2px 0 2px 140px; padding-left:12px; }
+  .zoom-divider-line { flex:1; height:1px; background:linear-gradient(to right, rgba(255,255,255,0.1), transparent); }
+  .zoom-divider-text { font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:#475569; white-space:nowrap; }
+  @media(max-width:768px) {
+    .zoom-label { min-width:90px; font-size:11px; padding-right:8px; }
+    .zoom-label strong { font-size:11px; }
+    .zoom-bar-wrap { height:32px; }
+    .zoom-pct { min-width:50px; font-size:11px; padding-left:6px; }
+    .zoom-divider { margin-left:90px; padding-left:8px; }
+  }
+
+  /* ── Mix Toggle ── */
+  .mix-section { margin-bottom:24px; }
+  .mix-toggle { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .mix-toggle label { font-size:13px; font-weight:600; cursor:pointer; }
+  .mix-toggle input[type="checkbox"] { width:18px; height:18px; accent-color:var(--cyan); cursor:pointer; }
+  .mix-sliders { display:none; background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:18px 20px; }
+  .mix-sliders.visible { display:block; }
+  .mix-row { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .mix-row label { font-size:12px; color:var(--text-dim); min-width:180px; }
+  .mix-row input[type="range"] { flex:1; accent-color:var(--accent); cursor:pointer; }
+  .mix-pct { font-size:14px; font-weight:700; min-width:42px; text-align:right; }
+  .mix-result { margin-top:12px; padding:12px 16px; border-radius:8px; background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.2); }
+  .mix-result-item { font-size:12px; color:var(--text-dim); line-height:1.8; }
+  .mix-result-item strong { color:var(--text-bright); }
+
+  /* ── Methodology ── */
+  .methodology { margin-top:6px; margin-bottom:24px; }
+  .methodology summary { font-size:12px; color:var(--text-dim); cursor:pointer; padding:8px 0; }
+  .methodology summary:hover { color:var(--text); }
+  .methodology .meth-body { font-size:12px; color:var(--text-dim); line-height:1.7; padding:12px 16px; background:var(--card); border:1px solid var(--card-border); border-radius:8px; margin-top:6px; }
+
+  /* ── Benchmark Table ── */
+  .bench-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .bench-table th { text-align:left; padding:8px 10px; border-bottom:1px solid var(--card-border); color:var(--text-dim); font-size:10px; text-transform:uppercase; letter-spacing:0.5px; }
+  .bench-table td { padding:8px 10px; border-bottom:1px solid rgba(30,41,59,0.5); }
+  .bench-table .num { text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+  .bench-table tr:hover { background:rgba(59,130,246,0.04); }
+
+  /* ── In-Dev Badge ── */
+  .in-dev-badge { display:inline-block; padding:4px 10px; border-radius:6px; background:rgba(245,158,11,0.15); color:var(--orange); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px; }
+
+  /* ── Footer ── */
+  footer{text-align:center;padding:32px 0 16px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--card-border);margin-top:24px;}
+  footer a{color:var(--accent);text-decoration:none;}
+  footer a:hover{text-decoration:underline;}
+  .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:left;margin-bottom:24px;}
+  .footer-grid h4{font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-bottom:6px;font-weight:700;}
+  .footer-grid a{display:block;margin-bottom:3px;font-size:12px;}
+
+  /* ── Mobile ── */
+  @media(max-width:768px) {
+    .nav-bar{padding:8px 12px;gap:4px;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,black 85%,transparent 100%);-webkit-mask-image:linear-gradient(to right,black 85%,transparent 100%);}
+    .nav-bar::-webkit-scrollbar{display:none;}
+    .nav-bar>*{flex:0 0 auto;}
+    .nav-brand{font-size:13px;margin-right:auto;}
+    .nav-link{font-size:10px;padding:6px 10px;min-height:44px;display:inline-flex;align-items:center;}
+    .nav-logo{margin-left:0;font-size:11px;gap:5px;}
+    .nav-logo svg{width:18px;height:18px;}
+    .container{padding:16px 12px;}
+    h1{font-size:22px;}
+    .hero-hook{font-size:15px;}
+    .sub{font-size:13px;}
+    .controls{padding:14px 16px;}
+    .control-row{flex-direction:column;gap:16px;}
+    .slider-val{font-size:22px;}
+    .ftbt-grid{grid-template-columns:1fr;}
+    .ftbt-card .ftbt-value{font-size:26px;}
+    #treemap-wrap{height:320px;}
+    .mix-row label{min-width:120px;font-size:11px;}
+    .bench-table{font-size:11px;}
+    .footer-grid{grid-template-columns:1fr;gap:16px;}
+  }
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-211EY55BEQ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-211EY55BEQ");</script>
+</head>
+<body>
+
+<nav class="nav-bar">
+  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="capital.html" class="nav-link">Capital</a>
+  <a href="revenue.html" class="nav-link">Revenue</a>
+  <a href="usage.html" class="nav-link">Usage</a>
+  <a href="follow-the-trillion.html" class="nav-link active">Trillion</a>
+  <a href="methodology.html" class="nav-link">Methodology</a>
+  <a href="changelog.html" class="nav-link">Changelog</a>
+  <a href="about.html" class="nav-link">About</a>
+  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
+    Hepburn Advisory
+  </a>
+</nav>
+
+<div class="container">
+  <span class="in-dev-badge">In Development</span>
+  <h1>Follow the Trillion</h1>
+  <p class="sub">
+    The AI Ledger tracks ~$17B of real customer revenue today. The industry's capex implies a destination measured in trillions.
+    This page asks: <em>for that to be true, what share of the global economy does AI need to own &mdash; and where does it come from?</em>
+  </p>
+  <p class="hero-hook">
+    Drag the year. Pick a revenue target. Watch the denominators.
+  </p>
+
+  <details class="methodology">
+    <summary>Methodology &amp; caveats</summary>
+    <div class="meth-body">
+      Projections are directional arithmetic, not forecasts. Benchmarks are dated and sourced.
+      AI revenue paths default to extrapolation of Ledger-tracked booked ARR; override any assumption.
+      Global benchmarks carry source URLs and retrieval dates &mdash; see the reference table at bottom of page.
+      All values in nominal USD unless stated otherwise.
+    </div>
+  </details>
+
+  <!-- ── Controls ── -->
+  <div class="controls">
+    <div class="control-row">
+      <div class="control-group">
+        <label>Target Year</label>
+        <div class="slider-wrap">
+          <input type="range" id="year-slider" min="2026" max="2035" value="2030" step="1">
+          <span class="slider-val" id="year-val">2030</span>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>AI Revenue Target ($B)</label>
+        <div class="slider-wrap">
+          <input type="number" class="revenue-input" id="rev-input" value="1000" min="10" max="20000" step="10">
+          <span class="unit-label">$B</span>
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn" data-preset="bear" title="Conservative: Current trajectory + deceleration">Bear</button>
+          <button class="preset-btn active" data-preset="base" title="Base: Enterprise adoption ramp">Base</button>
+          <button class="preset-btn" data-preset="bull" title="Bull: Agent-driven step-change">Bull</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FTBT Cards ── -->
+  <div class="ftbt-grid" id="ftbt-grid">
+    <div class="ftbt-card" id="card-gdp">
+      <div class="ftbt-label">Share of Global GDP</div>
+      <div class="ftbt-value val-blue" id="val-gdp">0.9%</div>
+      <div class="ftbt-detail">$<span id="detail-gdp-t">1,000</span>B of $<span id="detail-gdp-d">110</span>T global GDP</div>
+      <div class="ftbt-source">World Bank / IMF WEO</div>
+    </div>
+    <div class="ftbt-card" id="card-it">
+      <div class="ftbt-label">Share of IT Spend</div>
+      <div class="ftbt-value val-purple" id="val-it">17.5%</div>
+      <div class="ftbt-detail">$<span id="detail-it-t">1,000</span>B of $<span id="detail-it-d">5.7</span>T IT spend</div>
+      <div class="ftbt-source">Gartner IT Spending Forecast</div>
+    </div>
+    <div class="ftbt-card" id="card-saas">
+      <div class="ftbt-label">Multiples of SaaS Market</div>
+      <div class="ftbt-value val-orange" id="val-saas">3.3&times;</div>
+      <div class="ftbt-detail"><span id="detail-saas-x">3.3</span>&times; today's $300B SaaS market</div>
+      <div class="ftbt-source">Synergy Research / Gartner</div>
+    </div>
+    <div class="ftbt-card" id="card-labor">
+      <div class="ftbt-label">Knowledge-Worker Wages</div>
+      <div class="ftbt-value val-green" id="val-labor">3.7%</div>
+      <div class="ftbt-detail">Equivalent to <span id="detail-labor-pct">3.7</span>% of $27T knowledge-worker wage bill</div>
+      <div class="ftbt-source">ILO / McKinsey Global Institute</div>
+    </div>
+    <div class="ftbt-card" id="card-percap">
+      <div class="ftbt-label">Revenue per Person on Earth</div>
+      <div class="ftbt-value val-cyan" id="val-percap">$122</div>
+      <div class="ftbt-detail">$<span id="detail-percap">122</span> per person &times; 8.2B people</div>
+      <div class="ftbt-source">UN Population Division</div>
+    </div>
+    <div class="ftbt-card" id="card-capex">
+      <div class="ftbt-label">Implied Capex Required</div>
+      <div class="ftbt-value val-red" id="val-capex">$34T</div>
+      <div class="ftbt-detail">At current $<span id="detail-capex-ratio">34</span> capex per $1 earned = $<span id="detail-capex-abs">34</span>T capex</div>
+      <div class="ftbt-source">AI Ledger finding &middot; Hyperscaler 10-Ks</div>
+    </div>
+  </div>
+
+  <!-- ── Zoom Chart ── -->
+  <div class="card">
+    <h2>Where Does It Sit?</h2>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">Each bar zooms into the highlighted slice above it. Watch the AI target grow or shrink relative to each layer of the economy.</p>
+    <div id="zoom-chart"></div>
+  </div>
+
+  <!-- ── Mix Toggle ── -->
+  <div class="mix-section">
+    <div class="mix-toggle">
+      <input type="checkbox" id="mix-check">
+      <label for="mix-check">Where does the $<span id="mix-target-label">1,000</span>B come from?</label>
+    </div>
+    <div class="mix-sliders" id="mix-panel">
+      <div class="mix-row">
+        <label>Displacing existing SaaS / software</label>
+        <input type="range" id="mix-saas" min="0" max="100" value="40">
+        <span class="mix-pct" id="mix-saas-pct" style="color:var(--accent);">40%</span>
+      </div>
+      <div class="mix-row">
+        <label>Displacing labor cost (wages)</label>
+        <input type="range" id="mix-labor" min="0" max="100" value="35">
+        <span class="mix-pct" id="mix-labor-pct" style="color:var(--orange);">35%</span>
+      </div>
+      <div class="mix-row">
+        <label>Net-new economic value</label>
+        <input type="range" id="mix-new" min="0" max="100" value="25">
+        <span class="mix-pct" id="mix-new-pct" style="color:var(--green);">25%</span>
+      </div>
+      <div class="mix-result" id="mix-result"></div>
+    </div>
+  </div>
+
+  <!-- ── Benchmark Reference Table ── -->
+  <div class="card">
+    <h2>Benchmark Reference</h2>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">All global benchmarks used on this page. Reviewed quarterly. Sources carry retrieval dates.</p>
+    <div style="overflow-x:auto;">
+      <table class="bench-table" id="bench-table">
+        <thead>
+          <tr><th>Benchmark</th><th class="num">Value</th><th>Year</th><th>Source</th><th>Retrieved</th><th>Confidence</th></tr>
+        </thead>
+        <tbody id="bench-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>Hepburn Advisory</h4>
+        <a href="about.html">About the firm</a>
+        <a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a>
+      </div>
+      <div>
+        <h4>The Ledger</h4>
+        <a href="capital.html">Capital</a>
+        <a href="revenue.html">Revenue</a>
+        <a href="usage.html">Usage</a>
+        <a href="follow-the-trillion.html">Follow the Trillion</a>
+      </div>
+      <div>
+        <h4>Reference</h4>
+        <a href="methodology.html">Methodology</a>
+        <a href="changelog.html">Changelog</a>
+        <a href="source-ledger.html">Source Ledger</a>
+      </div>
+    </div>
+    <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
+    <div style="margin-top:8px;">Last updated: 22 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
+  </footer>
+</div>
+
+<script>
+// ── Data ──
+const BENCHMARKS = {};
+const WORLD_POP = 8.2e9;
+const CAPEX_RATIO = 34; // $34 capex per $1 AI revenue (Ledger finding)
+const CURRENT_ARR = 17.47; // $B, from Ledger
+const IT_CAGR = 0.05; // 5% default
+
+// Presets: Bear/Base/Bull revenue by year (in $B)
+// Growth decelerates over time (high early, matures later)
+// Bear: 30% early -> 20%. Base: 80% early -> 30%. Bull: 120% early -> 40%.
+function decayGrowth(baseRate, endRate, yearsFromNow, span) {
+  const t = Math.min(yearsFromNow / span, 1); // 0..1 over span years
+  const rate = baseRate + (endRate - baseRate) * t;
+  return rate;
+}
+const PRESETS = {
+  bear: function(y) {
+    let rev = CURRENT_ARR;
+    for (let yr = 2026; yr <= y; yr++) {
+      rev *= 1 + decayGrowth(0.30, 0.15, yr - 2025, 10);
+    }
+    return Math.round(rev);
+  },
+  base: function(y) {
+    let rev = CURRENT_ARR;
+    for (let yr = 2026; yr <= y; yr++) {
+      rev *= 1 + decayGrowth(0.80, 0.25, yr - 2025, 10);
+    }
+    return Math.round(rev);
+  },
+  bull: function(y) {
+    let rev = CURRENT_ARR;
+    for (let yr = 2026; yr <= y; yr++) {
+      rev *= 1 + decayGrowth(1.20, 0.35, yr - 2025, 10);
+    }
+    return Math.round(rev);
+  },
+};
+
+let currentPreset = 'base';
+let benchData = [];
+
+// ── Load Data ──
+fetch('site-data.json').then(r => r.json()).then(data => {
+  benchData = data.globalBenchmarks.entries;
+  benchData.forEach(b => { BENCHMARKS[b.key] = b.value; });
+  renderBenchTable();
+  syncFromURL();
+  recalc();
+}).catch(() => {
+  // Fallback hardcoded values if fetch fails
+  const fallback = [
+    { key:'global_gdp', label:'Global GDP', value:110e12, year:2025, source:'IMF WEO', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'global_it_spend', label:'Total global IT spend', value:5.7e12, year:2025, source:'Gartner', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'global_saas', label:'SaaS market', value:300e9, year:2025, source:'Synergy Research', retrievedAt:'2026-04-22', confidence:'Medium' },
+    { key:'knowledge_worker_payroll', label:'Knowledge-worker wage bill', value:27e12, year:2025, source:'ILO / McKinsey', retrievedAt:'2026-04-22', confidence:'Medium' },
+    { key:'enterprise_software', label:'Enterprise software', value:1.2e12, year:2025, source:'Gartner', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'global_services_gdp', label:'Services-sector GDP', value:70e12, year:2025, source:'World Bank', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'global_payroll', label:'Global labor compensation', value:60e12, year:2025, source:'ILO', retrievedAt:'2026-04-22', confidence:'Medium' },
+    { key:'public_cloud', label:'Public cloud services', value:700e9, year:2025, source:'Synergy Research', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'global_advertising', label:'Global ad market', value:1e12, year:2025, source:'GroupM', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'hyperscaler_capex', label:'Top-5 hyperscaler capex', value:350e9, year:2025, source:'10-K filings', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'sp500_mcap', label:'S&P 500 market cap', value:50e12, year:2025, source:'S&P Global', retrievedAt:'2026-04-22', confidence:'High' },
+    { key:'us_gdp', label:'US GDP', value:28e12, year:2025, source:'BEA', retrievedAt:'2026-04-22', confidence:'High' },
+  ];
+  benchData = fallback;
+  fallback.forEach(b => { BENCHMARKS[b.key] = b.value; });
+  renderBenchTable();
+  syncFromURL();
+  recalc();
+});
+
+// ── DOM refs ──
+const yearSlider = document.getElementById('year-slider');
+const yearVal = document.getElementById('year-val');
+const revInput = document.getElementById('rev-input');
+const presetBtns = document.querySelectorAll('.preset-btn');
+const mixCheck = document.getElementById('mix-check');
+const mixPanel = document.getElementById('mix-panel');
+const mixSaas = document.getElementById('mix-saas');
+const mixLabor = document.getElementById('mix-labor');
+const mixNew = document.getElementById('mix-new');
+
+// ── Formatting helpers ──
+function fmtB(v) { return v.toLocaleString('en-US', { maximumFractionDigits:0 }); }
+function fmtT(v) { return (v / 1e12).toFixed(1); }
+function fmtPct(v) { return v < 0.1 ? v.toFixed(2) + '%' : v < 10 ? v.toFixed(1) + '%' : Math.round(v) + '%'; }
+
+// ── Project benchmark to future year (simple CAGR) ──
+function projectBenchmark(key, year, cagr) {
+  const base = BENCHMARKS[key] || 0;
+  const years = year - 2025;
+  return base * Math.pow(1 + (cagr || 0.03), years); // default 3% nominal GDP growth
+}
+
+// ── FTBT Computation ──
+function recalc() {
+  const year = parseInt(yearSlider.value);
+  const targetB = parseFloat(revInput.value) || 1000;
+  const targetUSD = targetB * 1e9;
+
+  yearVal.textContent = year;
+
+  // Project benchmarks forward
+  const gdp = projectBenchmark('global_gdp', year, 0.03);
+  const itSpend = projectBenchmark('global_it_spend', year, IT_CAGR);
+  const saasToday = BENCHMARKS['global_saas'] || 300e9;
+  const kwPayroll = projectBenchmark('knowledge_worker_payroll', year, 0.025);
+
+  // 1. Share of GDP
+  const gdpPct = (targetUSD / gdp) * 100;
+  document.getElementById('val-gdp').textContent = fmtPct(gdpPct);
+  document.getElementById('detail-gdp-t').textContent = fmtB(targetB);
+  document.getElementById('detail-gdp-d').textContent = fmtT(gdp);
+
+  // 2. Share of IT spend
+  const itPct = (targetUSD / itSpend) * 100;
+  document.getElementById('val-it').textContent = fmtPct(itPct);
+  document.getElementById('detail-it-t').textContent = fmtB(targetB);
+  document.getElementById('detail-it-d').textContent = fmtT(itSpend);
+
+  // 3. Multiples of SaaS
+  const saasX = targetUSD / saasToday;
+  document.getElementById('val-saas').textContent = saasX < 1 ? saasX.toFixed(2) + '\u00d7' : saasX.toFixed(1) + '\u00d7';
+  document.getElementById('detail-saas-x').textContent = saasX < 1 ? saasX.toFixed(2) : saasX.toFixed(1);
+
+  // 4. Labor equivalence
+  const laborPct = (targetUSD / kwPayroll) * 100;
+  document.getElementById('val-labor').textContent = fmtPct(laborPct);
+  document.getElementById('detail-labor-pct').textContent = laborPct < 10 ? laborPct.toFixed(1) : Math.round(laborPct);
+
+  // 5. Revenue per person
+  const perCap = targetUSD / WORLD_POP;
+  document.getElementById('val-percap').textContent = '$' + Math.round(perCap).toLocaleString('en-US');
+  document.getElementById('detail-percap').textContent = Math.round(perCap).toLocaleString('en-US');
+
+  // 6. Implied capex
+  const impliedCapex = targetUSD * CAPEX_RATIO;
+  const capexLabel = impliedCapex >= 1e12 ? '$' + (impliedCapex / 1e12).toFixed(1) + 'T' : '$' + Math.round(impliedCapex / 1e9) + 'B';
+  document.getElementById('val-capex').textContent = capexLabel;
+  document.getElementById('detail-capex-ratio').textContent = CAPEX_RATIO;
+  document.getElementById('detail-capex-abs').textContent = impliedCapex >= 1e12 ? (impliedCapex / 1e12).toFixed(1) : Math.round(impliedCapex / 1e9) + 'B';
+
+  // Flash cards
+  document.querySelectorAll('.ftbt-card').forEach(c => {
+    c.classList.add('flash');
+    setTimeout(() => c.classList.remove('flash'), 300);
+  });
+
+  // Color-code alarming values
+  const gdpEl = document.getElementById('val-gdp');
+  gdpEl.className = 'ftbt-value ' + (gdpPct > 5 ? 'val-red' : gdpPct > 2 ? 'val-orange' : 'val-blue');
+
+  const itEl = document.getElementById('val-it');
+  itEl.className = 'ftbt-value ' + (itPct > 30 ? 'val-red' : itPct > 15 ? 'val-orange' : 'val-purple');
+
+  // Update zoom chart
+  renderZoomChart(targetUSD, gdp, itSpend);
+
+  // Update mix
+  document.getElementById('mix-target-label').textContent = fmtB(targetB);
+  if (mixCheck.checked) updateMix();
+
+  // Update URL
+  updateURL(year, targetB);
+}
+
+// ── Zoom Chart (cascading bars) ──
+function renderZoomChart(aiRev, gdp, itSpend) {
+  const wrap = document.getElementById('zoom-chart');
+  const year = parseInt(yearSlider.value);
+  const servicesGdp = projectBenchmark('global_services_gdp', year, 0.03);
+  const entSoftware = projectBenchmark('enterprise_software', year, 0.06);
+  const saasProjected = projectBenchmark('global_saas', year, 0.08);
+  const saasToday = BENCHMARKS['global_saas'] || 300e9;
+
+  // Each layer: the whole bar is "parent", the highlighted fill is "child"
+  const layers = [
+    {
+      label: 'Global GDP', value: gdp,
+      childLabel: 'Services', childValue: servicesGdp,
+      fillColor: 'rgba(59,130,246,0.5)', barColor: 'rgba(59,130,246,0.12)',
+      pctColor: 'var(--accent)'
+    },
+    {
+      label: 'Services GDP', value: servicesGdp,
+      childLabel: 'IT Spend', childValue: itSpend,
+      fillColor: 'rgba(139,92,246,0.5)', barColor: 'rgba(139,92,246,0.12)',
+      pctColor: 'var(--purple)'
+    },
+    {
+      label: 'IT Spend', value: itSpend,
+      childLabel: 'Ent. Software', childValue: entSoftware,
+      fillColor: 'rgba(6,182,212,0.5)', barColor: 'rgba(6,182,212,0.12)',
+      pctColor: 'var(--cyan)'
+    },
+    {
+      label: 'Ent. Software', value: entSoftware,
+      childLabel: 'SaaS', childValue: saasProjected,
+      fillColor: 'rgba(16,185,129,0.5)', barColor: 'rgba(16,185,129,0.12)',
+      pctColor: 'var(--green)'
+    },
+    {
+      label: 'SaaS Market', value: saasProjected,
+      childLabel: 'AI Revenue', childValue: aiRev,
+      fillColor: 'rgba(245,158,11,0.6)', barColor: 'rgba(245,158,11,0.12)',
+      pctColor: 'var(--orange)'
+    },
+  ];
+
+  function valLabel(v) {
+    return v >= 1e12 ? '$' + (v / 1e12).toFixed(1) + 'T' : '$' + Math.round(v / 1e9) + 'B';
+  }
+
+  let html = '';
+  layers.forEach((l, i) => {
+    const pct = (l.childValue / l.value) * 100;
+    const barPct = Math.max(pct, 1.5); // minimum visible width
+    const pctLabel = pct < 0.1 ? pct.toFixed(2) + '%' : pct < 10 ? pct.toFixed(1) + '%' : Math.round(pct) + '%';
+
+    // Divider with zoom-in label between rows
+    if (i > 0) {
+      html += `<div class="zoom-divider"><div class="zoom-divider-text">zoom in</div><div class="zoom-divider-line"></div></div>`;
+    }
+
+    html += `
+      <div class="zoom-row">
+        <div class="zoom-label"><strong>${l.label}</strong>${valLabel(l.value)}</div>
+        <div class="zoom-bar-wrap" style="background:${l.barColor};">
+          <div class="zoom-bar-fill" style="width:${Math.min(barPct, 100)}%;background:${l.fillColor};">
+            <span>${l.childLabel} ${valLabel(l.childValue)}</span>
+          </div>
+        </div>
+        <div class="zoom-pct" style="color:${l.pctColor};">${pctLabel}</div>
+      </div>`;
+  });
+
+  // Final summary row: AI Revenue as the highlighted block
+  const aiPctGdp = ((aiRev / gdp) * 100);
+  const aiGdpLabel = aiPctGdp < 0.1 ? aiPctGdp.toFixed(3) + '%' : aiPctGdp < 1 ? aiPctGdp.toFixed(2) + '%' : aiPctGdp.toFixed(1) + '%';
+
+  html += `<div class="zoom-divider"><div class="zoom-divider-text">full picture</div><div class="zoom-divider-line"></div></div>`;
+  html += `
+    <div class="zoom-row">
+      <div class="zoom-label"><strong>AI Revenue</strong>${valLabel(aiRev)} target</div>
+      <div class="zoom-bar-wrap" style="background:rgba(245,158,11,0.08);">
+        <div class="zoom-bar-fill" style="width:100%;background:linear-gradient(90deg, rgba(245,158,11,0.5), rgba(239,68,68,0.4));border:1px solid rgba(245,158,11,0.6);">
+          <span>${aiGdpLabel} of Global GDP</span>
+        </div>
+      </div>
+      <div class="zoom-pct" style="color:var(--orange);">${valLabel(aiRev)}</div>
+    </div>`;
+
+  wrap.innerHTML = html;
+}
+
+// ── Mix Sliders ──
+function constrainMix(changed) {
+  let s = parseInt(mixSaas.value);
+  let l = parseInt(mixLabor.value);
+  let n = parseInt(mixNew.value);
+  const total = s + l + n;
+
+  if (total !== 100) {
+    const diff = total - 100;
+    if (changed === 'saas') {
+      // Redistribute to labor and new proportionally
+      const lRatio = l / (l + n || 1);
+      l = Math.max(0, Math.round(l - diff * lRatio));
+      n = 100 - s - l;
+    } else if (changed === 'labor') {
+      const sRatio = s / (s + n || 1);
+      s = Math.max(0, Math.round(s - diff * sRatio));
+      n = 100 - s - l;
+    } else {
+      const sRatio = s / (s + l || 1);
+      s = Math.max(0, Math.round(s - diff * sRatio));
+      l = 100 - s - n;
+    }
+    s = Math.max(0, Math.min(100, s));
+    l = Math.max(0, Math.min(100, l));
+    n = Math.max(0, Math.min(100, n));
+  }
+
+  mixSaas.value = s;
+  mixLabor.value = l;
+  mixNew.value = n;
+  document.getElementById('mix-saas-pct').textContent = s + '%';
+  document.getElementById('mix-labor-pct').textContent = l + '%';
+  document.getElementById('mix-new-pct').textContent = n + '%';
+
+  updateMix();
+}
+
+function updateMix() {
+  const targetB = parseFloat(revInput.value) || 1000;
+  const s = parseInt(mixSaas.value) / 100;
+  const l = parseInt(mixLabor.value) / 100;
+  const n = parseInt(mixNew.value) / 100;
+
+  const saasSlice = targetB * s;
+  const laborSlice = targetB * l;
+  const newSlice = targetB * n;
+
+  const kwEquiv = Math.round((laborSlice * 1e9) / 75000); // $75K loaded cost
+  const saasMarket = (BENCHMARKS['global_saas'] || 300e9) / 1e9;
+  const saasPct = ((saasSlice / saasMarket) * 100).toFixed(0);
+
+  const res = document.getElementById('mix-result');
+  res.innerHTML = `
+    <div class="mix-result-item"><strong style="color:var(--accent);">SaaS displacement:</strong> $${fmtB(Math.round(saasSlice))}B &mdash; ${saasPct}% of today's $${saasMarket}B SaaS market</div>
+    <div class="mix-result-item"><strong style="color:var(--orange);">Labor displacement:</strong> $${fmtB(Math.round(laborSlice))}B &mdash; equivalent to ${kwEquiv.toLocaleString()} knowledge workers at $75K loaded cost</div>
+    <div class="mix-result-item"><strong style="color:var(--green);">Net-new value:</strong> $${fmtB(Math.round(newSlice))}B &mdash; for context, the entire mobile app economy took ~15 years to reach $500B</div>
+  `;
+}
+
+// ── Benchmark Table ──
+function renderBenchTable() {
+  const tbody = document.getElementById('bench-tbody');
+  tbody.innerHTML = '';
+  benchData.forEach(b => {
+    const valStr = b.value >= 1e12 ? '$' + (b.value / 1e12).toFixed(1) + 'T' :
+                   b.value >= 1e9 ? '$' + (b.value / 1e9).toFixed(0) + 'B' :
+                   '$' + b.value.toLocaleString('en-US');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${b.label}</td><td class="num">${valStr}</td><td>${b.year}</td><td>${b.source || ''}</td><td>${b.retrievedAt || ''}</td><td>${b.confidence || ''}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── URL State ──
+function updateURL(year, revB) {
+  const params = new URLSearchParams();
+  params.set('y', year);
+  params.set('r', revB);
+  history.replaceState(null, '', '?' + params.toString());
+}
+
+function syncFromURL() {
+  const params = new URLSearchParams(location.search);
+  if (params.has('y')) {
+    yearSlider.value = parseInt(params.get('y'));
+    yearVal.textContent = yearSlider.value;
+  }
+  if (params.has('r')) {
+    revInput.value = parseInt(params.get('r'));
+    // Clear preset highlight
+    presetBtns.forEach(b => b.classList.remove('active'));
+  }
+}
+
+// ── Event Listeners ──
+yearSlider.addEventListener('input', () => {
+  // If a preset is active, update revenue to match
+  if (currentPreset) {
+    const y = parseInt(yearSlider.value);
+    revInput.value = PRESETS[currentPreset](y);
+  }
+  recalc();
+});
+
+revInput.addEventListener('input', () => {
+  presetBtns.forEach(b => b.classList.remove('active'));
+  currentPreset = null;
+  recalc();
+});
+
+presetBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    presetBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentPreset = btn.dataset.preset;
+    const y = parseInt(yearSlider.value);
+    revInput.value = PRESETS[currentPreset](y);
+    recalc();
+  });
+});
+
+mixCheck.addEventListener('change', () => {
+  mixPanel.classList.toggle('visible', mixCheck.checked);
+  if (mixCheck.checked) updateMix();
+});
+
+mixSaas.addEventListener('input', () => constrainMix('saas'));
+mixLabor.addEventListener('input', () => constrainMix('labor'));
+mixNew.addEventListener('input', () => constrainMix('new'));
+
+// Resize handler for treemap
+window.addEventListener('resize', recalc);
+
+// Set initial preset revenue
+(function() {
+  const y = parseInt(yearSlider.value);
+  revInput.value = PRESETS.base(y);
+})();
+</script>
+</body>
+</html>
