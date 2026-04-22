@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-04-02T05:11:09Z",
+    "generatedAt": "2026-04-20T02:27:20Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -88,7 +88,7 @@
         "color": "#8b5cf6"
       },
       {
-        "label": "Google",
+        "label": "Google (Gemini)",
         "value": 2.5,
         "color": "#4285f4"
       }
@@ -105,7 +105,7 @@
         "color": "#f59e0b"
       },
       {
-        "label": "Margin",
+        "label": "Op. Cash Flow",
         "value": 2.15,
         "color": "#94a3b8"
       }
@@ -491,25 +491,15 @@
   },
   "dashboard": {
     "providers": {
-      "OpenAI": {
-        "tokens": 200,
-        "rev": 25.0,
-        "color": "#10a37f",
-        "growth": "+150% YoY",
-        "consumerPct": 60,
-        "bizPct": 40,
-        "modelType": "frontier",
-        "region": "US"
-      },
-      "Anthropic": {
+      "ByteDance": {
         "tokens": 110,
-        "rev": 19.0,
-        "color": "#d97706",
-        "growth": "14x in 14mo",
-        "consumerPct": 35,
-        "bizPct": 65,
-        "modelType": "frontier",
-        "region": "US"
+        "rev": 0,
+        "color": "#ff4500",
+        "growth": "+1000x since May 2024",
+        "consumerPct": 70,
+        "bizPct": 30,
+        "modelType": "closed",
+        "region": "China"
       },
       "Google/Gemini": {
         "tokens": 90,
@@ -518,11 +508,51 @@
         "growth": "14x in '24",
         "consumerPct": 40,
         "bizPct": 60,
-        "modelType": "frontier",
+        "modelType": "closed",
         "region": "US"
       },
+      "OpenAI": {
+        "tokens": 30,
+        "rev": 25.0,
+        "color": "#10a37f",
+        "growth": "+150% YoY",
+        "consumerPct": 58,
+        "bizPct": 42,
+        "modelType": "closed",
+        "region": "US"
+      },
+      "Alibaba/Qwen": {
+        "tokens": 25,
+        "rev": 0.5,
+        "color": "#ff6a00",
+        "growth": "+300% YoY",
+        "consumerPct": 30,
+        "bizPct": 70,
+        "modelType": "open",
+        "region": "China"
+      },
+      "Anthropic": {
+        "tokens": 6,
+        "rev": 19.0,
+        "color": "#d97706",
+        "growth": "14x in 14mo",
+        "consumerPct": 35,
+        "bizPct": 65,
+        "modelType": "closed",
+        "region": "US"
+      },
+      "Tencent": {
+        "tokens": 10,
+        "rev": 0.3,
+        "color": "#00c853",
+        "growth": "+200% YoY",
+        "consumerPct": 60,
+        "bizPct": 40,
+        "modelType": "closed",
+        "region": "China"
+      },
       "Meta": {
-        "tokens": 80,
+        "tokens": 12,
         "rev": 0,
         "color": "#60a5fa",
         "growth": "+400% YoY",
@@ -531,95 +561,110 @@
         "modelType": "open",
         "region": "US"
       },
+      "Baidu": {
+        "tokens": 8,
+        "rev": 0.4,
+        "color": "#2932e1",
+        "growth": "+33x since Aug 2024",
+        "consumerPct": 50,
+        "bizPct": 50,
+        "modelType": "closed",
+        "region": "China"
+      },
       "DeepSeek": {
-        "tokens": 40,
+        "tokens": 8,
         "rev": 0.3,
         "color": "#a78bfa",
         "growth": "+800% YoY",
         "consumerPct": 50,
         "bizPct": 50,
         "modelType": "open",
-        "region": "Asia"
-      },
-      "Mistral": {
-        "tokens": 15,
-        "rev": 0.4,
-        "color": "#f97316",
-        "growth": "+250% YoY",
-        "consumerPct": 20,
-        "bizPct": 80,
-        "modelType": "frontier",
-        "region": "Europe"
-      },
-      "xAI": {
-        "tokens": 10,
-        "rev": 0.5,
-        "color": "#e2e8f0",
-        "growth": "+500% YoY",
-        "consumerPct": 70,
-        "bizPct": 30,
-        "modelType": "frontier",
-        "region": "US"
-      },
-      "Others": {
-        "tokens": 132,
-        "rev": 1.25,
-        "color": "#475569",
-        "growth": "+86% YoY",
-        "consumerPct": 20,
-        "bizPct": 80,
-        "modelType": "open",
-        "region": "Mixed"
+        "region": "China"
       },
       "Minimax": {
-        "tokens": 30,
+        "tokens": 5,
         "rev": 0.15,
         "color": "#ec4899",
         "growth": "+400% YoY",
         "consumerPct": 60,
         "bizPct": 40,
-        "modelType": "open",
-        "region": "Asia"
+        "modelType": "closed",
+        "region": "China"
       },
-      "Moonshot": {
-        "tokens": 8,
+      "xAI": {
+        "tokens": 3,
+        "rev": 0.5,
+        "color": "#e2e8f0",
+        "growth": "+500% YoY",
+        "consumerPct": 70,
+        "bizPct": 30,
+        "modelType": "closed",
+        "region": "US"
+      },
+      "Mistral": {
+        "tokens": 2,
+        "rev": 0.4,
+        "color": "#f97316",
+        "growth": "+250% YoY",
+        "consumerPct": 20,
+        "bizPct": 80,
+        "modelType": "open",
+        "region": "EU"
+      },
+      "Moonshot/Kimi": {
+        "tokens": 3,
         "rev": 0.1,
         "color": "#14b8a6",
         "growth": "+300% YoY",
         "consumerPct": 50,
         "bizPct": 50,
+        "modelType": "closed",
+        "region": "China"
+      },
+      "Others/Self-hosted": {
+        "tokens": 48,
+        "rev": 1.5,
+        "color": "#475569",
+        "growth": "+100% YoY",
+        "consumerPct": 30,
+        "bizPct": 70,
         "modelType": "open",
-        "region": "Asia"
+        "region": "Mixed"
       }
     },
     "regions": {
+      "China": {
+        "pct": 48,
+        "color": "#ef4444",
+        "growth": "+1000x since 2024"
+      },
       "North America": {
-        "pct": 40,
+        "pct": 27,
         "color": "#3b82f6",
         "growth": "+160% YoY"
       },
-      "Asia-Pacific": {
-        "pct": 30,
+      "Rest of Asia-Pacific": {
+        "pct": 9,
         "color": "#8b5cf6",
         "growth": "+280% YoY"
       },
       "Europe": {
-        "pct": 18,
+        "pct": 9,
         "color": "#06b6d4",
         "growth": "+140% YoY"
       },
       "Middle East": {
-        "pct": 5,
+        "pct": 3,
         "color": "#f59e0b",
         "growth": "+350% YoY"
       },
       "Latin America": {
-        "pct": 4,
+        "pct": 2,
         "color": "#10b981",
         "growth": "+200% YoY"
       },
       "Africa": {
-        "pct": 3,
+        "pct": 2,
         "color": "#ec4899",
         "growth": "+300% YoY"
       }
@@ -693,304 +738,438 @@
       }
     },
     "crossWeights": {
-      "OpenAI": {
+      "ByteDance": {
         "regions": {
-          "North America": 0.45,
-          "Asia-Pacific": 0.25,
-          "Europe": 0.18,
-          "Middle East": 0.05,
-          "Latin America": 0.04,
-          "Africa": 0.03
+          "China": 0.8,
+          "North America": 0.03,
+          "Rest of Asia-Pacific": 0.1,
+          "Europe": 0.02,
+          "Middle East": 0.02,
+          "Latin America": 0.02,
+          "Africa": 0.01
         },
         "industries": {
-          "Software & Tech": 0.3,
-          "Financial Services": 0.12,
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
           "Healthcare": 0.08,
           "Retail & E-commerce": 0.12,
-          "Marketing & Ads": 0.1,
-          "Customer Service": 0.08,
-          "Education": 0.07,
-          "Manufacturing": 0.04,
-          "Legal & Gov & Other": 0.09
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
         },
         "useCases": {
           "Coding & Dev Tools": 0.25,
-          "Chat & Assistants": 0.35,
+          "Chat & Assistants": 0.3,
           "Content & Writing": 0.15,
-          "Enterprise Agents": 0.08,
-          "Search & RAG": 0.07,
-          "Data Analysis": 0.05,
-          "Other": 0.05
-        }
-      },
-      "Anthropic": {
-        "regions": {
-          "North America": 0.5,
-          "Asia-Pacific": 0.22,
-          "Europe": 0.18,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
-          "Africa": 0.03
-        },
-        "industries": {
-          "Software & Tech": 0.45,
-          "Financial Services": 0.18,
-          "Healthcare": 0.06,
-          "Retail & E-commerce": 0.05,
-          "Marketing & Ads": 0.04,
-          "Customer Service": 0.05,
-          "Education": 0.03,
-          "Manufacturing": 0.03,
-          "Legal & Gov & Other": 0.11
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.45,
-          "Chat & Assistants": 0.2,
-          "Content & Writing": 0.08,
-          "Enterprise Agents": 0.12,
-          "Search & RAG": 0.05,
-          "Data Analysis": 0.06,
-          "Other": 0.04
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       },
       "Google/Gemini": {
         "regions": {
-          "North America": 0.35,
-          "Asia-Pacific": 0.3,
-          "Europe": 0.2,
-          "Middle East": 0.06,
-          "Latin America": 0.05,
-          "Africa": 0.04
-        },
-        "industries": {
-          "Software & Tech": 0.3,
-          "Financial Services": 0.1,
-          "Healthcare": 0.12,
-          "Retail & E-commerce": 0.1,
-          "Marketing & Ads": 0.1,
-          "Customer Service": 0.08,
-          "Education": 0.08,
-          "Manufacturing": 0.04,
-          "Legal & Gov & Other": 0.08
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.2,
-          "Chat & Assistants": 0.3,
-          "Content & Writing": 0.15,
-          "Enterprise Agents": 0.1,
-          "Search & RAG": 0.12,
-          "Data Analysis": 0.08,
-          "Other": 0.05
-        }
-      },
-      "Meta": {
-        "regions": {
-          "North America": 0.35,
-          "Asia-Pacific": 0.3,
+          "China": 0.05,
+          "North America": 0.4,
+          "Rest of Asia-Pacific": 0.2,
           "Europe": 0.2,
           "Middle East": 0.05,
           "Latin America": 0.05,
           "Africa": 0.05
         },
         "industries": {
-          "Software & Tech": 0.45,
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.2,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.15,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "OpenAI": {
+        "regions": {
+          "China": 0.02,
+          "North America": 0.45,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.22,
+          "Middle East": 0.06,
+          "Latin America": 0.05,
+          "Africa": 0.05
+        },
+        "industries": {
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.3,
+          "Chat & Assistants": 0.25,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Alibaba/Qwen": {
+        "regions": {
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
+        },
+        "industries": {
+          "Software & Tech": 0.35,
           "Financial Services": 0.15,
           "Healthcare": 0.08,
-          "Retail & E-commerce": 0.08,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.05,
-          "Education": 0.04,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
           "Manufacturing": 0.05,
           "Legal & Gov & Other": 0.05
         },
         "useCases": {
-          "Coding & Dev Tools": 0.35,
-          "Chat & Assistants": 0.25,
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Anthropic": {
+        "regions": {
+          "China": 0.01,
+          "North America": 0.5,
+          "Rest of Asia-Pacific": 0.12,
+          "Europe": 0.25,
+          "Middle East": 0.04,
+          "Latin America": 0.04,
+          "Africa": 0.04
+        },
+        "industries": {
+          "Software & Tech": 0.45,
+          "Financial Services": 0.18,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.05,
+          "Marketing & Ads": 0.04,
+          "Customer Service": 0.05,
+          "Education": 0.03,
+          "Manufacturing": 0.03,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.4,
+          "Chat & Assistants": 0.2,
           "Content & Writing": 0.1,
           "Enterprise Agents": 0.12,
           "Search & RAG": 0.08,
-          "Data Analysis": 0.05,
-          "Other": 0.05
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Tencent": {
+        "regions": {
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Meta": {
+        "regions": {
+          "China": 0.02,
+          "North America": 0.35,
+          "Rest of Asia-Pacific": 0.25,
+          "Europe": 0.2,
+          "Middle East": 0.05,
+          "Latin America": 0.08,
+          "Africa": 0.05
+        },
+        "industries": {
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Baidu": {
+        "regions": {
+          "China": 0.85,
+          "North America": 0.02,
+          "Rest of Asia-Pacific": 0.08,
+          "Europe": 0.02,
+          "Middle East": 0.01,
+          "Latin America": 0.01,
+          "Africa": 0.01
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       },
       "DeepSeek": {
         "regions": {
-          "North America": 0.2,
-          "Asia-Pacific": 0.55,
-          "Europe": 0.15,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
-          "Africa": 0.03
+          "China": 0.55,
+          "North America": 0.15,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.08,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
         },
         "industries": {
-          "Software & Tech": 0.5,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.08,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.05,
-          "Education": 0.07,
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
           "Manufacturing": 0.05,
           "Legal & Gov & Other": 0.05
         },
         "useCases": {
-          "Coding & Dev Tools": 0.4,
+          "Coding & Dev Tools": 0.25,
           "Chat & Assistants": 0.3,
-          "Content & Writing": 0.08,
-          "Enterprise Agents": 0.05,
-          "Search & RAG": 0.07,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "Minimax": {
+        "regions": {
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
+        },
+        "industries": {
+          "Software & Tech": 0.35,
+          "Financial Services": 0.15,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.05,
+          "Legal & Gov & Other": 0.05
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.25,
+          "Chat & Assistants": 0.3,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
+        }
+      },
+      "xAI": {
+        "regions": {
+          "China": 0.01,
+          "North America": 0.55,
+          "Rest of Asia-Pacific": 0.1,
+          "Europe": 0.2,
+          "Middle East": 0.05,
+          "Latin America": 0.05,
+          "Africa": 0.04
+        },
+        "industries": {
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
+        },
+        "useCases": {
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
           "Data Analysis": 0.07,
           "Other": 0.03
         }
       },
       "Mistral": {
         "regions": {
-          "North America": 0.25,
-          "Asia-Pacific": 0.15,
-          "Europe": 0.45,
-          "Middle East": 0.06,
-          "Latin America": 0.05,
-          "Africa": 0.04
-        },
-        "industries": {
-          "Software & Tech": 0.4,
-          "Financial Services": 0.2,
-          "Healthcare": 0.08,
-          "Retail & E-commerce": 0.06,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.05,
-          "Education": 0.04,
-          "Manufacturing": 0.05,
-          "Legal & Gov & Other": 0.07
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.3,
-          "Chat & Assistants": 0.25,
-          "Content & Writing": 0.12,
-          "Enterprise Agents": 0.15,
-          "Search & RAG": 0.08,
-          "Data Analysis": 0.06,
-          "Other": 0.04
-        }
-      },
-      "xAI": {
-        "regions": {
-          "North America": 0.55,
-          "Asia-Pacific": 0.15,
-          "Europe": 0.18,
+          "China": 0.02,
+          "North America": 0.2,
+          "Rest of Asia-Pacific": 0.08,
+          "Europe": 0.55,
           "Middle East": 0.05,
-          "Latin America": 0.04,
-          "Africa": 0.03
+          "Latin America": 0.05,
+          "Africa": 0.05
         },
         "industries": {
-          "Software & Tech": 0.35,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.05,
-          "Marketing & Ads": 0.1,
-          "Customer Service": 0.05,
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
           "Education": 0.05,
-          "Manufacturing": 0.03,
-          "Legal & Gov & Other": 0.22
+          "Manufacturing": 0.04,
+          "Legal & Gov & Other": 0.09
         },
         "useCases": {
-          "Coding & Dev Tools": 0.15,
-          "Chat & Assistants": 0.5,
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
           "Content & Writing": 0.15,
-          "Enterprise Agents": 0.05,
-          "Search & RAG": 0.05,
-          "Data Analysis": 0.05,
-          "Other": 0.05
+          "Enterprise Agents": 0.1,
+          "Search & RAG": 0.1,
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       },
-      "Others": {
+      "Moonshot/Kimi": {
         "regions": {
-          "North America": 0.3,
-          "Asia-Pacific": 0.35,
-          "Europe": 0.2,
-          "Middle East": 0.06,
-          "Latin America": 0.05,
-          "Africa": 0.04
+          "China": 0.7,
+          "North America": 0.05,
+          "Rest of Asia-Pacific": 0.15,
+          "Europe": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.02,
+          "Africa": 0.02
         },
         "industries": {
           "Software & Tech": 0.35,
           "Financial Services": 0.15,
-          "Healthcare": 0.1,
-          "Retail & E-commerce": 0.1,
-          "Marketing & Ads": 0.05,
-          "Customer Service": 0.08,
+          "Healthcare": 0.08,
+          "Retail & E-commerce": 0.12,
+          "Marketing & Ads": 0.08,
+          "Customer Service": 0.07,
           "Education": 0.05,
           "Manufacturing": 0.05,
-          "Legal & Gov & Other": 0.07
+          "Legal & Gov & Other": 0.05
         },
         "useCases": {
           "Coding & Dev Tools": 0.25,
           "Chat & Assistants": 0.3,
           "Content & Writing": 0.15,
           "Enterprise Agents": 0.1,
-          "Search & RAG": 0.08,
+          "Search & RAG": 0.1,
           "Data Analysis": 0.07,
-          "Other": 0.05
+          "Other": 0.03
         }
       },
-      "Minimax": {
+      "Others/Self-hosted": {
         "regions": {
-          "North America": 0.15,
-          "Asia-Pacific": 0.6,
+          "China": 0.3,
+          "North America": 0.3,
+          "Rest of Asia-Pacific": 0.15,
           "Europe": 0.15,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
+          "Middle East": 0.03,
+          "Latin America": 0.04,
           "Africa": 0.03
         },
         "industries": {
-          "Software & Tech": 0.4,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.1,
+          "Software & Tech": 0.33,
+          "Financial Services": 0.16,
+          "Healthcare": 0.09,
+          "Retail & E-commerce": 0.09,
           "Marketing & Ads": 0.08,
-          "Customer Service": 0.08,
-          "Education": 0.07,
-          "Manufacturing": 0.05,
-          "Legal & Gov & Other": 0.07
-        },
-        "useCases": {
-          "Coding & Dev Tools": 0.2,
-          "Chat & Assistants": 0.35,
-          "Content & Writing": 0.15,
-          "Enterprise Agents": 0.1,
-          "Search & RAG": 0.08,
-          "Data Analysis": 0.07,
-          "Other": 0.05
-        }
-      },
-      "Moonshot": {
-        "regions": {
-          "North America": 0.1,
-          "Asia-Pacific": 0.7,
-          "Europe": 0.1,
-          "Middle East": 0.04,
-          "Latin America": 0.03,
-          "Africa": 0.03
-        },
-        "industries": {
-          "Software & Tech": 0.35,
-          "Financial Services": 0.1,
-          "Healthcare": 0.05,
-          "Retail & E-commerce": 0.1,
-          "Marketing & Ads": 0.08,
-          "Customer Service": 0.1,
-          "Education": 0.08,
-          "Manufacturing": 0.05,
+          "Customer Service": 0.07,
+          "Education": 0.05,
+          "Manufacturing": 0.04,
           "Legal & Gov & Other": 0.09
         },
         "useCases": {
-          "Coding & Dev Tools": 0.25,
-          "Chat & Assistants": 0.35,
-          "Content & Writing": 0.12,
-          "Enterprise Agents": 0.08,
+          "Coding & Dev Tools": 0.28,
+          "Chat & Assistants": 0.27,
+          "Content & Writing": 0.15,
+          "Enterprise Agents": 0.1,
           "Search & RAG": 0.1,
-          "Data Analysis": 0.05,
-          "Other": 0.05
+          "Data Analysis": 0.07,
+          "Other": 0.03
         }
       }
     },
@@ -3059,17 +3238,11 @@
       }
     },
     "demandWeights": {
-      "OpenAI": {
-        "Consumer Subs": 0.55,
-        "API / Developer": 0.15,
+      "ByteDance": {
+        "Consumer Subs": 0.7,
+        "API / Developer": 0.1,
         "Enterprise Platform": 0.15,
-        "Cloud Channel": 0.15
-      },
-      "Anthropic": {
-        "Consumer Subs": 0.2,
-        "API / Developer": 0.35,
-        "Enterprise Platform": 0.25,
-        "Cloud Channel": 0.2
+        "Cloud Channel": 0.05
       },
       "Google/Gemini": {
         "Consumer Subs": 0.35,
@@ -3077,9 +3250,39 @@
         "Enterprise Platform": 0.2,
         "Cloud Channel": 0.25
       },
+      "OpenAI": {
+        "Consumer Subs": 0.55,
+        "API / Developer": 0.15,
+        "Enterprise Platform": 0.15,
+        "Cloud Channel": 0.15
+      },
+      "Alibaba/Qwen": {
+        "Consumer Subs": 0.2,
+        "API / Developer": 0.3,
+        "Enterprise Platform": 0.4,
+        "Cloud Channel": 0.1
+      },
+      "Anthropic": {
+        "Consumer Subs": 0.2,
+        "API / Developer": 0.35,
+        "Enterprise Platform": 0.25,
+        "Cloud Channel": 0.2
+      },
+      "Tencent": {
+        "Consumer Subs": 0.6,
+        "API / Developer": 0.1,
+        "Enterprise Platform": 0.25,
+        "Cloud Channel": 0.05
+      },
       "Meta": {
         "Consumer Subs": 0.1,
         "API / Developer": 0.5,
+        "Enterprise Platform": 0.3,
+        "Cloud Channel": 0.1
+      },
+      "Baidu": {
+        "Consumer Subs": 0.4,
+        "API / Developer": 0.2,
         "Enterprise Platform": 0.3,
         "Cloud Channel": 0.1
       },
@@ -3089,34 +3292,34 @@
         "Enterprise Platform": 0.1,
         "Cloud Channel": 0.1
       },
-      "Mistral": {
-        "Consumer Subs": 0.1,
-        "API / Developer": 0.35,
-        "Enterprise Platform": 0.3,
-        "Cloud Channel": 0.25
-      },
-      "xAI": {
-        "Consumer Subs": 0.7,
-        "API / Developer": 0.15,
-        "Enterprise Platform": 0.1,
-        "Cloud Channel": 0.05
-      },
-      "Others": {
-        "Consumer Subs": 0.3,
-        "API / Developer": 0.3,
-        "Enterprise Platform": 0.2,
-        "Cloud Channel": 0.2
-      },
       "Minimax": {
-        "Consumer Subs": 0.45,
-        "API / Developer": 0.3,
-        "Enterprise Platform": 0.15,
+        "Consumer Subs": 0.3,
+        "API / Developer": 0.4,
+        "Enterprise Platform": 0.2,
         "Cloud Channel": 0.1
       },
-      "Moonshot": {
+      "xAI": {
+        "Consumer Subs": 0.6,
+        "API / Developer": 0.2,
+        "Enterprise Platform": 0.1,
+        "Cloud Channel": 0.1
+      },
+      "Mistral": {
+        "Consumer Subs": 0.15,
+        "API / Developer": 0.35,
+        "Enterprise Platform": 0.3,
+        "Cloud Channel": 0.2
+      },
+      "Moonshot/Kimi": {
         "Consumer Subs": 0.5,
         "API / Developer": 0.25,
-        "Enterprise Platform": 0.15,
+        "Enterprise Platform": 0.2,
+        "Cloud Channel": 0.05
+      },
+      "Others/Self-hosted": {
+        "Consumer Subs": 0.2,
+        "API / Developer": 0.5,
+        "Enterprise Platform": 0.2,
         "Cloud Channel": 0.1
       }
     }
@@ -3358,125 +3561,165 @@
       }
     ],
     "providerNames": [
+      "ByteDance",
+      "Google/Gemini",
       "OpenAI",
+      "Alibaba/Qwen",
       "Anthropic",
-      "Google",
-      "DeepSeek",
-      "Mistral",
-      "xAI",
+      "Tencent",
       "Meta",
-      "Others",
+      "Baidu",
+      "DeepSeek",
       "Minimax",
-      "Moonshot"
+      "xAI",
+      "Mistral",
+      "Moonshot/Kimi",
+      "Others/Self-hosted"
     ],
     "providerColors": [
-      "#10a37f",
-      "#d97706",
+      "#ff4500",
       "#4285f4",
-      "#a78bfa",
-      "#f97316",
-      "#e2e8f0",
+      "#10a37f",
+      "#ff6a00",
+      "#d97706",
+      "#00c853",
       "#60a5fa",
-      "#475569",
+      "#2932e1",
+      "#a78bfa",
       "#ec4899",
-      "#14b8a6"
+      "#e2e8f0",
+      "#f97316",
+      "#14b8a6",
+      "#475569"
     ],
     "revData": [
       [
+        0,
+        0.5,
         3.4,
-        0.2,
-        0.5,
-        0,
         0.05,
-        0,
+        0.2,
+        0.02,
         0.0,
-        0.5,
-        0,
-        0
+        0.05,
+        0.0,
+        0.0,
+        0.0,
+        0.05,
+        0.0,
+        0.18
       ],
       [
-        4.5,
-        0.5,
+        0,
         0.8,
-        0,
-        0.1,
-        0,
-        0.0,
-        0.7,
-        0,
-        0
-      ],
-      [
-        5.5,
-        1.0,
-        1.2,
-        0,
-        0.15,
-        0.1,
-        0.0,
-        1.0,
-        0,
-        0
-      ],
-      [
-        7.0,
-        2.0,
-        1.8,
-        0.05,
-        0.2,
-        0.2,
-        0.0,
-        1.39,
-        0.01,
-        0
-      ],
-      [
-        9.0,
-        4.0,
-        2.2,
-        0.1,
-        0.3,
-        0.3,
-        0.0,
-        1.95,
-        0.03,
-        0.02
-      ],
-      [
-        11.0,
-        6.5,
-        2.8,
-        0.15,
-        0.35,
-        0.4,
-        0.0,
-        2.41,
-        0.05,
-        0.04
-      ],
-      [
-        13.0,
-        9.0,
-        3.2,
-        0.2,
-        0.38,
-        0.45,
-        0.0,
-        3.06,
+        4.5,
         0.08,
-        0.06
+        0.5,
+        0.04,
+        0.0,
+        0.08,
+        0.0,
+        0.0,
+        0.0,
+        0.1,
+        0.0,
+        0.25
       ],
       [
-        16.0,
-        11.5,
-        3.6,
-        0.25,
-        0.39,
-        0.48,
+        0,
+        1.2,
+        5.5,
+        0.1,
+        1.0,
+        0.06,
         0.0,
+        0.1,
+        0.0,
+        0.0,
+        0.1,
+        0.15,
+        0.0,
+        0.35
+      ],
+      [
+        0,
+        1.8,
+        7.0,
+        0.15,
+        2.0,
+        0.08,
+        0.0,
+        0.15,
+        0.05,
+        0.01,
+        0.2,
+        0.2,
+        0.0,
+        0.49
+      ],
+      [
+        0,
+        2.2,
+        9.0,
+        0.2,
+        4.0,
+        0.1,
+        0.0,
+        0.2,
+        0.1,
+        0.03,
+        0.3,
+        0.3,
+        0.02,
+        0.69
+      ],
+      [
+        0,
+        2.8,
+        11.0,
+        0.25,
+        6.5,
+        0.15,
+        0.0,
+        0.25,
+        0.15,
+        0.05,
+        0.4,
+        0.35,
+        0.04,
+        0.85
+      ],
+      [
+        0,
+        3.2,
+        13.0,
+        0.3,
+        9.0,
+        0.2,
+        0.0,
+        0.3,
+        0.2,
+        0.08,
+        0.45,
+        0.38,
+        0.06,
+        1.08
+      ],
+      [
+        0,
         3.6,
+        16.0,
+        0.4,
+        11.5,
+        0.25,
+        0.0,
+        0.35,
+        0.25,
         0.12,
-        0.08
+        0.48,
+        0.39,
+        0.08,
+        1.27
       ],
       [
         25.0,
@@ -3486,119 +3729,159 @@
         0.4,
         0.5,
         0,
-        4.25,
+        0.4,
         0.15,
-        0.1
+        0.1,
+        0.5,
+        0.4,
+        0.1,
+        1.5
       ]
     ],
     "tokenData": [
       [
-        35,
-        4,
-        12,
         0,
+        6.67,
+        5.25,
+        0.5,
+        0.22,
+        0.5,
+        1.2,
+        0.2,
+        0.0,
+        0.0,
+        0.0,
+        0.13,
+        0.0,
+        3.58
+      ],
+      [
+        0.12,
+        11.11,
+        7.5,
         1,
-        0,
-        8,
-        10,
-        0,
-        0
-      ],
-      [
-        50,
-        10,
-        20,
-        0,
-        2,
+        0.55,
         1,
-        12,
-        18,
-        0,
-        0
+        1.8,
+        0.5,
+        0.0,
+        0.0,
+        0.3,
+        0.27,
+        0.0,
+        6.45
       ],
       [
-        70,
-        20,
-        30,
+        0.5,
+        16.67,
+        10.5,
         2,
+        1.09,
+        1.5,
+        3.0,
+        1,
+        0.4,
+        0.0,
+        0.6,
+        0.4,
+        0.0,
+        12.54
+      ],
+      [
+        2,
+        25.0,
+        14.25,
         3,
+        1.91,
         2,
-        20,
-        35,
-        0,
-        0
-      ],
-      [
-        95,
-        35,
-        45,
-        5,
-        5,
-        3,
-        30,
-        47,
+        4.5,
         2,
-        1
+        1.0,
+        0.33,
+        0.9,
+        0.67,
+        0.38,
+        16.84
       ],
       [
-        120,
-        50,
-        55,
-        12,
-        7,
-        5,
-        45,
-        63,
-        5,
-        2
-      ],
-      [
-        145,
-        70,
-        65,
-        18,
-        9,
-        7,
-        60,
-        82,
-        10,
-        3
-      ],
-      [
-        165,
-        85,
-        75,
-        25,
-        11,
         8,
+        30.56,
+        18.0,
+        5,
+        2.73,
+        3,
+        6.75,
+        3,
+        2.4,
+        0.83,
+        1.5,
+        0.93,
+        0.75,
+        22.57
+      ],
+      [
+        20,
+        36.11,
+        21.75,
+        8,
+        3.82,
+        4.5,
+        9.0,
+        4.5,
+        3.6,
+        1.67,
+        2.1,
+        1.2,
+        1.12,
+        29.37
+      ],
+      [
+        45,
+        41.67,
+        24.75,
+        12,
+        4.64,
+        6,
+        11.25,
+        5.5,
+        5.0,
+        3.0,
+        2.4,
+        1.47,
+        1.88,
+        31.16
+      ],
+      [
         75,
-        87,
+        45.56,
+        27.75,
         18,
-        5
+        5.45,
+        8,
+        13.2,
+        7,
+        6.4,
+        4.17,
+        2.7,
+        1.73,
+        2.25,
+        31.88
       ],
       [
-        185,
-        100,
-        82,
-        32,
-        13,
-        9,
-        88,
-        89,
-        25,
-        6
-      ],
-      [
-        200,
-        110,
+        30,
+        6,
         90,
-        40,
-        15,
-        10,
-        80,
-        132,
-        30,
-        8
+        8,
+        2,
+        3,
+        12,
+        8,
+        5,
+        8,
+        3.0,
+        2.0,
+        3.0,
+        48.0
       ]
     ],
     "priceData": [
@@ -3659,49 +3942,40 @@
     ],
     "events": [
       {
-        "title": "The GPT-4 Era",
-        "text": "OpenAI dominates at $3.4B ARR. Anthropic still tiny ($200M). Open models (Llama 2) exist but lag far behind frontier quality. Self-hosted inference is niche.",
-        "delta": "Baseline quarter. Total market: $4.7B ARR."
+        "title": "The GPT-4 Era Begins",
+        "body": "OpenAI dominates with GPT-4 at $3.4B ARR, processing ~5T tokens/day via API. Google quietly runs more total tokens through Search and Workspace but generates a fraction of the revenue. Anthropic is a $200M niche player. China's AI market is nascent \u2014 ByteDance hasn't launched Doubao yet. Total market: ~18T tokens/day, almost entirely US-driven."
       },
       {
-        "title": "GPT-4o + Claude 3.5 Sonnet + Llama 3",
-        "text": "Three game-changers: GPT-4o halves prices, Claude 3.5 Sonnet disrupts coding, and Llama 3 closes the open-source quality gap. Open model tokens start growing fast.",
-        "delta": "Total +$1.9B (+42% QoQ). Biggest mover: OpenAI (+$1.1B)."
+        "title": "GPT-4o + Claude 3.5 + Llama 3 Launch",
+        "body": "Three inflection points in one quarter. OpenAI ships GPT-4o (multimodal, faster, cheaper). Anthropic releases Claude 3.5 Sonnet, winning developer mindshare. Meta open-sources Llama 3, igniting the open-model movement. ByteDance launches Doubao at 120B tokens/day \u2014 tiny, but the start of a 1,000x growth curve. Token volumes double as prices halve."
       },
       {
-        "title": "The Mini Revolution",
-        "text": "GPT-4o mini at $0.60/M output \u2014 99.5% cheaper than GPT-4. But Llama 3.1 405B launches in July, closing the frontier quality gap. vLLM Docker pulls accelerate. Self-hosting becomes viable at enterprise scale.",
-        "delta": "Total +$2.3B (+36% QoQ). Biggest mover: OpenAI (+$1.0B)."
+        "title": "The Mini Model Revolution",
+        "body": "Small, cheap models change the economics. GPT-4o mini, Claude 3.5 Haiku, and Gemini Flash slash inference costs by 10-50x. API pricing collapses from $20/M to under $1/M for capable models. This unlocks massive developer adoption \u2014 every startup can now afford AI. Enterprise pilots proliferate but actual usage remains shallow."
       },
       {
-        "title": "Open Source Inflection",
-        "text": "Llama 3.1, Qwen 2.5, DeepSeek V2.5 all strong. Self-hosted tokens now ~9% of global volume. Enterprises self-hosting for data sovereignty and cost. The \"invisible token\" economy emerges.",
-        "delta": "Total +$3.7B (+41% QoQ). Biggest mover: OpenAI (+$1.5B)."
+        "title": "Open Source Inflection Point",
+        "body": "Llama 3.1 405B proves open models can match frontier performance. DeepSeek V2 emerges with shockingly good performance at a fraction of the cost. Chinese models hit 61% of OpenRouter token volume. The open-vs-closed debate shifts from 'if' to 'when'. ByteDance hits 2T tokens/day. OpenAI crosses $7B ARR but inference costs exceed revenue."
       },
       {
-        "title": "DeepSeek Shock",
-        "text": "DeepSeek R1 matches GPT-4o at 1/10th the price \u2014 and it's open-weight. Triggers pricing pressure across all providers. Open model share jumps to ~20%. The question shifts: why pay for frontier?",
-        "delta": "Total +$5.2B (+42% QoQ). Biggest mover: OpenAI (+$2.0B)."
+        "title": "The DeepSeek Shock",
+        "body": "DeepSeek V3 trains for $6M (vs GPT-4's $79M) and matches frontier performance. The AI cost narrative inverts \u2014 it's no longer about who spends the most, but who spends the smartest. China's token consumption explodes. ByteDance reaches 8T/day. Anthropic hits $4B ARR with 70% from API, proving the enterprise AI market is real. OpenAI races to $20B ARR."
       },
       {
-        "title": "The Enterprise AI Mirage",
-        "text": "M365 Copilot: 15M seats, 35.8% usage. Agentforce, Now Assist: revenue booked \u2260 used. Meanwhile open models quietly grow \u2014 banks, governments, sovereign clouds all deploying Llama/Qwen.",
-        "delta": "Total +$5.8B (+32% QoQ). Biggest mover: Anthropic (+$2.5B)."
+        "title": "The Enterprise AI Reality Check",
+        "body": "Microsoft Copilot has 15M paid seats but only 35.8% actually use it. Gartner finds only 5% of enterprises are past pilot stage. Salesforce gives away 50% of Agentforce deals for free. The gap between AI hype and enterprise reality becomes undeniable. Meanwhile, developer and API usage grows 20x \u2014 the real demand is bottom-up, not top-down."
       },
       {
-        "title": "Anthropic Takes Enterprise, OSS Takes Volume",
-        "text": "Anthropic captures 40% of enterprise LLM spend. But open models capture the volume story \u2014 80T tokens/day with almost no model-layer revenue.",
-        "delta": "Total +$5.7B (+24% QoQ). Biggest mover: Anthropic (+$2.5B)."
+        "title": "Anthropic Takes Enterprise, China Takes Volume",
+        "body": "Anthropic becomes the enterprise inference leader (Barclays), hitting $14B ARR in February. Claude Code launches at >$2.5B ARR. But the volume story is in China \u2014 ByteDance passes 45T tokens/day, overtaking Google as the world's largest token processor. Alibaba's internal AI usage hits 16T/day. China's National Data Administration reports 140T+ tokens/day nationally."
       },
       {
-        "title": "The AI Native Explosion",
-        "text": "Cursor $1B ARR, Harvey $190M, Cognition $155M. Many AI natives use a mix of frontier AND open models, routing by cost/quality. litellm hits 97M downloads/month.",
-        "delta": "Total +$6.6B (+22% QoQ). Biggest mover: OpenAI (+$3.0B)."
+        "title": "The AI-Native Explosion",
+        "body": "Cursor, Perplexity, and a wave of AI-native apps cross $100M+ ARR. Coding becomes the dominant use case \u2014 over 50% of OpenRouter traffic is now programming (up from 11%). OpenAI launches Codex with 70% month-over-month growth. The token mix shifts from chat to agents and multi-step workflows, multiplying tokens per task by 10-100x."
       },
       {
-        "title": "Today: Revenue Explosion Meets Reality Check",
-        "text": "OpenAI $20B ARR, Anthropic $14B (adding $6B in February alone \u2014 Brad Gerstner). Both expected to IPO in 2026 (Jensen Huang). NVIDIA invested $40B. But Chamath warns: zero proven enterprise ROI at scale, token spend tripling quarterly with no revenue gains. Meta spending $115-135B on AI infra. 85% of startup tokens now on open source. Data center costs hit $50B/GW with 5-year payback \u2014 and 40% of protested US DCs get canceled.",
-        "delta": "Total +$7.9B (+22% QoQ). Biggest mover: OpenAI (+$4.0B)."
+        "title": "Revenue Explosion Meets the China Surge",
+        "body": "OpenAI hits $2B/month revenue and 900M weekly active users. Anthropic reaches $19B ARR. But the biggest story is ByteDance at 110T tokens/day \u2014 more than all Western providers combined. China represents ~48% of global tokens. Total market: ~320T tokens/day across 14+ major providers. The industry generates $52B ARR but frontier providers still operate at a loss \u2014 spending $2.25-$2.60 for every $1 of revenue."
       }
     ]
   },
