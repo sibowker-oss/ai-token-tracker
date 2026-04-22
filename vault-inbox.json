@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-21",
+  "lastProcessed": "2026-04-23",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -37223,6 +37223,155 @@
       "replaces": null,
       "declined_at": "2026-04-20T09:46:46",
       "decline_reason": "review-batch: not actionable for dashboard"
+    },
+    {
+      "id": "scan-20260423-a1b",
+      "claim": "Anthropic committed to spend $100B+ on AWS over 10 years; Amazon investing $5B now with up to $25B additional (April 20, 2026)",
+      "value": 100,
+      "unit": "$B (spend commitment)",
+      "sourceUrl": "https://techcrunch.com/2026/04/20/anthropic-takes-5b-from-amazon-and-pledges-100b-in-cloud-spending-in-return/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-20",
+      "dateAdded": "2026-04-23",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "amazon",
+        "aws",
+        "infrastructure",
+        "deal",
+        "2026"
+      ],
+      "notes": "Anthropic pledges $100B+ AWS spend over 10 years incl. Trainium chips; secured 5GW capacity. Amazon invests $5B now, up to $25B additional on top of prior $8B.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260423-b2c",
+      "claim": "Anthropic enterprise customers spending $1M+/year doubled from 500 to 1,000+ in <2 months post-Series G close (April 2026)",
+      "value": 1000,
+      "unit": "enterprise customers ($1M+/yr)",
+      "sourceUrl": "https://www.idlen.io/news/anthropic-overtakes-openai-30-billion-revenue-april-2026/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Multiple sources",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-07",
+      "dateAdded": "2026-04-23",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "enterprise",
+        "customers",
+        "2026"
+      ],
+      "notes": "Anthropic disclosed enterprise customers spending $1M+/year doubled from 500 to 1,000+ in fewer than 2 months since Series G close (Feb 12, 2026).",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260423-c3d",
+      "claim": "Anthropic IPO target as early as October 2026; Bloomberg reports unsolicited investor offers at $800B+ valuation",
+      "value": 800,
+      "unit": "$B (implied IPO valuation)",
+      "sourceUrl": "https://www.tradingkey.com/analysis/stocks/us-stocks/261756528-anthropic-openai-ipo-tradingkey",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg / Multiple sources",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-15",
+      "dateAdded": "2026-04-23",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "anthropic",
+        "IPO",
+        "valuation",
+        "2026"
+      ],
+      "notes": "Multiple reports indicate Anthropic evaluating IPO as early as Oct 2026. Bloomberg: unsolicited offers at $800B+ (>2x Series G $380B post-money).",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260423-d4e",
+      "claim": "OpenAI confirmed $2B/month revenue (~$24B ARR) at $122B funding close (March 31, 2026)",
+      "value": 2,
+      "unit": "$B/month",
+      "sourceUrl": "https://www.coindesk.com/tech/2026/04/01/openai-raises-a-record-usd122-billion-at-as-revenue-crosses-usd2-billion-per-month",
+      "sourceType": "reporting",
+      "sourceAuthor": "CoinDesk",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-31",
+      "dateAdded": "2026-04-23",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "openai",
+        "revenue",
+        "ARR",
+        "2026"
+      ],
+      "notes": "OpenAI stated $2B/month revenue (~$24B ARR) at time of $122B funding announcement. Full-year 2025 revenue cited as $13.1B.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260423-e5f",
+      "claim": "Microsoft launched M365 E7 enterprise plan at $99/user/month including Copilot (March 2026), 65% above prior top tier",
+      "value": 99,
+      "unit": "$/user/month",
+      "sourceUrl": "https://www.fool.com/investing/2026/03/17/microsofts-new-99-copilot-tier-ai-monetization/",
+      "sourceType": "reporting",
+      "sourceAuthor": "The Motley Fool",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-17",
+      "dateAdded": "2026-04-23",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "microsoft",
+        "copilot",
+        "pricing",
+        "enterprise",
+        "SaaS",
+        "2026"
+      ],
+      "notes": "Microsoft M365 E7 at $99/user/month with Copilot bundled. 65% price premium vs prior top tier. Framed as offsetting $72B capex over prior 2 quarters.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260423-f6g",
+      "claim": "AWS AI services revenue run-rate estimated ~$15B (Q1 2026), driven by Bedrock multi-model strategy hosting both OpenAI and Anthropic",
+      "value": 15,
+      "unit": "$B ARR",
+      "sourceUrl": "https://markets.financialcontent.com/stocks/article/marketminute-2026-4-9-amazons-50-billion-openai-gambit-the-crown-jewel-of-the-q1-2026-m-and-a-supercycle",
+      "sourceType": "reporting",
+      "sourceAuthor": "MarketMinute / FinancialContent",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-09",
+      "dateAdded": "2026-04-23",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "aws",
+        "bedrock",
+        "hyperscaler",
+        "revenue",
+        "2026"
+      ],
+      "notes": "AWS AI run-rate est. $15B Q1 2026. Multi-model Bedrock strategy (OpenAI + Anthropic) cited as key driver. This is analyst estimate, not official AWS figure.",
+      "status": "pending",
+      "replaces": null
     }
   ]
 }
