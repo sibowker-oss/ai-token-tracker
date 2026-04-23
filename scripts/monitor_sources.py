@@ -168,7 +168,7 @@ Return ONLY the JSON array."""
     try:
         response = client.messages.create(
             model='claude-sonnet-4-6',
-            max_tokens=4096,
+            max_tokens=8192,
             messages=[{'role': 'user', 'content': prompt}]
         )
         raw = response.content[0].text.strip()
@@ -187,6 +187,35 @@ Return ONLY the JSON array."""
         log(f"  Claude extraction error: {e}")
 
     return []
+
+
+def extract_with_claude_chunked(text, source, chunk_size=28000, language=None):
+    """Chunked version of extract_with_claude. For documents larger than
+    ~30k chars, splits on paragraph boundaries and aggregates. Used by the
+    PDF adapters (State of AI Report, analyst PDFs) where a single Claude
+    call's 8k output budget can't hold every data point in a 200+ page deck."""
+    if len(text) <= chunk_size:
+        return extract_with_claude(text, source, max_chars=chunk_size, language=language)
+
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        if end < len(text):
+            break_at = text.rfind('\n\n', start, end)
+            if break_at > start + chunk_size // 2:
+                end = break_at
+        chunks.append(text[start:end])
+        start = end
+
+    log(f"  Chunked extraction: {len(chunks)} chunk(s) of ~{chunk_size} chars")
+    all_claims = []
+    for i, chunk in enumerate(chunks):
+        log(f"  Chunk {i+1}/{len(chunks)}...")
+        claims = extract_with_claude(chunk, source, max_chars=chunk_size, language=language)
+        log(f"    {len(claims)} claim(s)")
+        all_claims.extend(claims)
+    return all_claims
 
 
 def extract_google_slides(source):
@@ -211,24 +240,31 @@ def extract_google_slides(source):
             return extract_with_claude(text, source)
         return []
 
-    # Extract text from PDF (basic approach — works for text-heavy slides)
+    # Extract text from PDF (basic approach — works for text-heavy slides).
+    # Try three parsers in order of preference: pdfplumber (most featureful),
+    # pypdf (modern maintained fork), PyPDF2 (legacy). Installing any one is
+    # enough.
     try:
-        # Try pdfplumber or PyPDF2 if available
+        text = ''
         try:
             import pdfplumber
-            text = ''
             with pdfplumber.open(pdf_path) as pdf:
                 for page in pdf.pages:
                     text += (page.extract_text() or '') + '\n\n'
         except ImportError:
             try:
-                from PyPDF2 import PdfReader
+                from pypdf import PdfReader
                 reader = PdfReader(pdf_path)
-                text = '\n\n'.join(page.extract_text() or '' for page in reader.pages)
+                text = '\n\n'.join((page.extract_text() or '') for page in reader.pages)
             except ImportError:
-                log("  No PDF library available (install pdfplumber or PyPDF2)")
-                os.unlink(pdf_path)
-                return []
+                try:
+                    from PyPDF2 import PdfReader
+                    reader = PdfReader(pdf_path)
+                    text = '\n\n'.join((page.extract_text() or '') for page in reader.pages)
+                except ImportError:
+                    log("  No PDF library available (install pdfplumber, pypdf, or PyPDF2)")
+                    os.unlink(pdf_path)
+                    return []
 
         os.unlink(pdf_path)
         log(f"  Extracted {len(text):,} chars from PDF")
@@ -237,7 +273,7 @@ def extract_google_slides(source):
             log("  PDF text too short — may be image-heavy slides")
             return []
 
-        return extract_with_claude(text, source, max_chars=50000)
+        return extract_with_claude_chunked(text, source)
 
     except Exception as e:
         log(f"  PDF text extraction failed: {e}")
@@ -340,25 +376,30 @@ def extract_pdf_report(source):
         return []
 
     try:
+        text = ''
         try:
             import pdfplumber
-            text = ''
             with pdfplumber.open(pdf_path) as pdf:
                 for page in pdf.pages[:50]:  # Max 50 pages
                     text += (page.extract_text() or '') + '\n\n'
         except ImportError:
             try:
-                from PyPDF2 import PdfReader
+                from pypdf import PdfReader
                 reader = PdfReader(pdf_path)
                 text = '\n\n'.join((page.extract_text() or '') for page in reader.pages[:50])
             except ImportError:
-                log("  No PDF library available")
-                os.unlink(pdf_path)
-                return []
+                try:
+                    from PyPDF2 import PdfReader
+                    reader = PdfReader(pdf_path)
+                    text = '\n\n'.join((page.extract_text() or '') for page in reader.pages[:50])
+                except ImportError:
+                    log("  No PDF library available (install pdfplumber, pypdf, or PyPDF2)")
+                    os.unlink(pdf_path)
+                    return []
 
         os.unlink(pdf_path)
         log(f"  Extracted {len(text):,} chars from PDF")
-        return extract_with_claude(text, source, max_chars=50000)
+        return extract_with_claude_chunked(text, source)
 
     except Exception as e:
         log(f"  PDF extraction error: {e}")
