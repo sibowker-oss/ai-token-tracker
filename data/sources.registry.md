@@ -28,7 +28,17 @@
 
 | id | name | tier | url | handler | cadence | licence | method | addedOn | notes |
 |---|---|---|---|---|---|---|---|---|---|
-| _None registered yet._ Populate as sources are added to `site-data.json`. | | | | | | | | | |
+| wb-imf-weo | World Bank / IMF WEO | 1 | https://www.imf.org/external/datamapper/NGDPD@WEO | Simon | quarterly | Public data, attribution required | manual copy | 2026-04-23 | Nominal global GDP reference. IMF WEO revised April/October. |
+| wb-national-accounts | World Bank national accounts | 1 | https://data.worldbank.org/indicator/NV.SRV.TOTL.CD | Simon | annual | CC BY 4.0 | manual copy | 2026-04-23 | Services share of GDP. |
+| ilo-oecd-wages | ILO Global Wage Report / OECD | 1 | https://www.ilo.org/global/research/global-reports/global-wage-report | Simon | biennial | Public, attribution required | manual copy | 2026-04-23 | Global labour compensation. ILO Wage Report ~every 2y. |
+| ilo-mckinsey-mgi | ILO / McKinsey Global Institute | 2 | https://www.mckinsey.com/mgi/our-research | Simon | annual | Report-level attribution | manual copy | 2026-04-23 | Knowledge-worker wage bill. MGI reports derived, not primary. |
+| gartner-it-spend | Gartner IT Spending Forecast | 2 | https://www.gartner.com/en/newsroom/press-releases | Simon | quarterly | Press-release excerpts only; full report paywalled | manual copy | 2026-04-23 | Total global IT spend. Headline numbers only — never quote paywalled detail. |
+| gartner-idc | Gartner / IDC | 2 | https://www.gartner.com/en/newsroom/press-releases | Simon | quarterly | Press-release excerpts | manual copy | 2026-04-23 | Enterprise software market size. |
+| synergy-gartner-cloud | Synergy Research / Gartner | 2 | https://www.srgresearch.com | Simon | quarterly | Press-release excerpts | manual copy | 2026-04-23 | SaaS and public-cloud market sizing. |
+| groupm-warc | GroupM / WARC | 2 | https://www.groupm.com/this-year-next-year | Simon | semi-annual | Report summaries | manual copy | 2026-04-23 | Global ad market. |
+| edgar-10k-hyperscaler | Company 10-K filings (MSFT, GOOG, AMZN, META, ORCL) | 1 | https://www.sec.gov/cgi-bin/browse-edgar | Simon | quarterly | Public (EDGAR), no restriction | manual copy | 2026-04-23 | Hyperscaler capex roll-up. Recompute each quarter from filed 10-Qs / 10-Ks. |
+| sp-global | S&P Global | 1 | https://www.spglobal.com/spdji/en/indices/equity/sp-500 | Simon | daily (headline) | Public headline data; constituent detail paywalled | manual copy | 2026-04-23 | S&P 500 aggregate market cap. |
+| bea-imf-weo | BEA / IMF WEO | 1 | https://www.bea.gov/data/gdp/gross-domestic-product | Simon | quarterly | Public data | manual copy | 2026-04-23 | US GDP. BEA advance/second/third estimates. |
 
 ---
 
