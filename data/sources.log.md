@@ -55,3 +55,7 @@
 | 2026-04-23 | `sources-registry.json[src-005].next_check` | 2026-04-01 | 2026-04-24 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_signals.py`. | src-005 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-006].next_check` | 2026-04-01 | 2026-04-24 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_signals.py`. | src-006 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-007].next_check` | 2026-04-01 | 2026-04-24 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_signals.py`. | src-007 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-011].next_check` | 2026-04-07 | 2026-05-23 | Past-due (pending_first_extraction since registration). Pushed per wq-015 Phase 2 posture — first extraction on manual trigger. Review for deprecation if dead. | src-011 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-032].next_check` | 2026-04-04 | 2026-05-23 | Past-due (Meta IR, pending_first_extraction). Pushed per wq-015 Phase 2 posture. | src-032 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-041].next_check` | 2026-04-04 | 2026-05-23 | Past-due (Bessemer Atlas). Pushed per wq-015 Phase 2 posture. | src-041 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-045].next_check` | 2026-04-19 | 2026-05-23 | Past-due (Cloudflare Radar). Pushed per wq-015 Phase 2 posture. | src-045 | Simon | Simon | _(this commit)_ |
