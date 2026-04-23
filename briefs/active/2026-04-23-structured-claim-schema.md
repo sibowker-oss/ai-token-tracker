@@ -139,3 +139,89 @@ None at scoping. Implementation decisions deferred.
 ## Implementation log
 
 *(Append entries here when work starts. Leave §1–§6 above untouched.)*
+
+### 2026-04-23 — Phase 1 foundation shipped
+
+Four commits on `main`, in dependency order:
+
+- `ab3910a` Add structured claim types to metric-schema (wq-014)
+- `6012851` Add structured claim extractor (wq-014)
+- `3ca98f4` Render structured claim types in claims.html (wq-014)
+- `ed833e1` Route structured claim types in apply_claims.py (wq-014)
+
+**What landed**
+
+- `metric-schema.json` v2.2 — new top-level `claim_types` block with
+  `power_project`, `hiring_snapshot`, `patent_snapshot`, `company_surfaced`.
+  Each type carries label / description / required / optional / fields /
+  source_block / site_data_target. Existing `roles` / `proposed_fields` /
+  `derived_fields` / match-rule arrays untouched.
+- `scripts/extract_structured_claims.py` — new sibling to
+  `extract_claims.py`. Deterministic builders for typed input (ISO rows,
+  ATS JSON, USPTO JSON), LLM prompt templates as module constants for
+  narrative fallback (not wired in Phase 1). Writes to
+  `data-updates/{date}-structured-candidates.json`. Self-test CLI is
+  green against all four fixtures.
+- `claims.html` — type-branched rendering. Structured claims load from
+  the parallel candidates file and are normalised on load so the existing
+  card shell / sort / filter / stats machinery stays in one code path.
+  One helper per type for the body (metric grid + source/retrieval block).
+  Small CSS additions for per-type badges and metric grid. Free-text
+  card path is unchanged and remains the default branch. Also renders
+  the optional `source_excerpt_original` field (needed by wq-015 China
+  sources; lands there, not here).
+- `scripts/apply_claims.py` — type-dispatch at the top of the accepted
+  claim loop. Per-type appliers translate the nested `source` block to
+  flat `sourceUrl` / `retrievedAt` / `nextReview` per GUIDELINES §4.2,
+  capitalise `high|medium|low` → `High|Med|Low` per §4.4 / §5.6, and
+  append one row per write to `data/sources.log.md`. `_ensure_path`
+  helper creates nested target containers on demand so first-use
+  populations of `site.power.projects`, `site.hiring.snapshots`, and
+  `site.patents.snapshots` just work. `company_surfaced` appends to a
+  new `candidates` block in `companies.json` plus an append-only
+  `data/company-surfaced.log.json`; re-accepting the same name is a
+  no-op.
+
+**Validation**
+
+- `tests/test_claim_schema.py` — plain-Python validator, green for all
+  four fixtures (required / unknown / source-block completeness).
+- `scripts/extract_structured_claims.py --self-test` — green for all
+  four round trips.
+- In-memory integration test against a tempdir sandbox with all four
+  fixtures as accepted claims: site-data writes, provenance
+  translation, confidence casing, idempotent upsert, sources.log.md
+  rows, company-surfaced dedup — all pass.
+
+**Divergence from brief §5 implementation package**
+
+1. §5.2 prompt templates — brief said "prompt templates in
+   `extract_claims.py`". Shipped as module constants in the new sibling
+   `extract_structured_claims.py` instead. Simon confirmed the sibling
+   approach in the handoff thread. `extract_claims.py` is untouched —
+   the podcast/free-text path doesn't share enough with typed-input
+   extraction to justify one file.
+2. §5.6 migration — no migration was needed. Existing podcast claims in
+   `data-updates/*-candidates.json` use the free-text shape; structured
+   types are additive and land in a parallel
+   `*-structured-candidates.json` file.
+
+**Not done in Phase 1, deferred to the dependent streams**
+
+- Stream 2 (wq-012) wires power-source adapters in `monitor_sources.py`
+  that emit `power_project` claims using these builders.
+- Stream 3 (wq-013) wires ATS / USPTO / LCA adapters and the
+  `ai_native_density` scoring module.
+- BigQuery patent coverage is stubbed pending Simon enabling GCP creds
+  (brief wq-013 §3.1 / Phase 1 decision #4).
+
+**Carry-along on commit `ab3910a`** — a pre-staged `feed.html → parked/feed.html`
+rename was in the index when Phase 1.1 committed and got swept into the
+commit. Not my work; functionally harmless (feed.html was already a
+parked page per the reference memory). Flagging for audit; no action
+taken since amending is destructive. Every subsequent commit in Phase 1
+checked `git status` and `git diff --cached --stat` first to confirm
+only my files were staged.
+
+**Pausing for review before Phase 2 (wq-015 activation).**
+
