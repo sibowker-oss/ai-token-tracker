@@ -1305,6 +1305,188 @@
       "last_claims_count": 0,
       "status": "pending_first_extraction",
       "notes": "CC-BY. Already does LLC \u2192 AI-lab attribution via permits + satellite imagery (wq-012 \u00a73.2). Seeds data/datacenter-attribution-map.json and also emits power_project claims directly."
+    },
+    {
+      "id": "src-065",
+      "url": "https://search.patentsview.org/api/v1/patent/",
+      "title": "USPTO PatentSearch API",
+      "type": "gov_api",
+      "author": "",
+      "organization": "US Patent and Trademark Office",
+      "added": "2026-04-23",
+      "tags": [
+        "patents",
+        "discovery",
+        "us",
+        "primary",
+        "api"
+      ],
+      "extraction_method": "patentsview_search",
+      "frequency": "monthly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Public API, rate-limited. Per wq-013 \u00a73.1. CPC filter per \u00a710. Group by assignee; consult data/company-alias-map.json for disambiguation."
+    },
+    {
+      "id": "src-066",
+      "url": "https://github.com/google/patents-public-data",
+      "title": "Google Patents BigQuery dataset",
+      "type": "cloud_dataset",
+      "author": "",
+      "organization": "Google Cloud",
+      "added": "2026-04-23",
+      "tags": [
+        "patents",
+        "discovery",
+        "international",
+        "bigquery",
+        "stubbed"
+      ],
+      "extraction_method": "google_patents_bq",
+      "frequency": "monthly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_credentials",
+      "notes": "STUBBED pending GCP credentials (Simon Q4 decision). Provides international patent coverage (CN/EU) that USPTO lacks. Adapter will log \"credentials required\" until GCP_SERVICE_ACCOUNT_JSON is set."
+    },
+    {
+      "id": "src-067",
+      "url": "https://ea.espacenet.com/",
+      "title": "EPO Open Patent Services (OPS)",
+      "type": "gov_api",
+      "author": "",
+      "organization": "European Patent Office",
+      "added": "2026-04-23",
+      "tags": [
+        "patents",
+        "discovery",
+        "eu",
+        "api",
+        "rate-limited"
+      ],
+      "extraction_method": "epo_ops",
+      "frequency": "monthly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Free up to 250 req/week per wq-013 \u00a73.1. Requires OAuth registration at EPO OPS. Env gate: EPO_OPS_CLIENT_ID / EPO_OPS_CLIENT_SECRET."
+    },
+    {
+      "id": "src-068",
+      "url": "https://www.dol.gov/agencies/eta/foreign-labor/performance",
+      "title": "DoL OFLC LCA quarterly disclosure",
+      "type": "gov_dataset",
+      "author": "",
+      "organization": "US Department of Labor",
+      "added": "2026-04-23",
+      "tags": [
+        "hiring",
+        "lca",
+        "h-1b",
+        "discovery",
+        "us",
+        "primary",
+        "xlsx"
+      ],
+      "extraction_method": "dol_lca_xlsx",
+      "frequency": "quarterly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Quarterly XLSX drops per wq-013 \u00a73.2. AI-engineer regex filter per \u00a79. Requires openpyxl \u2014 v1 stub if absent."
+    },
+    {
+      "id": "src-069",
+      "url": "https://boards-api.greenhouse.io/v1/boards/",
+      "title": "Greenhouse Job Board API",
+      "type": "ats_api",
+      "author": "",
+      "organization": "Greenhouse Software",
+      "added": "2026-04-23",
+      "tags": [
+        "hiring",
+        "ats",
+        "discovery",
+        "public-api"
+      ],
+      "extraction_method": "greenhouse_board",
+      "frequency": "weekly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Public JSON, no auth. Per-company board via token from data/company-alias-map.json[<slug>].ats.token. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
+    },
+    {
+      "id": "src-070",
+      "url": "https://api.lever.co/v0/postings/",
+      "title": "Lever Postings API",
+      "type": "ats_api",
+      "author": "",
+      "organization": "Lever",
+      "added": "2026-04-23",
+      "tags": [
+        "hiring",
+        "ats",
+        "discovery",
+        "public-api"
+      ],
+      "extraction_method": "lever_postings",
+      "frequency": "weekly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Public JSON, no auth. Per-company slug via data/company-alias-map.json. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
+    },
+    {
+      "id": "src-071",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/",
+      "title": "Ashby Public Job Posting API",
+      "type": "ats_api",
+      "author": "",
+      "organization": "Ashby",
+      "added": "2026-04-23",
+      "tags": [
+        "hiring",
+        "ats",
+        "discovery",
+        "public-api"
+      ],
+      "extraction_method": "ashby_public",
+      "frequency": "weekly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Public JSON per-company-token. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
+    },
+    {
+      "id": "src-072",
+      "url": "https://apply.workable.com/api/v1/widget/accounts/",
+      "title": "Workable Jobs widget API",
+      "type": "ats_api",
+      "author": "",
+      "organization": "Workable",
+      "added": "2026-04-23",
+      "tags": [
+        "hiring",
+        "ats",
+        "discovery",
+        "public-api"
+      ],
+      "extraction_method": "workable_jobs",
+      "frequency": "weekly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Public widget JSON per-account. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
     }
   ]
 }

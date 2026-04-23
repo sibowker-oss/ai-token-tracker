@@ -50,6 +50,14 @@
 | eia-api | EIA API (860M / 930 / STEO) | 1 | https://www.eia.gov/opendata/ | Simon | daily | Public domain | eia_api | 2026-04-23 | Requires `EIA_API_KEY` env var. STEO now explicitly attributes DC load. `src-062`. |
 | neso-tec | NESO TEC Register (UK) | 1 | https://www.neso.energy/data-portal/transmission-entry-capacity-tec-register | Simon | weekly | OGL | neso_tec | 2026-04-23 | Twice-weekly upstream (Tue/Fri) — weekly at Ledger level. Gate 1 / Gate 2 classifier from Nov 2025. `src-063`. |
 | epoch-frontier-dc | Epoch AI — Frontier Data Centers Hub | 2 | https://epoch.ai/data/data-centers | Simon | monthly | CC-BY | epoch_frontier | 2026-04-23 | Primary source for LLC → AI-lab attribution map. Seeds `data/datacenter-attribution-map.json`. `src-064`. |
+| uspto-patentsview | USPTO PatentSearch API | 1 | https://search.patentsview.org/api/v1/patent/ | Simon | monthly | Public (USPTO) | patentsview_search | 2026-04-23 | Rate-limited REST. CPC filter per wq-013 §10. `src-065`. |
+| google-patents-bq | Google Patents BigQuery | 1 | https://github.com/google/patents-public-data | Simon | monthly | Google Cloud ToS | google_patents_bq | 2026-04-23 | STUBBED — requires GCP credentials. International patent coverage (CN/EU). `src-066`. |
+| epo-ops | EPO Open Patent Services | 1 | https://ea.espacenet.com/ | Simon | monthly | EPO OPS Fair Use Charter | epo_ops | 2026-04-23 | Free to 250 req/week. Env-gated on `EPO_OPS_CLIENT_ID` / `_SECRET`. `src-067`. |
+| dol-oflc-lca | DoL OFLC LCA quarterly disclosure | 1 | https://www.dol.gov/agencies/eta/foreign-labor/performance | Simon | quarterly | Public | dol_lca_xlsx | 2026-04-23 | AI-engineer regex filter per wq-013 §9. XLSX. Requires openpyxl. `src-068`. |
+| ats-greenhouse | Greenhouse Job Board API | 2 | https://boards-api.greenhouse.io/v1/boards/ | Simon | weekly | Public | greenhouse_board | 2026-04-23 | Public JSON per-company-token. `src-069`. |
+| ats-lever | Lever Postings API | 2 | https://api.lever.co/v0/postings/ | Simon | weekly | Public | lever_postings | 2026-04-23 | Public JSON per-company-slug. `src-070`. |
+| ats-ashby | Ashby Public Job Posting API | 2 | https://api.ashbyhq.com/posting-api/job-board/ | Simon | weekly | Public | ashby_public | 2026-04-23 | Public JSON per-company-token. `src-071`. |
+| ats-workable | Workable Jobs widget API | 2 | https://apply.workable.com/api/v1/widget/accounts/ | Simon | weekly | Public | workable_jobs | 2026-04-23 | Public widget JSON per-account. `src-072`. |
 
 ## Deferred (paid or out-of-scope for wq-015)
 
