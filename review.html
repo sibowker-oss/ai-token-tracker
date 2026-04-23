@@ -1169,6 +1169,8 @@ function exportDecisions() {
 // ---------------------------------------------------------------------------
 // Auto-clear — same logic as scripts/auto_clear_inbox.py. Keep the two in sync.
 // ---------------------------------------------------------------------------
+let _autoClearPendingPlan = null;   // stashed between preview click and Apply click
+
 function autoClearClassify(item) {
   if (item.status !== 'pending') return null;
   const w = item.weight;
@@ -1225,13 +1227,16 @@ async function autoClearInbox() {
   html += '</div>';
   html += '<div style="display:flex;gap:10px;justify-content:flex-end;">';
   html += '<button onclick="document.getElementById(\'autoclear-modal\').remove()" style="padding:8px 20px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;">Cancel</button>';
-  html += '<button onclick="autoClearApply(' + JSON.stringify(JSON.stringify(plan)).slice(1, -1) + ')" style="padding:8px 20px;border-radius:8px;border:none;background:var(--purple);color:white;font-weight:600;cursor:pointer;">Apply ' + total + ' decisions</button>';
+  html += '<button onclick="autoClearApply()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--purple);color:white;font-weight:600;cursor:pointer;">Apply ' + total + ' decisions</button>';
   html += '</div></div></div>';
+  _autoClearPendingPlan = plan;
   document.body.insertAdjacentHTML('beforeend', html);
 }
 
-async function autoClearApply(planJson) {
-  const plan = JSON.parse(planJson);
+async function autoClearApply() {
+  const plan = _autoClearPendingPlan;
+  _autoClearPendingPlan = null;
+  if (!plan) { showToast('No auto-clear plan in memory — click Auto-clear again'); return; }
   document.getElementById('autoclear-modal')?.remove();
   showToast('Auto-clear running…');
 
