@@ -1,0 +1,815 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "LLC / project → AI-operator attribution map for Stream 2 power-project claims (wq-012 §7.1).",
+    "schema": {
+      "by_project": "Keyed by project / facility name (seeded from Epoch AI Frontier Data Centers CSV). Each entry carries owners[] and operators[] lists — some projects have multiple operators with different confidence tags (e.g. Microsoft Fairwater has both OpenAI and Microsoft as likely users).",
+      "by_llc": "Keyed by LLC-of-record from ISO queue filings. Seeded empty — populated by ISO extractions (ERCOT, PJM) and manual research via Virginia DEQ permits + SCC docket search. Shape: {operator, confidence, attribution_sources, last_verified}."
+    },
+    "lastUpdated": "2026-04-23",
+    "sources_seeded_from": [
+      "src-064"
+    ],
+    "licence": "CC-BY 4.0 (Epoch AI Frontier Data Centers)",
+    "brief": "briefs/active/2026-04-23-stream-2-energy.md",
+    "source_csv": "https://epoch.ai/data/data_centers/data_centers.csv",
+    "rows_in_source_csv_on_seed": 36
+  },
+  "by_project": {
+    "Anthropic-Amazon New Carlisle": {
+      "owners": [
+        {
+          "name": "Amazon",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Anthropic",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 1092.0,
+      "country": "United States",
+      "address": "55001 Larrison Blvd, New Carlisle, IN 46552",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/1BKiTFNUk2KDaUaiHG7fz0KlkNSBTHzbb/view?usp=sharing",
+        "https://www.cat.com/en_US/products/new/power-systems/electric-power/diesel-generator-sets/117341.html",
+        "https://www.aboutamazon.com/news/aws/aws-project-rainier-ai-trainium-chips-compute-cluster"
+      ],
+      "epoch_project": "Project Rainier #confident",
+      "last_verified": "2026-04-23"
+    },
+    "Microsoft Fairwater Wisconsin": {
+      "owners": [
+        {
+          "name": "Microsoft",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "likely"
+        },
+        {
+          "name": "Microsoft",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 555.0,
+      "country": "United States",
+      "address": "4800 90th St, Mount Pleasant, WI 53403",
+      "attribution_sources": [
+        "https://blogs.microsoft.com/blog/2025/09/18/inside-the-worlds-most-powerful-ai-datacenter/",
+        "https://blogs.microsoft.com/on-the-issues/2025/09/18/made-in-wisconsin-the-worlds-most-powerful-ai-datacenter/",
+        "https://drive.google.com/file/d/1azyXnreQBuYEqX2oaSUgePDGCMneez5Z/view?usp=sharing",
+        "https://drive.google.com/file/d/1UXsNFoXCbstOK8upixx060-LFj8beHqp/view?usp=sharing"
+      ],
+      "epoch_project": "Microsoft AI WAN #confident",
+      "last_verified": "2026-04-23"
+    },
+    "Meta Prometheus": {
+      "owners": [
+        {
+          "name": "Meta",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Meta",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 531.0,
+      "country": "United States",
+      "address": "1 Community Cir, New Albany, OH 43054",
+      "attribution_sources": [
+        "https://engineering.fb.com/2025/09/29/data-infrastructure/metas-infrastructure-evolution-and-the-advent-of-ai/",
+        "https://drive.google.com/file/d/1Wb_BBVOnhu5UCQ8Q5d6iRIG9K_vigD8A/view?usp=sharing",
+        "https://drive.google.com/file/d/1OMbFbdNGPmfSkwVWqOAK-5pOufiKQBu1/view?usp=sharing"
+      ],
+      "epoch_project": "Prometheus #confident",
+      "last_verified": "2026-04-23"
+    },
+    "QTS Richmond": {
+      "power_mw": 854.0,
+      "country": "United States",
+      "address": "6000 Technology Blvd, Sandston, VA 23150",
+      "attribution_sources": [
+        "https://qtsdatacenters.com/data-centers/richmond-1/",
+        "https://qtsdatacenters.com/data-centers/richmond-1/",
+        "https://q.com/data-centers/richmond-3/",
+        "https://www.deq.virginia.gov/home/showpublisheddocument/25650/638627871515730000"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Microsoft Fairwater Atlanta": {
+      "owners": [
+        {
+          "name": "Microsoft",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "speculative"
+        }
+      ],
+      "power_mw": 433.0,
+      "country": "United States",
+      "address": "1435 Hwy 54 W, Fayetteville, GA 30214",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/1p7aY9syz319IcEuyukgIIvzmhTNKRS6p/view?usp=sharing",
+        "https://www.youtube.com/watch?v=44eWesI-174",
+        "https://youtu.be/hobvps-H38o?si=wsAcRtDFG4Df4_7z&t=901",
+        "https://www.bloomberg.com/news/features/2024-12-08/georgia-s-blackstone-backed-qts-data-center-hits-resistance-over-ai-power-needs"
+      ],
+      "epoch_project": "Microsoft AI WAN #confident",
+      "last_verified": "2026-04-23"
+    },
+    "xAI Colossus 1": {
+      "owners": [
+        {
+          "name": "xAI",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "xAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 425.0,
+      "country": "United States",
+      "address": "3231 Riverport Rd, Memphis, TN 38109",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/17WAFThn95X85ebzA_e19R1zYycwFzAl2/view?usp=sharing",
+        "https://www.scribd.com/document/883601734/01156-01PC-070225-Permit",
+        "https://cdn.arstechnica.net/wp-content/uploads/2025/07/NAACP-and-YGGs-xAI-Air-Permit-Appeal-7-15-2025.pdf",
+        "https://archive.is/oHQSA"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate Abilene": {
+      "owners": [
+        {
+          "name": "Oracle",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 295.0,
+      "country": "United States",
+      "address": "5502 Spinks Rd, Abilene, TX 79601",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/1oHWA9vmpvFOh-LvDy5fgq_wq5ITuxd1r/view?usp=sharing",
+        "https://drive.google.com/file/d/1FgfX6hqojlBtqNXJHjzJmnwWAMx4_M0b/view?usp=sharing",
+        "https://www.mortenson.com/projects/abilene-data-center-development"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "Amazon Madison Mega Site": {
+      "owners": [
+        {
+          "name": "Amazon",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Anthropic",
+          "confidence": "speculative"
+        }
+      ],
+      "power_mw": 341.0,
+      "country": "United States",
+      "address": "Amazon Data Services Inc, Madison Mega Site Nissan Parkway and Highway 22 Canton, Mississippi Madison County",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/1lhSF8TBA7fNWsN4Onj-nfL7X_-BN573r/view?usp=sharing",
+        "https://www.cat.com/en_US/products/new/power-systems/electric-power/diesel-generator-sets/117341.html",
+        "https://www.nytimes.com/2025/06/24/technology/amazon-ai-data-centers.html",
+        "https://newsletter.semianalysis.com/p/amazons-ai-resurgence-aws-anthropics-multi-gigawatt-trainium-expansion"
+      ],
+      "epoch_project": "Project Rainier #speculative",
+      "last_verified": "2026-04-23"
+    },
+    "Microsoft Goodyear": {
+      "owners": [
+        {
+          "name": "Microsoft",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 263.0,
+      "country": "United States",
+      "address": "14250 W Broadway Rd, Goodyear, AZ 85338",
+      "attribution_sources": [
+        "https://gis.maricopa.gov/aqd/recordsviewer/#",
+        "https://edms.maricopa.gov/aq/api/Document/AQizTh7Ek3Odb1UYnAFQc%C3%81Z0k59aCsu4%C3%890gw6xcPqnhTfYtG7scD%C3%89BewWyX4qdzXFk%C3%81xL9%C3%89VthN71ODAxZuKKeU%3D/",
+        "https://newsletter.semianalysis.com/p/microsofts-ai-strategy-deconstructed"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Meta Temple": {
+      "owners": [
+        {
+          "name": "Meta",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Meta",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 198.0,
+      "country": "United States",
+      "address": "2310 Eberhardt Rd, Temple, TX 76504",
+      "attribution_sources": [
+        "https://jedunn.com/projects/meta-temple-data-center/",
+        "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2022017728",
+        "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2026008019"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Alibaba Zhangbei": {
+      "owners": [
+        {
+          "name": "Alibaba",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Alibaba",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 203.0,
+      "country": "China",
+      "address": "Alibaba Zhangbei Yun Calculation Data Center, Zhangbei County, Zhangjiakou, Hebei, China, 076471",
+      "attribution_sources": [
+        "https://sinocities.substack.com/p/how-is-chinas-eastern-data-western",
+        "https://web.archive.org/web/20250712063836/https://www.cscec.com/xwzx_new/zqydt_new/202504/3867074.html",
+        "https://web.archive.org/web/20251205164722/https://gxt.hebei.gov.cn/main/portal/cylzsDetail?id=9c133225-aa96-4eb7-9906-00acc34ddbff",
+        "https://web.archive.org/web/20241217034700/https://zhidx.com/p/343866.html"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Google Council Bluffs (East)": {
+      "owners": [
+        {
+          "name": "Google",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Google DeepMind",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 190.0,
+      "country": "United States",
+      "address": "10410 Bunge Ave, Council Bluffs, IA 51503",
+      "attribution_sources": [
+        "https://programs.iowadnr.gov/easyair/Public/EnSuite/Shared/Pages/Util/ServerRptViewer.aspx?sr=/IDNR/Reports/EASY/RPT_Construction_Application_A_GEN&SUBMISSION_RID=67330&SUB_FORM_RID=148293",
+        "https://programs.iowadnr.gov/easyair/Public/EnSuite/Shared/Pages/Util/ServerRptViewer.aspx?sr=/IDNR/Reports/EASY/RPT_Construction_Application_E_EU&SUBMISSION_RID=67330&SUB_FORM_RID=148297"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Fluidstack Lake Mariner": {
+      "owners": [
+        {
+          "name": "Fluidstack",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Anthropic",
+          "confidence": "likely"
+        },
+        {
+          "name": "G42",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 68.0,
+      "country": "United States",
+      "address": "7725 Lake Rd, Barker, NY 14012",
+      "attribution_sources": [
+        "https://investors.terawulf.com/news-events/press-releases/detail/99/terawulf-to-deliver-over-70-mw-of-data-center",
+        "https://investors.terawulf.com/news-events/press-releases/detail/132/terawulf-reports-fourth-quarter-and-full-year-2025-results",
+        "https://www.datacenterdynamics.com/en/news/google-offers-its-tpus-to-ai-cloud-providers-report/",
+        "https://www.anthropic.com/news/anthropic-invests-50-billion-in-american-ai-infrastructure"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Google Cedar Rapids": {
+      "owners": [
+        {
+          "name": "Google",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Google DeepMind",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 105.0,
+      "country": "United States",
+      "address": "5800 EDGEWOOD RD SW CEDAR RAPIDS, IA 52404",
+      "attribution_sources": [
+        "https://cdn.misoenergy.org/NEW%20LOAD%20ANNOUNCEMENTS%20IN%20MISO%20REGIONS%2012062024684954.pdf",
+        "https://www.govonlinesaas.com/LCPH/EasyAir/Public/EnSuite/Shared/Pages/util/StreamDoc.ashx?id=260&type=attachment"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Google Omaha": {
+      "owners": [
+        {
+          "name": "Google",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Google DeepMind",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 189.0,
+      "country": "United States",
+      "address": "11110 State St, Omaha, NE 68142",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/1KN7o-wQOyt1UEud8wpM8PymXJF479r0n/view?usp=sharing",
+        "https://sustainability.google/reports/google-2025-environmental-report/"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "STACK Infrastructure NVA02": {
+      "power_mw": 118.0,
+      "country": "United States",
+      "address": "9590 Hornbaker Rd, Manassas, VA 20109",
+      "attribution_sources": [
+        "https://www.stackinfra.com/locations/americas/northern-virginia/nva02/",
+        "https://www.stackinfra.com/about/news-press/press-releases/stack-infrastructure-expands-northern-virginia-data-center-campus/",
+        "https://www.deq.virginia.gov/home/showpublisheddocument/25966/638633868679100000"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Vantage TX1": {
+      "power_mw": 44.8,
+      "country": "United States",
+      "address": "Goodyear, Arizona 85338",
+      "attribution_sources": [
+        "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2024007561",
+        "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2026001234",
+        "https://drive.google.com/file/d/1rbF-RT5Sq-iZ26hK5cKzbM2K4Vq2vObY/view?usp=sharing"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Start Campus Sines Data Campus": {
+      "owners": [
+        {
+          "name": "Nscale",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Microsoft",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 40.0,
+      "country": "Portugal",
+      "address": "Start Campus - Sustainable Data Center Services, Sines, Portugal",
+      "attribution_sources": [
+        "https://www.startcampus.pt/sines",
+        "https://23712035.hs-sites.com/hubfs/SINES%20DC_1.2%20GW%20DC%20Campus_V2.pdf?hsCtaAttrib=194868835084",
+        "https://lp.startcampus.pt/start-campus-hosts-eus-first-nvidia-gb300-chips-with-nscale-for-microsoft"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Google Pryor (North)": {
+      "owners": [
+        {
+          "name": "Google",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Google DeepMind",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 65.0,
+      "country": "United States",
+      "address": "4581 Webb St, Pryor, OK 74361",
+      "attribution_sources": [
+        "https://blog.google/inside-google/company-announcements/google-american-innovation-oklahoma/",
+        "https://sustainability.google/reports/google-2025-environmental-report/",
+        "https://techcrunch.com/2022/05/11/google-launches-a-9-exaflop-cluster-of-cloud-tpu-v4-pods-into-public-preview/"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Goodnight": {
+      "owners": [
+        {
+          "name": "Google",
+          "confidence": "speculative"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Google DeepMind",
+          "confidence": "speculative"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "10001 Lima Rd, Claude, TX 79019",
+      "attribution_sources": [
+        "https://www.co.armstrong.tx.us/upload/page/5361/Amended_Restated_Consolidated%20Second%20Property%20Tax%20Abatement%20Agreement%20%20GNDC1_ArmstrongCounty.pdf",
+        "https://drive.google.com/file/d/1ky5HhuhU8_JADNB2GziWa4WDRbTU4qtO/view?usp=sharing",
+        "https://www.tdlr.texas.gov/TABS/Search/",
+        "https://www.reuters.com/business/google-invest-40-billion-new-data-centers-texas-bloomberg-news-reports-2025-11-14/"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Amazon Ridgeland": {
+      "owners": [
+        {
+          "name": "Amazon",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Anthropic",
+          "confidence": "speculative"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "1626 County Line Road Ridgeland, Mississippi",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/1dQ5Pxl7rQAHLvHoTYrpOX32WAolo46d7/view?usp=sharing",
+        "https://drive.google.com/file/d/1myQ6BYqqzcfsWwv41tufHobvA8T3qo_d/view?usp=sharing",
+        "https://www.cat.com/en_US/products/new/power-systems/electric-power/diesel-generator-sets/117341.html",
+        "https://www.nytimes.com/2025/06/24/technology/amazon-ai-data-centers.html"
+      ],
+      "epoch_project": "Project Rainier #speculative",
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate UAE": {
+      "owners": [
+        {
+          "name": "G42",
+          "confidence": "likely"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United Arab Emirates",
+      "address": "Nexus L&T Project Office, Al Bihouth, Al Dhafrah, Abu Dhabi, United Arab Emirates",
+      "attribution_sources": [
+        "https://www.khaleejtimes.com/uae/stargate-uae-phase-1-in-two-years",
+        "https://khaznadatacenters.com/press-release/khazna-announces-the-uaes-first-ai-optimized-data-center-and-the-largest-in-its-portfolio-powering-the-nations-drive-toward-ai-leadership/",
+        "https://www.bloomberg.com/news/articles/2025-10-09/us-approves-several-billion-dollars-of-nvidia-nvda-ai-chip-sales-to-uae"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "Coreweave Helios": {
+      "owners": [
+        {
+          "name": "Coreweave",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Microsoft",
+          "confidence": "speculative"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "984 County Road 112, Afton, TX 79920",
+      "attribution_sources": [
+        "https://investor.galaxy.com/news/news-details/2025/Galaxy-Announces-Third-Quarter-2025-Financial-Results/default.aspx",
+        "https://records.tceq.texas.gov/cs/idcplg?IdcService=TCEQ_EXTERNAL_SEARCH_GET_FILE&dID=8711478&Rendition=Web#:~:text=Galaxy%20Helios%20I%20LLC%20owns,are%20the%20basis%20of%20the",
+        "https://www.galaxy.com/data-centers",
+        "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2025012175"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "QTS Cedar Rapids": {
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "6200 76th Ave SW, Fairfax, IA 52228",
+      "attribution_sources": [
+        "https://cdn.misoenergy.org/NEW%20LOAD%20ANNOUNCEMENTS%20IN%20MISO%20REGIONS%2012062024684954.pdf",
+        "https://www.thegazette.com/business/fast-start-to-cedar-rapids-data-center-projects/",
+        "https://corridorbusiness.com/scope-of-qts-data-project-in-cedar-rapids-continuing-to-grow/",
+        "https://www.gldcommercial.com/google-and-qts-data/"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate Shackelford": {
+      "owners": [
+        {
+          "name": "Oracle",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "175 Private Road 1604, Abilene, TX 79601, Shackelford County",
+      "attribution_sources": [
+        "https://vantage-dc.com/data-center-locations/north-america/shackelford-county-tx",
+        "https://openai.com/index/five-new-stargate-sites/",
+        "https://web.archive.org/web/20260226203340/https://www.linkedin.com/posts/vantage-data-centers_ai-digitalinfrastructure-stargate-activity-7405254667062124544-FOcd/?rcm=ACoAAAmuuF4BvsgagH4Z8-Z8-0LaBPPY6467cAs"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "Google Fort Wayne": {
+      "owners": [
+        {
+          "name": "Google",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Google DeepMind",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "6015 Adams Center Road, Fort Wayne, IN 46806",
+      "attribution_sources": [
+        "https://www.thelocalfw.com/what-to-know-about-googles-plans-for-wetlands-in-fort-wayne/",
+        "https://www.thelocalfw.com/data-center-diesel-generators/",
+        "https://www.thelocalfw.com/data-centers-secrecy-and-tax-abatements/",
+        "https://citycouncildocuments.acfw.net/documents/download/2023-12-19/R-23-12-02.pdf"
+      ],
+      "epoch_project": "Project Zodiac",
+      "last_verified": "2026-04-23"
+    },
+    "Crusoe Abilene Expansion": {
+      "owners": [
+        {
+          "name": "Microsoft",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Microsoft",
+          "confidence": "likely"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "5502 Spinks Rd, Abilene, TX 79601",
+      "attribution_sources": [
+        "https://www.bloomberg.com/news/articles/2026-03-06/oracle-and-openai-end-plans-to-expand-flagship-data-center",
+        "https://www.tceq.texas.gov/assets/public/permitting/air/reports/applications/400428-ac.pdf",
+        "https://www.aterio.io/blog/stargate-files-for-phase-3-expansion-in-abilene",
+        "https://x.com/mustafasuleyman/status/2037547756320141587"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate Lordstown": {
+      "owners": [
+        {
+          "name": "Softbank",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "2300 Hallock Young Rd, Warren, OH 44481",
+      "attribution_sources": [
+        "https://www.datacenterdynamics.com/en/news/openai-announces-five-more-us-stargate-data-centers-with-oracle-and-softbank/",
+        "https://drive.google.com/file/d/1VfWvb9unUXZs3u4zwBjZjQwtsu91y8i9/view?usp=drivesdk",
+        "https://drive.google.com/file/d/1xl4Ql2jdmKhcYFhn43ymM2TJ56Z8cInL/view?usp=drivesdk"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate New Mexico": {
+      "owners": [
+        {
+          "name": "Oracle",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "attribution_sources": [
+        "https://projectjupitertogether.com/",
+        "https://drive.google.com/file/d/1vVKvPogq2TkeFn7ibnp0GNqz8aB4tZXz/view?usp=sharing",
+        "https://drive.google.com/file/d/1zO6mGU6lOoDpU5vilRSa7x9_6n6j_deK/view?usp=drivesdk",
+        "https://drive.google.com/file/d/186WXWRfH49_SpaTCi_u_uDZ4rwzPyAtd/view?usp=drivesdk"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate Wisconsin": {
+      "owners": [
+        {
+          "name": "Oracle",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "attribution_sources": [
+        "https://vantage-dc.com/data-center-locations/north-america/port-washington-wisconsin",
+        "https://drive.google.com/file/d/1ft2ZzqAYZtsTqMwyML4eo_EFYuclVxE6/view?usp=sharing"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate Michigan": {
+      "owners": [
+        {
+          "name": "Oracle",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "attribution_sources": [
+        "https://www.related-digital.com/michigan",
+        "https://www.michigan.gov/mpsc/commission/news-releases/2025/12/18/mpsc-approves-dte-electric-energy-contracts-for-data-center",
+        "https://drive.google.com/file/d/16ZucHKYmld7dLApSXNtbknOyagSn5E-r/view?usp=sharing",
+        "https://mi-psc.my.site.com/sfc/servlet.shepherd/version/download/068cs00001MH71XAAT"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "OpenAI Stargate Milam": {
+      "owners": [
+        {
+          "name": "Softbank",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "OpenAI",
+          "confidence": "confident"
+        }
+      ],
+      "power_mw": 0.0,
+      "country": "United States",
+      "attribution_sources": [
+        "https://www.datacenterdynamics.com/en/news/softbanks-sb-energy-to-build-and-operate-openais-12gw-stargate-data-center-in-milam-county-texas/",
+        "https://sbenergy.com/openai-and-softbank-group-partner-with-sb-energy/",
+        "https://www.tdlr.texas.gov/TABS/Search/Project/TABS2026017746"
+      ],
+      "epoch_project": "Stargate #confident",
+      "last_verified": "2026-04-23"
+    },
+    "Stream Phoenix": {
+      "power_mw": 0.0,
+      "country": "United States",
+      "address": "2950 S. Litchfield Road",
+      "attribution_sources": [
+        "https://www.streamdatacenters.com/locations/phoenix/",
+        "https://www.streamdatacenters.com/wp-content/uploads/2026/01/SDC-Goodyear-CaseStudy-251218.pdf"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "Meta Hyperion": {
+      "owners": [
+        {
+          "name": "Meta",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Meta",
+          "confidence": "confident"
+        }
+      ],
+      "country": "United States",
+      "address": "Holly Ridge, LA 71269",
+      "attribution_sources": [
+        "https://datacenters.atmeta.com/richland-parish-data-center/",
+        "https://drive.google.com/file/d/1FLY13apaHy4hI8RNVk9n_nlJpwFHtBrB/view?usp=sharing",
+        "https://drive.google.com/file/d/1D4eUHwEuirNi0g3IU_xGOti3PcC8fcXi/view?usp=sharing"
+      ],
+      "epoch_project": "Hyperion #confident",
+      "last_verified": "2026-04-23"
+    },
+    "Google New Albany": {
+      "owners": [
+        {
+          "name": "Google",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "Google DeepMind",
+          "confidence": "likely"
+        }
+      ],
+      "country": "United States",
+      "address": "1101 Beech Rd SW, New Albany, OH 43054",
+      "attribution_sources": [
+        "https://drive.google.com/file/d/1KN7o-wQOyt1UEud8wpM8PymXJF479r0n/view?usp=sharing",
+        "https://sustainability.google/reports/google-2025-environmental-report/"
+      ],
+      "last_verified": "2026-04-23"
+    },
+    "xAI Colossus 2": {
+      "owners": [
+        {
+          "name": "xAI",
+          "confidence": "confident"
+        }
+      ],
+      "operators": [
+        {
+          "name": "xAI",
+          "confidence": "confident"
+        }
+      ],
+      "country": "United States",
+      "address": "5420 Tulane Rd, Memphis, TN 38109",
+      "attribution_sources": [
+        "https://www.wsj.com/tech/elon-musk-xai-memphis-tennessee-power-dec4c70d",
+        "https://x.com/elonmusk/status/1947701807389515912",
+        "https://www.mlgw.com/images/content/files/pdf/new/5-5-25%20xAI%20Update.pdf#page=4"
+      ],
+      "last_verified": "2026-04-23"
+    }
+  },
+  "by_llc": {}
+}
