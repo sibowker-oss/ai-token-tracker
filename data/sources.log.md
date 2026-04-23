@@ -59,3 +59,6 @@
 | 2026-04-23 | `sources-registry.json[src-032].next_check` | 2026-04-04 | 2026-05-23 | Past-due (Meta IR, pending_first_extraction). Pushed per wq-015 Phase 2 posture. | src-032 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-041].next_check` | 2026-04-04 | 2026-05-23 | Past-due (Bessemer Atlas). Pushed per wq-015 Phase 2 posture. | src-041 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-045].next_check` | 2026-04-19 | 2026-05-23 | Past-due (Cloudflare Radar). Pushed per wq-015 Phase 2 posture. | src-045 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-037].language` | null | `zh` | Tagged Chinese source for translation-aware extraction prompt per wq-015 §4. Next_check bumped from 2026-04-23 to 2026-05-23. | src-037 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-038].language` | null | `zh` | Tagged Chinese source. Next_check bumped from 2026-04-23 to 2026-05-23. | src-038 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-042].language` | null | `zh` | Tagged Chinese source (Cyberspace Administration of China). | src-042 | Simon | Simon | _(this commit)_ |

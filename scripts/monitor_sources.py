@@ -30,6 +30,24 @@ FREQUENCY_DAYS = {
     'daily': 1, 'weekly': 7, 'monthly': 30, 'quarterly': 90, 'annual': 365, 'one_time': 99999,
 }
 
+SNAPSHOT_ROOT = os.path.join(BASE_DIR, 'data', 'snapshots')
+EDGAR_TICKERS_FILE = os.path.join(BASE_DIR, 'data', 'edgar-tickers.json')
+
+
+def save_snapshot(source, content, ext='html'):
+    """Per data-sourcing-policy §6.4, persist the raw artefact of every retrieval
+    to data/snapshots/<source_id>/<YYYY-MM-DD>/. Never lose the primary doc to a
+    moved URL. content may be str (written as utf-8) or bytes (written raw)."""
+    date = datetime.now().strftime('%Y-%m-%d')
+    dest_dir = os.path.join(SNAPSHOT_ROOT, source['id'], date)
+    os.makedirs(dest_dir, exist_ok=True)
+    fname = f"{source['id']}.{ext}"
+    mode = 'wb' if isinstance(content, (bytes, bytearray)) else 'w'
+    path = os.path.join(dest_dir, fname)
+    with open(path, mode) as f:
+        f.write(content)
+    return path
+
 
 def log(msg):
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -73,8 +91,14 @@ def fetch_pdf(url):
         return None
 
 
-def extract_with_claude(text, source, max_chars=30000):
-    """Use Claude API to extract claims from text."""
+def extract_with_claude(text, source, max_chars=30000, language=None):
+    """Use Claude API to extract claims from text.
+
+    language: optional ISO code. When 'zh' (Chinese), uses a translation-aware
+    prompt that emits English claims with the original-language excerpt
+    preserved in a `source_excerpt_original` field per wq-015 §4.
+    Defaults to the source's own `language` field, then 'en'.
+    """
     api_key = os.environ.get('ANTHROPIC_API_KEY')
     if not api_key:
         log("  No ANTHROPIC_API_KEY — skipping Claude extraction")
@@ -87,9 +111,38 @@ def extract_with_claude(text, source, max_chars=30000):
         log("  anthropic package not installed")
         return []
 
+    if language is None:
+        language = source.get('language', 'en')
+
     text_chunk = text[:max_chars]
 
-    prompt = f"""Extract ALL specific data points from this content that are relevant to tracking AI industry economics.
+    if language == 'zh':
+        prompt = f"""The content below is in Chinese. Extract specific data points relevant to tracking AI industry economics.
+
+Source: {source['title']} ({source['url']})
+Type: {source['type']}
+Language: Chinese (translate claim text to English; preserve the original Chinese excerpt verbatim).
+
+Content:
+{text_chunk}
+
+For each data point, return a JSON object with:
+- "claim": the specific statement, translated to English (1-2 sentences)
+- "source_excerpt_original": the verbatim Chinese text the claim is translated from (do not translate this field)
+- "category": provider_revenue | token_volume | pricing | gpu_infrastructure | enterprise_adoption | skeptical_bear_case | valuation_funding | other
+- "entity": company or product name (canonical English form where possible; include Chinese original in parentheses the first time it appears)
+- "metric": what is measured
+- "value": numeric value or null
+- "unit": USD, CNY, tokens, percent, etc
+- "value_display": human-readable (e.g. "¥10B" or "$1.4B")
+- "time_period": when this applies
+- "confidence": high | medium | low
+- "weight": authoritative | corroborating | indicative
+
+Return a JSON array. Return [] if no relevant data points found.
+Return ONLY the JSON array."""
+    else:
+        prompt = f"""Extract ALL specific data points from this content that are relevant to tracking AI industry economics.
 
 Source: {source['title']} ({source['url']})
 Type: {source['type']}
@@ -194,13 +247,90 @@ def extract_google_slides(source):
 
 
 def extract_web_page(source):
-    """Fetch web page and extract claims."""
-    text, _ = fetch_page(source['url'])
+    """Fetch web page and extract claims. Honours source['language'] when set
+    (e.g. 'zh' for 36Kr, Jiemian, CAC)."""
+    text, html = fetch_page(source['url'])
     if not text or len(text) < 200:
         log(f"  Page content too short ({len(text) if text else 0} chars)")
         return []
     log(f"  Fetched {len(text):,} chars")
+    # Snapshot the raw artefact before parsing (data-sourcing-policy §6.4)
+    try:
+        save_snapshot(source, html or text, ext='html')
+    except Exception as e:
+        log(f"  Snapshot failed: {e}")
     return extract_with_claude(text, source)
+
+
+def extract_ir_page(source):
+    """Hyperscaler IR pages (wq-015 §2.1). v1 is a thin wrapper over
+    extract_web_page — it scrapes the HTML and runs the standard prompt.
+    v2 should follow PDF links for earnings slides; noted in the brief's
+    implementation log as follow-up."""
+    log("  [ir_page_extract] v1 — HTML text only; PDF-slide follow TODO")
+    return extract_web_page(source)
+
+
+def extract_sec_edgar_scan(source):
+    """SEC EDGAR multi-ticker scan (wq-015 §2.2). Iterates
+    data/edgar-tickers.json, fetches each ticker's EDGAR filings-index page,
+    and emits one lightweight claim per ticker describing the most recent
+    filing. Does NOT fetch the filings themselves — the filings-catalogue
+    pass is the trigger for a deeper per-filing extract, which Simon
+    initiates manually after reviewing the catalogue."""
+    if not os.path.exists(EDGAR_TICKERS_FILE):
+        log(f"  {EDGAR_TICKERS_FILE} missing — cannot run SEC EDGAR scan")
+        return []
+
+    with open(EDGAR_TICKERS_FILE) as f:
+        seed = json.load(f)
+    tickers = seed.get('tickers', [])
+    if not tickers:
+        log("  edgar-tickers.json has no tickers")
+        return []
+
+    claims = []
+    for t in tickers:
+        cik = t.get('cik')
+        ticker = t.get('ticker')
+        if not cik:
+            continue
+        # EDGAR's browse-edgar endpoint returns an HTML filings catalogue per CIK
+        url = (f'https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany'
+               f'&CIK={cik}&type=10-K,10-Q,8-K&dateb=&owner=include&count=5')
+        text, html = fetch_page(url)
+        if not text:
+            log(f"  {ticker}: filings catalogue fetch failed")
+            continue
+        # Save per-ticker snapshot so the catalogue page is preserved
+        try:
+            ticker_src = dict(source)
+            ticker_src['id'] = f"{source['id']}-{ticker}"
+            save_snapshot(ticker_src, html or text, ext='html')
+        except Exception as e:
+            log(f"  {ticker}: snapshot failed: {e}")
+        # Lightweight catalogue claim — no API call
+        claims.append({
+            'claim': f"SEC EDGAR filings catalogue fetched for {t.get('company', ticker)} ({ticker}).",
+            'category': 'filings_catalogue',
+            'entity': t.get('company', ticker),
+            'metric': 'recent_filings',
+            'value': None,
+            'unit': 'filings',
+            'value_display': 'catalogue',
+            'time_period': datetime.now().strftime('%Y-%m-%d'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],
+            'source_url': url,
+            'source_title': f"SEC EDGAR — {t.get('company', ticker)} filings catalogue",
+            'extracted_at': datetime.now().isoformat(),
+            'ticker': ticker,
+            'cik': cik,
+            'notes': t.get('why', ''),
+        })
+        log(f"  {ticker}: catalogue fetched")
+    return claims
 
 
 def extract_pdf_report(source):
@@ -242,6 +372,9 @@ ADAPTERS = {
     'pdf_export': extract_google_slides,
     'pdf_extract': extract_pdf_report,
     'web_extract': extract_web_page,
+    # Stream 1 (wq-015) adapters:
+    'ir_page_extract': extract_ir_page,
+    'sec_edgar_scan': extract_sec_edgar_scan,
     # These are handled by existing scripts, not this monitor:
     'podcast_scraper': lambda s: [],   # scrape_podcasts.py
     'signal_scraper': lambda s: [],    # scrape_signals.py
@@ -249,7 +382,7 @@ ADAPTERS = {
     'youtube_captions': lambda s: [],  # scrape_podcasts.py handles this
     'thread_extract': extract_web_page,
     'github_api': lambda s: [],        # enrich.py handles this
-    'sec_extract': extract_web_page,   # basic version — Phase 4 improves
+    'sec_extract': extract_web_page,   # legacy single-ticker path; sec_edgar_scan is the multi-ticker replacement
     'api_fetch': lambda s: [],         # scrape_signals.py handles this
 }
 
