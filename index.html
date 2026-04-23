@@ -112,6 +112,17 @@
   .supporting a{padding:10px 20px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid var(--card-border);color:var(--text-dim);text-decoration:none;font-size:12px;font-weight:500;transition:all 0.15s;}
   .supporting a:hover{border-color:var(--accent);color:var(--text);}
 
+  /* ── Stay Informed ── */
+  .subscribe-wrap{padding:32px 0;display:flex;justify-content:center;}
+  .subscribe-box{background:linear-gradient(135deg,rgba(59,130,246,0.1),rgba(139,92,246,0.1));border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:28px 32px;text-align:center;max-width:560px;width:100%;}
+  .subscribe-box h3{font-size:18px;margin-bottom:6px;color:var(--text-bright);}
+  .subscribe-box p{font-size:13px;color:var(--text-dim);margin-bottom:16px;}
+  .subscribe-form{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .subscribe-form input[type=email]{padding:10px 16px;background:#1e293b;border:1px solid #334155;border-radius:8px 0 0 8px;color:var(--text);font-size:14px;outline:none;width:260px;}
+  .subscribe-form button{padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:0 8px 8px 0;font-size:14px;font-weight:600;cursor:pointer;}
+  .subscribe-form button:hover{background:#2563eb;}
+  .subscribe-success{display:none;margin-top:12px;padding:10px 14px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;font-size:12px;color:#10b981;}
+
   /* ── Footer ── */
   footer{text-align:center;padding:32px 0 16px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--card-border);margin-top:24px;}
   footer a{color:var(--accent);text-decoration:none;}
@@ -122,6 +133,11 @@
 
   /* ── Mobile ── */
   @media(max-width:768px){
+    .subscribe-box{padding:20px 16px;}
+    .subscribe-box h3{font-size:16px;}
+    .subscribe-box p{font-size:12px;}
+    .subscribe-form input[type=email]{width:100%;border-radius:8px;margin-bottom:8px;}
+    .subscribe-form button{width:100%;border-radius:8px;min-height:44px;}
     .nav-bar{padding:8px 12px;gap:4px;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,black 85%,transparent 100%);-webkit-mask-image:linear-gradient(to right,black 85%,transparent 100%);}
     .nav-bar::-webkit-scrollbar{display:none;}
     .nav-bar>*{flex:0 0 auto;}
@@ -294,11 +310,25 @@
 
   <!-- ── SUPPORTING LAYERS ── -->
   <section class="supporting">
-    <a href="../timeline.html">Time Machine</a>
-    <a href="../openrouter.html">Live Pricing</a>
-    <a href="../feed.html">Weekly Feed</a>
+    <a href="timeline.html">Time Machine</a>
+    <a href="openrouter.html">Live Pricing</a>
     <a href="methodology.html">Methodology</a>
     <a href="changelog.html">Changelog</a>
+  </section>
+
+  <!-- ── STAY INFORMED ── -->
+  <section class="subscribe-wrap">
+    <div class="subscribe-box">
+      <h3>Stay informed</h3>
+      <p>Updates when the ledger shifts — new filings, revenue moves, structural signals.</p>
+      <form action="https://formspree.io/f/mqegqzny" method="POST" class="subscribe-form">
+        <input type="email" name="email" placeholder="your@email.com" required>
+        <input type="hidden" name="_subject" value="AI Ledger Newsletter Signup">
+        <input type="hidden" name="_next" value="https://ai-index.hepburnadvisory.com.au/?subscribed=true">
+        <button type="submit">Subscribe</button>
+      </form>
+      <div id="subscribe-success" class="subscribe-success">You're in — look for updates in your inbox.</div>
+    </div>
   </section>
 
   <div style="text-align:center;margin:24px 0 0;"><button class="cite-btn" data-path="/" style="background:transparent;border:1px solid var(--card-border);color:var(--text-dim);padding:6px 16px;border-radius:6px;font-size:11px;cursor:pointer;">Cite this page</button></div>
@@ -383,6 +413,11 @@ function applyScenario(s) {
 
 // Init
 applyScenario(getScenario());
+
+// Subscribe success message
+if (window.location.search.includes('subscribed=true')) {
+  document.getElementById('subscribe-success').style.display = 'block';
+}
 
 document.querySelectorAll('.cite-btn').forEach(btn => {
   btn.addEventListener('click', () => {
