@@ -145,12 +145,30 @@ const GitHubAPI = (() => {
    * @param {string} path — repo-relative path
    * @returns {Promise<{content: string, sha: string}>}
    */
+  function _decodeBase64Utf8(b64) {
+    const binary = atob((b64 || '').replace(/\n/g, ''));
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+
   async function readFile(path) {
     const headers = await _headers();
     const resp = await fetch(`${API}/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`, { headers });
     if (!resp.ok) throw new Error('Failed to read ' + path + ': ' + resp.status);
     const data = await resp.json();
-    return { content: atob(data.content), sha: data.sha };
+    // GitHub Contents API returns empty content for files > 1 MB. When that
+    // happens fall back to the Git Blobs API which handles up to 100 MB.
+    if (!data.content && data.sha) {
+      const blobResp = await fetch(`${API}/repos/${OWNER}/${REPO}/git/blobs/${data.sha}`, { headers });
+      if (!blobResp.ok) throw new Error('Failed to read blob for ' + path + ': ' + blobResp.status);
+      const blob = await blobResp.json();
+      return { content: _decodeBase64Utf8(blob.content), sha: data.sha };
+    }
+    // GitHub sends base64 of UTF-8 bytes. atob() returns a raw-byte string, so
+    // non-ASCII chars (Chinese, curly quotes, emoji) come back as mojibake and
+    // break JSON.parse. Decode properly via TextDecoder.
+    return { content: _decodeBase64Utf8(data.content), sha: data.sha };
   }
 
   /**
