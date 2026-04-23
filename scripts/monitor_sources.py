@@ -32,6 +32,7 @@ FREQUENCY_DAYS = {
 
 SNAPSHOT_ROOT = os.path.join(BASE_DIR, 'data', 'snapshots')
 EDGAR_TICKERS_FILE = os.path.join(BASE_DIR, 'data', 'edgar-tickers.json')
+ATTRIBUTION_MAP_FILE = os.path.join(BASE_DIR, 'data', 'datacenter-attribution-map.json')
 
 
 def save_snapshot(source, content, ext='html'):
@@ -369,6 +370,303 @@ def extract_sec_edgar_scan(source):
     return claims
 
 
+# ---------------------------------------------------------------------------
+# Stream 2 — power / grid-queue adapters (wq-012).
+#
+# Each adapter emits structured `power_project` claims per the schema in
+# metric-schema.json claim_types.power_project (wq-014). Attribution lookup
+# is shared via _lookup_attribution(), which consults
+# data/datacenter-attribution-map.json.
+#
+# Posture: adapters do NOT run on cron. Simon triggers per-source via
+# `python3 scripts/monitor_sources.py --force src-NNN` after confirming the
+# review queue has capacity.
+# ---------------------------------------------------------------------------
+
+def _load_attribution_map():
+    if not os.path.exists(ATTRIBUTION_MAP_FILE):
+        return {'by_project': {}, 'by_llc': {}}
+    with open(ATTRIBUTION_MAP_FILE) as f:
+        return json.load(f)
+
+
+def _lookup_attribution(attr_map, llc_name=None, project_name=None):
+    """Return (company_slug, confidence, attribution_sources) or (None, None, []).
+    Prefers by_llc (LLC-of-record, tighter match) over by_project (facility name)."""
+    if llc_name:
+        hit = attr_map.get('by_llc', {}).get(llc_name)
+        if hit:
+            return hit.get('operator'), hit.get('confidence'), hit.get('attribution_sources', [])
+    if project_name:
+        hit = attr_map.get('by_project', {}).get(project_name)
+        if hit:
+            # by_project uses operators[] — collapse to the highest-confidence one
+            ops = hit.get('operators') or []
+            if ops:
+                best = max(ops, key=lambda o: {'confident': 3, 'likely': 2, 'speculative': 1}.get(o.get('confidence'), 0))
+                return best.get('name'), best.get('confidence'), hit.get('attribution_sources', [])
+    return None, None, []
+
+
+def _power_project_claim_from_row(row, source, queue_market, attr_map):
+    """Build a `power_project` structured claim (metric-schema claim_types.power_project)
+    from an adapter row dict. Row carries queue_id/stage/mw/* fields and an optional
+    llc_of_record. Missing fields stay null per schema."""
+    llc = row.get('llc_of_record')
+    project = row.get('project_name')
+    op, op_conf, op_srcs = _lookup_attribution(attr_map, llc_name=llc, project_name=project)
+
+    claim = {
+        'type': 'power_project',
+        'queue_market': queue_market,
+        'queue_id': row.get('queue_id'),
+        'stage': row.get('stage'),
+        'source': {
+            'url': row.get('source_url', source['url']),
+            'retrievedAt': datetime.now().isoformat(),
+            'nextReview': (datetime.now() + timedelta(days=FREQUENCY_DAYS.get(source.get('frequency', 'monthly'), 30))).strftime('%Y-%m-%d'),
+            'confidence': row.get('confidence', 'medium'),
+        },
+    }
+    # Optional fields — only include when present
+    for field in ('poi', 'county', 'mw_requested', 'mw_approved', 'mw_in_service',
+                  'requested_cod', 'llc_of_record'):
+        if row.get(field) not in (None, ''):
+            claim[field] = row[field]
+
+    if op:
+        claim['company_slug'] = op.lower().replace(' ', '-') if isinstance(op, str) else op
+        claim['attribution_confidence'] = op_conf or 'low'
+        if op_srcs:
+            claim['attribution_sources'] = op_srcs
+
+    return claim
+
+
+def _save_power_claims(claims, source):
+    """Write structured power claims to the per-source candidates file."""
+    if not claims:
+        return None
+    today = datetime.now().strftime('%Y-%m-%d')
+    out = os.path.join(OUTPUT_DIR, f'{today}-source-{source["id"]}.json')
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    with open(out, 'w') as f:
+        json.dump(claims, f, indent=2)
+    log(f"   Saved {len(claims)} power_project claim(s) to {out}")
+    return out
+
+
+def extract_iso_queue_ercot(source):
+    """ERCOT GIS Report + Large Load Integration (src-060). v1: fetches the
+    landing HTML + saves as snapshot. Full XLSX parse requires openpyxl, which
+    is not a v1 dependency; when unavailable, logs the download URL(s) for
+    manual review and returns []."""
+    attr_map = _load_attribution_map()
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+
+    # Find XLSX download URLs on the page — ERCOT typically exposes one at the
+    # page bottom. v1 logs them; Simon downloads manually and a v2 XLSX parser
+    # handles the rows.
+    xlsx_urls = re.findall(r'https?://[^\s"\']+\.xlsx', html or '', re.IGNORECASE)
+    if xlsx_urls:
+        log(f"  Found {len(xlsx_urls)} XLSX link(s) — download and feed to the adapter manually for v1:")
+        for u in xlsx_urls[:5]:
+            log(f"    {u}")
+
+    try:
+        import openpyxl  # noqa: F401
+    except ImportError:
+        log("  openpyxl not installed — ERCOT GIS XLSX parse skipped for v1.")
+        log("  Install via `pip install openpyxl` to enable row-level power_project extraction.")
+        return []
+
+    # XLSX parsing path — stubbed for now. Simon's call whether to install
+    # openpyxl in the v1 env (adds ~5 MB) before enabling.
+    log("  openpyxl present but XLSX row-parsing not yet implemented; returning [].")
+    return []
+
+
+def extract_iso_queue_pjm(source):
+    """PJM New Services Queue (src-061). Same v1 posture as ERCOT: save the
+    landing-page snapshot, surface download links. Row-level XLSX parse is a
+    follow-up."""
+    attr_map = _load_attribution_map()
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+
+    xlsx_urls = re.findall(r'https?://[^\s"\']+\.(xlsx|xls)', html or '', re.IGNORECASE)
+    if xlsx_urls:
+        log(f"  Found {len(xlsx_urls)} XLSX/XLS link(s) on PJM queue page")
+        for u in xlsx_urls[:5]:
+            log(f"    {u[0] if isinstance(u, tuple) else u}")
+
+    try:
+        import openpyxl  # noqa: F401
+    except ImportError:
+        log("  openpyxl not installed — PJM queue XLSX parse skipped for v1.")
+        return []
+
+    log("  openpyxl present but PJM XLSX row-parsing not yet implemented; returning [].")
+    return []
+
+
+def extract_eia_api(source):
+    """EIA Open Data API (src-062). v1 fetches STEO datacenter-load commentary
+    when EIA_API_KEY is set. Output is free-text claims, not power_project —
+    STEO gives aggregate sector numbers, not per-queue-entry rows."""
+    api_key = os.environ.get('EIA_API_KEY')
+    if not api_key:
+        log("  EIA_API_KEY env var not set — eia_api adapter requires one (free registration at https://www.eia.gov/opendata/register.php). Returning [].")
+        return []
+
+    # STEO DC load is published as a specific series. v1 hits the STEO endpoint;
+    # full 860M / 930 coverage is follow-up.
+    endpoint = f'https://api.eia.gov/v2/steo/data/?api_key={api_key}&frequency=monthly&data[0]=value&facets[seriesId][]=ZEGEPUS&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=12'
+    try:
+        req = Request(endpoint, headers={'User-Agent': 'Mozilla/5.0'})
+        with urlopen(req, timeout=30) as resp:
+            payload = resp.read().decode('utf-8', errors='replace')
+        try:
+            save_snapshot(source, payload, ext='json')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+        parsed = json.loads(payload)
+    except Exception as e:
+        log(f"  EIA API fetch failed: {e}")
+        return []
+
+    data = parsed.get('response', {}).get('data', [])
+    if not data:
+        log("  EIA STEO returned no rows for the datacenter-load series")
+        return []
+    # Summarise the last 12 months as free-text claims (not power_project —
+    # these are sector aggregates, not queue entries).
+    claims = []
+    for row in data[:12]:
+        claims.append({
+            'claim': f"EIA STEO: {row.get('value')} {row.get('unit', '?')} for period {row.get('period')} (series {row.get('seriesId')}).",
+            'category': 'gpu_infrastructure',
+            'entity': 'US electricity sector',
+            'metric': row.get('seriesDescription', 'STEO series'),
+            'value': row.get('value'),
+            'unit': row.get('unit', ''),
+            'value_display': f"{row.get('value')} {row.get('unit', '')}",
+            'time_period': row.get('period'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],
+            'source_url': source['url'],
+            'source_title': source['title'],
+            'extracted_at': datetime.now().isoformat(),
+        })
+    return claims
+
+
+def extract_neso_tec(source):
+    """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
+    CSV download under OGL licence; produces power_project claims with
+    queue_market='NESO'."""
+    attr_map = _load_attribution_map()
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+
+    # Find the CSV download link on the page
+    csv_urls = re.findall(r'https?://[^\s"\']+\.csv', html or '', re.IGNORECASE)
+    if not csv_urls:
+        log("  No CSV link found on NESO data-portal page — manual download required. Returning [].")
+        return []
+
+    csv_url = csv_urls[0]
+    log(f"  Fetching CSV: {csv_url}")
+    try:
+        req = Request(csv_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urlopen(req, timeout=60) as resp:
+            csv_raw = resp.read()
+        try:
+            save_snapshot({**source, 'id': f"{source['id']}-csv"}, csv_raw, ext='csv')
+        except Exception as e:
+            log(f"  CSV snapshot failed: {e}")
+        csv_text = csv_raw.decode('utf-8', errors='replace')
+    except Exception as e:
+        log(f"  NESO CSV fetch failed: {e}")
+        return []
+
+    import csv as _csv, io as _io
+    reader = _csv.DictReader(_io.StringIO(csv_text))
+    claims = []
+    for raw_row in reader:
+        # NESO columns vary by quarter; pull the common fields defensively.
+        # Typical columns: 'Project Name', 'Connection Site', 'MW Connected',
+        # 'MW Contracted', 'Ready Year', 'Status', 'TO', 'Plant Type'.
+        row = {
+            'queue_id': raw_row.get('Project Name') or raw_row.get('Ref') or '',
+            'project_name': raw_row.get('Project Name'),
+            'stage': raw_row.get('Status') or raw_row.get('Gate'),
+            'poi': raw_row.get('Connection Site'),
+            'mw_requested': _try_float(raw_row.get('MW Contracted') or raw_row.get('Transmission Entry Capacity (MW)') or raw_row.get('MW')),
+            'mw_in_service': _try_float(raw_row.get('MW Connected')),
+            'requested_cod': raw_row.get('Ready Year') or raw_row.get('Target Date'),
+            'source_url': csv_url,
+            'confidence': 'high',
+        }
+        if not row['queue_id']:
+            continue
+        claims.append(_power_project_claim_from_row(row, source, queue_market='NESO', attr_map=attr_map))
+
+    log(f"  Parsed {len(claims)} NESO TEC row(s)")
+    return claims
+
+
+def _try_float(v):
+    if v is None or v == '':
+        return None
+    try:
+        return float(str(v).replace(',', ''))
+    except ValueError:
+        return None
+
+
+def extract_epoch_frontier(source):
+    """Epoch AI Frontier Data Centers Hub (src-064). v1: refreshes the
+    attribution map from the CC-BY CSV. Emits ZERO power_project claims on
+    its own — Epoch is a facility catalogue, not an ISO queue. Downstream
+    ERCOT / PJM / NESO extractions consult the updated map for LLC and
+    project-name attribution lookups."""
+    attr_map_url = 'https://epoch.ai/data/data_centers/data_centers.csv'
+    try:
+        req = Request(attr_map_url, headers={'User-Agent': 'Mozilla/5.0 (AILedgerBot)'})
+        with urlopen(req, timeout=30) as resp:
+            csv_raw = resp.read()
+        try:
+            save_snapshot(source, csv_raw, ext='csv')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    except Exception as e:
+        log(f"  Epoch CSV fetch failed: {e}")
+        return []
+
+    log(f"  Fetched Epoch CSV ({len(csv_raw):,} bytes). Attribution map refresh is a separate operation; for v1 it's seeded once (see data/datacenter-attribution-map.json) and Simon re-runs this adapter to capture new facilities.")
+    log("  This adapter emits 0 power_project claims — Epoch is the attribution source, not the queue source.")
+    return []
+
+
 def extract_pdf_report(source):
     """Download PDF and extract claims."""
     pdf_path = fetch_pdf(source['url'])
@@ -416,6 +714,12 @@ ADAPTERS = {
     # Stream 1 (wq-015) adapters:
     'ir_page_extract': extract_ir_page,
     'sec_edgar_scan': extract_sec_edgar_scan,
+    # Stream 2 (wq-012) power adapters:
+    'iso_queue_ercot': extract_iso_queue_ercot,
+    'iso_queue_pjm': extract_iso_queue_pjm,
+    'eia_api': extract_eia_api,
+    'neso_tec': extract_neso_tec,
+    'epoch_frontier': extract_epoch_frontier,
     # These are handled by existing scripts, not this monitor:
     'podcast_scraper': lambda s: [],   # scrape_podcasts.py
     'signal_scraper': lambda s: [],    # scrape_signals.py
