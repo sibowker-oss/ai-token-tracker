@@ -37247,8 +37247,11 @@
         "2026"
       ],
       "notes": "Anthropic pledges $100B+ AWS spend over 10 years incl. Trainium chips; secured 5GW capacity. Amazon invests $5B now, up to $25B additional on top of prior $8B.",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "scan-20260423-b2c",
@@ -37271,8 +37274,11 @@
         "2026"
       ],
       "notes": "Anthropic disclosed enterprise customers spending $1M+/year doubled from 500 to 1,000+ in fewer than 2 months since Series G close (Feb 12, 2026).",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "scan-20260423-c3d",
@@ -37295,8 +37301,11 @@
         "2026"
       ],
       "notes": "Multiple reports indicate Anthropic evaluating IPO as early as Oct 2026. Bloomberg: unsolicited offers at $800B+ (>2x Series G $380B post-money).",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "scan-20260423-d4e",
@@ -37319,8 +37328,11 @@
         "2026"
       ],
       "notes": "OpenAI stated $2B/month revenue (~$24B ARR) at time of $122B funding announcement. Full-year 2025 revenue cited as $13.1B.",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "scan-20260423-e5f",
@@ -37345,8 +37357,11 @@
         "2026"
       ],
       "notes": "Microsoft M365 E7 at $99/user/month with Copilot bundled. 65% price premium vs prior top tier. Framed as offsetting $72B capex over prior 2 quarters.",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "scan-20260423-f6g",
@@ -37370,8 +37385,11 @@
         "2026"
       ],
       "notes": "AWS AI run-rate est. $15B Q1 2026. Multi-model Bedrock strategy (OpenAI + Anthropic) cited as key driver. This is analyst estimate, not official AWS figure.",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "auto-20260423-src-025-1",
@@ -37790,7 +37808,7 @@
         "anthropic"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"anthropic\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 448, \"open_roles_ai_titled\": 144, \"open_roles_prompt_engineer\": 3, \"ai_titled_share\": 0.321, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "anthropic-hiring_snapshot",
@@ -37818,7 +37836,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-069-2",
@@ -37837,7 +37858,7 @@
         "glean"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"glean\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 178, \"open_roles_ai_titled\": 11, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.062, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "glean-hiring_snapshot",
@@ -37865,7 +37886,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-069-3",
@@ -37884,7 +37908,7 @@
         "databricks"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"databricks\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 838, \"open_roles_ai_titled\": 130, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.155, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "databricks-hiring_snapshot",
@@ -37912,7 +37936,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-069-4",
@@ -37931,7 +37958,7 @@
         "scale"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"scale\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 176, \"open_roles_ai_titled\": 59, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.335, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "scale-hiring_snapshot",
@@ -37959,7 +37986,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-069-5",
@@ -37978,7 +38008,7 @@
         "fireworks"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"fireworks\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 30, \"open_roles_ai_titled\": 10, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.333, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "fireworks-hiring_snapshot",
@@ -38006,7 +38036,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-070-1",
@@ -38025,7 +38058,7 @@
         "mistral"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"mistral\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 154, \"open_roles_ai_titled\": 47, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.305, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-070",
       "metricKey": "mistral-hiring_snapshot",
@@ -38053,7 +38086,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-1",
@@ -38072,7 +38108,7 @@
         "modal"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"modal\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 28, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "modal-hiring_snapshot",
@@ -38100,7 +38136,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-2",
@@ -38119,7 +38158,7 @@
         "harvey"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"harvey\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 230, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "harvey-hiring_snapshot",
@@ -38147,7 +38186,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-3",
@@ -38166,7 +38208,7 @@
         "perplexity"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"perplexity\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 72, \"open_roles_ai_titled\": 14, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.194, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "perplexity-hiring_snapshot",
@@ -38194,7 +38236,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-4",
@@ -38213,7 +38258,7 @@
         "elevenlabs"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"elevenlabs\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 114, \"open_roles_ai_titled\": 1, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.009, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "elevenlabs-hiring_snapshot",
@@ -38241,7 +38286,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-5",
@@ -38260,7 +38308,7 @@
         "runway"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"runway\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 4, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "runway-hiring_snapshot",
@@ -38288,7 +38336,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-6",
@@ -38307,7 +38358,7 @@
         "cohere"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"cohere\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 114, \"open_roles_ai_titled\": 11, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.096, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "cohere-hiring_snapshot",
@@ -38335,7 +38386,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-7",
@@ -38354,7 +38408,7 @@
         "lambda"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"lambda\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 32, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "lambda-hiring_snapshot",
@@ -38382,7 +38436,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-8",
@@ -38401,7 +38458,7 @@
         "anyscale"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"anyscale\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 13, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "anyscale-hiring_snapshot",
@@ -38429,7 +38486,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-9",
@@ -38448,7 +38508,7 @@
         "cursor"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"cursor\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 71, \"open_roles_ai_titled\": 2, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.028, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "cursor-hiring_snapshot",
@@ -38476,7 +38536,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-071-10",
@@ -38495,7 +38558,7 @@
         "writer"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"writer\", \"window\": \"2026-W17\", \"metrics\": {\"open_roles_total\": 48, \"open_roles_ai_titled\": 4, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.083, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "writer-hiring_snapshot",
@@ -38523,7 +38586,10 @@
           "nextReview": "2026-04-30",
           "confidence": "high"
         }
-      }
+      },
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule1_hiring_snapshot_structured"
     },
     {
       "id": "auto-20260423-src-001-1",
@@ -38566,14 +38632,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "early revenue",
       "entity": "Formula Bot",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-3",
@@ -38666,14 +38735,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "revenue scale",
       "entity": "AI-first companies (sector)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-7",
@@ -38766,14 +38838,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "capability doubling time",
       "entity": "AI Cyber Capabilities (sector)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-11",
@@ -39166,14 +39241,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "post-training example count for language adaptation",
       "entity": "LLMs / Reasoning Models (sector)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-27",
@@ -39341,14 +39419,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "training data efficiency",
       "entity": "Meta / Llama 8B",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-34",
@@ -39491,14 +39572,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "model performance at smaller parameter count",
       "entity": "Microsoft / Phi-3 vs Google / Gemma-2",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-40",
@@ -39516,14 +39600,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "inference speed vs TTT",
       "entity": "Local Mixtures of Experts",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-41",
@@ -39591,14 +39678,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "cost savings at scale",
       "entity": "Muon optimizer",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-44",
@@ -39841,14 +39931,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "GitHub stars",
       "entity": "OpenAI / gpt-oss",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-54",
@@ -40466,14 +40559,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "experiment throughput per day",
       "entity": "University of Liverpool / NC State (Rainbow)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-79",
@@ -40491,14 +40587,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "attention sink prevalence by model size",
       "entity": "Meta / LLaMA-3.1",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-80",
@@ -40516,14 +40615,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "training data scale (interfaces)",
       "entity": "ATOMICA",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-81",
@@ -40541,14 +40643,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "training data scale (crystal structures)",
       "entity": "MatterGen (Microsoft Research)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-82",
@@ -40666,14 +40771,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "agents created / conversations handled",
       "entity": "ElevenLabs",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-87",
@@ -40766,14 +40874,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "ARR",
       "entity": "Black Forest Labs",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-91",
@@ -40791,14 +40902,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "gross margin",
       "entity": "Black Forest Labs",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-92",
@@ -40866,14 +40980,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "ARR in year one",
       "entity": "Enterprise AI apps (median)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-95",
@@ -40891,14 +41008,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "ARR in year one",
       "entity": "Consumer AI apps (median)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-96",
@@ -40916,14 +41036,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "aggregate revenue",
       "entity": "Lean AI Leaderboard companies",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-97",
@@ -40941,14 +41064,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "revenue per employee",
       "entity": "Lean AI Leaderboard companies",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-98",
@@ -40991,14 +41117,17 @@
         "valuation_funding"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "investor-founder interaction growth",
       "entity": "AI industry",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-100",
@@ -41091,14 +41220,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "projected average contract value",
       "entity": "AI tools (Ramp customers)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-104",
@@ -41216,14 +41348,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "capability doubling time (Artificial Analysis Index)",
       "entity": "Google",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-109",
@@ -41241,14 +41376,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "capability doubling time (Artificial Analysis Index)",
       "entity": "OpenAI",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-110",
@@ -41266,14 +41404,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "capability doubling time (LMArena ELO)",
       "entity": "Google",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-111",
@@ -41291,14 +41432,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "capability doubling time (LMArena ELO)",
       "entity": "OpenAI",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-112",
@@ -41316,14 +41460,17 @@
         "valuation_funding"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "days between model release and fundraising close",
       "entity": "AI lab (unnamed)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-113",
@@ -41341,14 +41488,17 @@
         "valuation_funding"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "days between model release and fundraising close",
       "entity": "AI lab (unnamed)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-114",
@@ -41366,14 +41516,17 @@
         "valuation_funding"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "days between model release and fundraising close",
       "entity": "AI lab (unnamed)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-115",
@@ -41416,14 +41569,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "speed to $5M ARR vs SaaS peers",
       "entity": "AI-first companies (Stripe AI 100)",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-117",
@@ -41441,14 +41597,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "speed to $5M ARR vs pre-2020 AI companies",
       "entity": "AI-first companies (post-2022)",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-118",
@@ -41466,14 +41625,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "quarterly revenue growth rate",
       "entity": "AI companies ($1\u201320M revenue tier)",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-119",
@@ -41491,14 +41653,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "quarterly revenue growth rate",
       "entity": "AI companies ($20M+ revenue tier)",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-120",
@@ -41516,14 +41681,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "training compute",
       "entity": "Apple (ATOKEN)",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-121",
@@ -41541,14 +41709,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "relative inference cost",
       "entity": "Small language models (~7B)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-122",
@@ -41566,14 +41737,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "call routing to cheaper models",
       "entity": "AI inference (agentic workloads)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-123",
@@ -41591,14 +41765,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "cost per hour",
       "entity": "EEG recording",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule2_speculative"
     },
     {
       "id": "auto-20260423-src-001-124",
@@ -41616,14 +41793,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "cost per hour",
       "entity": "MEG recording",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule2_speculative"
     },
     {
       "id": "auto-20260423-src-001-125",
@@ -41641,14 +41821,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "cost per hour",
       "entity": "3T fMRI recording",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule2_speculative"
     },
     {
       "id": "auto-20260423-src-001-126",
@@ -41666,14 +41849,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "cost per hour",
       "entity": "7T fMRI recording",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule2_speculative"
     },
     {
       "id": "auto-20260423-src-001-127",
@@ -41691,14 +41877,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "example budget",
       "entity": "Brain recording (research)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule2_speculative"
     },
     {
       "id": "auto-20260423-src-001-128",
@@ -41716,14 +41905,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "research paper citation share vs. A2A",
       "entity": "Anthropic MCP",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-129",
@@ -41741,14 +41933,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "number of MCP servers",
       "entity": "MCP ecosystem",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-130",
@@ -41791,14 +41986,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "YoY revenue growth",
       "entity": "Black Forest Labs",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-132",
@@ -41841,14 +42039,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "dataset size relative to VLM pre-training",
       "entity": "Robotics AI (general)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-134",
@@ -41866,14 +42067,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "AI adoption rate",
       "entity": "US businesses (Government estimate)",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-135",
@@ -41891,14 +42095,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "SPV premium rate",
       "entity": "Hyperscalers (general)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-136",
@@ -41916,14 +42123,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "SPV deal size",
       "entity": "Meta",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-137",
@@ -41941,14 +42151,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Revenue forecast (revised)",
       "entity": "Groq",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-138",
@@ -41966,14 +42179,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Revenue forecast (original)",
       "entity": "Groq",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-139",
@@ -42166,14 +42382,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Research paper citation growth",
       "entity": "AMD",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-147",
@@ -42441,14 +42660,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "GPU shipment volume",
       "entity": "Cambricon",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-158",
@@ -42491,14 +42713,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Share of Chinese XPU production volume",
       "entity": "Huawei",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-160",
@@ -43141,14 +43366,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Annualized revenue growth rate",
       "entity": "Anthropic",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-186",
@@ -43166,14 +43394,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Annualized revenue growth rate",
       "entity": "OpenAI",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-187",
@@ -43191,14 +43422,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Revenue vs. valuation comparison",
       "entity": "xAI",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-188",
@@ -43216,14 +43450,17 @@
         "valuation_funding"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Revenue multiple premium vs. peers",
       "entity": "xAI",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-189",
@@ -43291,14 +43528,17 @@
         "valuation_funding"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "Annual revenue and IPO size",
       "entity": "Unitree",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-192",
@@ -43416,14 +43656,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "GPU units shipped to China",
       "entity": "NVIDIA",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-197",
@@ -43441,14 +43684,17 @@
         "provider_revenue"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "projected China market revenue",
       "entity": "NVIDIA",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-198",
@@ -43466,14 +43712,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "active developers in China",
       "entity": "NVIDIA / CUDA",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-199",
@@ -43491,14 +43740,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "lobbying expenditures YTD",
       "entity": "Meta",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-200",
@@ -43516,14 +43768,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "lobbying expenditures YTD",
       "entity": "Google",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-201",
@@ -43616,14 +43871,17 @@
         "valuation_funding"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "CEO investments in Chinese companies",
       "entity": "Intel",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-205",
@@ -43966,14 +44224,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "materially impactful state AI bills",
       "entity": "IAPP / US AI Labs",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-219",
@@ -44391,14 +44652,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "major models shipped",
       "entity": "US / China / EU AI labs",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-236",
@@ -44441,14 +44705,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "implementation rate of Draghi recommendations",
       "entity": "EU",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-238",
@@ -44491,14 +44758,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "projected GDP boost from AI",
       "entity": "UK Government",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-240",
@@ -44791,14 +45061,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "regional AI adoption rate",
       "entity": "Brazil / LatAm",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-252",
@@ -44816,14 +45089,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "AI adoption rate",
       "entity": "India",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-253",
@@ -44991,14 +45267,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "unit cost per autonomous drone",
       "entity": "US Air Force CCA program",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-260",
@@ -45416,14 +45695,17 @@
         "skeptical_bear_case"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "parked",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "entry-level hiring change",
       "entity": "Software/Customer Support sectors",
       "weight": "corroborating",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule5_triangulation_only"
     },
     {
       "id": "auto-20260423-src-001-277",
@@ -45841,14 +46123,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "task success rate at human 40-50 min tasks",
       "entity": "AI cybersecurity models",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-294",
@@ -45866,14 +46151,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "hallucination detection recall",
       "entity": "AI interpretability research",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-295",
@@ -45891,14 +46179,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "hallucination detection AUC on math reasoning",
       "entity": "AI interpretability research",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-296",
@@ -45916,14 +46207,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "cross-model hallucination detection AUC drop",
       "entity": "AI interpretability research",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-297",
@@ -46141,14 +46435,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "free plan share among non-productive users",
       "entity": "AI tools (general)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-306",
@@ -46166,14 +46463,17 @@
         "pricing"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "free plan share among productive users",
       "entity": "AI tools (general)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-307",
@@ -46241,14 +46541,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "AI agent advertising spend forecast",
       "entity": "AI agents (general)",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule2_speculative"
     },
     {
       "id": "auto-20260423-src-001-310",
@@ -46266,14 +46569,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "survey sample size",
       "entity": "State of AI Survey",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-311",
@@ -46291,14 +46597,17 @@
         "other"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "geographic distribution",
       "entity": "State of AI Survey",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-312",
@@ -46316,14 +46625,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "users replacing existing internet services",
       "entity": "ChatGPT / Perplexity / Claude / Gemini",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-313",
@@ -46341,14 +46653,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "relative usage vs. smaller competitors",
       "entity": "Meta AI",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-314",
@@ -46366,14 +46681,17 @@
         "enterprise_adoption"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "relative usage vs. Grok",
       "entity": "DeepSeek",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-315",
@@ -46391,14 +46709,17 @@
         "skeptical_bear_case"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "developer tool adoption rank",
       "entity": "OpenAI Codex / Gemini CLI",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "auto-20260423-src-001-316",
@@ -46466,14 +46787,17 @@
         "gpu_infrastructure"
       ],
       "notes": "From State of AI Report 2025",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-001",
       "metricKey": "neocloud customer type",
       "entity": "CoreWeave / Nebius / Lambda / Crusoe",
       "weight": "indicative",
       "dedup_status": "new",
-      "dedup_note": null
+      "dedup_note": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule3_indicative_never_overrides"
     },
     {
       "id": "scan-20260424-a1b",
@@ -46487,10 +46811,21 @@
       "dateOfClaim": "2026-04-23",
       "dateAdded": "2026-04-24",
       "usedOn": [],
-      "tags": ["auto-scan", "needs-review", "enterprise-ai", "consulting", "BCG", "services-revenue", "2025"],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "enterprise-ai",
+        "consulting",
+        "BCG",
+        "services-revenue",
+        "2025"
+      ],
       "notes": "BCG said AI work generated 25% of $14.4B 2025 revenue (~$3.6B). Firm hiring engineers/AI specialists. Context: traditional SaaS/services firms monetizing AI advisory work.",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "scan-20260424-b2c",
@@ -46504,10 +46839,22 @@
       "dateOfClaim": "2026-04-23",
       "dateAdded": "2026-04-24",
       "usedOn": [],
-      "tags": ["auto-scan", "needs-review", "VC", "funding", "bezos", "physical-ai", "manufacturing", "2026"],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "VC",
+        "funding",
+        "bezos",
+        "physical-ai",
+        "manufacturing",
+        "2026"
+      ],
       "notes": "Project Prometheus led by Jeff Bezos + Google vet Vik Bajaj. Focus: AI for manufacturing/physical products. $10B raise, $38B valuation. JPMorgan/BlackRock among investors.",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     },
     {
       "id": "scan-20260424-c3d",
@@ -46521,10 +46868,22 @@
       "dateOfClaim": "2026-04-22",
       "dateAdded": "2026-04-24",
       "usedOn": [],
-      "tags": ["auto-scan", "needs-review", "compute-costs", "google", "thinking-machines", "nvidia", "infrastructure", "2026"],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "compute-costs",
+        "google",
+        "thinking-machines",
+        "nvidia",
+        "infrastructure",
+        "2026"
+      ],
       "notes": "Thinking Machines Lab (Mira Murati, ex-OpenAI CTO) deepens Google Cloud ties with multibillion-$ deal for GB300 Nvidia chips. Supports RL workloads for Tinker product.",
-      "status": "pending",
-      "replaces": null
+      "status": "declined",
+      "replaces": null,
+      "decidedAt": "2026-04-24T07:45:22Z",
+      "decidedBy": "auto-clear@1.0",
+      "decisionReason": "rule4_orphaned_weight"
     }
   ]
 }
