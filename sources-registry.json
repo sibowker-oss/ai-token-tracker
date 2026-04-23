@@ -616,9 +616,9 @@
     },
     {
       "id": "src-032",
-      "url": "https://investor.meta.com/",
+      "url": "https://investors.atmeta.com/",
       "title": "Meta Investor Relations",
-      "type": "earnings_aggregation",
+      "type": "ir_page",
       "author": "",
       "organization": "",
       "added": "2026-04-04",
@@ -627,7 +627,7 @@
         "llama",
         "ai-spend"
       ],
-      "extraction_method": "web_extract",
+      "extraction_method": "ir_page_extract",
       "frequency": "quarterly",
       "next_check": "2026-07-22",
       "last_checked": "2026-04-23",
@@ -1418,7 +1418,7 @@
       "frequency": "weekly",
       "next_check": "2026-04-30",
       "last_checked": "2026-04-23",
-      "last_claims_count": 4,
+      "last_claims_count": 5,
       "status": "active",
       "notes": "Public JSON, no auth. Per-company board via token from data/company-alias-map.json[<slug>].ats.token. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
     },
@@ -1462,7 +1462,7 @@
       "frequency": "weekly",
       "next_check": "2026-04-30",
       "last_checked": "2026-04-23",
-      "last_claims_count": 5,
+      "last_claims_count": 10,
       "status": "active",
       "notes": "Public JSON per-company-token. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
     },

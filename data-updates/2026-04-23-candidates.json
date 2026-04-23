@@ -3974,5 +3974,325 @@
       "nextReview": "2026-04-30",
       "confidence": "high"
     }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "anthropic",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 448,
+      "open_roles_ai_titled": 144,
+      "open_roles_prompt_engineer": 3,
+      "ai_titled_share": 0.321,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "greenhouse",
+      "token": "anthropic",
+      "url": "https://boards-api.greenhouse.io/v1/boards/anthropic",
+      "retrievedAt": "2026-04-23T19:26:37.553598",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "fireworks",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 30,
+      "open_roles_ai_titled": 10,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.333,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "greenhouse",
+      "token": "fireworksai",
+      "url": "https://boards-api.greenhouse.io/v1/boards/fireworksai",
+      "retrievedAt": "2026-04-23T19:26:38.686363",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "glean",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 178,
+      "open_roles_ai_titled": 11,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.062,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "greenhouse",
+      "token": "gleanwork",
+      "url": "https://boards-api.greenhouse.io/v1/boards/gleanwork",
+      "retrievedAt": "2026-04-23T19:26:40.748862",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "databricks",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 838,
+      "open_roles_ai_titled": 130,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.155,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "greenhouse",
+      "token": "databricks",
+      "url": "https://boards-api.greenhouse.io/v1/boards/databricks",
+      "retrievedAt": "2026-04-23T19:26:42.359503",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "scale",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 176,
+      "open_roles_ai_titled": 59,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.335,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "greenhouse",
+      "token": "scaleai",
+      "url": "https://boards-api.greenhouse.io/v1/boards/scaleai",
+      "retrievedAt": "2026-04-23T19:26:42.943059",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "mistral",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 154,
+      "open_roles_ai_titled": 47,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.305,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "lever",
+      "token": "mistral",
+      "url": "https://api.lever.co/v0/postings/mistral",
+      "retrievedAt": "2026-04-23T19:26:46.587319",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "cohere",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 114,
+      "open_roles_ai_titled": 11,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.096,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "cohere",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/cohere",
+      "retrievedAt": "2026-04-23T19:26:51.970703",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "lambda",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 32,
+      "open_roles_ai_titled": 0,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.0,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "lambda",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/lambda",
+      "retrievedAt": "2026-04-23T19:26:54.174466",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "modal",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 28,
+      "open_roles_ai_titled": 0,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.0,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "modal",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/modal",
+      "retrievedAt": "2026-04-23T19:26:55.761108",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "anyscale",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 13,
+      "open_roles_ai_titled": 0,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.0,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "anyscale",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/anyscale",
+      "retrievedAt": "2026-04-23T19:26:56.753605",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "cursor",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 71,
+      "open_roles_ai_titled": 2,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.028,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "cursor",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/cursor",
+      "retrievedAt": "2026-04-23T19:27:00.587541",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "harvey",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 230,
+      "open_roles_ai_titled": 0,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.0,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "harvey",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/harvey",
+      "retrievedAt": "2026-04-23T19:27:09.581925",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "perplexity",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 72,
+      "open_roles_ai_titled": 14,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.194,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "perplexity",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/perplexity",
+      "retrievedAt": "2026-04-23T19:27:12.939475",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "elevenlabs",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 114,
+      "open_roles_ai_titled": 1,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.009,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "elevenlabs",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/elevenlabs",
+      "retrievedAt": "2026-04-23T19:27:17.368795",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "runway",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 4,
+      "open_roles_ai_titled": 0,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.0,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "runway",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/runway",
+      "retrievedAt": "2026-04-23T19:27:18.256262",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
+  },
+  {
+    "type": "hiring_snapshot",
+    "company_slug": "writer",
+    "window": "2026-W17",
+    "metrics": {
+      "open_roles_total": 48,
+      "open_roles_ai_titled": 4,
+      "open_roles_prompt_engineer": 0,
+      "ai_titled_share": 0.083,
+      "new_ai_roles_7d": 0
+    },
+    "source": {
+      "type": "ashby",
+      "token": "writer",
+      "url": "https://api.ashbyhq.com/posting-api/job-board/writer",
+      "retrievedAt": "2026-04-23T19:27:20.804015",
+      "nextReview": "2026-04-30",
+      "confidence": "high"
+    }
   }
 ]

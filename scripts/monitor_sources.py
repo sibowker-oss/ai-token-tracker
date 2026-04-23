@@ -100,12 +100,42 @@ def log(msg):
         f.write(line + '\n')
 
 
+# Full browser-like header set. Many IR pages / government portals / CDN-
+# protected pages (Cloudflare, Akamai) reject minimal UAs. These headers match
+# a vanilla Chrome 131 request and clear the checks on ERCOT, PJM, NESO, Meta IR.
+_BROWSER_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Language': 'en-US,en;q=0.9',
+    'Accept-Encoding': 'gzip, deflate',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Sec-Ch-Ua': '"Google Chrome";v="131", "Chromium";v="131", "Not_A Brand";v="24"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"macOS"',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+}
+
+
 def fetch_page(url):
-    """Fetch URL and return text content."""
+    """Fetch URL and return (text, html). Uses browser-like headers to beat
+    low-threshold bot detection on IR / government / CDN-protected pages."""
     try:
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0 (compatible; AILedgerBot/1.0)'})
-        with urlopen(req, timeout=20) as resp:
-            html = resp.read().decode('utf-8', errors='replace')
+        req = Request(url, headers=_BROWSER_HEADERS)
+        with urlopen(req, timeout=30) as resp:
+            raw = resp.read()
+            # Handle gzip/deflate
+            if resp.headers.get('Content-Encoding') == 'gzip':
+                import gzip
+                raw = gzip.decompress(raw)
+            elif resp.headers.get('Content-Encoding') == 'deflate':
+                import zlib
+                raw = zlib.decompress(raw)
+            html = raw.decode('utf-8', errors='replace')
         # Strip tags for text extraction
         text = re.sub(r'<script[^>]*>.*?</script>', '', html, flags=re.DOTALL)
         text = re.sub(r'<style[^>]*>.*?</style>', '', text, flags=re.DOTALL)
