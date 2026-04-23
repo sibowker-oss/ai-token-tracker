@@ -1,0 +1,87 @@
+name: release-check
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Advisory only — this workflow never fails the build. It reports.
+# Flip CHECK_MODE to `strict` later if you want to promote specific checks to blocking.
+env:
+  CHECK_MODE: advisory
+  RELEASE_CHECK_SOURCE: ci-github
+
+jobs:
+  release-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Serve site (static, no build)
+        run: |
+          npm run preview &
+          echo $! > preview.pid
+          npx wait-on http://localhost:4173 --timeout 60000
+
+      - name: Run release-check
+        env:
+          RELEASE_CHECK_BASE_URL: http://localhost:4173
+        run: npm run release-check
+
+      - name: Stop preview server
+        if: always()
+        run: kill $(cat preview.pid) || true
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-check-report
+          path: tests/reports/
+          retention-days: 14
+
+      - name: Upload screenshot diffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: tests/__screenshots__/
+          retention-days: 14
+
+      - name: Post report as PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const reportsDir = 'tests/reports';
+            if (!fs.existsSync(reportsDir)) return;
+            const runs = fs.readdirSync(reportsDir).filter(d => fs.statSync(path.join(reportsDir, d)).isDirectory());
+            if (runs.length === 0) return;
+            const latest = runs.sort().pop();
+            const body = fs.readFileSync(path.join(reportsDir, latest, 'report.md'), 'utf8');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `### release-check (advisory)\n\n${body}`,
+            });

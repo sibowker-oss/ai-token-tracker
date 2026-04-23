@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "generatedAt": "2026-04-23",
+    "dataReferences": {
+      "globalBenchmarks.revenue_booked_ttm_2025_ai_native": [
+        "/revenue-ledger",
+        "/capital-ledger"
+      ]
+    },
+    "labels": {
+      "confidence": { "High": "High", "Med": "Med", "Low": "Low" },
+      "layer": {
+        "compute-power": "Compute power",
+        "electric-power": "Electric power",
+        "time-to-build": "Time to build",
+        "investment": "Investment",
+        "denominator": "Denominator"
+      },
+      "revenueType": { "booked_ttm": "Booked (TTM)", "run_rate": "Run-rate" }
+    }
+  },
+  "pages": {
+    "revenue-ledger": {
+      "path": "/revenue-ledger",
+      "title": "Revenue Ledger",
+      "hasDerivedNumbers": true
+    },
+    "capital-ledger": {
+      "path": "/capital-ledger",
+      "title": "Capital Ledger",
+      "hasDerivedNumbers": true
+    },
+    "power-ledger": {
+      "path": "/power-ledger",
+      "title": "Power Ledger",
+      "hasDerivedNumbers": true
+    }
+  },
+  "globalBenchmarks": {
+    "revenue_booked_ttm_2025_ai_native": {
+      "value": 17000000000,
+      "label": "AI-native booked revenue (TTM, 2025)",
+      "unit": "USD",
+      "year": 2025,
+      "source": "Aggregated vendor filings",
+      "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar",
+      "retrievedAt": "2026-04-18",
+      "nextReview": "2026-07-18",
+      "confidence": "Med",
+      "revenueType": "booked_ttm",
+      "note": "Sum of booked TTM revenue across companies founded >= 2017. Directional; aggregation caveats in methodology."
+    },
+    "hyperscaler_capex_2025": {
+      "value": 240000000000,
+      "label": "Hyperscaler AI CapEx (2025)",
+      "unit": "USD",
+      "year": 2025,
+      "source": "Amazon / Microsoft / Google / Meta 10-Q filings",
+      "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar",
+      "retrievedAt": "2026-04-22",
+      "nextReview": "2026-07-22",
+      "confidence": "High",
+      "note": "Four-hyperscaler total; capex attribution to AI footprint per vendor guidance."
+    }
+  },
+  "powerLedger": {
+    "us_dc_interconnection_queue_gw": {
+      "value": 2600,
+      "label": "US data-centre interconnection queue",
+      "unit": "GW",
+      "year": 2025,
+      "source": "LBNL / FERC ISO queue report",
+      "sourceUrl": "https://emp.lbl.gov/queues",
+      "retrievedAt": "2026-04-10",
+      "nextReview": "2026-07-10",
+      "confidence": "High",
+      "layer": "electric-power"
+    },
+    "substation_lead_time_months": {
+      "minMonths": 30,
+      "maxMonths": 72,
+      "medianMonths": 48,
+      "label": "Substation equipment lead time",
+      "unit": "months",
+      "year": 2026,
+      "sources": [
+        { "source": "Hitachi Energy IR", "sourceUrl": "https://www.hitachienergy.com/investor-relations" },
+        { "source": "Siemens Energy FY25 report", "sourceUrl": "https://www.siemens-energy.com/investor-relations" }
+      ],
+      "retrievedAt": "2026-04-15",
+      "nextReview": "2026-07-15",
+      "confidence": "Med",
+      "layer": "time-to-build"
+    }
+  }
+}
