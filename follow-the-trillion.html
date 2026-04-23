@@ -173,7 +173,7 @@
   <span class="in-dev-badge">In Development</span>
   <h1>Follow the Trillion</h1>
   <p class="sub">
-    The AI Ledger tracks ~$17B of real customer revenue today. The industry's capex implies a destination measured in trillions.
+    The AI Ledger tracks ~$<span id="hero-current-arr">17</span>B of real customer revenue today. The industry's capex implies a destination measured in trillions.
     This page asks: <em>for that to be true, what share of the global economy does AI need to own &mdash; and where does it come from?</em>
   </p>
   <p class="hero-hook">
@@ -232,13 +232,13 @@
     <div class="ftbt-card" id="card-saas">
       <div class="ftbt-label">Multiples of SaaS Market</div>
       <div class="ftbt-value val-orange" id="val-saas">3.3&times;</div>
-      <div class="ftbt-detail"><span id="detail-saas-x">3.3</span>&times; today's $300B SaaS market</div>
+      <div class="ftbt-detail"><span id="detail-saas-x">3.3</span>&times; today's $<span id="detail-saas-abs">300</span>B SaaS market</div>
       <div class="ftbt-source">Synergy Research / Gartner</div>
     </div>
     <div class="ftbt-card" id="card-labor">
       <div class="ftbt-label">Knowledge-Worker Wages</div>
       <div class="ftbt-value val-green" id="val-labor">3.7%</div>
-      <div class="ftbt-detail">Equivalent to <span id="detail-labor-pct">3.7</span>% of $27T knowledge-worker wage bill</div>
+      <div class="ftbt-detail">Equivalent to <span id="detail-labor-pct">3.7</span>% of $<span id="detail-labor-abs">27</span>T knowledge-worker wage bill</div>
       <div class="ftbt-source">ILO / McKinsey Global Institute</div>
     </div>
     <div class="ftbt-card" id="card-percap">
@@ -334,7 +334,7 @@
 const BENCHMARKS = {};
 const WORLD_POP = 8.2e9;
 const CAPEX_RATIO = 34; // $34 capex per $1 AI revenue (Ledger finding)
-const CURRENT_ARR = 17.47; // $B, from Ledger
+let CURRENT_ARR = null; // $B, populated from site-data.json sankey.totalCustomerRevenue
 const IT_CAGR = 0.05; // 5% default
 
 // Presets: Bear/Base/Bull revenue by year (in $B)
@@ -371,6 +371,12 @@ let benchData = [];
 fetch('site-data.json').then(r => r.json()).then(data => {
   benchData = data.globalBenchmarks.entries;
   benchData.forEach(b => { BENCHMARKS[b.key] = b.value; });
+  // Canonical revenue anchors per spec §4 — read from sankey block, not hardcoded
+  if (data.sankey && typeof data.sankey.totalCustomerRevenue === 'number') {
+    CURRENT_ARR = data.sankey.totalCustomerRevenue;
+    const heroEl = document.getElementById('hero-current-arr');
+    if (heroEl) heroEl.textContent = Math.round(CURRENT_ARR);
+  }
   renderBenchTable();
   syncFromURL();
   recalc();
@@ -450,11 +456,18 @@ function recalc() {
   const saasX = targetUSD / saasToday;
   document.getElementById('val-saas').textContent = saasX < 1 ? saasX.toFixed(2) + '\u00d7' : saasX.toFixed(1) + '\u00d7';
   document.getElementById('detail-saas-x').textContent = saasX < 1 ? saasX.toFixed(2) : saasX.toFixed(1);
+  const saasAbs = document.getElementById('detail-saas-abs');
+  if (saasAbs) saasAbs.textContent = Math.round(saasToday / 1e9);
 
   // 4. Labor equivalence
   const laborPct = (targetUSD / kwPayroll) * 100;
   document.getElementById('val-labor').textContent = fmtPct(laborPct);
   document.getElementById('detail-labor-pct').textContent = laborPct < 10 ? laborPct.toFixed(1) : Math.round(laborPct);
+  const laborAbs = document.getElementById('detail-labor-abs');
+  if (laborAbs) {
+    const kwToday = BENCHMARKS['knowledge_worker_payroll'] || 27e12;
+    laborAbs.textContent = Math.round(kwToday / 1e12);
+  }
 
   // 5. Revenue per person
   const perCap = targetUSD / WORLD_POP;
