@@ -29,4 +29,5 @@
 
 | date | agent | version | promptSummary | fieldsTouched | reviewer | commit | outcome | notes |
 |---|---|---|---|---|---|---|---|---|
-| _No invocations yet._ | | | | | | | | |
+| 2026-04-23 | structured-claims-applier | 1.1.0 | Phase 1 fixture integration test against a tempdir sandbox — four accepted claims (one per type) + idempotency re-run. | `site.power.projects[0]`, `site.hiring.snapshots.anthropic.2026-W17`, `site.patents.snapshots.anthropic.2026-04`, `companies.candidates[Moonshot AI]` (sandbox only; real files untouched) | Simon | ed833e1 | merged | Sandbox-only test; no mutation to real `site-data.json` / `companies.json`. Validated provenance flattening, confidence capitalisation, idempotent upsert, `sources.log.md` rows, and `company_surfaced` dedup. |
+| 2026-04-23 | stream-1-activation-monitor | 0.1.0 | Registered per wq-015 §7.8. No extractions invoked; adapters ready behind manual trigger. | _(none — registration only)_ | Simon | _(this commit)_ | configured | First real invocation will land when Simon runs `python3 scripts/monitor_sources.py --force src-NNN`. Priority order documented in the wq-015 brief implementation log. |
