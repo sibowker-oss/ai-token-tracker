@@ -7,7 +7,9 @@ import { loadSiteData, pages, hasHorizontalScroll, undersizedTapTargets } from '
 
 const pageList = pages(loadSiteData());
 
-test.skip(({}, testInfo) => !testInfo.project.name.startsWith('mobile'), 'mobile gate runs on mobile projects only');
+test.beforeEach(({}, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith('mobile'), 'mobile gate runs on mobile projects only');
+});
 
 for (const p of pageList) {
   test.describe(`mobile — ${p.key}`, () => {

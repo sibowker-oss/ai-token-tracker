@@ -9,7 +9,9 @@ const pageList = pages(loadSiteData());
 
 // Project filter — structure is layout-level, check on desktop only to avoid six × pages redundancy.
 test.describe.configure({ mode: 'parallel' });
-test.skip(({ browserName }, testInfo) => !testInfo.project.name.startsWith('desktop'), 'structure is checked on desktop only');
+test.beforeEach(({}, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith('desktop'), 'structure is checked on desktop only');
+});
 
 for (const p of pageList) {
   test.describe(`structure — ${p.key}`, () => {

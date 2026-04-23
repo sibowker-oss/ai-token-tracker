@@ -7,7 +7,9 @@ import { loadSiteData, pages } from './helpers';
 
 const pageList = pages(loadSiteData());
 
-test.skip(({}, testInfo) => !testInfo.project.name.startsWith('desktop'), 'freshness audit runs on desktop only');
+test.beforeEach(({}, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith('desktop'), 'freshness audit runs on desktop only');
+});
 
 for (const p of pageList) {
   test(`${p.key} — freshness dots match retrievedAt (§7.2)`, async ({ page }) => {

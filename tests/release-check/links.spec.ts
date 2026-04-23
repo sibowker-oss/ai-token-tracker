@@ -9,8 +9,10 @@ import { loadSiteData, allDatapoints, pages } from './helpers';
 const data = loadSiteData();
 const offline = process.env.RELEASE_CHECK_LINKS === 'offline';
 
-test.skip(offline, 'RELEASE_CHECK_LINKS=offline');
-test.skip(({}, testInfo) => testInfo.project.name !== 'desktop-chrome', 'link checker runs once, on desktop-chrome');
+test.beforeEach(({}, testInfo) => {
+  test.skip(offline, 'RELEASE_CHECK_LINKS=offline');
+  test.skip(testInfo.project.name !== 'desktop-chrome', 'link checker runs once, on desktop-chrome');
+});
 
 const urls = new Set<string>();
 for (const { dp } of allDatapoints(data)) {

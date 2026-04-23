@@ -9,8 +9,10 @@ import { loadSiteData } from './helpers';
 const data = loadSiteData();
 const refs = data.meta?.dataReferences ?? {};
 
-test.skip(({}, testInfo) => testInfo.project.name !== 'desktop-chrome', 'reconciliation runs once, on desktop-chrome');
-test.skip(Object.keys(refs).length === 0, 'no dataReferences map — skipping. Add one per §5.3.1 once cross-page consumption exists.');
+test.beforeEach(({}, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chrome', 'reconciliation runs once, on desktop-chrome');
+  test.skip(Object.keys(refs).length === 0, 'no dataReferences map — skipping. Add one per §5.3.1 once cross-page consumption exists.');
+});
 
 for (const [canonicalKey, consumers] of Object.entries(refs)) {
   const canonical = resolveByDottedKey(data, canonicalKey);

@@ -27,7 +27,9 @@ function collectSuspectKeys(root: any): string[] {
   return [...out].filter(k => !structural.has(k));
 }
 
-test.skip(({ browserName }, testInfo) => !testInfo.project.name.startsWith('desktop'), 'label audit runs on desktop only');
+test.beforeEach(({}, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith('desktop'), 'label audit runs on desktop only');
+});
 
 for (const p of pageList) {
   test(`no raw keys visible on ${p.key} (§5.6)`, async ({ page }) => {
