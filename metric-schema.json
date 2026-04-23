@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": "2.1",
-    "description": "Field definitions per role. Supports dynamic field discovery \u2014 new fields proposed by Claude are added to proposed_fields until approved.",
-    "lastUpdated": "2026-04-02"
+    "version": "2.2",
+    "description": "Field definitions per role + structured claim types. Supports dynamic field discovery \u2014 new fields proposed by Claude are added to proposed_fields until approved. claim_types (v2.2) defines structured payloads emitted by Stream 2 / Stream 3 extractors per wq-014.",
+    "lastUpdated": "2026-04-23"
   },
   "proposed_fields": [
     {
@@ -697,6 +697,401 @@
           "yearly": true,
           "description": "How much of Mag7 capex flows to them."
         }
+      }
+    }
+  },
+  "claim_types": {
+    "_schema_notes": {
+      "authoring_vs_storage": "Claim payloads (what extractors emit) use a nested `source` block per brief wq-014 \u00a72. When apply_claims.py writes an accepted claim into site-data.json, it translates the nested block into the flat provenance fields required by GUIDELINES \u00a74.2 (value/label/unit/year/source/sourceUrl/retrievedAt/nextReview/confidence/note).",
+      "confidence_casing": "Claim payloads carry lowercase confidence (`high`/`medium`/`low`). apply_claims.py capitalises to `High`/`Med`/`Low` on write to satisfy the publish-ready label rule in GUIDELINES \u00a75.6.",
+      "merge_key": "When apply_claims.py upserts into site-data.json, the `merge_key` fields determine identity. Same identity overwrites; new identity appends.",
+      "source_origin": "briefs/active/2026-04-23-structured-claim-schema.md (wq-014)."
+    },
+    "power_project": {
+      "label": "Power Project",
+      "description": "One ISO/TSO interconnection-queue entry with MW at requested/approved/in-service stages and LLC-to-operator attribution. Emitted by Stream 2 extractors (ERCOT, PJM, EIA, NESO, Epoch AI).",
+      "required": [
+        "type",
+        "queue_market",
+        "queue_id",
+        "stage",
+        "source"
+      ],
+      "optional": [
+        "company_slug",
+        "attribution_confidence",
+        "attribution_sources",
+        "poi",
+        "county",
+        "mw_requested",
+        "mw_approved",
+        "mw_in_service",
+        "requested_cod",
+        "llc_of_record"
+      ],
+      "fields": {
+        "type": {
+          "label": "Claim Type",
+          "unit": "string",
+          "type": "primary",
+          "description": "Literal: power_project"
+        },
+        "company_slug": {
+          "label": "Attributed Operator",
+          "unit": "slug",
+          "type": "primary",
+          "description": "Slug in companies.json / entities.json. Null when LLC is unattributed."
+        },
+        "attribution_confidence": {
+          "label": "Attribution Confidence",
+          "unit": "string",
+          "type": "primary",
+          "description": "high | medium | low. How confident we are in the LLC-to-operator mapping."
+        },
+        "attribution_sources": {
+          "label": "Attribution Sources",
+          "unit": "[url]",
+          "type": "primary",
+          "description": "URLs supporting the LLC-to-operator attribution."
+        },
+        "queue_market": {
+          "label": "Queue Market",
+          "unit": "string",
+          "type": "primary",
+          "description": "ISO/TSO: ERCOT | PJM | MISO | CAISO | NYISO | SPP | ISO-NE | NESO | ENTSO-E."
+        },
+        "queue_id": {
+          "label": "Queue ID",
+          "unit": "string",
+          "type": "primary",
+          "description": "The ISO-assigned queue identifier (e.g. AA1-567, GIS-2024-045)."
+        },
+        "poi": {
+          "label": "Point of Interconnection",
+          "unit": "string",
+          "type": "primary",
+          "description": "Named substation / POI."
+        },
+        "county": {
+          "label": "County",
+          "unit": "string",
+          "type": "primary",
+          "description": "County and state (US) or equivalent administrative region."
+        },
+        "stage": {
+          "label": "Queue Stage",
+          "unit": "string",
+          "type": "primary",
+          "description": "screening | cluster_study | FIS_signed | construction | in_service | withdrawn."
+        },
+        "mw_requested": {
+          "label": "MW Requested",
+          "unit": "MW",
+          "type": "primary",
+          "description": "Megawatts requested at queue entry."
+        },
+        "mw_approved": {
+          "label": "MW Approved",
+          "unit": "MW",
+          "type": "primary",
+          "description": "Megawatts approved after studies. Null if not yet approved."
+        },
+        "mw_in_service": {
+          "label": "MW In Service",
+          "unit": "MW",
+          "type": "primary",
+          "description": "Megawatts actually delivered and energised. Null until COD."
+        },
+        "requested_cod": {
+          "label": "Requested COD",
+          "unit": "date",
+          "type": "primary",
+          "description": "Requested commercial operation date (ISO)."
+        },
+        "llc_of_record": {
+          "label": "LLC of Record",
+          "unit": "string",
+          "type": "primary",
+          "description": "The filing LLC name as it appears in the ISO queue."
+        },
+        "source": {
+          "label": "Provenance",
+          "unit": "object",
+          "type": "primary",
+          "description": "Nested source block: {url, retrievedAt, nextReview, confidence}."
+        }
+      },
+      "source_block": {
+        "url": {
+          "required": true,
+          "description": "Direct link to the ISO queue report row or equivalent primary artefact."
+        },
+        "retrievedAt": {
+          "required": true,
+          "description": "ISO datetime of fetch."
+        },
+        "nextReview": {
+          "required": true,
+          "description": "ISO date for next scheduled re-check."
+        },
+        "confidence": {
+          "required": true,
+          "description": "high | medium | low."
+        }
+      },
+      "site_data_target": {
+        "path": "power.projects",
+        "shape": "array",
+        "merge_key": [
+          "queue_market",
+          "queue_id"
+        ]
+      }
+    },
+    "hiring_snapshot": {
+      "label": "Hiring Snapshot",
+      "description": "Point-in-time ATS snapshot for one company: total roles, AI-titled roles, 7-day delta, role breakdown. Emitted by Stream 3 extractors (Greenhouse / Lever / Ashby / Workable).",
+      "required": [
+        "type",
+        "company_slug",
+        "window",
+        "metrics",
+        "source"
+      ],
+      "optional": [
+        "by_function"
+      ],
+      "fields": {
+        "type": {
+          "label": "Claim Type",
+          "unit": "string",
+          "type": "primary",
+          "description": "Literal: hiring_snapshot"
+        },
+        "company_slug": {
+          "label": "Company",
+          "unit": "slug",
+          "type": "primary",
+          "description": "Slug in companies.json."
+        },
+        "window": {
+          "label": "Window",
+          "unit": "string",
+          "type": "primary",
+          "description": "ISO week (2026-W17) or month (2026-04). Inclusive of the end boundary."
+        },
+        "metrics": {
+          "label": "Hiring Metrics",
+          "unit": "object",
+          "type": "primary",
+          "description": "Required subkeys: open_roles_total, open_roles_ai_titled, open_roles_prompt_engineer, ai_titled_share, new_ai_roles_7d."
+        },
+        "by_function": {
+          "label": "By Function",
+          "unit": "object",
+          "type": "primary",
+          "description": "Optional. Subkeys: research, engineering, go_to_market, ops."
+        },
+        "source": {
+          "label": "Provenance",
+          "unit": "object",
+          "type": "primary",
+          "description": "Nested source block: {type, token, url, retrievedAt, nextReview, confidence}. `type` names the ATS (greenhouse/lever/ashby/workable); `token` is the board identifier."
+        }
+      },
+      "source_block": {
+        "type": {
+          "required": true,
+          "description": "ATS identifier: greenhouse | lever | ashby | workable."
+        },
+        "token": {
+          "required": true,
+          "description": "Board identifier or slug (e.g. 'anthropic' for Greenhouse)."
+        },
+        "url": {
+          "required": true,
+          "description": "Canonical public board URL."
+        },
+        "retrievedAt": {
+          "required": true,
+          "description": "ISO datetime of fetch."
+        },
+        "nextReview": {
+          "required": true,
+          "description": "ISO date for next scheduled re-check (weekly default per brief wq-013 \u00a77)."
+        },
+        "confidence": {
+          "required": true,
+          "description": "high | medium | low."
+        }
+      },
+      "site_data_target": {
+        "path": "hiring.snapshots",
+        "shape": "nested_map",
+        "key_path": [
+          "company_slug",
+          "window"
+        ]
+      }
+    },
+    "patent_snapshot": {
+      "label": "Patent Snapshot",
+      "description": "Rolling patent activity for one assignee: applications and grants, trailing 12 months and last 30 days, top CPC subclasses. Emitted by Stream 3 extractors (USPTO PatentSearch, Google Patents BigQuery).",
+      "required": [
+        "type",
+        "company_slug",
+        "assignee_ids",
+        "window",
+        "metrics",
+        "source"
+      ],
+      "optional": [
+        "top_cpc_subclasses"
+      ],
+      "fields": {
+        "type": {
+          "label": "Claim Type",
+          "unit": "string",
+          "type": "primary",
+          "description": "Literal: patent_snapshot"
+        },
+        "company_slug": {
+          "label": "Company",
+          "unit": "slug",
+          "type": "primary",
+          "description": "Slug in companies.json."
+        },
+        "assignee_ids": {
+          "label": "Assignee IDs",
+          "unit": "[string]",
+          "type": "primary",
+          "description": "PatentsView disambiguated assignee identifiers."
+        },
+        "window": {
+          "label": "Window",
+          "unit": "string",
+          "type": "primary",
+          "description": "ISO month (2026-04). Rolling windows are 30d / 12m referenced against this boundary."
+        },
+        "metrics": {
+          "label": "Patent Metrics",
+          "unit": "object",
+          "type": "primary",
+          "description": "Required subkeys: applications_published_last_30d, applications_published_trailing_12m, grants_last_30d, grants_trailing_12m, ai_cpc_share_trailing_12m."
+        },
+        "top_cpc_subclasses": {
+          "label": "Top CPC Subclasses",
+          "unit": "[object]",
+          "type": "primary",
+          "description": "List of {code, n}. Codes per brief wq-013 \u00a710."
+        },
+        "source": {
+          "label": "Provenance",
+          "unit": "object",
+          "type": "primary",
+          "description": "Nested source block: {type, url, retrievedAt, nextReview, confidence}. `type` names the fetch method: patentsview_search | google_patents_bq | epo_ops."
+        }
+      },
+      "source_block": {
+        "type": {
+          "required": true,
+          "description": "Fetch method: patentsview_search | google_patents_bq | epo_ops."
+        },
+        "url": {
+          "required": true,
+          "description": "Canonical query or artefact URL."
+        },
+        "retrievedAt": {
+          "required": true,
+          "description": "ISO datetime of fetch."
+        },
+        "nextReview": {
+          "required": true,
+          "description": "ISO date for next scheduled re-check (monthly default per brief wq-013 \u00a77)."
+        },
+        "confidence": {
+          "required": true,
+          "description": "high | medium | low."
+        }
+      },
+      "site_data_target": {
+        "path": "patents.snapshots",
+        "shape": "nested_map",
+        "key_path": [
+          "company_slug",
+          "window"
+        ]
+      }
+    },
+    "company_surfaced": {
+      "label": "Company Surfaced",
+      "description": "A discovery-engine candidate: a company referenced by a patent / LCA / news signal that is not yet in companies.json. Review in claims.html \u2014 Accept adds to the master list.",
+      "required": [
+        "type",
+        "candidate_name",
+        "first_seen_signal",
+        "source"
+      ],
+      "optional": [
+        "candidate_aliases",
+        "density_score_estimate"
+      ],
+      "fields": {
+        "type": {
+          "label": "Claim Type",
+          "unit": "string",
+          "type": "primary",
+          "description": "Literal: company_surfaced"
+        },
+        "candidate_name": {
+          "label": "Candidate Name",
+          "unit": "string",
+          "type": "primary",
+          "description": "Best-guess canonical name for the candidate."
+        },
+        "candidate_aliases": {
+          "label": "Candidate Aliases",
+          "unit": "[string]",
+          "type": "primary",
+          "description": "Known alternate spellings / legal names / native-script forms."
+        },
+        "first_seen_signal": {
+          "label": "First-Seen Signal",
+          "unit": "object",
+          "type": "primary",
+          "description": "Subkeys depend on kind. For patent_application: {kind: 'patent_application', cpc, application_id, filing_date}. For lca_filing: {kind: 'lca_filing', employer_name, quarter}."
+        },
+        "density_score_estimate": {
+          "label": "Density Score Estimate",
+          "unit": "number",
+          "type": "derived",
+          "description": "AI-native density score (0-100) used for ranking the review queue. Derived per brief wq-013 \u00a75; never rendered publicly."
+        },
+        "source": {
+          "label": "Provenance",
+          "unit": "object",
+          "type": "primary",
+          "description": "Nested source block: {url, retrievedAt, confidence}. No nextReview \u2014 company_surfaced is a one-shot event claim."
+        }
+      },
+      "source_block": {
+        "url": {
+          "required": true,
+          "description": "URL pointing to the signal artefact (patent PDF, LCA row, article)."
+        },
+        "retrievedAt": {
+          "required": true,
+          "description": "ISO datetime of fetch."
+        },
+        "confidence": {
+          "required": true,
+          "description": "high | medium | low."
+        }
+      },
+      "site_data_target": {
+        "path": "companies.json",
+        "shape": "candidate_list",
+        "notes": "On Accept, apply_claims.py appends to a candidates block in companies.json and logs a row in data/company-surfaced.log.json."
       }
     }
   },

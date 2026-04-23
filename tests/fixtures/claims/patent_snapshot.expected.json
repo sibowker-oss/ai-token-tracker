@@ -1,0 +1,27 @@
+{
+  "type": "patent_snapshot",
+  "company_slug": "anthropic",
+  "assignee_ids": [
+    "pv_assignee_123456"
+  ],
+  "window": "2026-04",
+  "metrics": {
+    "applications_published_last_30d": 4,
+    "applications_published_trailing_12m": 38,
+    "grants_last_30d": 1,
+    "grants_trailing_12m": 9,
+    "ai_cpc_share_trailing_12m": 0.89
+  },
+  "top_cpc_subclasses": [
+    {"code": "G06N 20/00", "n": 18},
+    {"code": "G06N 3/08", "n": 9},
+    {"code": "G06F 40/30", "n": 5}
+  ],
+  "source": {
+    "type": "patentsview_search",
+    "url": "https://search.patentsview.org/api/v1/patent/?q={assignee_id:pv_assignee_123456,window:2026-04}",
+    "retrievedAt": "2026-04-23T08:00:00Z",
+    "nextReview": "2026-05-23",
+    "confidence": "high"
+  }
+}
