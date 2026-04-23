@@ -6,6 +6,16 @@
     "consensusMetrics": 3,
     "notes": "Fully rebalanced from consensus. All flows verified."
   },
+  "pages": {
+    "index": { "path": "/index.html", "title": "The AI Ledger", "hasDerivedNumbers": true },
+    "revenue": { "path": "/revenue.html", "title": "Revenue Ledger", "hasDerivedNumbers": true },
+    "capital": { "path": "/capital.html", "title": "Capital Ledger", "hasDerivedNumbers": true },
+    "usage": { "path": "/usage.html", "title": "Usage Ledger", "hasDerivedNumbers": true },
+    "power": { "path": "/power.html", "title": "Power Ledger", "hasDerivedNumbers": true },
+    "chips": { "path": "/chips.html", "title": "Follow the CapEx", "hasDerivedNumbers": true },
+    "about": { "path": "/about.html", "title": "About — Hepburn Advisory", "hasDerivedNumbers": false },
+    "methodology": { "path": "/methodology.html", "title": "Methodology", "hasDerivedNumbers": false }
+  },
   "sankey": {
     "title": "2025 Actual Revenue Collected",
     "totalCustomerRevenue": 17.47,
