@@ -216,6 +216,9 @@ function normaliseStructuredClaim(c) {
 }
 
 async function loadClaims() {
+  // Single file per day: data-updates/<date>-candidates.json. Contains both
+  // free-text and structured claims; the renderer branches on claim.type.
+  // Walk back up to 14 days looking for the most recent non-empty day.
   const today = new Date().toISOString().split('T')[0];
   const dates = [today];
   for (let i = 1; i <= 14; i++) {
@@ -223,32 +226,28 @@ async function loadClaims() {
     dates.push(d.toISOString().split('T')[0]);
   }
 
-  let freeText = [], structured = [], freeDate = null, structuredDate = null;
+  let raw = [], loadedDate = null;
   for (const date of dates) {
-    if (!freeDate) {
-      try {
-        const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
-        if (resp.ok) { freeText = await resp.json(); freeDate = date; }
-      } catch(e) {}
-    }
-    if (!structuredDate) {
-      try {
-        const resp = await fetch('data-updates/' + date + '-structured-candidates.json?v=' + Date.now());
-        if (resp.ok) { structured = (await resp.json()).map(normaliseStructuredClaim); structuredDate = date; }
-      } catch(e) {}
-    }
-    if (freeDate && structuredDate) break;
+    try {
+      const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
+      if (resp.ok) {
+        raw = await resp.json();
+        loadedDate = date;
+        break;
+      }
+    } catch(e) {}
   }
 
-  allClaims = freeText.concat(structured);
-  sourceFile = [freeDate && (freeDate + '-candidates.json'),
-                structuredDate && (structuredDate + '-structured-candidates.json')]
-                .filter(Boolean).join(' + ');
-  console.log('Loaded ' + allClaims.length + ' claims (free-text: ' + freeText.length +
-              ', structured: ' + structured.length + ')');
+  // Normalise structured claims on load so weight/confidence/dedup_status/category
+  // come from the nested source block and the existing card/sort/filter machinery
+  // keeps working without a parallel code path.
+  allClaims = raw.map(c => STRUCTURED_TYPES.indexOf(c.type) !== -1
+    ? normaliseStructuredClaim(c) : c);
+  sourceFile = loadedDate ? (loadedDate + '-candidates.json') : '';
+  console.log('Loaded ' + allClaims.length + ' claims from ' + (loadedDate || '(none)'));
 
   if (allClaims.length === 0) {
-    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run extract_claims.py or extract_structured_claims.py to generate candidates.</div>';
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run <code>python3 scripts/monitor_sources.py</code> to generate candidates, or wait for the daily 11:30am cron.</div>';
     return;
   }
 

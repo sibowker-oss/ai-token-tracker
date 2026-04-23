@@ -1102,41 +1102,20 @@ def process_source(source, dry_run=False):
         today = datetime.now().strftime('%Y-%m-%d')
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-        # 1. Always write a per-source audit snapshot. This file is NOT loaded
-        #    by claims.html — it's the 'raw adapter output' audit trail.
-        audit_path = os.path.join(OUTPUT_DIR, f'{today}-source-{source["id"]}.json')
-        with open(audit_path, 'w') as f:
-            json.dump(claims, f, indent=2)
-        log(f"   Audit snapshot: {audit_path}")
-
-        # 2. Route into the shared review queue so claims.html picks them up
-        #    on next page-load. Structured claims (wq-014) go to the
-        #    -structured-candidates file; everything else lands in the
-        #    legacy -candidates file.
-        structured = [c for c in claims if c.get('type') in
-                      ('power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced')]
-        freetext = [c for c in claims if c.get('type') not in
-                    ('power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced')]
-
-        def _append(path, new_items):
-            existing = []
-            if os.path.exists(path):
-                try:
-                    with open(path) as f:
-                        existing = json.load(f)
-                except Exception:
-                    existing = []
-            existing.extend(new_items)
-            with open(path, 'w') as f:
-                json.dump(existing, f, indent=2)
-            return len(existing)
-
-        if freetext:
-            total = _append(os.path.join(OUTPUT_DIR, f'{today}-candidates.json'), freetext)
-            log(f"   Appended {len(freetext)} free-text claim(s) to {today}-candidates.json (queue now {total})")
-        if structured:
-            total = _append(os.path.join(OUTPUT_DIR, f'{today}-structured-candidates.json'), structured)
-            log(f"   Appended {len(structured)} structured claim(s) to {today}-structured-candidates.json (queue now {total})")
+        # Everything — free-text and structured — appends to the single shared
+        # review queue that claims.html loads by default. One file per day.
+        path = os.path.join(OUTPUT_DIR, f'{today}-candidates.json')
+        existing = []
+        if os.path.exists(path):
+            try:
+                with open(path) as f:
+                    existing = json.load(f)
+            except Exception:
+                existing = []
+        existing.extend(claims)
+        with open(path, 'w') as f:
+            json.dump(existing, f, indent=2)
+        log(f"   Appended {len(claims)} claim(s) to {today}-candidates.json (queue now {len(existing)})")
 
     return len(claims)
 

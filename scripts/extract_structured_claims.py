@@ -191,7 +191,7 @@ BUILDERS = {
 def append_candidates(claims: list[dict]) -> str:
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     today = datetime.utcnow().strftime('%Y-%m-%d')
-    out_path = os.path.join(OUTPUT_DIR, f'{today}-structured-candidates.json')
+    out_path = os.path.join(OUTPUT_DIR, f'{today}-candidates.json')
     existing = []
     if os.path.exists(out_path):
         with open(out_path) as f:
