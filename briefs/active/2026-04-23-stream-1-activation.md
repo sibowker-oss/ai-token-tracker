@@ -428,3 +428,87 @@ Changes:
 State of AI Report (src-001) is NOT in the reset set — it already ran
 successfully and is on its annual cadence. Next fire: 2027-04-22.
 
+### 2026-04-24 — Session close
+
+Seven commits on 2026-04-24 addressing issues Simon hit after the first
+auto-extraction run:
+
+- `3adc128` Harden Claude JSON parsing + dedupe queue (3-stage salvage,
+  surrogate-strip, 350 clean claims)
+- `2a9fa5f` Route extracted claims into vault-inbox.json
+  (admin.html#review queue) — the big one; fixes the
+  "Simon sees only 6 pending" report
+- `b908a14` Auto-clear 111 pending items from vault-inbox
+  (359 → 248 pending)
+- `5bcd15a` Add 'Auto-clear safe items' button to review.html
+- `a3ae0d2` Fix auto-clear Apply button (HTML attribute escape bug)
+- `14e256a` Fix github-api.js readFile for >1 MB files + UTF-8 decode
+- `91bf217` Remove daily-signals.yml GitHub Action (duplicated local cron)
+
+**Architectural correction — review queue routing**
+
+The biggest fix: Phase 4 wired `monitor_sources.process_source()` to
+write to `data-updates/<date>-candidates.json`, but Simon reviews via
+`admin.html#review` which iframes `review.html` which reads
+`vault-inbox.json`. 350 auto-extracted claims landed somewhere Simon
+never looks. Commit `2a9fa5f` fixed this: every extraction now appends
+to `vault-inbox.json` as `status=pending` items in the canonical shape
+the podcast pipeline has always used. Per-source dedupe on append.
+Memory saved at `project_review_queue_architecture.md`.
+
+**Auto-clear tooling**
+
+`scripts/auto_clear_inbox.py` (CLI, `--dry-run` default) and the
+"Auto-clear safe items…" button on `review.html` (committed via
+`GitHubAPI.commitFiles`). Same 5 rules in both — kept byte-for-byte
+equivalent. First sweep accepted 16 hiring_snapshots, declined 66
+indicative/speculative/orphaned-weight items, parked 29 corroborating-
+estimated. Memory saved at `project_auto_clear.md`.
+
+**Bug-fix pass**
+
+- ATS tokens: probed real careers pages; 7 of 12 wrong tokens corrected
+  (cohere/lambda/anyscale/writer/fireworks/cursor/huggingface). OpenAI,
+  W&B, Together still unreachable — their careers use Workday which
+  doesn't expose tokens in static HTML.
+- Meta IR: fixed URL (`investors.atmeta.com`).
+- Fetch headers: browser-style UA + Sec-Fetch-* beats 403s on Meta IR,
+  PJM, Cloudflare Radar, FLI. ERCOT + NESO still block (full
+  Cloudflare challenge — needs headless browser).
+- JSON salvage: 3-stage (as-is → truncate+close → per-object
+  walker). State of AI Report yield went 217 → 318 (+47%).
+- Surrogate stripping via `re.sub(r'[\ud800-\udfff]', '?', raw)` before
+  any encode step — chunks 5/6 of dense PDFs now parseable.
+- `github-api.js` readFile: Contents API 1 MB limit → fall back to Git
+  Blobs; atob() raw-byte string → TextDecoder('utf-8'). Memory saved
+  at `reference_github_api_quirks.md`.
+
+**Posture correction — cadence is pacing**
+
+Simon pushed back on the extract-on-demand gate I'd put behind `next_check=2026-05-23`: the review-budget concern was about 38 sources
+firing at once, not about gating extraction entirely. Each source's
+registered `frequency` is the pacer. Reset all gated sources to today
+so the daily 11:30am cron picks them up naturally. Memory at
+`feedback_cadence_is_pacing.md`.
+
+**One canonical path**
+
+Deleted `.github/workflows/daily-signals.yml` — duplicated the local
+`auto_update.py` cron. Both ran at ~7am AEST; keeping both meant
+daily failure emails for zero additional coverage. Memory at
+`feedback_one_canonical_path.md`.
+
+**Queue state at session close (2026-04-24):**
+
+- `vault-inbox.json`: 1781 total items, 248 pending
+- `sources-registry.json`: 72 sources, 24 auto-extracting on cadence,
+  3 env-gated (pending credentials / openpyxl), 4 bot-blocked (ERCOT
+  / NESO / Recode Decode / bessemer SSL), 3 deferred (Seeking Alpha,
+  Crunchbase, Dealroom), 6 deprecated duplicates, 1 pending_credentials
+  (BigQuery)
+- `data/snapshots/` populated with raw artefacts for every successful fetch
+- `data/company-alias-map.json`: 31 companies, 22 ATS tokens now working
+- `data/datacenter-attribution-map.json`: 36 by_project entries seeded
+
+**Session closed. Brief work for wq-015 complete pending Simon's review of the 248-pending queue.**
+
