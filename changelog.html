@@ -117,6 +117,14 @@
 
     <div class="entry" data-scope="platform">
       <div class="entry-meta">
+        <span class="entry-date">23 Apr 2026</span>
+        <span class="entry-scope platform">Platform</span>
+      </div>
+      <div class="entry-text">Structured claim schema added. <code>metric-schema.json</code> v2.2 defines four typed payloads — <code>power_project</code>, <code>hiring_snapshot</code>, <code>patent_snapshot</code>, <code>company_surfaced</code> — alongside the existing free-text claim shape. Each type carries required / optional fields, a nested source block, and a <code>site_data_target</code> write path. A new extractor (<code>scripts/extract_structured_claims.py</code>) emits the types deterministically from typed input; <code>scripts/apply_claims.py</code> routes accepted claims into <code>site-data.json.power.projects</code>, <code>site-data.json.hiring.snapshots</code>, <code>site-data.json.patents.snapshots</code>, and <code>companies.json.candidates</code>. Fixture tests cover all four. Free-text claims unchanged. Unblocks Stream 2 (power) and Stream 3 (hiring / patents).</div>
+    </div>
+
+    <div class="entry" data-scope="platform">
+      <div class="entry-meta">
         <span class="entry-date">21 Apr 2026</span>
         <span class="entry-scope platform">Platform</span>
       </div>
@@ -188,7 +196,7 @@
       </div>
     </div>
     <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
-    <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
+    <div style="margin-top:8px;">Last updated: 23 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
 </footer>
 
 <script>
