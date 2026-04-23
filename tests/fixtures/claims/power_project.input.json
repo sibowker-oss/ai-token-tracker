@@ -1,0 +1,23 @@
+{
+  "queue_market": "PJM",
+  "queue_id": "AA1-567",
+  "stage": "FIS_signed",
+  "company_slug": "amazon-aws",
+  "attribution_confidence": "medium",
+  "attribution_sources": [
+    "https://epoch.ai/data/data-centers#aspen-230kv"
+  ],
+  "poi": "Aspen 230kV",
+  "county": "Loudoun, VA",
+  "mw_requested": 300,
+  "mw_approved": 300,
+  "mw_in_service": null,
+  "requested_cod": "2027-06-01",
+  "llc_of_record": "Silver Queen LLC",
+  "source": {
+    "url": "https://www.pjm.com/planning/services-requests/interconnection-queues#AA1-567",
+    "retrievedAt": "2026-04-23T08:00:00Z",
+    "nextReview": "2026-05-23",
+    "confidence": "high"
+  }
+}
