@@ -296,6 +296,25 @@ _Agent registration (§8.7)_
 
 **Pausing for review before Phase 4 (wq-013 Stream 3 discovery).**
 
+### 2026-04-23 — Review-budget posture reversed
+
+Per Simon's feedback. All five Stream 2 sources had `next_check=2026-05-23`;
+reset to today so the daily 11:30am cron fires them at their stated
+cadence tomorrow:
+
+- src-060 ERCOT — monthly
+- src-061 PJM — quarterly
+- src-062 EIA — daily (env-gated on EIA_API_KEY; will no-op gracefully
+  until the key is set)
+- src-063 NESO TEC — weekly (fully functional; expect ~100–200
+  power_project claims per pull)
+- src-064 Epoch AI — monthly (refreshes the attribution-map snapshot;
+  emits 0 claims)
+
+`process_source()` updated to append structured power_project claims
+to `<date>-structured-candidates.json`, so claims.html picks them up
+automatically. Per-source audit file `<date>-source-<id>.json` retained.
+
 
 ---
 

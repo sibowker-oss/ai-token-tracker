@@ -1099,13 +1099,44 @@ def process_source(source, dry_run=False):
     log(f"   Extracted {len(claims)} claim(s)")
 
     if claims:
-        # Save to data-updates
         today = datetime.now().strftime('%Y-%m-%d')
-        output_path = os.path.join(OUTPUT_DIR, f'{today}-source-{source["id"]}.json')
         os.makedirs(OUTPUT_DIR, exist_ok=True)
-        with open(output_path, 'w') as f:
+
+        # 1. Always write a per-source audit snapshot. This file is NOT loaded
+        #    by claims.html — it's the 'raw adapter output' audit trail.
+        audit_path = os.path.join(OUTPUT_DIR, f'{today}-source-{source["id"]}.json')
+        with open(audit_path, 'w') as f:
             json.dump(claims, f, indent=2)
-        log(f"   Saved to {output_path}")
+        log(f"   Audit snapshot: {audit_path}")
+
+        # 2. Route into the shared review queue so claims.html picks them up
+        #    on next page-load. Structured claims (wq-014) go to the
+        #    -structured-candidates file; everything else lands in the
+        #    legacy -candidates file.
+        structured = [c for c in claims if c.get('type') in
+                      ('power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced')]
+        freetext = [c for c in claims if c.get('type') not in
+                    ('power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced')]
+
+        def _append(path, new_items):
+            existing = []
+            if os.path.exists(path):
+                try:
+                    with open(path) as f:
+                        existing = json.load(f)
+                except Exception:
+                    existing = []
+            existing.extend(new_items)
+            with open(path, 'w') as f:
+                json.dump(existing, f, indent=2)
+            return len(existing)
+
+        if freetext:
+            total = _append(os.path.join(OUTPUT_DIR, f'{today}-candidates.json'), freetext)
+            log(f"   Appended {len(freetext)} free-text claim(s) to {today}-candidates.json (queue now {total})")
+        if structured:
+            total = _append(os.path.join(OUTPUT_DIR, f'{today}-structured-candidates.json'), structured)
+            log(f"   Appended {len(structured)} structured claim(s) to {today}-structured-candidates.json (queue now {total})")
 
     return len(claims)
 

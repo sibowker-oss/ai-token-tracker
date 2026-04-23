@@ -398,3 +398,33 @@ isolation — pulls into the main queue only on intent.
 
 **Pausing for review before Phase 3 (wq-012 Stream 2 energy).**
 
+### 2026-04-23 — Review-budget posture reversed
+
+Simon pushed back on the extract-on-demand gate: the review-flood concern
+was about 38 past-due sources firing at once, not about gating
+extraction entirely. The right pacer is each source's own `frequency`,
+which Simon set when registering it. Reversing.
+
+Changes:
+
+- `next_check` reset to **today (2026-04-23)** for every source I had
+  pushed to 2026-05-23 (11 in Stream 1's scope — src-011, 025, 032,
+  037, 038, 041, 045, 055–059). The daily 11:30am cron will fire them
+  tomorrow and each auto-advances `next_check` from there per its own
+  cadence.
+- `monitor_sources.process_source()` now appends extracted claims to
+  the shared review queue — `<date>-candidates.json` for free-text
+  output, `<date>-structured-candidates.json` for the wq-014 typed
+  claims. Claims.html picks them up on next load. Per-source audit
+  snapshot (`<date>-source-<id>.json`) retained as the raw adapter
+  output for provenance.
+- Exceptions (unchanged): `status=deferred` (Seeking Alpha, Crunchbase,
+  Dealroom), `status=deprecated_duplicate` (src-017..022) stay gated
+  regardless of next_check. Env-gated adapters (EIA, EPO OPS, DoL LCA
+  openpyxl) will log "requires X" and return [] gracefully when the
+  cron fires them — registry status advances anyway so next_check
+  rolls forward.
+
+State of AI Report (src-001) is NOT in the reset set — it already ran
+successfully and is on its annual cadence. Next fire: 2027-04-22.
+

@@ -384,6 +384,35 @@ _Agent (§12.7)_
 
 **Phase 4 complete — pausing for review.**
 
+### 2026-04-23 — Review-budget posture reversed
+
+Per Simon's feedback. All eight Stream 3 sources had `next_check=2026-05-23`;
+reset to today so the daily 11:30am cron fires them at their stated
+cadence tomorrow:
+
+- src-065 USPTO PatentSearch — monthly (0 claims until patent_assignee_ids
+  populated)
+- src-066 Google Patents BigQuery — `status=pending_credentials`,
+  next_check unchanged (9999-12-31). Gate when GCP creds land.
+- src-067 EPO OPS — monthly (env-gated; no-op until
+  EPO_OPS_CLIENT_ID/_SECRET set)
+- src-068 DoL LCA — quarterly (stubbed on openpyxl; no-op until
+  `pip install openpyxl`)
+- src-069 Greenhouse — **weekly**; fans out to 13 companies, emits 13
+  hiring_snapshot claims per run
+- src-070 Lever — **weekly**; 1 company (Mistral)
+- src-071 Ashby — **weekly**; 8 companies, 8 hiring_snapshots
+- src-072 Workable — weekly; 0 companies on the seed (stand-by)
+
+`process_source()` updated to append structured hiring_snapshot /
+patent_snapshot / company_surfaced claims to
+`<date>-structured-candidates.json`, so claims.html picks them up
+automatically. Per-source audit files retained.
+
+First natural cron fire (tomorrow, 2026-04-24 11:30am) will produce
+~22 hiring_snapshot claims plus whatever patent / LCA paths yield once
+creds / openpyxl land.
+
 **To see the discovery engine in action, run any of:**
 
 ```bash
