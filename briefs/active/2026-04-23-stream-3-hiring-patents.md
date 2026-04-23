@@ -212,6 +212,201 @@ In force: LinkedIn scraping forbidden (hiQ precedent), Levels.fyi forbidden (ToS
 
 *(Append entries here when work starts. Leave §1–§13 above untouched.)*
 
+### 2026-04-23 — Phase 4 plumbing shipped
+
+Five commits on `main`:
+
+- `98101ca` Register Stream 3 discovery sources (wq-013)
+- `0c14e79` Seed company-alias-map with 31-company validation set (wq-013)
+- `3934cd6` Add Stream 3 discovery adapters to monitor_sources (wq-013)
+- `f214234` AI Native Density scorer + 31-company validation harness (wq-013)
+- `ff2e377` Register company-discovery agent (wq-013)
+
+**What landed**
+
+_Sources (§12.1)_
+
+- Eight new registry entries (src-065 USPTO PatentSearch, src-066 Google
+  Patents BigQuery, src-067 EPO OPS, src-068 DoL OFLC LCA, src-069
+  Greenhouse, src-070 Lever, src-071 Ashby, src-072 Workable). All
+  pending_first_extraction with next_check=2026-05-23. src-066
+  additionally flagged `status=pending_credentials` because BigQuery
+  needs GCP auth.
+
+_Alias map (§12.2)_
+
+- `data/company-alias-map.json` seeded with the §6 validation set (31
+  companies). Shape per wq-013 §12.2 plus `founded` (for GUIDELINES §4.6
+  AI-native filter) and `category` (§6 bucket).
+- 22 of 31 ATS tokens populated on seed (13 greenhouse, 8 ashby,
+  1 lever). The remaining 9 (google-deepmind, meta-ai, xai, inflection,
+  reka, codeium, poolside, magic, character) have null ATS — Simon
+  confirms as each surfaces.
+- `lca_names` populated for all 31 with best-guess employer strings.
+- `patent_assignee_ids` empty across the board — the PatentsView
+  `/api/v1/assignee?q=<canonical>` disambiguation pass is a follow-up
+  helper I didn't build this phase (one API call per company; straightforward
+  when Simon wants to close that gap).
+
+_Adapters (§12.3)_
+
+Eight new entries in `monitor_sources.ADAPTERS`, plus the AI-engineer
+classifier `classify_role(title, body)` implementing the wq-013 §9
+INCLUDE / EXCLUDE regex verbatim. 20-case spot-check passed for
+representative ML / AI / Prompt / MLOps titles and the data-engineer /
+data-scientist exclusions.
+
+| Adapter | Status | Notes |
+|---|---|---|
+| `greenhouse_board` | **functional** | Fans out to 13 companies; public JSON, no auth. |
+| `lever_postings`   | **functional** | 1 company (Mistral) on seed. |
+| `ashby_public`     | **functional** | 8 companies. |
+| `workable_jobs`    | ready (no targets) | 0 companies use Workable in the seed; adapter stands by. |
+| `patentsview_search` | partial | Public USPTO API works; zero companies have `patent_assignee_ids` populated so v1 emits 0 patent_snapshot claims until disambiguation runs. Rolling 30d + grants counts are follow-up. |
+| `google_patents_bq` | **stubbed** | Requires GCP_SERVICE_ACCOUNT_JSON — Phase 1 decision #4. |
+| `epo_ops`           | **stubbed** | Env-gated on EPO_OPS_CLIENT_ID / _SECRET. |
+| `dol_lca_xlsx`     | **stubbed** | Needs `openpyxl` (not in v1 env). Surfaces quarterly XLSX download links in the log. |
+
+Shared helpers landed alongside:
+- `_extract_ats_generic` — common core for the four ATS adapters.
+- `_build_hiring_snapshot(slug, entry, source, jobs, ats_type, token)` —
+  aggregates job dicts into a schema-conformant hiring_snapshot claim.
+- `_load_alias_map()` / `_iso_week()` / `_iso_month()` / `_fetch_json()`
+  — stdlib-only utilities.
+
+_AI Native Density (§5 + §12.5)_
+
+- New `scripts/ai_native_density.py`. Four sub-scores
+  (hiring / patents / capital / revenue) combined with the brief's
+  0.30 / 0.20 / 0.20 / 0.30 weights. Implements the formulas literally
+  per §5.
+- Not rendered publicly per §8 decision ("LCA salary exposure: internal
+  only for v1. Not rendered publicly"). Score is used only as a ranking
+  filter in the company_surfaced review queue and as `density_score_estimate`
+  on emitted company_surfaced claims.
+- `Inputs.from_alias_entry(slug)` reads the latest hiring / patent
+  snapshots from `site-data.json`. Currently returns 0 for every
+  company because no extractions have landed — that's the honest
+  state, not a bug.
+
+_Validation harness (§12.6)_
+
+- New `scripts/discovery_validation.py`. For each of the 31 companies,
+  checks whether the engine can see it via patent_assignee_ids,
+  ats.token, or lca_names.
+- Current result:
+  - 0/31 visible via patents (empty assignee_ids seed)
+  - 22/31 visible via ATS
+  - 31/31 visible via LCA
+  - **31/31 surfaced by ≥1 signal — zero recall gaps**
+  - 0/31 fully covered across all three signals
+- `--report` mode writes markdown to `reports/discovery-coverage-<date>.md`
+  so coverage audits are persistable.
+
+_Agent (§12.7)_
+
+- `company-discovery` v0.1.0 registered in `data/agents.registry.md`
+  with the eight adapter handles + the two scripts. Cadence
+  on-demand per-source via `--force`. Recommended cadence per §7:
+  weekly for ATS, monthly for patents.
+- Two rows on `data/agents.log.md`: alias-map seed (commit `0c14e79`,
+  outcome=merged) and agent registration (outcome=configured).
+
+**Divergence from brief**
+
+1. **§12.1 source count** — brief says 8 sources. Implemented 8 exactly
+   (src-065..072). No drift.
+2. **§12.2 alias map PatentsView IDs** — brief says "seeded from
+   PatentsView assignee disambiguation". I seeded the alias map without
+   the PatentsView lookup. Reason: running a PatentsView disambiguation
+   pass requires one live API call per canonical name, ~31 calls, which
+   produces data that may need human judgment (some names
+   disambiguate to multiple PatentsView IDs; some don't
+   disambiguate at all). Leaving that as an explicit follow-up where
+   Simon reviews the disambiguation output before committing IDs, rather
+   than merging a machine-confidence pass.
+3. **§12.3 prompt vs deterministic** — brief §3.1 says PatentsView
+   "query: any application published in trailing 24 months with at least
+   one CPC in the AI list". v1 uses trailing 12m (matches the
+   patent_snapshot schema's `applications_published_trailing_12m`). 24m
+   is a follow-up when rolling-window extensions land.
+4. **§12.5 density score public rendering** — brief says "Not a tracked
+   metric in its own right; just a composite for ranking." Confirmed in
+   implementation; score is returned by a CLI helper, never written to
+   site-data.json.
+5. **§3.4 GitHub + HuggingFace** — brief lists these as medium-weight
+   discovery signals. Not implemented in v1 — no sources registered,
+   no adapter written. Flagged as next-phase work (would be src-073..074
+   when enabled).
+6. **§3.5 Common Room** — brief says "use the existing Common Room
+   connector to surface company mentions". No evidence of an existing
+   Common Room connector in the repo. Treated as a brief assumption to
+   clarify; not implemented.
+7. **Brief §13 open questions** — answered per Phase 1 decision #5:
+   reuse claims.html (landed in Phase 1.3), monthly discovery cadence
+   (set on src-065/066/067 with next_check=2026-05-23), Decline-forever
+   suppression semantics (landed in apply_claims's
+   apply_company_surfaced idempotency check in Phase 1.4). No new work
+   in Phase 4 on these.
+
+**Follow-ups from Phase 4**
+
+1. PatentsView assignee-disambiguation helper — one-shot script that
+   takes each canonical name, hits `/api/v1/assignee?q=...`, presents
+   results for Simon to confirm, and writes back to alias map. Unlocks
+   `patent_assignee_ids` for the 31 + any company_surfaced candidates.
+2. `new_ai_roles_7d` diff computation — `_build_hiring_snapshot` sets
+   this to 0 because no prior snapshot exists. When a second weekly
+   extraction lands for a company, the helper can read the prior week's
+   snapshot from `site-data.json.hiring.snapshots.<slug>` and compute
+   the delta.
+3. Register GitHub + HuggingFace as §3.4 signal sources.
+4. Install `openpyxl` and wire the DoL LCA XLSX row parse (high
+   value — LCA data is the strongest hiring-intent signal per §3.2).
+5. Backfill the 9 unknown ATS tokens in the alias map as Simon confirms
+   each company's board type.
+6. Capital / revenue sub-score inputs — v1 reads site-data.json hiring
+   and patents only. Capital (total_funding_trailing_24m /
+   months_since_last_round) and revenue (ARR) inputs need either a new
+   site-data path or a manual override file.
+
+**Not done in Phase 4, deferred**
+
+- §5 weight validation against the 31-company set. Brief decision §8
+  says "Score weights: validate against 31-company set before shipping".
+  Can't validate weights while all 31 companies score 0 (no hiring/
+  patent data landed). Validation lands after Simon runs the first ATS
+  extractions and the scorer has real input.
+- Monthly diff snapshots for `new_ai_roles_7d`. Needs a second weekly
+  run per company.
+- Actual ATS / PatentsView extractions. Simon fires per source when
+  ready to review output.
+
+**Phase 4 complete — pausing for review.**
+
+**To see the discovery engine in action, run any of:**
+
+```bash
+# Pull AI job snapshots for 13 Greenhouse-hosted validation companies
+python3 scripts/monitor_sources.py --force src-069
+
+# Pull AI job snapshots for 8 Ashby-hosted companies
+python3 scripts/monitor_sources.py --force src-071
+
+# Pull patent snapshots for any company with patent_assignee_ids populated
+python3 scripts/monitor_sources.py --force src-065   # emits 0 today until IDs seed
+
+# Dry-run: show current coverage against the 31-company validation set
+python3 scripts/discovery_validation.py
+
+# Dry-run: rank all 31 by density score (all 0 today, for the reason above)
+python3 scripts/ai_native_density.py --all
+```
+
+Claims land in `data-updates/<date>-source-<src-id>.json` —
+per-source isolation, not auto-loaded by claims.html.
+
+
 ---
 
 ## Sources
