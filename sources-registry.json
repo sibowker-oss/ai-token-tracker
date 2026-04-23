@@ -459,15 +459,16 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-21",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "deferred",
+      "notes": "DEFERRED per wq-015 \u00a72.6 \u2014 full transcripts paywalled, free tier too thin. Revisit if the $100/mo budget targets this."
     },
     {
       "id": "src-025",
-      "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company=openai&CIK=&type=10-K&dateb=&owner=include&count=40",
-      "title": "SEC EDGAR \u00e2\u0080\u0094 AI Company Filings",
+      "url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&company=&CIK=&type=10-K&dateb=&owner=include&count=40",
+      "title": "SEC EDGAR \u2014 AI company 10-K/10-Q/8-K scan",
       "type": "sec_filing",
       "author": "",
       "organization": "",
@@ -475,14 +476,16 @@
       "tags": [
         "sec",
         "financials",
-        "official"
+        "official",
+        "multi-ticker"
       ],
-      "extraction_method": "web_extract",
+      "extraction_method": "sec_edgar_scan",
       "frequency": "quarterly",
-      "next_check": "2026-07-21",
+      "next_check": "2026-05-23",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "pending_first_extraction",
+      "notes": "Scans tickers listed in data/edgar-tickers.json (seed 15 AI-relevant). Per wq-015 \u00a72.2 \u2014 broadened from OpenAI-only."
     },
     {
       "id": "src-026",
@@ -978,10 +981,11 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-22",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "deferred",
+      "notes": "Out of scope for wq-015 \u00a79 \u2014 Crunchbase held for paid-source budget review."
     },
     {
       "id": "src-051",
@@ -998,10 +1002,11 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-22",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "deferred",
+      "notes": "Out of scope for wq-015 \u00a79 \u2014 Dealroom held for paid-source budget review."
     },
     {
       "id": "src-052",
@@ -1057,6 +1062,116 @@
       "last_claims_count": 0,
       "status": "pending_first_extraction",
       "notes": "Key cross-check source for Follow the CapEx page. Publishes quarterly big-5 hyperscaler capex breakdowns from 10-K/10-Q filings. Pioneered DC-share-of-total-capex methodology."
+    },
+    {
+      "id": "src-055",
+      "url": "https://artificialintelligenceact.eu/",
+      "title": "FLI \u2014 EU AI Act Tracker",
+      "type": "regulatory_tracker",
+      "author": "Future of Life Institute",
+      "organization": "Future of Life Institute",
+      "added": "2026-04-23",
+      "tags": [
+        "regulation",
+        "eu",
+        "ai-act",
+        "compliance"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Primary EU AI Act status tracker per wq-015 \u00a72.3. CC-licensed. Per Simon decision: FLI for v1, EC public register deferred as corroboration."
+    },
+    {
+      "id": "src-056",
+      "url": "https://www.alibabagroup.com/en-US/ir",
+      "title": "Alibaba Group Investor Relations",
+      "type": "ir_page",
+      "author": "",
+      "organization": "Alibaba Group",
+      "added": "2026-04-23",
+      "tags": [
+        "hyperscaler",
+        "china",
+        "ir",
+        "cloud"
+      ],
+      "extraction_method": "ir_page_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Chinese hyperscaler IR per wq-015 \u00a72.4 (ByteDance/Alibaba/Tencent/Baidu added as src-056..059). Earnings and cloud commentary."
+    },
+    {
+      "id": "src-057",
+      "url": "https://www.tencent.com/en-us/investors.html",
+      "title": "Tencent Holdings Investor Relations",
+      "type": "ir_page",
+      "author": "",
+      "organization": "Tencent Holdings",
+      "added": "2026-04-23",
+      "tags": [
+        "hyperscaler",
+        "china",
+        "ir",
+        "cloud"
+      ],
+      "extraction_method": "ir_page_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Chinese hyperscaler IR per wq-015 \u00a72.4."
+    },
+    {
+      "id": "src-058",
+      "url": "https://ir.baidu.com/",
+      "title": "Baidu Investor Relations",
+      "type": "ir_page",
+      "author": "",
+      "organization": "Baidu",
+      "added": "2026-04-23",
+      "tags": [
+        "hyperscaler",
+        "china",
+        "ir",
+        "llm-provider"
+      ],
+      "extraction_method": "ir_page_extract",
+      "frequency": "quarterly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Chinese hyperscaler IR per wq-015 \u00a72.4. Ernie/Wenxin model commentary."
+    },
+    {
+      "id": "src-059",
+      "url": "https://www.bytedance.com/en/news",
+      "title": "ByteDance Corporate Newsroom",
+      "type": "press_room",
+      "author": "",
+      "organization": "ByteDance",
+      "added": "2026-04-23",
+      "tags": [
+        "hyperscaler",
+        "china",
+        "press",
+        "private-company"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "monthly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "ByteDance is private (no IR page). Using the corporate newsroom as the canonical press endpoint per wq-015 \u00a72.4. Re-evaluate if ByteDance IPOs."
     }
   ]
 }

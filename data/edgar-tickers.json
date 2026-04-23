@@ -1,0 +1,24 @@
+{
+  "_comment": "Seed list for sec_edgar_scan adapter (wq-015 §2.2). Tickers below are public companies whose 10-K/10-Q/8-K/S-1 filings are likely to carry AI-relevant revenue, capex, seat, or token disclosures. Add as needed; the adapter iterates this list, not companies.json, because most companies.json entries are private APAC co's that do not file with SEC.",
+  "_maintainer": "Simon / Hepburn Advisory",
+  "_lastUpdated": "2026-04-23",
+  "_brief": "briefs/active/2026-04-23-stream-1-activation.md §2.2",
+  "tickers": [
+    {"ticker": "MSFT",  "cik": "0000789019", "company": "Microsoft",    "why": "Azure AI capex, OpenAI commitment, Copilot commentary"},
+    {"ticker": "GOOGL", "cik": "0001652044", "company": "Alphabet",     "why": "Cloud capex, Gemini/Vertex commentary"},
+    {"ticker": "META",  "cik": "0001326801", "company": "Meta",         "why": "GPU capex, Llama, infrastructure spend"},
+    {"ticker": "AMZN",  "cik": "0001018724", "company": "Amazon",       "why": "AWS Bedrock, Anthropic commitment, capex"},
+    {"ticker": "NVDA",  "cik": "0001045810", "company": "NVIDIA",       "why": "Data-center revenue segment, CSP customer concentration"},
+    {"ticker": "AMD",   "cik": "0000002488", "company": "AMD",          "why": "Data-center GPU revenue, MI300X commentary"},
+    {"ticker": "CRM",   "cik": "0001108524", "company": "Salesforce",   "why": "AgentForce metrics, AI ARR"},
+    {"ticker": "NOW",   "cik": "0001373715", "company": "ServiceNow",   "why": "Now Assist commentary"},
+    {"ticker": "PLTR",  "cik": "0001321655", "company": "Palantir",     "why": "AIP revenue, government AI deals"},
+    {"ticker": "ORCL",  "cik": "0001341439", "company": "Oracle",       "why": "OCI AI backlog, cloud capex"},
+    {"ticker": "ADBE",  "cik": "0000796343", "company": "Adobe",        "why": "Firefly, AI seat uptake"},
+    {"ticker": "SNOW",  "cik": "0001640147", "company": "Snowflake",    "why": "Cortex, AI data-platform metrics"},
+    {"ticker": "DDOG",  "cik": "0001561550", "company": "Datadog",      "why": "AI-customer mix, LLM observability"},
+    {"ticker": "MDB",   "cik": "0001441816", "company": "MongoDB",      "why": "Vector DB adoption, AI workload mix"},
+    {"ticker": "ARM",   "cik": "0001973239", "company": "Arm Holdings", "why": "Chip licensing, AI server IP"},
+    {"ticker": "CRWV",  "cik": "0001769628", "company": "CoreWeave",    "why": "GPU cloud revenue, hyperscaler customer concentration"}
+  ]
+}

@@ -39,6 +39,26 @@
 | edgar-10k-hyperscaler | Company 10-K filings (MSFT, GOOG, AMZN, META, ORCL) | 1 | https://www.sec.gov/cgi-bin/browse-edgar | Simon | quarterly | Public (EDGAR), no restriction | manual copy | 2026-04-23 | Hyperscaler capex roll-up. Recompute each quarter from filed 10-Qs / 10-Ks. |
 | sp-global | S&P Global | 1 | https://www.spglobal.com/spdji/en/indices/equity/sp-500 | Simon | daily | Public headline data; constituent detail paywalled | manual copy | 2026-04-23 | S&P 500 aggregate market cap. Headline index value publishes daily. |
 | bea-imf-weo | BEA / IMF WEO | 1 | https://www.bea.gov/data/gdp/gross-domestic-product | Simon | quarterly | Public data | manual copy | 2026-04-23 | US GDP. BEA advance/second/third estimates. |
+| fli-eu-ai-act | Future of Life Institute — EU AI Act Tracker | 1 | https://artificialintelligenceact.eu/ | Simon | monthly | CC-licensed | web_extract | 2026-04-23 | Primary EU AI Act status tracker per wq-015 §2.3. Mirrored as `src-055` in sources-registry.json. Pending first extraction. |
+| sec-edgar-ai-scan | SEC EDGAR — AI company 10-K/10-Q/8-K scan | 1 | https://www.sec.gov/cgi-bin/browse-edgar | Simon | quarterly | Public (EDGAR) | sec_edgar_scan | 2026-04-23 | Broadened from OpenAI-only (was `src-025`). Scans tickers in `data/edgar-tickers.json` (seed 15). |
+| alibaba-ir | Alibaba Group — Investor Relations | 1 | https://www.alibabagroup.com/en-US/ir | Simon | quarterly | Public | ir_page_extract | 2026-04-23 | Chinese hyperscaler IR per wq-015 §2.4. `src-056`. |
+| tencent-ir | Tencent Holdings — Investor Relations | 1 | https://www.tencent.com/en-us/investors.html | Simon | quarterly | Public | ir_page_extract | 2026-04-23 | Chinese hyperscaler IR per wq-015 §2.4. `src-057`. |
+| baidu-ir | Baidu — Investor Relations | 1 | https://ir.baidu.com/ | Simon | quarterly | Public | ir_page_extract | 2026-04-23 | Chinese hyperscaler IR per wq-015 §2.4. Ernie/Wenxin commentary. `src-058`. |
+| bytedance-press | ByteDance — Corporate Newsroom | 2 | https://www.bytedance.com/en/news | Simon | monthly | Public | web_extract | 2026-04-23 | ByteDance is private (no IR). Press room used as canonical endpoint per wq-015 §2.4. `src-059`. Re-evaluate if ByteDance IPOs. |
+
+## Deferred (paid or out-of-scope for wq-015)
+
+| id | name | status | reason |
+|---|---|---|---|
+| seeking-alpha | Seeking Alpha — AI earnings transcripts (`src-024`) | deferred | Full transcripts paywalled per wq-015 §2.6. |
+| crunchbase-ai | Crunchbase — Top AI companies (`src-050`) | deferred | Held for paid-source budget review per wq-015 §9. |
+| dealroom-ai | Dealroom — AI landscape (`src-051`) | deferred | Held for paid-source budget review per wq-015 §9. |
+
+## Deprecated duplicates (per sources.registry.md rule 2, never deleted)
+
+| id | supersededBy | deprecatedOn | reason |
+|---|---|---|---|
+| `src-017` → `src-022` | `src-016` | 2026-04-23 | All six rows pointed at the same OpenAI "Accelerating the Next Phase of AI" URL. Per wq-015 §3.1. |
 
 ---
 
