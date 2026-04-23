@@ -1210,50 +1210,174 @@ def process_source(source, dry_run=False):
         today = datetime.now().strftime('%Y-%m-%d')
         os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-        # Everything — free-text and structured — appends to the single shared
-        # review queue that claims.html loads by default. One file per day.
-        # De-dupe by (source_url, claim_text | type+keys) fingerprint so
-        # re-running a source doesn't stack identical entries.
-        path = os.path.join(OUTPUT_DIR, f'{today}-candidates.json')
-        existing = []
-        if os.path.exists(path):
-            try:
-                with open(path) as f:
-                    existing = json.load(f)
-            except Exception:
-                existing = []
+        # 1. Per-source raw snapshot into data-updates/<date>-source-<id>.json
+        #    for provenance/audit. Not loaded by any UI.
+        audit_path = os.path.join(OUTPUT_DIR, f'{today}-source-{source["id"]}.json')
+        with open(audit_path, 'w') as f:
+            json.dump(claims, f, indent=2)
 
-        def _fingerprint(c):
-            # For structured claims: type + identifying fields.
-            # For free-text: source URL + verbatim claim text (first 200 chars).
-            t = c.get('type')
-            src = c.get('source_url') or (c.get('source') or {}).get('url', '')
-            if t == 'power_project':
-                return (t, c.get('queue_market'), c.get('queue_id'))
-            if t in ('hiring_snapshot', 'patent_snapshot'):
-                return (t, c.get('company_slug'), c.get('window'))
-            if t == 'company_surfaced':
-                return (t, c.get('candidate_name'))
-            return (src, (c.get('claim') or '')[:200])
-
-        # Replace prior entries with newer extractions:
-        # - Free-text: by the registered source URL match (re-running the
-        #   State of AI replaces its 217-claim contribution rather than
-        #   stacking to 434).
-        # - Structured: by per-claim fingerprint match against the new
-        #   claims (re-running Greenhouse replaces each company's
-        #   hiring_snapshot for this week rather than stacking duplicates).
-        src_url = source.get('url', '')
-        new_fingerprints = {_fingerprint(c) for c in claims}
-        existing = [c for c in existing
-                    if (c.get('source_url') or (c.get('source') or {}).get('url', '')) != src_url
-                    and _fingerprint(c) not in new_fingerprints]
-        existing.extend(claims)
-        with open(path, 'w') as f:
-            json.dump(existing, f, indent=2)
-        log(f"   Appended {len(claims)} claim(s) to {today}-candidates.json (queue now {len(existing)}, de-duped from re-runs of same source)")
+        # 2. Append to vault-inbox.json as status=pending items. This is the
+        #    queue `admin.html#review` reads via review.html. One canonical
+        #    review location for all extractions — matches the existing
+        #    extract_claims.py (podcast) pipeline behaviour.
+        added = _append_to_vault_inbox(claims, source, today)
+        log(f"   Appended {added} pending item(s) to vault-inbox.json")
 
     return len(claims)
+
+
+VAULT_INBOX_PATH = os.path.join(BASE_DIR, 'vault-inbox.json')
+_CONFIDENCE_TO_VAULT = {'high': 'verified', 'medium': 'estimated', 'low': 'speculative'}
+_STRUCTURED_TYPES_SET = ('power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced')
+
+
+def _existing_fingerprint(item):
+    """Mirror of the fingerprint used for structured-claim dedupe in vault-inbox."""
+    t = item.get('type')
+    src = item.get('sourceUrl', '')
+    if t == 'power_project':
+        return (t, item.get('queue_market'), item.get('queue_id'))
+    if t in ('hiring_snapshot', 'patent_snapshot'):
+        return (t, item.get('entity') or item.get('company_slug'), item.get('window'))
+    if t == 'company_surfaced':
+        return (t, item.get('entity') or item.get('candidate_name'))
+    return (src, (item.get('claim') or '')[:200])
+
+
+def _claim_to_vault_item(claim, source, today, index):
+    """Convert an extracted claim (free-text or structured) to the
+    vault-inbox.json item shape used by review.html / admin.html#review."""
+    date_str = today.replace('-', '')
+    src_id = source.get('id', 'src-???')
+    claim_id = f"auto-{date_str}-{src_id}-{index+1}"
+
+    claim_type = claim.get('type')
+    if claim_type in _STRUCTURED_TYPES_SET:
+        return _structured_claim_to_vault(claim, source, claim_id, today)
+    return _freetext_claim_to_vault(claim, source, claim_id, today)
+
+
+def _freetext_claim_to_vault(claim, source, claim_id, today):
+    conf_in = (claim.get('confidence') or 'medium').lower()
+    return {
+        'id': claim_id,
+        'claim': claim.get('claim', ''),
+        'value': claim.get('value'),
+        'unit': claim.get('unit', ''),
+        'sourceUrl': claim.get('source_url', source.get('url', '')),
+        'sourceType': claim.get('source_type', source.get('type', '')),
+        'sourceAuthor': claim.get('speaker') or claim.get('source_title') or source.get('organization', ''),
+        'confidence': _CONFIDENCE_TO_VAULT.get(conf_in, 'estimated'),
+        'dateOfClaim': claim.get('source_date') or claim.get('time_period', today),
+        'dateAdded': today,
+        'usedOn': [],
+        'tags': [claim.get('category', 'other')],
+        'notes': claim.get('source_excerpt_original') or f"From {source.get('title', '?')}",
+        'status': 'pending',
+        'replaces': None,
+        'source_id': source.get('id'),
+        'metricKey': claim.get('metric_key') or claim.get('metric'),
+        'entity': claim.get('entity', ''),
+        'weight': claim.get('weight', 'indicative'),
+        'dedup_status': claim.get('dedup_status', 'new'),
+        'dedup_note': claim.get('dedup_note'),
+    }
+
+
+def _structured_claim_to_vault(claim, source, claim_id, today):
+    """Serialise a typed claim into the vault-inbox shape while preserving
+    the structured payload on the item for renderers that care."""
+    t = claim['type']
+    entity = claim.get('company_slug') or claim.get('candidate_name') or claim.get('queue_market') or ''
+    src_block = claim.get('source', {})
+    conf_in = (src_block.get('confidence') or 'medium').lower()
+
+    if t == 'hiring_snapshot':
+        m = claim.get('metrics', {})
+        summary = (f"{entity} — {m.get('open_roles_ai_titled','?')} AI roles / "
+                   f"{m.get('open_roles_total','?')} total ({claim.get('window')})")
+        value = m.get('open_roles_ai_titled')
+        unit = 'AI roles'
+    elif t == 'patent_snapshot':
+        m = claim.get('metrics', {})
+        summary = (f"{entity} — {m.get('applications_published_trailing_12m','?')} AI-CPC apps / "
+                   f"{m.get('grants_trailing_12m','?')} grants trailing 12m ({claim.get('window')})")
+        value = m.get('applications_published_trailing_12m')
+        unit = 'patent apps'
+    elif t == 'power_project':
+        summary = (f"{claim.get('queue_market')} {claim.get('queue_id')} — "
+                   f"{claim.get('mw_requested','?')} MW requested, stage {claim.get('stage')}"
+                   + (f" → {claim.get('company_slug')}" if claim.get('company_slug') else ""))
+        value = claim.get('mw_requested')
+        unit = 'MW'
+    elif t == 'company_surfaced':
+        fs = claim.get('first_seen_signal', {})
+        summary = (f"{claim.get('candidate_name')} — surfaced via {fs.get('kind','?')}"
+                   + (f" ({fs.get('cpc')})" if fs.get('cpc') else ""))
+        value = claim.get('density_score_estimate')
+        unit = 'density_score'
+    else:
+        summary = f"[{t}] {entity}"
+        value = None
+        unit = ''
+
+    return {
+        'id': claim_id,
+        'claim': summary,
+        'value': value,
+        'unit': unit,
+        'sourceUrl': src_block.get('url', source.get('url', '')),
+        'sourceType': source.get('type', ''),
+        'sourceAuthor': source.get('organization', ''),
+        'confidence': _CONFIDENCE_TO_VAULT.get(conf_in, 'estimated'),
+        'dateOfClaim': today,
+        'dateAdded': today,
+        'usedOn': [],
+        'tags': [t, entity] if entity else [t],
+        'notes': json.dumps({k: v for k, v in claim.items() if k not in ('source',)}, default=str)[:500],
+        'status': 'pending',
+        'replaces': None,
+        'source_id': source.get('id'),
+        'metricKey': f"{entity}-{t}" if entity else t,
+        'entity': entity,
+        'weight': 'authoritative' if conf_in == 'high' else ('corroborating' if conf_in == 'medium' else 'indicative'),
+        'dedup_status': 'new',
+        'dedup_note': None,
+        # Preserve the typed payload verbatim for renderers that support it
+        'type': t,
+        'structured_payload': claim,
+    }
+
+
+def _append_to_vault_inbox(claims, source, today):
+    if os.path.exists(VAULT_INBOX_PATH):
+        with open(VAULT_INBOX_PATH) as f:
+            inbox = json.load(f)
+    else:
+        inbox = {'items': [], 'lastProcessed': None}
+
+    # Replace-per-source on append so re-running this source doesn't stack
+    # duplicates. Only touches items whose source_id matches.
+    src_id = source.get('id')
+    if src_id:
+        before = len(inbox['items'])
+        inbox['items'] = [it for it in inbox['items']
+                          if it.get('source_id') != src_id
+                          or it.get('status') != 'pending']
+        removed = before - len(inbox['items'])
+        if removed:
+            log(f"   Replaced {removed} prior pending item(s) from {src_id}")
+
+    added = 0
+    for i, claim in enumerate(claims):
+        item = _claim_to_vault_item(claim, source, today, i)
+        inbox['items'].append(item)
+        added += 1
+
+    inbox['lastProcessed'] = today
+    with open(VAULT_INBOX_PATH, 'w') as f:
+        json.dump(inbox, f, indent=2)
+    return added
 
 
 def main():
