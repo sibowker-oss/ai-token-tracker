@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-03-31",
+    "lastUpdated": "2026-04-23",
     "description": "Registry of all data sources \u00e2\u0080\u0094 auto-classified with extraction method and check frequency"
   },
   "sources": [
@@ -317,7 +317,8 @@
       "next_check": "4764-03-18",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "pending_first_extraction",
+      "notes": "Canonical entry for openai.com/index/accelerating-the-next-phase-ai/. src-017..022 superseded by this on 2026-04-23 per wq-015 \u00a73.1."
     },
     {
       "id": "src-017",
@@ -330,10 +331,12 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "4764-03-18",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "deprecated_duplicate",
+      "supersededBy": "src-016",
+      "deprecatedOn": "2026-04-23"
     },
     {
       "id": "src-018",
@@ -346,10 +349,12 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "4764-03-18",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "deprecated_duplicate",
+      "supersededBy": "src-016",
+      "deprecatedOn": "2026-04-23"
     },
     {
       "id": "src-019",
@@ -362,10 +367,12 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "4764-03-18",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "deprecated_duplicate",
+      "supersededBy": "src-016",
+      "deprecatedOn": "2026-04-23"
     },
     {
       "id": "src-020",
@@ -378,10 +385,12 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "2026-04-02",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-03",
       "last_claims_count": 11,
-      "status": "active"
+      "status": "deprecated_duplicate",
+      "supersededBy": "src-016",
+      "deprecatedOn": "2026-04-23"
     },
     {
       "id": "src-021",
@@ -394,10 +403,12 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "2026-04-02",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-03",
       "last_claims_count": 20,
-      "status": "active"
+      "status": "deprecated_duplicate",
+      "supersededBy": "src-016",
+      "deprecatedOn": "2026-04-23"
     },
     {
       "id": "src-022",
@@ -410,10 +421,12 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "2026-04-02",
+      "next_check": "9999-12-31",
       "last_checked": "2026-04-03",
       "last_claims_count": 21,
-      "status": "active"
+      "status": "deprecated_duplicate",
+      "supersededBy": "src-016",
+      "deprecatedOn": "2026-04-23"
     },
     {
       "id": "src-023",
