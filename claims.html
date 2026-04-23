@@ -58,6 +58,15 @@
   .badge-high { background:rgba(16,185,129,0.1); color:var(--green); }
   .badge-medium { background:rgba(245,158,11,0.1); color:var(--orange); }
   .badge-low { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+  /* Structured claim type badges (wq-014) */
+  .badge-power_project { background:rgba(6,182,212,0.15); color:var(--cyan); }
+  .badge-hiring_snapshot { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .badge-patent_snapshot { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .badge-company_surfaced { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .metric-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:6px 16px; font-size:11px; color:var(--text-dim); margin-top:6px; }
+  .metric-grid strong { color:var(--text); font-weight:600; display:block; font-size:13px; }
+  .cpc-list { margin-top:4px; font-size:11px; color:var(--text-dim); }
+  .cpc-list code { background:var(--bg); padding:1px 5px; border-radius:4px; font-size:10px; }
 
   .claim-quote { font-size:12px; color:var(--text); line-height:1.5; margin-bottom:8px; font-style:italic; }
   .claim-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
@@ -187,6 +196,25 @@ function saveDecisions() {
   localStorage.setItem(DECISIONS_KEY, JSON.stringify(decisions));
 }
 
+// Structured claim types introduced by wq-014. Anything else renders with the
+// original free-text card.
+const STRUCTURED_TYPES = ['power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced'];
+const CONFIDENCE_TO_WEIGHT = { high: 'authoritative', medium: 'corroborating', low: 'indicative' };
+
+function normaliseStructuredClaim(c) {
+  // Structured claims don't carry weight/category/dedup_status/confidence at top level.
+  // Synthesize them from the nested source block so the existing card shell, sort, and
+  // filter machinery keep working without a parallel code path.
+  const conf = (c.source && c.source.confidence) || 'low';
+  return Object.assign({}, c, {
+    weight: c.weight || CONFIDENCE_TO_WEIGHT[conf] || 'indicative',
+    confidence: c.confidence || conf,
+    category: c.category || c.type,
+    dedup_status: c.dedup_status || 'new',
+    entity: c.entity || c.company_slug || c.candidate_name || c.queue_market || '?',
+  });
+}
+
 async function loadClaims() {
   const today = new Date().toISOString().split('T')[0];
   const dates = [today];
@@ -195,20 +223,32 @@ async function loadClaims() {
     dates.push(d.toISOString().split('T')[0]);
   }
 
+  let freeText = [], structured = [], freeDate = null, structuredDate = null;
   for (const date of dates) {
-    try {
-      const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
-      if (resp.ok) {
-        allClaims = await resp.json();
-        sourceFile = date + '-candidates.json';
-        console.log('Loaded ' + allClaims.length + ' claims from ' + date);
-        break;
-      }
-    } catch(e) {}
+    if (!freeDate) {
+      try {
+        const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
+        if (resp.ok) { freeText = await resp.json(); freeDate = date; }
+      } catch(e) {}
+    }
+    if (!structuredDate) {
+      try {
+        const resp = await fetch('data-updates/' + date + '-structured-candidates.json?v=' + Date.now());
+        if (resp.ok) { structured = (await resp.json()).map(normaliseStructuredClaim); structuredDate = date; }
+      } catch(e) {}
+    }
+    if (freeDate && structuredDate) break;
   }
 
+  allClaims = freeText.concat(structured);
+  sourceFile = [freeDate && (freeDate + '-candidates.json'),
+                structuredDate && (structuredDate + '-structured-candidates.json')]
+                .filter(Boolean).join(' + ');
+  console.log('Loaded ' + allClaims.length + ' claims (free-text: ' + freeText.length +
+              ', structured: ' + structured.length + ')');
+
   if (allClaims.length === 0) {
-    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run extract_claims.py to generate candidates.</div>';
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run extract_claims.py or extract_structured_claims.py to generate candidates.</div>';
     return;
   }
 
@@ -279,6 +319,122 @@ function setNote(idx, note) {
   saveDecisions();
 }
 
+function escapeHtml(s) {
+  return (s == null ? '' : String(s))
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function renderCardTitle(c) {
+  if (c.type === 'power_project') {
+    const mw = c.mw_requested != null ? c.mw_requested + ' MW' : 'MW ?';
+    return escapeHtml(c.queue_market + ' ' + c.queue_id) + ' — ' + escapeHtml(mw) +
+      (c.company_slug ? ' <span style="color:var(--text-dim);font-weight:400;">→ ' + escapeHtml(c.company_slug) + '</span>' : '');
+  }
+  if (c.type === 'hiring_snapshot') {
+    const m = c.metrics || {};
+    return escapeHtml(c.company_slug) + ' — ' +
+      escapeHtml(m.open_roles_ai_titled + ' AI roles / ' + m.open_roles_total + ' total') +
+      ' <span style="color:var(--text-dim);font-weight:400;">(' + escapeHtml(c.window) + ')</span>';
+  }
+  if (c.type === 'patent_snapshot') {
+    const m = c.metrics || {};
+    return escapeHtml(c.company_slug) + ' — ' +
+      escapeHtml(m.applications_published_trailing_12m + ' apps / ' + m.grants_trailing_12m + ' grants 12m') +
+      ' <span style="color:var(--text-dim);font-weight:400;">(' + escapeHtml(c.window) + ')</span>';
+  }
+  if (c.type === 'company_surfaced') {
+    return escapeHtml(c.candidate_name) +
+      (c.density_score_estimate != null ? ' <span style="color:var(--text-dim);font-weight:400;">density ' + escapeHtml(c.density_score_estimate) + '</span>' : '');
+  }
+  // Free-text
+  return escapeHtml(c.entity || '?') + ' — ' + escapeHtml(c.value_display || c.value || '?');
+}
+
+function renderStructuredBody(c) {
+  let body = '';
+  const src = c.source || {};
+  const srcUrl = src.url ? '<a href="' + escapeHtml(src.url) + '" target="_blank" rel="noopener" style="color:var(--accent);">source</a>' : 'no url';
+  const retrieved = src.retrievedAt ? src.retrievedAt.split('T')[0] : '?';
+  const nextReview = src.nextReview || '(event)';
+
+  if (c.type === 'power_project') {
+    body += '<div class="metric-grid">';
+    body += '<div><strong>' + escapeHtml(c.stage) + '</strong>Stage</div>';
+    body += '<div><strong>' + escapeHtml(c.mw_requested ?? '?') + '</strong>MW requested</div>';
+    body += '<div><strong>' + escapeHtml(c.mw_approved ?? '—') + '</strong>MW approved</div>';
+    body += '<div><strong>' + escapeHtml(c.mw_in_service ?? '—') + '</strong>MW in service</div>';
+    body += '<div><strong>' + escapeHtml(c.requested_cod || '—') + '</strong>Requested COD</div>';
+    body += '<div><strong>' + escapeHtml(c.county || '—') + '</strong>County</div>';
+    body += '</div>';
+    body += '<div class="claim-meta" style="margin-top:8px;">';
+    if (c.llc_of_record) body += '<strong>LLC:</strong> ' + escapeHtml(c.llc_of_record) + ' &nbsp; ';
+    if (c.poi) body += '<strong>POI:</strong> ' + escapeHtml(c.poi) + '<br>';
+    if (c.attribution_confidence) body += '<strong>Attribution:</strong> ' + escapeHtml(c.attribution_confidence) + ' ';
+    if (c.attribution_sources && c.attribution_sources.length) {
+      body += '(' + c.attribution_sources.map((u, i) => '<a href="' + escapeHtml(u) + '" target="_blank" rel="noopener" style="color:var(--accent);">ref ' + (i+1) + '</a>').join(', ') + ') ';
+    }
+    body += '<br><strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += ' &nbsp; <strong>Next review:</strong> ' + escapeHtml(nextReview);
+    body += '</div>';
+  }
+  else if (c.type === 'hiring_snapshot') {
+    const m = c.metrics || {};
+    body += '<div class="metric-grid">';
+    body += '<div><strong>' + escapeHtml(m.open_roles_total) + '</strong>Total open</div>';
+    body += '<div><strong>' + escapeHtml(m.open_roles_ai_titled) + '</strong>AI-titled</div>';
+    body += '<div><strong>' + escapeHtml(m.open_roles_prompt_engineer) + '</strong>Prompt eng</div>';
+    body += '<div><strong>' + escapeHtml((m.ai_titled_share * 100).toFixed(1)) + '%</strong>AI share</div>';
+    body += '<div><strong>' + escapeHtml(m.new_ai_roles_7d) + '</strong>New 7d</div>';
+    body += '</div>';
+    if (c.by_function) {
+      const bf = c.by_function;
+      body += '<div class="claim-meta" style="margin-top:8px;"><strong>By function:</strong> ';
+      body += Object.keys(bf).map(k => escapeHtml(k.replace(/_/g, ' ')) + ' ' + escapeHtml(bf[k])).join(' · ');
+      body += '</div>';
+    }
+    body += '<div class="claim-meta" style="margin-top:6px;">';
+    body += '<strong>ATS:</strong> ' + escapeHtml(src.type || '?') + ' (' + escapeHtml(src.token || '?') + ') &nbsp; ';
+    body += '<strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += ' &nbsp; <strong>Next review:</strong> ' + escapeHtml(nextReview);
+    body += '</div>';
+  }
+  else if (c.type === 'patent_snapshot') {
+    const m = c.metrics || {};
+    body += '<div class="metric-grid">';
+    body += '<div><strong>' + escapeHtml(m.applications_published_last_30d) + '</strong>Apps 30d</div>';
+    body += '<div><strong>' + escapeHtml(m.applications_published_trailing_12m) + '</strong>Apps 12m</div>';
+    body += '<div><strong>' + escapeHtml(m.grants_last_30d) + '</strong>Grants 30d</div>';
+    body += '<div><strong>' + escapeHtml(m.grants_trailing_12m) + '</strong>Grants 12m</div>';
+    body += '<div><strong>' + escapeHtml((m.ai_cpc_share_trailing_12m * 100).toFixed(1)) + '%</strong>AI-CPC share</div>';
+    body += '</div>';
+    if (c.top_cpc_subclasses && c.top_cpc_subclasses.length) {
+      body += '<div class="cpc-list"><strong style="color:var(--text);">Top CPC:</strong> ';
+      body += c.top_cpc_subclasses.map(x => '<code>' + escapeHtml(x.code) + '</code> ×' + escapeHtml(x.n)).join(' · ');
+      body += '</div>';
+    }
+    body += '<div class="claim-meta" style="margin-top:6px;">';
+    body += '<strong>Assignee IDs:</strong> ' + escapeHtml((c.assignee_ids || []).join(', ')) + '<br>';
+    body += '<strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += ' &nbsp; <strong>Next review:</strong> ' + escapeHtml(nextReview);
+    body += '</div>';
+  }
+  else if (c.type === 'company_surfaced') {
+    const fs = c.first_seen_signal || {};
+    body += '<div class="claim-meta">';
+    body += '<strong>First-seen signal:</strong> ' + escapeHtml(fs.kind || '?');
+    if (fs.cpc) body += ' &nbsp; <strong>CPC:</strong> <code>' + escapeHtml(fs.cpc) + '</code>';
+    if (fs.application_id) body += ' &nbsp; <strong>App:</strong> ' + escapeHtml(fs.application_id);
+    if (fs.filing_date) body += ' &nbsp; <strong>Filed:</strong> ' + escapeHtml(fs.filing_date);
+    if (c.candidate_aliases && c.candidate_aliases.length) {
+      body += '<br><strong>Aliases:</strong> ' + escapeHtml(c.candidate_aliases.join(' · '));
+    }
+    body += '<br><strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += '</div>';
+  }
+  return body;
+}
+
 function renderClaims() {
   let filtered = allClaims.map((c, i) => ({ ...c, _idx: i }));
 
@@ -313,29 +469,35 @@ function renderClaims() {
     const d = decisions[idx] || {};
     const decidedClass = d.decision ? ' decided-' + d.decision : '';
 
+    const isStructured = STRUCTURED_TYPES.indexOf(c.type) !== -1;
+
     html += '<div class="claim-card w-' + c.weight + decidedClass + '">';
 
     // Header row
     html += '<div class="claim-top">';
-    html += '<span class="claim-entity">' + (c.entity || '?') + ' — ' + (c.value_display || c.value || '?') + '</span>';
+    html += '<span class="claim-entity">' + renderCardTitle(c) + '</span>';
     html += '<div class="claim-badges">';
     if (d.decision) html += '<span class="badge badge-' + (d.decision === 'accepted' ? 'confirms' : d.decision === 'declined' ? 'conflicts' : 'medium') + '">' + d.decision.toUpperCase() + '</span>';
+    if (isStructured) html += '<span class="badge badge-' + c.type + '">' + c.type.replace(/_/g, ' ') + '</span>';
     html += '<span class="badge badge-' + c.weight + '">' + c.weight + '</span>';
     html += '<span class="badge badge-' + c.dedup_status + '">' + c.dedup_status + '</span>';
     html += '<span class="badge badge-' + c.confidence + '">' + c.confidence + '</span>';
     html += '</div></div>';
 
-    // Quote
-    html += '<div class="claim-quote">"' + c.claim + '"</div>';
-
-    // Metadata
-    html += '<div class="claim-meta">';
-    html += '<strong>Metric:</strong> ' + (c.metric || '?') + ' &nbsp; ';
-    html += '<strong>Period:</strong> ' + (c.time_period || '?') + ' &nbsp; ';
-    html += '<strong>Speaker:</strong> ' + (c.speaker || '?') + '<br>';
-    html += '<strong>Source:</strong> ' + (c.source_podcast || '?') + ' (' + (c.source_date || '?') + ')';
-    if (c.original_source_cited) html += ' &nbsp; <strong>Cites:</strong> ' + c.original_source_cited;
-    html += '</div>';
+    if (isStructured) {
+      html += renderStructuredBody(c);
+    } else {
+      // Free-text (podcast / text-extraction) claim
+      html += '<div class="claim-quote">"' + (c.claim || '') + '"</div>';
+      html += '<div class="claim-meta">';
+      html += '<strong>Metric:</strong> ' + (c.metric || '?') + ' &nbsp; ';
+      html += '<strong>Period:</strong> ' + (c.time_period || '?') + ' &nbsp; ';
+      html += '<strong>Speaker:</strong> ' + (c.speaker || '?') + '<br>';
+      html += '<strong>Source:</strong> ' + (c.source_podcast || '?') + ' (' + (c.source_date || '?') + ')';
+      if (c.original_source_cited) html += ' &nbsp; <strong>Cites:</strong> ' + c.original_source_cited;
+      if (c.source_excerpt_original) html += '<br><strong>Original excerpt:</strong> <em>' + c.source_excerpt_original + '</em>';
+      html += '</div>';
+    }
 
     // Conflict note
     if (c.dedup_note) {
