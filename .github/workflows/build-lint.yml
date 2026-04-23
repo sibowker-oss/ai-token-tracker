@@ -1,0 +1,69 @@
+name: build-lint
+
+# GUIDELINES §11 release gate — blocking CI.
+# Any non-zero exit from a step below fails the merge.
+#   - build-lint.js          → §5.5 data integrity + schema-diff + dataReferences reconciliation
+#   - validate-provenance.mjs → §4.2 / §4.4 / §4.5 / §5.5 / §5.6 / §11.2
+#   - release-check.mjs      → orchestrator (strict mode bubbles sub-check failures)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      # Make release-check.mjs block on failures instead of writing an advisory report.
+      CHECK_MODE: strict
+      RELEASE_CHECK_SOURCE: ci-build-lint
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so build-lint.js can diff site-data.json against origin/main.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Build lint (§5.5 + schema-diff + dataReferences)
+        run: node scripts/build-lint.js
+
+      - name: Provenance validator (§4.2 / §4.4 / §4.5 / §5.5 / §5.6 / §11.2)
+        run: node scripts/validate-provenance.mjs
+
+      - name: Serve site for release-check
+        run: |
+          npm run preview &
+          echo $! > preview.pid
+          npx wait-on http://localhost:4173 --timeout 60000
+
+      - name: Release check (§11 orchestrator, strict mode)
+        env:
+          RELEASE_CHECK_BASE_URL: http://localhost:4173
+        run: node scripts/release-check.mjs
+
+      - name: Stop preview server
+        if: always()
+        run: kill "$(cat preview.pid)" || true
+
+      - name: Upload release-check report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-lint-report
+          path: tests/reports/
+          retention-days: 14
