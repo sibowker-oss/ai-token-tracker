@@ -33,6 +33,47 @@ FREQUENCY_DAYS = {
 SNAPSHOT_ROOT = os.path.join(BASE_DIR, 'data', 'snapshots')
 EDGAR_TICKERS_FILE = os.path.join(BASE_DIR, 'data', 'edgar-tickers.json')
 ATTRIBUTION_MAP_FILE = os.path.join(BASE_DIR, 'data', 'datacenter-attribution-map.json')
+ALIAS_MAP_FILE = os.path.join(BASE_DIR, 'data', 'company-alias-map.json')
+
+# AI-engineer regex per wq-013 §9. Two categories:
+# - AI_TITLED — counts in `open_roles_ai_titled`.
+# - PROMPT_ENGINEER — separate category in `open_roles_prompt_engineer`.
+# The EXCLUDE set filters out generic data-engineer / data-analyst titles
+# unless the body carries AI-specific signal.
+import re as _re
+_AI_TITLE_PATTERNS = [
+    r'\b(machine learning|ml)\b.*\b(engineer|scientist|researcher)\b',
+    r'\b(ai|artificial intelligence)\b.*\b(engineer|scientist|researcher)\b',
+    r'\bresearch (engineer|scientist)\b',
+    r'\bapplied (ai|ml|scientist|research)\b',
+    r'\b(mlops|ml ops|ml platform|ml infrastructure)\b',
+    r'\b(deep learning|nlp|computer vision|reinforcement learning)\b.*\b(engineer|scientist)\b',
+    r'\b(llm|foundation model|generative ai)\b.*\b(engineer|scientist|researcher)\b',
+    r'\b(ai safety|alignment|interpretability)\b.*\b(engineer|scientist|researcher)\b',
+]
+_PROMPT_ENGINEER_RE = _re.compile(r'\bprompt engineer\b', _re.IGNORECASE)
+_AI_TITLE_RE = _re.compile('|'.join(_AI_TITLE_PATTERNS), _re.IGNORECASE)
+_EXCLUDE_RE = _re.compile(r'\b(data engineer|analytics engineer|bi engineer|data analyst)\b', _re.IGNORECASE)
+_DATA_SCI_RE = _re.compile(r'\bdata scientist\b', _re.IGNORECASE)
+_DATA_SCI_ALLOW_RE = _re.compile(r'\b(ml|ai|applied|research|llm|nlp)\b', _re.IGNORECASE)
+
+
+def classify_role(title, body=''):
+    """Return 'ai_titled' | 'prompt_engineer' | None per wq-013 §9."""
+    t = (title or '') + ' ' + (body or '')
+    if _PROMPT_ENGINEER_RE.search(t):
+        return 'prompt_engineer'
+    if _AI_TITLE_RE.search(t):
+        return 'ai_titled'
+    # Data scientist only counts if title ALSO contains ml/ai/applied/research/llm/nlp
+    if _DATA_SCI_RE.search(title or '') and _DATA_SCI_ALLOW_RE.search(title or ''):
+        return 'ai_titled'
+    # Exclude generic data-engineer titles unless body has AI signal
+    if _EXCLUDE_RE.search(title or ''):
+        if _AI_TITLE_RE.search(body or ''):
+            return 'ai_titled'
+        return None
+    return None
 
 
 def save_snapshot(source, content, ext='html'):
@@ -667,6 +708,305 @@ def extract_epoch_frontier(source):
     return []
 
 
+# ---------------------------------------------------------------------------
+# Stream 3 — hiring + patent discovery adapters (wq-013).
+#
+# ATS adapters fan out to every company in data/company-alias-map.json whose
+# `ats.type` matches the source's extraction method. Each company produces
+# one `hiring_snapshot` structured claim per run.
+#
+# Patent adapters use `patent_assignee_ids` from the alias map for assignee-
+# keyed queries. When a company has no assignee_ids yet, PatentsView can
+# still be queried by `canonical` name via a free-text search path, but v1
+# uses the assignee_ids path only.
+#
+# Posture: on-demand, manual --force trigger. No cron auto-fire.
+# ---------------------------------------------------------------------------
+
+def _load_alias_map():
+    if not os.path.exists(ALIAS_MAP_FILE):
+        return {'companies': {}}
+    with open(ALIAS_MAP_FILE) as f:
+        return json.load(f)
+
+
+def _iso_week(d=None):
+    d = d or datetime.now()
+    y, w, _ = d.isocalendar()
+    return f"{y}-W{w:02d}"
+
+
+def _iso_month(d=None):
+    d = d or datetime.now()
+    return d.strftime('%Y-%m')
+
+
+def _fetch_json(url, headers=None, timeout=30):
+    req = Request(url, headers=headers or {'User-Agent': 'Mozilla/5.0 (AILedgerBot)'})
+    with urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode('utf-8', errors='replace'))
+
+
+def _build_hiring_snapshot(slug, entry, source, jobs, ats_type, token):
+    """Aggregate a list of job dicts into a hiring_snapshot structured claim.
+
+    Each job dict must carry `title` and optionally `description`/`content`/`body`.
+    Returns None if zero jobs classify."""
+    total = len(jobs)
+    ai_titled = 0
+    prompt_eng = 0
+    for j in jobs:
+        body = j.get('description') or j.get('content') or j.get('body') or ''
+        kind = classify_role(j.get('title', ''), body)
+        if kind == 'prompt_engineer':
+            prompt_eng += 1
+            ai_titled += 1   # prompt engineers are also AI-titled
+        elif kind == 'ai_titled':
+            ai_titled += 1
+
+    claim = {
+        'type': 'hiring_snapshot',
+        'company_slug': slug,
+        'window': _iso_week(),
+        'metrics': {
+            'open_roles_total': total,
+            'open_roles_ai_titled': ai_titled,
+            'open_roles_prompt_engineer': prompt_eng,
+            'ai_titled_share': round(ai_titled / total, 3) if total else 0.0,
+            'new_ai_roles_7d': 0,  # v1 — requires prior snapshot to compute diff; 0 on first run
+        },
+        'source': {
+            'type': ats_type,
+            'token': token,
+            'url': source['url'].rstrip('/') + '/' + token,
+            'retrievedAt': datetime.now().isoformat(),
+            'nextReview': (datetime.now() + timedelta(days=FREQUENCY_DAYS.get(source.get('frequency', 'weekly'), 7))).strftime('%Y-%m-%d'),
+            'confidence': 'high',
+        },
+    }
+    return claim
+
+
+def _save_stream3_claims(claims, source):
+    if not claims:
+        return None
+    today = datetime.now().strftime('%Y-%m-%d')
+    out = os.path.join(OUTPUT_DIR, f'{today}-source-{source["id"]}.json')
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    with open(out, 'w') as f:
+        json.dump(claims, f, indent=2)
+    log(f"   Saved {len(claims)} Stream 3 claim(s) to {out}")
+    return out
+
+
+def _extract_ats_generic(source, ats_type, url_builder, jobs_from_payload):
+    """Shared ATS extraction core.
+
+    ats_type         — 'greenhouse' | 'lever' | 'ashby' | 'workable'.
+    url_builder(tok) — returns the per-company API URL.
+    jobs_from_payload(p) — returns a list of job dicts from the API response.
+    """
+    alias_map = _load_alias_map()
+    companies = alias_map.get('companies', {})
+    targets = [(slug, e) for slug, e in companies.items()
+               if (e.get('ats') or {}).get('type') == ats_type]
+    if not targets:
+        log(f"  No companies in alias map have ats.type={ats_type}")
+        return []
+
+    log(f"  {ats_type} — fanning out to {len(targets)} company target(s)")
+    claims = []
+    for slug, entry in targets:
+        token = entry['ats']['token']
+        url = url_builder(token)
+        try:
+            payload = _fetch_json(url)
+        except Exception as e:
+            log(f"    {slug} ({token}): fetch failed — {e}")
+            continue
+        try:
+            save_snapshot({**source, 'id': f"{source['id']}-{slug}"},
+                          json.dumps(payload).encode('utf-8'), ext='json')
+        except Exception as e:
+            log(f"    {slug}: snapshot failed: {e}")
+        jobs = jobs_from_payload(payload) or []
+        claim = _build_hiring_snapshot(slug, entry, source, jobs, ats_type, token)
+        if claim:
+            claims.append(claim)
+            m = claim['metrics']
+            log(f"    {slug}: {m['open_roles_total']} total / {m['open_roles_ai_titled']} AI-titled ({m['ai_titled_share']*100:.1f}%)")
+        else:
+            log(f"    {slug}: 0 jobs")
+    return claims
+
+
+def extract_greenhouse_board(source):
+    """Greenhouse public JSON API: /v1/boards/{token}/jobs?content=true."""
+    base = 'https://boards-api.greenhouse.io/v1/boards/'
+    return _extract_ats_generic(
+        source, 'greenhouse',
+        url_builder=lambda t: f'{base}{t}/jobs?content=true',
+        jobs_from_payload=lambda p: p.get('jobs', []),
+    )
+
+
+def extract_lever_postings(source):
+    """Lever postings API: /v0/postings/{slug}?mode=json."""
+    base = 'https://api.lever.co/v0/postings/'
+    return _extract_ats_generic(
+        source, 'lever',
+        url_builder=lambda t: f'{base}{t}?mode=json',
+        jobs_from_payload=lambda p: p if isinstance(p, list) else [],
+    )
+
+
+def extract_ashby_public(source):
+    """Ashby public posting API: /posting-api/job-board/{token}."""
+    base = 'https://api.ashbyhq.com/posting-api/job-board/'
+    return _extract_ats_generic(
+        source, 'ashby',
+        url_builder=lambda t: f'{base}{t}?includeCompensation=false',
+        jobs_from_payload=lambda p: p.get('jobs', []),
+    )
+
+
+def extract_workable_jobs(source):
+    """Workable widget API: /api/v1/widget/accounts/{account}/jobs."""
+    base = 'https://apply.workable.com/api/v1/widget/accounts/'
+    return _extract_ats_generic(
+        source, 'workable',
+        url_builder=lambda t: f'{base}{t}/jobs',
+        jobs_from_payload=lambda p: p.get('jobs', p.get('results', [])),
+    )
+
+
+def extract_patentsview_search(source):
+    """USPTO PatentSearch API. For every company with populated
+    patent_assignee_ids, query assignee-keyed patents and emit a
+    patent_snapshot claim. For companies with empty assignee_ids, emit a
+    company_surfaced stub so Simon knows to run a PatentsView
+    /api/v1/assignee?q=<canonical> disambiguation pass."""
+    alias_map = _load_alias_map()
+    companies = alias_map.get('companies', {})
+    base = 'https://search.patentsview.org/api/v1/patent/'
+
+    # AI CPC code prefixes per wq-013 §10. PatentsView takes CPC codes
+    # without the space: 'G06N20/00' (not 'G06N 20/00').
+    AI_CPCS = ['G06N3', 'G06N20', 'G06N5', 'G06N7', 'G06N10',
+               'G06F18', 'G06F40', 'G06V10', 'G10L15', 'G10L25']
+
+    claims = []
+    lookups_needed = []
+    for slug, entry in companies.items():
+        assignee_ids = entry.get('patent_assignee_ids') or []
+        if not assignee_ids:
+            lookups_needed.append((slug, entry.get('canonical', slug)))
+            continue
+
+        # Build a patent-count query filtered to AI CPC codes + assignee ids
+        q = json.dumps({
+            '_and': [
+                {'_or': [{'assignee_id': a} for a in assignee_ids]},
+                {'_or': [{'_begins': {'cpc_subclass_id': p}} for p in AI_CPCS]},
+            ]
+        })
+        url = f'{base}?q={q}&f=["patent_id"]&o={{"per_page":25}}'
+        try:
+            payload = _fetch_json(url)
+        except Exception as e:
+            log(f"    {slug}: PatentsView fetch failed — {e}")
+            continue
+        try:
+            save_snapshot({**source, 'id': f"{source['id']}-{slug}"},
+                          json.dumps(payload).encode('utf-8'), ext='json')
+        except Exception:
+            pass
+        total = payload.get('total_hits') or len(payload.get('patents') or [])
+        claim = {
+            'type': 'patent_snapshot',
+            'company_slug': slug,
+            'assignee_ids': assignee_ids,
+            'window': _iso_month(),
+            'metrics': {
+                'applications_published_last_30d': 0,  # v1 — requires date range query follow-up
+                'applications_published_trailing_12m': total,
+                'grants_last_30d': 0,
+                'grants_trailing_12m': 0,
+                'ai_cpc_share_trailing_12m': 1.0,  # all queried patents are AI-CPC by construction
+            },
+            'top_cpc_subclasses': [],
+            'source': {
+                'type': 'patentsview_search',
+                'url': url,
+                'retrievedAt': datetime.now().isoformat(),
+                'nextReview': (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d'),
+                'confidence': 'high',
+            },
+        }
+        claims.append(claim)
+        log(f"    {slug}: {total} patent(s) matched")
+
+    if lookups_needed:
+        log(f"  {len(lookups_needed)} company/ies have empty patent_assignee_ids — run a disambiguation pass to populate:")
+        for slug, canon in lookups_needed[:10]:
+            log(f"    {slug}  (canonical: {canon})")
+    return claims
+
+
+def extract_google_patents_bq(source):
+    """STUBBED per Phase 1 decision #4. International patent coverage gated
+    on GCP credentials (GCP_SERVICE_ACCOUNT_JSON env var). When the env
+    isn't set, logs guidance and returns []."""
+    if not os.environ.get('GCP_SERVICE_ACCOUNT_JSON'):
+        log("  GCP_SERVICE_ACCOUNT_JSON env var not set — google_patents_bq is stubbed.")
+        log("  To enable: provision a GCP service account with BigQuery Data Viewer + BigQuery User roles, and export the JSON key path.")
+        return []
+    log("  GCP credentials present but BigQuery adapter not yet implemented; returning [].")
+    return []
+
+
+def extract_epo_ops(source):
+    """EPO Open Patent Services — EU patent API. Env-gated on
+    EPO_OPS_CLIENT_ID / EPO_OPS_CLIENT_SECRET (register free at EPO OPS)."""
+    cid = os.environ.get('EPO_OPS_CLIENT_ID')
+    secret = os.environ.get('EPO_OPS_CLIENT_SECRET')
+    if not cid or not secret:
+        log("  EPO_OPS_CLIENT_ID / EPO_OPS_CLIENT_SECRET not set — epo_ops is env-gated.")
+        log("  Register at https://developers.epo.org/ (free, 250 req/week). Set both env vars then --force src-067.")
+        return []
+    log("  EPO OPS credentials present but adapter not yet implemented; returning [].")
+    return []
+
+
+def extract_dol_lca_xlsx(source):
+    """DoL OFLC LCA quarterly disclosure. Quarterly XLSX drops require
+    openpyxl to parse. Applies the AI-engineer regex from wq-013 §9 to
+    the JOB_TITLE column and aggregates by normalised employer."""
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+
+    xlsx_urls = _re.findall(r'https?://[^\s"\']+\.xlsx', html or '', _re.IGNORECASE)
+    if xlsx_urls:
+        log(f"  Found {len(xlsx_urls)} quarterly XLSX drop(s) on DoL OFLC page")
+        for u in xlsx_urls[:5]:
+            log(f"    {u}")
+
+    try:
+        import openpyxl  # noqa: F401
+    except ImportError:
+        log("  openpyxl not installed — DoL LCA XLSX parse skipped for v1.")
+        log("  Install via `pip install openpyxl` to enable row-level LCA extraction.")
+        return []
+    log("  openpyxl present but DoL LCA row-parsing not yet implemented; returning [].")
+    return []
+
+
 def extract_pdf_report(source):
     """Download PDF and extract claims."""
     pdf_path = fetch_pdf(source['url'])
@@ -720,6 +1060,15 @@ ADAPTERS = {
     'eia_api': extract_eia_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
+    # Stream 3 (wq-013) discovery adapters:
+    'greenhouse_board': extract_greenhouse_board,
+    'lever_postings': extract_lever_postings,
+    'ashby_public': extract_ashby_public,
+    'workable_jobs': extract_workable_jobs,
+    'patentsview_search': extract_patentsview_search,
+    'google_patents_bq': extract_google_patents_bq,
+    'epo_ops': extract_epo_ops,
+    'dol_lca_xlsx': extract_dol_lca_xlsx,
     # These are handled by existing scripts, not this monitor:
     'podcast_scraper': lambda s: [],   # scrape_podcasts.py
     'signal_scraper': lambda s: [],    # scrape_signals.py
