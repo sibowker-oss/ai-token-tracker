@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-23",
+  "lastProcessed": "2026-04-24",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -46474,6 +46474,57 @@
       "weight": "indicative",
       "dedup_status": "new",
       "dedup_note": null
+    },
+    {
+      "id": "scan-20260424-a1b",
+      "claim": "BCG AI services work = 25% of 2025 revenue (~$3.6B of $14.4B total); 2025 revenue grew 7% YoY from $13.5B",
+      "value": 3.6,
+      "unit": "$B (AI services revenue)",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-04-23/boston-consulting-group-says-ai-work-brought-25-of-2025-revenue",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-23",
+      "dateAdded": "2026-04-24",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "enterprise-ai", "consulting", "BCG", "services-revenue", "2025"],
+      "notes": "BCG said AI work generated 25% of $14.4B 2025 revenue (~$3.6B). Firm hiring engineers/AI specialists. Context: traditional SaaS/services firms monetizing AI advisory work.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260424-b2c",
+      "claim": "Project Prometheus (Bezos AI lab, physical world AI) closes $10B funding round at $38B valuation (April 23, 2026)",
+      "value": 10,
+      "unit": "$B (funding round)",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-04-23/bezos-s-physical-ai-lab-has-closed-round-at-38-billion-value",
+      "sourceType": "reporting",
+      "sourceAuthor": "Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-23",
+      "dateAdded": "2026-04-24",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "VC", "funding", "bezos", "physical-ai", "manufacturing", "2026"],
+      "notes": "Project Prometheus led by Jeff Bezos + Google vet Vik Bajaj. Focus: AI for manufacturing/physical products. $10B raise, $38B valuation. JPMorgan/BlackRock among investors.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260424-c3d",
+      "claim": "Thinking Machines Lab (Mira Murati) signs single-digit-billion Google Cloud compute deal for GB300 Nvidia GPU infrastructure (April 22, 2026)",
+      "value": null,
+      "unit": "$B (single-digit, undisclosed)",
+      "sourceUrl": "https://techcrunch.com/2026/04/22/exclusive-google-deepens-thinking-machines-lab-ties-with-new-multi-billion-dollar-deal/",
+      "sourceType": "reporting",
+      "sourceAuthor": "TechCrunch",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-22",
+      "dateAdded": "2026-04-24",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "compute-costs", "google", "thinking-machines", "nvidia", "infrastructure", "2026"],
+      "notes": "Thinking Machines Lab (Mira Murati, ex-OpenAI CTO) deepens Google Cloud ties with multibillion-$ deal for GB300 Nvidia chips. Supports RL workloads for Tinker product.",
+      "status": "pending",
+      "replaces": null
     }
   ]
 }
