@@ -1,0 +1,298 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "Canonical slug → aliases / LCA name variants / PatentsView assignee IDs / ATS tokens. Used by Stream 3 adapters (patents + hiring) for entity resolution before a claim is written. Referenced by extract_claims.py during entity-resolution passes per wq-013 §12.2.",
+    "schema": {
+      "aliases": "Human-readable alternate names, alternate-script forms, and common press spellings.",
+      "lca_names": "Exact employer name(s) as they appear in DoL OFLC LCA quarterly disclosures. Case is preserved — DoL data is upper-cased for some employers.",
+      "patent_assignee_ids": "PatentsView disambiguated assignee identifiers. Populate via a PatentsView /api/v1/assignee?q=... lookup; empty on seed.",
+      "ats": "Applicant Tracking System info — {type, token}. type in {greenhouse, lever, ashby, workable}. token is the per-company board slug. Unknown ATS stays null; populated as Simon confirms each board.",
+      "founded": "ISO year. Used by GUIDELINES §4.6 AI-native filter (founded >= 2017 is AI-native; < 2017 is Enterprise Software / Digital Native).",
+      "category": "Per wq-013 §6 validation-set categorisation."
+    },
+    "lastUpdated": "2026-04-23",
+    "seeded_from": "wq-013 brief §6 validation set (31 companies). PatentsView IDs and most ATS tokens left empty for follow-up.",
+    "brief": "briefs/active/2026-04-23-stream-3-hiring-patents.md"
+  },
+  "companies": {
+    "openai": {
+      "canonical": "OpenAI",
+      "aliases": ["OpenAI Inc.", "OpenAI LLC", "OpenAI, Inc.", "OpenAI GP LLC"],
+      "lca_names": ["OPENAI L.L.C.", "OpenAI OpCo, LLC"],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "openai"},
+      "founded": 2015,
+      "category": "frontier_lab"
+    },
+    "anthropic": {
+      "canonical": "Anthropic",
+      "aliases": ["Anthropic PBC", "Anthropic, P.B.C.", "Anthropic Inc"],
+      "lca_names": ["ANTHROPIC PBC", "Anthropic, PBC"],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "anthropic"},
+      "founded": 2021,
+      "category": "frontier_lab"
+    },
+    "google-deepmind": {
+      "canonical": "Google DeepMind",
+      "aliases": ["DeepMind", "Google DeepMind Ltd", "DeepMind Technologies"],
+      "lca_names": ["GOOGLE LLC", "DeepMind Technologies Limited"],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2010,
+      "category": "frontier_lab"
+    },
+    "meta-ai": {
+      "canonical": "Meta AI (FAIR + GenAI)",
+      "aliases": ["Meta", "Meta Platforms, Inc.", "FAIR", "Meta AI Research"],
+      "lca_names": ["META PLATFORMS, INC."],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2013,
+      "category": "frontier_lab"
+    },
+    "xai": {
+      "canonical": "xAI",
+      "aliases": ["X.AI", "x.AI Corp"],
+      "lca_names": ["X.AI CORP", "X.AI LLC"],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2023,
+      "category": "frontier_lab"
+    },
+    "mistral": {
+      "canonical": "Mistral AI",
+      "aliases": ["Mistral", "Mistral AI SAS"],
+      "lca_names": ["MISTRAL AI"],
+      "patent_assignee_ids": [],
+      "ats": {"type": "lever", "token": "mistral"},
+      "founded": 2023,
+      "category": "frontier_lab"
+    },
+    "cohere": {
+      "canonical": "Cohere",
+      "aliases": ["Cohere AI", "Cohere Inc."],
+      "lca_names": ["COHERE INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "cohere"},
+      "founded": 2019,
+      "category": "frontier_lab"
+    },
+    "ai21": {
+      "canonical": "AI21 Labs",
+      "aliases": ["AI21", "AI21 Labs Ltd"],
+      "lca_names": ["AI21 LABS LTD."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "ai21labs"},
+      "founded": 2017,
+      "category": "frontier_lab"
+    },
+    "inflection": {
+      "canonical": "Inflection AI",
+      "aliases": ["Inflection"],
+      "lca_names": ["INFLECTION AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2022,
+      "category": "frontier_lab"
+    },
+    "reka": {
+      "canonical": "Reka AI",
+      "aliases": ["Reka"],
+      "lca_names": ["REKA AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2022,
+      "category": "frontier_lab"
+    },
+    "together": {
+      "canonical": "Together AI",
+      "aliases": ["Together Computer", "Together"],
+      "lca_names": ["TOGETHER AI", "TOGETHER COMPUTER, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "together"},
+      "founded": 2022,
+      "category": "inference_infra"
+    },
+    "groq": {
+      "canonical": "Groq",
+      "aliases": ["Groq Inc"],
+      "lca_names": ["GROQ, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "groq"},
+      "founded": 2016,
+      "category": "inference_infra"
+    },
+    "fireworks": {
+      "canonical": "Fireworks AI",
+      "aliases": ["Fireworks.ai", "Fireworks"],
+      "lca_names": ["FIREWORKS AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "fireworks"},
+      "founded": 2022,
+      "category": "inference_infra"
+    },
+    "lambda": {
+      "canonical": "Lambda Labs",
+      "aliases": ["Lambda", "Lambda Cloud"],
+      "lca_names": ["LAMBDA, INC.", "LAMBDA LABS"],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "lambda"},
+      "founded": 2012,
+      "category": "inference_infra"
+    },
+    "modal": {
+      "canonical": "Modal",
+      "aliases": ["Modal Labs", "Modal.com"],
+      "lca_names": ["MODAL LABS, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "modal"},
+      "founded": 2021,
+      "category": "inference_infra"
+    },
+    "anyscale": {
+      "canonical": "Anyscale",
+      "aliases": ["Anyscale Inc"],
+      "lca_names": ["ANYSCALE, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "anyscale"},
+      "founded": 2019,
+      "category": "inference_infra"
+    },
+    "cursor": {
+      "canonical": "Cursor",
+      "aliases": ["Anysphere", "Cursor AI"],
+      "lca_names": ["ANYSPHERE INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "anysphere"},
+      "founded": 2022,
+      "category": "dev_tools"
+    },
+    "codeium": {
+      "canonical": "Codeium / Windsurf",
+      "aliases": ["Exafunction", "Windsurf", "Codeium"],
+      "lca_names": ["EXAFUNCTION, INC."],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2021,
+      "category": "dev_tools"
+    },
+    "poolside": {
+      "canonical": "Poolside",
+      "aliases": ["Poolside.ai"],
+      "lca_names": ["POOLSIDE AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2023,
+      "category": "dev_tools"
+    },
+    "magic": {
+      "canonical": "Magic",
+      "aliases": ["Magic AI", "Magic.dev"],
+      "lca_names": ["MAGIC AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2022,
+      "category": "dev_tools"
+    },
+    "harvey": {
+      "canonical": "Harvey",
+      "aliases": ["Harvey AI", "Counsel AI Corporation"],
+      "lca_names": ["COUNSEL AI CORPORATION", "HARVEY"],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "harvey"},
+      "founded": 2022,
+      "category": "applied_vertical"
+    },
+    "glean": {
+      "canonical": "Glean",
+      "aliases": ["Glean Technologies"],
+      "lca_names": ["GLEAN TECHNOLOGIES, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "gleanwork"},
+      "founded": 2019,
+      "category": "applied_vertical"
+    },
+    "perplexity": {
+      "canonical": "Perplexity AI",
+      "aliases": ["Perplexity"],
+      "lca_names": ["PERPLEXITY AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "perplexity"},
+      "founded": 2022,
+      "category": "applied_vertical"
+    },
+    "character": {
+      "canonical": "Character.AI",
+      "aliases": ["Character AI", "Character Technologies"],
+      "lca_names": ["CHARACTER TECHNOLOGIES, INC."],
+      "patent_assignee_ids": [],
+      "ats": null,
+      "founded": 2021,
+      "category": "applied_vertical"
+    },
+    "elevenlabs": {
+      "canonical": "ElevenLabs",
+      "aliases": ["Eleven Labs", "ElevenLabs Inc"],
+      "lca_names": ["ELEVEN LABS INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "elevenlabs"},
+      "founded": 2022,
+      "category": "applied_vertical"
+    },
+    "runway": {
+      "canonical": "Runway",
+      "aliases": ["Runway ML", "Runway AI"],
+      "lca_names": ["RUNWAY AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "ashby", "token": "runway"},
+      "founded": 2018,
+      "category": "applied_vertical"
+    },
+    "writer": {
+      "canonical": "Writer",
+      "aliases": ["Writer.com", "Writer AI"],
+      "lca_names": ["WRITER, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "writer"},
+      "founded": 2020,
+      "category": "applied_vertical"
+    },
+    "databricks": {
+      "canonical": "Databricks",
+      "aliases": ["Databricks Inc."],
+      "lca_names": ["DATABRICKS, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "databricks"},
+      "founded": 2013,
+      "category": "data_mlops"
+    },
+    "huggingface": {
+      "canonical": "Hugging Face",
+      "aliases": ["HuggingFace", "Hugging Face, Inc."],
+      "lca_names": ["HUGGING FACE INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "huggingface"},
+      "founded": 2016,
+      "category": "data_mlops"
+    },
+    "scale": {
+      "canonical": "Scale AI",
+      "aliases": ["Scale", "Scale AI Inc."],
+      "lca_names": ["SCALE AI, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "scaleai"},
+      "founded": 2016,
+      "category": "data_mlops"
+    },
+    "wandb": {
+      "canonical": "Weights & Biases",
+      "aliases": ["W&B", "Weights and Biases"],
+      "lca_names": ["WEIGHTS & BIASES, INC."],
+      "patent_assignee_ids": [],
+      "ats": {"type": "greenhouse", "token": "wandb"},
+      "founded": 2018,
+      "category": "data_mlops"
+    }
+  }
+}

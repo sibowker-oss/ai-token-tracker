@@ -76,3 +76,4 @@
 | 2026-04-23 | `sources-registry.json[src-070]` | null | Lever Postings API (pending_first_extraction) | New Stream 3 ATS per wq-013 §3.6. | src-070 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-071]` | null | Ashby Public Job Posting API (pending_first_extraction) | New Stream 3 ATS per wq-013 §3.6. | src-071 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-072]` | null | Workable Jobs widget API (pending_first_extraction) | New Stream 3 ATS per wq-013 §3.6. | src-072 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `data/company-alias-map.json` | (absent) | 31 validation-set entries + 22 known ATS tokens | New alias map for Stream 3 entity resolution per wq-013 §12.2. Seeded from §6 validation set. patent_assignee_ids empty — populate via PatentsView lookup follow-up. 9 ATS tokens unknown; Simon confirms. | n/a | Simon | Simon | _(this commit)_ |
