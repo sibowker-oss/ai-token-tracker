@@ -1188,6 +1188,123 @@
       "last_claims_count": 0,
       "status": "pending_first_extraction",
       "notes": "ByteDance is private (no IR page). Using the corporate newsroom as the canonical press endpoint per wq-015 \u00a72.4. Re-evaluate if ByteDance IPOs."
+    },
+    {
+      "id": "src-060",
+      "url": "https://www.ercot.com/mp/data-products/data-product-details?id=pg7-200-er",
+      "title": "ERCOT \u2014 GIS Report + Large Load Integration",
+      "type": "iso_queue",
+      "author": "",
+      "organization": "ERCOT",
+      "added": "2026-04-23",
+      "tags": [
+        "power",
+        "iso-queue",
+        "datacenter",
+        "us",
+        "primary"
+      ],
+      "extraction_method": "iso_queue_ercot",
+      "frequency": "monthly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Largest US AI-DC concentration \u2014 226 GW requests, ~77% datacenter per wq-012 \u00a71. XLSX monthly. Large Load Integration form carries explicit load-type flag."
+    },
+    {
+      "id": "src-061",
+      "url": "https://www.pjm.com/planning/services-requests/interconnection-queues",
+      "title": "PJM \u2014 New Services Queue",
+      "type": "iso_queue",
+      "author": "",
+      "organization": "PJM Interconnection",
+      "added": "2026-04-23",
+      "tags": [
+        "power",
+        "iso-queue",
+        "datacenter",
+        "us",
+        "primary",
+        "virginia"
+      ],
+      "extraction_method": "iso_queue_pjm",
+      "frequency": "quarterly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "32 GW load forecast, ~30 GW DC (wq-012 \u00a71). Post-2025 co-location rule forces end-customer naming. Pair with Virginia DEQ + SCC docket search when an LLC needs deanonymising."
+    },
+    {
+      "id": "src-062",
+      "url": "https://www.eia.gov/opendata/",
+      "title": "EIA API \u2014 860M / 930 / STEO",
+      "type": "gov_api",
+      "author": "",
+      "organization": "US Energy Information Administration",
+      "added": "2026-04-23",
+      "tags": [
+        "power",
+        "datacenter",
+        "us",
+        "primary",
+        "api",
+        "public-domain"
+      ],
+      "extraction_method": "eia_api",
+      "frequency": "daily",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time."
+    },
+    {
+      "id": "src-063",
+      "url": "https://www.neso.energy/data-portal/transmission-entry-capacity-tec-register",
+      "title": "NESO TEC Register (UK)",
+      "type": "iso_queue",
+      "author": "",
+      "organization": "National Energy System Operator (UK)",
+      "added": "2026-04-23",
+      "tags": [
+        "power",
+        "iso-queue",
+        "uk",
+        "primary",
+        "best-cadence"
+      ],
+      "extraction_method": "neso_tec",
+      "frequency": "weekly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "Best-in-class cadence (twice-weekly Tue/Fri upstream; weekly at Ledger level) per wq-012 \u00a71. CSV, OGL licence. Gate 1 / Gate 2 classifier from Nov 2025."
+    },
+    {
+      "id": "src-064",
+      "url": "https://epoch.ai/data/data-centers",
+      "title": "Epoch AI \u2014 Frontier Data Centers Hub",
+      "type": "curated_dataset",
+      "author": "Epoch AI",
+      "organization": "Epoch AI",
+      "added": "2026-04-23",
+      "tags": [
+        "power",
+        "datacenter",
+        "attribution",
+        "cc-by",
+        "secondary"
+      ],
+      "extraction_method": "epoch_frontier",
+      "frequency": "monthly",
+      "next_check": "2026-05-23",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "notes": "CC-BY. Already does LLC \u2192 AI-lab attribution via permits + satellite imagery (wq-012 \u00a73.2). Seeds data/datacenter-attribution-map.json and also emits power_project claims directly."
     }
   ]
 }

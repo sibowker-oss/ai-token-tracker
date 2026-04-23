@@ -62,3 +62,8 @@
 | 2026-04-23 | `sources-registry.json[src-037].language` | null | `zh` | Tagged Chinese source for translation-aware extraction prompt per wq-015 §4. Next_check bumped from 2026-04-23 to 2026-05-23. | src-037 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-038].language` | null | `zh` | Tagged Chinese source. Next_check bumped from 2026-04-23 to 2026-05-23. | src-038 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-042].language` | null | `zh` | Tagged Chinese source (Cyberspace Administration of China). | src-042 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-060]` | null | ERCOT GIS + Large Load Integration (pending_first_extraction) | New Stream 2 power source per wq-012 §1. US primary ISO queue. | src-060 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-061]` | null | PJM New Services Queue (pending_first_extraction) | New Stream 2 power source per wq-012 §1. Post-2025 co-location rule. | src-061 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-062]` | null | EIA API 860M/930/STEO (pending_first_extraction) | New Stream 2 gov API per wq-012 §1. Free API key. | src-062 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-063]` | null | NESO TEC Register UK (pending_first_extraction) | New Stream 2 UK ISO queue per wq-012 §1. OGL licence, best cadence. | src-063 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-064]` | null | Epoch AI Frontier Data Centers Hub (pending_first_extraction) | New Stream 2 attribution dataset per wq-012 §1. CC-BY. Seeds `data/datacenter-attribution-map.json`. | src-064 | Simon | Simon | _(this commit)_ |

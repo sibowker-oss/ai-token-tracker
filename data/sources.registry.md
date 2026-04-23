@@ -45,6 +45,11 @@
 | tencent-ir | Tencent Holdings — Investor Relations | 1 | https://www.tencent.com/en-us/investors.html | Simon | quarterly | Public | ir_page_extract | 2026-04-23 | Chinese hyperscaler IR per wq-015 §2.4. `src-057`. |
 | baidu-ir | Baidu — Investor Relations | 1 | https://ir.baidu.com/ | Simon | quarterly | Public | ir_page_extract | 2026-04-23 | Chinese hyperscaler IR per wq-015 §2.4. Ernie/Wenxin commentary. `src-058`. |
 | bytedance-press | ByteDance — Corporate Newsroom | 2 | https://www.bytedance.com/en/news | Simon | monthly | Public | web_extract | 2026-04-23 | ByteDance is private (no IR). Press room used as canonical endpoint per wq-015 §2.4. `src-059`. Re-evaluate if ByteDance IPOs. |
+| ercot-gis | ERCOT GIS + Large Load Integration | 1 | https://www.ercot.com/mp/data-products/data-product-details?id=pg7-200-er | Simon | monthly | Public (ERCOT) | iso_queue_ercot | 2026-04-23 | Largest US AI-DC concentration per wq-012 §1. XLSX monthly. `src-060`. |
+| pjm-queue | PJM New Services Queue | 1 | https://www.pjm.com/planning/services-requests/interconnection-queues | Simon | quarterly | Public (PJM) | iso_queue_pjm | 2026-04-23 | 32 GW load forecast, ~30 GW DC. Post-2025 co-location rule forces end-customer naming. Pair with Virginia DEQ + SCC. `src-061`. |
+| eia-api | EIA API (860M / 930 / STEO) | 1 | https://www.eia.gov/opendata/ | Simon | daily | Public domain | eia_api | 2026-04-23 | Requires `EIA_API_KEY` env var. STEO now explicitly attributes DC load. `src-062`. |
+| neso-tec | NESO TEC Register (UK) | 1 | https://www.neso.energy/data-portal/transmission-entry-capacity-tec-register | Simon | weekly | OGL | neso_tec | 2026-04-23 | Twice-weekly upstream (Tue/Fri) — weekly at Ledger level. Gate 1 / Gate 2 classifier from Nov 2025. `src-063`. |
+| epoch-frontier-dc | Epoch AI — Frontier Data Centers Hub | 2 | https://epoch.ai/data/data-centers | Simon | monthly | CC-BY | epoch_frontier | 2026-04-23 | Primary source for LLC → AI-lab attribution map. Seeds `data/datacenter-attribution-map.json`. `src-064`. |
 
 ## Deferred (paid or out-of-scope for wq-015)
 
