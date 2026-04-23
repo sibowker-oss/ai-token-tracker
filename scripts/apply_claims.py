@@ -24,9 +24,19 @@ from datetime import datetime
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_DATA = os.path.join(BASE_DIR, 'site-data.json')
 VAULT_DATA = os.path.join(BASE_DIR, 'vault-data.json')
+COMPANIES_FILE = os.path.join(BASE_DIR, 'companies.json')
 APPROVED_FILE = os.path.join(BASE_DIR, 'data-updates', 'approved-claims.json')
 ARCHIVE_DIR = os.path.join(BASE_DIR, 'data-updates', 'archive')
 LOG_FILE = os.path.join(BASE_DIR, 'data', 'apply_claims.log')
+SOURCES_LOG_MD = os.path.join(BASE_DIR, 'data', 'sources.log.md')
+COMPANY_SURFACED_LOG = os.path.join(BASE_DIR, 'data', 'company-surfaced.log.json')
+
+# Structured claim types handled by this module (wq-014). Dispatch table wired
+# at the bottom of the file, after the per-type apply_* functions are defined.
+STRUCTURED_TYPES = ('power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced')
+
+# Publish-ready confidence casing per GUIDELINES §4.4 / §5.6.
+CONFIDENCE_DISPLAY = {'high': 'High', 'medium': 'Med', 'low': 'Low'}
 
 # COGS ratios for token recalculation
 COGS_RATIOS = {
@@ -158,6 +168,252 @@ def add_to_vault(vault, claim):
     return dp_id
 
 
+# ---------------------------------------------------------------------------
+# Structured claim routing (wq-014)
+#
+# Each apply_<type> function accepts one accepted claim and mutates
+# `site` / `companies` / a log file in place. Returns True on change.
+#
+# Provenance translation: claim payloads carry a nested `source` block
+# (brief wq-014 §2). GUIDELINES §4.2 requires flat sourceUrl/retrievedAt/
+# nextReview/confidence on stored entries. We flatten on write.
+# ---------------------------------------------------------------------------
+
+def _flatten_source(block, include_next_review=True):
+    out = {
+        'sourceUrl': block.get('url', ''),
+        'retrievedAt': block.get('retrievedAt', ''),
+        'confidence': CONFIDENCE_DISPLAY.get((block.get('confidence') or '').lower(),
+                                             block.get('confidence') or ''),
+    }
+    if include_next_review and block.get('nextReview'):
+        out['nextReview'] = block['nextReview']
+    # Preserve source sub-type (ATS identifier, patent fetch method) alongside the flat envelope
+    if block.get('type'):
+        out['sourceType'] = block['type']
+    if block.get('token'):
+        out['sourceToken'] = block['token']
+    return out
+
+
+def _ensure_path(site, *keys):
+    """Navigate into site[key1][key2]..., creating empty dicts along the way.
+    Returns the node at the final key. `_ensure_path(site, 'a', 'b')` returns
+    site['a']['b'], creating both intermediate and terminal keys if absent."""
+    node = site
+    for k in keys:
+        if k not in node or node[k] is None:
+            node[k] = {}
+        node = node[k]
+    return node
+
+
+def _append_sources_log_row(row):
+    """Append one row to data/sources.log.md (Markdown table)."""
+    if not os.path.exists(SOURCES_LOG_MD):
+        return  # File not present; silently skip. Phase 2 of wq-015 wires this file up.
+    with open(SOURCES_LOG_MD, 'a') as f:
+        f.write('| ' + ' | '.join(str(row.get(c, '')) for c in
+                ('date', 'field', 'priorValue', 'newValue', 'reason',
+                 'sourceId', 'operator', 'reviewer', 'commit')) + ' |\n')
+
+
+def apply_power_project(site, claim):
+    """Upsert a power project by (queue_market, queue_id) into site.power.projects."""
+    power = _ensure_path(site, 'power')
+    projects = power.setdefault('projects', [])
+    merge_key = (claim.get('queue_market'), claim.get('queue_id'))
+    if not all(merge_key):
+        log(f"  SKIP power_project: missing queue_market or queue_id")
+        return False
+
+    entry = {
+        'id': f"{merge_key[0].lower()}-{merge_key[1].lower()}",
+        'queue_market': claim['queue_market'],
+        'queue_id': claim['queue_id'],
+        'stage': claim.get('stage'),
+    }
+    for field in ('company_slug', 'attribution_confidence', 'attribution_sources',
+                  'poi', 'county', 'mw_requested', 'mw_approved', 'mw_in_service',
+                  'requested_cod', 'llc_of_record'):
+        if field in claim:
+            entry[field] = claim[field]
+    entry.update(_flatten_source(claim.get('source', {})))
+    entry['label'] = f"{entry['queue_market']} {entry['queue_id']}" + (
+        f" ({entry.get('mw_requested')} MW)" if entry.get('mw_requested') else ''
+    )
+    entry['year'] = int((claim.get('source', {}).get('retrievedAt') or '0000')[:4]) or None
+    entry['unit'] = 'MW'
+
+    existing_idx = next((i for i, p in enumerate(projects)
+                         if (p.get('queue_market'), p.get('queue_id')) == merge_key), None)
+    if existing_idx is None:
+        projects.append(entry)
+        log(f"  ADD power_project: {entry['label']}")
+    else:
+        projects[existing_idx] = entry
+        log(f"  UPDATE power_project: {entry['label']}")
+
+    _append_sources_log_row({
+        'date': datetime.utcnow().strftime('%Y-%m-%d'),
+        'field': f"power.projects[{entry['id']}]",
+        'priorValue': 'null' if existing_idx is None else 'prior',
+        'newValue': entry['label'],
+        'reason': 'apply_claims — accepted power_project claim',
+        'sourceId': claim.get('source', {}).get('url', ''),
+        'operator': 'agent:apply_claims@1.1',
+        'reviewer': 'human via claims.html',
+        'commit': '(pending)',
+    })
+    return True
+
+
+def apply_hiring_snapshot(site, claim):
+    company = claim.get('company_slug')
+    window = claim.get('window')
+    if not company or not window:
+        log("  SKIP hiring_snapshot: missing company_slug or window")
+        return False
+
+    snapshots = _ensure_path(site, 'hiring', 'snapshots')
+    per_company = snapshots.setdefault(company, {})
+    entry = {
+        'company_slug': company,
+        'window': window,
+        'metrics': dict(claim.get('metrics', {})),
+        'label': f"{company} hiring — {window}",
+        'unit': 'count',
+        'year': int(window[:4]) if window[:4].isdigit() else None,
+    }
+    if 'by_function' in claim:
+        entry['by_function'] = dict(claim['by_function'])
+    entry.update(_flatten_source(claim.get('source', {})))
+
+    prior = window in per_company
+    per_company[window] = entry
+    log(f"  {'UPDATE' if prior else 'ADD'} hiring_snapshot: {entry['label']}")
+
+    _append_sources_log_row({
+        'date': datetime.utcnow().strftime('%Y-%m-%d'),
+        'field': f"hiring.snapshots.{company}.{window}",
+        'priorValue': 'prior' if prior else 'null',
+        'newValue': f"{entry['metrics'].get('open_roles_ai_titled', '?')} AI-titled / {entry['metrics'].get('open_roles_total', '?')} total",
+        'reason': 'apply_claims — accepted hiring_snapshot claim',
+        'sourceId': claim.get('source', {}).get('url', ''),
+        'operator': 'agent:apply_claims@1.1',
+        'reviewer': 'human via claims.html',
+        'commit': '(pending)',
+    })
+    return True
+
+
+def apply_patent_snapshot(site, claim):
+    company = claim.get('company_slug')
+    window = claim.get('window')
+    if not company or not window:
+        log("  SKIP patent_snapshot: missing company_slug or window")
+        return False
+
+    snapshots = _ensure_path(site, 'patents', 'snapshots')
+    per_company = snapshots.setdefault(company, {})
+    entry = {
+        'company_slug': company,
+        'assignee_ids': list(claim.get('assignee_ids', [])),
+        'window': window,
+        'metrics': dict(claim.get('metrics', {})),
+        'label': f"{company} patents — {window}",
+        'unit': 'count',
+        'year': int(window[:4]) if window[:4].isdigit() else None,
+    }
+    if 'top_cpc_subclasses' in claim:
+        entry['top_cpc_subclasses'] = [dict(x) for x in claim['top_cpc_subclasses']]
+    entry.update(_flatten_source(claim.get('source', {})))
+
+    prior = window in per_company
+    per_company[window] = entry
+    log(f"  {'UPDATE' if prior else 'ADD'} patent_snapshot: {entry['label']}")
+
+    _append_sources_log_row({
+        'date': datetime.utcnow().strftime('%Y-%m-%d'),
+        'field': f"patents.snapshots.{company}.{window}",
+        'priorValue': 'prior' if prior else 'null',
+        'newValue': f"{entry['metrics'].get('applications_published_trailing_12m', '?')} apps 12m",
+        'reason': 'apply_claims — accepted patent_snapshot claim',
+        'sourceId': claim.get('source', {}).get('url', ''),
+        'operator': 'agent:apply_claims@1.1',
+        'reviewer': 'human via claims.html',
+        'commit': '(pending)',
+    })
+    return True
+
+
+def apply_company_surfaced(claim):
+    """Append a surfaced candidate to companies.json candidates list + dedicated log.
+
+    Does NOT promote to the main companies list — that requires enrichment
+    (outreach_status, providers, volume estimate) and stays a manual step.
+    """
+    name = claim.get('candidate_name')
+    if not name:
+        log("  SKIP company_surfaced: missing candidate_name")
+        return False
+
+    with open(COMPANIES_FILE) as f:
+        companies = json.load(f)
+    candidates = companies.setdefault('candidates', [])
+
+    already = next((c for c in candidates
+                    if c.get('candidate_name', '').lower() == name.lower()), None)
+    if already:
+        log(f"  SKIP company_surfaced: {name} already in candidates list")
+        return False
+
+    entry = {
+        'candidate_name': name,
+        'candidate_aliases': list(claim.get('candidate_aliases', [])),
+        'first_seen_signal': dict(claim.get('first_seen_signal', {})),
+        'density_score_estimate': claim.get('density_score_estimate'),
+        'surfaced_at': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+        'status': 'candidate',
+    }
+    entry.update(_flatten_source(claim.get('source', {}), include_next_review=False))
+    candidates.append(entry)
+
+    with open(COMPANIES_FILE, 'w') as f:
+        json.dump(companies, f, indent=2)
+
+    # Separate append-only log for provenance/audit
+    log_rows = []
+    if os.path.exists(COMPANY_SURFACED_LOG):
+        with open(COMPANY_SURFACED_LOG) as f:
+            log_rows = json.load(f)
+    log_rows.append(entry)
+    with open(COMPANY_SURFACED_LOG, 'w') as f:
+        json.dump(log_rows, f, indent=2)
+
+    log(f"  ADD company_surfaced: {name}")
+    _append_sources_log_row({
+        'date': datetime.utcnow().strftime('%Y-%m-%d'),
+        'field': f"companies.candidates[{name}]",
+        'priorValue': 'null',
+        'newValue': name,
+        'reason': 'apply_claims — accepted company_surfaced claim',
+        'sourceId': claim.get('source', {}).get('url', ''),
+        'operator': 'agent:apply_claims@1.1',
+        'reviewer': 'human via claims.html',
+        'commit': '(pending)',
+    })
+    return True
+
+
+STRUCTURED_APPLIERS = {
+    'power_project': lambda site, vault, claim: apply_power_project(site, claim),
+    'hiring_snapshot': lambda site, vault, claim: apply_hiring_snapshot(site, claim),
+    'patent_snapshot': lambda site, vault, claim: apply_patent_snapshot(site, claim),
+    'company_surfaced': lambda site, vault, claim: apply_company_surfaced(claim),
+}
+
+
 def main():
     # Check both data-updates/ and ~/Downloads/ for approved file
     downloads_file = os.path.expanduser('~/Downloads/approved-claims.json')
@@ -199,6 +455,18 @@ def main():
         if claim.get('major_change') and not claim.get('confirmed'):
             log(f"  BLOCKED {claim.get('entity', '?')}: major change not confirmed")
             skipped += 1
+            continue
+
+        # Structured claim types (wq-014) — dispatch by type before the
+        # legacy entity/metric heuristics.
+        claim_type = claim.get('type')
+        if claim_type in STRUCTURED_TYPES:
+            applier = STRUCTURED_APPLIERS[claim_type]
+            if applier(site, vault, claim):
+                add_to_vault(vault, claim)
+                applied += 1
+            else:
+                skipped += 1
             continue
 
         metric = (claim.get('metric') or '').lower()
