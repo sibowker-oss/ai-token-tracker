@@ -246,7 +246,12 @@ Return ONLY the JSON array."""
         raw = response.content[0].text.strip()
         raw = re.sub(r'^```(?:json)?\s*', '', raw)
         raw = re.sub(r'\s*```$', '', raw)
-        claims = json.loads(raw)
+        # Strip lone UTF-16 surrogates. These leak in from PDFs / Chinese text
+        # when Claude's output carries an unpaired surrogate codepoint
+        # (U+D800..U+DFFF) — Python 3 can't encode those to utf-8 at all, so
+        # replace them before any downstream encode/decode step.
+        raw = re.sub(r'[\ud800-\udfff]', '?', raw)
+        claims = _parse_claims_json(raw, source)
         if isinstance(claims, list):
             # Enrich with source metadata
             for c in claims:
@@ -258,6 +263,79 @@ Return ONLY the JSON array."""
     except Exception as e:
         log(f"  Claude extraction error: {e}")
 
+    return []
+
+
+def _parse_claims_json(raw, source):
+    """Parse Claude's response as a JSON array of claims. Three-stage salvage:
+      1. Parse as-is.
+      2. Truncate to last `}` and close the array (recovers truncated/
+         unterminated responses).
+      3. Object-by-object regex — find every top-level {...} block and parse
+         each individually (recovers responses where a middle object is
+         malformed but others are fine).
+    Returns [] when nothing is usable."""
+    first_err = None
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as e:
+        first_err = e
+
+    # Stage 2: truncate to last `}` and close the array.
+    last_close = raw.rfind('}')
+    if last_close >= 0:
+        salvage = raw[:last_close + 1]
+        if not salvage.rstrip().endswith(']'):
+            salvage = salvage.rstrip().rstrip(',') + ']'
+        try:
+            result = json.loads(salvage)
+            if isinstance(result, list) and result:
+                log(f"  Claude JSON parse recovered (truncate-close) — salvaged {len(result)} claim(s).")
+                return result
+        except json.JSONDecodeError:
+            pass
+
+    # Stage 3: scan for individual {...} blocks using a balanced-brace walker
+    # and parse each. Recovers any well-formed objects from an otherwise
+    # malformed response.
+    objects = []
+    depth = 0
+    start = None
+    in_string = False
+    escape = False
+    for i, ch in enumerate(raw):
+        if escape:
+            escape = False
+            continue
+        if ch == '\\':
+            escape = True
+            continue
+        if ch == '"' and not escape:
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if ch == '{':
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == '}':
+            if depth > 0:
+                depth -= 1
+                if depth == 0 and start is not None:
+                    chunk = raw[start:i + 1]
+                    try:
+                        obj = json.loads(chunk)
+                        if isinstance(obj, dict):
+                            objects.append(obj)
+                    except json.JSONDecodeError:
+                        pass
+                    start = None
+    if objects:
+        log(f"  Claude JSON parse recovered (per-object) — salvaged {len(objects)} claim(s) from broken response.")
+        return objects
+
+    log(f"  Claude JSON parse failed ({first_err}); all salvage stages failed.")
     return []
 
 
@@ -1134,6 +1212,8 @@ def process_source(source, dry_run=False):
 
         # Everything — free-text and structured — appends to the single shared
         # review queue that claims.html loads by default. One file per day.
+        # De-dupe by (source_url, claim_text | type+keys) fingerprint so
+        # re-running a source doesn't stack identical entries.
         path = os.path.join(OUTPUT_DIR, f'{today}-candidates.json')
         existing = []
         if os.path.exists(path):
@@ -1142,10 +1222,36 @@ def process_source(source, dry_run=False):
                     existing = json.load(f)
             except Exception:
                 existing = []
+
+        def _fingerprint(c):
+            # For structured claims: type + identifying fields.
+            # For free-text: source URL + verbatim claim text (first 200 chars).
+            t = c.get('type')
+            src = c.get('source_url') or (c.get('source') or {}).get('url', '')
+            if t == 'power_project':
+                return (t, c.get('queue_market'), c.get('queue_id'))
+            if t in ('hiring_snapshot', 'patent_snapshot'):
+                return (t, c.get('company_slug'), c.get('window'))
+            if t == 'company_surfaced':
+                return (t, c.get('candidate_name'))
+            return (src, (c.get('claim') or '')[:200])
+
+        # Replace prior entries with newer extractions:
+        # - Free-text: by the registered source URL match (re-running the
+        #   State of AI replaces its 217-claim contribution rather than
+        #   stacking to 434).
+        # - Structured: by per-claim fingerprint match against the new
+        #   claims (re-running Greenhouse replaces each company's
+        #   hiring_snapshot for this week rather than stacking duplicates).
+        src_url = source.get('url', '')
+        new_fingerprints = {_fingerprint(c) for c in claims}
+        existing = [c for c in existing
+                    if (c.get('source_url') or (c.get('source') or {}).get('url', '')) != src_url
+                    and _fingerprint(c) not in new_fingerprints]
         existing.extend(claims)
         with open(path, 'w') as f:
             json.dump(existing, f, indent=2)
-        log(f"   Appended {len(claims)} claim(s) to {today}-candidates.json (queue now {len(existing)})")
+        log(f"   Appended {len(claims)} claim(s) to {today}-candidates.json (queue now {len(existing)}, de-duped from re-runs of same source)")
 
     return len(claims)
 
