@@ -49,3 +49,9 @@
 | 2026-04-23 | `sources-registry.json[src-058]` | null | Baidu IR (pending_first_extraction) | New Chinese hyperscaler IR per wq-015 §2.4. | src-058 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `sources-registry.json[src-059]` | null | ByteDance press room (pending_first_extraction) | New; ByteDance private so IR is substituted with corporate newsroom. Per wq-015 §2.4. | src-059 | Simon | Simon | _(this commit)_ |
 | 2026-04-23 | `data/edgar-tickers.json` | (absent) | 16 seed tickers | New ticker-seed file for the broadened SEC EDGAR scan. Per wq-015 §2.2 and Phase 1 decision #9. | n/a | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-002].next_check` | 2026-04-02 | 2026-04-30 | Past-due cleanup (wq-015 §3.2). Extraction handled by `scrape_podcasts.py`, not `monitor_sources.py` — registry freshness is a hygiene bump, not a re-extraction. | src-002 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-003].next_check` | 2026-04-02 | 2026-04-30 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_podcasts.py`. | src-003 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-004].next_check` | 2026-04-02 | 2026-04-30 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_podcasts.py`. | src-004 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-005].next_check` | 2026-04-01 | 2026-04-24 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_signals.py`. | src-005 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-006].next_check` | 2026-04-01 | 2026-04-24 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_signals.py`. | src-006 | Simon | Simon | _(this commit)_ |
+| 2026-04-23 | `sources-registry.json[src-007].next_check` | 2026-04-01 | 2026-04-24 | Past-due cleanup (wq-015 §3.2). Handled by `scrape_signals.py`. | src-007 | Simon | Simon | _(this commit)_ |
