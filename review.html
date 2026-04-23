@@ -218,6 +218,8 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
     <strong style="color:var(--green);">Authoritative</strong> = first-hand, can override existing data.
     <strong style="color:var(--accent);">Corroborating</strong> = cites named primary source, raises confidence.
     <strong style="color:var(--text-dim);">Indicative</strong> = market colour only, never overrides.
+    <button class="bulk-btn" style="margin-left:auto;float:right;border-color:rgba(139,92,246,0.3);color:var(--purple);" onclick="autoClearInbox()">Auto-clear safe items…</button>
+    <div style="clear:both;"></div>
   </div>
 
   <div class="stats-row" id="stats-row"></div>
@@ -1163,6 +1165,119 @@ function exportDecisions() {
   URL.revokeObjectURL(url);
   showToast('Decisions exported');
 }
+
+// ---------------------------------------------------------------------------
+// Auto-clear — same logic as scripts/auto_clear_inbox.py. Keep the two in sync.
+// ---------------------------------------------------------------------------
+function autoClearClassify(item) {
+  if (item.status !== 'pending') return null;
+  const w = item.weight;
+  const c = item.confidence || '';
+  const t = item.type;
+  if (t === 'hiring_snapshot') return { action: 'accepted', rule: 'rule1_hiring_snapshot_structured' };
+  if (c === 'speculative')    return { action: 'declined', rule: 'rule2_speculative' };
+  if (w === 'indicative')     return { action: 'declined', rule: 'rule3_indicative_never_overrides' };
+  if (!w || w === '?')        return { action: 'declined', rule: 'rule4_orphaned_weight' };
+  if (w === 'corroborating' && c === 'estimated')
+                              return { action: 'parked',   rule: 'rule5_triangulation_only' };
+  return null;
+}
+
+async function autoClearInbox() {
+  if (!GitHubAPI.hasToken()) {
+    showToast('GitHub token required — Settings tab');
+    return;
+  }
+  const pending = allItems.filter(i => i.inboxStatus === 'pending');
+  if (pending.length === 0) {
+    showToast('No pending items to clear');
+    return;
+  }
+
+  // Classify against the 5 rules
+  const plan = { accepted: [], declined: [], parked: [], perRule: {} };
+  for (const i of pending) {
+    const c = autoClearClassify({ status: 'pending', weight: i.weight, confidence: i.confidence, type: i.type });
+    if (!c) continue;
+    plan[c.action].push(i.id);
+    plan.perRule[c.rule] = (plan.perRule[c.rule] || 0) + 1;
+  }
+  const total = plan.accepted.length + plan.declined.length + plan.parked.length;
+  if (total === 0) {
+    showToast('No items match the auto-clear rules');
+    return;
+  }
+
+  // Confirmation modal
+  let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="autoclear-modal">';
+  html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:560px;width:90%;">';
+  html += '<h2 style="font-size:16px;margin-bottom:12px;">Auto-clear — preview</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">' + total + ' of ' + pending.length + ' pending items match safe rules. Nothing gets applied to site-data — these just clear from the review queue. Audit trail preserved on every touched item.</p>';
+  html += '<div style="padding:12px 14px;background:var(--bg);border-radius:8px;font-size:12px;line-height:1.8;margin-bottom:14px;">';
+  html += '<strong style="color:var(--green);">Accept (' + plan.accepted.length + ')</strong> — hiring_snapshot items (API-deterministic)<br>';
+  html += '<strong style="color:var(--red);">Decline (' + plan.declined.length + ')</strong> — speculative / indicative / no-weight (triangulation-only or low confidence)<br>';
+  html += '<strong style="color:var(--orange);">Park (' + plan.parked.length + ')</strong> — corroborating+estimated (preserved for later)<br>';
+  html += '</div>';
+  html += '<div style="font-size:10px;color:var(--text-dim);margin-bottom:16px;">';
+  for (const [rule, n] of Object.entries(plan.perRule)) {
+    html += '<div>' + rule + ': ' + n + '</div>';
+  }
+  html += '</div>';
+  html += '<div style="display:flex;gap:10px;justify-content:flex-end;">';
+  html += '<button onclick="document.getElementById(\'autoclear-modal\').remove()" style="padding:8px 20px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;">Cancel</button>';
+  html += '<button onclick="autoClearApply(' + JSON.stringify(JSON.stringify(plan)).slice(1, -1) + ')" style="padding:8px 20px;border-radius:8px;border:none;background:var(--purple);color:white;font-weight:600;cursor:pointer;">Apply ' + total + ' decisions</button>';
+  html += '</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+async function autoClearApply(planJson) {
+  const plan = JSON.parse(planJson);
+  document.getElementById('autoclear-modal')?.remove();
+  showToast('Auto-clear running…');
+
+  try {
+    const inboxFile = await GitHubAPI.readFile('vault-inbox.json');
+    const inbox = JSON.parse(inboxFile.content);
+    const now = new Date().toISOString();
+    const byAction = {
+      accepted: new Set(plan.accepted),
+      declined: new Set(plan.declined),
+      parked: new Set(plan.parked),
+    };
+    const ruleForId = {};
+    for (const [rule, _] of Object.entries(plan.perRule)) { /* no-op */ }
+
+    // We don't carry per-ID rule from the plan (only per-rule counts). Re-classify
+    // each touched item to tag it with the rule that matched. Matches auto_clear_inbox.py.
+    let updated = 0;
+    inbox.items.forEach(item => {
+      if (item.status !== 'pending') return;
+      let action = null;
+      if (byAction.accepted.has(item.id)) action = 'accepted';
+      else if (byAction.declined.has(item.id)) action = 'declined';
+      else if (byAction.parked.has(item.id)) action = 'parked';
+      if (!action) return;
+      const c = autoClearClassify({ status: 'pending', weight: item.weight, confidence: item.confidence, type: item.type });
+      item.status = action;
+      item.decidedAt = now;
+      item.decidedBy = 'auto-clear@1.0-ui';
+      item.decisionReason = c ? c.rule : 'unknown';
+      updated++;
+    });
+    inbox.lastProcessed = now.split('T')[0];
+
+    const msg = 'Auto-clear: ' + plan.accepted.length + ' accepted, ' +
+                plan.declined.length + ' declined, ' + plan.parked.length + ' parked';
+    const result = await GitHubAPI.commitFiles(
+      [{ path: 'vault-inbox.json', content: inbox }], msg
+    );
+    showToast(updated + ' items cleared');
+    setTimeout(() => location.reload(), 1200);
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+}
+
 
 function submitDecisions() {
   const accepted = [];
