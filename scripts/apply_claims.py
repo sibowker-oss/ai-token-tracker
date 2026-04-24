@@ -19,9 +19,12 @@ Safety rules:
 import json
 import os
 import shutil
+import sys
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from coerce_date import coerce_or_keep  # noqa: E402
 SITE_DATA = os.path.join(BASE_DIR, 'site-data.json')
 VAULT_DATA = os.path.join(BASE_DIR, 'vault-data.json')
 COMPANIES_FILE = os.path.join(BASE_DIR, 'companies.json')
@@ -157,7 +160,7 @@ def add_to_vault(vault, claim):
         'sourceType': 'reporting',
         'sourceAuthor': f"{claim.get('source_podcast', '')} ({claim.get('speaker', '')})",
         'confidence': claim.get('confidence', 'estimated'),
-        'dateOfClaim': claim.get('source_date', ''),
+        'dateOfClaim': coerce_or_keep(claim.get('source_date') or '', datetime.now().strftime('%Y-%m-%d')),
         'dateAdded': datetime.now().strftime('%Y-%m-%d'),
         'usedOn': ['dashboard'],
         'notes': f"Auto-applied from claims review. Weight: {claim.get('weight', '?')}. Dedup: {claim.get('dedup_status', '?')}.",

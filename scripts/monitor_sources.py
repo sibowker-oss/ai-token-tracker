@@ -22,6 +22,8 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from coerce_date import coerce_or_keep  # noqa: E402
 REGISTRY_PATH = os.path.join(BASE_DIR, 'sources-registry.json')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 LOG_FILE = os.path.join(BASE_DIR, 'data', 'monitor_sources.log')
@@ -1268,7 +1270,7 @@ def _freetext_claim_to_vault(claim, source, claim_id, today):
         'sourceType': claim.get('source_type', source.get('type', '')),
         'sourceAuthor': claim.get('speaker') or claim.get('source_title') or source.get('organization', ''),
         'confidence': _CONFIDENCE_TO_VAULT.get(conf_in, 'estimated'),
-        'dateOfClaim': claim.get('source_date') or claim.get('time_period', today),
+        'dateOfClaim': coerce_or_keep(claim.get('source_date') or claim.get('time_period') or today, today),
         'dateAdded': today,
         'usedOn': [],
         'tags': [claim.get('category', 'other')],

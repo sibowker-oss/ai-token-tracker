@@ -22,6 +22,8 @@ import sys
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from coerce_date import coerce_or_keep  # noqa: E402
 TRANSCRIPT_DIR = os.path.join(BASE_DIR, 'transcripts')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 PROCESSED_FILE = os.path.join(OUTPUT_DIR, '.processed')
@@ -520,7 +522,7 @@ def main():
             "sourceType": "podcast_discussion",
             "sourceAuthor": claim.get("speaker") or claim.get("source_podcast", ""),
             "confidence": {"high": "verified", "medium": "estimated", "low": "speculative"}.get(claim.get("confidence", "medium"), "estimated"),
-            "dateOfClaim": claim.get("source_date") or claim.get("time_period", today),
+            "dateOfClaim": coerce_or_keep(claim.get("source_date") or claim.get("time_period") or today, today),
             "dateAdded": today,
             "usedOn": [],
             "tags": [claim.get("category", "other")],

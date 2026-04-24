@@ -19,6 +19,8 @@ from datetime import datetime
 from urllib.request import urlopen, Request
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from coerce_date import coerce_or_keep  # noqa: E402
 REGISTRY_PATH = os.path.join(BASE_DIR, "sources-registry.json")
 INBOX_PATH = os.path.join(BASE_DIR, "vault-inbox.json")
 MODEL = "claude-sonnet-4-6"
@@ -278,7 +280,7 @@ def main():
                 "sourceType": "reporting",
                 "sourceAuthor": claim.get("entity", title),
                 "confidence": claim.get("confidence", "estimated"),
-                "dateOfClaim": claim.get("dateOfClaim", today),
+                "dateOfClaim": coerce_or_keep(claim.get("dateOfClaim") or today, today),
                 "dateAdded": today,
                 "usedOn": [],
                 "tags": claim.get("tags", []),
