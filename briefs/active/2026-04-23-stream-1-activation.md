@@ -512,3 +512,150 @@ daily failure emails for zero additional coverage. Memory at
 
 **Session closed. Brief work for wq-015 complete pending Simon's review of the 248-pending queue.**
 
+### 2026-04-24 — Phase 2 activation sweep (23 pending → active)
+
+Posture: the 2026-04-23 reversal set "each source's frequency is the pacer"
+but only touched the 24 sources Simon had explicitly gated. A further 24
+sources registered on 2026-04-23 were still sitting on
+`pending_first_extraction` with future `next_check` values — the cron
+would not have reached them for months. This session activates them.
+
+**Phase 0 audit (requested before any writes):**
+
+- (a) 24 sources on `pending_first_extraction` at session start:
+  src-016, 023, 026–031, 033–036, 039, 040, 042, 043, 044, 046, 047–049,
+  052, 053, 054.
+- (b) The original brief named 38 pending sources; that count had already
+  collapsed after Phase 1/2/3/4 on 2026-04-23. Remaining from the brief's
+  list at session start: all seven hyperscaler IRs (src-026..031) plus
+  four Sacra deep dives (src-033..036), two VC pages (src-039 a16z, src-040
+  Sequoia), CAC China (src-042), Stanford AI Index (src-043), europarl
+  EU AI Act page (src-044), SimilarWeb (src-046), three PyPI SDKs
+  (src-047..049), two Coreweave one-shots (src-052/053), Platformonomics
+  (src-054), plus the OpenAI press-release canonical (src-016) and
+  apoorv03 economics-of-AI report (src-023). Already flipped to active
+  on 2026-04-23: src-025, 032, 037, 038, 041, 045, 055–059, 060–064, 065,
+  067–072 (plus src-001 via forced run).
+- (c) The src-016..022 dedupe was **already done** on 2026-04-23. src-016
+  canonical; src-017..022 carry `status=deprecated_duplicate,
+  supersededBy=src-016, deprecatedOn=2026-04-23`. Untouched this session.
+- (d) The 13 brief-listed past-due sources were **all refreshed** on
+  2026-04-23. Post-sweep past-due count: 0. Confirmed by running the
+  freshness check on every `active` row.
+
+**New housekeeping finding (§3.1 pattern):**
+
+- `src-052` and `src-053` both point at the same nextplatform.com
+  Coreweave article (`coreweave-takes-as-much-financial-engineering-as-it-does-datacenter-design`)
+  — same shape as the OpenAI dedupe. Applied the §3.1 treatment:
+  src-052 canonical; src-053 → `status=deprecated_duplicate`,
+  `supersededBy=src-052`, `deprecatedOn=2026-04-24`, `next_check=9999-12-31`.
+  Row added to `data/sources.registry.md` dedupe table.
+
+**Activation mechanism:**
+
+Followed the "cadence is pacing" posture rather than 23 separate
+`--force` invocations. Set `next_check=2026-04-24` on the 23 remaining
+pending sources (preserving original values in the sources.log rows),
+then ran `python3 scripts/monitor_sources.py` once — the script picked up
+all 23 plus 6 incidental sources already due today (src-005/006/007
+signal-scraper no-ops, src-037/038 weekly Chinese sources, src-062 EIA
+env-gated no-op).
+
+Result: 29 sources processed, 331 claims appended to `vault-inbox.json`.
+Per-source audit snapshots in `data-updates/2026-04-24-source-src-NNN.json`.
+Raw HTML snapshots in `data/snapshots/src-NNN/2026-04-24/`.
+
+**Per-source outcome (23 formerly-pending):**
+
+| id | src | claims | notes |
+|---|---|---|---|
+| src-016 | OpenAI press release | 30 | clean |
+| src-023 | apoorv03 economics of AI | 42 | clean |
+| src-026 | Alphabet IR | 0 | JS-shell landing — 1.5KB HTML; follow-up = ir_page_extract v2 PDF-link follow |
+| src-027 | Microsoft IR | 0 | JS-shell; same follow-up |
+| src-028 | NVIDIA IR | 4 | thin but clean |
+| src-029 | AMD IR | 16 | clean |
+| src-030 | Salesforce IR | 0 | JS-shell; same follow-up |
+| src-031 | ServiceNow IR | 0 | JS-shell; same follow-up |
+| src-033 | Sacra — Anthropic | 53 | clean |
+| src-034 | Sacra — OpenAI | 63 | clean |
+| src-035 | Sacra — Cursor | 33 | clean |
+| src-036 | Sacra — Perplexity | 26 | clean |
+| src-039 | a16z AI essays | 0 | 19KB fetched but page is the essay-index — depth-1 link-follow needed |
+| src-040 | Sequoia articles | 0 | **HTTP 404** — URL rot; follow-up replace with `/article/` path |
+| src-042 | CAC (China) | 0 | Chinese prompt ran but landing page is a directory; deep-link the `algorithmRegistration/...` indices |
+| src-043 | Stanford AI Index | 0 | thin landing; switch to chapter-wise PDF adapter |
+| src-044 | Europarl EU AI Act | 0 | single-article page, no quantitative data — reinforces FLI (src-055) as primary |
+| src-046 | SimilarWeb | 0 | **HTTP 404** — taxonomy removed; Simon to deprecate or replace |
+| src-047 | PyPI Stats — OpenAI SDK | 4 | clean |
+| src-048 | PyPI Stats — Anthropic SDK | 4 | clean |
+| src-049 | PyPI Stats — Google GenAI SDK | 4 | clean |
+| src-052 | Coreweave (nextplatform.com) | 30 | clean; canonical after src-053 dedupe |
+| src-054 | Platformonomics | 4 | thin; post-level fetch as follow-up |
+
+Two Chinese sources also ran incidentally (they were due today):
+- src-037 36Kr: 12 claims (JSON-salvage path kicked in — per-object walker salvaged 12 from a broken response).
+- src-038 Jiemian: 6 claims (same salvage path).
+
+**Registry state at session close:**
+
+- 72 total sources
+- **39 active** (up from 38 — includes the 23 activations + src-052 staying active with claims, offset by src-053 going deprecated_duplicate)
+- 7 deprecated_duplicate (src-017..022 + src-053)
+- 3 deferred (src-024 Seeking Alpha, src-050 Crunchbase, src-051 Dealroom)
+- 1 pending_credentials (src-066 Google Patents BQ)
+- **0 pending_first_extraction** ← success metric from §8 now met at the ran-on-cron layer, not just the plumbing layer
+- 0 past-due active sources
+
+**Skipped (deliberately):**
+
+- `src-066` Google Patents BQ — stays `pending_credentials` (§Phase 1
+  decision #4, needs GCP creds).
+- `src-024` Seeking Alpha, `src-050` Crunchbase, `src-051` Dealroom —
+  stay `deferred` per §2.6 / §9 budget policy.
+- `src-017..022` — already `deprecated_duplicate` from 2026-04-23.
+
+**Follow-ups (new in this session):**
+
+1. `ir_page_extract` v2 — follow PDF links on IR landing pages so
+   Alphabet/Microsoft/Salesforce/ServiceNow produce something. This is
+   the existing TODO in the adapter docstring; it's now gated on 4 real
+   0-claim extractions rather than hypothetical.
+2. Replace `src-040` Sequoia URL — `/articles/` 404s; try `/article/`
+   or the root `/` with filter.
+3. Deprecate or replace `src-046` SimilarWeb — taxonomy page gone.
+4. Deep-link `src-042` CAC — register child paths for
+   `algorithmRegistration/...` indices that carry the actual data.
+5. Switch `src-043` Stanford AI Index to a chapter-wise PDF adapter
+   path (landing page is the nav, not the data).
+6. Post-level fetch for `src-054` Platformonomics (landing is thin).
+7. Depth-1 link-follow for `src-039` a16z essay index.
+
+**Also done this session:**
+
+- `data/sources.log.md` — +24 rows (dedupe + 23 activations).
+- `data/sources.registry.md` — dedupe table gets a row for src-053 →
+  src-052; `Last updated` bumped to 2026-04-24.
+- `data/agents.log.md` — +1 row summarising the sweep
+  (`stream-1-activation-monitor@0.1.0`, outcome=partial, 331 claims / 17
+  producing sources / 6 JS-shell 0s / 2 404s).
+- `changelog.html` — new 24 Apr 2026 Platform entry.
+- `node scripts/build-lint.js` — 0 failures after the edits. The 12
+  pre-existing `dataReferences` warnings are unchanged (not caused by
+  this session).
+
+**Not done / explicit deferrals:**
+
+- The 6 zero-claim sources (Alphabet/MS/Salesforce/ServiceNow IR, a16z,
+  Stanford, Europarl, CAC) and 2 404s (Sequoia, SimilarWeb) have been
+  flipped to `active` (per the user prompt: "Flip status from
+  pending_first_extraction to active") with `last_claims_count=0`. Cron
+  will re-try them at their registered cadence. Follow-up list above
+  says what to fix before the next cycle.
+- No change to `extract_claims.py` — the user's "existing free-text claim
+  shape, not structured" rule held.
+- Did not wire CI — out of scope (wq-004, done).
+
+Phase 2 complete. The next review-queue triage pass is on Simon.
+

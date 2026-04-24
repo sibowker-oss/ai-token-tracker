@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-04-23",
+    "lastUpdated": "2026-04-24",
     "description": "Registry of all data sources \u00e2\u0080\u0094 auto-classified with extraction method and check frequency"
   },
   "sources": [
@@ -105,8 +105,8 @@
       ],
       "extraction_method": "signal_scraper",
       "frequency": "daily",
-      "next_check": "2026-04-24",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-04-25",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
       "status": "active",
       "notes": "Extraction handled by `scrape_signals.py`, not `monitor_sources.py`. Registry freshness refreshed 2026-04-23 per wq-015 \u00a73.2."
@@ -126,8 +126,8 @@
       ],
       "extraction_method": "signal_scraper",
       "frequency": "daily",
-      "next_check": "2026-04-24",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-04-25",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
       "status": "active",
       "notes": "Extraction handled by `scrape_signals.py`, not `monitor_sources.py`. Registry freshness refreshed 2026-04-23 per wq-015 \u00a73.2."
@@ -146,8 +146,8 @@
       ],
       "extraction_method": "signal_scraper",
       "frequency": "daily",
-      "next_check": "2026-04-24",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-04-25",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
       "status": "active",
       "notes": "Extraction handled by `scrape_signals.py`, not `monitor_sources.py`. Registry freshness refreshed 2026-04-23 per wq-015 \u00a73.2."
@@ -321,10 +321,10 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "4764-03-19",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction",
+      "next_check": "2300-02-06",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 30,
+      "status": "active",
       "notes": "Canonical entry for openai.com/index/accelerating-the-next-phase-ai/. src-017..022 superseded by this on 2026-04-23 per wq-015 \u00a73.1."
     },
     {
@@ -446,10 +446,10 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "4764-03-19",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2300-02-06",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 42,
+      "status": "active"
     },
     {
       "id": "src-024",
@@ -509,10 +509,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-22",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-07-23",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-027",
@@ -529,10 +529,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-22",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-07-23",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-028",
@@ -549,10 +549,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-22",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-07-23",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 4,
+      "status": "active"
     },
     {
       "id": "src-029",
@@ -569,10 +569,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-22",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-07-23",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 16,
+      "status": "active"
     },
     {
       "id": "src-030",
@@ -589,10 +589,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-22",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-07-23",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-031",
@@ -609,10 +609,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-21",
-      "last_checked": "2026-04-22",
+      "next_check": "2026-07-23",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-032",
@@ -650,10 +650,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-23",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-05-24",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 53,
+      "status": "active"
     },
     {
       "id": "src-034",
@@ -670,10 +670,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-23",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-05-24",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 63,
+      "status": "active"
     },
     {
       "id": "src-035",
@@ -690,10 +690,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-23",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-05-24",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 33,
+      "status": "active"
     },
     {
       "id": "src-036",
@@ -710,10 +710,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-23",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-05-24",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 26,
+      "status": "active"
     },
     {
       "id": "src-037",
@@ -731,9 +731,9 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "daily",
-      "next_check": "2026-04-24",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
+      "next_check": "2026-04-25",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 12,
       "status": "active",
       "language": "zh",
       "notes": "Chinese source \u2014 extracted via translation-aware prompt per wq-015 \u00a74. source_excerpt_original preserved on emitted claims."
@@ -752,9 +752,9 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "daily",
-      "next_check": "2026-04-24",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
+      "next_check": "2026-04-25",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 6,
       "status": "active",
       "language": "zh",
       "notes": "Chinese source \u2014 extracted via translation-aware prompt per wq-015 \u00a74. source_excerpt_original preserved on emitted claims."
@@ -774,10 +774,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-01",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-040",
@@ -793,10 +793,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-01",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-041",
@@ -835,10 +835,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-23",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-24",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction",
+      "status": "active",
       "language": "zh",
       "notes": "Chinese source \u2014 extracted via translation-aware prompt per wq-015 \u00a74. source_excerpt_original preserved on emitted claims."
     },
@@ -857,10 +857,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "annual",
-      "next_check": "2027-04-23",
-      "last_checked": "2026-04-23",
+      "next_check": "2027-04-24",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-044",
@@ -876,10 +876,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-23",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-24",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-045",
@@ -917,10 +917,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "monthly",
-      "next_check": "2026-05-23",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-24",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "active"
     },
     {
       "id": "src-047",
@@ -937,10 +937,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-05-01",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 4,
+      "status": "active"
     },
     {
       "id": "src-048",
@@ -957,10 +957,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-05-01",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 4,
+      "status": "active"
     },
     {
       "id": "src-049",
@@ -977,10 +977,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2026-05-01",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 4,
+      "status": "active"
     },
     {
       "id": "src-050",
@@ -1035,10 +1035,10 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "4764-03-19",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "next_check": "2300-02-06",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 30,
+      "status": "active"
     },
     {
       "id": "src-053",
@@ -1051,10 +1051,12 @@
       "tags": [],
       "extraction_method": "web_extract",
       "frequency": "one_time",
-      "next_check": "4764-03-19",
-      "last_checked": "2026-04-23",
+      "next_check": "9999-12-31",
+      "last_checked": "2026-04-22",
       "last_claims_count": 0,
-      "status": "pending_first_extraction"
+      "status": "deprecated_duplicate",
+      "supersededBy": "src-052",
+      "deprecatedOn": "2026-04-24"
     },
     {
       "id": "src-054",
@@ -1073,10 +1075,10 @@
       ],
       "extraction_method": "web_extract",
       "frequency": "quarterly",
-      "next_check": "2026-07-22",
-      "last_checked": "2026-04-23",
-      "last_claims_count": 0,
-      "status": "pending_first_extraction",
+      "next_check": "2026-07-23",
+      "last_checked": "2026-04-24",
+      "last_claims_count": 4,
+      "status": "active",
       "notes": "Key cross-check source for Follow the CapEx page. Publishes quarterly big-5 hyperscaler capex breakdowns from 10-K/10-Q filings. Pioneered DC-share-of-total-capex methodology."
     },
     {
@@ -1254,8 +1256,8 @@
       ],
       "extraction_method": "eia_api",
       "frequency": "daily",
-      "next_check": "2026-04-24",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-04-25",
+      "last_checked": "2026-04-24",
       "last_claims_count": 0,
       "status": "active",
       "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time."

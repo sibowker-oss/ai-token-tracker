@@ -3,7 +3,7 @@
 **Purpose:** Authoritative list of every external source used by The AI Ledger. Per GUIDELINES §5.4, every data source that feeds `site-data.json` must be registered here.
 
 **Maintained by:** Simon / Hepburn Advisory
-**Last updated:** 2026-04-23
+**Last updated:** 2026-04-24
 
 ---
 
@@ -72,6 +72,7 @@
 | id | supersededBy | deprecatedOn | reason |
 |---|---|---|---|
 | `src-017` → `src-022` | `src-016` | 2026-04-23 | All six rows pointed at the same OpenAI "Accelerating the Next Phase of AI" URL. Per wq-015 §3.1. |
+| `src-053` | `src-052` | 2026-04-24 | Both rows pointed at the same nextplatform.com Coreweave article (`coreweave-takes-as-much-financial-engineering...`). Same §3.1 pattern as the OpenAI dedupe — winner keeps the lower ID. Caught during wq-015 Phase 2 activation sweep. |
 
 ---
 

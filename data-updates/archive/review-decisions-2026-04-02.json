@@ -1,0 +1,99 @@
+{
+  "submitted_at": "2026-04-02T05:26:35.147Z",
+  "accepted": [
+    {
+      "id": "extract-20260402-src-022-2",
+      "origin": "inbox",
+      "entity": "Openai",
+      "claim": "OpenAI has a post money valuation of $852 billion",
+      "value": 852,
+      "unit": "$B",
+      "value_display": "852 $B",
+      "weight": "corroborating",
+      "confidence": "verified",
+      "dedup_status": "new",
+      "dedup_note": null,
+      "sourceUrl": "/api/add-source",
+      "sourceAuthor": "OpenAI",
+      "sourceType": "reporting",
+      "source_id": "src-022",
+      "tags": [
+        "valuation",
+        "funding"
+      ],
+      "notes": "Auto-extracted from OpenAI Again",
+      "dateOfClaim": "2024-12-31",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "replaces": null,
+      "metricKey": null,
+      "metric": "valuation",
+      "review_decision": "accepted",
+      "review_note": "",
+      "reviewed_at": "2026-04-02T05:26:35.145Z",
+      "major_change": false,
+      "confirmed": false,
+      "impact": null
+    },
+    {
+      "id": "extract-20260402-src-022-8",
+      "origin": "inbox",
+      "entity": "Openai",
+      "claim": "OpenAI is now generating $2B in revenue per month",
+      "value": 2,
+      "unit": "$B monthly",
+      "value_display": "2 $B monthly",
+      "weight": "corroborating",
+      "confidence": "verified",
+      "dedup_status": "new",
+      "dedup_note": null,
+      "sourceUrl": "/api/add-source",
+      "sourceAuthor": "OpenAI",
+      "sourceType": "reporting",
+      "source_id": "src-022",
+      "tags": [
+        "revenue",
+        "monthly"
+      ],
+      "notes": "Auto-extracted from OpenAI Again",
+      "dateOfClaim": "2024-12-31",
+      "dateAdded": "2026-04-02",
+      "usedOn": [],
+      "replaces": null,
+      "metricKey": null,
+      "metric": "revenue",
+      "review_decision": "accepted",
+      "review_note": "",
+      "reviewed_at": "2026-04-02T05:26:35.146Z",
+      "major_change": false,
+      "confirmed": false,
+      "impact": null
+    }
+  ],
+  "declined": [
+    {
+      "id": "extract-20260402-src-021-8",
+      "claim": "OpenAI raised over $3 billion from individual investors",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-022-9",
+      "claim": "OpenAI raised over $3 billion from individual investors through bank channels",
+      "note": ""
+    }
+  ],
+  "parked": [
+    {
+      "id": "extract-20260402-src-021-4",
+      "claim": "OpenAI was the fastest to 100 million users",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-021-11",
+      "claim": "ChatGPT has over 50 million subscribers",
+      "note": ""
+    }
+  ],
+  "new_fields_approved": [],
+  "new_fields_rejected": []
+}

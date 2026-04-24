@@ -117,6 +117,14 @@
 
     <div class="entry" data-scope="platform">
       <div class="entry-meta">
+        <span class="entry-date">24 Apr 2026</span>
+        <span class="entry-scope platform">Platform</span>
+      </div>
+      <div class="entry-text">Stream 1 activation sweep (wq-015 Phase 2). Flipped the remaining 23 registered-but-inert sources from <code>pending_first_extraction</code> to <code>active</code> via a single <code>monitor_sources.py</code> pass — 17 produced 331 claims into the review queue (top: Sacra OpenAI 63, Sacra Anthropic 53, apoorv03 42, Sacra Cursor 33, Coreweave 30, OpenAI press 30, Sacra Perplexity 26, AMD IR 16); 6 returned 0 because the landing pages are JS shells (Alphabet/Microsoft/Salesforce/ServiceNow IR, Stanford AI Index, Europarl AI Act page, CAC, a16z) and 2 fetched 404 (Sequoia URL rot, SimilarWeb taxonomy removed). Also deduped <code>src-053</code> → <code>src-052</code> (both pointed at the same nextplatform.com Coreweave article — same pattern as the src-016..022 OpenAI dedupe). Registry now: 72 sources, 39 active (up from 38), 7 deprecated_duplicate, 3 deferred, 1 pending_credentials; zero sources remain pending_first_extraction.</div>
+    </div>
+
+    <div class="entry" data-scope="platform">
+      <div class="entry-meta">
         <span class="entry-date">23 Apr 2026</span>
         <span class="entry-scope platform">Platform</span>
       </div>
