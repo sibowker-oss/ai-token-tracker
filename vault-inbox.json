@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-24",
+  "lastProcessed": "2026-04-25",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -55903,6 +55903,91 @@
       "weight": "indicative",
       "dedup_status": "new",
       "dedup_note": null
+    },
+    {
+      "id": "scan-20260425-a1b",
+      "claim": "Anthropic hit $30B ARR (April 7, 2026), surpassing OpenAI at ~$25B",
+      "value": 30,
+      "unit": "$B ARR",
+      "sourceUrl": "https://www.saastr.com/anthropic-just-passed-openai-in-revenue-while-spending-4x-less-to-train-their-models/",
+      "sourceType": "reporting",
+      "sourceAuthor": "SaaStr / multiple",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-07",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "anthropic", "revenue", "ARR", "2026"],
+      "notes": "Anthropic crossed $30B ARR on Apr 7, 2026, passing OpenAI. Up from $19B ARR in March, $9B at end-2025. 30x growth in 15 months from $1B in Jan 2025. Enterprise 80% of revenue. Training cost 4x less than OpenAI.",
+      "status": "pending",
+      "replaces": "email-20260328-a1x"
+    },
+    {
+      "id": "scan-20260425-b2c",
+      "claim": "Anthropic enterprise customers spending >$1M/yr doubled from 500 to 1,000 in <2 months (April 2026)",
+      "value": 1000,
+      "unit": "customers >$1M/yr",
+      "sourceUrl": "https://www.saastr.com/anthropic-just-passed-openai-in-revenue-while-spending-4x-less-to-train-their-models/",
+      "sourceType": "reporting",
+      "sourceAuthor": "SaaStr / multiple",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-07",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "anthropic", "enterprise", "customers", "2026"],
+      "notes": "Anthropic's $1M+/yr customers doubled from 500 to 1,000 in <2 months following Series G. Previous count of 500 was as of Oct 2025. Signals strong enterprise demand surge post-Series G.",
+      "status": "pending",
+      "replaces": "email-20260328-h8s"
+    },
+    {
+      "id": "scan-20260425-c3d",
+      "claim": "OpenAI closed $122B funding round at $852B valuation (March 31, 2026)",
+      "value": 852,
+      "unit": "$B valuation",
+      "sourceUrl": "https://www.cnbc.com/2026/03/31/openai-funding-round-ipo.html",
+      "sourceType": "reporting",
+      "sourceAuthor": "CNBC / Bloomberg",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-03-31",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "openai", "funding", "valuation", "2026"],
+      "notes": "OpenAI final close: $122B total at $852B valuation (March 31). Up from March 24 extension at $120B/$840B (dp-065). Investors: Amazon $50B, Nvidia $30B, SoftBank $30B. Also raised $3B from retail via bank channels.",
+      "status": "pending",
+      "replaces": "scan-20260330-b2c"
+    },
+    {
+      "id": "scan-20260425-d4e",
+      "claim": "Qwen (Alibaba) nears 1 billion cumulative downloads; captures >50% of global open-source AI downloads (March 2026)",
+      "value": 942,
+      "unit": "M cumulative downloads",
+      "sourceUrl": "https://www.gizmochina.com/2026/04/10/alibaba-qwen-ai-downloads-1-billion-leads-open-source-ai/",
+      "sourceType": "reporting",
+      "sourceAuthor": "Gizmochina / SCMP",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-10",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "qwen", "alibaba", "open-models", "china", "market-share", "downloads", "2026"],
+      "notes": "Qwen: 942M cumulative downloads by March 2026 (up from 400M in earlier scan dp-081). 153.6M downloads in Feb 2026 alone — more than double next 8 players combined. Captures >50% of global open-source downloads. Derivative share 69% vs Llama 11%.",
+      "status": "pending",
+      "replaces": "scan-20260401-d4e"
+    },
+    {
+      "id": "scan-20260425-e5f",
+      "claim": "OpenRouter April 2026: Xiaomi MiMo-V2-Pro #1 with 4.65T weekly tokens; Chinese models hold top 6 spots by token volume",
+      "value": 4.65,
+      "unit": "T tokens/week (Xiaomi #1)",
+      "sourceUrl": "https://www.digitalapplied.com/blog/openrouter-rankings-april-2026-top-ai-models-data",
+      "sourceType": "reporting",
+      "sourceAuthor": "Digital Applied / OpenRouter",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-20",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "tags": ["auto-scan", "needs-review", "openrouter", "token-volume", "market-share", "china", "xiaomi", "qwen", "2026"],
+      "notes": "April 2026 OpenRouter snapshot: Xiaomi MiMo-V2-Pro #1 (4.65T/wk, debuted as Hunter Alpha). Qwen family #2 (13.9% share, 2.77T/wk). Chinese models now hold top 6 spots. Total OpenRouter volume ~20T tokens/week (up from 7T/week in March). >45% Chinese model traffic share.",
+      "status": "pending",
+      "replaces": "scan-20260401-g7h"
     }
   ]
 }
