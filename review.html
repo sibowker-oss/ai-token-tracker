@@ -262,6 +262,7 @@ let decisions = {};      // keyed by item.id
 let activeSource = 'all';
 let activeFilter = 'pending';
 let activeConfidence = 'all';
+let activeBatch = null; // null | 'first' — quick-filter chip per wq-018 §4
 let siteData = null;
 
 // ----- Data loading -----
@@ -845,7 +846,29 @@ function updateBulkBar() {
   }
 }
 
+// First-batch predicate (wq-018 §4): warm-up queue of high-confidence items.
+// PyPI Stats (deterministic), Jiemian (translated), Sacra Cursor verified-only.
+function isFirstBatchItem(item) {
+  if (item.inboxStatus !== 'pending') return false;
+  const a = item.sourceAuthor || '';
+  if (a.includes('PyPI')) return true;
+  if (a.includes('Jiemian')) return true;
+  if (a.includes('Cursor') && item.confidence === 'verified') return true;
+  return false;
+}
+
+function firstBatchProducer(item) {
+  const a = item.sourceAuthor || '';
+  if (a.includes('PyPI')) return 'PyPI';
+  if (a.includes('Jiemian')) return 'Jiemian';
+  if (a.includes('Cursor')) return 'Cursor';
+  return 'other';
+}
+
 function getVisibleItems() {
+  if (activeBatch === 'first') {
+    return allItems.filter(isFirstBatchItem);
+  }
   let filtered = allItems;
   if (activeSource !== 'all') {
     if (activeSource === 'unsourced') {
@@ -907,6 +930,37 @@ function renderFilters() {
   const declinedCount = allItems.filter(i => i.inboxStatus === 'declined').length;
   const parkedCount = allItems.filter(i => i.inboxStatus === 'parked').length;
 
+  // First-batch progress: count remaining-pending vs reviewed for the same predicate.
+  // "reviewed" = any non-pending status on items that match the batch's producer set
+  // (sourceAuthor contains PyPI / Jiemian / Cursor — for Cursor, only verified counts as
+  // a reviewed batch member).
+  const isBatchProducer = (i) => {
+    const a = i.sourceAuthor || '';
+    if (a.includes('PyPI') || a.includes('Jiemian')) return true;
+    if (a.includes('Cursor') && i.confidence === 'verified') return true;
+    return false;
+  };
+  const batchPending = allItems.filter(i => i.inboxStatus === 'pending' && isBatchProducer(i));
+  const batchReviewed = allItems.filter(i => i.inboxStatus !== 'pending' && isBatchProducer(i)).length;
+  const perProducer = { PyPI: 0, Jiemian: 0, Cursor: 0 };
+  batchPending.forEach(i => { perProducer[firstBatchProducer(i)] = (perProducer[firstBatchProducer(i)] || 0) + 1; });
+
+  let html = '';
+
+  // First-batch chip (wq-018 §4) — sits left, distinct styling.
+  html += '<button class="filter-btn' + (activeBatch === 'first' ? ' active' : '') +
+          '" onclick="setBatch(\'first\')" style="border-color:rgba(139,92,246,0.4);' +
+          (activeBatch === 'first' ? 'background:var(--purple);' : 'color:var(--purple);') +
+          '" title="High-confidence warm-up: PyPI + Jiemian + Sacra Cursor verified">' +
+          'First batch (' + batchPending.length + ')' +
+          '</button>';
+  html += '<span style="font-size:10px;color:var(--text-dim);align-self:center;margin-right:4px;">' +
+          'PyPI ' + perProducer.PyPI + ' · Jiemian ' + perProducer.Jiemian +
+          ' · Cursor verified ' + perProducer.Cursor +
+          (batchReviewed > 0 ? ' · ' + batchReviewed + ' reviewed' : '') +
+          '</span>';
+  html += '<span style="border-left:1px solid var(--card-border);height:16px;margin:0 4px;"></span>';
+
   const filters = [
     { key: 'pending', label: 'Pending (' + pendingCount + ')' },
     { key: 'parked', label: 'Parked (' + parkedCount + ')' },
@@ -915,9 +969,8 @@ function renderFilters() {
     { key: 'all', label: 'All (' + allItems.length + ')' },
   ];
 
-  let html = '';
   filters.forEach(f => {
-    html += '<button class="filter-btn' + (activeFilter === f.key ? ' active' : '') + '" onclick="setFilter(\'' + f.key + '\')">' + f.label + '</button>';
+    html += '<button class="filter-btn' + (activeFilter === f.key && !activeBatch ? ' active' : '') + '" onclick="setFilter(\'' + f.key + '\')">' + f.label + '</button>';
   });
 
   // Confidence sub-filters
@@ -928,50 +981,62 @@ function renderFilters() {
     { key: 'estimated', label: 'Estimated' },
   ];
   confFilters.forEach(f => {
-    html += '<button class="filter-btn' + (activeConfidence === f.key ? ' active' : '') + '" onclick="setConfidence(\'' + f.key + '\')" style="' + (f.key === 'verified' ? 'border-color:rgba(16,185,129,0.3);' : f.key === 'estimated' ? 'border-color:rgba(245,158,11,0.3);' : '') + '">' + f.label + '</button>';
+    html += '<button class="filter-btn' + (activeConfidence === f.key && !activeBatch ? ' active' : '') + '" onclick="setConfidence(\'' + f.key + '\')" style="' + (f.key === 'verified' ? 'border-color:rgba(16,185,129,0.3);' : f.key === 'estimated' ? 'border-color:rgba(245,158,11,0.3);' : '') + '">' + f.label + '</button>';
   });
 
   document.getElementById('filters').innerHTML = html;
 }
 
+function setBatch(b) {
+  activeBatch = (activeBatch === b) ? null : b;
+  renderFilters();
+  renderClaims();
+}
+
 function setConfidence(c) {
   activeConfidence = c;
+  activeBatch = null;
   renderFilters();
   renderClaims();
 }
 
 function setSource(s) {
   activeSource = s;
-  renderSourceTabs();
+  activeBatch = null;
+  renderFilters();
   renderClaims();
 }
 
 function setFilter(f) {
   activeFilter = f;
+  activeBatch = null;
   renderFilters();
   renderClaims();
 }
 
 function renderClaims() {
-  let filtered = allItems;
+  let filtered;
 
-  // Source filter
-  if (activeSource !== 'all') {
-    if (activeSource === 'unsourced') {
-      filtered = filtered.filter(i => !i.source_id);
-    } else {
-      filtered = filtered.filter(i => i.source_id === activeSource);
+  if (activeBatch === 'first') {
+    filtered = allItems.filter(isFirstBatchItem);
+  } else {
+    filtered = allItems;
+    // Source filter
+    if (activeSource !== 'all') {
+      if (activeSource === 'unsourced') {
+        filtered = filtered.filter(i => !i.source_id);
+      } else {
+        filtered = filtered.filter(i => i.source_id === activeSource);
+      }
     }
-  }
-
-  // Status filter (from vault-inbox status)
-  if (['pending', 'accepted', 'declined', 'parked'].includes(activeFilter)) {
-    filtered = filtered.filter(i => i.inboxStatus === activeFilter);
-  }
-
-  // Confidence filter
-  if (activeConfidence !== 'all') {
-    filtered = filtered.filter(i => i.confidence === activeConfidence);
+    // Status filter (from vault-inbox status)
+    if (['pending', 'accepted', 'declined', 'parked'].includes(activeFilter)) {
+      filtered = filtered.filter(i => i.inboxStatus === activeFilter);
+    }
+    // Confidence filter
+    if (activeConfidence !== 'all') {
+      filtered = filtered.filter(i => i.confidence === activeConfidence);
+    }
   }
 
   if (filtered.length === 0) {
@@ -979,12 +1044,22 @@ function renderClaims() {
     return;
   }
 
-  // Sort: newest first (by dateAdded, then dateOfClaim)
-  filtered.sort((a, b) => {
-    const da = a.dateAdded || a.dateOfClaim || '';
-    const db = b.dateAdded || b.dateOfClaim || '';
-    return db.localeCompare(da);
-  });
+  if (activeBatch === 'first') {
+    // Brief order: PyPI → Jiemian → Cursor verified.
+    const rank = { PyPI: 0, Jiemian: 1, Cursor: 2, other: 3 };
+    filtered.sort((a, b) => {
+      const r = rank[firstBatchProducer(a)] - rank[firstBatchProducer(b)];
+      if (r !== 0) return r;
+      return (a.id || '').localeCompare(b.id || '');
+    });
+  } else {
+    // Sort: newest first (by dateAdded, then dateOfClaim)
+    filtered.sort((a, b) => {
+      const da = a.dateAdded || a.dateOfClaim || '';
+      const db = b.dateAdded || b.dateOfClaim || '';
+      return db.localeCompare(da);
+    });
+  }
 
   let html = '';
   filtered.forEach(item => {
