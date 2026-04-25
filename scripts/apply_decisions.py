@@ -40,12 +40,41 @@ ARCHIVE_DIR = os.path.join(SITE_DIR, "data-updates", "archive")
 LOG_FILE = os.path.join(ROOT_DIR, "data", "apply_decisions.log")
 
 def load_json(path):
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 def save_json(path, data):
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
+
+
+# Single-pass mojibake markers: U+00E2 (the latin-1 reading of UTF-8 byte 0xE2,
+# the leading byte of the U+2014 / U+2018 / U+2019 / U+201C / U+201D / U+2026
+# punctuation block) plus U+0080 (the Latin-1 reading of UTF-8 byte 0x80, which
+# follows 0xE2 in those sequences). Both must be present for safe_str to fire.
+_MOJI_HIGH = "â"  # â — leading byte of mis-decoded U+201X punctuation
+_MOJI_CTRL = ""  # invisible control — second byte of those sequences
+
+
+def safe_str(s):
+    """Defensive cleanup of single-pass mojibake on string fields.
+
+    Catches the canonical U+00E2 + U+0080 pairing — UTF-8 punctuation bytes
+    (E2 80 94 em-dash, E2 80 99 curly apostrophe, E2 80 93 en-dash, ...)
+    decoded as Latin-1 — and undoes one pass of latin-1 -> utf-8. No-op for
+    already-clean strings. Multi-pass / deep mojibake is left intact; the
+    Phase 2 cleanup script iterates for those.
+
+    See briefs/active/2026-04-26-mojibake-roundtrip-fix.md §4.2.
+    """
+    if not isinstance(s, str):
+        return s
+    if _MOJI_HIGH not in s or _MOJI_CTRL not in s:
+        return s
+    try:
+        return s.encode("latin-1").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return s
 
 def log(msg):
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -131,21 +160,23 @@ def check_provenance_guard(entity, prov_key, new_weight):
 def apply_accepted(claim, vault_data, entities, schema):
     """Process an accepted claim: vault-data + entities + provenance."""
 
-    # 1. Add to vault-data.json
+    # 1. Add to vault-data.json — safe_str on every text field guards against
+    #    mojibake leaking through from upstream (vault-inbox or decisions
+    #    payload). See briefs/active/2026-04-26-mojibake-roundtrip-fix.md.
     dp_id = "dp-" + str(len(vault_data["dataPoints"]) + 1).zfill(3)
     data_point = {
         "id": dp_id,
-        "claim": claim.get("claim", ""),
+        "claim": safe_str(claim.get("claim", "")),
         "value": claim.get("value"),
         "unit": claim.get("unit", ""),
         "sourceUrl": claim.get("sourceUrl", ""),
         "sourceType": claim.get("sourceType", ""),
-        "sourceAuthor": claim.get("sourceAuthor", ""),
+        "sourceAuthor": safe_str(claim.get("sourceAuthor", "")),
         "confidence": claim.get("confidence", "estimated"),
         "dateOfClaim": claim.get("dateOfClaim", ""),
         "dateAdded": datetime.now().strftime("%Y-%m-%d"),
         "usedOn": claim.get("usedOn", []),
-        "notes": claim.get("notes", ""),
+        "notes": safe_str(claim.get("notes", "")),
         "tags": claim.get("tags", []),
         "metricKey": claim.get("metricKey", ""),
         "status": "accepted",
@@ -216,12 +247,12 @@ def apply_accepted(claim, vault_data, entities, schema):
             prov = entity["provenance"][prov_key]
             prov["claims"].append({
                 "id": dp_id,
-                "claim": claim["claim"][:120] + (f" [annualised: {value}]" if annualised else ""),
+                "claim": safe_str(claim["claim"][:120]) + (f" [annualised: {value}]" if annualised else ""),
                 "value": value,
                 "unit": "$B" if annualised else claim.get("unit", ""),
                 "weight": infer_weight(claim),
                 "confidence": claim.get("confidence", "estimated"),
-                "source": claim.get("sourceAuthor", ""),
+                "source": safe_str(claim.get("sourceAuthor", "")),
                 "source_url": claim.get("sourceUrl", ""),
                 "date": claim.get("dateOfClaim", ""),
                 "origin": "accepted",
