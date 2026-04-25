@@ -96,6 +96,8 @@
   .action-btn.act-decline:hover, .action-btn.act-decline.active { background:rgba(239,68,68,0.15); color:var(--red); border-color:var(--red); }
   .action-btn.act-park { border-color:rgba(245,158,11,0.3); }
   .action-btn.act-park:hover, .action-btn.act-park.active { background:rgba(245,158,11,0.15); color:var(--orange); border-color:var(--orange); }
+  .action-btn.act-rawpool { border-color:rgba(6,182,212,0.3); }
+  .action-btn.act-rawpool:hover, .action-btn.act-rawpool.active { background:rgba(6,182,212,0.15); color:var(--cyan); border-color:var(--cyan); }
   .claim-note { flex:1; min-width:150px; padding:5px 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:6px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
   .claim-note:focus { border-color:var(--accent); }
   .claim-note::placeholder { color:#475569; }
@@ -167,6 +169,8 @@
   .bulk-btn.bulk-decline:hover { background:rgba(239,68,68,0.15); border-color:var(--red); }
   .bulk-btn.bulk-park { border-color:rgba(245,158,11,0.3); color:var(--orange); }
   .bulk-btn.bulk-park:hover { background:rgba(245,158,11,0.15); border-color:var(--orange); }
+  .bulk-btn.bulk-rawpool { border-color:rgba(6,182,212,0.3); color:var(--cyan); }
+  .bulk-btn.bulk-rawpool:hover { background:rgba(6,182,212,0.15); border-color:var(--cyan); }
   .bulk-btn.bulk-select { border-color:rgba(59,130,246,0.3); color:var(--accent); }
   .bulk-btn.bulk-select:hover { background:rgba(59,130,246,0.1); border-color:var(--accent); }
   .bulk-btn.bulk-clear { color:var(--text-dim); }
@@ -233,6 +237,7 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
     <button class="bulk-btn bulk-accept" onclick="bulkDecision('accepted')">Accept all</button>
     <button class="bulk-btn bulk-decline" onclick="bulkDecision('declined')">Decline all</button>
     <button class="bulk-btn bulk-park" onclick="bulkDecision('parked')">Park all</button>
+    <button class="bulk-btn bulk-rawpool" onclick="bulkDecision('raw_pool')">Raw pool all</button>
   </div>
   <div id="claims-list"></div>
 </div>
@@ -767,7 +772,33 @@ async function deleteClaim(id) {
   }
 }
 
+// wq-023 §4.2 — per-session stickiness for the Accept-on-no-metric prompt.
+// Possible values: null (ask), 'route' (silently apply raw_pool),
+// 'override' (silently apply accepted anyway).
+let unmetricAutoRoute = null;
+
+function claimHasMetric(item) {
+  if (!item) return true; // unknown item — don't gate
+  const mk = item.metricKey;
+  return !!mk && mk !== 'unknown';
+}
+
 function setDecision(id, decision) {
+  // Auto-route Accept-with-no-metric (wq-023 §4.2). Reserved for
+  // single-item clicks; bulkDecision applies decisions verbatim.
+  if (decision === 'accepted') {
+    const item = allItems.find(i => i.id === id);
+    if (item && !claimHasMetric(item)) {
+      if (unmetricAutoRoute === 'route') {
+        decision = 'raw_pool';
+      } else if (unmetricAutoRoute !== 'override') {
+        showUnmetricRouteModal(id, item);
+        return;
+      }
+      // 'override' falls through and accepts as requested.
+    }
+  }
+
   if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
   if (decisions[id].decision === decision) {
     decisions[id].decision = '';
@@ -779,6 +810,40 @@ function setDecision(id, decision) {
   renderStats();
   renderClaims();
   updateSubmitBar();
+}
+
+function showUnmetricRouteModal(id, item) {
+  // Already open? Bail (defensive against double-fire).
+  if (document.getElementById('unmetric-modal')) return;
+
+  const choose = (route) => {
+    document.getElementById('unmetric-modal')?.remove();
+    if (route === 'override') {
+      if (!confirm('Override: accept this claim even though it has no mapped metric? It will land as status=accepted but won\'t move any number on the site.')) {
+        return; // user cancelled the confirm — don't set sticky preference
+      }
+      unmetricAutoRoute = 'override';
+      setDecision(id, 'accepted');
+    } else {
+      unmetricAutoRoute = 'route';
+      setDecision(id, 'raw_pool');
+    }
+  };
+
+  const claimText = (item.claim || '').substring(0, 220);
+  let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="unmetric-modal">';
+  html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:540px;width:90%;">';
+  html += '<h2 style="font-size:16px;margin-bottom:8px;color:var(--cyan);">No mapped metric on this claim</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.5;">Accepts are reserved for claims that update a live data point on the site. This claim is trustworthy but doesn\'t map to any metric, so accepting it would file it without surfacing it anywhere.</p>';
+  html += '<div style="font-size:11px;color:var(--text-dim);font-style:italic;margin-bottom:14px;padding:10px;background:var(--bg);border-radius:6px;">"' + esc(claimText) + (item.claim && item.claim.length > 220 ? '…' : '') + '"</div>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">Move to <strong style="color:var(--cyan);">Raw pool</strong> instead? Your choice sticks for the rest of this session.</p>';
+  html += '<div style="display:flex;gap:8px;justify-content:flex-end;">';
+  html += '<button id="unmetric-override" style="padding:8px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Override and Accept anyway</button>';
+  html += '<button id="unmetric-route" style="padding:8px 20px;border-radius:8px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer;">Move to Raw pool</button>';
+  html += '</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.getElementById('unmetric-route').addEventListener('click', () => choose('route'));
+  document.getElementById('unmetric-override').addEventListener('click', () => choose('override'));
 }
 
 function setNote(id, note) {
@@ -877,7 +942,7 @@ function getVisibleItems() {
       filtered = filtered.filter(i => i.source_id === activeSource);
     }
   }
-  if (['pending', 'accepted', 'declined', 'parked'].includes(activeFilter)) {
+  if (['pending', 'accepted', 'declined', 'parked', 'raw_pool'].includes(activeFilter)) {
     filtered = filtered.filter(i => i.inboxStatus === activeFilter);
   }
   if (activeConfidence !== 'all') {
@@ -916,11 +981,13 @@ function renderStats() {
   const accepted = allItems.filter(i => i.inboxStatus === 'accepted').length;
   const declined = allItems.filter(i => i.inboxStatus === 'declined').length;
   const parked = allItems.filter(i => i.inboxStatus === 'parked').length;
+  const rawPool = allItems.filter(i => i.inboxStatus === 'raw_pool').length;
 
   let html = '<span class="stat-pill">Pending: <strong>' + pending + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(16,185,129,0.3);">Accepted: <strong style="color:var(--green);">' + accepted + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(239,68,68,0.3);">Declined: <strong style="color:var(--red);">' + declined + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(245,158,11,0.3);">Parked: <strong style="color:var(--orange);">' + parked + '</strong></span>';
+  html += '<span class="stat-pill" style="border-color:rgba(6,182,212,0.3);">Raw pool: <strong style="color:var(--cyan);">' + rawPool + '</strong></span>';
   document.getElementById('stats-row').innerHTML = html;
 }
 
@@ -929,6 +996,7 @@ function renderFilters() {
   const acceptedCount = allItems.filter(i => i.inboxStatus === 'accepted').length;
   const declinedCount = allItems.filter(i => i.inboxStatus === 'declined').length;
   const parkedCount = allItems.filter(i => i.inboxStatus === 'parked').length;
+  const rawPoolCount = allItems.filter(i => i.inboxStatus === 'raw_pool').length;
 
   // First-batch progress: count remaining-pending vs reviewed for the same predicate.
   // "reviewed" = any non-pending status on items that match the batch's producer set
@@ -966,6 +1034,7 @@ function renderFilters() {
     { key: 'parked', label: 'Parked (' + parkedCount + ')' },
     { key: 'accepted', label: 'Accepted (' + acceptedCount + ')' },
     { key: 'declined', label: 'Declined (' + declinedCount + ')' },
+    { key: 'raw_pool', label: 'Raw pool (' + rawPoolCount + ')' },
     { key: 'all', label: 'All (' + allItems.length + ')' },
   ];
 
@@ -1030,7 +1099,7 @@ function renderClaims() {
       }
     }
     // Status filter (from vault-inbox status)
-    if (['pending', 'accepted', 'declined', 'parked'].includes(activeFilter)) {
+    if (['pending', 'accepted', 'declined', 'parked', 'raw_pool'].includes(activeFilter)) {
       filtered = filtered.filter(i => i.inboxStatus === activeFilter);
     }
     // Confidence filter
@@ -1138,6 +1207,7 @@ function renderClaims() {
     html += '<button class="action-btn act-accept' + (d.decision === 'accepted' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'accepted\')">Accept</button>';
     html += '<button class="action-btn act-decline' + (d.decision === 'declined' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'declined\')">Decline</button>';
     html += '<button class="action-btn act-park' + (d.decision === 'parked' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'parked\')">Park</button>';
+    html += '<button class="action-btn act-rawpool' + (d.decision === 'raw_pool' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'raw_pool\')" title="Trustworthy but no mapped metric — file in raw pool">Raw pool</button>';
     html += '<button class="action-btn" style="margin-left:auto;color:var(--red);border-color:rgba(239,68,68,0.3);font-size:10px;opacity:0.6;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" onclick="event.stopPropagation();deleteClaim(\'' + item.id + '\')">Delete</button>';
     html += '<input class="claim-note" placeholder="Add a note..." value="' + esc(d.note || '') + '" oninput="setNote(\'' + item.id + '\', this.value)">';
     html += '</div>';
@@ -1158,12 +1228,13 @@ function renderClaims() {
 }
 
 function updateSubmitBar() {
-  let accepted = 0, declined = 0, parked = 0, pending = 0;
+  let accepted = 0, declined = 0, parked = 0, rawPool = 0, pending = 0;
   allItems.forEach(i => {
     const d = decisions[i.id]?.decision;
     if (d === 'accepted') accepted++;
     else if (d === 'declined') declined++;
     else if (d === 'parked') parked++;
+    else if (d === 'raw_pool') rawPool++;
     else pending++;
   });
 
@@ -1171,9 +1242,11 @@ function updateSubmitBar() {
     '<span class="s-green">Accept: <strong>' + accepted + '</strong></span> &nbsp; ' +
     '<span class="s-red">Decline: <strong>' + declined + '</strong></span> &nbsp; ' +
     '<span class="s-orange">Park: <strong>' + parked + '</strong></span> &nbsp; ' +
+    '<span style="color:var(--cyan);">Raw pool: <strong>' + rawPool + '</strong></span> &nbsp; ' +
     'Pending: <strong>' + pending + '</strong>';
 
-  document.getElementById('submit-btn').disabled = accepted === 0;
+  // Submit is enabled if any decision is staged (Accept, Decline, Park, or Raw pool).
+  document.getElementById('submit-btn').disabled = (accepted + declined + parked + rawPool) === 0;
 }
 
 // ----- Submit -----
@@ -1361,8 +1434,10 @@ async function autoClearApply() {
 
 function submitDecisions() {
   const accepted = [];
+  let stagedTotal = 0;
   allItems.forEach(item => {
     const d = decisions[item.id] || {};
+    if (d.decision) stagedTotal++;
     if (d.decision === 'accepted') {
       const impact = getImpact(item);
       accepted.push({
@@ -1377,7 +1452,7 @@ function submitDecisions() {
     }
   });
 
-  if (accepted.length === 0) { showToast('No accepted items'); return; }
+  if (stagedTotal === 0) { showToast('No decisions staged'); return; }
 
   const major = accepted.filter(c => c.major_change);
   if (major.length > 0) {
@@ -1446,10 +1521,12 @@ function confirmSubmit() {
 async function writeApproved(accepted) {
   const declined = [];
   const parked = [];
+  const rawPool = [];
   allItems.forEach(item => {
     const d = decisions[item.id] || {};
     if (d.decision === 'declined') declined.push(item);
     if (d.decision === 'parked') parked.push(item);
+    if (d.decision === 'raw_pool') rawPool.push(item);
   });
 
   const approvedFields = proposedFields
@@ -1464,6 +1541,7 @@ async function writeApproved(accepted) {
     accepted: accepted,
     declined: declined.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
     parked: parked.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
+    raw_pool: rawPool.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
     new_fields_approved: approvedFields,
     new_fields_rejected: rejectedFields
   };
@@ -1491,6 +1569,7 @@ async function writeApproved(accepted) {
     const acceptedIds = new Set(accepted.map(i => i.id));
     const declinedIds = new Set(declined.map(i => i.id));
     const parkedIds = new Set(parked.map(i => i.id));
+    const rawPoolIds = new Set(rawPool.map(i => i.id));
 
     // Update statuses in vault-inbox
     let updated = 0;
@@ -1498,27 +1577,34 @@ async function writeApproved(accepted) {
       if (acceptedIds.has(item.id)) { item.status = 'accepted'; updated++; }
       else if (declinedIds.has(item.id)) { item.status = 'declined'; updated++; }
       else if (parkedIds.has(item.id)) { item.status = 'parked'; updated++; }
+      else if (rawPoolIds.has(item.id)) { item.status = 'raw_pool'; updated++; }
     });
 
     inbox.lastProcessed = new Date().toISOString().split('T')[0];
 
     // Commit updated vault-inbox.json directly
+    const parts = [];
+    if (accepted.length) parts.push(accepted.length + ' accepted');
+    if (declined.length) parts.push(declined.length + ' declined');
+    if (parked.length) parts.push(parked.length + ' parked');
+    if (rawPool.length) parts.push(rawPool.length + ' raw_pool');
     const result = await GitHubAPI.commitFiles(
       [{ path: 'vault-inbox.json', content: inbox }],
-      'Review: ' + accepted.length + ' accepted, ' + declined.length + ' declined, ' + parked.length + ' parked'
+      'Review: ' + parts.join(', ')
     );
 
     localStorage.removeItem(DECISIONS_KEY);
     localStorage.removeItem('field-decisions');
-    showToast(accepted.length + ' accepted, ' + declined.length + ' declined');
+    showToast(parts.join(', '));
 
     let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
     html += '<h3 style="font-size:16px;margin-bottom:16px;color:var(--green);">Decisions Applied</h3>';
     html += '<div style="padding:12px 16px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;margin-bottom:10px;">';
     html += '<div style="font-size:13px;color:var(--text);line-height:1.8;">';
-    html += '<strong style="color:var(--green);">' + accepted.length + ' accepted</strong><br>';
+    if (accepted.length > 0) html += '<strong style="color:var(--green);">' + accepted.length + ' accepted</strong><br>';
     if (declined.length > 0) html += '<strong style="color:var(--red);">' + declined.length + ' declined</strong><br>';
     if (parked.length > 0) html += '<strong style="color:var(--orange);">' + parked.length + ' parked</strong><br>';
+    if (rawPool.length > 0) html += '<strong style="color:var(--cyan);">' + rawPool.length + ' raw pool</strong><br>';
     html += '</div></div>';
     html += '<div style="margin-top:12px;font-size:11px;color:var(--text-dim);">';
     html += updated + ' items updated in vault-inbox.json<br>';
@@ -1549,6 +1635,18 @@ function esc(s) {
 
 // ----- Init -----
 loadAll();
+
+// Keyboard shortcut: `r` — bulk raw_pool the currently selected items (wq-023 §4.1).
+// Skips when typing in an input/textarea so the note field still works.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'r' && e.key !== 'R') return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const tag = (e.target && e.target.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+  if (selectedIds.size === 0) return;
+  e.preventDefault();
+  bulkDecision('raw_pool');
+});
 </script>
 <script src="github-api.js"></script>
 </body>
