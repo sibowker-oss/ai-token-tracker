@@ -327,3 +327,63 @@ same audits file.
 Acceptance §5.4 satisfied: both files clean, audit committed alongside,
 two commits (P2a vault-data, P2b archive).
 
+### 2026-04-26 P3 — synthetic accept verify — sandbox proof + handoff for browser leg
+
+**CLI proof (the apply_decisions hot path).** Sandboxed full pipeline run in
+`/tmp/p3-sandbox`. Picked the first pending Sacra item from current
+`vault-inbox.json` — `auto-20260424-src-033-1`, `sourceAuthor` = real
+mojibake `'Sacra â\x80\x94 Anthropic Deep Dive'`. Built a synthetic
+decisions payload matching the shape `apply-decisions.yml` would deliver,
+ran `python3 scripts/apply_decisions.py data-updates/...-p3.json`. Output
+`vault-data.json` dp-001:
+
+```
+"sourceAuthor": "Sacra — Anthropic Deep Dive"
+"notes":        "From Sacra — Anthropic Deep Dive"
+```
+
+Byte-equal to the expected `"Sacra — Anthropic Deep Dive"` (U+2014, UTF-8
+bytes E2 80 94). `'â' in dp.sourceAuthor → False` (no mojibake markers
+remain). The defensive guard fires correctly on real corruption. Acceptance
+§6.2 step 5 — assert sourceAuthor reads clean — confirmed.
+
+**Handoff to Simon for the browser leg (steps §6.1.1–§6.1.4).** Cannot
+drive `admin.html#review` from CLI; the GitHub-token-bearing browser
+session is required. Recommended verification when ready:
+
+1. Open `admin.html#review`, find any pending Sacra item (392 mojibake
+   markers in inbox today — easy targets).
+2. Single-click Accept → Submit Decisions.
+3. Wait for `apply-decisions.yml` to land a new commit on `main`.
+4. `git pull` + grep the new dp- in `vault-data.json` for `â`.
+   Expected: 0. Expected sourceAuthor pattern:
+   `"Sacra — <Producer> Deep Dive"`.
+
+If step 4 fails, the upstream JS write path is still re-introducing
+deeper-than-single-pass mojibake — bump the `safe_str` iteration cap and
+re-test. (Today's defensive guard handles single-pass; deeper requires
+extending the trigger detection.)
+
+**Follow-ups deferred per brief §9 Q3 (out of wq-021 scope):**
+
+- F1. **Upstream JS write-path corruption.** The hosted-admin commit at
+  249cffe added 391 mojibake markers to `vault-inbox.json` in a single
+  push that only modified `status` fields — proof that the read → JSON.parse
+  → JSON.stringify → POST round-trip in
+  [github-api.js](github-api.js) /
+  [review.html](review.html) is mutating Unicode. Fix is outside this
+  brief but should be the next ticket; without it every hosted-admin commit
+  may keep re-introducing corruption that only the apply_decisions guard
+  catches.
+- F2. **vault-inbox.json itself remains corrupt** (392 markers at HEAD).
+  Out of brief §5 scope (which targets vault-data + archive only). A
+  follow-up cleanup pass with `scripts/fix_vault_data_mojibake.py`
+  (it walks any list of dicts, so works on the inbox shape too) plus the
+  status-frozen guard from `scripts/fix_vault_mojibake.py` would close it.
+
+### 2026-04-26 — STOP
+
+Phases 0/1/2a/2b/3 complete. Three commits on `main`: b07483e (P1),
+9b17954 (P2a), b46a9aa (P2b). Build-lint green at HEAD. Handed back to
+Simon.
+
