@@ -310,3 +310,20 @@ dp-148, dp-160, dp-186 all read `"Sacra — Cursor Deep Dive"`. dp-100 / dp-130
 unchanged (were already clean). Audit appended to
 `audits/2026-04-26-vault-data-mojibake-fix.md` per §5.2.
 
+### 2026-04-26 P2b — clean wq-027 replay archive — commit pending
+
+Same script run against
+`data-updates/archive/review-decisions-2026-04-25-wq027-replay.json`:
+
+- Field changes: 78 (matches the count cleaned in vault-data — same 39 items)
+- Items touched: 39 (`auto-20260424-src-035-1` ... `-39`)
+- Passes per field: 1
+
+Pre-fix `grep -c "u00e2" ...wq027-replay.json` → 78. Post-fix → 0.
+Sacra/Cursor item now reads `"Sacra — Cursor Deep Dive"` byte-for-byte
+matching the live `dp-148` in vault-data.json. Audit row appended to the
+same audits file.
+
+Acceptance §5.4 satisfied: both files clean, audit committed alongside,
+two commits (P2a vault-data, P2b archive).
+
