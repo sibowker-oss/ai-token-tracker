@@ -24,10 +24,11 @@
         "email-import"
       ],
       "notes": "Sacra estimate. NOTE: This is annualized run rate, NOT collected revenue. Our Sankey uses actual collected. Previous Sacra data shows $4.5B for 2025, $14B ARR in Feb 2026. Growth from $875M ARR Jan 2025.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": "dp-002",
       "source_id": "src-012",
-      "accepted_as": "dp-043"
+      "accepted_as": "dp-043",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "email-20260328-b2y",
@@ -81,10 +82,11 @@
         "email-import"
       ],
       "notes": "Sacra states OpenAI at $25B annualized from $13.1B. NOTE: ARR not collected. Our Sankey had $6B collected for 2025. Need to reconcile \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 The Information previously reported $13.1B which may be 2025 actual collected.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": "dp-004",
       "source_id": "src-012",
-      "accepted_as": "dp-044"
+      "accepted_as": "dp-044",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "email-20260328-d4w",
@@ -111,10 +113,11 @@
         "email-import"
       ],
       "notes": "Claude Code hit $2.5B ARR in Feb 2026, doubled since start of 2026 (was $500M ARR in Sep 2025). Major new revenue stream \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 not broken out in our current Sankey.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-012",
-      "accepted_as": "dp-058"
+      "accepted_as": "dp-058",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "email-20260328-e5v",
@@ -169,10 +172,11 @@
         "email-import"
       ],
       "notes": "Revenue breakdown: 70-75% token-based API, 10-15% subscriptions, remainder reserved capacity/enterprise. Useful for Sankey channel allocation (Model Subs vs API vs Enterprise).",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-012",
-      "accepted_as": "dp-059"
+      "accepted_as": "dp-059",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "email-20260328-g7t",
@@ -198,10 +202,11 @@
         "email-import"
       ],
       "notes": "Series G closed Feb 2026. Led by GIC and Coatue. Amazon total investment $8B. Up from $183B valuation in Sep 2025.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-012",
-      "accepted_as": "dp-046"
+      "accepted_as": "dp-046",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "email-20260328-h8s",
@@ -225,10 +230,11 @@
         "email-import"
       ],
       "notes": "As of Oct 2025: 300K+ biz customers (~80% of revenue), 500 spending >$1M/yr (up from 12 two years ago). 8 of Fortune 10 are Claude customers.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-012",
-      "accepted_as": "dp-060"
+      "accepted_as": "dp-060",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "email-20260328-i9r",
@@ -254,10 +260,11 @@
         "email-import"
       ],
       "notes": "Claude Code developer adoption metrics. 29M daily VS Code installs. 4% of all public GitHub commits.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-012",
-      "accepted_as": "dp-061"
+      "accepted_as": "dp-061",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "email-20260328-j0q",
@@ -284,10 +291,11 @@
         "email-import"
       ],
       "notes": "User comparison: Gemini 650M monthly vs ChatGPT 800M weekly (note different measurement periods). Google boosted by Nano Banana launch.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-012",
-      "accepted_as": "dp-062"
+      "accepted_as": "dp-062",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "zitron-20260328-a1",
@@ -432,10 +440,11 @@
         "zitron"
       ],
       "notes": "OpenAI spending $2.25-$2.60 for every $1 earned. Implies ~60% of total spend is just inference, rest is R&D ($6.7B H1), sales/marketing ($2B H1), and other ops.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-013",
-      "accepted_as": "dp-087"
+      "accepted_as": "dp-087",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "zitron-20260328-f6",
@@ -457,10 +466,11 @@
         "arr-manipulation"
       ],
       "notes": "CRITICAL: OpenAI's $25B ARR confirmed to use best 4-week period \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u0083\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0097 12, NOT calendar month \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u0083\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0097 12. This inflates the figure by an estimated 10-15% vs monthly calculation. Must apply cherry-pick haircut in ARR conversion.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-013",
-      "accepted_as": "dp-064"
+      "accepted_as": "dp-064",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-a1b",
@@ -510,10 +520,11 @@
         "2026"
       ],
       "notes": "OpenAI added extra $10B to existing round, bringing total to $120B at $840B post-money valuation. Significantly higher than Anthropic's $380B valuation.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-065"
+      "accepted_as": "dp-065",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-c3d",
@@ -536,10 +547,11 @@
         "2026"
       ],
       "notes": "OpenAI projected to burn ~$25B in 2026 even as revenue hits $25B ARR. Implies close to breakeven on ARR basis but not on actual collected revenue. Critical context for burn rate analysis.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-014",
-      "accepted_as": "dp-066"
+      "accepted_as": "dp-066",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-d4e",
@@ -561,10 +573,11 @@
         "2030"
       ],
       "notes": "OpenAI's internal 2030 revenue forecast is $280B. Context: current 2025 actual ~$13B, implies 21x growth in 5 years. Highly speculative \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 flagged for perspective/context use only.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-067"
+      "accepted_as": "dp-067",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-e5f",
@@ -588,10 +601,11 @@
         "2026"
       ],
       "notes": "Microsoft AI at $13B ARR Q2 FY2026. Copilot: 15M paid seats (+160% YoY) = 3.3% of 450M commercial M365 base. Key enterprise adoption data point \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 2+ years in, still only 1-in-30 users paying.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-068"
+      "accepted_as": "dp-068",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-f6g",
@@ -615,10 +629,11 @@
         "2026"
       ],
       "notes": "Salesforce Agentforce Q4 FY2026: $800M ARR standalone (+169% YoY). Full FY2026 AI + Data 360 combined: $2.9B (+200% YoY). Also: 19 trillion tokens processed (5x YoY). Official earnings release.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-048"
+      "accepted_as": "dp-048",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-g7h",
@@ -642,10 +657,11 @@
         "2025"
       ],
       "notes": "Now Assist ACV $600M+ at Q4 2025, doubled YoY (tracking toward $1B+ for 2026). Total ServiceNow FY2026 sub revenue guided at $15.53-15.57B. AI = ~4% of total sub base \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 consistent with low-penetration thesis.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-049"
+      "accepted_as": "dp-049",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-h8i",
@@ -668,10 +684,11 @@
         "2026"
       ],
       "notes": "Harvey raised $200M at $11B valuation. Legal AI vertical \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 notable as sector-specific AI company reaching unicorn+ status.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-069"
+      "accepted_as": "dp-069",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-i9j",
@@ -694,10 +711,11 @@
         "2026"
       ],
       "notes": "Physical Intelligence (robotics startup, ex-DeepMind staff) in talks for ~$1B at $11B+ valuation. AI investment extending into physical AI/robotics sector.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-070"
+      "accepted_as": "dp-070",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-j0k",
@@ -720,10 +738,11 @@
         "2026"
       ],
       "notes": "Anthropic raised its internal 2026 revenue forecast by 20% to $18B. Note: this is a forecast for actual collected revenue (not ARR), distinct from the $19B current ARR run rate.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-071"
+      "accepted_as": "dp-071",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260330-k1l",
@@ -745,10 +764,11 @@
         "2026"
       ],
       "notes": "Feb 2026 record driven by OpenAI $110B + Anthropic $30B + Waymo $16B. AI = 41% of all venture dollars on Carta. Highly concentrated \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 3 deals = ~83% of the record month.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-072"
+      "accepted_as": "dp-072",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260331-a1b",
@@ -770,10 +790,11 @@
         "2026"
       ],
       "notes": "OpenAI internal projections imply $14B operating loss in 2026 \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 tripling from ~$5B in 2025. Burn rate ~57% of projected revenue. Critical context: losses growing faster than revenue.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-014",
-      "accepted_as": "dp-073"
+      "accepted_as": "dp-073",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260331-b2c",
@@ -796,10 +817,11 @@
         "2029"
       ],
       "notes": "OpenAI says its business will burn $115B cumulatively through 2029. Projects profitability at $100B revenue in 2029. Contrasts with Anthropic target of 9% burn rate by 2027.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-014",
-      "accepted_as": "dp-074"
+      "accepted_as": "dp-074",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260331-c3d",
@@ -824,10 +846,11 @@
         "2027"
       ],
       "notes": "OpenAI burn 57% of revenue through 2027. Anthropic projects burn dropping to ~33% in 2026 and 9% by 2027 \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 structural divergence in economics between the two leading frontier labs.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-014",
-      "accepted_as": "dp-075"
+      "accepted_as": "dp-075",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260331-d4e",
@@ -850,10 +873,11 @@
         "2026"
       ],
       "notes": "Anthropic cut gross margin projection by ~10pp as cloud server/inference costs outpaced revenue growth. Both OpenAI and Anthropic missed their own gross margin forecasts. Signals compute cost pressure despite rapid revenue growth.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-014",
-      "accepted_as": "dp-076"
+      "accepted_as": "dp-076",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260331-e5f",
@@ -876,10 +900,11 @@
         "2026"
       ],
       "notes": "Anthropic raised 2026 revenue forecast 20% to $18B but simultaneously delayed cash flow positive timeline past 2028. Revenue growth not translating to faster profitability path.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": "email-20260328-e5v",
       "source_id": "src-014",
-      "accepted_as": "dp-045"
+      "accepted_as": "dp-045",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260331-f6g",
@@ -906,10 +931,11 @@
         "2026"
       ],
       "notes": "Chinese models dominate OpenRouter by token volume in March 2026. MiniMax M2.5: 4.55T tokens (#1), Kimi K2.5: 4.02T (#2), DeepSeek #4. Chinese models = ~2/3 of top-5 consumption. Top-5 includes only one Anthropic model.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-077"
+      "accepted_as": "dp-077",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260331-g7h",
@@ -932,10 +958,11 @@
         "2026"
       ],
       "notes": "OpenRouter processing 1T+ tokens/day (March 2026). Annual run rate: 100T+ tokens/year. Now routes traffic across 300+ models from 60+ providers, serving 5M+ developers. Key demand-side indicator.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-005",
-      "accepted_as": "dp-050"
+      "accepted_as": "dp-050",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-a1b",
@@ -958,10 +985,11 @@
         "2026"
       ],
       "notes": "H100 spot pricing ~$2.99/hr (Q1 2026) vs $8-10/hr (Q4 2024). Specialized GPU providers 60-85% cheaper than hyperscalers at $0.29-$2.99/hr.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-078"
+      "accepted_as": "dp-078",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-b2c",
@@ -984,10 +1012,11 @@
         "2026"
       ],
       "notes": "From $20/M tokens (Nov 2022) to $0.40/M tokens (early 2026) for GPT-4 class performance \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 a ~1,000x reduction in 3 years. Driven by hardware advances, competition, efficiency gains.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-079"
+      "accepted_as": "dp-079",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-c3d",
@@ -1010,10 +1039,11 @@
         "2026"
       ],
       "notes": "Inference now ~2/3 of all AI compute (up from minority share in 2023). Training has been overtaken as the dominant AI workload \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 structurally important for GPU demand forecasting.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-080"
+      "accepted_as": "dp-080",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-d4e",
@@ -1039,10 +1069,11 @@
         "2026"
       ],
       "notes": "Qwen: 400M+ downloads; OpenAI/DeepSeek ~50M each. 113K+ Qwen derivative models. China = 41% of Hugging Face downloads. Chinese open models now dominant on largest ML hub.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-081"
+      "accepted_as": "dp-081",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-e5f",
@@ -1066,10 +1097,11 @@
         "2025"
       ],
       "notes": "Google Cloud Q4 2025: $17.66B (+47.8% YoY). Full-year 2025 growth accelerated through H2. $240B backlog doubled YoY \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 indicates committed future AI cloud revenue. Vertex AI cited as key driver.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-051"
+      "accepted_as": "dp-051",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-f6g",
@@ -1094,10 +1126,11 @@
         "2026"
       ],
       "notes": "Opus 4.6: $5/$25 per M in/out tokens (was higher; ~67% cut). Sonnet 4.6: $3/$15. Haiku 4.5: $1/$5. Long-context surcharge removed \u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a2\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0080\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0094 1M context window now at standard per-token rates.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-052"
+      "accepted_as": "dp-052",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-g7h",
@@ -1123,10 +1156,11 @@
         "2026"
       ],
       "notes": "OpenRouter live rankings snapshot Apr 2026. Anthropic leads with 1.1T total but declining -1.6%/wk. OpenAI surging +19.3%/wk (382B tokens). OSS models ~1/3 of usage; Chinese OSS near 30% some weeks.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": "scan-20260331-f6g",
       "source_id": "src-005",
-      "accepted_as": "dp-111"
+      "accepted_as": "dp-111",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-h8i",
@@ -1150,10 +1184,11 @@
         "2026"
       ],
       "notes": "Nscale $2B Series C at $14.6B valuation. AI compute infra now a sovereign-level investment priority. Signals large-scale private capital flowing into GPU/inference infrastructure beyond the frontier labs.",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": null,
-      "accepted_as": "dp-082"
+      "accepted_as": "dp-082",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260401-i9j",
@@ -6913,11 +6948,12 @@
         "investment"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
       "metricKey": null,
-      "accepted_as": "dp-104"
+      "accepted_as": "dp-104",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-2",
@@ -6936,11 +6972,12 @@
         "funding"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
       "metricKey": null,
-      "accepted_as": "dp-105"
+      "accepted_as": "dp-105",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-3",
@@ -7053,11 +7090,12 @@
         "monthly"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
       "metricKey": null,
-      "accepted_as": "dp-106"
+      "accepted_as": "dp-106",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-8",
@@ -7100,11 +7138,12 @@
         "financing"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
       "metricKey": null,
-      "accepted_as": "dp-107"
+      "accepted_as": "dp-107",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-10",
@@ -7124,11 +7163,12 @@
         "weekly active"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
       "metricKey": null,
-      "accepted_as": "dp-108"
+      "accepted_as": "dp-108",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-11",
@@ -7197,11 +7237,12 @@
         "percentage"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
       "metricKey": null,
-      "accepted_as": "dp-109"
+      "accepted_as": "dp-109",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-14",
@@ -7246,11 +7287,12 @@
         "weekly"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
       "metricKey": null,
-      "accepted_as": "dp-110"
+      "accepted_as": "dp-110",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-16",
@@ -7316,10 +7358,11 @@
         "multiplier"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-19",
@@ -7339,10 +7382,11 @@
         "multiplier"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-021-20",
@@ -7362,10 +7406,11 @@
         "multiplier"
       ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-021",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-1",
@@ -7384,10 +7429,11 @@
         "capital"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-2",
@@ -7406,11 +7452,12 @@
         "funding"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
       "metricKey": null,
-      "accepted_as": "dp-113"
+      "accepted_as": "dp-113",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-3",
@@ -7495,10 +7542,11 @@
         "milestone"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-7",
@@ -7539,11 +7587,12 @@
         "monthly"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
       "metricKey": null,
-      "accepted_as": "dp-114"
+      "accepted_as": "dp-114",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-9",
@@ -7608,10 +7657,11 @@
         "ChatGPT"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-12",
@@ -7630,10 +7680,11 @@
         "ChatGPT"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-13",
@@ -7653,10 +7704,11 @@
         "ChatGPT"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-14",
@@ -7676,10 +7728,11 @@
         "ChatGPT"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-15",
@@ -7699,10 +7752,11 @@
         "ChatGPT"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-16",
@@ -7766,10 +7820,11 @@
         "tokens"
       ],
       "notes": "Auto-extracted from OpenAI Again",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-022",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "extract-20260402-src-022-19",
@@ -7858,8 +7913,9 @@
         "2026"
       ],
       "notes": "Crunchbase Q1 2026 recap. Record $297B into 6,000 startups globally. Up ~150% YoY. AI dominant driver. Single-quarter total near 70% of all 2025 VC.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-v1b",
@@ -7906,8 +7962,9 @@
         "2026"
       ],
       "notes": "Elon Musk's xAI raised $20B in Q1 2026, per Crunchbase Q1 2026 funding recap. Part of the $186B raised by top 4 frontier labs in Q1.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-v1d",
@@ -7932,8 +7989,9 @@
         "MiniMax"
       ],
       "notes": "OpenRouter Feb 24, 2026 data: Chinese models = 61% of token consumption. Top model: MiniMax M2.5 (4.55T tokens), #2 Kimi K2.5 (4.02T). Chinese OSS displacing US frontier models in volume.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-v1e",
@@ -7957,8 +8015,9 @@
         "2025"
       ],
       "notes": "Programming expanded from 11% to 50%+ of OpenRouter token usage across 2025, now the largest category. Reflects AI coding tool dominance (Cursor, Claude Code, etc.).",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-009-1",
@@ -7978,10 +8037,11 @@
         "founder"
       ],
       "notes": "Auto-scanned from Lean AI Leaderboard",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-009-2",
@@ -8002,10 +8062,11 @@
         "employees"
       ],
       "notes": "Auto-scanned from Lean AI Leaderboard",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-009-3",
@@ -8113,10 +8174,11 @@
         "history"
       ],
       "notes": "Auto-scanned from Lean AI Leaderboard",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-010-1",
@@ -8136,10 +8198,11 @@
         "business"
       ],
       "notes": "Auto-scanned from State of AI 2025 (Website)",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-010",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-010-2",
@@ -8160,10 +8223,11 @@
         "historical"
       ],
       "notes": "Auto-scanned from State of AI 2025 (Website)",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-010",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-010-3",
@@ -8183,10 +8247,11 @@
         "enterprise"
       ],
       "notes": "Auto-scanned from State of AI 2025 (Website)",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-010",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-010-4",
@@ -8205,10 +8270,11 @@
         "startups"
       ],
       "notes": "Auto-scanned from State of AI 2025 (Website)",
-      "status": "accepted",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-010",
-      "metricKey": null
+      "metricKey": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260403-src-010-5",
@@ -8371,8 +8437,9 @@
         "2026"
       ],
       "notes": "Chinese AI (DeepSeek+Qwen) went from 1% to 15% global AI market share in 12 months \u00c3\u0083\u00c2\u00a2\u00c3\u0082\u00c2\u0080\u00c3\u0082\u00c2\u0094 claimed fastest adoption curve in AI history. Android took 3 years to reach same smartphone penetration.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260404-d4e",
@@ -8395,8 +8462,9 @@
         "2025"
       ],
       "notes": "DeepSeek 89% of Chinese AI market by end-2025. China = 35% of DeepSeek MAUs globally; India = 20%; Indonesia = 8%. Strong APAC angle for the vault.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260404-e5f",
@@ -8949,8 +9017,9 @@
         "gpu"
       ],
       "notes": "Inference share of AI infra spending rose from 33% (2023) to 55% (early 2026). Reflects shift toward inference-heavy deployment phase.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260405-b2c",
@@ -8973,8 +9042,9 @@
         "llama"
       ],
       "notes": "Enterprises deploying open weights models in production: 23% to 67% in 2026. Open source AI market grew 340% YoY.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260405-c3d",
@@ -9021,8 +9091,9 @@
         "coding-ai"
       ],
       "notes": "GitHub Copilot 4.7M paid subscribers (+75% YoY). Estimated ~$1B ARR. Separate from M365 Copilot (15M seats). Microsoft confirmed both figures in Q2 FY2026 earnings.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260405-e5f",
@@ -9044,8 +9115,9 @@
         "growth-rate"
       ],
       "notes": "Anthropic: $1B ARR in Dec 2024 \u00c3\u00a2\u00c2\u0086\u00c2\u0092 $19B ARR in Mar 2026. ~19x growth in 15 months. No precedent in enterprise software. Bloomberg reported $19B on Mar 3, 2026.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "audit-20260405-gap-1",
@@ -9551,8 +9623,9 @@
         "2026"
       ],
       "notes": "Round closed at $852B (vs $840B preliminary in scan-20260330-b2c). $122B total (vs $120B preliminary). Amazon $50B, Nvidia $30B, SoftBank $30B, a16z. Retail tranche: $3B. IPO expected 2026.",
-      "status": "accepted",
-      "replaces": "scan-20260330-b2c"
+      "status": "raw_pool",
+      "replaces": "scan-20260330-b2c",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260406-b2c",
@@ -9574,8 +9647,9 @@
         "2026"
       ],
       "notes": "Self-reported at funding round close. $2B/month = ~$24B annualized. 2025 actual was $13.1B. Note: OpenAI ARR methodology uses best 4-week window x12 (dp-064) which may inflate vs monthly figure.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260406-c3d",
@@ -9599,8 +9673,9 @@
         "2025"
       ],
       "notes": "1B downloads announced March 2025, updated to 1.2B at April 2025 LlamaCon. Dwarfs Qwen (400M+) and DeepSeek (~50M) cumulative figures. Majority are Llama derivative models.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260406-d4e",
@@ -9624,8 +9699,9 @@
         "forecast"
       ],
       "notes": "Updated forecast: $111B more burn through 2030. Compare to prior scan-20260331-b2c ($115B through 2029). Also: 2025 actual burn $8B (better than $9B target). Revenue forecasts raised alongside.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260407-a1b",
@@ -9679,8 +9755,9 @@
         "2026"
       ],
       "notes": "Microsoft $5.5B into Singapore cloud/AI infra through 2029. Includes free AI tools for students. Part of Microsoft's broader APAC AI expansion alongside India ($17.5B) and Japan ($10B).",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260407-c3d",
@@ -9705,8 +9782,9 @@
         "2026"
       ],
       "notes": "Microsoft planning $10B investment in Japan AI/cloud infrastructure. Follows Singapore $5.5B (Apr 1). Microsoft APAC AI infra commitments now exceed $27B (India $17.5B + Japan $10B + Singapore $5.5B).",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260407-d4e",
@@ -9779,8 +9857,9 @@
         "2026"
       ],
       "notes": "1,000+ customers at $1M+/yr (April 2026), more than doubling since February. Vault previously had 500 (Oct 2025, email-20260328-h8s). Significant enterprise acceleration.",
-      "status": "accepted",
-      "replaces": "email-20260328-h8s"
+      "status": "raw_pool",
+      "replaces": "email-20260328-h8s",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260408-c3d",
@@ -9833,8 +9912,9 @@
         "2026"
       ],
       "notes": "Microsoft ToS (updated Oct 2025, widely noticed April 2026): Copilot is 'for entertainment purposes only', use 'at your own risk', 'not designed for professional or business-critical applications'. Microsoft says it will update the 'legacy language'. Directly supports low-enterprise-adoption thesis.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260409-a1b",
@@ -9860,8 +9940,9 @@
         "apac"
       ],
       "notes": "Chinese models topped all 6 spots on OpenRouter by token volume week of Mar 30-Apr 5. China at 12.96T tokens Apr 6 week, +31.48% WoW. 5 consecutive weeks surpassing US.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260409-b2c",
@@ -9884,8 +9965,9 @@
         "compute-economics"
       ],
       "notes": "H100s that launched above $7/hr on AWS now under $2.50/hr on specialist providers. A100s below $1/hr. Extends accepted data point (scan-20260401-a1b) showing further decline from $2.99/hr Q1 2026.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260409-c3d",
@@ -9907,8 +9989,9 @@
         "platform-scale"
       ],
       "notes": "If accurate, ~3x growth vs March 2026 (scan-20260331-g7h shows 1T+/day). Source is secondary; should verify against openrouter.ai directly.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260410-a1x",
@@ -9931,8 +10014,9 @@
         "2026"
       ],
       "notes": "Anthropic crossed $30B run-rate revenue in April 2026, first time it has outearned OpenAI. Up from $19B ARR in March 2026. Multiple outlets confirmed: Seeking Alpha, CNBC context, Whalesbook, TrendingTopics.",
-      "status": "accepted",
-      "replaces": "email-20260328-a1x"
+      "status": "raw_pool",
+      "replaces": "email-20260328-a1x",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260410-b2y",
@@ -9982,8 +10066,9 @@
         "2026"
       ],
       "notes": "Anthropic + Google + Broadcom expanding chip deal: next-gen TPU capacity (multi-gigawatt scale) coming online 2027. Signals Anthropic pivoting away from Nvidia GPUs for inference at scale.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260410-d4w",
@@ -10008,8 +10093,9 @@
         "2026"
       ],
       "notes": "DeepInfra example on open models: H100 Hopper 20\u00c2\u00a2/M tokens \u00e2\u0086\u0092 Blackwell 10\u00c2\u00a2 (2x reduction) \u00e2\u0086\u0092 Blackwell NVFP4 5\u00c2\u00a2 (4x reduction from Hopper). Confirmed by VentureBeat and NetworkWorld coverage.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260410-e5v",
@@ -10036,8 +10122,9 @@
         "ATOM-report"
       ],
       "notes": "Academic paper measuring open LLM ecosystem. Total 2.04B cumulative downloads by March 2026. Qwen: ~1B downloads (most of any org); derivative share 69% of all open model derivatives. Meta Llama fell from 25% to 11% derivative share.",
-      "status": "accepted",
-      "replaces": "scan-20260401-d4e"
+      "status": "raw_pool",
+      "replaces": "scan-20260401-d4e",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260410-f6u",
@@ -10092,8 +10179,9 @@
         "2026"
       ],
       "notes": "Cursor doubled ARR from $1B (Nov 2025) to $2B (Mar 2026) in ~3 months. TechCrunch + Bloomberg confirmed. Vault had $1B placeholder from NEEDS SOURCE entry. Claude Code at ~$2.5B ARR for comparison.",
-      "status": "accepted",
-      "replaces": "resource-cursor-(anysphere)-2025-arr"
+      "status": "raw_pool",
+      "replaces": "resource-cursor-(anysphere)-2025-arr",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260411-b2c",
@@ -10118,8 +10206,9 @@
         "2026"
       ],
       "notes": "Cursor reportedly raising up to $5B new capital at $60B valuation. Vault resource entry had stale $10B valuation placeholder. Source is secondary \u2014 needs verification from Bloomberg/TechCrunch.",
-      "status": "accepted",
-      "replaces": "resource-cursor-(anysphere)-current-valuation"
+      "status": "raw_pool",
+      "replaces": "resource-cursor-(anysphere)-current-valuation",
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260411-c3d",
@@ -10170,8 +10259,9 @@
         "2026"
       ],
       "notes": "Sacra (Apr 6 2026): SpaceX absorbed xAI; combined entity ~$1.25T valuation; xAI portion = $250B vs. $230B at Series E in Jan 2026. Needs primary source confirmation \u2014 significant structural change.",
-      "status": "accepted",
-      "replaces": null
+      "status": "raw_pool",
+      "replaces": null,
+      "migration_note": "wq-023 Phase 3 \u2014 moved from accepted to raw_pool because metric was unmapped at accept time"
     },
     {
       "id": "scan-20260411-e5f",
