@@ -1580,16 +1580,25 @@ async function writeApproved(accepted) {
       else if (rawPoolIds.has(item.id)) { item.status = 'raw_pool'; updated++; }
     });
 
-    inbox.lastProcessed = new Date().toISOString().split('T')[0];
+    const todayISO = new Date().toISOString().split('T')[0];
+    inbox.lastProcessed = todayISO;
 
-    // Commit updated vault-inbox.json directly
+    // Commit vault-inbox.json AND the decisions payload (wq-025).
+    // The second file triggers .github/workflows/apply-decisions.yml,
+    // which runs scripts/apply_decisions.py to flow accepted claims
+    // through to vault-data.json / entities.json / site-data.json.
+    // Without this file the hosted-admin path updated only inbox status
+    // and the apply pipeline never fired.
     const parts = [];
     if (accepted.length) parts.push(accepted.length + ' accepted');
     if (declined.length) parts.push(declined.length + ' declined');
     if (parked.length) parts.push(parked.length + ' parked');
     if (rawPool.length) parts.push(rawPool.length + ' raw_pool');
     const result = await GitHubAPI.commitFiles(
-      [{ path: 'vault-inbox.json', content: inbox }],
+      [
+        { path: 'vault-inbox.json', content: inbox },
+        { path: `data-updates/review-decisions-${todayISO}.json`, content: output },
+      ],
       'Review: ' + parts.join(', ')
     );
 
