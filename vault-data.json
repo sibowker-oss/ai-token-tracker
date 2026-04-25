@@ -3326,6 +3326,786 @@
       "metricKey": "revenue growth rate multiplier vs peers",
       "status": "accepted",
       "source_id": "src-016"
+    },
+    {
+      "id": "dp-148",
+      "claim": "Cursor hit $2B in annualized revenue in February 2026.",
+      "value": 2000000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "February 2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Annualized Revenue",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-149",
+      "claim": "Cursor reached $1B in annualized revenue in November 2025.",
+      "value": 1000000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "November 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Annualized Revenue",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-150",
+      "claim": "Cursor reached $500M ARR in June 2025.",
+      "value": 500000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "June 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "ARR",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-151",
+      "claim": "Cursor is the fastest-growing SaaS company of all time from $1M to $500M in ARR, with revenue doubling approximately every two months.",
+      "value": null,
+      "unit": "percent",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2024-2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Revenue Growth Rate",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-152",
+      "claim": "Large corporate buyers now account for approximately 60% of Cursor's revenue.",
+      "value": 60,
+      "unit": "percent",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Enterprise Revenue Share",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-153",
+      "claim": "Cursor is used by over 50,000 engineering teams globally.",
+      "value": 50000,
+      "unit": "teams",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Engineering Teams",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-154",
+      "claim": "Nearly 70% of the Fortune 1000 is represented in Cursor's customer base.",
+      "value": 70,
+      "unit": "percent",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Fortune 1000 Penetration",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-155",
+      "claim": "Cursor offers a free tier with limited AI features including 2,000 monthly code completions.",
+      "value": 2000,
+      "unit": "completions/month",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "pricing"
+      ],
+      "metricKey": "Free Tier Completions",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-156",
+      "claim": "Cursor's Pro plan is priced at $20/month providing unlimited code completions and premium AI model access.",
+      "value": 20,
+      "unit": "USD/month",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "pricing"
+      ],
+      "metricKey": "Pro Plan Price",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-157",
+      "claim": "Cursor's Business plan is priced at $40/user/month and adds enterprise features like centralized billing, admin dashboards, and enhanced privacy controls.",
+      "value": 40,
+      "unit": "USD/user/month",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "pricing"
+      ],
+      "metricKey": "Business Plan Price",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-158",
+      "claim": "Cursor's Ultra plan is priced at $200/month offering 20x more usage than Pro, introduced June 2025.",
+      "value": 200,
+      "unit": "USD/month",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "June 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "pricing"
+      ],
+      "metricKey": "Ultra Plan Price",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-159",
+      "claim": "Cursor's Composer 2 model is available at API-accessible token pricing of $0.50/M input tokens and $2.50/M output tokens.",
+      "value": null,
+      "unit": "USD/million tokens",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "March 2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "pricing"
+      ],
+      "metricKey": "API Token Pricing",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-160",
+      "claim": "In April 2026, Cursor raised $2 billion at a $50 billion valuation.",
+      "value": 50000000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "April 2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Valuation",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-161",
+      "claim": "In April 2026, Cursor raised $2 billion in a funding round.",
+      "value": 2000000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "April 2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Funding Raised",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-162",
+      "claim": "In November 2025, Cursor raised $2.3 billion in a Series D that valued it at $29.3 billion.",
+      "value": 29300000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "November 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series D Valuation",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-163",
+      "claim": "Cursor raised $2.3 billion in its Series D round in November 2025.",
+      "value": 2300000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "November 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series D Amount Raised",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-164",
+      "claim": "Cursor reached a $9.9 billion valuation in June 2025 after raising a $900M Series C.",
+      "value": 9900000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "June 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series C Valuation",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-165",
+      "claim": "Cursor raised $900M in its Series C round in June 2025.",
+      "value": 900000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "June 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series C Amount Raised",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-166",
+      "claim": "Cursor closed a $105 million Series B at a $2.5 billion valuation in December 2024.",
+      "value": 2500000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "December 2024",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series B Valuation",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-167",
+      "claim": "Cursor raised $105 million in its Series B round in December 2024.",
+      "value": 105000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "December 2024",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series B Amount Raised",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-168",
+      "claim": "Cursor closed a $60 million Series A at a $400 million valuation in August 2024.",
+      "value": 400000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "August 2024",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series A Valuation",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-169",
+      "claim": "Cursor raised $60 million in its Series A round in August 2024.",
+      "value": 60000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "August 2024",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Series A Amount Raised",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-170",
+      "claim": "Total funding raised by Cursor across all rounds as of 2025 was $3.38B.",
+      "value": 3380000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Total Funding",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-171",
+      "claim": "Cursor surpassed $1 billion in annual recurring revenue since its 2023 debut, confirmed by a Wired source.",
+      "value": 1000000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "December 2025",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "ARR",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-172",
+      "claim": "More than 30% of pull requests Cursor merges internally are now created by agents operating autonomously in cloud sandboxes.",
+      "value": 30,
+      "unit": "percent",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "other"
+      ],
+      "metricKey": "Agent-Created PRs Share",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-173",
+      "claim": "Cursor counts over half the Fortune 500 as customers.",
+      "value": 50,
+      "unit": "percent",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Fortune 500 Penetration",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-174",
+      "claim": "Cursor reports tens of thousands of enterprise customers, with enterprise and corporate buyers representing the majority of revenue.",
+      "value": null,
+      "unit": "customers",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From Sacra \u00e2\u0080\u0094 Cursor Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Enterprise Customer Count",
+      "status": "accepted",
+      "source_id": "src-035"
+    },
+    {
+      "id": "dp-175",
+      "claim": "The OpenAI Python SDK received 10,166,199 downloads in the last day.",
+      "value": 10166199,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/openai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last day (as of page capture)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "daily SDK downloads",
+      "status": "accepted",
+      "source_id": "src-047"
+    },
+    {
+      "id": "dp-176",
+      "claim": "The OpenAI Python SDK received 62,863,567 downloads in the last week.",
+      "value": 62863567,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/openai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last week (as of page capture)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "weekly SDK downloads",
+      "status": "accepted",
+      "source_id": "src-047"
+    },
+    {
+      "id": "dp-177",
+      "claim": "The OpenAI Python SDK received 254,437,183 downloads in the last month.",
+      "value": 254437183,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/openai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last month (as of page capture)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "monthly SDK downloads",
+      "status": "accepted",
+      "source_id": "src-047"
+    },
+    {
+      "id": "dp-178",
+      "claim": "The latest version of the OpenAI Python SDK is 2.32.0, indicating active and rapid development of the API ecosystem.",
+      "value": 2.32,
+      "unit": "version number",
+      "sourceUrl": "https://pypistats.org/packages/openai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "as of page capture",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "SDK version",
+      "status": "accepted",
+      "source_id": "src-047"
+    },
+    {
+      "id": "dp-179",
+      "claim": "The Anthropic Python SDK received 4,389,716 downloads in the last day.",
+      "value": 4389716,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/anthropic",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last day (as of page retrieval)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "daily SDK downloads",
+      "status": "accepted",
+      "source_id": "src-048"
+    },
+    {
+      "id": "dp-180",
+      "claim": "The Anthropic Python SDK received 24,718,548 downloads in the last week.",
+      "value": 24718548,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/anthropic",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last week (as of page retrieval)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "weekly SDK downloads",
+      "status": "accepted",
+      "source_id": "src-048"
+    },
+    {
+      "id": "dp-181",
+      "claim": "The Anthropic Python SDK received 99,004,938 downloads in the last month.",
+      "value": 99004938,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/anthropic",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last month (as of page retrieval)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "monthly SDK downloads",
+      "status": "accepted",
+      "source_id": "src-048"
+    },
+    {
+      "id": "dp-182",
+      "claim": "The latest version of the Anthropic Python SDK is 0.97.0, indicating a high release cadence and active development.",
+      "value": 0.97,
+      "unit": "version number",
+      "sourceUrl": "https://pypistats.org/packages/anthropic",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "confidence": "verified",
+      "dateOfClaim": "as of page retrieval",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "SDK version",
+      "status": "accepted",
+      "source_id": "src-048"
+    },
+    {
+      "id": "dp-183",
+      "claim": "Google GenAI SDK (google-generativeai) recorded 520,183 downloads in the last day.",
+      "value": 520183,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/google-generativeai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last day (as of scrape date)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "daily PyPI downloads",
+      "status": "accepted",
+      "source_id": "src-049"
+    },
+    {
+      "id": "dp-184",
+      "claim": "Google GenAI SDK (google-generativeai) recorded 3,590,645 downloads in the last week.",
+      "value": 3590645,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/google-generativeai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last week (as of scrape date)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "weekly PyPI downloads",
+      "status": "accepted",
+      "source_id": "src-049"
+    },
+    {
+      "id": "dp-185",
+      "claim": "Google GenAI SDK (google-generativeai) recorded 15,799,338 downloads in the last month.",
+      "value": 15799338,
+      "unit": "downloads",
+      "sourceUrl": "https://pypistats.org/packages/google-generativeai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "last month (as of scrape date)",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "monthly PyPI downloads",
+      "status": "accepted",
+      "source_id": "src-049"
+    },
+    {
+      "id": "dp-186",
+      "claim": "The latest version of the Google GenAI SDK is 0.8.6, indicating active development and iteration.",
+      "value": null,
+      "unit": "version",
+      "sourceUrl": "https://pypistats.org/packages/google-generativeai",
+      "sourceType": "web_page",
+      "sourceAuthor": "PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "confidence": "verified",
+      "dateOfClaim": "as of scrape date",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "latest SDK version",
+      "status": "accepted",
+      "source_id": "src-049"
     }
   ]
 }
