@@ -3306,6 +3306,26 @@
       "metricKey": "quarterly revenue",
       "status": "accepted",
       "source_id": null
+    },
+    {
+      "id": "dp-147",
+      "claim": "OpenAI is growing revenue four times faster than Alphabet and Meta at comparable stages.",
+      "value": 4,
+      "unit": "x",
+      "sourceUrl": "https://openai.com/index/accelerating-the-next-phase-ai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-Q1",
+      "dateAdded": "2026-04-25",
+      "usedOn": [],
+      "notes": "From OpenAI Press Release 31 Mar 25",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "revenue growth rate multiplier vs peers",
+      "status": "accepted",
+      "source_id": "src-016"
     }
   ]
 }

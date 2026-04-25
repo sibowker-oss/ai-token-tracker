@@ -1,20 +1,52 @@
 {
   "meta": {
-    "generatedAt": "2026-04-20T02:27:20Z",
+    "generatedAt": "2026-04-25T08:09:25Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
     "notes": "Fully rebalanced from consensus. All flows verified."
   },
   "pages": {
-    "index": { "path": "/index.html", "title": "The AI Ledger", "hasDerivedNumbers": true },
-    "revenue": { "path": "/revenue.html", "title": "Revenue Ledger", "hasDerivedNumbers": true },
-    "capital": { "path": "/capital.html", "title": "Capital Ledger", "hasDerivedNumbers": true },
-    "usage": { "path": "/usage.html", "title": "Usage Ledger", "hasDerivedNumbers": true },
-    "power": { "path": "/power.html", "title": "Power Ledger", "hasDerivedNumbers": true },
-    "chips": { "path": "/chips.html", "title": "Follow the CapEx", "hasDerivedNumbers": true },
-    "about": { "path": "/about.html", "title": "About — Hepburn Advisory", "hasDerivedNumbers": false },
-    "methodology": { "path": "/methodology.html", "title": "Methodology", "hasDerivedNumbers": false }
+    "index": {
+      "path": "/index.html",
+      "title": "The AI Ledger",
+      "hasDerivedNumbers": true
+    },
+    "revenue": {
+      "path": "/revenue.html",
+      "title": "Revenue Ledger",
+      "hasDerivedNumbers": true
+    },
+    "capital": {
+      "path": "/capital.html",
+      "title": "Capital Ledger",
+      "hasDerivedNumbers": true
+    },
+    "usage": {
+      "path": "/usage.html",
+      "title": "Usage Ledger",
+      "hasDerivedNumbers": true
+    },
+    "power": {
+      "path": "/power.html",
+      "title": "Power Ledger",
+      "hasDerivedNumbers": true
+    },
+    "chips": {
+      "path": "/chips.html",
+      "title": "Follow the CapEx",
+      "hasDerivedNumbers": true
+    },
+    "about": {
+      "path": "/about.html",
+      "title": "About \u2014 Hepburn Advisory",
+      "hasDerivedNumbers": false
+    },
+    "methodology": {
+      "path": "/methodology.html",
+      "title": "Methodology",
+      "hasDerivedNumbers": false
+    }
   },
   "sankey": {
     "title": "2025 Actual Revenue Collected",
@@ -4380,7 +4412,7 @@
         "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar",
         "retrievedAt": "2026-04-22",
         "nextReview": "2026-10-22",
-        "note": "Supply-side check — is build-out coherent with revenue path",
+        "note": "Supply-side check \u2014 is build-out coherent with revenue path",
         "confidence": "High"
       },
       {
