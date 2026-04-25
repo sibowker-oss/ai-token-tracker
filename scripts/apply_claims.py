@@ -38,6 +38,9 @@ COMPANY_SURFACED_LOG = os.path.join(BASE_DIR, 'data', 'company-surfaced.log.json
 # at the bottom of the file, after the per-type apply_* functions are defined.
 STRUCTURED_TYPES = ('power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced')
 
+# Mirrors metric-schema.json `inbox_statuses.values` (wq-023 §3.1).
+STATUS_VALUES = ('pending', 'accepted', 'declined', 'parked', 'raw_pool')
+
 # Publish-ready confidence casing per GUIDELINES §4.4 / §5.6.
 CONFIDENCE_DISPLAY = {'high': 'High', 'medium': 'Med', 'low': 'Low'}
 
@@ -450,9 +453,22 @@ def main():
 
     for claim in approved:
         decision = claim.get('review_decision', '')
+
+        # raw_pool decisions never update site-data.json (wq-023 §3.2).
+        if decision == 'raw_pool':
+            skipped += 1
+            log(f"  RAW_POOL skip {claim.get('id', '?')}: {(claim.get('claim') or '')[:60]}")
+            continue
+
         if decision != 'accepted':
             skipped += 1
             continue
+
+        # wq-023: post-Phase-3, accepted claims must carry a mapped metric.
+        # Items without metric/metricKey should have been migrated to raw_pool;
+        # log if any slip through so the migration gap is visible.
+        if not (claim.get('metric') or claim.get('metricKey')):
+            log(f"  WARN orphan-accept (no metric/metricKey, should be raw_pool): {claim.get('id', '?')}")
 
         # Safety gate: major changes need explicit confirm
         if claim.get('major_change') and not claim.get('confirmed'):

@@ -53,6 +53,18 @@ def validate_claim(claim, type_def, type_name):
     return errors
 
 
+EXPECTED_INBOX_STATUSES = {'pending', 'accepted', 'declined', 'parked', 'raw_pool'}
+
+
+def validate_inbox_status(item, allowed):
+    """Round-trip check for vault-inbox.json items (wq-023 §3.3).
+    Asserts the item's status is in the schema-declared enum."""
+    s = item.get('status')
+    if s not in allowed:
+        return [f"status {s!r} not in inbox_statuses enum {sorted(allowed)}"]
+    return []
+
+
 def main():
     with open(SCHEMA_PATH) as f:
         schema = json.load(f)
@@ -87,11 +99,49 @@ def main():
         else:
             print(f"PASS {t}")
 
+    # wq-023 §3.3: inbox_statuses enum and a raw_pool round-trip.
+    statuses_block = schema.get('inbox_statuses', {})
+    declared = set(statuses_block.get('values', []))
+    if declared != EXPECTED_INBOX_STATUSES:
+        missing = EXPECTED_INBOX_STATUSES - declared
+        extra = declared - EXPECTED_INBOX_STATUSES
+        print(f"FAIL inbox_statuses: missing={sorted(missing)} extra={sorted(extra)}")
+        failed += 1
+    else:
+        print("PASS inbox_statuses (5 values declared in schema)")
+
+    sample_raw_pool_item = {
+        'id': 'sample-raw-pool-001',
+        'claim': 'sample claim with no mapped metric',
+        'value': 42,
+        'unit': 'count',
+        'sourceUrl': 'https://example.com/x',
+        'sourceType': 'reporting',
+        'sourceAuthor': 'Sample',
+        'confidence': 'estimated',
+        'dateOfClaim': '2026-04-25',
+        'dateAdded': '2026-04-25',
+        'usedOn': [],
+        'tags': ['sample'],
+        'notes': '',
+        'status': 'raw_pool',
+        'replaces': None,
+    }
+    errs = validate_inbox_status(sample_raw_pool_item, declared)
+    if errs:
+        print("FAIL raw_pool round-trip:")
+        for e in errs:
+            print(f"  - {e}")
+        failed += 1
+    else:
+        print("PASS raw_pool round-trip (sample item validates against schema enum)")
+
+    total_checks = len(CLAIM_TYPES) + 2  # claim types + inbox_statuses + raw_pool round-trip
     if failed:
-        print(f"\n{failed} of {len(CLAIM_TYPES)} claim types failed validation.")
+        print(f"\n{failed} of {total_checks} checks failed.")
         return 1
 
-    print(f"\nAll {len(CLAIM_TYPES)} claim types valid.")
+    print(f"\nAll {total_checks} checks passed.")
     return 0
 
 

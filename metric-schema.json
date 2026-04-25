@@ -90,6 +90,17 @@
       "proposed_for_entity": "anthropic"
     }
   ],
+  "inbox_statuses": {
+    "_description": "Valid status values for items in vault-inbox.json. Source of truth for review.html, scripts/apply_claims.py, scripts/auto_clear_inbox.py, and scripts/migrate_orphan_accepts.py. Added under wq-023 (briefs/active/2026-04-25-raw-pool-status.md).",
+    "values": ["pending", "accepted", "declined", "parked", "raw_pool"],
+    "definitions": {
+      "pending": "Awaiting human review in admin.html#review.",
+      "accepted": "Reviewed and trusted; updates a live data point in site-data.json. Must have a mapped metric (metricKey) post-wq-023.",
+      "raw_pool": "Reviewed and trusted, but no mapped metric — filed for later, not surfaced on the site.",
+      "declined": "Reviewed and rejected.",
+      "parked": "Held for triangulation or future review."
+    }
+  },
   "roles": {
     "model_provider": {
       "label": "Model Provider",
