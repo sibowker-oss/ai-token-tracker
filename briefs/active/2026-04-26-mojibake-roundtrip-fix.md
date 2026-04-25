@@ -267,3 +267,46 @@ inbox status update. Iterative round-trip (run while marker pattern is
 present, capped at 4 passes) so deep mojibake (the 24-codepoint quadruple
 case) is handled on the apply_decisions hot path too.
 
+### 2026-04-26 P1 patch — apply_decisions.py + tests — commit b07483e
+
+Single-pass-only `safe_str()` shipped (kept simple; the brief's recommended
+trigger pattern is U+00E2 + U+0080, which only matches single-pass em-dash /
+curly-quote / en-dash / ellipsis mojibake). Multi-pass / deep cases left
+intact on the apply_decisions hot path — Phase 2 cleanup script iterates
+those.
+
+Applied at the dataPoint construction in
+[scripts/apply_decisions.py:148-172](scripts/apply_decisions.py#L148-L172)
+(claim, sourceAuthor, notes) and the provenance.claims entry at
+[scripts/apply_decisions.py:230-246](scripts/apply_decisions.py#L230-L246)
+(claim, source). Pinned `load_json` / `save_json` to `encoding="utf-8"`
+explicitly (defensive — was relying on locale).
+
+Test file `tests/test_apply_decisions_encoding.py` — 9 cases, all pass:
+clean passthrough, em-dash mojibake cleanup, curly apostrophe cleanup,
+non-string passthrough, partial-marker no-op (e.g. "Citroën" must not be
+mangled), undecodable-string safe fallback, end-to-end apply_accepted with
+clean input, end-to-end apply_accepted with mojibaked input, save/load
+round-trip preserves em-dash. Build-lint 0 failures (12 pre-existing
+data-references warnings, unrelated).
+
+Agents log row appended at `data/agents.log.md` for
+`structured-claims-applier` v1.1.0, with notes flagging the upstream JS
+write-path follow-up.
+
+### 2026-04-26 P2a — clean vault-data.json — commit pending
+
+`scripts/fix_vault_data_mojibake.py` written (iterative, single-pass-marker
+trigger, walks any nested string in `dataPoints[*]`). Run on
+`vault-data.json`:
+
+- Field changes: 78
+- Items touched: 39 (dp-148 through dp-186, contiguous block from the
+  wq-027 replay)
+- Passes per field: 1 (all single-pass mojibake — no deep cases in vault-data)
+
+Pre-fix `grep -c "u00e2" vault-data.json` → 78. Post-fix → 0. Spot-checks:
+dp-148, dp-160, dp-186 all read `"Sacra — Cursor Deep Dive"`. dp-100 / dp-130
+unchanged (were already clean). Audit appended to
+`audits/2026-04-26-vault-data-mojibake-fix.md` per §5.2.
+
