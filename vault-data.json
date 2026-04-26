@@ -4315,6 +4315,46 @@
       "metricKey": "Annualized Revenue",
       "status": "accepted",
       "source_id": "src-036"
+    },
+    {
+      "id": "dp-196",
+      "claim": "Perplexity had approximately $148M in annualized revenue in June 2025.",
+      "value": 148,
+      "unit": "USD millions",
+      "sourceUrl": "https://sacra.com/research/perplexity/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Perplexity Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "June 2025",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Perplexity Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Annualized Revenue (ARR)",
+      "status": "accepted",
+      "source_id": "src-036"
+    },
+    {
+      "id": "dp-197",
+      "claim": "Perplexity was valued at $20B after raising $200M in a round announced in September 2025.",
+      "value": 20,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/perplexity/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Perplexity Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "September 2025",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Perplexity Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Valuation",
+      "status": "accepted",
+      "source_id": "src-036"
     }
   ]
 }

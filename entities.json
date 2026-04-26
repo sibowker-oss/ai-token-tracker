@@ -6349,7 +6349,8 @@
       ],
       "financials": {
         "2025": {
-          "arr": 0.2
+          "arr": 148,
+          "valuation": 20
         },
         "2026": {
           "arr": 500
@@ -6371,8 +6372,8 @@
       "provenance": {
         "2025.arr": {
           "confidence": "low",
-          "claim_count": 1,
-          "needs_source": true,
+          "claim_count": 2,
+          "needs_source": false,
           "claims": [
             {
               "id": "editorial-perplexity-2025-arr",
@@ -6387,6 +6388,19 @@
               "origin": "editorial",
               "role": "editorial_estimate",
               "note": "Set during initial site build. Needs external source."
+            },
+            {
+              "id": "dp-196",
+              "claim": "Perplexity had approximately $148M in annualized revenue in June 2025.",
+              "value": 148,
+              "unit": "USD millions",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 Perplexity Deep Dive",
+              "source_url": "https://sacra.com/research/perplexity/",
+              "date": "June 2025",
+              "origin": "accepted",
+              "role": "supports"
             }
           ]
         },
@@ -6467,6 +6481,26 @@
               "source": "Sacra \u2014 Perplexity Deep Dive",
               "source_url": "https://sacra.com/research/perplexity/",
               "date": "April 2026",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2025.valuation": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-197",
+              "claim": "Perplexity was valued at $20B after raising $200M in a round announced in September 2025.",
+              "value": 20,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 Perplexity Deep Dive",
+              "source_url": "https://sacra.com/research/perplexity/",
+              "date": "September 2025",
               "origin": "accepted",
               "role": "supports"
             }
