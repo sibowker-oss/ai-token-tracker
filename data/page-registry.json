@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-04-26-P4",
+  "last_updated": "2026-04-26-P0-followup",
   "_notes": "Source of truth for page lifecycle status. Every .html file in the repo (excluding node_modules, tests/reports, data/snapshots, data-updates/archive) appears exactly once. See briefs/active/2026-04-26-page-lifecycle-registry.md (wq-031) for the contract; metric-schema.json :: page_lifecycle_statuses for the allowed status values; scripts/validate_page_registry.py for enforcement.",
   "pages": [
 
@@ -94,15 +94,16 @@
     },
     {
       "path": "follow-the-trillion.html",
-      "status": "live",
+      "status": "concept",
       "title": "Follow the Trillion — The AI Ledger",
-      "purpose": "Interactive FTBT chart — at $34:$1 capex/revenue, what does a $1T target imply? Public, sliders, denominator framing.",
+      "purpose": "Interactive FTBT chart — at $34:$1 capex/revenue, what does a $1T target imply? In development; graduates to public Claims Ledger via wq-005.",
       "supersedes": [],
       "supersededBy": null,
       "addedOn": "2026-04-22",
       "retiredOn": null,
       "lastReviewed": "2026-04-26",
-      "_provenance": "Not in brief §4.1 — defaulted to live based on wq-016 audit (line 252, $34T literal in headline tile) and public framing. Surfaced as ambiguity in audits/2026-04-26-page-inventory.md."
+      "promotionTracking": "wq-005",
+      "_provenance": "Not in brief §4.1 — initial P0 default was live. Simon corrected to concept on 2026-04-26 (P0 follow-up): page is in-development, will graduate to public Claims Ledger via wq-005. promotionTracking field records the link."
     },
     {
       "path": "about.html",

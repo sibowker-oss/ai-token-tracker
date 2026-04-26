@@ -153,3 +153,53 @@ absent from the registry; nested directories still escape.
 - **P2 commits** rewrite the four registry entries: drop `pendingMove` / `pendingMoveTo`, set `path` to the archive path. Each P2 commit should change the registry in lockstep with the `git mv`.
 - **P3 build-lint** also needs to handle `pendingMove` on read — until P2 is fully done, the registry briefly has retired-pending entries at root paths. The dataReferences gating uses status, not folder, so this is automatic; the unregistered-root-page-fail rule needs to count an entry's current `path` (not `pendingMoveTo`) as the registered identity.
 - **P4 archive.html** renders Concepts / Retired / Parked sections from the registry. The `page-archive.html` entry is `status: retired` without `pendingMove` because §4.1 calls it "retired-or-merge" (folded in, not moved); P4 either deletes the file or stubs it.
+
+---
+
+## Correction (2026-04-26) — ambiguity resolutions
+
+Both ambiguities flagged above are resolved (Simon, 2026-04-26):
+
+### #1 follow-the-trillion.html — `live` → `concept` (P0 default was wrong)
+
+The default-classification reasoning ("public-facing FTBT chart, looks like
+the v2 ledger pages, in nav") missed that the page is **in development** and
+will graduate to a public Claims Ledger as part of wq-005. Today it's a
+concept-status experiment, not a live ledger page.
+
+Registry change applied to `data/page-registry.json`:
+- `status: "live"` → `status: "concept"`
+- New field `promotionTracking: "wq-005"` records the work-queue link to the
+  promotion path.
+- `purpose` updated to reflect in-development state.
+- `lastReviewed: "2026-04-26"` (unchanged date, but the entry is now
+  considered Simon-confirmed rather than Claude-defaulted).
+
+### #2 review.html — `admin` confirmed (P0 default was correct)
+
+The default classification stands. No registry change needed.
+
+### dataReferences impact: 12 → 9 → 8
+
+The wq-031 P3 commit (8e4739b) reduced dataReferences warnings from 12 to 9
+by moving chips.html under `archive/` and exempting changelog.html. With
+follow-the-trillion now `concept`, build-lint scopes its `$34T` literal
+out of the live-page lint scan:
+
+- 12 → 9: chips × 2 (file relocated), changelog × 1 (lintExclusions)
+- **9 → 8:** follow-the-trillion × 1 (`$34T`) — status flipped from live
+  to concept, no longer in `liveCheckable`
+
+The remaining 8 warnings (capital × 3, index × 1, in-development × 3,
+methodology × 1) are all real wq-016 Phase 2 follow-ups: the headline
+ledger anchors (`$170B`, `$1.07T`, `$310B`, `~360T`, `~370T`, `$260B/yr`,
+`$310B`, `$465B`) need canonical keys in `site-data.json`. Out of wq-031
+scope; tracked under wq-016.
+
+### Validator + build-lint after correction
+
+- `python3 scripts/validate_page_registry.py` → `OK — 88 pages, 88 .html files in scope, all rules R1-R5 pass`
+- `node scripts/build-lint.js` → 0 failures, 8 dataReferences warnings (was 9)
+
+Single commit landing the change: `chore(registry): resolve wq-031
+ambiguities — follow-the-trillion → concept (wq-031 P0 follow-up)`.
