@@ -64,7 +64,7 @@
           "cash_burn": 25,
           "operating_loss": 14,
           "subscription_revenue": 50,
-          "user_count": 800000000
+          "user_count": 900000000
         },
         "2027_projected": {
           "arr": 50.0
@@ -1421,7 +1421,7 @@
         },
         "2026.user_count": {
           "confidence": "low",
-          "claim_count": 2,
+          "claim_count": 3,
           "claims": [
             {
               "id": "dp-103",
@@ -1446,6 +1446,19 @@
               "source": "Ranjan Roy",
               "source_url": "https://pdst.fm/e/tracking.swap.fm/track/t7yC0rGPUqahTF4et8YD/pscrb.fm/rss/p/traffic.megaphone.fm/AMPP4147573754.mp3?updated=1774661186",
               "date": "2026-03-28",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-204",
+              "claim": "ChatGPT has more than 900 million weekly active users.",
+              "value": 900000000,
+              "unit": "users",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "OpenAI Press Release 31 Mar 25",
+              "source_url": "https://openai.com/index/accelerating-the-next-phase-ai/",
+              "date": "2026-Q1",
               "origin": "accepted",
               "role": "supports"
             }

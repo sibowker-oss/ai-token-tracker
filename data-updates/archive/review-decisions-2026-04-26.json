@@ -1,206 +1,36 @@
 {
-  "submitted_at": "2026-04-26T21:48:34.664Z",
+  "submitted_at": "2026-04-26T23:37:34.172Z",
   "accepted": [
     {
-      "id": "auto-20260424-src-023-4",
+      "id": "auto-20260424-src-016-9",
       "origin": "inbox",
       "inboxStatus": "pending",
-      "entity": "Nvidia",
-      "claim": "NVIDIA's data center business did $62B last quarter, annualizing to ~$250B.",
-      "value": 250,
-      "unit": "USD billions",
-      "value_display": "250 USD billions",
+      "entity": "OpenAI Press Release 31 Mar 25",
+      "claim": "ChatGPT has more than 900 million weekly active users.",
+      "value": 900000000,
+      "unit": "users",
+      "value_display": "900000000 users",
       "weight": "indicative",
       "confidence": "verified",
       "dedup_status": "new",
       "dedup_note": null,
-      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
-      "sourceAuthor": "economics of AI report",
+      "sourceUrl": "https://openai.com/index/accelerating-the-next-phase-ai/",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
       "sourceType": "web_page",
-      "source_id": "src-023",
+      "source_id": "src-016",
       "tags": [
-        "provider_revenue"
+        "enterprise_adoption"
       ],
-      "notes": "From economics of AI report",
-      "dateOfClaim": "2026 (annualized)",
+      "notes": "From OpenAI Press Release 31 Mar 25",
+      "dateOfClaim": "2026-Q1",
       "dateAdded": "2026-04-24",
       "usedOn": [],
       "replaces": null,
-      "metricKey": "data center annualized revenue",
-      "metric": "other",
+      "metricKey": "weekly active users",
+      "metric": "adoption",
       "review_decision": "accepted",
       "review_note": "",
-      "reviewed_at": "2026-04-26T21:48:34.662Z",
-      "major_change": false,
-      "confirmed": false,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-023-25",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "economics of AI report",
-      "claim": "The top five hyperscalers spent ~$443B in capex in 2025, up 73% from $256B in 2024.",
-      "value": 443,
-      "unit": "USD billions",
-      "value_display": "443 USD billions",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
-      "sourceAuthor": "economics of AI report",
-      "sourceType": "web_page",
-      "source_id": "src-023",
-      "tags": [
-        "gpu_infrastructure"
-      ],
-      "notes": "From economics of AI report",
-      "dateOfClaim": "2025",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "total capex",
-      "metric": "capex",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-26T21:48:34.663Z",
-      "major_change": false,
-      "confirmed": false,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-023-26",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "economics of AI report",
-      "claim": "Hyperscaler capex grew 73% year-over-year from $256B in 2024 to $443B in 2025.",
-      "value": 73,
-      "unit": "percent",
-      "value_display": "73 percent",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
-      "sourceAuthor": "economics of AI report",
-      "sourceType": "web_page",
-      "source_id": "src-023",
-      "tags": [
-        "gpu_infrastructure"
-      ],
-      "notes": "From economics of AI report",
-      "dateOfClaim": "2024-2025",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "capex YoY growth",
-      "metric": "capex",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-26T21:48:34.663Z",
-      "major_change": false,
-      "confirmed": false,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-023-27",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "economics of AI report",
-      "claim": "Hyperscaler capex in 2024 was $256B.",
-      "value": 256,
-      "unit": "USD billions",
-      "value_display": "256 USD billions",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
-      "sourceAuthor": "economics of AI report",
-      "sourceType": "web_page",
-      "source_id": "src-023",
-      "tags": [
-        "gpu_infrastructure"
-      ],
-      "notes": "From economics of AI report",
-      "dateOfClaim": "2024",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "total capex",
-      "metric": "capex",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-26T21:48:34.663Z",
-      "major_change": false,
-      "confirmed": false,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-023-28",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "economics of AI report",
-      "claim": "Hyperscaler capex is projected to exceed $600B in 2026, with roughly 75% (~$450B) directed at AI infrastructure.",
-      "value": 600,
-      "unit": "USD billions",
-      "value_display": "600 USD billions",
-      "weight": "indicative",
-      "confidence": "estimated",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
-      "sourceAuthor": "economics of AI report",
-      "sourceType": "web_page",
-      "source_id": "src-023",
-      "tags": [
-        "gpu_infrastructure"
-      ],
-      "notes": "From economics of AI report",
-      "dateOfClaim": "2026 (projected)",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "projected capex",
-      "metric": "capex",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-26T21:48:34.663Z",
-      "major_change": false,
-      "confirmed": false,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-023-29",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "economics of AI report",
-      "claim": "Approximately 75% (~$450B) of projected 2026 hyperscaler capex (~$600B+) is directed at AI infrastructure.",
-      "value": 450,
-      "unit": "USD billions",
-      "value_display": "450 USD billions",
-      "weight": "indicative",
-      "confidence": "estimated",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
-      "sourceAuthor": "economics of AI report",
-      "sourceType": "web_page",
-      "source_id": "src-023",
-      "tags": [
-        "gpu_infrastructure"
-      ],
-      "notes": "From economics of AI report",
-      "dateOfClaim": "2026 (projected)",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "AI-directed capex",
-      "metric": "capex",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-26T21:48:34.663Z",
+      "reviewed_at": "2026-04-26T23:37:34.169Z",
       "major_change": false,
       "confirmed": false,
       "impact": null
@@ -208,206 +38,86 @@
   ],
   "declined": [
     {
-      "id": "auto-20260424-src-023-31",
-      "claim": "Competitive pressure from Google TPUs has reportedly forced NVIDIA to cut pricing ~30% for some customers.",
+      "id": "auto-20260424-src-016-8",
+      "claim": "OpenAI expanded its revolving credit facility to approximately $4.7 billion.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260424-src-016-11",
+      "claim": "OpenAI expects to soon reach 1 billion weekly active users, which would be the fastest platform to achieve that milestone.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260424-src-016-15",
+      "claim": "OpenAI's ads pilot reached more than $100 million in ARR in under six weeks.",
       "note": ""
     }
   ],
   "parked": [],
   "raw_pool": [
     {
-      "id": "auto-20260424-src-023-1",
-      "claim": "The AI ecosystem has grown roughly 5x, from ~$90B to ~$435B in annualized revenue over two years.",
+      "id": "auto-20260424-src-016-7",
+      "claim": "Over $3 billion was raised from individual investors through bank channels in this round.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-2",
-      "claim": "The AI ecosystem was ~$90B in annualized revenue two years prior (2024).",
+      "id": "auto-20260424-src-016-10",
+      "claim": "ChatGPT has over 50 million subscribers.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-3",
-      "claim": "The semiconductor layer (overwhelmingly NVIDIA) accounts for ~$300B of AI ecosystem revenue, representing ~70% of all AI revenues.",
+      "id": "auto-20260424-src-016-12",
+      "claim": "ChatGPT has 6x the monthly web visits and mobile sessions compared to the next largest AI app.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-5",
-      "claim": "NVIDIA's data center quarterly revenue was $62B.",
+      "id": "auto-20260424-src-016-13",
+      "claim": "Total AI time spent on ChatGPT is 4x the next largest AI app and 4x all other AI apps combined.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-6",
-      "claim": "NVIDIA represents ~80% of the semiconductor layer and ~80% of AI semiconductor revenue.",
+      "id": "auto-20260424-src-016-14",
+      "claim": "OpenAI's search usage has nearly tripled in the past year.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-7",
-      "claim": "Broadcom's AI semiconductor business (custom accelerators for Google, Meta, ByteDance) adds ~$34B in annualized revenue.",
+      "id": "auto-20260424-src-016-16",
+      "claim": "Enterprise revenue now makes up more than 40% of OpenAI's total revenue.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-8",
-      "claim": "An estimated ~$25B in high bandwidth memory is purchased directly by hyperscalers for custom chip programs.",
+      "id": "auto-20260424-src-016-17",
+      "claim": "Enterprise revenue is on track to reach parity with consumer revenue by end of 2026.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-9",
-      "claim": "The AI infrastructure layer (AI-specific cloud) accounts for ~$75B in annualized revenue, with Azure, AWS, GCP, and Oracle each contributing $10-20B in AI-attributable revenue.",
+      "id": "auto-20260424-src-016-18",
+      "claim": "OpenAI's APIs now process more than 15 billion tokens per minute.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-10",
-      "claim": "CoreWeave contributes ~$6B in AI infrastructure revenue.",
+      "id": "auto-20260424-src-016-19",
+      "claim": "Codex serves over 2 million weekly users, up 5x in the past three months.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-11",
-      "claim": "The AI application layer accounts for ~$60B in annualized revenue.",
+      "id": "auto-20260424-src-016-20",
+      "claim": "Codex weekly user growth is up 5x in the past three months.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-12",
-      "claim": "OpenAI and Anthropic together make up ~$45B in annualized revenue and represent ~75% of the application layer.",
+      "id": "auto-20260424-src-016-21",
+      "claim": "Codex usage is growing more than 70% month over month.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-13",
-      "claim": "OpenAI and Anthropic together represent ~75% of the AI application layer by revenue.",
+      "id": "auto-20260424-src-016-22",
+      "claim": "OpenAI was the fastest technology platform to reach 10 million users and 100 million users.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-023-14",
-      "claim": "The semiconductor layer grew from capturing ~87% of all AI gross profit (2024) to ~79% in 2026.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-15",
-      "claim": "In 2024, the semiconductor layer captured ~83% of all AI revenue and ~87% of all gross profit.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-16",
-      "claim": "In 2024, the semiconductor layer captured ~83% of all AI revenue.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-17",
-      "claim": "AI semiconductors run at ~73% gross margins.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-18",
-      "claim": "AI infrastructure layer runs at ~55% gross margins.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-19",
-      "claim": "AI application layer runs at ~33% gross margins.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-20",
-      "claim": "The semiconductor layer earns ~$225B in gross profit dollars from AI.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-21",
-      "claim": "The AI infrastructure layer earns ~$40B in gross profit.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-22",
-      "claim": "The AI application layer earns ~$20B in gross profit.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-23",
-      "claim": "The app layer grew 12x over two years in percentage terms but only added ~$55B in absolute dollars.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-24",
-      "claim": "NVIDIA alone added ~$175B of incremental revenue over two years, roughly 3x the size of the entire app layer today.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-30",
-      "claim": "Anthropic ordered up to 1 million Google TPU chips, worth tens of billions.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-32",
-      "claim": "Amazon deployed 1.4 million Trainium2 chips, powering the majority of Bedrock inference.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-33",
-      "claim": "Amazon's custom chips business crossed $10B annual run rate, growing triple digits.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-34",
-      "claim": "OpenAI signed a multiyear deal with Broadcom for 10GW of custom accelerators starting 2026.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-35",
-      "claim": "OpenAI signed a 6GW deal with AMD for Instinct MI450 GPUs.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-36",
-      "claim": "In the cloud stack (for comparison), apps capture 70% of gross profit and semis capture only 6%.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-37",
-      "claim": "In the cloud stack, semis capture only ~8% of revenue, versus ~70% in the AI stack — a core distortion of the AI supercycle.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-38",
-      "claim": "Over two years (2024-2026), infra and apps each gained about 4 points of gross profit share, while semis declined from 87% to 79%.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-39",
-      "claim": "At the current pace of profit share shift (~4pp per 2 years), it would take well over a decade for the app layer to reach cloud-like profit share.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-40",
-      "claim": "The semiconductor layer still captures ~70% of all AI revenues as of 2026, down from ~83% in 2024.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-41",
-      "claim": "Meta acquired chip startup Rivos in September 2025 for RISC-V designs targeting 2026 deployment.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-023-42",
-      "claim": "Microsoft deployed Maia 200 in Azure (January 2026), claiming 3x performance of Trainium3 on inference, now powering a portion of ChatGPT workloads.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-035-24",
-      "claim": "SpaceX can pay $10 billion for their work together as an alternative to the $60B acquisition of Cursor.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-035-26",
-      "claim": "GitHub Copilot is generating over $300M in annual revenue.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-035-29",
-      "claim": "Average developer salaries are $150K+, referenced as context for productivity value capture.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-035-33",
-      "claim": "Cursor improving developer productivity by 20-30% captures significant value given average developer salaries of $150K+.",
+      "id": "auto-20260424-src-016-23",
+      "claim": "The funding round was anchored by Amazon, NVIDIA, SoftBank, and Microsoft, with SoftBank co-leading alongside a16z, D.E. Shaw Ventures, MGX, TPG, and T. Rowe Price.",
       "note": ""
     }
   ],

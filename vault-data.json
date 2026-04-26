@@ -4475,6 +4475,26 @@
       "metricKey": "AI-directed capex",
       "status": "accepted",
       "source_id": "src-023"
+    },
+    {
+      "id": "dp-204",
+      "claim": "ChatGPT has more than 900 million weekly active users.",
+      "value": 900000000,
+      "unit": "users",
+      "sourceUrl": "https://openai.com/index/accelerating-the-next-phase-ai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-Q1",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From OpenAI Press Release 31 Mar 25",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "weekly active users",
+      "status": "accepted",
+      "source_id": "src-016"
     }
   ]
 }
