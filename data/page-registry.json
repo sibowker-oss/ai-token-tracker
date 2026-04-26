@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-04-26-P2d",
+  "last_updated": "2026-04-26-P4",
   "_notes": "Source of truth for page lifecycle status. Every .html file in the repo (excluding node_modules, tests/reports, data/snapshots, data-updates/archive) appears exactly once. See briefs/active/2026-04-26-page-lifecycle-registry.md (wq-031) for the contract; metric-schema.json :: page_lifecycle_statuses for the allowed status values; scripts/validate_page_registry.py for enforcement.",
   "pages": [
 
@@ -243,8 +243,8 @@
     {
       "path": "archive.html",
       "status": "admin",
-      "title": "Decision Archive — AI Ledger",
-      "purpose": "Password-gated registry-driven index for non-public pages. Phase 4 of wq-031 makes this fetch data/page-registry.json and render Concepts / Retired / Parked sections.",
+      "title": "Page Archive — AI Ledger",
+      "purpose": "Password-gated registry-driven index for non-public pages. Fetches data/page-registry.json and renders Concepts / Retired / Parked sections — adding a card is a registry edit, not an HTML edit. Replaces the old Decision Archive (claims) and folds in page-archive.html.",
       "supersedes": ["page-archive.html"],
       "supersededBy": null,
       "addedOn": "2026-04-08",
@@ -371,15 +371,14 @@
     {
       "path": "page-archive.html",
       "status": "retired",
-      "title": "Page Archive — AI Ledger",
-      "purpose": "Pre-existing one-card archive gallery, supersededBy archive.html (registry-driven, Phase 4). Folded in during P4.",
+      "title": "Moved — Page Archive (redirect stub)",
+      "purpose": "Meta-refresh stub redirecting to archive.html. The single-card gallery this file used to be has been folded into archive.html as the registry-driven Concepts / Retired / Parked view (wq-031 P4).",
       "supersedes": [],
       "supersededBy": "archive.html",
       "addedOn": "2026-04-15",
       "retiredOn": "2026-04-26",
-      "retiredReason": "Single-card gallery for archive/sankey-v1.html. Replaced by registry-driven Concepts / Retired / Parked sections in archive.html (wq-031 P4).",
-      "lastReviewed": "2026-04-26",
-      "_provenance": "Stays at root path during P0–P3 (no /archive/ move per brief §4.1 'retired-or-merge'). P4 either deletes this file or replaces it with a meta-refresh stub to archive.html. Validator allows this exception via the lintExclusions+ in-place-retired pattern; see _retiredInPlace below."
+      "retiredReason": "Folded into archive.html during wq-031 P4 — archive.html now reads data/page-registry.json and renders the same Retired card (and more) plus Concepts and Parked sections. This file is a 5-line meta-refresh stub at the original path so the admin.html 'Page Archive' iframe tab still resolves until that tab is cleaned up in a follow-up.",
+      "lastReviewed": "2026-04-26"
     },
 
     {
