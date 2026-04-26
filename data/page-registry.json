@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-04-26",
+  "last_updated": "2026-04-26-P2a",
   "_notes": "Source of truth for page lifecycle status. Every .html file in the repo (excluding node_modules, tests/reports, data/snapshots, data-updates/archive) appears exactly once. See briefs/active/2026-04-26-page-lifecycle-registry.md (wq-031) for the contract; metric-schema.json :: page_lifecycle_statuses for the allowed status values; scripts/validate_page_registry.py for enforcement.",
   "pages": [
 
@@ -9,7 +9,7 @@
       "status": "live",
       "title": "The AI Ledger — Hepburn Advisory",
       "purpose": "Public landing page. Hero anchors ($745B capex, $22B revenue, ~360T tokens/day) with links into the four ledger pages.",
-      "supersedes": [],
+      "supersedes": ["archive/dashboard-v1.html"],
       "supersededBy": null,
       "addedOn": "2026-04-08",
       "retiredOn": null,
@@ -309,17 +309,27 @@
     },
 
     {
-      "path": "dashboard.html",
+      "path": "archive/dashboard-v1.html",
       "status": "retired",
-      "pendingMove": true,
-      "pendingMoveTo": "archive/dashboard-v1.html",
       "title": "The AI Ledger",
-      "purpose": "v1 public landing page (predecessor of index.html).",
+      "purpose": "v1 public landing page (predecessor of index.html). Frozen content at this archive path.",
       "supersedes": [],
       "supersededBy": "index.html",
       "addedOn": "2026-04-08",
       "retiredOn": "2026-04-26",
-      "retiredReason": "Replaced by index.html as the v2 landing page. Original URL was sibowker-oss.github.io/ai-token-tracker/dashboard.html — preserve via meta-refresh stub at root per brief §10 Q1.",
+      "retiredReason": "Replaced by index.html as the v2 landing page. Moved to /archive/ on 2026-04-26 (wq-031 P2a).",
+      "lastReviewed": "2026-04-26"
+    },
+    {
+      "path": "dashboard.html",
+      "status": "retired",
+      "title": "Moved — The AI Ledger (redirect stub)",
+      "purpose": "Meta-refresh redirect stub at the legacy URL. Per brief §10 Q1, dashboard.html is the only retired page that gets a stub — the v1 URL (sibowker-oss.github.io/ai-token-tracker/dashboard.html) is referenced in project knowledge.",
+      "supersedes": [],
+      "supersededBy": "index.html",
+      "addedOn": "2026-04-26",
+      "retiredOn": "2026-04-26",
+      "retiredReason": "Redirect stub for legacy URL preservation. Real content at archive/dashboard-v1.html.",
       "lastReviewed": "2026-04-26"
     },
     {
