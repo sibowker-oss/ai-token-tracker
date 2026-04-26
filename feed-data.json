@@ -1,7 +1,131 @@
 {
-  "generatedAt": "2026-04-25T08:31:46+00:00Z",
+  "generatedAt": "2026-04-26T06:10:51+00:00Z",
   "weekOf": "2026-04-20",
   "dashboardChanges": [
+    {
+      "category": "funding",
+      "tagClass": "tag-funding",
+      "date": "2026-04-26",
+      "entity": "Anthropic",
+      "title": "Anthropic drawing investor offers at $800B+ valuation (April 2026), up from...",
+      "claim": "Anthropic drawing investor offers at $800B+ valuation (April 2026), up from $350B pre-money valuation at February Series G",
+      "value": "800 $B (investor offer valuation)",
+      "source": "Bloomberg",
+      "sourceUrl": "https://www.bloomberg.com/news/articles/2026-04-14/anthropic-attracts-investor-offers-at-a-800-billion-valuation",
+      "impact": null,
+      "majorChange": false
+    },
+    {
+      "category": "inference",
+      "tagClass": "tag-pricing",
+      "date": "2026-04-26",
+      "entity": "DigitalApplied / OpenRouter",
+      "title": "Xiaomi MiMo V2 Pro #1 on OpenRouter in April 2026 with 4.65T tokens/week;...",
+      "claim": "Xiaomi MiMo V2 Pro #1 on OpenRouter in April 2026 with 4.65T tokens/week; Xiaomi commands 22.3% of OpenRouter market share",
+      "value": "4.65 T tokens/week",
+      "source": "DigitalApplied / OpenRouter",
+      "sourceUrl": "https://www.digitalapplied.com/blog/openrouter-rankings-april-2026-top-ai-models-data",
+      "impact": null,
+      "majorChange": false
+    },
+    {
+      "category": "launch",
+      "tagClass": "tag-launch",
+      "date": "2026-04-26",
+      "entity": "Anthropic",
+      "title": "Anthropic IPO target as early as October 2026; Bloomberg reports unsolicited...",
+      "claim": "Anthropic IPO target as early as October 2026; Bloomberg reports unsolicited investor offers at $800B+ valuation",
+      "value": "800 $B (implied IPO valuation)",
+      "source": "Bloomberg / Multiple sources",
+      "sourceUrl": "https://www.tradingkey.com/analysis/stocks/us-stocks/261756528-anthropic-openai-ipo-tradingkey",
+      "impact": {
+        "type": "valuation",
+        "name": "Anthropic → Valuation (2026)",
+        "current": "380 $B",
+        "proposed": "800 $B (implied IPO valuation)",
+        "pctChange": "110.5",
+        "isMajor": true
+      },
+      "majorChange": false
+    },
+    {
+      "category": "revenue",
+      "tagClass": "tag-revenue",
+      "date": "2026-04-26",
+      "entity": "Openai",
+      "title": "OpenAI confirmed $2B/month revenue (~$24B ARR) at $122B funding close (March...",
+      "claim": "OpenAI confirmed $2B/month revenue (~$24B ARR) at $122B funding close (March 31, 2026)",
+      "value": "2 $B/month",
+      "source": "CoinDesk",
+      "sourceUrl": "https://www.coindesk.com/tech/2026/04/01/openai-raises-a-record-usd122-billion-at-as-revenue-crosses-usd2-billion-per-month",
+      "impact": null,
+      "majorChange": false
+    },
+    {
+      "category": "adoption",
+      "tagClass": "tag-launch",
+      "date": "2026-04-26",
+      "entity": "Microsoft",
+      "title": "Microsoft launched M365 E7 enterprise plan at $99/user/month including...",
+      "claim": "Microsoft launched M365 E7 enterprise plan at $99/user/month including Copilot (March 2026), 65% above prior top tier",
+      "value": "99 $/user/month",
+      "source": "The Motley Fool",
+      "sourceUrl": "https://www.fool.com/investing/2026/03/17/microsofts-new-99-copilot-tier-ai-monetization/",
+      "impact": null,
+      "majorChange": false
+    },
+    {
+      "category": "launch",
+      "tagClass": "tag-launch",
+      "date": "2026-04-26",
+      "entity": "Microsoft",
+      "title": "SEC EDGAR filings catalogue fetched for Microsoft (MSFT).",
+      "claim": "SEC EDGAR filings catalogue fetched for Microsoft (MSFT).",
+      "value": null,
+      "source": "SEC EDGAR — Microsoft filings catalogue",
+      "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000789019&type=10-K,10-Q,8-K&dateb=&owner=include&count=5",
+      "impact": null,
+      "majorChange": false
+    },
+    {
+      "category": "launch",
+      "tagClass": "tag-launch",
+      "date": "2026-04-26",
+      "entity": "SEC EDGAR — Alphabet filings catalogue",
+      "title": "SEC EDGAR filings catalogue fetched for Alphabet (GOOGL).",
+      "claim": "SEC EDGAR filings catalogue fetched for Alphabet (GOOGL).",
+      "value": null,
+      "source": "SEC EDGAR — Alphabet filings catalogue",
+      "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001652044&type=10-K,10-Q,8-K&dateb=&owner=include&count=5",
+      "impact": null,
+      "majorChange": false
+    },
+    {
+      "category": "launch",
+      "tagClass": "tag-launch",
+      "date": "2026-04-26",
+      "entity": "Meta",
+      "title": "SEC EDGAR filings catalogue fetched for Meta (META).",
+      "claim": "SEC EDGAR filings catalogue fetched for Meta (META).",
+      "value": null,
+      "source": "SEC EDGAR — Meta filings catalogue",
+      "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001326801&type=10-K,10-Q,8-K&dateb=&owner=include&count=5",
+      "impact": null,
+      "majorChange": false
+    },
+    {
+      "category": "revenue",
+      "tagClass": "tag-revenue",
+      "date": "2026-04-26",
+      "entity": "Sacra â Perplexity Deep Dive",
+      "title": "Perplexity hit $500M in annualized revenue in April 2026, up 335%...",
+      "claim": "Perplexity hit $500M in annualized revenue in April 2026, up 335% year-over-year.",
+      "value": "500 USD millions",
+      "source": "Sacra â Perplexity Deep Dive",
+      "sourceUrl": "https://sacra.com/research/perplexity/",
+      "impact": null,
+      "majorChange": false
+    },
     {
       "category": "revenue",
       "tagClass": "tag-revenue",
@@ -23,7 +147,7 @@
       "title": "Cursor hit $2B in annualized revenue in February 2026.",
       "claim": "Cursor hit $2B in annualized revenue in February 2026.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -36,7 +160,7 @@
       "title": "Cursor reached $1B in annualized revenue in November 2025.",
       "claim": "Cursor reached $1B in annualized revenue in November 2025.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -49,7 +173,7 @@
       "title": "Cursor reached $500M ARR in June 2025.",
       "claim": "Cursor reached $500M ARR in June 2025.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -62,7 +186,7 @@
       "title": "Cursor is the fastest-growing SaaS company of all time from $1M to $500M in...",
       "claim": "Cursor is the fastest-growing SaaS company of all time from $1M to $500M in ARR, with revenue doubling approximately every two months.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -75,7 +199,7 @@
       "title": "Large corporate buyers now account for approximately 60% of Cursor's revenue.",
       "claim": "Large corporate buyers now account for approximately 60% of Cursor's revenue.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -88,7 +212,7 @@
       "title": "Cursor is used by over 50,000 engineering teams globally.",
       "claim": "Cursor is used by over 50,000 engineering teams globally.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -101,7 +225,7 @@
       "title": "Nearly 70% of the Fortune 1000 is represented in Cursor's customer base.",
       "claim": "Nearly 70% of the Fortune 1000 is represented in Cursor's customer base.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -114,7 +238,7 @@
       "title": "Cursor offers a free tier with limited AI features including 2,000 monthly...",
       "claim": "Cursor offers a free tier with limited AI features including 2,000 monthly code completions.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -127,7 +251,7 @@
       "title": "Cursor's Pro plan is priced at $20/month providing unlimited code...",
       "claim": "Cursor's Pro plan is priced at $20/month providing unlimited code completions and premium AI model access.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -140,7 +264,7 @@
       "title": "Cursor's Business plan is priced at $40/user/month and adds enterprise...",
       "claim": "Cursor's Business plan is priced at $40/user/month and adds enterprise features like centralized billing, admin dashboards, and enhanced privacy controls.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -153,7 +277,7 @@
       "title": "Cursor's Ultra plan is priced at $200/month offering 20x more usage than...",
       "claim": "Cursor's Ultra plan is priced at $200/month offering 20x more usage than Pro, introduced June 2025.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -166,7 +290,7 @@
       "title": "Cursor's Composer 2 model is available at API-accessible token pricing of...",
       "claim": "Cursor's Composer 2 model is available at API-accessible token pricing of $0.50/M input tokens and $2.50/M output tokens.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -179,7 +303,7 @@
       "title": "In April 2026, Cursor raised $2 billion at a $50 billion valuation.",
       "claim": "In April 2026, Cursor raised $2 billion at a $50 billion valuation.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -192,7 +316,7 @@
       "title": "In April 2026, Cursor raised $2 billion in a funding round.",
       "claim": "In April 2026, Cursor raised $2 billion in a funding round.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -205,7 +329,7 @@
       "title": "In November 2025, Cursor raised $2.3 billion in a Series D that valued it at...",
       "claim": "In November 2025, Cursor raised $2.3 billion in a Series D that valued it at $29.3 billion.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -218,7 +342,7 @@
       "title": "Cursor raised $2.3 billion in its Series D round in November 2025.",
       "claim": "Cursor raised $2.3 billion in its Series D round in November 2025.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -231,7 +355,7 @@
       "title": "Cursor reached a $9.9 billion valuation in June 2025 after raising a $900M...",
       "claim": "Cursor reached a $9.9 billion valuation in June 2025 after raising a $900M Series C.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -244,7 +368,7 @@
       "title": "Cursor raised $900M in its Series C round in June 2025.",
       "claim": "Cursor raised $900M in its Series C round in June 2025.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -257,7 +381,7 @@
       "title": "Cursor closed a $105 million Series B at a $2.5 billion valuation in...",
       "claim": "Cursor closed a $105 million Series B at a $2.5 billion valuation in December 2024.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -270,7 +394,7 @@
       "title": "Cursor raised $105 million in its Series B round in December 2024.",
       "claim": "Cursor raised $105 million in its Series B round in December 2024.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -283,7 +407,7 @@
       "title": "Cursor closed a $60 million Series A at a $400 million valuation in August 2024.",
       "claim": "Cursor closed a $60 million Series A at a $400 million valuation in August 2024.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -296,7 +420,7 @@
       "title": "Cursor raised $60 million in its Series A round in August 2024.",
       "claim": "Cursor raised $60 million in its Series A round in August 2024.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -309,7 +433,7 @@
       "title": "Total funding raised by Cursor across all rounds as of 2025 was $3.38B.",
       "claim": "Total funding raised by Cursor across all rounds as of 2025 was $3.38B.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -322,7 +446,7 @@
       "title": "Cursor surpassed $1 billion in annual recurring revenue since its 2023...",
       "claim": "Cursor surpassed $1 billion in annual recurring revenue since its 2023 debut, confirmed by a Wired source.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -335,7 +459,7 @@
       "title": "More than 30% of pull requests Cursor merges internally are now created by...",
       "claim": "More than 30% of pull requests Cursor merges internally are now created by agents operating autonomously in cloud sandboxes.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -348,7 +472,7 @@
       "title": "Cursor counts over half the Fortune 500 as customers.",
       "claim": "Cursor counts over half the Fortune 500 as customers.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -361,7 +485,7 @@
       "title": "Cursor reports tens of thousands of enterprise customers, with enterprise...",
       "claim": "Cursor reports tens of thousands of enterprise customers, with enterprise and corporate buyers representing the majority of revenue.",
       "value": "",
-      "source": "Sacra â Cursor Deep Dive",
+      "source": "Sacra — Cursor Deep Dive",
       "sourceUrl": "https://sacra.com/research/cursor/",
       "impact": null,
       "majorChange": false
@@ -374,7 +498,7 @@
       "title": "The OpenAI Python SDK received 10,166,199 downloads in the last day.",
       "claim": "The OpenAI Python SDK received 10,166,199 downloads in the last day.",
       "value": "",
-      "source": "PyPI Stats â OpenAI SDK",
+      "source": "PyPI Stats — OpenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/openai",
       "impact": null,
       "majorChange": false
@@ -387,7 +511,7 @@
       "title": "The OpenAI Python SDK received 62,863,567 downloads in the last week.",
       "claim": "The OpenAI Python SDK received 62,863,567 downloads in the last week.",
       "value": "",
-      "source": "PyPI Stats â OpenAI SDK",
+      "source": "PyPI Stats — OpenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/openai",
       "impact": null,
       "majorChange": false
@@ -400,7 +524,7 @@
       "title": "The OpenAI Python SDK received 254,437,183 downloads in the last month.",
       "claim": "The OpenAI Python SDK received 254,437,183 downloads in the last month.",
       "value": "",
-      "source": "PyPI Stats â OpenAI SDK",
+      "source": "PyPI Stats — OpenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/openai",
       "impact": null,
       "majorChange": false
@@ -413,7 +537,7 @@
       "title": "The latest version of the OpenAI Python SDK is 2.32.0, indicating active and...",
       "claim": "The latest version of the OpenAI Python SDK is 2.32.0, indicating active and rapid development of the API ecosystem.",
       "value": "",
-      "source": "PyPI Stats â OpenAI SDK",
+      "source": "PyPI Stats — OpenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/openai",
       "impact": null,
       "majorChange": false
@@ -426,7 +550,7 @@
       "title": "The Anthropic Python SDK received 4,389,716 downloads in the last day.",
       "claim": "The Anthropic Python SDK received 4,389,716 downloads in the last day.",
       "value": "",
-      "source": "PyPI Stats â Anthropic SDK",
+      "source": "PyPI Stats — Anthropic SDK",
       "sourceUrl": "https://pypistats.org/packages/anthropic",
       "impact": null,
       "majorChange": false
@@ -439,7 +563,7 @@
       "title": "The Anthropic Python SDK received 24,718,548 downloads in the last week.",
       "claim": "The Anthropic Python SDK received 24,718,548 downloads in the last week.",
       "value": "",
-      "source": "PyPI Stats â Anthropic SDK",
+      "source": "PyPI Stats — Anthropic SDK",
       "sourceUrl": "https://pypistats.org/packages/anthropic",
       "impact": null,
       "majorChange": false
@@ -452,7 +576,7 @@
       "title": "The Anthropic Python SDK received 99,004,938 downloads in the last month.",
       "claim": "The Anthropic Python SDK received 99,004,938 downloads in the last month.",
       "value": "",
-      "source": "PyPI Stats â Anthropic SDK",
+      "source": "PyPI Stats — Anthropic SDK",
       "sourceUrl": "https://pypistats.org/packages/anthropic",
       "impact": null,
       "majorChange": false
@@ -465,7 +589,7 @@
       "title": "The latest version of the Anthropic Python SDK is 0.97.0, indicating a high...",
       "claim": "The latest version of the Anthropic Python SDK is 0.97.0, indicating a high release cadence and active development.",
       "value": "",
-      "source": "PyPI Stats â Anthropic SDK",
+      "source": "PyPI Stats — Anthropic SDK",
       "sourceUrl": "https://pypistats.org/packages/anthropic",
       "impact": null,
       "majorChange": false
@@ -478,7 +602,7 @@
       "title": "Google GenAI SDK (google-generativeai) recorded 520,183 downloads in the...",
       "claim": "Google GenAI SDK (google-generativeai) recorded 520,183 downloads in the last day.",
       "value": "",
-      "source": "PyPI Stats â Google GenAI SDK",
+      "source": "PyPI Stats — Google GenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/google-generativeai",
       "impact": null,
       "majorChange": false
@@ -491,7 +615,7 @@
       "title": "Google GenAI SDK (google-generativeai) recorded 3,590,645 downloads in the...",
       "claim": "Google GenAI SDK (google-generativeai) recorded 3,590,645 downloads in the last week.",
       "value": "",
-      "source": "PyPI Stats â Google GenAI SDK",
+      "source": "PyPI Stats — Google GenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/google-generativeai",
       "impact": null,
       "majorChange": false
@@ -504,7 +628,7 @@
       "title": "Google GenAI SDK (google-generativeai) recorded 15,799,338 downloads in the...",
       "claim": "Google GenAI SDK (google-generativeai) recorded 15,799,338 downloads in the last month.",
       "value": "",
-      "source": "PyPI Stats â Google GenAI SDK",
+      "source": "PyPI Stats — Google GenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/google-generativeai",
       "impact": null,
       "majorChange": false
@@ -517,7 +641,7 @@
       "title": "The latest version of the Google GenAI SDK is 0.8.6, indicating active...",
       "claim": "The latest version of the Google GenAI SDK is 0.8.6, indicating active development and iteration.",
       "value": "",
-      "source": "PyPI Stats â Google GenAI SDK",
+      "source": "PyPI Stats — Google GenAI SDK",
       "sourceUrl": "https://pypistats.org/packages/google-generativeai",
       "impact": null,
       "majorChange": false
