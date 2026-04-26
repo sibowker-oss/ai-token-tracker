@@ -37,6 +37,7 @@ const ROOT = path.resolve(__dirname, '..');
 const SITE_DATA = path.join(ROOT, 'site-data.json');
 const SOURCES_REGISTRY = path.join(ROOT, 'data', 'sources.registry.md');
 const CHANGELOG_HTML = path.join(ROOT, 'changelog.html');
+const PAGE_REGISTRY = path.join(ROOT, 'data', 'page-registry.json');
 
 const REQUIRED_FIELDS = [
   'value', 'label', 'unit', 'year', 'source', 'sourceUrl',
@@ -240,6 +241,77 @@ function literalMatchesAnyValue(literalValue, rawBase, numericSet) {
   return false;
 }
 
+// ────────────────────────────────────────────────────────────
+// Page-lifecycle registry (wq-031 P3)
+//
+// dataReferences only runs against status=live pages whose registry entry
+// does not opt out via lintExclusions. The unregistered-root-pages check
+// fails if a new .html lands at repo root without a registry entry —
+// forces every new page to be classified.
+// ────────────────────────────────────────────────────────────
+
+function loadPageRegistry() {
+  if (!fs.existsSync(PAGE_REGISTRY)) {
+    fail(
+      'missing-registry',
+      'data/page-registry.json',
+      'page-registry.json not found — every .html must be classified (wq-031)',
+    );
+    return null;
+  }
+  try {
+    return JSON.parse(fs.readFileSync(PAGE_REGISTRY, 'utf8'));
+  } catch (e) {
+    fail(
+      'malformed-registry',
+      'data/page-registry.json',
+      `page-registry.json is not valid JSON: ${e.message}`,
+    );
+    return null;
+  }
+}
+
+function buildLintScope(registry) {
+  // Returns { liveCheckable, allRegistered, byPath }
+  //   liveCheckable: Set<string> — paths to run dataReferences on
+  //   allRegistered: Set<string> — every registered path (any status)
+  //   byPath: Map<path, entry>
+  const liveCheckable = new Set();
+  const allRegistered = new Set();
+  const byPath = new Map();
+  if (!registry || !Array.isArray(registry.pages)) {
+    return { liveCheckable, allRegistered, byPath };
+  }
+  for (const entry of registry.pages) {
+    const p = entry.path;
+    if (!p) continue;
+    allRegistered.add(p);
+    byPath.set(p, entry);
+    if (entry.status !== 'live') continue;
+    const exclusions = Array.isArray(entry.lintExclusions) ? entry.lintExclusions : [];
+    if (exclusions.includes('dataReferences')) continue;
+    liveCheckable.add(p);
+  }
+  return { liveCheckable, allRegistered, byPath };
+}
+
+function checkUnregisteredRootPages(allRegistered) {
+  // Fail (not warn) on any .html in repo root that isn't in the registry.
+  // Forces every new page to be classified.
+  const rootHtmls = fs
+    .readdirSync(ROOT)
+    .filter(f => f.endsWith('.html'));
+  for (const f of rootHtmls) {
+    if (!allRegistered.has(f)) {
+      fail(
+        'unregistered-page',
+        f,
+        'root .html file not in data/page-registry.json — add a registry entry (wq-031)',
+      );
+    }
+  }
+}
+
 function stripTagsAndStyle(html) {
   return html
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
@@ -247,14 +319,19 @@ function stripTagsAndStyle(html) {
     .replace(/<!--[\s\S]*?-->/g, ' ');
 }
 
-function checkDataReferences(currentData) {
+function checkDataReferences(currentData, liveCheckable) {
   const numericSet = collectNumericValues(currentData);
   if (numericSet.size === 0) return;
 
-  const htmlFiles = fs
-    .readdirSync(ROOT)
-    .filter(f => f.endsWith('.html'))
-    .map(f => path.join(ROOT, f));
+  // wq-031 P3: scope is registry-driven. Only status=live entries (without
+  // a dataReferences lint exclusion) get scanned. Admin / concept / retired /
+  // beta / parked / newsletter files are skipped here.
+  const htmlFiles = Array.from(liveCheckable)
+    .filter(rel => {
+      const full = path.join(ROOT, rel);
+      return fs.existsSync(full);
+    })
+    .map(rel => path.join(ROOT, rel));
 
   for (const file of htmlFiles) {
     const rel = path.relative(ROOT, file);
@@ -313,7 +390,12 @@ function main() {
   walkEntries(data);
   checkSourceRegistryExists();
   checkSchemaDiff(data);
-  checkDataReferences(data);
+
+  // wq-031 P3: page-registry-gated checks.
+  const registry = loadPageRegistry();
+  const { liveCheckable, allRegistered } = buildLintScope(registry);
+  checkUnregisteredRootPages(allRegistered);
+  checkDataReferences(data, liveCheckable);
 
   if (failures.length === 0 && warnings.length === 0) {
     if (!QUIET) console.log(`✓ build-lint: 0 failures, 0 warnings (checked against today=${today})`);
