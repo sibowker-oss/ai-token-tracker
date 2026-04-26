@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-04-26-P2b",
+  "last_updated": "2026-04-26-P2c",
   "_notes": "Source of truth for page lifecycle status. Every .html file in the repo (excluding node_modules, tests/reports, data/snapshots, data-updates/archive) appears exactly once. See briefs/active/2026-04-26-page-lifecycle-registry.md (wq-031) for the contract; metric-schema.json :: page_lifecycle_statuses for the allowed status values; scripts/validate_page_registry.py for enforcement.",
   "pages": [
 
@@ -30,8 +30,8 @@
       "path": "revenue.html",
       "status": "live",
       "title": "Revenue Ledger — AI Ledger v2",
-      "purpose": "Revenue Ledger — customer revenue by buyer / channel / provider, the canonical Sankey. v2 page; supersedes sankey.html.",
-      "supersedes": [],
+      "purpose": "Revenue Ledger — customer revenue by buyer / channel / provider, the canonical Sankey. v2 page; supersedes archive/sankey-v2.html (and transitively archive/sankey-v1.html).",
+      "supersedes": ["archive/sankey-v2.html", "archive/sankey-v1.html"],
       "supersededBy": null,
       "addedOn": "2026-04-22",
       "retiredOn": null,
@@ -345,17 +345,15 @@
       "lastReviewed": "2026-04-26"
     },
     {
-      "path": "sankey.html",
+      "path": "archive/sankey-v2.html",
       "status": "retired",
-      "pendingMove": true,
-      "pendingMoveTo": "archive/sankey-v2.html",
       "title": "Follow the Revenue — The AI Ledger",
-      "purpose": "v2 revenue Sankey (predecessor of revenue.html). Note: archive/sankey-v1.html is the older v1 predecessor.",
-      "supersedes": [],
+      "purpose": "v2 revenue Sankey (predecessor of revenue.html). Frozen content at this archive path. archive/sankey-v1.html is the older v1 predecessor.",
+      "supersedes": ["archive/sankey-v1.html"],
       "supersededBy": "revenue.html",
       "addedOn": "2026-04-08",
       "retiredOn": "2026-04-26",
-      "retiredReason": "Replaced by revenue.html as the v2 canonical Sankey.",
+      "retiredReason": "Replaced by revenue.html as the v2 canonical Sankey. Moved to /archive/ on 2026-04-26 (wq-031 P2c).",
       "lastReviewed": "2026-04-26"
     },
     {
