@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-04-26-P2a",
+  "last_updated": "2026-04-26-P2b",
   "_notes": "Source of truth for page lifecycle status. Every .html file in the repo (excluding node_modules, tests/reports, data/snapshots, data-updates/archive) appears exactly once. See briefs/active/2026-04-26-page-lifecycle-registry.md (wq-031) for the contract; metric-schema.json :: page_lifecycle_statuses for the allowed status values; scripts/validate_page_registry.py for enforcement.",
   "pages": [
 
@@ -19,8 +19,8 @@
       "path": "capital.html",
       "status": "live",
       "title": "Capital Ledger — The AI Ledger v2",
-      "purpose": "Capital Ledger — capex flows by hyperscaler, infrastructure node, and convergence-path analysis. v2 page; supersedes chips.html.",
-      "supersedes": [],
+      "purpose": "Capital Ledger — capex flows by hyperscaler, infrastructure node, and convergence-path analysis. v2 page; supersedes archive/chips-v1.html.",
+      "supersedes": ["archive/chips-v1.html"],
       "supersededBy": null,
       "addedOn": "2026-04-22",
       "retiredOn": null,
@@ -333,17 +333,15 @@
       "lastReviewed": "2026-04-26"
     },
     {
-      "path": "chips.html",
+      "path": "archive/chips-v1.html",
       "status": "retired",
-      "pendingMove": true,
-      "pendingMoveTo": "archive/chips-v1.html",
       "title": "Follow the CapEx — The AI Ledger",
-      "purpose": "v1 capex Sankey (predecessor of capital.html).",
+      "purpose": "v1 capex Sankey (predecessor of capital.html). Frozen content at this archive path.",
       "supersedes": [],
       "supersededBy": "capital.html",
       "addedOn": "2026-04-18",
       "retiredOn": "2026-04-26",
-      "retiredReason": "RHS Sankey totals diverged from capital.html by $141B (chips.html sums to $604B; capital.html sums to $745B). Per wq-016 audit, chips.html is a stale snapshot never re-balanced when capital.html shipped. Capital.html is the canonical capex view.",
+      "retiredReason": "RHS Sankey totals diverged from capital.html by $141B (chips.html summed to $604B; capital.html sums to $745B). Per wq-016 audit, chips.html was a stale snapshot never re-balanced when capital.html shipped. capital.html is the canonical capex view. Moved to /archive/ on 2026-04-26 (wq-031 P2b).",
       "lastReviewed": "2026-04-26"
     },
     {
