@@ -4355,6 +4355,126 @@
       "metricKey": "Valuation",
       "status": "accepted",
       "source_id": "src-036"
+    },
+    {
+      "id": "dp-198",
+      "claim": "NVIDIA's data center business did $62B last quarter, annualizing to ~$250B.",
+      "value": 250,
+      "unit": "USD billions",
+      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
+      "sourceType": "web_page",
+      "sourceAuthor": "economics of AI report",
+      "confidence": "verified",
+      "dateOfClaim": "2026 (annualized)",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From economics of AI report",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "data center annualized revenue",
+      "status": "accepted",
+      "source_id": "src-023"
+    },
+    {
+      "id": "dp-199",
+      "claim": "The top five hyperscalers spent ~$443B in capex in 2025, up 73% from $256B in 2024.",
+      "value": 443,
+      "unit": "USD billions",
+      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
+      "sourceType": "web_page",
+      "sourceAuthor": "economics of AI report",
+      "confidence": "verified",
+      "dateOfClaim": "2025",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From economics of AI report",
+      "tags": [
+        "gpu_infrastructure"
+      ],
+      "metricKey": "total capex",
+      "status": "accepted",
+      "source_id": "src-023"
+    },
+    {
+      "id": "dp-200",
+      "claim": "Hyperscaler capex grew 73% year-over-year from $256B in 2024 to $443B in 2025.",
+      "value": 73,
+      "unit": "percent",
+      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
+      "sourceType": "web_page",
+      "sourceAuthor": "economics of AI report",
+      "confidence": "verified",
+      "dateOfClaim": "2024-2025",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From economics of AI report",
+      "tags": [
+        "gpu_infrastructure"
+      ],
+      "metricKey": "capex YoY growth",
+      "status": "accepted",
+      "source_id": "src-023"
+    },
+    {
+      "id": "dp-201",
+      "claim": "Hyperscaler capex in 2024 was $256B.",
+      "value": 256,
+      "unit": "USD billions",
+      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
+      "sourceType": "web_page",
+      "sourceAuthor": "economics of AI report",
+      "confidence": "verified",
+      "dateOfClaim": "2024",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From economics of AI report",
+      "tags": [
+        "gpu_infrastructure"
+      ],
+      "metricKey": "total capex",
+      "status": "accepted",
+      "source_id": "src-023"
+    },
+    {
+      "id": "dp-202",
+      "claim": "Hyperscaler capex is projected to exceed $600B in 2026, with roughly 75% (~$450B) directed at AI infrastructure.",
+      "value": 600,
+      "unit": "USD billions",
+      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
+      "sourceType": "web_page",
+      "sourceAuthor": "economics of AI report",
+      "confidence": "estimated",
+      "dateOfClaim": "2026 (projected)",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From economics of AI report",
+      "tags": [
+        "gpu_infrastructure"
+      ],
+      "metricKey": "projected capex",
+      "status": "accepted",
+      "source_id": "src-023"
+    },
+    {
+      "id": "dp-203",
+      "claim": "Approximately 75% (~$450B) of projected 2026 hyperscaler capex (~$600B+) is directed at AI infrastructure.",
+      "value": 450,
+      "unit": "USD billions",
+      "sourceUrl": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
+      "sourceType": "web_page",
+      "sourceAuthor": "economics of AI report",
+      "confidence": "estimated",
+      "dateOfClaim": "2026 (projected)",
+      "dateAdded": "2026-04-26",
+      "usedOn": [],
+      "notes": "From economics of AI report",
+      "tags": [
+        "gpu_infrastructure"
+      ],
+      "metricKey": "AI-directed capex",
+      "status": "accepted",
+      "source_id": "src-023"
     }
   ]
 }

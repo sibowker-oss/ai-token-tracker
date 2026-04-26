@@ -5531,7 +5531,8 @@
           "data_center_revenue_quarterly": 60,
           "data_center_revenue": 240,
           "gross_margin_pct": 70,
-          "hyperscaler_revenue_pct": 60
+          "hyperscaler_revenue_pct": 60,
+          "collected_revenue": 250
         }
       },
       "current": {
@@ -5737,6 +5738,26 @@
               "source": "Dwarkesh Patel",
               "source_url": "https://www.dwarkesh.com/p/jensen-huang",
               "date": "2026-04-15",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2026.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-198",
+              "claim": "NVIDIA's data center business did $62B last quarter, annualizing to ~$250B.",
+              "value": 250,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "economics of AI report",
+              "source_url": "https://apoorv03.com/p/the-economics-of-generative-ai-two?utm_source=tldrai",
+              "date": "2026 (annualized)",
               "origin": "accepted",
               "role": "supports"
             }
