@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "last_updated": "2026-04-26-P2c",
+  "last_updated": "2026-04-26-P2d",
   "_notes": "Source of truth for page lifecycle status. Every .html file in the repo (excluding node_modules, tests/reports, data/snapshots, data-updates/archive) appears exactly once. See briefs/active/2026-04-26-page-lifecycle-registry.md (wq-031) for the contract; metric-schema.json :: page_lifecycle_statuses for the allowed status values; scripts/validate_page_registry.py for enforcement.",
   "pages": [
 
@@ -357,17 +357,15 @@
       "lastReviewed": "2026-04-26"
     },
     {
-      "path": "v1-review.html",
+      "path": "archive/v1-review.html",
       "status": "retired",
-      "pendingMove": true,
-      "pendingMoveTo": "archive/v1-review.html",
       "title": "V1 Release Review Checklist",
       "purpose": "Legacy v1 release-review checklist — superseded by the wq-031 lifecycle workflow.",
       "supersedes": [],
       "supersededBy": null,
       "addedOn": "2026-04-08",
       "retiredOn": "2026-04-26",
-      "retiredReason": "One-shot release-review checklist from the v1 push; not maintained.",
+      "retiredReason": "One-shot release-review checklist from the v1 push; not maintained. Moved to /archive/ on 2026-04-26 (wq-031 P2d).",
       "lastReviewed": "2026-04-26"
     },
     {
