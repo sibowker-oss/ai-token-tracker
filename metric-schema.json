@@ -101,6 +101,31 @@
       "parked": "Held for triangulation or future review."
     }
   },
+  "page_lifecycle_statuses": {
+    "_description": "Valid status values for entries in data/page-registry.json. Source of truth for scripts/validate_page_registry.py, scripts/build-lint.js (dataReferences gating), and archive.html (Concepts/Retired/Parked sections). Added under wq-031 (briefs/active/2026-04-26-page-lifecycle-registry.md).",
+    "values": ["live", "admin", "concept", "beta", "parked", "retired", "newsletter"],
+    "definitions": {
+      "live": "Public ledger / infrastructure page. In nav. Linted (full dataReferences) unless the entry carries lintExclusions.",
+      "admin": "Tooling page (review queue, source admin, settings, etc.). Not in public nav. Schema-checked but skipped on dataReferences.",
+      "concept": "Experiment / in-flight idea kept in repo root for active iteration. Not in nav. Excluded from dataReferences. Surfaced on archive.html under the Concepts section.",
+      "beta": "Parallel staging tree under /beta/. Not in nav. Excluded by directory boundary on every site-wide check.",
+      "parked": "Paused work under /parked/. Not in nav. Excluded from audits. Surfaced on archive.html under the Parked section.",
+      "retired": "Superseded by a live page. Frozen content under /archive/. Surfaced on archive.html under the Retired section.",
+      "newsletter": "Immutable timestamped artefact under /newsletters/. Not in nav. Excluded from audits."
+    },
+    "folder_rules": {
+      "live": {"required_folder": "<root>", "in_public_nav": true, "linted": true},
+      "admin": {"required_folder": "<root> or data-updates/", "in_public_nav": false, "linted": false},
+      "concept": {"required_folder": "<root>", "in_public_nav": false, "linted": false},
+      "beta": {"required_folder": "beta/", "in_public_nav": false, "linted": false},
+      "parked": {"required_folder": "parked/", "in_public_nav": false, "linted": false},
+      "retired": {"required_folder": "archive/", "in_public_nav": false, "linted": false, "transition_flag": "pendingMove allows status=retired with path at <root> until the P2 git mv lands"},
+      "newsletter": {"required_folder": "newsletters/", "in_public_nav": false, "linted": false}
+    },
+    "entry_required_fields": ["path", "status", "title", "purpose", "supersedes", "supersededBy", "addedOn", "retiredOn"],
+    "entry_optional_fields": ["lastReviewed", "retiredReason", "lintExclusions", "pendingMove", "pendingMoveTo", "_provenance", "_lintExclusionsReason"],
+    "retired_required_fields": ["supersededBy", "retiredOn", "retiredReason"]
+  },
   "roles": {
     "model_provider": {
       "label": "Model Provider",
