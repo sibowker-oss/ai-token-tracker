@@ -5186,6 +5186,9 @@
         "2025": {
           "arr": 1.9,
           "valuation": 35
+        },
+        "2026": {
+          "customer_count": 24
         }
       },
       "current": {
@@ -5251,6 +5254,26 @@
               "role": "supports"
             }
           ]
+        },
+        "2026.customer_count": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-225",
+              "claim": "CoreWeave has approximately two dozen named customers.",
+              "value": 24,
+              "unit": "customers",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Coreweave data points",
+              "source_url": "https://www.nextplatform.com/cloud/2026/04/09/coreweave-takes-as-much-financial-engineering-as-it-does-datacenter-design/5215794?utm_source=tldrai",
+              "date": "April 2026",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
         }
       }
     },

@@ -1,470 +1,187 @@
 {
-  "submitted_at": "2026-04-27T22:30:02.180Z",
+  "submitted_at": "2026-04-27T22:36:28.248Z",
   "accepted": [
     {
-      "id": "auto-20260424-src-034-46",
+      "id": "auto-20260424-src-052-29",
       "origin": "inbox",
       "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic reached $19B in annualized revenue by early 2026, up from approximately $4B in mid-2025.",
-      "value": 19,
-      "unit": "USD billions",
-      "value_display": "19 USD billions",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/openai/",
-      "sourceAuthor": "Sacra â OpenAI Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-034",
-      "tags": [
-        "provider_revenue"
-      ],
-      "notes": "From Sacra â OpenAI Deep Dive",
-      "dateOfClaim": "Early 2026",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "Annualized Revenue",
-      "metric": "revenue",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T22:30:02.172Z",
-      "major_change": false,
-      "confirmed": false,
-      "impact": {
-        "type": "arr",
-        "name": "Anthropic → Current ARR (2026)",
-        "current": "18 $B",
-        "proposed": "19 USD billions",
-        "pctChange": "5.6",
-        "isMajor": false
-      }
-    },
-    {
-      "id": "auto-20260424-src-034-59",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic's annualized revenue was approximately $4B in mid-2025.",
-      "value": 4,
-      "unit": "USD billions",
-      "value_display": "4 USD billions",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/openai/",
-      "sourceAuthor": "Sacra â OpenAI Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-034",
-      "tags": [
-        "provider_revenue"
-      ],
-      "notes": "From Sacra â OpenAI Deep Dive",
-      "dateOfClaim": "Mid-2025",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "Annualized Revenue",
-      "metric": "revenue",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T22:30:02.178Z",
-      "major_change": false,
-      "confirmed": false,
-      "impact": {
-        "type": "arr",
-        "name": "Anthropic → Current ARR (2025)",
-        "current": "4.5 $B",
-        "proposed": "4 USD billions",
-        "pctChange": "-11.1",
-        "isMajor": false
-      }
-    },
-    {
-      "id": "auto-20260424-src-035-23",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Sacra â Cursor Deep Dive",
-      "claim": "SpaceX has an option to acquire Cursor for $60 billion.",
-      "value": 60000000000,
-      "unit": "USD",
-      "value_display": "60000000000 USD",
+      "entity": "Coreweave data points",
+      "claim": "CoreWeave has approximately two dozen named customers.",
+      "value": 24,
+      "unit": "customers",
+      "value_display": "24 customers",
       "weight": "indicative",
       "confidence": "estimated",
       "dedup_status": "new",
       "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/cursor/",
-      "sourceAuthor": "Sacra â Cursor Deep Dive",
+      "sourceUrl": "https://www.nextplatform.com/cloud/2026/04/09/coreweave-takes-as-much-financial-engineering-as-it-does-datacenter-design/5215794?utm_source=tldrai",
+      "sourceAuthor": "Coreweave data points",
       "sourceType": "web_page",
-      "source_id": "src-035",
+      "source_id": "src-052",
       "tags": [
-        "valuation_funding"
+        "enterprise_adoption"
       ],
-      "notes": "From Sacra â Cursor Deep Dive",
+      "notes": "From Coreweave data points",
       "dateOfClaim": "April 2026",
       "dateAdded": "2026-04-24",
       "usedOn": [],
       "replaces": null,
-      "metricKey": "Acquisition Option Valuation",
-      "metric": "other",
+      "metricKey": "named customer count",
+      "metric": "adoption",
       "review_decision": "accepted",
       "review_note": "",
-      "reviewed_at": "2026-04-27T22:30:02.178Z",
+      "reviewed_at": "2026-04-27T22:36:28.246Z",
       "major_change": false,
       "confirmed": false,
       "impact": null
     }
   ],
-  "declined": [
-    {
-      "id": "auto-20260424-src-034-24",
-      "claim": "ChatGPT Plus is priced at $20/month for consumers.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-25",
-      "claim": "ChatGPT Pro is priced at $200/month for power users.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-26",
-      "claim": "ChatGPT Team is priced at around $25–30 per user/month for small businesses.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-27",
-      "claim": "ChatGPT Enterprise is custom-priced at roughly $60 per seat at list price.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-28",
-      "claim": "ChatGPT Go, an India-only plan, is priced at $5 per month.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-47",
-      "claim": "Anthropic is reportedly closing a new funding round of ~$5B led by Iconiq at a $170B valuation.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-48",
-      "claim": "Anthropic's valuation was $20B in early 2024.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-49",
-      "claim": "OpenAI employed 100+ ex-investment bankers at $150/hour to train AI for financial modeling tasks.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-51",
-      "claim": "Google's Gemini 3 reached 650M MAUs.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-55",
-      "claim": "ChatGPT weekly active users were 800M in October 2025.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-034-56",
-      "claim": "ChatGPT weekly active users were 700M in July 2025.",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-d4e",
-      "claim": "Chinese AI providers (Xiaomi, Alibaba, MiniMax, Zhipu, DeepSeek, StepFun) collectively exceeded 45% of OpenRouter weekly token volume in April 2026, up from <2% one year prior",
-      "note": ""
-    }
-  ],
+  "declined": [],
   "parked": [],
   "raw_pool": [
     {
-      "id": "auto-20260424-src-034-23",
-      "claim": "ChatGPT Plus has amassed roughly 15 million active subscribers as of mid-2025.",
+      "id": "auto-20260424-src-052-5",
+      "claim": "OpenAI inked a five-year deal with CoreWeave for $11.9 billion in capacity in March 2025, with an additional $10.5 billion added later, bringing the total to $22.4 billion.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-29",
-      "claim": "OpenAI API costs approximately $0.03 per 1K tokens for GPT-4.",
+      "id": "auto-20260424-src-052-6",
+      "claim": "OpenAI represents approximately 25.5 percent of CoreWeave's extended revenue backlog.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-30",
-      "claim": "OpenAI API costs approximately $0.002 per 1K tokens for GPT-3.5.",
+      "id": "auto-20260424-src-052-7",
+      "claim": "Meta Platforms and OpenAI together represent nearly two-thirds of CoreWeave's guaranteed revenue backlog.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-31",
-      "claim": "API and licensing business contributes an estimated 15–20% of OpenAI's total revenue.",
+      "id": "auto-20260424-src-052-8",
+      "claim": "In 2024, Microsoft represented 62 percent of CoreWeave's $1.92 billion in sales.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-32",
-      "claim": "OpenAI agreed to pay Microsoft 20% of total revenue through 2032 under a renegotiated partnership in October 2025.",
+      "id": "auto-20260424-src-052-9",
+      "claim": "CoreWeave's total revenue in 2024 was $1.92 billion.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-33",
-      "claim": "OpenAI projected paying more than $13B in total revenue share—mostly to Microsoft—across 2026 and 2027.",
+      "id": "auto-20260424-src-052-10",
+      "claim": "CoreWeave's top three customers accounted for 77 percent of revenues in 2024.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-34",
-      "claim": "OpenAI offers bundle discounts of approximately 10–20% off for large enterprise deployments.",
+      "id": "auto-20260424-src-052-11",
+      "claim": "CoreWeave had $5.13 billion in sales in 2025, up 2.7X from 2024.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-35",
-      "claim": "The Stargate initiative is a $500B plan over four years to build 10GW of AI data center capacity in the U.S.",
+      "id": "auto-20260424-src-052-12",
+      "claim": "CoreWeave had an operating loss of $46 million in 2025.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-36",
-      "claim": "The Stargate initiative launched in 2025 with $100B deployed immediately.",
+      "id": "auto-20260424-src-052-13",
+      "claim": "CoreWeave posted a net loss of $1.17 billion in 2025 due to stock compensation and other factors.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-37",
-      "claim": "Five additional US Stargate data center sites have been announced, bringing the initiative to nearly 7 GW of capacity and over $400B in investment over approximately three years.",
+      "id": "auto-20260424-src-052-14",
+      "claim": "CoreWeave has just shy of $4 billion in cash and marketable securities.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-38",
-      "claim": "OpenAI has committed to over $500B in disclosed cloud capacity across multiple providers as of early 2026.",
+      "id": "auto-20260424-src-052-15",
+      "claim": "CoreWeave spent $14.9 billion on capital equipment expenses in 2025, building out its datacenter fleet to 43 centers.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-39",
-      "claim": "OpenAI contracted to purchase $250B of Azure cloud services from Microsoft under revised partnership terms.",
+      "id": "auto-20260424-src-052-16",
+      "claim": "CoreWeave ended 2025 with 850 megawatts of active power across its datacenter fleet.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-40",
-      "claim": "Amazon will invest $50B and OpenAI will consume approximately 2 gigawatts of Trainium capacity over 8 years under expanded AWS deal.",
+      "id": "auto-20260424-src-052-17",
+      "claim": "CoreWeave is estimated to have approximately 600,000 GPUs, mostly Nvidia H100s and H200s with a rising number of B200s and B300s.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-41",
-      "claim": "OpenAI committed to a massive cloud deal with Oracle beginning in 2027, widely reported as totaling about $300B over roughly five years, or about $30B of annual revenue for Oracle.",
+      "id": "auto-20260424-src-052-18",
+      "claim": "CoreWeave has 3.5 gigawatts of total power under contract.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-42",
-      "claim": "The multi-year Cerebras arrangement is valued at more than $10 billion, adding 750 megawatts of ultra-low latency AI compute.",
+      "id": "auto-20260424-src-052-19",
+      "claim": "CoreWeave's GPU fleet is estimated to be worth between $15 billion and $20 billion before significant depreciation.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-43",
-      "claim": "OpenAI's chip strategy spans partnerships targeting 26GW of data center capacity, implying $1T+ in build-out costs.",
+      "id": "auto-20260424-src-052-20",
+      "claim": "CoreWeave has 2.25 gigawatts of unused contracted power to potentially build out.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-44",
-      "claim": "The Broadcom collaboration focuses on a co-designed inference chip manufactured by TSMC, targeting 10GW between 2026–2029.",
+      "id": "auto-20260424-src-052-21",
+      "claim": "At Nvidia CEO Jensen Huang's cited figure of $50 billion per gigawatt, CoreWeave would need approximately $113 billion to build out its unused contracted power capacity.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-45",
-      "claim": "Stargate expansion is expected to create approximately 25,000 onsite jobs.",
+      "id": "auto-20260424-src-052-22",
+      "claim": "Nvidia's cited figure for datacenter buildout cost is approximately $50 billion per gigawatt of capacity.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-50",
-      "claim": "OpenAI advertising beta requires minimum advertiser commitments of $200,000.",
+      "id": "auto-20260424-src-052-23",
+      "claim": "CoreWeave announced a private offering of $1.75 billion in senior notes due in 2031.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-52",
-      "claim": "Microsoft's total investment in OpenAI over past few years is $13B.",
+      "id": "auto-20260424-src-052-24",
+      "claim": "CoreWeave announced a $3 billion offering of senior convertible notes due in 2031.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-53",
-      "claim": "Microsoft receives 75% of OpenAI profits until it recoups its $13B in principal, then 50% until it reaches a total return of $92B.",
+      "id": "auto-20260424-src-052-25",
+      "claim": "CoreWeave planned capital expenditures of $6–7 billion for early 2026, with full-year 2026 investment expected between $30–35 billion.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-54",
-      "claim": "Early OpenAI investors and employees are entitled to returns capped at 100× their principal.",
+      "id": "auto-20260424-src-052-26",
+      "claim": "CoreWeave went public in March 2025.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-57",
-      "claim": "OpenAI paying business users were 5M in August 2025.",
+      "id": "auto-20260424-src-052-27",
+      "claim": "CoreWeave had approximately 43 datacenters at end of 2025.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-58",
-      "claim": "Codex Security scanned more than 1.2 million commits across a 30-day private beta, identifying 792 critical findings and 10,561 high-severity findings.",
+      "id": "auto-20260424-src-052-28",
+      "claim": "Neocloud rental pricing is estimated at roughly half the rate of major hyperscalers, which charge 4X–5X the buildout cost over time.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-60",
-      "claim": "Anthropic is raising ~$5B in new funding led by Iconiq.",
+      "id": "auto-20260424-src-052-30",
+      "claim": "CoreWeave's revenue grew 2.7X year-over-year from 2024 to 2025.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-61",
-      "claim": "73% of ChatGPT chats are non-work related and nearly half of conversations come from users aged 18 to 25.",
+      "id": "auto-20260424-src-054-1",
+      "claim": "Elon Musk is floating a 100 times revenue multiple valuation for Anthropic, implying a $3 trillion IPO valuation.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-62",
-      "claim": "OpenAI revenue grew at a 3x year-over-year growth rate from 2023 to 2025.",
+      "id": "auto-20260424-src-054-2",
+      "claim": "Approximately 40% of data center builds are reported to be behind schedule.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-034-63",
-      "claim": "OpenAI's total disclosed funding is $178B as of 2026.",
+      "id": "auto-20260424-src-054-3",
+      "claim": "Hyperscaler CapEx spend is described as being in the hundreds of billions of dollars.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-037-1",
-      "claim": "AI4S company 'AoMing Xingcheng' completed a Series A funding round of over 100 million yuan, and has established deep cooperation with more than 50 top-tier hospitals and over 100 health examination institutions in China.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-2",
-      "claim": "DeepSeek is reportedly valued at approximately 20 billion USD, with both Alibaba and Tencent competing to invest, as founder Liang Wenfeng considers which backer to accept.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-3",
-      "claim": "DeepSeek is seeking $20 billion, aiming not just for capital but also for pricing power in AI.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-4",
-      "claim": "Zhipu AI (智谱) and MiniMax have seen their valuations surge 5 to 8 times, described as an 'Anthropic-style myth' hidden in their stock prices.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-5",
-      "claim": "A leaked investor memo indicates OpenAI is planning a 30GW compute infrastructure buildout, which could consume 6% of all US electricity.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-6",
-      "claim": "GPT-5.5 has been released, described as stronger, faster, and more expensive, with internal NVIDIA engineers saying losing it would feel like an amputation; the model optimizes its own reasoning infrastructure, achieving a 20% speedup.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-7",
-      "claim": "GPT-5.5 ranks first on all benchmarks, surpassing Claude Opus 4.7, according to reports.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-8",
-      "claim": "Anthropic has released a new AI economic report identifying which jobs are most likely to be displaced, with younger workers reportedly feeling the most anxiety.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-9",
-      "claim": "OpenClaw's download volume has dropped to half of its peak, reflecting significant user decline since its launch.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-10",
-      "claim": "Green Harmonic's (绿的谐波) performance doubled but its stock price fell sharply, seen as paying for the bubble in the billion-yuan robot joint market.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-11",
-      "claim": "China's domestic AI large models have not yet over-expanded commercially; the industry is still in a recovery/realization phase transitioning from heavy investment to commercial returns.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-037-12",
-      "claim": "A mobilization of 600,000 data collectors has entered the embodied intelligence space, with 2026 projected to see simultaneous rises in both funding and production capacity.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-052-1",
-      "claim": "Meta Platforms signed a deal with CoreWeave for $14.2 billion in AI processing capacity through December 2031.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-052-2",
-      "claim": "Meta Platforms signed an additional deal with CoreWeave for $21 billion in AI processing capacity through December 2032.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-052-3",
-      "claim": "CoreWeave's total revenue backlog will reach $87.8 billion after the new Meta deal.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-052-4",
-      "claim": "Meta Platforms will represent 40.1 percent of CoreWeave's total revenue backlog after the new deal.",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-a1b",
-      "claim": "AWS GPU on-demand pricing rose in April 2026: p5en.48xlarge increased from $36.18 to $41.61/hr; p5e in US West (N. California) reached $49.75/hr",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-b2c",
-      "claim": "Eclipse VC closed a $1.3B fund focused on physical AI, robotics, and AI infrastructure startups (April 7, 2026)",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-c3d",
-      "claim": "Forecaster Peter Wildeford projects combined OpenAI + Anthropic run rate could reach $240B by end of 2026",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-e5f",
-      "claim": "OpenAI's GPT-5.4 fell to #7 on OpenRouter rankings in April 2026; four of top five models are from Chinese providers",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-f6g",
-      "claim": "LLM API token prices fell approximately 80% across the industry from 2025 to 2026; Claude Opus per-input-token pricing dropped 67% (from $15 to $5/M)",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-g7h",
-      "claim": "Google removed Gemini Pro models from the free tier as of April 1, 2026; Flash models remain free but with reduced daily quotas",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-h8i",
-      "claim": "April 2026 saw 1,314 distinct startup funding events globally; 764 (~58%) involved AI or machine learning companies",
-      "note": ""
-    },
-    {
-      "id": "scan-20260427-i9j",
-      "claim": "Defense AI funding reached $12.7B in April 2026, with Shield AI projecting $540M+ in 2026 revenue (80%+ YoY growth)",
-      "note": ""
-    },
-    {
-      "id": "scan-20260428-a1b",
-      "claim": "ServiceNow raised Now Assist 2026 AI ACV target to $1.5B (up from prior $1B target) following Q1 2026 earnings (April 22, 2026)",
-      "note": ""
-    },
-    {
-      "id": "scan-20260428-b2c",
-      "claim": "ServiceNow Q1 2026 subscription revenue was $3,671M, up 22% YoY (19% in constant currency)",
-      "note": ""
-    },
-    {
-      "id": "scan-20260428-c3d",
-      "claim": "ServiceNow Now Assist customers spending >$1M annual contract value grew over 130% year-over-year in Q1 2026",
-      "note": ""
-    },
-    {
-      "id": "scan-20260428-d4e",
-      "claim": "Amazon guided for ~$200B in 2026 capex (much for AI infrastructure) and Alphabet plans ~$175B 2026 capex",
-      "note": ""
-    },
-    {
-      "id": "scan-20260428-e5f",
-      "claim": "NVIDIA B300 spot pricing reached $2.45/GPU-hr on April 16, 2026 via Spheron — undercutting H200 rates; B200 spot hit $2.25/GPU-hr on April 18, 2026",
+      "id": "auto-20260424-src-054-4",
+      "claim": "Oracle beat earnings estimates for Q3 FY26, causing Wall Street to send the stock upward.",
       "note": ""
     }
   ],

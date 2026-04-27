@@ -1,57 +1,17 @@
 {
-  "generatedAt": "2026-04-27T22:30:20+00:00Z",
+  "generatedAt": "2026-04-27T22:36:46+00:00Z",
   "weekOf": "2026-04-27",
   "dashboardChanges": [
     {
-      "category": "revenue",
-      "tagClass": "tag-revenue",
-      "date": "2026-04-27",
-      "entity": "Anthropic",
-      "title": "Anthropic reached $19B in annualized revenue by early 2026, up from...",
-      "claim": "Anthropic reached $19B in annualized revenue by early 2026, up from approximately $4B in mid-2025.",
-      "value": "19 USD billions",
-      "source": "Sacra â OpenAI Deep Dive",
-      "sourceUrl": "https://sacra.com/research/openai/",
-      "impact": {
-        "type": "arr",
-        "name": "Anthropic → Current ARR (2026)",
-        "current": "18 $B",
-        "proposed": "19 USD billions",
-        "pctChange": "5.6",
-        "isMajor": false
-      },
-      "majorChange": false
-    },
-    {
-      "category": "revenue",
-      "tagClass": "tag-revenue",
-      "date": "2026-04-27",
-      "entity": "Anthropic",
-      "title": "Anthropic's annualized revenue was approximately $4B in mid-2025.",
-      "claim": "Anthropic's annualized revenue was approximately $4B in mid-2025.",
-      "value": "4 USD billions",
-      "source": "Sacra â OpenAI Deep Dive",
-      "sourceUrl": "https://sacra.com/research/openai/",
-      "impact": {
-        "type": "arr",
-        "name": "Anthropic → Current ARR (2025)",
-        "current": "4.5 $B",
-        "proposed": "4 USD billions",
-        "pctChange": "-11.1",
-        "isMajor": false
-      },
-      "majorChange": false
-    },
-    {
-      "category": "launch",
+      "category": "adoption",
       "tagClass": "tag-launch",
       "date": "2026-04-27",
-      "entity": "Sacra â Cursor Deep Dive",
-      "title": "SpaceX has an option to acquire Cursor for $60 billion.",
-      "claim": "SpaceX has an option to acquire Cursor for $60 billion.",
-      "value": "60000000000 USD",
-      "source": "Sacra â Cursor Deep Dive",
-      "sourceUrl": "https://sacra.com/research/cursor/",
+      "entity": "Coreweave data points",
+      "title": "CoreWeave has approximately two dozen named customers.",
+      "claim": "CoreWeave has approximately two dozen named customers.",
+      "value": "24 customers",
+      "source": "Coreweave data points",
+      "sourceUrl": "https://www.nextplatform.com/cloud/2026/04/09/coreweave-takes-as-much-financial-engineering-as-it-does-datacenter-design/5215794?utm_source=tldrai",
       "impact": null,
       "majorChange": false
     },
