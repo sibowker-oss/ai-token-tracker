@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-04-27",
+  "lastProcessed": "2026-04-28",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -56348,6 +56348,132 @@
         "2026"
       ],
       "notes": "Defense AI funding cohort hit $12.7B in April 2026; Shield AI projects $540M+ 2026 revenue at 80%+ growth.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260428-a1b",
+      "claim": "ServiceNow raised Now Assist 2026 AI ACV target to $1.5B (up from prior $1B target) following Q1 2026 earnings (April 22, 2026)",
+      "value": 1.5,
+      "unit": "$B",
+      "sourceUrl": "https://www.uctoday.com/service-management-connectivity/servicenow-q1-2026-earnings/",
+      "sourceType": "reporting",
+      "sourceAuthor": "UC Today",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-22",
+      "dateAdded": "2026-04-28",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "servicenow",
+        "now-assist",
+        "enterprise-saas-ai",
+        "2026"
+      ],
+      "notes": "ServiceNow raised 2026 Now Assist ACV target to $1.5B from $1B at Q1 2026 earnings — material lift in AI-specific commit guidance.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260428-b2c",
+      "claim": "ServiceNow Q1 2026 subscription revenue was $3,671M, up 22% YoY (19% in constant currency)",
+      "value": 3.671,
+      "unit": "$B",
+      "sourceUrl": "https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-Reports-First-Quarter-2026-Financial-Results/default.aspx",
+      "sourceType": "reporting",
+      "sourceAuthor": "ServiceNow Newsroom",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-22",
+      "dateAdded": "2026-04-28",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "servicenow",
+        "earnings",
+        "subscription-revenue",
+        "2026"
+      ],
+      "notes": "ServiceNow Q1 2026 subscription revenue $3.671B (+22% YoY, +19% CC) — baseline for Now Assist attach analysis.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260428-c3d",
+      "claim": "ServiceNow Now Assist customers spending >$1M annual contract value grew over 130% year-over-year in Q1 2026",
+      "value": 130,
+      "unit": "%",
+      "sourceUrl": "https://www.uctoday.com/service-management-connectivity/servicenow-q1-2026-earnings/",
+      "sourceType": "reporting",
+      "sourceAuthor": "UC Today",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-22",
+      "dateAdded": "2026-04-28",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "servicenow",
+        "now-assist",
+        "enterprise-saas-ai",
+        "growth-rate",
+        "2026"
+      ],
+      "notes": "$1M+ ACV Now Assist customer cohort grew 130%+ YoY in Q1 2026 — supports management's $1.5B raised guidance.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260428-d4e",
+      "claim": "Amazon guided for ~$200B in 2026 capex (much for AI infrastructure) and Alphabet plans ~$175B 2026 capex",
+      "value": 200,
+      "unit": "$B",
+      "sourceUrl": "https://www.ibtimes.com/cloud-titans-battle-2026-microsoft-azure-vs-aws-vs-google-cloud-which-stock-buy-3801980",
+      "sourceType": "reporting",
+      "sourceAuthor": "IBTimes",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-24",
+      "dateAdded": "2026-04-28",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "hyperscaler-capex",
+        "amazon",
+        "alphabet",
+        "ai-infrastructure",
+        "2026"
+      ],
+      "notes": "AMZN ~$200B and GOOGL ~$175B 2026 capex guidance — tracks against the $443B 2025 hyperscaler capex baseline.",
+      "status": "pending",
+      "replaces": null
+    },
+    {
+      "id": "scan-20260428-e5f",
+      "claim": "NVIDIA B300 spot pricing reached $2.45/GPU-hr on April 16, 2026 via Spheron — undercutting H200 rates; B200 spot hit $2.25/GPU-hr on April 18, 2026",
+      "value": 2.45,
+      "unit": "$/GPU-hr",
+      "sourceUrl": "https://www.thundercompute.com/blog/nvidia-h200-pricing",
+      "sourceType": "reporting",
+      "sourceAuthor": "Thundercompute / Spheron",
+      "confidence": "unverified",
+      "dateOfClaim": "2026-04-18",
+      "dateAdded": "2026-04-28",
+      "usedOn": [],
+      "tags": [
+        "auto-scan",
+        "needs-review",
+        "gpu-pricing",
+        "nvidia",
+        "blackwell",
+        "b300",
+        "b200",
+        "spot-pricing",
+        "inference-cost",
+        "2026"
+      ],
+      "notes": "Blackwell spot rates on neoclouds (B300 $2.45/hr, B200 $2.25/hr in April 2026) now undercut older H200 rates — accelerating per-token cost compression.",
       "status": "pending",
       "replaces": null
     }
