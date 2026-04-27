@@ -45,14 +45,14 @@
   .entry[data-scope="capital"]::before{border-color:var(--accent);}
   .entry[data-scope="revenue"]::before{border-color:var(--green);}
   .entry[data-scope="usage"]::before{border-color:var(--purple);}
-  .entry[data-scope="platform"]::before{border-color:var(--orange);}
+  .entry[data-scope="methodology"]::before{border-color:var(--cyan);}
   .entry-meta{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
   .entry-date{font-size:13px;font-weight:700;color:var(--text-bright);}
   .entry-scope{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;}
   .entry-scope.capital{background:rgba(59,130,246,0.15);color:var(--accent);}
   .entry-scope.revenue{background:rgba(16,185,129,0.15);color:var(--green);}
   .entry-scope.usage{background:rgba(139,92,246,0.15);color:var(--purple);}
-  .entry-scope.platform{background:rgba(245,158,11,0.15);color:var(--orange);}
+  .entry-scope.methodology{background:rgba(6,182,212,0.15);color:var(--cyan);}
   .entry-text{font-size:14px;line-height:1.6;color:var(--text);}
   .entry.hidden{display:none;}
 
@@ -104,37 +104,22 @@
 <div class="container">
   <h1>Changelog</h1>
   <p class="subtitle">Every estimate revision, data upgrade, and structural change — in reverse chronological order.</p>
+  <p class="subtitle">Each entry reflects a change to a published number, a new section of the site, or a methodology revision. For the underlying engineering log, see git history.</p>
 
   <div class="filters">
     <button class="filter-btn active" data-filter="all" onclick="filterEntries('all')">All</button>
     <button class="filter-btn" data-filter="capital" onclick="filterEntries('capital')">Capital</button>
     <button class="filter-btn" data-filter="revenue" onclick="filterEntries('revenue')">Revenue</button>
     <button class="filter-btn" data-filter="usage" onclick="filterEntries('usage')">Usage</button>
-    <button class="filter-btn" data-filter="platform" onclick="filterEntries('platform')">Platform</button>
+    <button class="filter-btn" data-filter="methodology" onclick="filterEntries('methodology')">Methodology</button>
   </div>
 
   <div class="timeline">
 
-    <div class="entry" data-scope="platform">
-      <div class="entry-meta">
-        <span class="entry-date">24 Apr 2026</span>
-        <span class="entry-scope platform">Platform</span>
-      </div>
-      <div class="entry-text">Stream 1 activation sweep (wq-015 Phase 2). Flipped the remaining 23 registered-but-inert sources from <code>pending_first_extraction</code> to <code>active</code> via a single <code>monitor_sources.py</code> pass — 17 produced 331 claims into the review queue (top: Sacra OpenAI 63, Sacra Anthropic 53, apoorv03 42, Sacra Cursor 33, Coreweave 30, OpenAI press 30, Sacra Perplexity 26, AMD IR 16); 6 returned 0 because the landing pages are JS shells (Alphabet/Microsoft/Salesforce/ServiceNow IR, Stanford AI Index, Europarl AI Act page, CAC, a16z) and 2 fetched 404 (Sequoia URL rot, SimilarWeb taxonomy removed). Also deduped <code>src-053</code> → <code>src-052</code> (both pointed at the same nextplatform.com Coreweave article — same pattern as the src-016..022 OpenAI dedupe). Registry now: 72 sources, 39 active (up from 38), 7 deprecated_duplicate, 3 deferred, 1 pending_credentials; zero sources remain pending_first_extraction.</div>
-    </div>
-
-    <div class="entry" data-scope="platform">
-      <div class="entry-meta">
-        <span class="entry-date">23 Apr 2026</span>
-        <span class="entry-scope platform">Platform</span>
-      </div>
-      <div class="entry-text">Structured claim schema added. <code>metric-schema.json</code> v2.2 defines four typed payloads — <code>power_project</code>, <code>hiring_snapshot</code>, <code>patent_snapshot</code>, <code>company_surfaced</code> — alongside the existing free-text claim shape. Each type carries required / optional fields, a nested source block, and a <code>site_data_target</code> write path. A new extractor (<code>scripts/extract_structured_claims.py</code>) emits the types deterministically from typed input; <code>scripts/apply_claims.py</code> routes accepted claims into <code>site-data.json.power.projects</code>, <code>site-data.json.hiring.snapshots</code>, <code>site-data.json.patents.snapshots</code>, and <code>companies.json.candidates</code>. Fixture tests cover all four. Free-text claims unchanged. Unblocks Stream 2 (power) and Stream 3 (hiring / patents).</div>
-    </div>
-
-    <div class="entry" data-scope="platform">
+    <div class="entry" data-scope="methodology">
       <div class="entry-meta">
         <span class="entry-date">21 Apr 2026</span>
-        <span class="entry-scope platform">Platform</span>
+        <span class="entry-scope methodology">Methodology</span>
       </div>
       <div class="entry-text">The AI Ledger v2 launches. We've replaced the single token-centric dashboard with three interlocking ledgers — Capital, Revenue, Usage — each answering a different question about the same underlying economy. The numbers now carry explicit provenance tiers (1A–3C) and can be viewed under Bear, Base, or Bull assumptions via the top-right toggle. A fourth ledger tracking physical power and grid constraints is coming in v3.</div>
     </div>
@@ -145,14 +130,6 @@
         <span class="entry-scope capital">Capital Ledger</span>
       </div>
       <div class="entry-text">CapEx revised to $745B following Platformonomics cross-check. Previously $770B. The $25B delta came from double-counting non-AI networking spend in hyperscaler totals.</div>
-    </div>
-
-    <div class="entry" data-scope="platform">
-      <div class="entry-meta">
-        <span class="entry-date">17 Apr 2026</span>
-        <span class="entry-scope platform">Platform</span>
-      </div>
-      <div class="entry-text">Site renamed from "Follow the Dollar" to "Follow the Revenue". All internal references and page titles updated. URLs unchanged.</div>
     </div>
 
     <div class="entry" data-scope="capital">
@@ -176,7 +153,7 @@
         <span class="entry-date">1 Apr 2026</span>
         <span class="entry-scope revenue">Revenue Ledger</span>
       </div>
-      <div class="entry-text">32 accepted claims applied to entity data from podcast triage pipeline. Source-weighted provenance enforced — no lower-tier overwrites.</div>
+      <div class="entry-text">Entity-level revenue figures refreshed from earnings calls and analyst commentary across 32 source records. Higher-tier sources (10-K filings, IR disclosures) take precedence over commentary and podcast estimates.</div>
     </div>
 
   </div>
@@ -204,7 +181,7 @@
       </div>
     </div>
     <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
-    <div style="margin-top:8px;">Last updated: 23 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
+    <div style="margin-top:8px;">Last updated: 27 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
 </footer>
 
 <script>
