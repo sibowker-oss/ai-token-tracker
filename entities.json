@@ -64,7 +64,7 @@
           "cash_burn": 25,
           "operating_loss": 14,
           "subscription_revenue": 50,
-          "user_count": 900000000
+          "user_count": 800000000
         },
         "2027_projected": {
           "arr": 50.0
@@ -293,7 +293,7 @@
         },
         "2026.arr": {
           "confidence": "high",
-          "claim_count": 6,
+          "claim_count": 7,
           "claims": [
             {
               "id": "email-20260328-c3z",
@@ -370,6 +370,19 @@
               "source": "CoinDesk",
               "source_url": "https://www.coindesk.com/tech/2026/04/01/openai-raises-a-record-usd122-billion-at-as-revenue-crosses-usd2-billion-per-month",
               "date": "2026-03-31",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-212",
+              "claim": "OpenAI is generating approximately $25B in annualized revenue.",
+              "value": 25,
+              "unit": "USD_billions",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "2025-2026",
               "origin": "accepted",
               "role": "supports"
             }
@@ -1421,7 +1434,7 @@
         },
         "2026.user_count": {
           "confidence": "low",
-          "claim_count": 3,
+          "claim_count": 5,
           "claims": [
             {
               "id": "dp-103",
@@ -1459,6 +1472,32 @@
               "source": "OpenAI Press Release 31 Mar 25",
               "source_url": "https://openai.com/index/accelerating-the-next-phase-ai/",
               "date": "2026-Q1",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-205",
+              "claim": "ChatGPT has more than 900 million weekly active users.",
+              "value": 900000000,
+              "unit": "users",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "OpenAI Press Release 31 Mar 25",
+              "source_url": "https://openai.com/index/accelerating-the-next-phase-ai/",
+              "date": "2026-Q1",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-214",
+              "claim": "ChatGPT has 800 million weekly users.",
+              "value": 800000000,
+              "unit": "users",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "2025-2026",
               "origin": "accepted",
               "role": "supports"
             }
@@ -1680,7 +1719,7 @@
         },
         "2025.customer_count": {
           "confidence": "high",
-          "claim_count": 2,
+          "claim_count": 3,
           "claims": [
             {
               "id": "email-20260328-h8s",
@@ -1705,6 +1744,19 @@
               "source": "Sacra",
               "source_url": "https://sacra.com/c/anthropic/",
               "date": "2025-10-01",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-207",
+              "claim": "Anthropic had 300,000+ business customers as of October 2025, accounting for approximately 80% of revenue.",
+              "value": 300000,
+              "unit": "customers",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "October 2025",
               "origin": "accepted",
               "role": "supports"
             }
@@ -1732,7 +1784,7 @@
         },
         "2026.arr": {
           "confidence": "high",
-          "claim_count": 7,
+          "claim_count": 8,
           "claims": [
             {
               "id": "dp-026",
@@ -1822,6 +1874,19 @@
               "source": "Jason Calacanis",
               "source_url": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
               "date": "2026-03-13",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-206",
+              "claim": "Anthropic hit $30B in annualized revenue in March 2026, up about 1,400% year-over-year.",
+              "value": 30,
+              "unit": "USD_billions",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "March 2026",
               "origin": "accepted",
               "role": "supports"
             }
@@ -1915,7 +1980,7 @@
         },
         "2026.valuation": {
           "confidence": "high",
-          "claim_count": 6,
+          "claim_count": 8,
           "claims": [
             {
               "id": "dp-028",
@@ -1994,6 +2059,32 @@
               "date": "2026-04-15",
               "origin": "accepted",
               "role": "supports"
+            },
+            {
+              "id": "dp-208",
+              "claim": "Anthropic's post-money valuation reached $380 billion at Series G closing in February 2026.",
+              "value": 380,
+              "unit": "USD_billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "February 2026",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-209",
+              "claim": "Anthropic was nearing close of a more than $20 billion financing round at a $350 billion pre-money valuation, expected t",
+              "value": 350,
+              "unit": "USD_billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "February 2026",
+              "origin": "accepted",
+              "role": "supports"
             }
           ],
           "needs_source": false
@@ -2019,7 +2110,7 @@
         },
         "2025.cash_burn": {
           "confidence": "medium",
-          "claim_count": 1,
+          "claim_count": 2,
           "needs_source": false,
           "recovered_from": "original_conversation",
           "claims": [
@@ -2033,6 +2124,19 @@
               "source": "Sacra (email-20260328-e5v): Anthropic burned ~$3B in 2025, down from $5.6B prior year. Conflicts with dp-006 $5.2B operating loss \u2014 different metric (cash vs accrual).",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
+              "role": "supports"
+            },
+            {
+              "id": "dp-210",
+              "claim": "Anthropic's cash burn was $5.6B in the year prior to 2025.",
+              "value": 5.6,
+              "unit": "USD_billions",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "2024",
+              "origin": "accepted",
               "role": "supports"
             }
           ]
@@ -2661,7 +2765,8 @@
       ],
       "financials": {
         "2025": {
-          "arr": 4.2
+          "arr": 4.2,
+          "user_count": 650000000
         },
         "2026": {
           "valuation": 11
@@ -3009,6 +3114,26 @@
               "role": "supports"
             }
           ]
+        },
+        "2025.user_count": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-213",
+              "claim": "Google reports 650 million monthly Gemini users as of mid-to-late 2025.",
+              "value": 650000000,
+              "unit": "users",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "2025",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
         }
       }
     },

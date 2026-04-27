@@ -4495,6 +4495,206 @@
       "metricKey": "weekly active users",
       "status": "accepted",
       "source_id": "src-016"
+    },
+    {
+      "id": "dp-205",
+      "claim": "ChatGPT has more than 900 million weekly active users.",
+      "value": 900000000,
+      "unit": "users",
+      "sourceUrl": "https://openai.com/index/accelerating-the-next-phase-ai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
+      "confidence": "verified",
+      "dateOfClaim": "2026-Q1",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From OpenAI Press Release 31 Mar 25",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "weekly active users",
+      "status": "accepted",
+      "source_id": "src-016"
+    },
+    {
+      "id": "dp-206",
+      "claim": "Anthropic hit $30B in annualized revenue in March 2026, up about 1,400% year-over-year.",
+      "value": 30,
+      "unit": "USD_billions",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "March 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "ARR",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-207",
+      "claim": "Anthropic had 300,000+ business customers as of October 2025, accounting for approximately 80% of revenue.",
+      "value": 300000,
+      "unit": "customers",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "October 2025",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Business customer count",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-208",
+      "claim": "Anthropic's post-money valuation reached $380 billion at Series G closing in February 2026.",
+      "value": 380,
+      "unit": "USD_billions",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "February 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Post-money valuation",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-209",
+      "claim": "Anthropic was nearing close of a more than $20 billion financing round at a $350 billion pre-money valuation, expected to close the week of February 9, 2026.",
+      "value": 350,
+      "unit": "USD_billions",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "February 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Pre-money valuation",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-210",
+      "claim": "Anthropic's cash burn was $5.6B in the year prior to 2025.",
+      "value": 5.6,
+      "unit": "USD_billions",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "2024",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "skeptical_bear_case"
+      ],
+      "metricKey": "Annual cash burn",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-211",
+      "claim": "Anthropic projects reaching cash-flow break-even in 2028 after stopping cash burn in 2027.",
+      "value": null,
+      "unit": "year",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "2027-2028",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "skeptical_bear_case"
+      ],
+      "metricKey": "Cash-flow break-even timeline",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-212",
+      "claim": "OpenAI is generating approximately $25B in annualized revenue.",
+      "value": 25,
+      "unit": "USD_billions",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "2025-2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "ARR",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-213",
+      "claim": "Google reports 650 million monthly Gemini users as of mid-to-late 2025.",
+      "value": 650000000,
+      "unit": "users",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "2025",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Monthly active users",
+      "status": "accepted",
+      "source_id": "src-033"
+    },
+    {
+      "id": "dp-214",
+      "claim": "ChatGPT has 800 million weekly users.",
+      "value": 800000000,
+      "unit": "users",
+      "sourceUrl": "https://sacra.com/research/anthropic/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Anthropic Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "2025-2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Anthropic Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Weekly active users",
+      "status": "accepted",
+      "source_id": "src-033"
     }
   ]
 }
