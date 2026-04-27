@@ -64,7 +64,8 @@
           "cash_burn": 25,
           "operating_loss": 14,
           "subscription_revenue": 50,
-          "user_count": 800000000
+          "user_count": 910,
+          "inference_cost": 14.1
         },
         "2027_projected": {
           "arr": 50.0
@@ -73,7 +74,8 @@
           "arr": 280.0
         },
         "2030": {
-          "arr": 280
+          "arr": 280,
+          "cash_burn": 9
         },
         "2029": {
           "cash_burn": 115
@@ -149,7 +151,7 @@
         },
         "2025.arr": {
           "confidence": "medium",
-          "claim_count": 2,
+          "claim_count": 3,
           "claims": [
             {
               "id": "dp-029",
@@ -174,6 +176,19 @@
               "source": "Jason Calacanis",
               "source_url": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
               "date": "2026-03-13",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-215",
+              "claim": "OpenAI hit $25B in annualized revenue in February 2026, up from $20B at the end of 2025.",
+              "value": 25,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "February 2026",
               "origin": "accepted",
               "role": "supports"
             }
@@ -391,7 +406,7 @@
         },
         "2026.cash_burn": {
           "confidence": "high",
-          "claim_count": 2,
+          "claim_count": 3,
           "claims": [
             {
               "id": "scan-20260330-c3d",
@@ -416,6 +431,19 @@
               "source": "The Information / multiple",
               "source_url": "https://www.theinformation.com/articles/openai-tops-25-billion-annualized-revenue-anthropic-narrows-gap",
               "date": "2026-03-05",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-219",
+              "claim": "OpenAI projected cash burn of approximately $17B in 2026.",
+              "value": 17,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "2026",
               "origin": "accepted",
               "role": "supports"
             }
@@ -516,7 +544,7 @@
         },
         "2026.valuation": {
           "confidence": "high",
-          "claim_count": 4,
+          "claim_count": 5,
           "claims": [
             {
               "id": "dp-030",
@@ -567,6 +595,19 @@
               "source": "Jason Calacanis",
               "source_url": "https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg/iran-war-oil-shock-off-ramps-ai-s-revenue-explosion-and-pr-nightmare",
               "date": "2026-03-13",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-220",
+              "claim": "OpenAI announced $122B in new investment at an $852B valuation in April 2026, co-led by SoftBank alongside Andreessen Ho",
+              "value": 852,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "April 2026",
               "origin": "accepted",
               "role": "supports"
             }
@@ -1434,7 +1475,7 @@
         },
         "2026.user_count": {
           "confidence": "low",
-          "claim_count": 5,
+          "claim_count": 6,
           "claims": [
             {
               "id": "dp-103",
@@ -1498,6 +1539,19 @@
               "source": "Sacra \u2014 Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "2025-2026",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-221",
+              "claim": "ChatGPT weekly active users grew to 910M, up from 800M in October and 700M in July.",
+              "value": 910,
+              "unit": "millions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "February 2026",
               "origin": "accepted",
               "role": "supports"
             }
@@ -1571,6 +1625,59 @@
               "source": "OpenAI",
               "source_url": "/api/add-source",
               "date": "2024-12-31",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2026.inference_cost": {
+          "confidence": "low",
+          "claim_count": 2,
+          "claims": [
+            {
+              "id": "dp-216",
+              "claim": "OpenAI inference costs reached $8.4B in 2025 and are projected to rise to $14.1B in 2026.",
+              "value": 8.4,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "2025",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-217",
+              "claim": "OpenAI inference costs are projected to rise to $14.1B in 2026.",
+              "value": 14.1,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "2026",
+              "origin": "accepted",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2030.cash_burn": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-218",
+              "claim": "OpenAI projected cash burn of approximately $9B in 2025 and $17B in 2026, not turning cash-flow positive until 2030.",
+              "value": 9,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "2025",
               "origin": "accepted",
               "role": "supports"
             }

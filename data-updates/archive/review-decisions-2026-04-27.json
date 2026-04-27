@@ -1,683 +1,376 @@
 {
-  "submitted_at": "2026-04-27T01:14:37.232Z",
+  "submitted_at": "2026-04-27T02:21:16.007Z",
   "accepted": [
     {
-      "id": "auto-20260424-src-016-9",
-      "origin": "inbox",
-      "inboxStatus": "accepted",
-      "entity": "OpenAI Press Release 31 Mar 25",
-      "claim": "ChatGPT has more than 900 million weekly active users.",
-      "value": 900000000,
-      "unit": "users",
-      "value_display": "900000000 users",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://openai.com/index/accelerating-the-next-phase-ai/",
-      "sourceAuthor": "OpenAI Press Release 31 Mar 25",
-      "sourceType": "web_page",
-      "source_id": "src-016",
-      "tags": [
-        "enterprise_adoption"
-      ],
-      "notes": "From OpenAI Press Release 31 Mar 25",
-      "dateOfClaim": "2026-Q1",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "weekly active users",
-      "metric": "adoption",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.229Z",
-      "confirmed": true,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-033-1",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic hit $30B in annualized revenue in March 2026, up about 1,400% year-over-year.",
-      "value": 30,
-      "unit": "USD_billions",
-      "value_display": "30 USD_billions",
-      "weight": "indicative",
-      "confidence": "estimated",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-033",
-      "tags": [
-        "provider_revenue"
-      ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "March 2026",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "ARR",
-      "metric": "revenue",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.230Z",
-      "confirmed": true,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-033-5",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic had 300,000+ business customers as of October 2025, accounting for approximately 80% of revenue.",
-      "value": 300000,
-      "unit": "customers",
-      "value_display": "300000 customers",
-      "weight": "indicative",
-      "confidence": "estimated",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-033",
-      "tags": [
-        "enterprise_adoption"
-      ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "October 2025",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "Business customer count",
-      "metric": "revenue",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.230Z",
-      "confirmed": true,
-      "impact": {
-        "type": "customer_count",
-        "name": "Anthropic → Customer Count (2025)",
-        "current": "300000 count",
-        "proposed": "300000 customers",
-        "pctChange": "0.0",
-        "isMajor": false
-      }
-    },
-    {
-      "id": "auto-20260424-src-033-12",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic's post-money valuation reached $380 billion at Series G closing in February 2026.",
-      "value": 380,
-      "unit": "USD_billions",
-      "value_display": "380 USD_billions",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-033",
-      "tags": [
-        "valuation_funding"
-      ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "February 2026",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "Post-money valuation",
-      "metric": "valuation",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.231Z",
-      "confirmed": true,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-033-14",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic was nearing close of a more than $20 billion financing round at a $350 billion pre-money valuation, expected to close the week of February 9, 2026.",
-      "value": 350,
-      "unit": "USD_billions",
-      "value_display": "350 USD_billions",
-      "weight": "indicative",
-      "confidence": "verified",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-033",
-      "tags": [
-        "valuation_funding"
-      ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "February 2026",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "Pre-money valuation",
-      "metric": "valuation",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.231Z",
-      "confirmed": true,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-033-32",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic's cash burn was $5.6B in the year prior to 2025.",
-      "value": 5.6,
-      "unit": "USD_billions",
-      "value_display": "5.6 USD_billions",
-      "weight": "indicative",
-      "confidence": "estimated",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-033",
-      "tags": [
-        "skeptical_bear_case"
-      ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "2024",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "Annual cash burn",
-      "metric": "operating_loss",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.231Z",
-      "confirmed": true,
-      "impact": {
-        "type": "cash_burn",
-        "name": "Anthropic → Cash Burn (2025)",
-        "current": "3 $B",
-        "proposed": "5.6 USD_billions",
-        "pctChange": "86.7",
-        "isMajor": true
-      }
-    },
-    {
-      "id": "auto-20260424-src-033-33",
-      "origin": "inbox",
-      "inboxStatus": "pending",
-      "entity": "Anthropic",
-      "claim": "Anthropic projects reaching cash-flow break-even in 2028 after stopping cash burn in 2027.",
-      "value": null,
-      "unit": "year",
-      "value_display": null,
-      "weight": "indicative",
-      "confidence": "estimated",
-      "dedup_status": "new",
-      "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
-      "sourceType": "web_page",
-      "source_id": "src-033",
-      "tags": [
-        "skeptical_bear_case"
-      ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "2027-2028",
-      "dateAdded": "2026-04-24",
-      "usedOn": [],
-      "replaces": null,
-      "metricKey": "Cash-flow break-even timeline",
-      "metric": "operating_loss",
-      "review_decision": "accepted",
-      "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.231Z",
-      "confirmed": true,
-      "impact": null
-    },
-    {
-      "id": "auto-20260424-src-033-42",
+      "id": "auto-20260424-src-034-1",
       "origin": "inbox",
       "inboxStatus": "pending",
       "entity": "Openai",
-      "claim": "OpenAI is generating approximately $25B in annualized revenue.",
+      "claim": "OpenAI hit $25B in annualized revenue in February 2026, up from $20B at the end of 2025.",
       "value": 25,
-      "unit": "USD_billions",
-      "value_display": "25 USD_billions",
+      "unit": "USD billions",
+      "value_display": "25 USD billions",
       "weight": "indicative",
-      "confidence": "estimated",
+      "confidence": "verified",
       "dedup_status": "new",
       "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceAuthor": "Sacra â OpenAI Deep Dive",
       "sourceType": "web_page",
-      "source_id": "src-033",
+      "source_id": "src-034",
       "tags": [
         "provider_revenue"
       ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "2025-2026",
+      "notes": "From Sacra â OpenAI Deep Dive",
+      "dateOfClaim": "February 2026",
       "dateAdded": "2026-04-24",
       "usedOn": [],
       "replaces": null,
-      "metricKey": "ARR",
+      "metricKey": "Annualized Revenue",
       "metric": "revenue",
       "review_decision": "accepted",
       "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.231Z",
+      "reviewed_at": "2026-04-27T02:21:16.005Z",
       "confirmed": true,
       "impact": null
     },
     {
-      "id": "auto-20260424-src-033-43",
+      "id": "auto-20260424-src-034-7",
       "origin": "inbox",
       "inboxStatus": "pending",
-      "entity": "Google",
-      "claim": "Google reports 650 million monthly Gemini users as of mid-to-late 2025.",
-      "value": 650000000,
-      "unit": "users",
-      "value_display": "650000000 users",
+      "entity": "Openai",
+      "claim": "OpenAI inference costs reached $8.4B in 2025 and are projected to rise to $14.1B in 2026.",
+      "value": 8.4,
+      "unit": "USD billions",
+      "value_display": "8.4 USD billions",
       "weight": "indicative",
-      "confidence": "estimated",
+      "confidence": "verified",
       "dedup_status": "new",
       "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceAuthor": "Sacra â OpenAI Deep Dive",
       "sourceType": "web_page",
-      "source_id": "src-033",
+      "source_id": "src-034",
       "tags": [
-        "enterprise_adoption"
+        "gpu_infrastructure"
       ],
-      "notes": "From Sacra â Anthropic Deep Dive",
+      "notes": "From Sacra â OpenAI Deep Dive",
       "dateOfClaim": "2025",
       "dateAdded": "2026-04-24",
       "usedOn": [],
       "replaces": null,
-      "metricKey": "Monthly active users",
-      "metric": "adoption",
+      "metricKey": "Inference Cost",
+      "metric": "inference",
       "review_decision": "accepted",
       "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.231Z",
+      "reviewed_at": "2026-04-27T02:21:16.006Z",
       "confirmed": true,
-      "impact": null
+      "impact": {
+        "type": "inference_cost",
+        "name": "OpenAI → Inference Compute Cost (2025)",
+        "current": "5 $B",
+        "proposed": "8.4 USD billions",
+        "pctChange": "68.0",
+        "isMajor": true
+      }
     },
     {
-      "id": "auto-20260424-src-033-44",
+      "id": "auto-20260424-src-034-8",
       "origin": "inbox",
       "inboxStatus": "pending",
-      "entity": "Sacra â Anthropic Deep Dive",
-      "claim": "ChatGPT has 800 million weekly users.",
-      "value": 800000000,
-      "unit": "users",
-      "value_display": "800000000 users",
+      "entity": "Openai",
+      "claim": "OpenAI inference costs are projected to rise to $14.1B in 2026.",
+      "value": 14.1,
+      "unit": "USD billions",
+      "value_display": "14.1 USD billions",
       "weight": "indicative",
       "confidence": "estimated",
       "dedup_status": "new",
       "dedup_note": null,
-      "sourceUrl": "https://sacra.com/research/anthropic/",
-      "sourceAuthor": "Sacra â Anthropic Deep Dive",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceAuthor": "Sacra â OpenAI Deep Dive",
       "sourceType": "web_page",
-      "source_id": "src-033",
+      "source_id": "src-034",
       "tags": [
-        "enterprise_adoption"
+        "gpu_infrastructure"
       ],
-      "notes": "From Sacra â Anthropic Deep Dive",
-      "dateOfClaim": "2025-2026",
+      "notes": "From Sacra â OpenAI Deep Dive",
+      "dateOfClaim": "2026",
       "dateAdded": "2026-04-24",
       "usedOn": [],
       "replaces": null,
-      "metricKey": "Weekly active users",
+      "metricKey": "Projected Inference Cost",
+      "metric": "inference",
+      "review_decision": "accepted",
+      "review_note": "",
+      "reviewed_at": "2026-04-27T02:21:16.006Z",
+      "confirmed": true,
+      "impact": null
+    },
+    {
+      "id": "auto-20260424-src-034-10",
+      "origin": "inbox",
+      "inboxStatus": "pending",
+      "entity": "Openai",
+      "claim": "OpenAI projected cash burn of approximately $9B in 2025 and $17B in 2026, not turning cash-flow positive until 2030.",
+      "value": 9,
+      "unit": "USD billions",
+      "value_display": "9 USD billions",
+      "weight": "indicative",
+      "confidence": "verified",
+      "dedup_status": "new",
+      "dedup_note": null,
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceAuthor": "Sacra â OpenAI Deep Dive",
+      "sourceType": "web_page",
+      "source_id": "src-034",
+      "tags": [
+        "provider_revenue"
+      ],
+      "notes": "From Sacra â OpenAI Deep Dive",
+      "dateOfClaim": "2025",
+      "dateAdded": "2026-04-24",
+      "usedOn": [],
+      "replaces": null,
+      "metricKey": "Cash Burn",
+      "metric": "operating_loss",
+      "review_decision": "accepted",
+      "review_note": "",
+      "reviewed_at": "2026-04-27T02:21:16.006Z",
+      "confirmed": true,
+      "impact": null
+    },
+    {
+      "id": "auto-20260424-src-034-11",
+      "origin": "inbox",
+      "inboxStatus": "pending",
+      "entity": "Openai",
+      "claim": "OpenAI projected cash burn of approximately $17B in 2026.",
+      "value": 17,
+      "unit": "USD billions",
+      "value_display": "17 USD billions",
+      "weight": "indicative",
+      "confidence": "verified",
+      "dedup_status": "new",
+      "dedup_note": null,
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceAuthor": "Sacra â OpenAI Deep Dive",
+      "sourceType": "web_page",
+      "source_id": "src-034",
+      "tags": [
+        "provider_revenue"
+      ],
+      "notes": "From Sacra â OpenAI Deep Dive",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-24",
+      "usedOn": [],
+      "replaces": null,
+      "metricKey": "Projected Cash Burn",
+      "metric": "operating_loss",
+      "review_decision": "accepted",
+      "review_note": "",
+      "reviewed_at": "2026-04-27T02:21:16.006Z",
+      "confirmed": true,
+      "impact": {
+        "type": "cash_burn",
+        "name": "OpenAI → Cash Burn (2026)",
+        "current": "25 $B",
+        "proposed": "17 USD billions",
+        "pctChange": "-32.0",
+        "isMajor": true
+      }
+    },
+    {
+      "id": "auto-20260424-src-034-12",
+      "origin": "inbox",
+      "inboxStatus": "pending",
+      "entity": "Openai",
+      "claim": "OpenAI announced $122B in new investment at an $852B valuation in April 2026, co-led by SoftBank alongside Andreessen Horowitz, D.E. Shaw Ventures, MPX, and TPG.",
+      "value": 852,
+      "unit": "USD billions",
+      "value_display": "852 USD billions",
+      "weight": "indicative",
+      "confidence": "verified",
+      "dedup_status": "new",
+      "dedup_note": null,
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceAuthor": "Sacra â OpenAI Deep Dive",
+      "sourceType": "web_page",
+      "source_id": "src-034",
+      "tags": [
+        "valuation_funding"
+      ],
+      "notes": "From Sacra â OpenAI Deep Dive",
+      "dateOfClaim": "April 2026",
+      "dateAdded": "2026-04-24",
+      "usedOn": [],
+      "replaces": null,
+      "metricKey": "Valuation",
+      "metric": "valuation",
+      "review_decision": "accepted",
+      "review_note": "",
+      "reviewed_at": "2026-04-27T02:21:16.006Z",
+      "confirmed": true,
+      "impact": {
+        "type": "valuation",
+        "name": "OpenAI → Valuation (2026)",
+        "current": "840 $B",
+        "proposed": "852 USD billions",
+        "pctChange": "1.4",
+        "isMajor": false
+      }
+    },
+    {
+      "id": "auto-20260424-src-034-20",
+      "origin": "inbox",
+      "inboxStatus": "pending",
+      "entity": "Sacra â OpenAI Deep Dive",
+      "claim": "ChatGPT weekly active users grew to 910M, up from 800M in October and 700M in July.",
+      "value": 910,
+      "unit": "millions",
+      "value_display": "910 millions",
+      "weight": "indicative",
+      "confidence": "verified",
+      "dedup_status": "new",
+      "dedup_note": null,
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceAuthor": "Sacra â OpenAI Deep Dive",
+      "sourceType": "web_page",
+      "source_id": "src-034",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "notes": "From Sacra â OpenAI Deep Dive",
+      "dateOfClaim": "February 2026",
+      "dateAdded": "2026-04-24",
+      "usedOn": [],
+      "replaces": null,
+      "metricKey": "Weekly Active Users",
       "metric": "adoption",
       "review_decision": "accepted",
       "review_note": "",
-      "reviewed_at": "2026-04-27T01:14:37.231Z",
+      "reviewed_at": "2026-04-27T02:21:16.006Z",
       "confirmed": true,
       "impact": null
     }
   ],
   "declined": [
     {
-      "id": "auto-20260424-src-016-8",
-      "claim": "OpenAI expanded its revolving credit facility to approximately $4.7 billion.",
+      "id": "auto-20260424-src-033-52",
+      "claim": "Anthropic Cowork and Claude Code are available on paid plans starting at Pro ($20/mo), Max ($100-200/mo), Team ($30/user/mo), and Enterprise (custom).",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-11",
-      "claim": "OpenAI expects to soon reach 1 billion weekly active users, which would be the fastest platform to achieve that milestone.",
+      "id": "auto-20260424-src-034-13",
+      "claim": "OpenAI raised $122B in new investment in April 2026.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-27",
-      "claim": "OpenAI's revolving credit facility is supported by JPMorgan Chase, Citi, Goldman Sachs, Morgan Stanley, Wells Fargo, Mizuho, Royal Bank of Canada, SMBC, UBS, HSBC, and Santander, and remains undrawn at close.",
+      "id": "auto-20260424-src-034-14",
+      "claim": "The OpenAI Foundation's equity stake was valued at approximately $130B post-recapitalization.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-28",
-      "claim": "OpenAI will be included in several ARK Invest ETFs, broadening ownership to retail investors.",
+      "id": "auto-20260424-src-034-15",
+      "claim": "Microsoft's stake in the OpenAI PBC was valued at approximately $135B, representing roughly 27% on an as-converted diluted basis.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-033-16",
-      "claim": "Anthropic closed a $13 billion Series F funding round in September 2025, valuing it at $183 billion.",
+      "id": "auto-20260424-src-034-16",
+      "claim": "Current and former OpenAI staff sold approximately $6.6B of stock in a secondary transaction that valued OpenAI at $500B in October 2025.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-033-27",
-      "claim": "Claude Pro consumer subscription is $20 per month.",
+      "id": "auto-20260424-src-034-18",
+      "claim": "OpenAI raised $40B in March 2025.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-033-28",
-      "claim": "Claude Max subscription is $100/month or $200/month for heavy users.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-29",
-      "claim": "Claude Team subscription is $30 per user per month with a 5-seat minimum.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-38",
-      "claim": "Cognizant rolled out Claude tools internally to up to 350,000 associates.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-39",
-      "claim": "Deloitte announced its largest-ever enterprise deployment of Anthropic's Claude across more than 470,000 employees in 150 countries in October 2025.",
+      "id": "auto-20260424-src-034-19",
+      "claim": "OpenAI is potentially valued at up to $1 trillion ahead of a planned 2027 IPO.",
       "note": ""
     }
   ],
   "parked": [],
   "raw_pool": [
     {
-      "id": "auto-20260424-src-016-7",
-      "claim": "Over $3 billion was raised from individual investors through bank channels in this round.",
+      "id": "auto-20260424-src-029-16",
+      "claim": "AMD and Nutanix announced a strategic partnership to advance an open and scalable platform for enterprise AI.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-10",
-      "claim": "ChatGPT has over 50 million subscribers.",
+      "id": "auto-20260424-src-033-47",
+      "claim": "Anthropic pledges $100B in cloud spending in return for Amazon's $5B investment (April 2026).",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-24",
-      "claim": "OpenAI's infrastructure now spans cloud providers Microsoft, Oracle, AWS, CoreWeave, and Google Cloud.",
+      "id": "auto-20260424-src-033-48",
+      "claim": "Claude Opus 4.6 features a 1 million token context window, up from 200,000 tokens.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-25",
-      "claim": "OpenAI's silicon strategy spans NVIDIA, AMD, AWS Trainium, Cerebras, and a custom chip developed in partnership with Broadcom.",
+      "id": "auto-20260424-src-033-49",
+      "claim": "GPT-4 Turbo has a context window of 128K tokens, compared to Claude's 200K tokens.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-26",
-      "claim": "OpenAI's data center partnerships span Oracle, SBE, and SoftBank.",
+      "id": "auto-20260424-src-033-50",
+      "claim": "The Pentagon has declared Anthropic a supply-chain risk, with prohibitions scheduled to take effect June 30, 2026, after Anthropic lost a $200M defense contract.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-29",
-      "claim": "Over the past 15 months, OpenAI has expanded its infrastructure strategy beyond a small number of core providers.",
+      "id": "auto-20260424-src-033-51",
+      "claim": "Anthropic's healthcare addressable market is described as the $4.9 trillion healthcare market.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-016-30",
-      "claim": "Nvidia remains the foundation of OpenAI's infrastructure, powering the training fleet and majority of the inference stack.",
+      "id": "auto-20260424-src-033-53",
+      "claim": "Anthropic reports revenue from cloud resellers (AWS, Google, Microsoft) on a gross basis, inflating top-line figures relative to net-reporting peers.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-028-1",
-      "claim": "NVIDIA reported 31% revenue growth.",
+      "id": "auto-20260424-src-034-2",
+      "claim": "OpenAI CFO Sarah Friar confirmed $20B in 2025 revenue in January 2026.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-028-2",
-      "claim": "NVIDIA reported 200 basis points of gross margin growth.",
+      "id": "auto-20260424-src-034-3",
+      "claim": "OpenAI generated $6B in revenue in 2024.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-028-3",
-      "claim": "NVIDIA reported 850 basis points of operating margin growth.",
+      "id": "auto-20260424-src-034-4",
+      "claim": "OpenAI generated $2B in revenue in 2023.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-028-4",
-      "claim": "NVIDIA identifies 4 multi-billion dollar GPU computing growth drivers: Gaming, VR, AI, and Self-Driving Cars.",
+      "id": "auto-20260424-src-034-5",
+      "claim": "OpenAI projects reaching $85B in revenue by 2030.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-029-1",
-      "claim": "AMD reported record revenue and earnings for full year 2025, described as 'a defining year for AMD'.",
+      "id": "auto-20260424-src-034-6",
+      "claim": "OpenAI posted a 33% gross margin, constrained by inference costs.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-029-2",
-      "claim": "AMD and Meta announced an expanded strategic partnership to deploy 6 gigawatts of AMD GPUs.",
+      "id": "auto-20260424-src-034-9",
+      "claim": "Paying users account for approximately 66% of OpenAI's inference spend.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-029-3",
-      "claim": "AMD and OpenAI announced a strategic partnership to deploy 6 gigawatts of AMD GPUs.",
+      "id": "auto-20260424-src-034-17",
+      "claim": "In March 2025, OpenAI raised $40B at a $300B post-money valuation.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-029-4",
-      "claim": "AMD unveiled a strategy to lead the $1 trillion compute market at its Financial Analyst Day on November 11, 2025.",
+      "id": "auto-20260424-src-034-21",
+      "claim": "Paying business users surpassed 9M as of February 2026, up from 5M in August.",
       "note": ""
     },
     {
-      "id": "auto-20260424-src-029-5",
-      "claim": "AMD completed the divestiture of ZT Systems Data Center Infrastructure Manufacturing Business to Sanmina on October 27, 2025.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-6",
-      "claim": "AMD reported Q3 2025 financial results on November 4, 2025, with strong demand cited for high-performance and AI platforms.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-7",
-      "claim": "AMD reported Q2 2025 financial results on August 5, 2025.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-8",
-      "claim": "AMD reported Q4 and full year 2025 financial results on February 3, 2026, citing record revenue and earnings.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-9",
-      "claim": "AMD's data center AI franchise is described as 'rapidly scaling' entering 2026, with accelerating adoption of EPYC and Ryzen CPUs.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-10",
-      "claim": "AMD and TCS announced collaboration to bring 'Helios' rack-scale AI architecture to India.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-11",
-      "claim": "AMD and Eviden partnered to power Europe's new exascale supercomputer, the first based in France.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-12",
-      "claim": "AMD powered Frontier AI training for Zyphra, indicating AI training infrastructure deployment.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-13",
-      "claim": "AMD and Cohere expanded global AI collaboration to power enterprise and sovereign deployments with AMD AI infrastructure.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-14",
-      "claim": "AMD powered U.S. Sovereign AI Factory Supercomputers, accelerating an open American AI stack.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-029-15",
-      "claim": "AMD and HPE expanded collaboration to advance open rack-scale AI infrastructure.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-2",
-      "claim": "Anthropic revenue was $9B at the end of 2025.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-3",
-      "claim": "Anthropic revenue grew approximately 1,400% year-over-year as of March 2026.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-6",
-      "claim": "Business customers account for approximately 80% of Anthropic revenue as of October 2025.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-7",
-      "claim": "The number of customers spending over $100,000 annually on Claude has grown 7x in the past year.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-8",
-      "claim": "Over 500 customers now spend over $1 million annually on Claude, up from a dozen two years ago.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-9",
-      "claim": "Eight of the Fortune 10 are now Claude customers.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-10",
-      "claim": "Claude Code hit $2.5B in annualized revenue in February 2026, more than doubling since the beginning of 2026.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-11",
-      "claim": "Anthropic closed a $30 billion Series G funding round on February 12, 2026, at a $380 billion post-money valuation.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-13",
-      "claim": "Amazon has invested $8 billion total in Anthropic.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-15",
-      "claim": "Microsoft and Nvidia were contributing up to $15 billion to Anthropic's February 2026 financing round.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-17",
-      "claim": "Anthropic's Series F valuation was $183 billion in September 2025, up from $61.5B in March 2025.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-18",
-      "claim": "Anthropic's valuation was $61.5B in March 2025 (Series E).",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-19",
-      "claim": "Anthropic's total funding raised is $6.98B as of 2024 per Sacra's summary figure.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-20",
-      "claim": "Amazon is investing an additional $5 billion in Anthropic (April 2026 announced round).",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-21",
-      "claim": "Claude Opus 4.6 is priced at $5 per million input tokens and $25 per million output tokens.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-22",
-      "claim": "Claude Opus 4.6 extended context pricing is $10 per million input tokens and $37.50 per million output tokens.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-23",
-      "claim": "Claude Sonnet 4.5 API is priced at $3 per million input tokens and $15 per million output tokens.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-24",
-      "claim": "Claude Sonnet 4.5 long-context prompts over 200K tokens are priced at $6 per million input tokens and $22.50 per million output tokens.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-25",
-      "claim": "Batch processing for Claude APIs offers 50% savings versus standard pricing.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-26",
-      "claim": "Claude Sonnet is up to 80% cheaper per token compared to GPT-4.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-30",
-      "claim": "Subscriptions account for 10-15% of Anthropic's total revenue.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-31",
-      "claim": "Anthropic expects to burn approximately $3B in cash in 2025, down from $5.6B the prior year.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-34",
-      "claim": "Anthropic faces an estimated $80B in cloud infrastructure costs through 2029, up dramatically from roughly $3B the prior year.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-35",
-      "claim": "Claude Code has reached 29 million daily installs on VS Code.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-36",
-      "claim": "Claude Code accounts for approximately 4% of all public GitHub commits.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-37",
-      "claim": "Claude Code benchmarks at 72.5% on SWE-bench.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-40",
-      "claim": "Anthropic and Snowflake expanded their partnership with a $200 million multi-year agreement in December 2025.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-41",
-      "claim": "In September 2025, Microsoft began integrating Anthropic's models into Office 365 Copilot, potentially reaching more than 100 million users.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-45",
-      "claim": "Anthropic and Google announced a cloud partnership granting access to up to one million TPUs and adding over a gigawatt of compute capacity by 2026.",
-      "note": ""
-    },
-    {
-      "id": "auto-20260424-src-033-46",
-      "claim": "Anthropic commits $50 billion to data center upgrades (November 2025 announcement).",
+      "id": "auto-20260424-src-034-22",
+      "claim": "More than one million organizations use OpenAI's technology as of December 2025.",
       "note": ""
     }
   ],

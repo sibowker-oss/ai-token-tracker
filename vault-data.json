@@ -4695,6 +4695,146 @@
       "metricKey": "Weekly active users",
       "status": "accepted",
       "source_id": "src-033"
+    },
+    {
+      "id": "dp-215",
+      "claim": "OpenAI hit $25B in annualized revenue in February 2026, up from $20B at the end of 2025.",
+      "value": 25,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "February 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Annualized Revenue",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-216",
+      "claim": "OpenAI inference costs reached $8.4B in 2025 and are projected to rise to $14.1B in 2026.",
+      "value": 8.4,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2025",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "gpu_infrastructure"
+      ],
+      "metricKey": "Inference Cost",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-217",
+      "claim": "OpenAI inference costs are projected to rise to $14.1B in 2026.",
+      "value": 14.1,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "gpu_infrastructure"
+      ],
+      "metricKey": "Projected Inference Cost",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-218",
+      "claim": "OpenAI projected cash burn of approximately $9B in 2025 and $17B in 2026, not turning cash-flow positive until 2030.",
+      "value": 9,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2025",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Cash Burn",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-219",
+      "claim": "OpenAI projected cash burn of approximately $17B in 2026.",
+      "value": 17,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Projected Cash Burn",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-220",
+      "claim": "OpenAI announced $122B in new investment at an $852B valuation in April 2026, co-led by SoftBank alongside Andreessen Horowitz, D.E. Shaw Ventures, MPX, and TPG.",
+      "value": 852,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "April 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Valuation",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-221",
+      "claim": "ChatGPT weekly active users grew to 910M, up from 800M in October and 700M in July.",
+      "value": 910,
+      "unit": "millions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "February 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "metricKey": "Weekly Active Users",
+      "status": "accepted",
+      "source_id": "src-034"
     }
   ]
 }
