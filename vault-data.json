@@ -4835,6 +4835,66 @@
       "metricKey": "Weekly Active Users",
       "status": "accepted",
       "source_id": "src-034"
+    },
+    {
+      "id": "dp-222",
+      "claim": "Anthropic reached $19B in annualized revenue by early 2026, up from approximately $4B in mid-2025.",
+      "value": 19,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "Early 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Annualized Revenue",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-223",
+      "claim": "Anthropic's annualized revenue was approximately $4B in mid-2025.",
+      "value": 4,
+      "unit": "USD billions",
+      "sourceUrl": "https://sacra.com/research/openai/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 OpenAI Deep Dive",
+      "confidence": "verified",
+      "dateOfClaim": "Mid-2025",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 OpenAI Deep Dive",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "Annualized Revenue",
+      "status": "accepted",
+      "source_id": "src-034"
+    },
+    {
+      "id": "dp-224",
+      "claim": "SpaceX has an option to acquire Cursor for $60 billion.",
+      "value": 60000000000,
+      "unit": "USD",
+      "sourceUrl": "https://sacra.com/research/cursor/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Sacra \u2014 Cursor Deep Dive",
+      "confidence": "estimated",
+      "dateOfClaim": "April 2026",
+      "dateAdded": "2026-04-27",
+      "usedOn": [],
+      "notes": "From Sacra \u2014 Cursor Deep Dive",
+      "tags": [
+        "valuation_funding"
+      ],
+      "metricKey": "Acquisition Option Valuation",
+      "status": "accepted",
+      "source_id": "src-035"
     }
   ]
 }

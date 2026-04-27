@@ -1774,7 +1774,7 @@
         },
         "2025.arr": {
           "confidence": "medium",
-          "claim_count": 1,
+          "claim_count": 3,
           "claims": [
             {
               "id": "dp-002",
@@ -1788,8 +1788,35 @@
               "date": "2025-06-01",
               "origin": "accepted",
               "role": "supports"
+            },
+            {
+              "id": "dp-222",
+              "claim": "Anthropic reached $19B in annualized revenue by early 2026, up from approximately $4B in mid-2025.",
+              "value": 19,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "Early 2026",
+              "origin": "accepted",
+              "role": "supports"
+            },
+            {
+              "id": "dp-223",
+              "claim": "Anthropic's annualized revenue was approximately $4B in mid-2025.",
+              "value": 4,
+              "unit": "USD billions",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source_url": "https://sacra.com/research/openai/",
+              "date": "Mid-2025",
+              "origin": "accepted",
+              "role": "supports"
             }
-          ]
+          ],
+          "needs_source": false
         },
         "2025.collected_revenue": {
           "confidence": "high",
