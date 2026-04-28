@@ -269,6 +269,11 @@ let activeFilter = 'pending';
 let activeConfidence = 'all';
 let activeBatch = null; // null | 'first' — quick-filter chip per wq-018 §4
 let siteData = null;
+// wq-029: baseline mojibake-marker count captured at page load. Each commit
+// of vault-inbox.json re-counts the outgoing object and aborts if it rose.
+// review.html never touches source strings, so any rise means a stale-cached
+// readFile() or upstream regression has corrupted the inbox in transit.
+let _inboxMojibakeBaseline = null;
 
 // ----- Data loading -----
 
@@ -290,6 +295,10 @@ async function loadAll() {
   // Build vault data point lookup (for "replaces" resolution)
   if (vault?.dataPoints) {
     vault.dataPoints.forEach(dp => vaultDataPoints[dp.id] = dp);
+  }
+
+  if (window.GitHubAPI && typeof GitHubAPI.countMojibakeMarkers === 'function' && inbox) {
+    _inboxMojibakeBaseline = GitHubAPI.countMojibakeMarkers(inbox);
   }
 
   metricSchema = schema;
@@ -362,6 +371,24 @@ async function loadJSON(path) {
     if (r.ok) return await r.json();
   } catch(e) {}
   return null;
+}
+
+// wq-029: pre-commit defensive guard for vault-inbox.json. Throws if the
+// outgoing inbox has more mojibake markers than the page-load baseline,
+// meaning either a stale-cached readFile() mangled the bytes on this read
+// or an upstream commit rewrote the file. review.html never edits source
+// strings, so any rise is unsafe to commit.
+function _assertNoNewMojibake(inbox, callsite) {
+  if (!window.GitHubAPI || typeof GitHubAPI.countMojibakeMarkers !== 'function') return;
+  if (_inboxMojibakeBaseline == null) return;
+  const now = GitHubAPI.countMojibakeMarkers(inbox);
+  if (now > _inboxMojibakeBaseline) {
+    throw new Error(
+      'Refusing to commit: mojibake markers rose from ' + _inboxMojibakeBaseline +
+      ' to ' + now + ' between page load and ' + callsite + '. ' +
+      'Hard-refresh (Cmd+Shift+R) and try again — likely stale cached github-api.js.'
+    );
+  }
 }
 
 // ----- Inference helpers -----
@@ -754,6 +781,7 @@ async function deleteClaim(id) {
     const inboxFile = await GitHubAPI.readFile('vault-inbox.json');
     const inbox = JSON.parse(inboxFile.content);
     inbox.items = inbox.items.filter(item => item.id !== id);
+    _assertNoNewMojibake(inbox, 'deleteClaim');
     await GitHubAPI.commitFiles(
       [{ path: 'vault-inbox.json', content: inbox }],
       'Delete claim: ' + id
@@ -1421,6 +1449,7 @@ async function autoClearApply() {
 
     const msg = 'Auto-clear: ' + plan.accepted.length + ' accepted, ' +
                 plan.declined.length + ' declined, ' + plan.parked.length + ' parked';
+    _assertNoNewMojibake(inbox, 'autoClearApply');
     const result = await GitHubAPI.commitFiles(
       [{ path: 'vault-inbox.json', content: inbox }], msg
     );
@@ -1594,6 +1623,7 @@ async function writeApproved(accepted) {
     if (declined.length) parts.push(declined.length + ' declined');
     if (parked.length) parts.push(parked.length + ' parked');
     if (rawPool.length) parts.push(rawPool.length + ' raw_pool');
+    _assertNoNewMojibake(inbox, 'writeApproved');
     const result = await GitHubAPI.commitFiles(
       [
         { path: 'vault-inbox.json', content: inbox },
@@ -1657,6 +1687,6 @@ document.addEventListener('keydown', (e) => {
   bulkDecision('raw_pool');
 });
 </script>
-<script src="github-api.js"></script>
+<script src="github-api.js?v=2026-04-27-wq029"></script>
 </body>
 </html>

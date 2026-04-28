@@ -58,13 +58,27 @@ const GitHubAPI = (() => {
     return data.tree.sha;
   }
 
-  /** Create a blob for file content */
+  /** Encode a JS string as base64 of its UTF-8 bytes (round-trip-safe). */
+  function _encodeBase64Utf8(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+
+  // wq-029: post the blob as base64 of UTF-8 bytes rather than a raw JS string
+  // tagged encoding:utf-8. Stale browsers running the pre-14e256a readFile()
+  // returned a raw-byte string (each UTF-8 byte → a Latin-1 codepoint); when
+  // that round-tripped through fetch's USVString body it re-encoded as UTF-8
+  // and produced the c3 a2 c2 80 c2 94 mojibake observed at 249cffe.
+  // TextEncoder + btoa freezes whatever bytes the JS string represents, so
+  // this path is byte-clean regardless of how the string was decoded upstream.
   async function _createBlob(content) {
     const headers = await _headers();
     const resp = await fetch(`${API}/repos/${OWNER}/${REPO}/git/blobs`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ content, encoding: 'utf-8' })
+      body: JSON.stringify({ content: _encodeBase64Utf8(content), encoding: 'base64' })
     });
     if (!resp.ok) throw new Error('Failed to create blob: ' + resp.status);
     const data = await resp.json();
@@ -189,6 +203,39 @@ const GitHubAPI = (() => {
     }
   }
 
+  // wq-029 defensive guard. When stale pre-14e256a JS decodes UTF-8 bytes
+  // as a raw byte-string (atob without TextDecoder), multi-byte codepoints
+  // land in JS memory as a sequence of Latin-1-range codepoints. Canonical
+  // signatures: U+00E2 + U+0080 + U+009X (broken em/en-dash, curly quotes,
+  // ellipsis) and U+00C2 + U+00A0 (broken nbsp). U+00E2 alone is legitimate
+  // (French/Portuguese vowels) so the discriminator is U+00E2 followed by
+  // a C1 control U+0080-U+009F or U+00A6 (ellipsis trailer) - impossible
+  // in normal text. ASCII-only escape sequences below to keep this source
+  // file robust against editors that strip C1 controls.
+  const MOJIBAKE_RE = /\u00e2\u0080[\u0093-\u009d\u00a6]|\u00c2\u00a0/;
+
+  /**
+   * Count canonical mojibake markers in a JS object (deep walk over strings).
+   * Used by the defensive guard to compare a page-load baseline vs pre-commit
+   * value — if the count went *up* without the user touching strings, abort.
+   */
+  function countMojibakeMarkers(value) {
+    let n = 0;
+    const walk = (v) => {
+      if (v == null) return;
+      if (typeof v === 'string') {
+        const m = v.match(new RegExp(MOJIBAKE_RE.source, 'g'));
+        if (m) n += m.length;
+      } else if (Array.isArray(v)) {
+        for (let i = 0; i < v.length; i++) walk(v[i]);
+      } else if (typeof v === 'object') {
+        for (const k in v) walk(v[k]);
+      }
+    };
+    walk(value);
+    return n;
+  }
+
   /**
    * Trigger a workflow via workflow_dispatch.
    * @param {string} workflowFile — e.g. "apply-decisions.yml"
@@ -204,5 +251,5 @@ const GitHubAPI = (() => {
     return resp.status === 204;
   }
 
-  return { getToken, setToken, clearToken, hasToken, commitFiles, readFile, validateToken, triggerWorkflow, OWNER, REPO };
+  return { getToken, setToken, clearToken, hasToken, commitFiles, readFile, validateToken, triggerWorkflow, countMojibakeMarkers, OWNER, REPO };
 })();
