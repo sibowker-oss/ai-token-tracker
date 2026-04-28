@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brand — Hepburn Advisory</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 40px; background: var(--bg-light); font-family: var(--font-sans); }
+  .wrap { max-width: 1000px; }
+  h1 { font: var(--type-h2); letter-spacing: var(--tracking-head); margin: 0 0 4px; color: var(--ink-1000);}
+  .sub { font: var(--type-meta); color: var(--fg-light-3); margin: 0 0 28px; max-width: 60ch; line-height: 1.5;}
+  .sec { font: var(--type-eyebrow); text-transform: uppercase; letter-spacing: var(--tracking-eyebrow); color: var(--fg-light-3); margin: 32px 0 14px; }
+
+  .marks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .mark-card { border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; background: #fff;}
+  .mark-card .frame { height: 180px; display: flex; align-items: center; justify-content: center; }
+  .mark-card .frame.dark { background: var(--ink-1000); }
+  .mark-card .frame.warm { background: var(--bg-light-alt); }
+  .mark-card .frame svg, .mark-card .frame img { width: 96px; height: 96px; }
+  .mark-card .meta { padding: 12px 14px; font-size: 11px; color: var(--fg-light-3); }
+  .mark-card .meta b { color: var(--ink-1000); font-size: 12px; display: block; margin-bottom: 2px; }
+
+  .lockups { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .lockup { border: 1px solid var(--border-light); border-radius: 12px; padding: 36px; background: #fff; display: flex; align-items: center; gap: 18px; }
+  .lockup.dark { background: var(--ink-1000); }
+  .lockup svg, .lockup img { width: 72px; height: 72px; flex: none;}
+  .lockup .wordmark { font-weight: 700; font-size: 40px; letter-spacing: -0.02em; color: var(--ink-1000); line-height: 1.1;}
+  .lockup.dark .wordmark { color: #fff; }
+  .lockup .tagline { font-size: 12px; color: var(--fg-light-3); font-weight: 500; letter-spacing: 0.01em; margin-top: 2px; }
+  .lockup.dark .tagline { color: var(--ink-400); }
+
+  .donts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .dont { border: 1px solid var(--border-light); border-radius: 12px; padding: 24px; text-align: center; position: relative; background: #fff;}
+  .dont .x { position: absolute; top: 10px; right: 12px; font-size: 11px; font-weight: 700; color: var(--red);}
+  .dont svg { width: 72px; height: 72px; }
+  .dont .lbl { font-size: 11px; color: var(--fg-light-3); margin-top: 10px; line-height: 1.4; }
+
+  .voice { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .v { border: 1px solid var(--border-light); border-radius: 12px; padding: 18px 20px; background: #fff; font-size: 14px; line-height: 1.5; }
+  .v.good { border-left: 3px solid var(--green); }
+  .v.bad  { border-left: 3px solid var(--red); text-decoration: line-through; text-decoration-color: rgba(239,68,68,.45); color: var(--fg-light-3); }
+  .v .tag { display: block; font: 600 10px/1.4 var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .v.good .tag { color: var(--green); }
+  .v.bad .tag  { color: var(--red); text-decoration: none; }
+
+  .note { font-size: 12px; color: var(--fg-light-3); margin-top: 10px; line-height: 1.5; max-width: 70ch; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Brand</h1>
+  <p class="sub">A 4-point sparkle mark in a rounded-square container. Used black-on-white or inverted, always with the "Hepburn Advisory" wordmark in Inter Bold when lockup is needed.</p>
+
+  <div class="sec">The mark</div>
+  <div class="marks">
+    <div class="mark-card"><div class="frame"><img src="../assets/logo-icon.svg"></div><div class="meta"><b>Primary · on light</b>Black mark, white container inside</div></div>
+    <div class="mark-card"><div class="frame dark"><img src="../assets/logo-icon-inverse.svg"></div><div class="meta"><b>Primary · on dark</b>White mark, black container</div></div>
+    <div class="mark-card"><div class="frame warm"><img src="../assets/logo-icon.svg"></div><div class="meta"><b>On warm neutral</b>Advisory section-breaker band</div></div>
+    <div class="mark-card"><div class="frame" style="background:#0A0E1A"><img src="../assets/logo-icon-inverse.svg"></div><div class="meta"><b>On Ledger dark</b>Against #0A0E1A page</div></div>
+  </div>
+  <p class="note">Clearspace: one quarter of the mark's width on all sides. Minimum sizes: 24px favicon · 32px UI chrome · 56px marketing.</p>
+
+  <div class="sec">Lockups</div>
+  <div class="lockups">
+    <div class="lockup">
+      <img src="../assets/logo-icon.svg">
+      <div>
+        <div class="wordmark">Hepburn Advisory</div>
+      </div>
+    </div>
+    <div class="lockup dark">
+      <img src="../assets/logo-icon-inverse.svg">
+      <div>
+        <div class="wordmark">Hepburn Advisory</div>
+      </div>
+    </div>
+  </div>
+  <p class="note">Reference horizontal lockup with optically-matched kerning: <code style="font-family:var(--font-mono);font-size:12px">assets/logo-horizontal.png</code>. Vertical lockup for square formats: <code style="font-family:var(--font-mono);font-size:12px">assets/logo-vertical.png</code>.</p>
+
+  <div class="sec">Don'ts</div>
+  <div class="donts">
+    <div class="dont"><span class="x">✗</span><svg viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect width="100" height="100" rx="18" fill="url(#g)"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#fff"/></svg><div class="lbl">No gradient containers</div></div>
+    <div class="dont"><span class="x">✗</span><svg viewBox="0 0 100 100"><rect width="100" height="100" rx="18" fill="#0A0A0A"/><path transform="rotate(22 50 50)" d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#fff"/></svg><div class="lbl">No rotation</div></div>
+    <div class="dont"><span class="x">✗</span><svg viewBox="0 0 100 100" style="filter: drop-shadow(0 6px 18px rgba(59,130,246,.7))"><rect width="100" height="100" rx="18" fill="#0A0A0A"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#3B82F6"/></svg><div class="lbl">No coloured fills or glow</div></div>
+  </div>
+
+  <div class="sec">Voice — say this, not that</div>
+  <div class="voice">
+    <div class="v good"><span class="tag">Advisory · ✓</span>I advise AI founders on commercial scale and enterprise executives on AI strategy.</div>
+    <div class="v bad"><span class="tag">✗ Banned</span>We are a fractional CXO practice that unlocks transformative AI value for our partners.</div>
+    <div class="v good"><span class="tag">Ledger · ✓</span>~$745B in committed AI capex reconciles to ~$22B in customer revenue — ~$34 spent for every $1 earned.</div>
+    <div class="v bad"><span class="tag">✗ Banned</span>The AI bubble is about to hit the wall — a reckoning is coming for the hyperscalers.</div>
+    <div class="v good"><span class="tag">Ledger · ✓</span>For AI to hit $1T by 2030, it needs to equal 18% of global IT spend. Pick one.</div>
+    <div class="v bad"><span class="tag">✗ Banned</span>AI is revolutionising the way enterprises leverage data, end-to-end.</div>
+  </div>
+  <p class="note">Banned words: <b>Fractional</b> (ever), revolutionary, transformative, unlock, leverage, seamless, end-to-end, bubble, winter, hits the wall, reckoning. "I" on the Advisory site. Third-person neutral on the Ledger.</p>
+</div>
+</body>
+</html>

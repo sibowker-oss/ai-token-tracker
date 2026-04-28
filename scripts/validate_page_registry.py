@@ -32,7 +32,7 @@ REPO = Path(__file__).resolve().parents[1]
 REGISTRY = REPO / "data" / "page-registry.json"
 SCHEMA = REPO / "metric-schema.json"
 
-EXCLUDED_DIRS = {"node_modules", "tests", "data/snapshots", "data-updates/archive", ".git"}
+EXCLUDED_DIRS = {"node_modules", "tests", "data/snapshots", "data-updates/archive", ".git", "Claude Design - Design System", "design-system"}
 
 # Folder-rule resolver — maps status to allowed folder prefix
 FOLDER_FOR_STATUS = {

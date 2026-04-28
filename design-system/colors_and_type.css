@@ -1,0 +1,366 @@
+/* ============================================================
+   HEPBURN ADVISORY — Design Tokens
+   Color + Type system for Hepburn Advisory and The AI Ledger.
+   Two surfaces share one type + palette:
+   - Advisory (light) — clean, professional, executive
+   - Ledger (dark)   — data-first, numerate, quotable
+   ============================================================ */
+
+/* -------- Fonts --------
+   Inter is the primary face for UI + body. Used everywhere on
+   the live Ledger and the Webflow site. Tabular numerals are
+   mandatory for any numeric cell.
+
+   Source Serif is used sparingly for long-form editorial copy
+   (Insights, About, print/briefing decks). Not used in UI.
+
+   Geist Mono / JetBrains Mono for code, methodology, monospace
+   benchmarks. Either is acceptable; stick to one per artefact.
+
+   NOTE: Fonts loaded locally from /fonts. Variable fonts, OFL-licensed.
+   The CSS below declares each family once per style (normal/italic)
+   with the full weight range (100–900); the browser selects the
+   requested weight from the variable axis.                           */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-Italic-VariableFont_opsz_wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('fonts/SourceSerif4-VariableFont_opsz_wght.ttf') format('truetype-variations');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('fonts/SourceSerif4-Italic-VariableFont_opsz_wght.ttf') format('truetype-variations');
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('fonts/JetBrainsMono-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('fonts/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 100 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+
+  /* ==========================================================
+     1. COLOR — CORE BRAND
+     ========================================================== */
+
+  /* Ink: the brand black. The mark, primary type, CTA fills. */
+  --ink-1000:        #0A0A0A;   /* Mark, primary headlines on light */
+  --ink-900:         #111827;   /* Ledger card surface + body text on light */
+  --ink-800:         #1F2937;
+  --ink-700:         #334155;
+  --ink-600:         #475569;
+  --ink-500:         #64748B;
+  --ink-400:         #94A3B8;   /* Ledger --text-dim */
+  --ink-300:         #CBD5E1;
+  --ink-200:         #E2E8F0;   /* Ledger --text */
+  --ink-100:         #F1F5F9;
+  --ink-50:          #F8FAFC;   /* Ledger --text-bright, Advisory page bg */
+  --ink-0:           #FFFFFF;
+
+  /* ==========================================================
+     2. COLOR — ACCENTS (from the live Ledger palette)
+     Fixed accent set — do not introduce new hues without a
+     change-log entry in README.md.
+     ========================================================== */
+
+  --blue:            #3B82F6;   /* --accent  / Capital Ledger / primary links */
+  --blue-600:        #2563EB;   /* hover */
+  --blue-700:        #1D4ED8;   /* press */
+  --blue-tint:       rgba(59, 130, 246, 0.08);
+
+  --violet:          #8B5CF6;   /* --accent2 / Usage Ledger / secondary series */
+  --violet-600:      #7C3AED;
+  --violet-tint:     rgba(139, 92, 246, 0.08);
+
+  --cyan:            #06B6D4;   /* --accent3 / tertiary series */
+  --cyan-tint:       rgba(6, 182, 212, 0.08);
+
+  --amber:           #F59E0B;   /* --orange  / Power / emphasis, gap-to-target */
+  --amber-600:       #D97706;
+  --amber-tint:      rgba(245, 158, 11, 0.10);
+
+  --green:           #10B981;   /* Revenue Ledger / positive / sourced (Tier 1) */
+  --green-tint:      rgba(16, 185, 129, 0.10);
+
+  --red:             #EF4444;   /* reality-check / warnings */
+  --red-tint:        rgba(239, 68, 68, 0.10);
+
+  --pink:            #EC4899;
+
+  /* Ledger "provenance tier" semantic colors (see GUIDELINES §7.1) */
+  --tier-sourced:    var(--green);   /* Tier 1 — primary filings */
+  --tier-derived:    var(--amber);   /* Tier 2 — triangulated */
+  --tier-modeled:    var(--violet);  /* Tier 3 — modeled */
+
+  /* Ledger namespace (keeps parity with site-data CSS tokens) */
+  --capital:         var(--blue);
+  --revenue:         var(--green);
+  --usage:           var(--violet);
+  --power:           var(--amber);
+
+  /* ==========================================================
+     3. SURFACES — two themes on one palette
+     ========================================================== */
+
+  /* LIGHT (Advisory, briefings, executive decks) */
+  --bg-light:        #FBFBF9;   /* warm off-white, slightly paper-ish */
+  --bg-light-alt:    #F4F3EE;   /* inverse band / section breaker */
+  --surface-light:   #FFFFFF;
+  --border-light:    #E7E5DC;
+  --fg-light-1:      var(--ink-1000);  /* headlines */
+  --fg-light-2:      #2A2A28;          /* body */
+  --fg-light-3:      #6B6B66;          /* meta */
+
+  /* DARK (Ledger, data dashboards) — matches live site exactly */
+  --bg-dark:         #0A0E1A;
+  --bg-dark-alt:     #0F172A;
+  --surface-dark:    #111827;
+  --border-dark:     #1E293B;
+  --fg-dark-1:       var(--ink-50);    /* headlines */
+  --fg-dark-2:       var(--ink-200);   /* body */
+  --fg-dark-3:       var(--ink-400);   /* meta / text-dim */
+
+  /* ==========================================================
+     4. TYPE — FAMILIES
+     ========================================================== */
+
+  --font-sans:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif:      'Source Serif 4', 'Charter', 'Iowan Old Style', Georgia, serif;
+  --font-mono:       'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-display:    var(--font-sans); /* we do not use a separate display face */
+
+  /* ==========================================================
+     5. TYPE — SCALE
+     Tight, information-dense scale. Headlines want
+     letter-spacing: -0.02em to -0.04em to match the Ledger.
+     ========================================================== */
+
+  --text-xs:         11px;   /* eyebrow, provenance meta */
+  --text-sm:         12px;   /* chart labels, footnotes */
+  --text-base:       14px;   /* UI body */
+  --text-md:         15px;
+  --text-lg:         17px;   /* lede paragraph */
+  --text-xl:         20px;   /* sub-hook */
+  --text-2xl:        24px;   /* section title */
+  --text-3xl:        32px;   /* H2 */
+  --text-4xl:        42px;   /* headline tile */
+  --text-5xl:        56px;   /* masthead */
+  --text-6xl:        72px;   /* hero display (slides) */
+  --text-7xl:        96px;   /* the one-number hero (rare) */
+
+  --leading-tight:   1.1;
+  --leading-snug:    1.25;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.65;   /* long-form editorial */
+
+  --tracking-hero:   -0.035em;
+  --tracking-head:   -0.02em;
+  --tracking-body:   0;
+  --tracking-eyebrow: 0.08em;  /* UPPERCASE eyebrows */
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semi:     600;
+  --weight-bold:     700;
+  --weight-black:    800;
+
+  /* ==========================================================
+     6. SEMANTIC TYPE SLOTS
+     Use these via e.g. .h1 { font: var(--type-h1); } or map
+     into utilities. Every slot is a full font shorthand.
+     ========================================================== */
+
+  --type-eyebrow:        var(--weight-semi) var(--text-xs)/1.2 var(--font-sans);
+  --type-meta:           var(--weight-medium) var(--text-xs)/1.4 var(--font-sans);
+  --type-body:           var(--weight-regular) var(--text-base)/var(--leading-normal) var(--font-sans);
+  --type-lede:           var(--weight-regular) var(--text-lg)/var(--leading-relaxed) var(--font-sans);
+  --type-h3:             var(--weight-semi) var(--text-xl)/var(--leading-snug) var(--font-sans);
+  --type-h2:             var(--weight-bold) var(--text-3xl)/var(--leading-tight) var(--font-sans);
+  --type-h1:             var(--weight-bold) var(--text-4xl)/var(--leading-tight) var(--font-sans);
+  --type-display:        var(--weight-bold) var(--text-5xl)/var(--leading-tight) var(--font-sans);
+  --type-mega:           var(--weight-black) var(--text-7xl)/0.95 var(--font-sans);
+  --type-mono:           var(--weight-medium) var(--text-sm)/1.4 var(--font-mono);
+  --type-editorial:      var(--weight-regular) var(--text-lg)/var(--leading-relaxed) var(--font-serif);
+
+  /* ==========================================================
+     7. SPACING (4px grid)
+     ========================================================== */
+
+  --space-1:         4px;
+  --space-2:         8px;
+  --space-3:         12px;
+  --space-4:         16px;
+  --space-5:         20px;
+  --space-6:         24px;
+  --space-7:         32px;
+  --space-8:         40px;
+  --space-9:         48px;
+  --space-10:        64px;
+  --space-11:        80px;
+  --space-12:        96px;
+
+  /* ==========================================================
+     8. RADII
+     ========================================================== */
+
+  --radius-xs:       4px;    /* badges */
+  --radius-sm:       6px;
+  --radius-md:       8px;    /* nav-link, button */
+  --radius-lg:       12px;   /* card */
+  --radius-xl:       16px;   /* hero tile */
+  --radius-2xl:      20px;
+  --radius-brand:    18px;   /* logo mark corner radius */
+  --radius-pill:     999px;
+
+  /* ==========================================================
+     9. SHADOWS (light theme only — dark uses borders)
+     ========================================================== */
+
+  --shadow-xs:       0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-sm:       0 2px 6px rgba(10, 10, 10, 0.06);
+  --shadow-md:       0 8px 24px rgba(10, 10, 10, 0.08);
+  --shadow-lg:       0 16px 48px rgba(10, 10, 10, 0.12);
+  --shadow-focus:    0 0 0 3px rgba(59, 130, 246, 0.35);
+
+  /* ==========================================================
+     10. MOTION
+     Economy-of-motion: 150ms for UI, 200ms for presence,
+     nothing bouncy. Ease-out for entrance, ease-in-out
+     for state changes.
+     ========================================================== */
+
+  --ease-out:        cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out:     cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast:   120ms;
+  --duration-base:   180ms;
+  --duration-slow:   280ms;
+
+  /* ==========================================================
+     11. FRESHNESS DOTS (Ledger)
+     ========================================================== */
+
+  --fresh-green:     var(--green);    /* ≤30 days */
+  --fresh-yellow:    var(--amber);    /* 31–90 days */
+  --fresh-grey:      var(--ink-500);  /* >90 days */
+}
+
+/* ============================================================
+   BASE — applied to <body> when element uses the light surface
+   ============================================================ */
+
+body.surface-light {
+  background: var(--bg-light);
+  color: var(--fg-light-2);
+  font: var(--type-body);
+  font-feature-settings: 'ss01', 'cv11';  /* Inter stylistic sets for clean a/g */
+}
+
+body.surface-dark {
+  background: var(--bg-dark);
+  color: var(--fg-dark-2);
+  font: var(--type-body);
+}
+
+/* ============================================================
+   SEMANTIC CLASSES — use these over element selectors.
+   Every design artefact should reach for .eyebrow, .h1, .lede
+   instead of raw font-size/weight declarations.
+   ============================================================ */
+
+.eyebrow {
+  font: var(--type-eyebrow);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--fg-light-3);
+}
+.surface-dark .eyebrow { color: var(--fg-dark-3); }
+
+.meta {
+  font: var(--type-meta);
+  color: var(--fg-light-3);
+}
+.surface-dark .meta { color: var(--fg-dark-3); }
+
+.h1 {
+  font: var(--type-h1);
+  letter-spacing: var(--tracking-head);
+  color: var(--fg-light-1);
+}
+.surface-dark .h1 { color: var(--fg-dark-1); }
+
+.h2 {
+  font: var(--type-h2);
+  letter-spacing: var(--tracking-head);
+  color: var(--fg-light-1);
+}
+.surface-dark .h2 { color: var(--fg-dark-1); }
+
+.h3 {
+  font: var(--type-h3);
+  color: var(--fg-light-1);
+}
+.surface-dark .h3 { color: var(--fg-dark-1); }
+
+.display {
+  font: var(--type-display);
+  letter-spacing: var(--tracking-hero);
+  color: var(--fg-light-1);
+}
+.surface-dark .display { color: var(--fg-dark-1); }
+
+.mega {
+  font: var(--type-mega);
+  letter-spacing: var(--tracking-hero);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-light-1);
+}
+.surface-dark .mega { color: var(--fg-dark-1); }
+
+.lede {
+  font: var(--type-lede);
+  color: var(--fg-light-2);
+  max-width: 58ch;
+}
+.surface-dark .lede { color: var(--fg-dark-2); }
+
+.body       { font: var(--type-body); }
+.mono       { font: var(--type-mono); }
+.num        { font-variant-numeric: tabular-nums; }
+.editorial  { font: var(--type-editorial); max-width: 64ch; }
+
+/* Inline emphasis for numbers (the Ledger's signature tic) */
+.num-display {
+  font: var(--type-h1);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-head);
+  color: var(--fg-light-1);
+}
+.surface-dark .num-display { color: var(--fg-dark-1); }

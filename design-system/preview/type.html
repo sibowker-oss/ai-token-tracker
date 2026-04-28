@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Type — Hepburn Advisory</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 40px; background: var(--bg-light); }
+  .wrap { max-width: 1000px; }
+  .spec-head { font: var(--type-h2); letter-spacing: var(--tracking-head); margin: 0 0 4px; color: var(--ink-1000); }
+  .spec-sub { font: var(--type-meta); color: var(--fg-light-3); margin: 0 0 32px; }
+  .section-label { font: var(--type-eyebrow); text-transform: uppercase; letter-spacing: var(--tracking-eyebrow); color: var(--fg-light-3); margin: 32px 0 12px; }
+  .stack { border-top: 1px solid var(--border-light); }
+  .row { display: grid; grid-template-columns: 220px 1fr; gap: 32px; padding: 20px 0; border-bottom: 1px solid var(--border-light); align-items: baseline; }
+  .tag { font: 11px/1.4 var(--font-mono); color: var(--fg-light-3); }
+  .tag b { display: block; color: var(--ink-1000); font-size: 12px; font-family: var(--font-sans); margin-bottom: 2px; }
+  .sample { color: var(--ink-1000); }
+  .mega { font-weight: 800; font-size: 96px; line-height: 0.95; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+  .display { font-weight: 700; font-size: 56px; line-height: 1.1; letter-spacing: -0.035em; }
+  .h1 { font-weight: 700; font-size: 42px; line-height: 1.1; letter-spacing: -0.02em; }
+  .h2 { font-weight: 700; font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; }
+  .h3 { font-weight: 600; font-size: 20px; line-height: 1.25; }
+  .lede { font-weight: 400; font-size: 17px; line-height: 1.65; color: var(--fg-light-2); max-width: 60ch; }
+  .body { font-weight: 400; font-size: 14px; line-height: 1.5; color: var(--fg-light-2); max-width: 70ch; }
+  .eyebrow { font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-light-3); }
+  .mono { font: 500 12px/1.4 var(--font-mono); color: var(--fg-light-2); }
+  .editorial { font-family: 'Source Serif 4', Georgia, serif; font-weight: 400; font-size: 17px; line-height: 1.65; color: var(--fg-light-2); max-width: 60ch; }
+  .editorial em { font-style: italic; }
+
+  .numdemo { display: flex; gap: 40px; align-items: baseline; padding: 20px 0; }
+  .numdemo .num { font-weight: 800; font-size: 72px; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--ink-1000); line-height: 1; }
+  .numdemo .lbl { font: 600 11px/1.4 var(--font-sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-light-3); }
+
+  .pairing { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 12px; }
+  .pairing .card { padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-light); background: #fff; }
+  .pairing .dark { background: var(--bg-dark); border-color: var(--border-dark); color: var(--fg-dark-1); }
+  .pairing .dark .body { color: var(--fg-dark-2); }
+  .pairing .dark .eyebrow { color: var(--fg-dark-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="spec-head">Type</h1>
+  <p class="spec-sub">Inter for UI and numbers. Source Serif 4 for long-form editorial only. JetBrains Mono for code and provenance meta.</p>
+
+  <div class="section-label">Scale</div>
+  <div class="stack">
+    <div class="row"><div class="tag"><b>Mega / $hero</b>Inter 800 · 96 / 0.95 · −0.035em · tabular-nums</div><div class="sample mega">$745B</div></div>
+    <div class="row"><div class="tag"><b>Display</b>Inter 700 · 56 / 1.1 · −0.035em</div><div class="sample display">Scale with your enterprise</div></div>
+    <div class="row"><div class="tag"><b>H1</b>Inter 700 · 42 / 1.1 · −0.02em</div><div class="sample h1">The AI Ledger — Capital view</div></div>
+    <div class="row"><div class="tag"><b>H2</b>Inter 700 · 32 / 1.1 · −0.02em</div><div class="sample h2">Gap to target, by scenario</div></div>
+    <div class="row"><div class="tag"><b>H3</b>Inter 600 · 20 / 1.25</div><div class="sample h3">US data-centre interconnection queue</div></div>
+    <div class="row"><div class="tag"><b>Lede</b>Inter 400 · 17 / 1.65 · ≤58ch</div><div class="sample lede">For AI to hit $1T by 2030, it needs to equal 18% of global IT spend, 2.4% of global payroll, or replace 31% of today's SaaS market. Pick one.</div></div>
+    <div class="row"><div class="tag"><b>Body</b>Inter 400 · 14 / 1.5 · ≤70ch</div><div class="sample body">I advise AI founders on commercial scale and enterprise executives on AI strategy. Operator experience. No slideware. Every engagement is sized to a single quarter's question, not an annual retainer.</div></div>
+    <div class="row"><div class="tag"><b>Eyebrow</b>Inter 600 · 11 / 1.2 · UPPER · +0.08em</div><div class="sample eyebrow">Capital Ledger · Last updated 21 Apr 2026</div></div>
+    <div class="row"><div class="tag"><b>Meta / mono</b>JetBrains Mono 500 · 12 / 1.4</div><div class="sample mono">method: sum(capex filings 2024–2026, public)  ·  tier 2 · med confidence</div></div>
+    <div class="row"><div class="tag"><b>Editorial</b>Source Serif 4 400 · 17 / 1.65 · long-form only</div><div class="sample editorial">The SaaS implementation tax is back, re-skinned as <em>AI transformation</em>. The vendor sells outcomes; the buyer still pays for integration, change management, and the quarterly reconciliation of what the model was supposed to automate against what it actually did.</div></div>
+  </div>
+
+  <div class="section-label">Numbers are the star</div>
+  <div class="numdemo">
+    <div>
+      <div class="num">$745B</div>
+      <div class="lbl">Capital committed</div>
+    </div>
+    <div>
+      <div class="num">$22B</div>
+      <div class="lbl">Customer revenue</div>
+    </div>
+    <div>
+      <div class="num">$34 : $1</div>
+      <div class="lbl">Spent per earned</div>
+    </div>
+  </div>
+
+  <div class="section-label">Pairing — the one-number hero</div>
+  <div class="pairing">
+    <div class="card">
+      <div class="eyebrow">Capital Ledger</div>
+      <div class="h1" style="margin-top:8px">~$745B</div>
+      <div class="body" style="margin-top:6px">committed AI capex, 2024–2026<br><span class="mono" style="color:var(--fg-light-3)">tier 1 · high confidence · 21 Apr</span></div>
+    </div>
+    <div class="card dark">
+      <div class="eyebrow">Capital Ledger</div>
+      <div class="h1" style="margin-top:8px;color:var(--blue)">~$745B</div>
+      <div class="body" style="margin-top:6px">committed AI capex, 2024–2026<br><span class="mono" style="color:var(--fg-dark-3)">tier 1 · high confidence · 21 Apr</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

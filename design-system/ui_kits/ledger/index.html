@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The AI Ledger — UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  body { margin: 0; background: var(--bg-dark); color: var(--fg-dark-2); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1400px; margin: 0 auto; padding: 0 40px 80px; }
+  a { color: inherit; text-decoration: none; }
+
+  /* Nav */
+  nav.top {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-dark);
+    padding: 16px 40px;
+    display: flex; align-items: center; gap: 32px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand img { width: 28px; height: 28px; }
+  .brand .name { font-weight: 700; color: var(--fg-dark-1); letter-spacing: -0.01em; font-size: 15px; }
+  .brand .sub { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue); margin-top: 1px;}
+  nav.top .links { display: flex; gap: 4px; margin-left: 32px;}
+  nav.top .links a { padding: 8px 14px; border-radius: 8px; font-size: 13px; color: var(--fg-dark-2); font-weight: 500; }
+  nav.top .links a.active { background: rgba(59,130,246,.12); color: var(--blue); border: 1px solid rgba(59,130,246,.3);}
+  nav.top .spacer { flex: 1; }
+  nav.top .freshness { font: 500 11px/1 var(--font-mono); color: var(--fg-dark-3); display: flex; align-items: center; gap: 6px;}
+  nav.top .freshness::before { content:''; width:6px; height:6px; border-radius:999px; background: var(--green); }
+
+  /* Hero */
+  .hero { padding: 64px 0 48px; border-bottom: 1px solid var(--border-dark); }
+  .hero .eyebrow { font: 600 11px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue); margin-bottom: 20px;}
+  .hero h1 { font-weight: 700; font-size: 56px; line-height: 1.05; letter-spacing: -0.035em; color: var(--fg-dark-1); margin: 0 0 20px; max-width: 20ch;}
+  .hero h1 em { font-style: normal; background: linear-gradient(135deg, #3B82F6, #8B5CF6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero .lede { font-size: 18px; line-height: 1.65; color: var(--fg-dark-2); max-width: 60ch; margin: 0 0 28px;}
+  .hero .meta-row { display: flex; gap: 24px; font-size: 12px; color: var(--fg-dark-3); }
+  .hero .meta-row span strong { color: var(--fg-dark-1); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Hero tiles */
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 40px 0 56px; }
+  .tile { background: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 16px; padding: 24px; transition: all 180ms var(--ease-out); cursor: pointer; }
+  .tile:hover { border-color: var(--blue); transform: translateY(-2px); }
+  .tile .label { font: 600 11px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-dark-3); display: flex; align-items: center; gap: 8px;}
+  .tile.cap .label { color: var(--blue); }
+  .tile.rev .label { color: var(--green); }
+  .tile.use .label { color: var(--violet); }
+  .tile.pow .label { color: var(--amber); }
+  .tile .label::before { content:''; width: 6px; height: 6px; border-radius: 999px; }
+  .tile.cap .label::before { background: var(--blue); }
+  .tile.rev .label::before { background: var(--green); }
+  .tile.use .label::before { background: var(--violet); }
+  .tile.pow .label::before { background: var(--amber); }
+  .tile .num { font-weight: 800; font-size: 44px; letter-spacing: -0.03em; line-height: 1; margin: 16px 0 8px; font-variant-numeric: tabular-nums; color: var(--fg-dark-1);}
+  .tile .caption { font-size: 13px; color: var(--fg-dark-2); line-height: 1.4; }
+  .tile .meta { font: 500 11px/1.3 var(--font-mono); color: var(--fg-dark-3); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-dark); display: flex; justify-content: space-between;}
+
+  /* Section head */
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin: 56px 0 20px; }
+  .sec-head h2 { font: 700 28px/1.1 var(--font-sans); letter-spacing: -0.02em; color: var(--fg-dark-1); margin: 0;}
+  .sec-head .kicker { font: 500 12px/1 var(--font-mono); color: var(--fg-dark-3); margin-left: auto; }
+
+  /* Sankey */
+  .panel { background: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 12px; padding: 32px; }
+  .sankey { width: 100%; height: 320px; }
+  .sankey text { font: 500 11px/1 var(--font-sans); fill: var(--fg-dark-2); }
+
+  /* Chart area */
+  .chart-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  .chart-card { background: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 12px; padding: 24px;}
+  .chart-card h3 { font: 600 15px/1.2 var(--font-sans); color: var(--fg-dark-1); margin: 0 0 4px;}
+  .chart-card .subtitle { font-size: 12px; color: var(--fg-dark-3); margin: 0 0 20px;}
+  .chart-card svg { width: 100%; height: 220px;}
+  .axis text { font: 500 10px/1 var(--font-sans); fill: var(--fg-dark-3);}
+  .grid-line { stroke: var(--border-dark); stroke-width: 1;}
+
+  /* Filter bar */
+  .filters { display: flex; gap: 8px; padding: 14px 18px; background: rgba(17,24,39,.7); backdrop-filter: blur(8px); border: 1px solid var(--border-dark); border-radius: 10px; margin-bottom: 14px; align-items: center; flex-wrap: wrap;}
+  .filters .chip { padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; border: 1px solid var(--border-dark); color: var(--fg-dark-2); cursor: pointer;}
+  .filters .chip.on { background: rgba(59,130,246,.15); border-color: rgba(59,130,246,.4); color: var(--blue); }
+  .filters .label { font: 600 10px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-dark-3); margin-right: 8px;}
+  .filters .spacer { flex: 1; }
+  .filters input { background: rgba(15,23,42,.7); border: 1px solid var(--border-dark); border-radius: 8px; padding: 7px 12px; color: var(--fg-dark-1); font-size: 13px; font-family: inherit; min-width: 240px;}
+
+  /* Table */
+  table.led { width: 100%; border-collapse: collapse; font-size: 13px;}
+  table.led th, table.led td { padding: 14px 16px; text-align: left; border-bottom: 1px solid var(--border-dark); color: var(--fg-dark-2);}
+  table.led th { font: 600 10px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.1em; color: var(--fg-dark-3); background: var(--bg-dark-alt);}
+  table.led td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--fg-dark-1); font-weight: 500;}
+  table.led tr:last-child td { border-bottom: none;}
+  table.led tr:hover td { background: rgba(59,130,246,.04);}
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 600;}
+  .p-t1 { background: var(--green-tint); color: var(--green);}
+  .p-t2 { background: var(--amber-tint); color: var(--amber);}
+  .p-t3 { background: var(--violet-tint); color: var(--violet);}
+  .dot { width: 6px; height: 6px; border-radius: 999px; display: inline-block; }
+
+  /* Claim card (the Ledger's signature editorial unit) */
+  .claims { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .claim { background: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 12px; padding: 24px; position: relative;}
+  .claim .qmark { position: absolute; top: 20px; right: 20px; font: 700 48px/1 var(--font-serif); color: rgba(59,130,246,.15); }
+  .claim .issuer { display: flex; gap: 10px; align-items: center; font-size: 12px; color: var(--fg-dark-3); margin-bottom: 10px;}
+  .claim .issuer strong { color: var(--fg-dark-1); font-weight: 600; }
+  .claim blockquote { font-family: 'Source Serif 4', serif; font-size: 17px; line-height: 1.55; color: var(--fg-dark-1); margin: 0 0 14px; font-style: italic; font-weight: 400;}
+  .claim .foot { display: flex; gap: 10px; align-items: center; font-size: 11px; color: var(--fg-dark-3); padding-top: 12px; border-top: 1px solid var(--border-dark);}
+  .claim .foot .sep { opacity: 0.4;}
+  .claim .foot a { color: var(--blue); }
+  .claim .reconcile { background: rgba(16,185,129,.1); color: var(--green); padding: 10px 12px; border-radius: 6px; font: 500 12px/1.4 var(--font-mono); margin-bottom: 10px; }
+  .claim .reconcile.bad { background: rgba(239,68,68,.1); color: var(--red); }
+
+  /* Methodology strip */
+  .methodology { background: var(--bg-dark-alt); border: 1px solid var(--border-dark); border-radius: 12px; padding: 20px 24px; margin-top: 40px; display: flex; gap: 20px; align-items: flex-start; }
+  .methodology .icon { font: 700 24px/1 var(--font-serif); color: var(--amber); }
+  .methodology .txt { flex: 1; font-size: 13px; line-height: 1.55; color: var(--fg-dark-2);}
+  .methodology .txt strong { color: var(--fg-dark-1);}
+  .methodology .txt .mono { font-family: var(--font-mono); font-size: 12px; color: var(--fg-dark-3);}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="brand">
+    <img src="../../assets/logo-icon-inverse.svg">
+    <div>
+      <div class="name">The AI Ledger</div>
+      <div class="sub">by Hepburn Advisory</div>
+    </div>
+  </div>
+  <div class="links">
+    <a class="active">Home</a>
+    <a>Capital</a>
+    <a>Revenue</a>
+    <a>Usage</a>
+    <a>Power</a>
+    <a>Timeline</a>
+    <a>Claims</a>
+  </div>
+  <div class="spacer"></div>
+  <div class="freshness">Live · updated 21 Apr 2026</div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">The AI Ledger · Q1 2026</div>
+    <h1>For AI to earn out its capex by 2030, it needs to equal <em>18% of global IT spend</em>. Pick one.</h1>
+    <p class="lede">The Ledger triangulates capital committed, customer revenue booked, and tokens used across the AI stack — then reconciles issuer claims against the arithmetic. Every number is sourced, dated, and confidence-rated.</p>
+    <div class="meta-row">
+      <span>Last refresh <strong>21 Apr 2026</strong></span>
+      <span>Primary sources <strong>146</strong></span>
+      <span>Tracked issuers <strong>38</strong></span>
+      <span>Open reconciliations <strong>12</strong></span>
+    </div>
+  </section>
+
+  <!-- FOUR LEDGER TILES -->
+  <div class="tiles">
+    <div class="tile cap">
+      <div class="label">Capital</div>
+      <div class="num">$745B</div>
+      <div class="caption">committed capex, 2024–2026 cumulative</div>
+      <div class="meta"><span>Tier 1 · High</span><span>↑ 4.2% qtr</span></div>
+    </div>
+    <div class="tile rev">
+      <div class="label">Revenue</div>
+      <div class="num">$22B</div>
+      <div class="caption">customer revenue booked, trailing 12m</div>
+      <div class="meta"><span>Tier 2 · Med</span><span>↑ 1.8% qtr</span></div>
+    </div>
+    <div class="tile use">
+      <div class="label">Usage</div>
+      <div class="num">~650T</div>
+      <div class="caption">tokens served per day, global (est.)</div>
+      <div class="meta"><span>Tier 3 · Modeled</span><span>↑ 22% qtr</span></div>
+    </div>
+    <div class="tile pow">
+      <div class="label">Power</div>
+      <div class="num">92 GW</div>
+      <div class="caption">committed interconnection, 2026–2028</div>
+      <div class="meta"><span>Tier 1 · High</span><span>↑ 8.4% qtr</span></div>
+    </div>
+  </div>
+
+  <!-- SANKEY -->
+  <div class="sec-head">
+    <h2>Where the money goes</h2>
+    <span class="kicker">$745B capex → $22B revenue · FY25 base</span>
+  </div>
+
+  <div class="panel">
+    <svg class="sankey" viewBox="0 0 1200 320" preserveAspectRatio="none">
+      <!-- Left: capex sources -->
+      <rect x="40" y="40" width="14" height="210" fill="#3B82F6"/>
+      <text x="66" y="54" fill="#F8FAFC" font-size="12" font-weight="600">Hyperscalers · $482B</text>
+      <text x="66" y="72" fill="#94A3B8" font-size="11">MSFT · META · AMZN · GOOG</text>
+
+      <rect x="40" y="260" width="14" height="40" fill="#8B5CF6"/>
+      <text x="66" y="274" fill="#F8FAFC" font-size="12" font-weight="600">Labs direct · $68B</text>
+
+      <rect x="40" y="310" width="14" height="10" fill="#06B6D4"/>
+
+      <!-- Middle nodes -->
+      <rect x="560" y="60" width="14" height="110" fill="#F59E0B"/>
+      <text x="582" y="74" fill="#F8FAFC" font-size="12" font-weight="600">Data centres · $312B</text>
+      <rect x="560" y="180" width="14" height="70" fill="#06B6D4"/>
+      <text x="582" y="194" fill="#F8FAFC" font-size="12" font-weight="600">GPUs · $198B</text>
+      <rect x="560" y="260" width="14" height="40" fill="#8B5CF6"/>
+      <text x="582" y="274" fill="#F8FAFC" font-size="12" font-weight="600">Models/training · $140B</text>
+
+      <!-- Right: revenue destinations -->
+      <rect x="1120" y="100" width="14" height="40" fill="#10B981"/>
+      <text x="1040" y="114" fill="#F8FAFC" font-size="12" font-weight="600" text-anchor="end">API · $8B</text>
+      <rect x="1120" y="160" width="14" height="30" fill="#10B981"/>
+      <text x="1040" y="174" fill="#F8FAFC" font-size="12" font-weight="600" text-anchor="end">Enterprise · $9B</text>
+      <rect x="1120" y="210" width="14" height="22" fill="#10B981"/>
+      <text x="1040" y="224" fill="#F8FAFC" font-size="12" font-weight="600" text-anchor="end">Consumer · $5B</text>
+
+      <!-- Flow curves (stylised) -->
+      <g opacity="0.45" fill="none" stroke-width="8">
+        <path d="M54,80 C290,80 310,110 574,110" stroke="#3B82F6" stroke-width="60"/>
+        <path d="M54,170 C290,170 310,210 574,210" stroke="#3B82F6" stroke-width="40"/>
+        <path d="M54,280 C290,280 310,280 574,280" stroke="#8B5CF6" stroke-width="40"/>
+        <path d="M574,110 C820,110 880,115 1120,115" stroke="#F59E0B" stroke-width="24"/>
+        <path d="M574,210 C820,210 880,170 1120,170" stroke="#06B6D4" stroke-width="18"/>
+        <path d="M574,280 C820,280 880,220 1120,220" stroke="#8B5CF6" stroke-width="14"/>
+      </g>
+
+      <!-- Annotation -->
+      <text x="600" y="315" fill="#EF4444" font-size="12" font-weight="600" text-anchor="middle">~$34 spent for every $1 of revenue · Tier 2 derived</text>
+    </svg>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="sec-head">
+    <h2>Capital and revenue, by quarter</h2>
+    <span class="kicker">2022 Q1 → 2026 Q1 · $B · tier 1</span>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Capital committed · hyperscalers + labs</h3>
+      <p class="subtitle">Quarterly additions, $B. Source: 10-Q filings + announced rounds.</p>
+      <svg viewBox="0 0 640 220">
+        <g class="axis">
+          <line class="grid-line" x1="50" x2="640" y1="30" y2="30"/>
+          <line class="grid-line" x1="50" x2="640" y1="80" y2="80"/>
+          <line class="grid-line" x1="50" x2="640" y1="130" y2="130"/>
+          <line class="grid-line" x1="50" x2="640" y1="180" y2="180"/>
+          <text x="44" y="34" text-anchor="end">80</text>
+          <text x="44" y="84" text-anchor="end">60</text>
+          <text x="44" y="134" text-anchor="end">40</text>
+          <text x="44" y="184" text-anchor="end">20</text>
+        </g>
+        <!-- Bars -->
+        <g>
+          <!-- 17 quarters, growing -->
+          <rect x="54" y="170" width="24" height="10" fill="#3B82F6"/>
+          <rect x="88" y="165" width="24" height="15" fill="#3B82F6"/>
+          <rect x="122" y="160" width="24" height="20" fill="#3B82F6"/>
+          <rect x="156" y="150" width="24" height="30" fill="#3B82F6"/>
+          <rect x="190" y="140" width="24" height="40" fill="#3B82F6"/>
+          <rect x="224" y="130" width="24" height="50" fill="#3B82F6"/>
+          <rect x="258" y="115" width="24" height="65" fill="#3B82F6"/>
+          <rect x="292" y="100" width="24" height="80" fill="#3B82F6"/>
+          <rect x="326" y="90" width="24" height="90" fill="#3B82F6"/>
+          <rect x="360" y="75" width="24" height="105" fill="#3B82F6"/>
+          <rect x="394" y="70" width="24" height="110" fill="#3B82F6"/>
+          <rect x="428" y="55" width="24" height="125" fill="#3B82F6"/>
+          <rect x="462" y="50" width="24" height="130" fill="#3B82F6"/>
+          <rect x="496" y="38" width="24" height="142" fill="#3B82F6"/>
+          <rect x="530" y="34" width="24" height="146" fill="#3B82F6"/>
+          <rect x="564" y="28" width="24" height="152" fill="#3B82F6"/>
+          <rect x="598" y="22" width="24" height="158" fill="#3B82F6"/>
+        </g>
+        <g class="axis">
+          <text x="66" y="200">'22</text>
+          <text x="200" y="200">'23</text>
+          <text x="336" y="200">'24</text>
+          <text x="472" y="200">'25</text>
+          <text x="608" y="200">'26</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="chart-card">
+      <h3>Revenue · booked vs forward ARR</h3>
+      <p class="subtitle">$B trailing 12m vs issuer-claimed run-rate.</p>
+      <svg viewBox="0 0 520 220">
+        <g class="axis">
+          <line class="grid-line" x1="40" x2="520" y1="30" y2="30"/>
+          <line class="grid-line" x1="40" x2="520" y1="80" y2="80"/>
+          <line class="grid-line" x1="40" x2="520" y1="130" y2="130"/>
+          <line class="grid-line" x1="40" x2="520" y1="180" y2="180"/>
+          <text x="34" y="34" text-anchor="end">40</text>
+          <text x="34" y="84" text-anchor="end">30</text>
+          <text x="34" y="134" text-anchor="end">20</text>
+          <text x="34" y="184" text-anchor="end">10</text>
+        </g>
+        <!-- Booked area + line -->
+        <path d="M 42,170 L 110,165 L 180,160 L 250,150 L 320,135 L 390,115 L 460,92 L 510,75 L 510,180 L 42,180 Z"
+          fill="rgba(16,185,129,0.18)"/>
+        <path d="M 42,170 L 110,165 L 180,160 L 250,150 L 320,135 L 390,115 L 460,92 L 510,75"
+          stroke="#10B981" stroke-width="2.5" fill="none"/>
+        <!-- Claimed ARR dashed -->
+        <path d="M 42,155 L 110,135 L 180,115 L 250,95 L 320,70 L 390,50 L 460,38 L 510,28"
+          stroke="#F59E0B" stroke-width="2" stroke-dasharray="5 4" fill="none"/>
+        <!-- Legend -->
+        <circle cx="46" cy="212" r="4" fill="#10B981"/>
+        <text x="58" y="216" class="axis" style="fill:#94A3B8">Booked · T12M</text>
+        <circle cx="180" cy="212" r="4" fill="#F59E0B"/>
+        <text x="192" y="216" class="axis" style="fill:#94A3B8">Claimed ARR</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CLAIMS LEDGER -->
+  <div class="sec-head">
+    <h2>Claims Ledger</h2>
+    <span class="kicker">Issuer statements vs reconciled arithmetic</span>
+  </div>
+
+  <div class="claims">
+    <div class="claim">
+      <div class="qmark">"</div>
+      <div class="issuer"><strong>OpenAI · S. Altman</strong> · CNBC · 14 Apr 2026</div>
+      <div class="reconcile bad">Reconciles to ~$11.2B booked · gap 78% · Tier 2 Med</div>
+      <blockquote>"We're on a $50B ARR trajectory by end of year."</blockquote>
+      <div class="foot"><span class="pill p-t2"><span class="dot" style="background:var(--amber)"></span>Tier 2 · Derived</span><span class="sep">·</span><a>See reconciliation →</a></div>
+    </div>
+    <div class="claim">
+      <div class="qmark">"</div>
+      <div class="issuer"><strong>NVIDIA · J. Huang</strong> · GTC · 18 Mar 2026</div>
+      <div class="reconcile">Reconciles to $312B DC capex · gap 4% · Tier 1 High</div>
+      <blockquote>"We're seeing $300B of AI data-centre build-out this year alone."</blockquote>
+      <div class="foot"><span class="pill p-t1"><span class="dot" style="background:var(--green)"></span>Tier 1 · Sourced</span><span class="sep">·</span><a>See 23 filings →</a></div>
+    </div>
+  </div>
+
+  <!-- FILTERS + TABLE -->
+  <div class="sec-head">
+    <h2>Issuer filings · Q1 2026</h2>
+    <span class="kicker">38 issuers · 146 primary sources</span>
+  </div>
+
+  <div class="filters">
+    <span class="label">Filter</span>
+    <span class="chip on">All</span>
+    <span class="chip">Capital</span>
+    <span class="chip">Revenue</span>
+    <span class="chip">Usage</span>
+    <span class="chip">Power</span>
+    <span class="chip">Tier 1 only</span>
+    <span class="spacer"></span>
+    <input placeholder="Search issuer, metric, period…">
+  </div>
+
+  <div class="panel" style="padding: 0; overflow: hidden;">
+    <table class="led">
+      <thead><tr>
+        <th style="width:30px"></th>
+        <th>Issuer</th><th>Metric</th><th>Period</th>
+        <th>Provenance</th><th>Confidence</th>
+        <th style="text-align:right">Value</th>
+        <th style="text-align:right">∆ vs Hepburn</th>
+      </tr></thead>
+      <tbody>
+        <tr><td><span class="dot" style="background:var(--green)"></span></td><td>Microsoft</td><td>AI capex, FY25</td><td>10-K</td><td><span class="pill p-t1">Tier 1</span></td><td>High</td><td class="num">$112.4B</td><td class="num" style="color:var(--green)">+0.8%</td></tr>
+        <tr><td><span class="dot" style="background:var(--green)"></span></td><td>Meta</td><td>AI capex, FY25</td><td>10-K</td><td><span class="pill p-t1">Tier 1</span></td><td>High</td><td class="num">$68.0B</td><td class="num" style="color:var(--green)">+0.0%</td></tr>
+        <tr><td><span class="dot" style="background:var(--amber)"></span></td><td>OpenAI</td><td>ARR, implied</td><td>Q1 '26</td><td><span class="pill p-t2">Tier 2</span></td><td>Med</td><td class="num">$11.2B</td><td class="num" style="color:var(--amber)">−78%</td></tr>
+        <tr><td><span class="dot" style="background:var(--green)"></span></td><td>Anthropic</td><td>Revenue, Q1</td><td>Press</td><td><span class="pill p-t2">Tier 2</span></td><td>Med</td><td class="num">$4.8B</td><td class="num" style="color:var(--fg-dark-3)">±0%</td></tr>
+        <tr><td><span class="dot" style="background:var(--ink-500)"></span></td><td>Mistral</td><td>Tokens / day</td><td>Mar '26</td><td><span class="pill p-t3">Tier 3</span></td><td>Low</td><td class="num">~82B</td><td class="num" style="color:var(--fg-dark-3)">—</td></tr>
+        <tr><td><span class="dot" style="background:var(--green)"></span></td><td>PJM Interconnect</td><td>DC queue, GW</td><td>Apr '26</td><td><span class="pill p-t1">Tier 1</span></td><td>High</td><td class="num">412 GW</td><td class="num" style="color:var(--green)">+1.2%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="methodology">
+    <div class="icon">⚘</div>
+    <div class="txt">
+      <strong>Methodology note</strong> · Projections are directional arithmetic, not forecasts. Benchmarks are dated and sourced. Revenue defaults to trailing-12-month booked revenue from filings; forward-ARR is tracked separately and always labelled. Every assumption on this page is editable via the parameters drawer. <span class="mono">model v1.3.2 · last reconciled 21 Apr 2026 09:14 UTC</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

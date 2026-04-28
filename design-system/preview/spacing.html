@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Spacing, Radii, Shadows — Hepburn Advisory</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 40px; background: var(--bg-light); font-family: var(--font-sans); }
+  .wrap { max-width: 1000px; }
+  h1 { font: var(--type-h2); letter-spacing: var(--tracking-head); margin: 0 0 4px; color: var(--ink-1000);}
+  .sub { font: var(--type-meta); color: var(--fg-light-3); margin: 0 0 28px; }
+  .sec { font: var(--type-eyebrow); text-transform: uppercase; letter-spacing: var(--tracking-eyebrow); color: var(--fg-light-3); margin: 28px 0 14px; }
+  .grid { display: grid; gap: 12px; }
+  .space-row { display: grid; grid-template-columns: 80px 80px 1fr; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--border-light); }
+  .space-row .bar { background: var(--blue); border-radius: 2px; height: 10px; }
+  .space-row .name { font-size: 12px; font-weight: 600; color: var(--ink-1000); }
+  .space-row .px { font: 500 11px/1.2 var(--font-mono); color: var(--fg-light-3); }
+
+  .radii { display: grid; grid-template-columns: repeat(6,1fr); gap: 14px; }
+  .radii .box { background: #fff; border: 1px solid var(--border-light); height: 90px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .radii .lbl { font-size: 11px; color: var(--ink-1000); font-weight: 600; }
+  .radii .hex { font: 11px/1.3 var(--font-mono); color: var(--fg-light-3); display: block; margin-top: 2px; }
+
+  .shadows { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 20px; background: var(--bg-light); }
+  .shad { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 18px; height: 90px; display: flex; flex-direction: column; justify-content: space-between; }
+  .shad .l { font-size: 12px; font-weight: 600; color: var(--ink-1000); }
+  .shad .c { font: 11px/1.3 var(--font-mono); color: var(--fg-light-3); }
+
+  .motion { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .motion .c { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 20px; }
+  .motion .t { font-weight: 700; color: var(--ink-1000); font-size: 14px; }
+  .motion .d { color: var(--fg-light-3); font-size: 12px; margin-top: 2px; }
+  .motion .e { font: 500 11px/1.4 var(--font-mono); color: var(--ink-1000); background: var(--ink-100); padding: 8px 10px; border-radius: 6px; margin-top: 12px; }
+  .motion .u { font-size: 11px; color: var(--fg-light-3); margin-top: 8px; line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Spacing · Radii · Shadows · Motion</h1>
+  <p class="sub">4px grid. Small shadow ramp. Restrained motion. Borders do most of the structural work.</p>
+
+  <div class="sec">Spacing — 4px grid</div>
+  <div id="spaces"></div>
+
+  <div class="sec">Corner radii</div>
+  <div class="radii">
+    <div><div class="box" style="border-radius:4px"><div><div class="lbl">4 · xs</div><span class="hex">badges</span></div></div></div>
+    <div><div class="box" style="border-radius:6px"><div><div class="lbl">6 · sm</div><span class="hex">buttons</span></div></div></div>
+    <div><div class="box" style="border-radius:8px"><div><div class="lbl">8 · md</div><span class="hex">inputs · nav</span></div></div></div>
+    <div><div class="box" style="border-radius:12px"><div><div class="lbl">12 · lg</div><span class="hex">card default</span></div></div></div>
+    <div><div class="box" style="border-radius:16px"><div><div class="lbl">16 · xl</div><span class="hex">hero tile</span></div></div></div>
+    <div><div class="box" style="border-radius:18px;background:var(--ink-1000);color:#fff"><div><div class="lbl" style="color:#fff">18 · brand</div><span class="hex" style="color:#8b8b85">logo container</span></div></div></div>
+  </div>
+
+  <div class="sec">Shadows — light surface only</div>
+  <div class="shadows">
+    <div class="shad" style="box-shadow: 0 1px 2px rgba(10,10,10,0.04)"><div class="l">xs</div><div class="c">0 1px 2px #0A0A0A/.04</div></div>
+    <div class="shad" style="box-shadow: 0 2px 6px rgba(10,10,10,0.06)"><div class="l">sm</div><div class="c">0 2px 6px #0A0A0A/.06</div></div>
+    <div class="shad" style="box-shadow: 0 8px 24px rgba(10,10,10,0.08)"><div class="l">md</div><div class="c">0 8px 24px #0A0A0A/.08</div></div>
+    <div class="shad" style="box-shadow: 0 16px 48px rgba(10,10,10,0.12)"><div class="l">lg</div><div class="c">0 16px 48px #0A0A0A/.12</div></div>
+  </div>
+  <p class="sub" style="margin-top:12px">On dark surfaces shadows are near-invisible — use border contrast instead.</p>
+
+  <div class="sec">Motion</div>
+  <div class="motion">
+    <div class="c"><div class="t">Fast · 120ms</div><div class="d">UI nudge — hover</div><div class="e">cubic-bezier(0.22, 1, 0.36, 1)</div><div class="u">Link underline slide, icon tint, button-bg darken.</div></div>
+    <div class="c"><div class="t">Base · 180ms</div><div class="d">State change</div><div class="e">cubic-bezier(0.65, 0, 0.35, 1)</div><div class="u">Card selection, nav active swap, tier pill toggle.</div></div>
+    <div class="c"><div class="t">Slow · 280ms</div><div class="d">Appearance</div><div class="e">cubic-bezier(0.22, 1, 0.36, 1)</div><div class="u">Panel enter, chart-load sweep, methodology drawer.</div></div>
+  </div>
+</div>
+
+<script>
+  const spaces = [
+    ['space-1', 4], ['space-2', 8], ['space-3', 12], ['space-4', 16],
+    ['space-5', 20], ['space-6', 24], ['space-7', 32], ['space-8', 40],
+    ['space-9', 48], ['space-10', 64], ['space-11', 80], ['space-12', 96],
+  ];
+  document.getElementById('spaces').innerHTML = spaces.map(([n,px]) =>
+    `<div class="space-row"><div class="name">${n}</div><div class="px">${px}px</div><div class="bar" style="width:${px*3}px"></div></div>`
+  ).join('');
+</script>
+</body>
+</html>

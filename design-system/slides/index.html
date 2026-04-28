@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hepburn Advisory — Slide Templates</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="deck-stage.js"></script>
+<style>
+  /* ================================================================
+     HEPBURN ADVISORY — Slide Template Set (18 layouts)
+     ================================================================
+     All slides are 1920×1080. Grid: 12-col, 96px outer margin.
+     Brand corner: top-left, 40px from edges.
+     Meta corner:  top-right, 40px from edges.
+     Page number:  bottom-right, 40px from edges.
+
+     Surfaces — pick one per slide:
+       .ink    background: #0A0A0A, white type (title, close)
+       .dark   background: var(--bg-dark), data slides
+       .warm   background: var(--bg-light-alt), section breaks
+       .light  background: var(--bg-light), default analytic surface
+     ============================================================== */
+
+  html, body { margin: 0; background: #0A0A0A; height: 100%; }
+  deck-stage { font-family: var(--font-sans); }
+
+  section {
+    padding: 80px 96px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    color: var(--fg-light-1);
+  }
+  section.light { background: var(--bg-light); color: var(--ink-1000); }
+  section.dark  { background: var(--bg-dark);  color: var(--fg-dark-1); }
+  section.ink   { background: #0A0A0A;         color: #fff; }
+  section.warm  { background: var(--bg-light-alt); color: var(--ink-1000); }
+
+  /* ---- Shared chrome ---- */
+  .brand-corner {
+    position: absolute; top: 40px; left: 96px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand-corner img { width: 32px; height: 32px; }
+  .brand-corner .name {
+    font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
+    color: var(--ink-1000);
+  }
+  section.dark .brand-corner .name,
+  section.ink  .brand-corner .name { color: #fff; }
+
+  .meta-corner {
+    position: absolute; top: 40px; right: 96px;
+    font: 500 11px/1.4 var(--font-mono);
+    color: var(--fg-light-3); text-align: right;
+  }
+  section.dark .meta-corner,
+  section.ink  .meta-corner { color: var(--fg-dark-3); }
+
+  .page-num {
+    position: absolute; bottom: 40px; right: 96px;
+    font: 500 12px/1 var(--font-mono);
+    color: var(--fg-light-3);
+  }
+  section.dark .page-num,
+  section.ink  .page-num { color: var(--fg-dark-3); }
+
+  .foot-conf {
+    position: absolute; bottom: 40px; left: 96px;
+    font: 500 11px/1 var(--font-mono); letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--fg-light-3);
+  }
+  section.dark .foot-conf, section.ink .foot-conf { color: var(--fg-dark-3); }
+
+  /* ---- Common type utilities (scoped) ---- */
+  .eyebrow {
+    font: 600 14px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--blue); margin-bottom: 32px;
+  }
+  section.warm .eyebrow { color: var(--ink-800); }
+
+  .mega    { font-weight: 800; font-size: 180px; letter-spacing: -0.04em;
+             line-height: 0.92; font-variant-numeric: tabular-nums; }
+  .display { font-weight: 700; font-size: 96px;  letter-spacing: -0.035em; line-height: 1.02; }
+  .title   { font-weight: 700; font-size: 72px;  letter-spacing: -0.03em;  line-height: 1.05; }
+  .h2      { font-weight: 700; font-size: 48px;  letter-spacing: -0.02em;  line-height: 1.15; }
+  .h3      { font-weight: 700; font-size: 32px;  letter-spacing: -0.015em; line-height: 1.2; }
+  .lede    { font-size: 28px; line-height: 1.45; font-weight: 400; }
+  .body    { font-size: 22px; line-height: 1.5;  font-weight: 400; }
+  .caption { font-size: 18px; color: var(--fg-light-3); }
+  section.dark .caption, section.ink .caption { color: var(--fg-dark-3); }
+
+  /* ================================================================
+     1 · TITLE — ink, three-part meta footer
+     ================================================================ */
+  .s-title { justify-content: flex-end; }
+  .s-title .title { max-width: 22ch; margin: 0 0 40px; }
+  .s-title .sub   { font-size: 28px; color: var(--ink-400); max-width: 40ch;
+                    font-weight: 400; line-height: 1.4; }
+  .s-title .tag   { margin-top: 60px; padding-top: 32px;
+                    border-top: 1px solid rgba(255,255,255,0.15);
+                    display: flex; justify-content: space-between;
+                    font: 500 14px/1.4 var(--font-mono);
+                    color: var(--ink-400); }
+  .s-title .tag strong { color: #fff; font-weight: 600; font-size: 15px;
+                         display: block; margin-bottom: 4px; }
+
+  /* ================================================================
+     2 · AGENDA — light, numbered outline
+     ================================================================ */
+  .s-agenda { padding-top: 160px; }
+  .s-agenda .title { margin: 24px 0 64px; font-size: 64px; }
+  .s-agenda ol { list-style: none; padding: 0; margin: 0;
+                 display: grid; grid-template-columns: 1fr 1fr;
+                 column-gap: 80px; row-gap: 0; }
+  .s-agenda ol li {
+    display: grid; grid-template-columns: 64px 1fr;
+    align-items: baseline; gap: 24px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border-light);
+    font-size: 26px; font-weight: 500;
+    color: var(--ink-1000);
+  }
+  .s-agenda ol li:last-child { border-bottom: 1px solid var(--border-light); }
+  .s-agenda ol li .n {
+    font: 600 18px/1 var(--font-mono);
+    color: var(--blue);
+  }
+  .s-agenda ol li .desc {
+    display: block; font-size: 16px; font-weight: 400;
+    color: var(--fg-light-3); margin-top: 6px;
+  }
+
+  /* ================================================================
+     3 · SECTION BREAK — warm, §-marker
+     ================================================================ */
+  .s-section { justify-content: center; align-items: flex-start; }
+  .s-section .marker { font: 600 14px/1 var(--font-mono); color: var(--blue);
+                       margin-bottom: 32px; letter-spacing: 0.05em; }
+  .s-section .title { max-width: 20ch; margin: 0 0 28px; }
+  .s-section .lede  { max-width: 48ch; color: var(--fg-light-2); }
+
+  /* ================================================================
+     4 · CONTENT — light, single-column narrative
+     ================================================================ */
+  .s-content { justify-content: flex-start; padding-top: 140px;}
+  .s-content .title { margin: 0 0 48px; font-size: 56px; max-width: 24ch;}
+  .s-content .cols { display: grid; grid-template-columns: 2fr 1fr; gap: 80px; flex: 1;}
+  .s-content .body p { font-size: 24px; line-height: 1.55; color: var(--ink-700); margin: 0 0 20px;}
+  .s-content .body p strong { color: var(--ink-1000); font-weight: 600;}
+  .s-content .pull {
+    border-left: 3px solid var(--blue);
+    padding: 4px 0 4px 28px;
+    font-family: 'Source Serif 4', serif;
+    font-style: italic; font-size: 28px; line-height: 1.3;
+    color: var(--ink-1000);
+  }
+  .s-content .pull .src {
+    display: block; margin-top: 16px;
+    font: 500 13px/1.4 var(--font-mono);
+    font-style: normal; color: var(--fg-light-3);
+  }
+
+  /* ================================================================
+     5 · TWO-COLUMN — light, balanced narrative
+     ================================================================ */
+  .s-twocol .title { margin: 0 0 48px; font-size: 56px; max-width: 26ch;}
+  .s-twocol .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; flex: 1;}
+  .s-twocol .col .hd {
+    font: 600 13px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--blue); margin-bottom: 20px;
+  }
+  .s-twocol .col h3 {
+    font-weight: 700; font-size: 36px; letter-spacing: -0.015em;
+    line-height: 1.15; color: var(--ink-1000); margin: 0 0 20px;
+  }
+  .s-twocol .col p {
+    font-size: 22px; line-height: 1.5; color: var(--ink-700); margin: 0 0 16px;
+  }
+
+  /* ================================================================
+     6 · THREE FOCUS AREAS — light tiles, icon-free
+     ================================================================ */
+  .s-focus .title { margin: 0 0 56px; font-size: 56px; max-width: 26ch;}
+  .s-focus .grid  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; flex: 1;}
+  .s-focus .card {
+    background: #fff;
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 40px 36px;
+    display: flex; flex-direction: column;
+  }
+  .s-focus .card .n {
+    font: 600 14px/1 var(--font-mono);
+    color: var(--blue); margin-bottom: 28px;
+  }
+  .s-focus .card h3 {
+    font-weight: 700; font-size: 30px; letter-spacing: -0.015em;
+    line-height: 1.15; color: var(--ink-1000); margin: 0 0 16px;
+  }
+  .s-focus .card p {
+    font-size: 19px; line-height: 1.5; color: var(--ink-700); margin: 0;
+  }
+
+  /* ================================================================
+     7 · FOUR TILES — dark, Ledger four books
+     ================================================================ */
+  .s-tiles .title { margin: 0 0 48px; max-width: 26ch; font-size: 56px;}
+  .s-tiles .grid  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; flex: 1;}
+  .s-tiles .tile  {
+    background: var(--surface-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: 16px; padding: 40px 32px;
+    display: flex; flex-direction: column;
+  }
+  .s-tiles .tile .lbl {
+    font: 600 14px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+  }
+  .s-tiles .tile .lbl::before { content:''; width: 8px; height: 8px; border-radius: 999px; }
+  .s-tiles .tile.cap .lbl, .s-tiles .tile.cap .num { color: var(--blue); }
+  .s-tiles .tile.cap .lbl::before { background: var(--blue); }
+  .s-tiles .tile.rev .lbl, .s-tiles .tile.rev .num { color: var(--green); }
+  .s-tiles .tile.rev .lbl::before { background: var(--green); }
+  .s-tiles .tile.use .lbl, .s-tiles .tile.use .num { color: var(--violet); }
+  .s-tiles .tile.use .lbl::before { background: var(--violet); }
+  .s-tiles .tile.pow .lbl, .s-tiles .tile.pow .num { color: var(--amber); }
+  .s-tiles .tile.pow .lbl::before { background: var(--amber); }
+  .s-tiles .tile .num {
+    font-weight: 800; font-size: 80px; letter-spacing: -0.035em;
+    line-height: 0.95; font-variant-numeric: tabular-nums; margin-bottom: 20px;
+  }
+  .s-tiles .tile .cap { font-size: 18px; color: var(--fg-dark-2); line-height: 1.4; flex: 1; }
+  .s-tiles .tile .tier {
+    margin-top: 24px; padding-top: 16px;
+    border-top: 1px solid var(--border-dark);
+    font: 500 12px/1 var(--font-mono); color: var(--fg-dark-3);
+  }
+
+  /* ================================================================
+     8 · METRICS — light, 4-up headline stats
+     ================================================================ */
+  .s-metrics .title { margin: 0 0 56px; font-size: 56px; max-width: 26ch;}
+  .s-metrics .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; flex: 1; align-content: center;}
+  .s-metrics .m {
+    padding: 32px 0;
+    border-top: 2px solid var(--ink-1000);
+  }
+  .s-metrics .m .n {
+    font-weight: 800; font-size: 96px; letter-spacing: -0.04em;
+    line-height: 0.95; color: var(--ink-1000);
+    font-variant-numeric: tabular-nums; margin-bottom: 20px;
+  }
+  .s-metrics .m .lbl {
+    font: 600 13px/1.3 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--fg-light-3);
+  }
+  .s-metrics .m .desc { margin-top: 10px; font-size: 15px; line-height: 1.4; color: var(--fg-light-3);}
+
+  /* ================================================================
+     9 · MEGA NUMBER — dark, one hero figure
+     ================================================================ */
+  .s-mega { justify-content: center; align-items: center; text-align: center; }
+  .s-mega .eyebrow { color: var(--fg-dark-3); margin-bottom: 40px; }
+  .s-mega .mega    { color: #fff; }
+  .s-mega .mega em {
+    font-style: normal;
+    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .s-mega .cap  { margin-top: 40px; font-size: 26px; color: var(--fg-dark-2);
+                  max-width: 42ch; line-height: 1.4; }
+  .s-mega .prov { margin-top: 24px; font: 500 14px/1 var(--font-mono);
+                  color: var(--fg-dark-3); }
+
+  /* ================================================================
+     10 · CLAIM + RECONCILIATION — light, quote vs number
+     ================================================================ */
+  .s-claim { justify-content: center; }
+  .s-claim .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .s-claim blockquote {
+    font-family: 'Source Serif 4', serif;
+    font-size: 52px; line-height: 1.2; font-style: italic;
+    font-weight: 400; margin: 0 0 32px; color: var(--ink-1000);
+    letter-spacing: -0.01em;
+  }
+  .s-claim blockquote::before {
+    content: "“"; font-size: 120px; color: var(--blue);
+    line-height: 0.8; display: block; margin-bottom: -20px;
+  }
+  .s-claim .attrib { font: 500 18px/1.4 var(--font-mono); color: var(--fg-light-3); }
+  .s-claim .attrib strong { color: var(--ink-1000); font-weight: 600; }
+  .s-claim .reconcile {
+    background: var(--amber-tint);
+    border-left: 4px solid var(--amber);
+    padding: 32px; border-radius: 8px;
+  }
+  .s-claim .reconcile .lbl {
+    font: 600 12px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--amber-600); margin-bottom: 20px;
+  }
+  .s-claim .reconcile .val {
+    font-weight: 800; font-size: 72px; letter-spacing: -0.03em;
+    line-height: 1; font-variant-numeric: tabular-nums;
+    color: var(--ink-1000); margin-bottom: 16px;
+  }
+  .s-claim .reconcile .desc { font-size: 20px; line-height: 1.4; color: var(--ink-700); }
+
+  /* ================================================================
+     11 · PULL QUOTE — warm, centered editorial quote
+     ================================================================ */
+  .s-quote { justify-content: center; align-items: center; text-align: center; }
+  .s-quote .mark {
+    font-family: 'Source Serif 4', serif; font-size: 200px;
+    line-height: 0.7; color: var(--blue); margin-bottom: -30px;
+  }
+  .s-quote blockquote {
+    font-family: 'Source Serif 4', serif;
+    font-size: 56px; line-height: 1.25; font-weight: 400;
+    font-style: italic; margin: 0 auto; max-width: 28ch;
+    color: var(--ink-1000); letter-spacing: -0.005em;
+  }
+  .s-quote .attrib {
+    margin-top: 48px;
+    font: 500 14px/1.4 var(--font-mono);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--fg-light-3);
+  }
+  .s-quote .attrib strong { color: var(--ink-1000); display: block; margin-bottom: 4px; }
+
+  /* ================================================================
+     12 · RECOMMENDATIONS — light, check-bullet outcomes
+     ================================================================ */
+  .s-rec .title { margin: 0 0 48px; font-size: 56px; max-width: 26ch; }
+  .s-rec .list { display: grid; gap: 20px; flex: 1; align-content: center; max-width: 1100px;}
+  .s-rec .item {
+    display: grid; grid-template-columns: 56px 1fr; gap: 24px;
+    padding: 24px 0; border-top: 1px solid var(--border-light);
+  }
+  .s-rec .item:last-child { border-bottom: 1px solid var(--border-light); }
+  .s-rec .item .tick {
+    width: 40px; height: 40px; border-radius: 999px;
+    background: var(--green); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px;
+  }
+  .s-rec .item h3 {
+    font-weight: 700; font-size: 26px; letter-spacing: -0.015em;
+    color: var(--ink-1000); margin: 4px 0 8px;
+  }
+  .s-rec .item p { font-size: 18px; line-height: 1.45; color: var(--ink-700); margin: 0; }
+
+  /* ================================================================
+     13 · ROADMAP — light, 4-phase horizontal
+     ================================================================ */
+  .s-road .title { margin: 0 0 56px; font-size: 56px; max-width: 26ch; }
+  .s-road .track {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px; flex: 1; align-content: center;
+    position: relative;
+  }
+  .s-road .track::before {
+    content: ''; position: absolute; top: 22px; left: 22px; right: 22px;
+    height: 2px; background: var(--border-light); z-index: 0;
+  }
+  .s-road .phase { position: relative; z-index: 1; }
+  .s-road .phase .dot {
+    width: 44px; height: 44px; border-radius: 999px;
+    background: var(--ink-1000); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font: 600 15px/1 var(--font-mono); margin-bottom: 32px;
+  }
+  .s-road .phase.active .dot { background: var(--blue); }
+  .s-road .phase h3 {
+    font-weight: 700; font-size: 28px; letter-spacing: -0.015em;
+    color: var(--ink-1000); margin: 0 0 14px;
+  }
+  .s-road .phase .dur {
+    font: 500 13px/1 var(--font-mono); color: var(--fg-light-3);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .s-road .phase p { font-size: 17px; line-height: 1.5; color: var(--ink-700); margin: 0; }
+
+  /* ================================================================
+     14 · EDITORIAL — light, long-form serif
+     ================================================================ */
+  .s-editorial { justify-content: center; }
+  .s-editorial .body-wrap { max-width: 68ch; margin: 0 auto; }
+  .s-editorial h2 {
+    font-family: 'Source Serif 4', serif; font-weight: 400;
+    font-size: 68px; line-height: 1.12; letter-spacing: -0.02em;
+    color: var(--ink-1000); margin: 0 0 40px;
+  }
+  .s-editorial p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 26px; line-height: 1.55; color: var(--ink-700); margin: 0 0 20px;
+  }
+  .s-editorial p em { font-style: italic; }
+  .s-editorial .drop {
+    float: left; font-weight: 700; font-size: 96px; line-height: 0.85;
+    padding: 6px 14px 0 0; color: var(--ink-1000);
+    font-family: var(--font-sans);
+  }
+
+  /* ================================================================
+     15 · COMPARISON — light, green/red two-up
+     ================================================================ */
+  .s-compare .title { margin: 0 0 48px; max-width: 26ch; font-size: 56px; }
+  .s-compare .cols  { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1; }
+  .s-compare .col   {
+    background: #fff; border: 1px solid var(--border-light);
+    border-radius: 16px; padding: 40px; display: flex; flex-direction: column;
+  }
+  .s-compare .col.good { border-top: 4px solid var(--green); }
+  .s-compare .col.bad  { border-top: 4px solid var(--red); }
+  .s-compare .col .hd {
+    font: 600 14px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 16px;
+  }
+  .s-compare .col.good .hd { color: var(--green); }
+  .s-compare .col.bad  .hd { color: var(--red); }
+  .s-compare .col h3 {
+    font-weight: 700; font-size: 36px; letter-spacing: -0.018em;
+    line-height: 1.15; color: var(--ink-1000); margin: 0 0 20px;
+  }
+  .s-compare .col ul { list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 14px; }
+  .s-compare .col ul li {
+    font-size: 20px; line-height: 1.4; color: var(--ink-700);
+    padding-left: 28px; position: relative;
+  }
+  .s-compare .col ul li::before { position: absolute; left: 0; font-weight: 700; }
+  .s-compare .col.good ul li::before { content: "✓"; color: var(--green); }
+  .s-compare .col.bad  ul li::before { content: "✗"; color: var(--red); }
+
+  /* ================================================================
+     16 · LEDGER TABLE — dark, dense tabular data
+     ================================================================ */
+  .s-table { }
+  .s-table .title { margin: 0 0 32px; max-width: 28ch; font-size: 48px; color: #fff; }
+  .s-table table { width: 100%; border-collapse: collapse; flex: 1; }
+  .s-table thead th {
+    text-align: left; padding: 14px 16px;
+    font: 600 12px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--fg-dark-3);
+    border-bottom: 1px solid var(--border-dark);
+  }
+  .s-table thead th.num { text-align: right; }
+  .s-table tbody td {
+    padding: 18px 16px; font-size: 19px;
+    color: var(--fg-dark-1);
+    border-bottom: 1px solid var(--border-dark);
+  }
+  .s-table tbody td.num {
+    text-align: right; font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .s-table tbody td.label { color: var(--fg-dark-2); font-weight: 500; }
+  .s-table tbody tr.total td { border-top: 1px solid var(--fg-dark-3); padding-top: 20px; font-weight: 700; color: #fff; }
+  .s-table .tier-pill {
+    display: inline-block; padding: 3px 9px;
+    font: 600 11px/1 var(--font-mono); letter-spacing: 0.05em;
+    border-radius: 4px;
+  }
+  .s-table .tier-pill.t1 { background: rgba(16,185,129,0.15); color: var(--green); }
+  .s-table .tier-pill.t2 { background: rgba(245,158,11,0.15); color: var(--amber); }
+  .s-table .tier-pill.t3 { background: rgba(139,92,246,0.15); color: var(--violet); }
+
+  /* ================================================================
+     17 · TIMELINE — warm, vertical narrative
+     ================================================================ */
+  .s-timeline { padding-top: 120px; }
+  .s-timeline .title { margin: 0 0 48px; font-size: 48px; max-width: 24ch; }
+  .s-timeline .rail {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 40px; flex: 1; overflow: auto; position: relative;
+  }
+  .s-timeline .row {
+    display: contents;
+  }
+  .s-timeline .when {
+    font: 600 20px/1.2 var(--font-mono);
+    color: var(--ink-1000);
+    padding: 24px 24px 24px 0;
+    border-right: 2px solid var(--ink-1000);
+    text-align: right;
+  }
+  .s-timeline .when .sub {
+    display: block; margin-top: 6px; font-size: 13px;
+    font-weight: 500; color: var(--fg-light-3);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .s-timeline .what {
+    padding: 24px 0;
+    position: relative;
+  }
+  .s-timeline .what::before {
+    content: ''; position: absolute; left: -51px; top: 34px;
+    width: 18px; height: 18px; border-radius: 999px;
+    background: var(--bg-light-alt); border: 3px solid var(--ink-1000);
+  }
+  .s-timeline .what.accent::before { background: var(--blue); border-color: var(--blue); }
+  .s-timeline .what h3 {
+    font-weight: 700; font-size: 24px; letter-spacing: -0.01em;
+    color: var(--ink-1000); margin: 0 0 8px;
+  }
+  .s-timeline .what p { font-size: 17px; line-height: 1.5; color: var(--ink-700); margin: 0; max-width: 68ch; }
+
+  /* ================================================================
+     18 · APPENDIX — light, sources + methodology
+     ================================================================ */
+  .s-appendix .title { margin: 0 0 40px; font-size: 48px; max-width: 24ch; }
+  .s-appendix .grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; flex: 1;
+  }
+  .s-appendix h3 {
+    font: 600 13px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--blue); margin: 0 0 24px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--border-light);
+  }
+  .s-appendix ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+  .s-appendix ul li {
+    font-size: 15px; line-height: 1.5; color: var(--ink-700);
+    padding-left: 22px; position: relative;
+  }
+  .s-appendix ul li::before {
+    content: '→'; position: absolute; left: 0; color: var(--fg-light-3);
+  }
+  .s-appendix ul li strong { color: var(--ink-1000); font-weight: 600; }
+  .s-appendix ul li .mono {
+    font: 500 12px/1.4 var(--font-mono); color: var(--fg-light-3);
+    display: block; margin-top: 4px;
+  }
+  .s-appendix .tiers { margin-top: 24px; display: grid; gap: 10px; }
+  .s-appendix .tier-row {
+    display: grid; grid-template-columns: 80px 1fr; gap: 16px;
+    font-size: 14px; line-height: 1.4; color: var(--ink-700);
+    align-items: baseline;
+  }
+  .s-appendix .tier-row .tag {
+    font: 600 11px/1 var(--font-mono); letter-spacing: 0.05em;
+    padding: 4px 8px; border-radius: 4px; text-align: center;
+  }
+  .s-appendix .tier-row .tag.t1 { background: var(--green-tint); color: var(--green); }
+  .s-appendix .tier-row .tag.t2 { background: var(--amber-tint); color: var(--amber-600); }
+  .s-appendix .tier-row .tag.t3 { background: var(--violet-tint); color: var(--violet-600); }
+
+  /* ================================================================
+     19 · CLOSE — ink, three-action footer
+     ================================================================ */
+  .s-close { justify-content: flex-start; padding-top: 160px; }
+  .s-close .display { margin: 0 0 40px; max-width: 22ch; }
+  .s-close .actions {
+    display: flex; gap: 40px; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.15); margin-top: 80px;
+  }
+  .s-close .actions .a { flex: 1; }
+  .s-close .actions .a .lbl {
+    font: 600 12px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--blue); margin-bottom: 16px;
+  }
+  .s-close .actions .a .v {
+    font-weight: 700; font-size: 28px; letter-spacing: -0.015em;
+    color: #fff; line-height: 1.25;
+  }
+  .s-close .actions .a .s {
+    font: 500 14px/1.4 var(--font-mono); color: var(--ink-400); margin-top: 8px;
+  }
+
+  /* ================================================================
+     20 · THANK YOU — ink, contact details
+     ================================================================ */
+  .s-thanks { justify-content: center; align-items: flex-start; }
+  .s-thanks .display { margin: 0 0 48px; color: #fff; }
+  .s-thanks .contacts {
+    display: grid; grid-template-columns: repeat(3, auto); gap: 72px;
+    padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .s-thanks .contacts .lbl {
+    font: 600 12px/1 var(--font-sans);
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--blue); margin-bottom: 14px;
+  }
+  .s-thanks .contacts .v {
+    font: 500 20px/1.3 var(--font-mono); color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<deck-stage>
+
+  <!-- ================================================================
+       1 · TITLE
+       ================================================================ -->
+  <section class="ink s-title" data-screen-label="01 Title">
+    <div class="brand-corner"><img src="../assets/logo-icon-inverse.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Briefing · Q1 2026<br>Client · Confidential</div>
+    <h1 class="title">The AI capex<br>reconciliation.</h1>
+    <div class="sub">What ~$745B of committed capital implies for revenue, usage, and the shape of the next four quarters.</div>
+    <div class="tag">
+      <span><strong>Prepared by</strong>Simon Bowker · Hepburn Advisory</span>
+      <span><strong>For</strong>[Client name] · Board Advisory</span>
+      <span><strong>Date</strong>21 Apr 2026</span>
+    </div>
+    <div class="page-num">01 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       2 · AGENDA
+       ================================================================ -->
+  <section class="light s-agenda" data-screen-label="02 Agenda">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Briefing · 20 min</div>
+    <h2 class="title">Agenda</h2>
+    <ol>
+      <li><span class="n">01</span><span>The question<span class="desc">Why the capex/revenue gap is a board-level arithmetic problem</span></span></li>
+      <li><span class="n">02</span><span>The four books<span class="desc">Capital · Revenue · Usage · Power — and where each is sourced</span></span></li>
+      <li><span class="n">03</span><span>Claims vs. reality<span class="desc">How issuer language reconciles to booked numbers</span></span></li>
+      <li><span class="n">04</span><span>Three paths forward<span class="desc">Only one doesn't require a recession</span></span></li>
+      <li><span class="n">05</span><span>Three questions<span class="desc">What we'd put in the next board pack</span></span></li>
+      <li><span class="n">06</span><span>Appendix &amp; methodology<span class="desc">Sources, tiers, and where to push back</span></span></li>
+    </ol>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">02 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       3 · SECTION BREAK
+       ================================================================ -->
+  <section class="warm s-section" data-screen-label="03 Section break">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">§ 01 of 05</div>
+    <div class="marker">§ 01 — The question</div>
+    <h2 class="title">If the capex is real, the revenue has to catch up. Or the capex has to stop.</h2>
+    <p class="lede">Both outcomes have precedent. Neither is currently priced into enterprise AI budgets.</p>
+    <div class="page-num">03 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       4 · CONTENT — single-column narrative with pull quote
+       ================================================================ -->
+  <section class="light s-content" data-screen-label="04 Content">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Context · 1 of 2</div>
+    <h2 class="title">Three things are simultaneously true, and the market is pricing only one of them.</h2>
+    <div class="cols">
+      <div class="body">
+        <p><strong>One.</strong> The capital commitments are real. $745B of cumulative capex through 2026, sourced directly from hyperscaler filings and Tier 1 issuer disclosures.</p>
+        <p><strong>Two.</strong> Booked AI revenue is ~$22B trailing twelve months — a figure that includes every line item issuers are willing to attribute to AI, generously interpreted.</p>
+        <p><strong>Three.</strong> The implied payback period, at current growth rates, exceeds the useful life of the depreciating asset. This is the reconciliation the market has not yet made.</p>
+      </div>
+      <div class="pull">
+        The capex is a sunk cost. The question is what reconciles it.
+        <span class="src">— Hepburn house view, Q1 '26</span>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">04 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       5 · TWO-COLUMN
+       ================================================================ -->
+  <section class="light s-twocol" data-screen-label="05 Two column">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Framing</div>
+    <h2 class="title" style="margin-top: 80px;">How issuers describe the moment &mdash; and what the numbers actually say.</h2>
+    <div class="cols">
+      <div class="col">
+        <div class="hd">Issuer narrative</div>
+        <h3>&ldquo;Compute-bound, revenue-unconstrained.&rdquo;</h3>
+        <p>Forward ARR guidance is framed in terms of capacity: more chips, more power, more tokens served. The constraint is always supply-side.</p>
+        <p>Under this frame, the capex is investment against a queue of unmet demand. The payback window is assumed, not demonstrated.</p>
+      </div>
+      <div class="col">
+        <div class="hd">Hepburn reconciliation</div>
+        <h3>Revenue growth is real, but not at the shape required.</h3>
+        <p>Booked AI revenue is growing ~85% YoY on our numbers. At that rate, sustained for 36 months, the gap closes to ~5×.</p>
+        <p>That is still the widest capex/revenue ratio in any comparable cycle. The cycle is not broken. It is merely expensive.</p>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">05 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       6 · THREE FOCUS AREAS
+       ================================================================ -->
+  <section class="light s-focus" data-screen-label="06 Focus areas">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Scope of work</div>
+    <h2 class="title" style="margin-top: 80px;">Three focus areas. One operating model. Engaged for weeks, not quarters.</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="n">01</div>
+        <h3>AI commercialisation</h3>
+        <p>Pricing, positioning, and revenue architecture for AI products. Built from the reconciled numbers, not the vendor pitch.</p>
+      </div>
+      <div class="card">
+        <div class="n">02</div>
+        <h3>Embedded leadership</h3>
+        <p>Operator-grade commercial leadership inside your team during the 90&ndash;180 day windows that define a cycle.</p>
+      </div>
+      <div class="card">
+        <div class="n">03</div>
+        <h3>Growth strategy</h3>
+        <p>Market entry, channel design, and the scalable motions that survive once the novelty premium has priced out.</p>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">06 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       7 · FOUR TILES (Ledger)
+       ================================================================ -->
+  <section class="dark s-tiles" data-screen-label="07 Four tiles">
+    <div class="brand-corner"><img src="../assets/logo-icon-inverse.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">The AI Ledger · live</div>
+    <h2 class="title" style="color:#fff; margin-top: 80px;">Capital, revenue, usage, power.<br>All four have to reconcile.</h2>
+    <div class="grid">
+      <div class="tile cap"><div class="lbl">Capital</div><div class="num">$745B</div><div class="cap">committed capex<br>2024&ndash;2026 cumulative</div><div class="tier">Tier 1 · High confidence</div></div>
+      <div class="tile rev"><div class="lbl">Revenue</div><div class="num">$22B</div><div class="cap">booked customer revenue<br>trailing 12 months</div><div class="tier">Tier 2 · Med confidence</div></div>
+      <div class="tile use"><div class="lbl">Usage</div><div class="num">~650T</div><div class="cap">tokens served per day<br>global estimate</div><div class="tier">Tier 3 · Modeled</div></div>
+      <div class="tile pow"><div class="lbl">Power</div><div class="num">92GW</div><div class="cap">committed interconnection<br>2026&ndash;2028 window</div><div class="tier">Tier 1 · High confidence</div></div>
+    </div>
+    <div class="page-num">07 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       8 · METRICS — light 4-up
+       ================================================================ -->
+  <section class="light s-metrics" data-screen-label="08 Metrics">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Engagement outcomes</div>
+    <h2 class="title" style="margin-top: 80px;">What we've moved, measured at the board level.</h2>
+    <div class="grid">
+      <div class="m">
+        <div class="n">3.2&times;</div>
+        <div class="lbl">Revenue multiplier</div>
+        <div class="desc">Median across five engagements, 12-month window post-engagement.</div>
+      </div>
+      <div class="m">
+        <div class="n">47%</div>
+        <div class="lbl">Faster to market</div>
+        <div class="desc">Measured against the original internal GTM plan at engagement start.</div>
+      </div>
+      <div class="m">
+        <div class="n">85%</div>
+        <div class="lbl">Client retention</div>
+        <div class="desc">12-month retention across engagements concluded since Q1 2025.</div>
+      </div>
+      <div class="m">
+        <div class="n">$12M</div>
+        <div class="lbl">Pipeline generated</div>
+        <div class="desc">Qualified commercial pipeline attributable to engagement work.</div>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential &middot; T2 derived · Med confidence</div>
+    <div class="page-num">08 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       9 · MEGA NUMBER
+       ================================================================ -->
+  <section class="dark s-mega" data-screen-label="09 Mega number">
+    <div class="brand-corner"><img src="../assets/logo-icon-inverse.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Capital Ledger · Tier 1</div>
+    <div class="cap" style="margin-top: 0; margin-bottom: 32px; max-width: 40ch; text-align: center;">For every dollar of AI revenue</div>
+    <div class="mega">$<em>34</em></div>
+    <div class="cap">of capital has been committed to the stack that serves it. The implied payback needs one of three things to move.</div>
+    <div class="prov">Method: committed capex 2024&ndash;2026 / booked revenue T12M · Tier 2 derived · Med confidence</div>
+    <div class="page-num">09 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       10 · CLAIM + RECONCILIATION
+       ================================================================ -->
+  <section class="light s-claim" data-screen-label="10 Claim vs reconciliation">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Claims Ledger · Reconciliation</div>
+    <div class="wrap" style="margin-top: 40px;">
+      <div>
+        <blockquote>We're on a $50B ARR trajectory by end of year.</blockquote>
+        <div class="attrib"><strong>OpenAI · S. Altman</strong><br>CNBC · 14 Apr 2026</div>
+      </div>
+      <div class="reconcile">
+        <div class="lbl">Hepburn reconciliation</div>
+        <div class="val">~$11.2B</div>
+        <div class="desc">booked revenue, Q1 '26. Gap to claim: 78%. Implies a 4.5&times; revenue acceleration in 8 months.</div>
+      </div>
+    </div>
+    <div class="page-num">10 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       11 · PULL QUOTE
+       ================================================================ -->
+  <section class="warm s-quote" data-screen-label="11 Pull quote">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">House view</div>
+    <div class="mark">&ldquo;</div>
+    <blockquote>The capex is the question. The revenue is the answer. The useful life of the asset is the deadline.</blockquote>
+    <div class="attrib"><strong>Simon Bowker</strong>Founder, Hepburn Advisory &middot; April 2026</div>
+    <div class="page-num">11 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       12 · RECOMMENDATIONS
+       ================================================================ -->
+  <section class="light s-rec" data-screen-label="12 Recommendations">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Recommendations</div>
+    <h2 class="title" style="margin-top: 80px;">Four moves, sequenced across the next two board cycles.</h2>
+    <div class="list">
+      <div class="item">
+        <div class="tick">✓</div>
+        <div>
+          <h3>Reclassify AI line items by what they're actually paying for.</h3>
+          <p>Split the P&amp;L into <em>outcome</em>, <em>integration</em>, and <em>optionality</em>. The first gets the budget; the second gets scrutiny; the third gets a kill-date.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="tick">✓</div>
+        <div>
+          <h3>Establish the reconciliation cadence before the market forces it.</h3>
+          <p>Monthly capex-to-revenue ratio, reported internally, tiered by source. The goal is to see the trend before it is a press cycle.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="tick">✓</div>
+        <div>
+          <h3>Map vendor concentration against credible downside.</h3>
+          <p>If any single hyperscaler cuts capex 20% in 2027, what breaks? The answer should be on one page, not in an audit document.</p>
+        </div>
+      </div>
+      <div class="item">
+        <div class="tick">✓</div>
+        <div>
+          <h3>Rebuild the category-authority plan around the reconciled view.</h3>
+          <p>Stop pitching into the vendor narrative. The differentiation is the reconciliation — show your work, publish the numbers.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">12 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       13 · ROADMAP — 4 phases
+       ================================================================ -->
+  <section class="light s-road" data-screen-label="13 Roadmap">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Engagement arc</div>
+    <h2 class="title" style="margin-top: 80px;">Four phases. Twelve to twenty weeks. Measured against one board-level outcome.</h2>
+    <div class="track">
+      <div class="phase active">
+        <div class="dot">01</div>
+        <div class="dur">Week 1&ndash;2</div>
+        <h3>Discovery</h3>
+        <p>Stakeholder interviews, reconciliation of current numbers to source, identification of the arithmetic gaps.</p>
+      </div>
+      <div class="phase">
+        <div class="dot">02</div>
+        <div class="dur">Week 3&ndash;6</div>
+        <h3>Strategy</h3>
+        <p>Positioning, GTM framework, pricing architecture, and the commercial playbook — delivered as briefing, not slideware.</p>
+      </div>
+      <div class="phase">
+        <div class="dot">03</div>
+        <div class="dur">Week 6&ndash;14</div>
+        <h3>Execution</h3>
+        <p>Embedded leadership inside your team. Launch support, team enablement, monthly board-level reporting.</p>
+      </div>
+      <div class="phase">
+        <div class="dot">04</div>
+        <div class="dur">Week 14&ndash;20</div>
+        <h3>Handover</h3>
+        <p>Performance instrumentation, expansion plan, and a clean handoff to the internal team. We leave on schedule.</p>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">13 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       14 · EDITORIAL
+       ================================================================ -->
+  <section class="light s-editorial" data-screen-label="14 Editorial">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Hepburn view &middot; Analyst note</div>
+    <div class="body-wrap">
+      <h2>The SaaS implementation tax, re-skinned as AI transformation.</h2>
+      <p><span class="drop">T</span>he vendor sells outcomes. The buyer still pays for integration, change management, and the quarterly reconciliation of what the model was supposed to automate against what it actually did. <em>That gap is the tax.</em></p>
+      <p>Every prior platform wave &mdash; client-server, web, mobile, cloud &mdash; ran the same arithmetic. AI is not different in kind. It is different in magnitude. And the magnitude is, so far, in the cost column.</p>
+    </div>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">14 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       15 · COMPARISON
+       ================================================================ -->
+  <section class="light s-compare" data-screen-label="15 Comparison">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Framework &middot; Pick one</div>
+    <h2 class="title" style="margin-top: 80px;">The reconciliation has to come from somewhere.</h2>
+    <div class="cols">
+      <div class="col good">
+        <div class="hd">Path of least pain</div>
+        <h3>Revenue expands ~4&times; over 36 months</h3>
+        <ul>
+          <li>Enterprise seat penetration triples from 18% to ~55%</li>
+          <li>Per-seat pricing holds; no discount pressure</li>
+          <li>Capex plateau; no new multi-year commitments</li>
+          <li>Implied CAGR: 58% · precedented in zero comparable cycles</li>
+        </ul>
+      </div>
+      <div class="col bad">
+        <div class="hd">Paths of more pain</div>
+        <h3>Capex contracts, or margins compress</h3>
+        <ul>
+          <li>Hyperscaler capex cuts &rarr; chip oversupply &rarr; margin shock</li>
+          <li>Lab revenue grows but at commodity API pricing</li>
+          <li>Either path requires a recession the market hasn't priced</li>
+          <li>Board planning horizon: 12 months, not 36</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential</div>
+    <div class="page-num">15 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       16 · LEDGER TABLE
+       ================================================================ -->
+  <section class="dark s-table" data-screen-label="16 Ledger table">
+    <div class="brand-corner"><img src="../assets/logo-icon-inverse.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Capital Ledger · Q1 '26</div>
+    <h2 class="title" style="margin-top: 80px;">Committed capex, 2024&ndash;2026, sourced and triangulated.</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 22%;">Issuer</th>
+          <th style="width: 18%;">Tier</th>
+          <th style="width: 30%;">Source</th>
+          <th class="num" style="width: 15%;">2024&ndash;26</th>
+          <th class="num" style="width: 15%;">Share</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Microsoft</td>
+          <td><span class="tier-pill t1">Tier 1</span></td>
+          <td>10-K, Q3 FY26 guidance</td>
+          <td class="num">$184B</td>
+          <td class="num">24.7%</td>
+        </tr>
+        <tr>
+          <td class="label">Alphabet</td>
+          <td><span class="tier-pill t1">Tier 1</span></td>
+          <td>10-K, earnings call Q1</td>
+          <td class="num">$162B</td>
+          <td class="num">21.7%</td>
+        </tr>
+        <tr>
+          <td class="label">Amazon (AWS)</td>
+          <td><span class="tier-pill t1">Tier 1</span></td>
+          <td>10-K capex disclosure</td>
+          <td class="num">$148B</td>
+          <td class="num">19.9%</td>
+        </tr>
+        <tr>
+          <td class="label">Meta</td>
+          <td><span class="tier-pill t1">Tier 1</span></td>
+          <td>10-K, Q4 '25 guidance</td>
+          <td class="num">$114B</td>
+          <td class="num">15.3%</td>
+        </tr>
+        <tr>
+          <td class="label">Oracle</td>
+          <td><span class="tier-pill t2">Tier 2</span></td>
+          <td>Earnings call, triangulated</td>
+          <td class="num">$62B</td>
+          <td class="num">8.3%</td>
+        </tr>
+        <tr>
+          <td class="label">Other (xAI, CoreWeave, sovereign)</td>
+          <td><span class="tier-pill t3">Tier 3</span></td>
+          <td>Modeled from disclosures</td>
+          <td class="num">$75B</td>
+          <td class="num">10.1%</td>
+        </tr>
+        <tr class="total">
+          <td colspan="3">Committed capex, 2024&ndash;2026</td>
+          <td class="num">$745B</td>
+          <td class="num">100%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="page-num">16 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       17 · TIMELINE
+       ================================================================ -->
+  <section class="warm s-timeline" data-screen-label="17 Timeline">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Twelve-month view</div>
+    <h2 class="title">The forward calendar — what the board should be watching and when.</h2>
+    <div class="rail">
+      <div class="row">
+        <div class="when">Q2 '26<span class="sub">Apr–Jun</span></div>
+        <div class="what accent">
+          <h3>The first capex guide-down</h3>
+          <p>At least one hyperscaler will revise FY27 capex guidance materially. The reaction — or absence of one — is the signal.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="when">Q3 '26<span class="sub">Jul–Sep</span></div>
+        <div class="what">
+          <h3>Enterprise renewal cohort</h3>
+          <p>The first 12-month AI contracts renewed under reconciled expectations. Expected churn: 18–28% of seat volume, not of logos.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="when">Q4 '26<span class="sub">Oct–Dec</span></div>
+        <div class="what accent">
+          <h3>Model economics disclosure</h3>
+          <p>Pressure on at least one lab to disclose per-query unit economics. This becomes the moment the conversation shifts from scale to margin.</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="when">Q1 '27<span class="sub">Jan–Mar</span></div>
+        <div class="what">
+          <h3>Board planning reset</h3>
+          <p>The first full budget cycle where AI line items are treated as mature spend, not growth bets. Governance moves from CIO to CFO.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential &middot; Tier 2 derived</div>
+    <div class="page-num">17 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       18 · APPENDIX
+       ================================================================ -->
+  <section class="light s-appendix" data-screen-label="18 Appendix">
+    <div class="brand-corner"><img src="../assets/logo-icon.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Appendix &middot; Methodology</div>
+    <h2 class="title" style="margin-top: 80px;">Sources, tiers, and the arithmetic behind every figure in this deck.</h2>
+    <div class="grid">
+      <div>
+        <h3>Primary sources</h3>
+        <ul>
+          <li><strong>Hyperscaler 10-K filings</strong>, most recent fiscal year<span class="mono">Microsoft · Alphabet · Amazon · Meta · Oracle</span></li>
+          <li><strong>Earnings calls &amp; transcripts</strong>, Q1 '26 + Q4 '25 cycle<span class="mono">management capex guidance + Q&amp;A segments</span></li>
+          <li><strong>FERC interconnection queue</strong><span class="mono">public data, 2024–2028 pipeline</span></li>
+          <li><strong>Hepburn Ledger derived dataset</strong><span class="mono">ledger.hepburnadvisory.com.au/methodology</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Provenance tiers</h3>
+        <div class="tiers">
+          <div class="tier-row">
+            <span class="tag t1">Tier 1</span>
+            <span><strong>Sourced &middot; High confidence.</strong> Pulled directly from a primary filing or disclosure.</span>
+          </div>
+          <div class="tier-row">
+            <span class="tag t2">Tier 2</span>
+            <span><strong>Derived &middot; Medium confidence.</strong> Reconciled or triangulated from ≥2 sources.</span>
+          </div>
+          <div class="tier-row">
+            <span class="tag t3">Tier 3</span>
+            <span><strong>Modeled &middot; Lower confidence.</strong> Estimated; method disclosed on the slide.</span>
+          </div>
+        </div>
+        <h3 style="margin-top: 40px;">Known gaps</h3>
+        <ul>
+          <li><strong>Private lab revenue.</strong> Figures ex-OpenAI are modeled from indirect disclosures.</li>
+          <li><strong>Sovereign / gov AI spend.</strong> Under-captured; likely understates total capex by 8–12%.</li>
+          <li><strong>Per-query unit economics.</strong> Not disclosed by any major lab as of Q1 '26.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-conf">Confidential &middot; Methodology v1.3</div>
+    <div class="page-num">18 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       19 · CLOSE — three-action footer
+       ================================================================ -->
+  <section class="ink s-close" data-screen-label="19 Close">
+    <div class="brand-corner"><img src="../assets/logo-icon-inverse.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">End of briefing</div>
+    <div>
+      <h2 class="display">Three questions for your next board pack.</h2>
+    </div>
+    <div class="actions">
+      <div class="a"><div class="lbl">01</div><div class="v">Which of our AI line items is revenue, and which is implementation tax?</div><div class="s">scope: current FY P&amp;L</div></div>
+      <div class="a"><div class="lbl">02</div><div class="v">What's our plan if hyperscaler capex contracts 20% in 2027?</div><div class="s">scope: vendor concentration map</div></div>
+      <div class="a"><div class="lbl">03</div><div class="v">Where's the arithmetic we can't yet answer?</div><div class="s">scope: data gaps · commission follow-up</div></div>
+    </div>
+    <div class="page-num">19 / 20</div>
+  </section>
+
+  <!-- ================================================================
+       20 · THANK YOU
+       ================================================================ -->
+  <section class="ink s-thanks" data-screen-label="20 Thank you">
+    <div class="brand-corner"><img src="../assets/logo-icon-inverse.svg"><span class="name">Hepburn Advisory</span></div>
+    <div class="meta-corner">Contact</div>
+    <h1 class="display">Thank you.</h1>
+    <p class="lede" style="color: var(--ink-400); margin: 24px 0 0; max-width: 42ch;">For the time, the questions, and the chance to show our work.</p>
+    <div class="contacts">
+      <div>
+        <div class="lbl">Email</div>
+        <div class="v">info@hepburnadvisory.com.au</div>
+      </div>
+      <div>
+        <div class="lbl">Web</div>
+        <div class="v">hepburnadvisory.com.au</div>
+      </div>
+      <div>
+        <div class="lbl">LinkedIn</div>
+        <div class="v">linkedin.com/in/simonbowker</div>
+      </div>
+    </div>
+    <div class="page-num">20 / 20</div>
+  </section>
+
+</deck-stage>
+
+<script type="application/json" id="speaker-notes">
+[
+"Title slide. Introduce yourself; thank the board for the time. The briefing is 20 minutes with three questions at the end — nothing longer. The subtitle states the scope in one sentence; don't elaborate until slide 3.",
+"Walk the agenda briefly. Six sections, each one a board-level question rather than a topic. Flag that the appendix at the end is the methodology, and that every number in the deck will trace to a source.",
+"Section break. Say aloud: the question I'm asked most is whether the AI spending is real. My answer is yes — the capex is real, the bills are paid, the GPUs are installed. The follow-on question is the one that matters, and that's what §01 is about.",
+"Content setup. Three things are simultaneously true. Read each one slowly, then pause on the third. The pull-quote is your line — use it verbatim if it helps. This slide is the frame for the next 40 minutes; don't rush it.",
+"Two-column. Left is how issuers talk. Right is what the numbers show. Both are defensible. The deck does not argue the issuers are lying; it argues the gap between those two views is the unpriced risk.",
+"Focus areas. Thirty seconds, no more. This is a credibility slide — it tells the board what Hepburn does without being a pitch. Say: we engage for weeks, not quarters, and we're measured against one board-level outcome.",
+"The four books of the Ledger. Capital and Power are sourced and high-confidence. Revenue is derived. Usage is modelled. Every number on your P&L connects to one of these four. If they ask which is softest — say Usage, and point to the tier.",
+"Engagement metrics. Hepburn's track record, 12 months. Use these numbers sparingly — don't stack them. The 3.2× revenue multiplier is the one to emphasise; the rest contextualise.",
+"The headline number. Say it slowly. Thirty-four dollars of committed capital for every dollar of current booked revenue. Emphasise: this is arithmetic, not opinion — method is on the slide. Pause after the mega number.",
+"Walk the gap. Issuers say forward ARR; Hepburn reports booked. Both are legitimate views. But only one shows up on a tax return. The 78% gap is where the argument lives. Invite the board to name any other industry where that gap holds.",
+"Pull quote. Read it aloud, then give the room 20 seconds of silence. This is the rhetorical pivot. From here on, we're arguing, not describing.",
+"Recommendations. Four moves, sequenced. Walk each one briefly — 30 seconds max per item. Reclassification first; it's the one that pays for itself inside a single quarter. The kill-date language in item one is intentional — don't soften it.",
+"Engagement roadmap. Twenty weeks, four phases. Emphasise the handover — we leave on schedule, and that's in the contract. This slide exists to pre-empt the 'how long' question.",
+"Editorial slide. Read the opening line aloud. Let the drop-cap paragraph breathe. The board is used to being pitched; this slide is where the tone shifts to analyst note. Sparingly — one of these per deck, ever.",
+"Three paths. Only one doesn't require a recession. This is the board's planning call, not mine. If they push, say: the left column requires a 58% CAGR sustained for three years, and no comparable cycle has produced that shape. Let them sit with it.",
+"Capital Ledger table. Dense slide — don't read it, land the point. $745B total, five named issuers account for 90%, and the tiers tell you where the numbers are softest. Invite them to read it after.",
+"Timeline. Four quarters, four decisions. The Q2 capex guide-down is the one to watch; it's the earliest signal. Don't predict — say: we'll be watching these four dates on your behalf.",
+"Appendix. This slide exists so you don't need the appendix. Point at the primary sources column; point at the tiers. Then say: if you find a number in this deck that isn't traceable, tell me — and I owe you a revised deck.",
+"Close. Three questions for your next board pack. Leave them with a written version of this slide. Don't take more than 90 seconds on it — the questions are the ask.",
+"Thank you. Contact details. Don't say more than one sentence. The sentence: I'd rather be wrong in public than vague in private — here's how to reach me."
+]
+</script>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Components — Hepburn Advisory</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body { margin: 0; padding: 40px; background: var(--bg-light); font-family: var(--font-sans); color: var(--fg-light-2);}
+  .wrap { max-width: 1080px; }
+  h1 { font: var(--type-h2); letter-spacing: var(--tracking-head); margin: 0 0 4px; color: var(--ink-1000);}
+  .sub { font: var(--type-meta); color: var(--fg-light-3); margin: 0 0 28px; }
+  .sec { font: var(--type-eyebrow); text-transform: uppercase; letter-spacing: var(--tracking-eyebrow); color: var(--fg-light-3); margin: 28px 0 14px; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+  /* Buttons */
+  .btn { font-family: var(--font-sans); font-weight: 600; font-size: 14px; padding: 10px 18px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; transition: all 180ms var(--ease-out); }
+  .btn-primary { background: var(--ink-1000); color: #fff; }
+  .btn-primary:hover { background: var(--ink-800); }
+  .btn-secondary { background: #fff; color: var(--ink-1000); border-color: var(--border-light); }
+  .btn-secondary:hover { border-color: var(--ink-1000); }
+  .btn-ghost { background: transparent; color: var(--ink-1000); padding: 10px 6px; }
+  .btn-ghost:hover { color: var(--blue); }
+  .btn-accent { background: var(--blue); color: #fff; }
+  .btn-accent:hover { background: var(--blue-600); }
+
+  /* Dark button row */
+  .dark-row { background: var(--bg-dark); padding: 20px; border-radius: 12px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-d-primary { background: var(--blue); color: #fff; }
+  .btn-d-secondary { background: transparent; color: var(--ink-50); border-color: var(--border-dark); }
+  .btn-d-ghost { color: var(--ink-50); background: transparent;}
+
+  /* Pills */
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; }
+  .pill-tier1 { background: var(--green-tint); color: var(--green); }
+  .pill-tier2 { background: var(--amber-tint); color: var(--amber); }
+  .pill-tier3 { background: var(--violet-tint); color: var(--violet); }
+  .pill-neutral { background: var(--ink-100); color: var(--ink-700); }
+  .pill-live { background: rgba(16,185,129,.15); color: var(--green); }
+  .pill-live::before { content:''; width:6px; height:6px; border-radius:999px; background: var(--green); animation: pulse 2s ease-in-out infinite;}
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* Freshness */
+  .dot { width: 8px; height: 8px; border-radius: 999px; display: inline-block; vertical-align: middle; }
+
+  /* Metric tile */
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .tile { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 18px 18px 16px; }
+  .tile .eb { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; color: var(--fg-light-3); display: flex; align-items: center; gap: 6px;}
+  .tile .num { font-weight: 800; font-size: 28px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--ink-1000); margin-top: 8px; line-height: 1; }
+  .tile .delta { font: 500 11px/1 var(--font-mono); margin-top: 8px; display: flex; align-items: center; gap: 8px; color: var(--fg-light-3); }
+  .tile .delta .up { color: var(--green);}
+  .tile-dark { background: var(--surface-dark); border-color: var(--border-dark); }
+  .tile-dark .eb { color: var(--fg-dark-3); }
+  .tile-dark .num { color: var(--fg-dark-1);}
+  .tile-dark .num.blue { color: var(--blue);}
+  .tile-dark .num.violet { color: var(--violet);}
+  .tile-dark .num.amber { color: var(--amber);}
+  .tile-dark .num.green { color: var(--green);}
+  .tile-dark .delta { color: var(--fg-dark-3);}
+
+  /* Card */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 24px; }
+  .card h3 { font: var(--type-h3); color: var(--ink-1000); margin: 0 0 6px; }
+  .card p { margin: 0; font-size: 14px; line-height: 1.5; }
+  .card-dark { background: var(--surface-dark); border-color: var(--border-dark); }
+  .card-dark h3 { color: var(--fg-dark-1); }
+  .card-dark p { color: var(--fg-dark-2); }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; gap: 20px; padding: 12px 20px; border: 1px solid var(--border-light); border-radius: 10px; background: #fff; }
+  .nav .logo-mark { width: 28px; height: 28px; }
+  .nav .brand { font-weight: 700; color: var(--ink-1000); letter-spacing: -0.01em;}
+  .nav .spacer { flex: 1; }
+  .nav a { color: var(--ink-700); font-size: 13px; text-decoration: none; font-weight: 500; }
+  .nav a.active { color: var(--blue); }
+  .nav-dark { background: var(--bg-dark-alt); border-color: var(--border-dark); }
+  .nav-dark .brand { color: var(--fg-dark-1); }
+  .nav-dark a { color: var(--fg-dark-2); }
+  .nav-dark a.active { background: rgba(59,130,246,.15); color: var(--blue); padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(59,130,246,.3);}
+
+  /* Input */
+  .input { padding: 10px 14px; border: 1px solid var(--border-light); border-radius: 8px; font-family: var(--font-sans); font-size: 14px; min-width: 260px; background: #fff; color: var(--ink-1000);}
+  .input:focus { outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,.35); border-color: var(--blue);}
+
+  /* Table */
+  table.ledger { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface-dark); border: 1px solid var(--border-dark); border-radius: 12px; overflow: hidden; }
+  table.ledger th, table.ledger td { text-align: left; padding: 12px 16px; color: var(--fg-dark-2); border-bottom: 1px solid var(--border-dark);}
+  table.ledger th { font: 600 10px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-dark-3); background: var(--bg-dark-alt);}
+  table.ledger td.num { font-variant-numeric: tabular-nums; text-align: right; color: var(--fg-dark-1); font-weight: 500;}
+  table.ledger tr:last-child td { border-bottom: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Components</h1>
+  <p class="sub">Buttons, pills, tiles, cards, nav, inputs, data tables — for both surfaces.</p>
+
+  <div class="sec">Buttons — light</div>
+  <div class="row">
+    <button class="btn btn-primary">Primary</button>
+    <button class="btn btn-accent">Accent</button>
+    <button class="btn btn-secondary">Secondary</button>
+    <button class="btn btn-ghost">Ghost link →</button>
+  </div>
+
+  <div class="sec">Buttons — dark</div>
+  <div class="dark-row">
+    <button class="btn btn-d-primary">Primary</button>
+    <button class="btn btn-d-secondary">Secondary</button>
+    <button class="btn btn-d-ghost">Methodology →</button>
+  </div>
+
+  <div class="sec">Pills — provenance + status</div>
+  <div class="row">
+    <span class="pill pill-tier1">Tier 1 · Sourced</span>
+    <span class="pill pill-tier2">Tier 2 · Derived</span>
+    <span class="pill pill-tier3">Tier 3 · Modeled</span>
+    <span class="pill pill-neutral">Med confidence</span>
+    <span class="pill pill-live">Live · Updated 21 Apr</span>
+    <span class="pill pill-neutral"><span class="dot" style="background:var(--green)"></span>Fresh</span>
+    <span class="pill pill-neutral"><span class="dot" style="background:var(--amber)"></span>Stale</span>
+    <span class="pill pill-neutral"><span class="dot" style="background:var(--ink-500)"></span>Old</span>
+  </div>
+
+  <div class="sec">Metric tiles — light</div>
+  <div class="tiles">
+    <div class="tile"><div class="eb"><span class="dot" style="background:var(--blue)"></span>Capital</div><div class="num">$745B</div><div class="delta"><span class="up">↑ 4.2%</span> vs prior qtr</div></div>
+    <div class="tile"><div class="eb"><span class="dot" style="background:var(--green)"></span>Revenue</div><div class="num">$22B</div><div class="delta"><span class="up">↑ 1.8%</span> rolling</div></div>
+    <div class="tile"><div class="eb"><span class="dot" style="background:var(--violet)"></span>Usage</div><div class="num">~650T</div><div class="delta">tokens / day · global</div></div>
+    <div class="tile"><div class="eb"><span class="dot" style="background:var(--amber)"></span>Power</div><div class="num">92 GW</div><div class="delta">committed, 2026–2028</div></div>
+  </div>
+
+  <div class="sec">Metric tiles — dark</div>
+  <div class="tiles">
+    <div class="tile tile-dark"><div class="eb"><span class="dot" style="background:var(--blue)"></span>Capital</div><div class="num blue">$745B</div><div class="delta">tier 1 · high conf</div></div>
+    <div class="tile tile-dark"><div class="eb"><span class="dot" style="background:var(--green)"></span>Revenue</div><div class="num green">$22B</div><div class="delta">tier 2 · med conf</div></div>
+    <div class="tile tile-dark"><div class="eb"><span class="dot" style="background:var(--violet)"></span>Usage</div><div class="num violet">~650T</div><div class="delta">tier 3 · modeled</div></div>
+    <div class="tile tile-dark"><div class="eb"><span class="dot" style="background:var(--amber)"></span>Power</div><div class="num amber">92 GW</div><div class="delta">tier 2 · med conf</div></div>
+  </div>
+
+  <div class="sec">Cards — light + dark</div>
+  <div class="cards">
+    <div class="card">
+      <span class="pill pill-neutral" style="margin-bottom:12px;display:inline-flex">Founder Advisory</span>
+      <h3 style="margin-top:10px">Commercial scale for AI founders</h3>
+      <p>Unit economics, pricing, enterprise GTM. Tied to a single quarter's question — not an annual retainer.</p>
+    </div>
+    <div class="card card-dark">
+      <span class="pill pill-tier1" style="margin-bottom:12px;display:inline-flex">Tier 1 · Sourced</span>
+      <h3 style="margin-top:10px">Capital Ledger · $745B</h3>
+      <p>Committed AI capex, 2024–2026. Method: sum of public capex filings, cross-checked to project-level announcements.</p>
+    </div>
+  </div>
+
+  <div class="sec">Nav — light</div>
+  <div class="nav">
+    <img src="../assets/logo-icon.svg" class="logo-mark"><span class="brand">Hepburn Advisory</span>
+    <div class="spacer"></div>
+    <a class="active">Advisory</a><a>Insights</a><a>The AI Ledger ↗</a><a>About</a>
+  </div>
+
+  <div class="sec">Nav — dark</div>
+  <div class="nav nav-dark">
+    <img src="../assets/logo-icon-inverse.svg" class="logo-mark"><span class="brand">The AI Ledger</span>
+    <div class="spacer"></div>
+    <a>Capital</a><a class="active">Revenue</a><a>Usage</a><a>Power</a><a>Timeline</a>
+  </div>
+
+  <div class="sec">Input</div>
+  <div class="row">
+    <input class="input" type="text" placeholder="Filter by issuer, metric, or period…">
+    <button class="btn btn-accent">Apply</button>
+  </div>
+
+  <div class="sec">Data table — Ledger</div>
+  <table class="ledger">
+    <thead><tr><th>Metric</th><th>Period</th><th>Provenance</th><th>Confidence</th><th style="text-align:right">Value</th></tr></thead>
+    <tbody>
+      <tr><td>Hyperscaler capex</td><td>2025 FY</td><td><span class="pill pill-tier1">Tier 1</span></td><td>High</td><td class="num">$312.4B</td></tr>
+      <tr><td>OpenAI ARR, implied</td><td>Q1 '26</td><td><span class="pill pill-tier2">Tier 2</span></td><td>Med</td><td class="num">$11.2B</td></tr>
+      <tr><td>Enterprise seat penetration</td><td>Q1 '26</td><td><span class="pill pill-tier3">Tier 3</span></td><td>Low</td><td class="num">18.4%</td></tr>
+      <tr><td>Data-centre interconnection queue</td><td>Apr '26</td><td><span class="pill pill-tier1">Tier 1</span></td><td>High</td><td class="num">1,842 GW</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

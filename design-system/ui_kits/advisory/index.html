@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hepburn Advisory — UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  body { margin: 0; background: var(--bg-light); color: var(--fg-light-2); font-family: var(--font-sans); -webkit-font-smoothing: antialiased;}
+  a { color: inherit; text-decoration: none;}
+  .page { max-width: 1200px; margin: 0 auto; padding: 0 40px 80px;}
+
+  /* Nav */
+  nav.top { position: sticky; top: 0; z-index: 10; background: rgba(251,251,249,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light); padding: 18px 40px; display: flex; align-items: center; gap: 32px;}
+  .brand { display: flex; align-items: center; gap: 12px;}
+  .brand img { width: 32px; height: 32px;}
+  .brand .name { font-weight: 700; color: var(--ink-1000); letter-spacing: -0.015em; font-size: 16px;}
+  nav.top .links { display: flex; gap: 4px; margin-left: 32px;}
+  nav.top .links a { padding: 8px 14px; border-radius: 8px; font-size: 14px; color: var(--ink-700); font-weight: 500;}
+  nav.top .links a.active { color: var(--ink-1000); background: #fff; border: 1px solid var(--border-light);}
+  nav.top .spacer { flex: 1;}
+  .btn-cta { background: var(--ink-1000); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;}
+
+  /* Hero */
+  .hero { padding: 80px 0 48px;}
+  .hero .eyebrow { font: 600 11px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.1em; color: var(--fg-light-3); margin-bottom: 20px;}
+  .hero h1 { font-weight: 700; font-size: 56px; line-height: 1.08; letter-spacing: -0.032em; color: var(--ink-1000); margin: 0 0 24px; max-width: 22ch;}
+  .hero .lede { font-size: 19px; line-height: 1.6; color: var(--fg-light-2); max-width: 58ch; margin: 0 0 36px;}
+  .hero .actions { display: flex; gap: 14px;}
+  .btn-primary { background: var(--ink-1000); color: #fff; padding: 14px 22px; border-radius: 8px; font-size: 14px; font-weight: 600;}
+  .btn-secondary { background: #fff; color: var(--ink-1000); padding: 14px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; border: 1px solid var(--border-light);}
+
+  /* Proof strip */
+  .proof { padding: 28px 0 48px; border-bottom: 1px solid var(--border-light); display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 40px;}
+  .proof .stat { }
+  .proof .stat .num { font-weight: 800; font-size: 38px; letter-spacing: -0.025em; line-height: 1; color: var(--ink-1000); font-variant-numeric: tabular-nums;}
+  .proof .stat .lbl { font-size: 13px; color: var(--fg-light-3); margin-top: 8px; max-width: 28ch; line-height: 1.4;}
+
+  /* Section headers */
+  .sec { padding: 80px 0 24px;}
+  .sec .eyebrow { font: 600 11px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.1em; color: var(--fg-light-3); margin-bottom: 14px;}
+  .sec h2 { font-weight: 700; font-size: 38px; letter-spacing: -0.022em; color: var(--ink-1000); margin: 0 0 14px; line-height: 1.15;}
+  .sec .lede { font-size: 17px; line-height: 1.6; color: var(--fg-light-2); max-width: 58ch; margin: 0;}
+
+  /* Tracks (services) */
+  .tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 8px;}
+  .track { background: #fff; border: 1px solid var(--border-light); border-radius: 16px; padding: 40px; display: flex; flex-direction: column; gap: 20px; transition: all 180ms var(--ease-out);}
+  .track:hover { border-color: var(--ink-1000); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,10,10,0.06);}
+  .track .pill { font: 600 10px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--blue); background: var(--blue-tint); padding: 6px 10px; border-radius: 999px; align-self: flex-start;}
+  .track.exec .pill { color: var(--amber); background: var(--amber-tint);}
+  .track h3 { font-weight: 700; font-size: 24px; letter-spacing: -0.015em; color: var(--ink-1000); margin: 0; line-height: 1.2;}
+  .track p { font-size: 15px; line-height: 1.6; color: var(--fg-light-2); margin: 0; max-width: 48ch;}
+  .track ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; border-top: 1px solid var(--border-light); padding-top: 20px;}
+  .track ul li { font-size: 14px; color: var(--fg-light-2); display: flex; gap: 10px; align-items: flex-start;}
+  .track ul li::before { content:"→"; color: var(--ink-1000); font-weight: 600; flex: none;}
+  .track .foot { border-top: 1px solid var(--border-light); padding-top: 16px; font: 500 12px/1.4 var(--font-mono); color: var(--fg-light-3); display: flex; gap: 20px;}
+  .track .foot strong { color: var(--ink-1000); font-weight: 600;}
+  .track .foot span { display: block;}
+
+  /* About strip */
+  .about { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; margin-top: 8px; align-items: start;}
+  .about .portrait { aspect-ratio: 4/5; background: var(--bg-light-alt); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--fg-light-3); font-size: 12px; border: 1px dashed var(--ink-300);}
+  .about blockquote { font-family: 'Source Serif 4', serif; font-size: 22px; line-height: 1.5; color: var(--ink-1000); margin: 0 0 24px; font-weight: 400; letter-spacing: -0.005em;}
+  .about blockquote em { font-style: italic;}
+  .about p { font-size: 15px; line-height: 1.65; color: var(--fg-light-2); max-width: 56ch;}
+  .about .credits { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light); display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 13px; color: var(--fg-light-3);}
+  .about .credits strong { color: var(--ink-1000); font-weight: 600;}
+
+  /* Insights */
+  .insights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 8px;}
+  .insight { background: #fff; border: 1px solid var(--border-light); border-radius: 12px; padding: 28px; display: flex; flex-direction: column; gap: 14px; transition: all 180ms var(--ease-out); cursor: pointer;}
+  .insight:hover { border-color: var(--ink-1000); transform: translateY(-2px);}
+  .insight .kicker { font: 600 10px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-light-3); display: flex; gap: 10px; align-items: center;}
+  .insight .kicker .dot { width: 4px; height: 4px; border-radius: 999px; background: var(--ink-400);}
+  .insight h4 { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; color: var(--ink-1000); margin: 0; line-height: 1.3;}
+  .insight p { font-size: 14px; line-height: 1.55; color: var(--fg-light-2); margin: 0;}
+  .insight .read { font-size: 13px; color: var(--ink-1000); font-weight: 600; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-light);}
+
+  /* Ledger teaser */
+  .ledger-strip { background: var(--ink-1000); color: #fff; border-radius: 20px; padding: 56px 64px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: center; margin-top: 8px;}
+  .ledger-strip h2 { color: #fff; font-weight: 700; font-size: 36px; letter-spacing: -0.02em; line-height: 1.1; margin: 0 0 16px;}
+  .ledger-strip h2 em { background: linear-gradient(135deg, #3B82F6, #8B5CF6); -webkit-background-clip: text; background-clip: text; color: transparent; font-style: normal;}
+  .ledger-strip p { color: var(--ink-300); font-size: 16px; line-height: 1.6; margin: 0 0 24px; max-width: 46ch;}
+  .ledger-strip .cta { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--blue); color: #fff; border-radius: 8px; font-size: 14px; font-weight: 600;}
+  .ledger-strip .mini-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px;}
+  .ledger-strip .mt { border: 1px solid var(--border-dark); border-radius: 10px; padding: 14px 16px;}
+  .ledger-strip .mt .l { font: 600 10px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-400); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;}
+  .ledger-strip .mt .l::before { content:''; width: 5px; height: 5px; border-radius: 999px;}
+  .ledger-strip .mt.cap .l { color: var(--blue);} .ledger-strip .mt.cap .l::before { background: var(--blue);}
+  .ledger-strip .mt.rev .l { color: var(--green);} .ledger-strip .mt.rev .l::before { background: var(--green);}
+  .ledger-strip .mt.use .l { color: var(--violet);} .ledger-strip .mt.use .l::before { background: var(--violet);}
+  .ledger-strip .mt.pow .l { color: var(--amber);} .ledger-strip .mt.pow .l::before { background: var(--amber);}
+  .ledger-strip .mt .n { font-weight: 800; font-size: 24px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;}
+
+  /* Footer */
+  footer { padding: 48px 0 0; margin-top: 80px; border-top: 1px solid var(--border-light); display: grid; grid-template-columns: 1fr 2fr; gap: 60px;}
+  footer .fb { display: flex; flex-direction: column; gap: 12px; }
+  footer .fb .name { font-weight: 700; color: var(--ink-1000); font-size: 15px;}
+  footer .fb .desc { font-size: 13px; color: var(--fg-light-3); max-width: 36ch; line-height: 1.5;}
+  footer .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;}
+  footer .col h5 { font: 600 10px/1 var(--font-sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-light-3); margin: 0 0 14px;}
+  footer .col a { display: block; font-size: 13px; color: var(--ink-700); padding: 6px 0;}
+  footer .base { grid-column: 1/-1; margin-top: 40px; padding: 20px 0; border-top: 1px solid var(--border-light); display: flex; justify-content: space-between; font-size: 12px; color: var(--fg-light-3);}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="brand">
+    <img src="../../assets/logo-icon.svg">
+    <span class="name">Hepburn Advisory</span>
+  </div>
+  <div class="links">
+    <a class="active">Advisory</a>
+    <a>Insights</a>
+    <a>The AI Ledger ↗</a>
+    <a>About</a>
+  </div>
+  <div class="spacer"></div>
+  <a class="btn-cta">Start a conversation</a>
+</nav>
+
+<div class="page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="eyebrow">Independent advisory · Sydney / Global</div>
+    <h1>Commercial scale for AI founders. AI strategy for enterprise executives.</h1>
+    <p class="lede">I advise on the two questions that move the revenue line: how AI companies price and sell into the enterprise, and how enterprises actually extract value from what they've bought. Operator experience. No slideware.</p>
+    <div class="actions">
+      <a class="btn-primary">Book a first call</a>
+      <a class="btn-secondary">Read the Ledger →</a>
+    </div>
+  </section>
+
+  <!-- PROOF -->
+  <div class="proof">
+    <div class="stat"><div class="num">17 yrs</div><div class="lbl">Operator in AI commercial roles — founder-side and enterprise-side.</div></div>
+    <div class="stat"><div class="num">~$2.1B</div><div class="lbl">Cumulative ARR built or advised on across AI software and SaaS portfolios.</div></div>
+    <div class="stat"><div class="num">90 days</div><div class="lbl">Typical engagement length. Tied to one question per quarter — never an annual retainer.</div></div>
+  </div>
+
+  <!-- TRACKS -->
+  <section class="sec">
+    <div class="eyebrow">Two tracks</div>
+    <h2>Pick the side of the table you're on.</h2>
+    <p class="lede">Every engagement is one of these. Not both at once. Conflicts of interest are managed by saying no, not by building a wall.</p>
+  </section>
+
+  <div class="tracks">
+    <div class="track">
+      <span class="pill">Founder Advisory</span>
+      <h3>You're selling AI. I help you build commercial scale.</h3>
+      <p>Pricing that survives procurement. Enterprise GTM motion. Unit economics that actually compound. Board-grade commercial narratives without the consultant gloss.</p>
+      <ul>
+        <li>Pricing model design, land-and-expand architecture</li>
+        <li>Enterprise motion: pilots, contracts, procurement, renewals</li>
+        <li>Unit economics diagnostic and forward-plan</li>
+        <li>Commercial narrative for board and raise</li>
+      </ul>
+      <div class="foot"><span><strong>Typical fit</strong><span>Series A–C AI-native · $5–100M ARR</span></span><span><strong>Cadence</strong><span>1 quarter · weekly · scoped</span></span></div>
+    </div>
+    <div class="track exec">
+      <span class="pill">Executive Advisory</span>
+      <h3>You've bought AI. I help you extract the value.</h3>
+      <p>Where AI actually changes the P&L, and where it's just a vendor tax. Portfolio review, build-vs-buy, commercial terms with labs, and the awkward question of what to do with the team you already have.</p>
+      <ul>
+        <li>AI portfolio review: what's working, what's theatre</li>
+        <li>Vendor commercials with labs and SaaS incumbents</li>
+        <li>Build-vs-buy framings tied to real economics</li>
+        <li>Board briefings that don't hide behind hype</li>
+      </ul>
+      <div class="foot"><span><strong>Typical fit</strong><span>Enterprise exec · CIO / CFO / Strategy</span></span><span><strong>Cadence</strong><span>1 quarter · fortnightly · scoped</span></span></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="sec">
+    <div class="eyebrow">About</div>
+    <h2>A practice of one, deliberately.</h2>
+  </section>
+
+  <div class="about">
+    <div class="portrait">Portrait placeholder<br>(Simon Bowker)</div>
+    <div>
+      <blockquote>"The question I get asked most is a variant of: <em>is this AI thing actually working?</em> My job is to turn that into an arithmetic problem you can answer, and then answer it honestly."</blockquote>
+      <p>Before Hepburn Advisory I ran commercial teams in enterprise software and AI companies across APAC, EMEA and the US. I've been on both sides of the table — selling into the Fortune 500 and buying AI into a Fortune 500. I write publicly at The AI Ledger because transparent arithmetic is a better product than another 40-page deck.</p>
+      <div class="credits">
+        <div><strong>Based</strong><br>Sydney · working globally</div>
+        <div><strong>Published in</strong><br>AFR · The Economist · SaaStr</div>
+        <div><strong>Previously</strong><br>Commercial leader, 3 AI/SaaS co's</div>
+        <div><strong>Board</strong><br>2 advisory seats · AI infra · enterprise SaaS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEDGER STRIP -->
+  <section class="sec" style="padding-bottom: 24px;">
+    <div class="eyebrow">Live research</div>
+  </section>
+
+  <div class="ledger-strip">
+    <div>
+      <h2>The AI Ledger — <em>capital vs revenue vs usage, reconciled.</em></h2>
+      <p>My open-source data publication. Tracks ~$745B of committed AI capex against ~$22B of customer revenue and ~650T tokens served per day. Updated weekly. Every number sourced, dated, confidence-rated.</p>
+      <a class="cta">Open the Ledger ↗</a>
+    </div>
+    <div class="mini-tiles">
+      <div class="mt cap"><div class="l">Capital</div><div class="n">$745B</div></div>
+      <div class="mt rev"><div class="l">Revenue</div><div class="n">$22B</div></div>
+      <div class="mt use"><div class="l">Usage</div><div class="n">~650T</div></div>
+      <div class="mt pow"><div class="l">Power</div><div class="n">92 GW</div></div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <section class="sec">
+    <div class="eyebrow">Insights</div>
+    <h2>Writing, updated weekly.</h2>
+    <p class="lede">Long-form only when the argument requires it. Short pieces when the arithmetic is enough.</p>
+  </section>
+
+  <div class="insights">
+    <div class="insight">
+      <div class="kicker">Essay <span class="dot"></span> 18 min read</div>
+      <h4>AI is the new SaaS implementation tax</h4>
+      <p>Procurement bought the model. Integration, change management, and the quarterly reconciliation are still a CFO problem. Here's the arithmetic that says so.</p>
+      <div class="read">Read essay →</div>
+    </div>
+    <div class="insight">
+      <div class="kicker">Brief <span class="dot"></span> 4 min read</div>
+      <h4>What $34 of capex per $1 of revenue actually implies</h4>
+      <p>Three scenarios for closing the gap: margin expansion, revenue multiplier, or capex contraction. Two of them require a recession nobody has priced in.</p>
+      <div class="read">Read brief →</div>
+    </div>
+    <div class="insight">
+      <div class="kicker">Letter <span class="dot"></span> 6 min read</div>
+      <h4>On "AI strategy" as an organisational defence mechanism</h4>
+      <p>When enterprises name a Head of AI, they are usually buying themselves 18 months of narrative cover. Sometimes that's the right thing to buy. Here's how to tell.</p>
+      <div class="read">Read letter →</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="fb">
+      <img src="../../assets/logo-icon.svg" style="width:36px;height:36px">
+      <div class="name">Hepburn Advisory</div>
+      <div class="desc">Independent advisory practice. Sydney · working globally. A practice of one, deliberately.</div>
+    </div>
+    <div class="cols">
+      <div class="col"><h5>Practice</h5><a>Founder Advisory</a><a>Executive Advisory</a><a>Engagement terms</a></div>
+      <div class="col"><h5>Research</h5><a>The AI Ledger</a><a>Insights</a><a>Claims Ledger</a></div>
+      <div class="col"><h5>Contact</h5><a>simon@hepburnadvisory.com.au</a><a>Book a first call</a><a>LinkedIn ↗</a></div>
+    </div>
+    <div class="base">
+      <div>© 2026 Hepburn Advisory · ABN tbd</div>
+      <div>Last updated 21 Apr 2026</div>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
