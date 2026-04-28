@@ -153,6 +153,50 @@ function codepoints(s) {
   );
 })();
 
+// Case 4 (wq-029 P1.6): _stringifyAsciiSafe emits non-ASCII as \uXXXX so
+// the JS write path produces byte-identical output to Python's default
+// json.dump(ensure_ascii=True). Without this, every Submit flips the file
+// from ASCII-escape to raw UTF-8 and the next apply-decisions auto-fire
+// flips it back, producing 8000+ line cosmetic diffs. The helper isn't
+// exported but its algorithm is replicated here against the same input
+// the live writer uses.
+(() => {
+  function stringifyAsciiSafe(value, indent) {
+    return JSON.stringify(value, null, indent).replace(
+      /[\u0080-\uffff]/g,
+      c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')
+    );
+  }
+  // Clean em-dash, mojibake em-dash, plain ASCII — all should land as
+  // \uXXXX escapes in the output, matching what Python writes.
+  const sample = {
+    items: [
+      { id: 'a', sourceAuthor: 'Sacra — Anthropic Deep Dive' },     // U+2014
+      { id: 'b', sourceAuthor: 'Sacra ' + MOJIBAKED_EM_DASH + ' x' },// pre-mojibaked
+      { id: 'c', sourceAuthor: 'Plain ASCII' },
+    ]
+  };
+  const out = stringifyAsciiSafe(sample, 2);
+  const hasCleanEscape = out.indexOf('\\u2014') !== -1;
+  const hasMojibakeEscape = out.indexOf('\\u00e2\\u0080\\u0094') !== -1;
+  const hasNoLiteralEmDash = out.indexOf('—') === -1;
+  // Bytes when this string is encoded as UTF-8 should contain neither
+  // E2 80 94 (clean) nor C3 A2 C2 80 C2 94 (mojibake) — only ASCII.
+  const wireBytes = new TextEncoder().encode(out);
+  let allAscii = true;
+  for (let i = 0; i < wireBytes.length; i++) {
+    if (wireBytes[i] > 0x7F) { allAscii = false; break; }
+  }
+  assert(
+    'Case 4: _stringifyAsciiSafe produces ASCII-only bytes, escapes both clean and mojibake codepoints',
+    hasCleanEscape && hasMojibakeEscape && hasNoLiteralEmDash && allAscii,
+    'has \\u2014 escape:                ' + hasCleanEscape + '\n' +
+    'has \\u00e2\\u0080\\u0094 escape:      ' + hasMojibakeEscape + '\n' +
+    'no literal em-dash glyph:         ' + hasNoLiteralEmDash + '\n' +
+    'output is ASCII-only on the wire: ' + allAscii
+  );
+})();
+
 const summary = document.createElement('div');
 summary.className = 'summary';
 summary.textContent = (fails === 0 ? 'PASS' : 'FAIL') + ' — ' + passes + '/' + (passes + fails) + ' cases';

@@ -66,6 +66,20 @@ const GitHubAPI = (() => {
     return btoa(bin);
   }
 
+  // wq-029 P1.6: emit JSON with non-ASCII codepoints escaped as \uXXXX so
+  // diffs match Python's json.dump default (ensure_ascii=True). Without
+  // this, every Submit flips the file from ASCII-escape to raw UTF-8 and
+  // every apply-decisions auto-fire flips it back — producing 8000+ line
+  // cosmetic diffs on every cycle while preserving the same codepoints.
+  // Match Python's lowercase-hex output exactly so byte-level diffs are
+  // empty when no semantic change occurred.
+  function _stringifyAsciiSafe(value, indent) {
+    return JSON.stringify(value, null, indent).replace(
+      /[\u0080-\uffff]/g,
+      c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')
+    );
+  }
+
   // wq-029: post the blob as base64 of UTF-8 bytes rather than a raw JS string
   // tagged encoding:utf-8. Stale browsers running the pre-14e256a readFile()
   // returned a raw-byte string (each UTF-8 byte → a Latin-1 codepoint); when
@@ -90,7 +104,7 @@ const GitHubAPI = (() => {
     const headers = await _headers();
     const tree = [];
     for (const f of files) {
-      const blobSha = await _createBlob(typeof f.content === 'string' ? f.content : JSON.stringify(f.content, null, 2));
+      const blobSha = await _createBlob(typeof f.content === 'string' ? f.content : _stringifyAsciiSafe(f.content, 2));
       tree.push({ path: f.path, mode: '100644', type: 'blob', sha: blobSha });
     }
     const resp = await fetch(`${API}/repos/${OWNER}/${REPO}/git/trees`, {

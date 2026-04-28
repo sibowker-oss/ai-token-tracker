@@ -273,4 +273,40 @@ Single commit covers all four sub-fixes (§4.1 - §4.4) plus the spec test (§4.
 
 **Phase 1 acceptance:** Met. Hand-off below covers Phase 2 verification on the live admin once Pages deploys.
 
+### 2026-04-28 — Phase 2 (verify on live admin)
+
+**Push:** Local d91d93c was cherry-picked onto origin/main as `73dc782` after a sustained Mac git-hang quirk forced a manual cleanup (rebase machinery and `git status --ahead-behind` both stalled in S-state for minutes; resolved by killing hung processes, removing `.git/index.lock`, `git reset --hard origin/main`, then plain `git cherry-pick d91d93c`).
+
+**Pages deploy:** run `25042763188` for sha `73dc782` completed `success`. Watched via `gh run view --json status,conclusion`.
+
+**Phase 2b serve check:** `https://sibowker-oss.github.io/ai-token-tracker/github-api.js?v=2026-04-27-wq029` 301-redirects to the custom domain `http://ai-index.hepburnadvisory.com.au/github-api.js?v=2026-04-27-wq029` and serves 200 OK. Body grep confirms all three new markers present:
+
+- `countMojibakeMarkers` defined and exported.
+- `_encodeBase64Utf8` defined using `new TextEncoder().encode(str)`.
+- `_createBlob` posts `body: JSON.stringify({content: _encodeBase64Utf8(content), encoding: 'base64'})`.
+
+**Phase 2c manual Submit:** Simon hard-refreshed `review.html`, set one item `scan-20260428-d4e` to raw_pool (no other changes), clicked Submit. Resulting commit `6b60ad1` ("Review: 1 raw_pool"), parent `73dc782`. Apply-decisions auto-fired commit `79367f5` on top.
+
+**Marker delta — primary acceptance, PASS:**
+
+| File state | mojibake codepoint U+00E2 U+0080 U+0094 | clean em-dash U+2014 |
+|---|---:|---:|
+| `73dc782` (parent) | 390 | 1167 |
+| `6b60ad1` (Simon's Submit) | **390** | **1167** |
+| `79367f5` (apply-decisions auto-fire) | 390 | 1167 |
+
+All counts identical at the codepoint level. **No new mojibake introduced. Pre-existing mojibake codepoints preserved verbatim (wq-030's cleanup is now unblocked).** Verified by counting BOTH the ASCII-escape form (`â`) and the raw UTF-8 byte form (`c3 a2 c2 80 c2 94`) — sums match across both representations.
+
+**Diff sanity — secondary acceptance, INITIAL FAIL → fixed in P1.6:**
+
+Brief §5.2 also required "no mass diff of sourceAuthor / notes / claim lines". The actual `6b60ad1` diff was 8072 lines. Root cause: Python's `json.dump()` writes `ensure_ascii=True` (`\uXXXX` escapes) but JS `JSON.stringify` writes raw UTF-8 bytes for non-ASCII codepoints. Every Submit flips the file from ASCII-escape → raw UTF-8, every apply-decisions flips it back. Codepoint-identical, byte-different. Cosmetic, but breaks PR review and creates noisy commits on every cycle.
+
+### 2026-04-28 — Phase 1.6 (cosmetic-diff fix)
+
+Helper `_stringifyAsciiSafe(value, indent)` added to `github-api.js` next to `_encodeBase64Utf8`. Wraps `JSON.stringify(value, null, indent)` in a `.replace(/[-￿]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4,'0'))` pass that emits Python-compatible lowercase-hex `\uXXXX` escapes for every non-ASCII codepoint. `_createTree` now calls `_stringifyAsciiSafe(f.content, 2)` instead of `JSON.stringify(f.content, null, 2)`. Cache-bust token bumped from `2026-04-27-wq029` to `2026-04-28-wq029-p1.6` on review.html, add.html, sources.html plus the three beta/ equivalents. `beta/github-api.js` re-synced. Spec test `tests/test_github_api_encoding.spec.html` extended with **Case 4** (4/4 PASS via node shim): asserts that the helper output contains `—` for clean em-dash, `â` for pre-mojibaked input, no literal em-dash glyph, and is ASCII-only on the wire.
+
+After P1.6 lands, the next Submit + apply cycle should produce diffs containing only the explicitly-modified `status` / `decided_at` / `lastProcessed` fields — no encoding-style flip.
+
+**Phase 1.6 acceptance:** existing tests green (9/9, 6/6, 26/26, build-lint 0 fail), spec test 4/4. Hand-off to Simon for the second push + verify cycle.
+
 
