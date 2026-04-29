@@ -1285,7 +1285,7 @@
       "field": "gpu_count"
     },
     {
-      "pattern": "active.*rate|usage.*rate|adoption.*rate",
+      "pattern": "\\b(?:active|usage|adoption)\\s+rate\\b",
       "field": "active_rate"
     },
     {
@@ -1303,6 +1303,38 @@
     {
       "pattern": "total.*funding|funding.*round|series\\s+[a-g]|raised.*(?:seed|series|round|funding|capital)",
       "field": "total_funding"
+    },
+    {
+      "pattern": "gross.*margin",
+      "field": "gross_margin_pct"
+    },
+    {
+      "pattern": "gross.*profit\\b",
+      "field": "gross_profit"
+    },
+    {
+      "pattern": "operating.*income",
+      "field": "operating_income"
+    },
+    {
+      "pattern": "contract.*value|deal.*value|contract.*size",
+      "field": "contract_value"
+    },
+    {
+      "pattern": "rack.*power|power.*density",
+      "field": "rack_power_density_kw"
+    },
+    {
+      "pattern": "data.center.*power|power.*capacity",
+      "field": "dc_power_capacity_gw"
+    },
+    {
+      "pattern": "purchase.*commitment",
+      "field": "purchase_commitments"
+    },
+    {
+      "pattern": "\\benterprise\\s+revenue\\b|enterprise_revenue",
+      "field": "enterprise_revenue"
     }
   ]
 }

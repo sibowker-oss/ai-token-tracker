@@ -186,9 +186,18 @@ def apply_accepted(claim, vault_data, entities, schema):
     log(f"  VAULT: Added {dp_id}: {claim['claim'][:60]}")
 
     # 2. Classify to entity + field + year
+    # wq-028 P1: try claim+tags first (legacy behavior). If no field rule
+    # matches, fall back to metricKey alone. Concatenating metricKey into
+    # the same search_text lets patterns like `infrastructure.*spend`
+    # bridge across tag/metricKey boundaries (gpu_infrastructure + spend
+    # = false-positive capex). Two-pass keeps multi-word rules intact for
+    # claim text while still catching ~140 metricKey-only routings.
     search_text = (claim.get("claim", "") + " " + " ".join(claim.get("tags", []))).lower()
+    metric_key_text = (claim.get("metricKey") or "").lower()
     entity_slug = match_entity(search_text, schema.get("entity_match_rules", []))
     field_id = match_field(search_text, schema.get("field_match_rules", []))
+    if not field_id and metric_key_text:
+        field_id = match_field(metric_key_text, schema.get("field_match_rules", []))
     year = match_year(search_text) or match_year(claim.get("dateOfClaim", ""))
 
     if entity_slug and field_id and claim.get("value") is not None:
