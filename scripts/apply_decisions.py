@@ -360,6 +360,174 @@ def apply_new_fields(approved_fields, schema):
     ]
 
 
+def replay_accepted(vault_inbox, vault_data, entities, schema, dry_run=False, only_ids=None):
+    """wq-028 P1 replay: walk status=accepted inbox items, run the new
+    matcher, and gap-fill entity fields that are currently empty.
+
+    Skips items where the field is already populated to avoid duplicate
+    provenance. Honours the provenance guard. Annotates new provenance
+    entries with origin='wq-028-p1-replay' for traceability.
+
+    If `only_ids` is provided (set/list of inbox IDs), processes only
+    those items — used to whitelist a hand-picked subset after a dry-run
+    review (e.g., to skip entity-misroute false positives surfaced by
+    the dry-run).
+
+    Does NOT touch vault-data.json — accepted items already have their
+    dataPoints from prior apply_decisions runs. This only fills the
+    entity-record gap that was silently missed under the old matcher.
+
+    Returns (rescued, skipped_already_populated, skipped_no_match,
+             skipped_no_value, skipped_no_entity, blocked_by_guard).
+    """
+    rescued = 0
+    skipped_already = 0
+    skipped_no_match = 0
+    skipped_no_value = 0
+    skipped_no_entity = 0
+    blocked = 0
+
+    only_ids_set = set(only_ids) if only_ids else None
+
+    for item in vault_inbox.get("items", []):
+        if item.get("status") != "accepted":
+            continue
+        if only_ids_set is not None and item.get("id") not in only_ids_set:
+            continue
+
+        # Two-pass match (mirrors apply_accepted §2)
+        search_text = (item.get("claim", "") + " " + " ".join(item.get("tags", []))).lower()
+        metric_key_text = (item.get("metricKey") or "").lower()
+        entity_slug = match_entity(search_text, schema.get("entity_match_rules", []))
+        field_id = match_field(search_text, schema.get("field_match_rules", []))
+        if not field_id and metric_key_text:
+            field_id = match_field(metric_key_text, schema.get("field_match_rules", []))
+        year = match_year(search_text) or match_year(item.get("dateOfClaim", ""))
+
+        if not (entity_slug and field_id):
+            skipped_no_match += 1
+            continue
+        if item.get("value") is None:
+            skipped_no_value += 1
+            continue
+
+        entity = next((c for c in entities.get("companies", []) if c.get("slug") == entity_slug), None)
+        if not entity:
+            skipped_no_entity += 1
+            continue
+
+        # Annualise (same logic as apply_accepted)
+        value = item["value"]
+        unit = (item.get("unit") or "").lower()
+        claim_text = (item.get("claim") or "").lower()
+        annualised = False
+        if isinstance(value, (int, float)):
+            if "/month" in unit or "per month" in unit or "per month" in claim_text or "/month" in claim_text:
+                value = value * 12
+                annualised = True
+            elif "/quarter" in unit or "per quarter" in unit or "per quarter" in claim_text or "/quarter" in claim_text:
+                value = value * 4
+                annualised = True
+
+        # Determine target path
+        if year:
+            existing = entity.get("financials", {}).get(year, {}).get(field_id)
+            target_path = f"{year}.{field_id}"
+        else:
+            existing = entity.get("current", {}).get(field_id)
+            target_path = f"current.{field_id}"
+
+        # Gap-fill only — don't overwrite
+        if existing is not None:
+            skipped_already += 1
+            continue
+
+        # Provenance guard (defence-in-depth — should always pass for empty fields)
+        new_weight = infer_weight(item)
+        prov_key = f"{year}.{field_id}" if year else f"current.{field_id}"
+        allowed, guard_reason = check_provenance_guard(entity, prov_key, new_weight)
+        if not allowed:
+            blocked += 1
+            log(f"  GUARD: {entity['name']} → {prov_key}: {guard_reason}")
+            continue
+
+        # Populate
+        if dry_run:
+            log(f"  [DRY-RUN] REPLAY: {entity['name']} → {target_path} = {value}{' (annualised)' if annualised else ''} [from inbox.{item['id']}]")
+        else:
+            if year:
+                entity.setdefault("financials", {}).setdefault(year, {})[field_id] = value
+            else:
+                entity.setdefault("current", {})[field_id] = value
+
+            # Provenance trail
+            if "provenance" not in entity:
+                entity["provenance"] = {}
+            if prov_key not in entity["provenance"]:
+                entity["provenance"][prov_key] = {"confidence": "medium", "claim_count": 0, "claims": []}
+            prov = entity["provenance"][prov_key]
+            prov["claims"].append({
+                "id": item.get("id"),
+                "claim": safe_str(item.get("claim", ""))[:120] + (f" [annualised: {value}]" if annualised else ""),
+                "value": value,
+                "unit": "$B" if annualised else item.get("unit", ""),
+                "weight": new_weight,
+                "confidence": item.get("confidence", "estimated"),
+                "source": safe_str(item.get("sourceAuthor", "")),
+                "source_url": item.get("sourceUrl", ""),
+                "date": item.get("dateOfClaim", ""),
+                "origin": "wq-028-p1-replay",
+                "role": "supports",
+            })
+            prov["claim_count"] = len(prov["claims"])
+            weights = [c["weight"] for c in prov["claims"]]
+            if "authoritative" in weights:
+                prov["confidence"] = "high"
+            elif weights.count("corroborating") >= 2:
+                prov["confidence"] = "high"
+            elif "corroborating" in weights:
+                prov["confidence"] = "medium"
+            else:
+                prov["confidence"] = "low"
+            log(f"  REPLAY: {entity['name']} → {target_path} = {value}{' (annualised)' if annualised else ''} [from inbox.{item['id']}]")
+
+        rescued += 1
+
+    return rescued, skipped_already, skipped_no_match, skipped_no_value, skipped_no_entity, blocked
+
+
+def run_replay(dry_run=False, only_ids=None):
+    """Top-level entry for --replay-accepted mode."""
+    log(f"apply_decisions.py --replay-accepted (dry-run={dry_run}, only_ids={only_ids})")
+    vault_data = load_json(VAULT_DATA)
+    vault_inbox = load_json(VAULT_INBOX)
+    entities = load_json(ENTITIES)
+    schema = load_json(SCHEMA)
+
+    rescued, skip_already, skip_no_match, skip_no_value, skip_no_entity, blocked = replay_accepted(
+        vault_inbox, vault_data, entities, schema, dry_run=dry_run, only_ids=only_ids
+    )
+
+    log("")
+    log(f"  Replay summary:")
+    log(f"    Rescued (gap-filled):              {rescued}")
+    log(f"    Skipped (field already populated): {skip_already}")
+    log(f"    Skipped (no entity+field match):   {skip_no_match}")
+    log(f"    Skipped (no value):                {skip_no_value}")
+    log(f"    Skipped (entity not in entities):  {skip_no_entity}")
+    log(f"    Blocked by provenance guard:       {blocked}")
+
+    if not dry_run and rescued > 0:
+        save_json(ENTITIES, entities)
+        log(f"  Saved: entities.json")
+        # Regenerate site-data.json from updated entities
+        from generate_site_data import generate
+        generate(ENTITIES, os.path.join(SITE_DIR, "site-data.json"), os.path.join(SITE_DIR, "site-data.json"))
+        log(f"  Regenerated: site-data.json")
+    elif dry_run:
+        log(f"  [DRY-RUN] No files written.")
+
+
 def main(decisions_path=None):
     # Find decisions file
     if not decisions_path:
@@ -443,5 +611,16 @@ def main(decisions_path=None):
 
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv) > 1 else None
-    main(path)
+    args = sys.argv[1:]
+    if "--replay-accepted" in args:
+        dry = "--dry-run" in args
+        only_ids = None
+        # --ids id1,id2,id3
+        if "--ids" in args:
+            i = args.index("--ids")
+            if i + 1 < len(args):
+                only_ids = [s.strip() for s in args[i + 1].split(",") if s.strip()]
+        run_replay(dry_run=dry, only_ids=only_ids)
+    else:
+        path = args[0] if args and not args[0].startswith("--") else None
+        main(path)
