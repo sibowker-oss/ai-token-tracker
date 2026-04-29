@@ -191,6 +191,29 @@
 }
 
 /* ============================================================
+   3b. PAGE TOOLBAR (wq-033 Phase 2 cleanup)
+   Thin sub-bar below the shared header, used where a page has
+   functional controls (scenario toggle, etc.). Reuses existing
+   per-page .nav-scenario / .scenario-btn styles for the inner
+   buttons so the JS hooks (querySelectorAll('.scenario-btn'))
+   keep working without modification.
+   ============================================================ */
+
+.ds-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 8px 32px;
+  background: var(--bg-dark-alt);
+  border-bottom: 1px solid var(--border-dark);
+}
+
+@media (max-width: 768px) {
+  .ds-toolbar { padding: 8px 14px; }
+}
+
+/* ============================================================
    4. PER-PAGE BYLINE (wq-033 Phase 2 §4.8)
    Drops in below the methodology block. One line, restrained.
    ============================================================ */
