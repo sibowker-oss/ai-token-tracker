@@ -191,6 +191,51 @@
 }
 
 /* ============================================================
+   3a. METHODOLOGY CAVEAT (wq-033 Phase 3, GUIDELINES §2.4)
+   Required collapsible caveat at the top of any page with
+   derived numbers. <details> + <summary> markup.
+   ============================================================ */
+
+.methodology-caveat {
+  background: var(--bg-dark-alt);
+  border: 1px solid var(--border-dark);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin: 24px 0 32px;
+  font: var(--type-body);
+  color: var(--fg-dark-2);
+}
+
+.methodology-caveat > summary {
+  cursor: pointer;
+  font: var(--weight-semi) var(--text-sm)/1.4 var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--amber);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.methodology-caveat > summary::-webkit-details-marker { display: none; }
+
+.methodology-caveat > summary::before {
+  content: "▸";
+  font-size: 10px;
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.methodology-caveat[open] > summary::before { transform: rotate(90deg); }
+
+.methodology-caveat > p {
+  margin-top: 10px;
+  font: var(--weight-regular) var(--text-base)/var(--leading-relaxed) var(--font-sans);
+  color: var(--fg-dark-2);
+}
+
+/* ============================================================
    3b. PAGE TOOLBAR (wq-033 Phase 2 cleanup)
    Thin sub-bar below the shared header, used where a page has
    functional controls (scenario toggle, etc.). Reuses existing

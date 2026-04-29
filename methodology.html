@@ -136,6 +136,11 @@
   <h1>Methodology</h1>
   <p class="subtitle">How we build the numbers, where they come from, and how confident we are.</p>
 
+  <details class="methodology-caveat">
+    <summary>Methodology caveat</summary>
+    <p>Projections are directional arithmetic, not forecasts. Benchmarks are dated and sourced. Each derived metric defaults to a documented method; every assumption is editable. Where a number appears on a Ledger page, that page is the canonical source — this page describes how those numbers are built, not what they are at any given moment.</p>
+  </details>
+
   <p>The AI Ledger tracks the AI industry through three interlocking ledgers. The <strong>Capital Ledger</strong> follows how much is being spent to build AI infrastructure — semiconductors, data centres, networking. The <strong>Revenue Ledger</strong> tracks what comes back — who earns what from selling AI products and services. The <strong>Usage Ledger</strong> estimates actual consumption — tokens processed, models served, inference volume. Together they answer: how much is going in, how much is coming out, and how much is actually being used?</p>
 
   <div class="tier-bars">
@@ -165,11 +170,11 @@
     </div>
   </div>
   <div class="tier-legend">
-    <div class="tier-legend-item"><div class="tier-legend-dot" style="background:var(--green);"></div>Tier 1 — Sourced</div>
-    <div class="tier-legend-item"><div class="tier-legend-dot" style="background:var(--orange);"></div>Tier 2 — Derived</div>
-    <div class="tier-legend-item"><div class="tier-legend-dot" style="background:var(--purple);"></div>Tier 3 — Modeled</div>
+    <div class="tier-legend-item"><div class="tier-legend-dot" style="background:var(--green);"></div>T1 High</div>
+    <div class="tier-legend-item"><div class="tier-legend-dot" style="background:var(--orange);"></div>T2 Med</div>
+    <div class="tier-legend-item"><div class="tier-legend-dot" style="background:var(--purple);"></div>T3 Low</div>
   </div>
-  <div class="tier-caption">Across the full picture: ~35% is directly sourced, ~37% is derived from sourced data, ~28% is modeled with stated assumptions.</div>
+  <div class="tier-caption">Confidence skews higher on the Capital Ledger (filings) and Revenue Ledger (issuer disclosures); Usage is harder to source directly and leans Med / Low.</div>
 
   <!-- Section 2: Per-ledger methodology -->
   <h2>Per-Ledger Methodology</h2>
@@ -177,23 +182,40 @@
     <div class="card">
       <div class="card-tag capital">Capital</div>
       <h3>Capital Ledger</h3>
-      <p>Anchored from NVIDIA Data Centre revenue of $356B annualised (Tier 1A), which sets the silicon floor. Cross-checked against MSFT, GOOG, META, and AMZN 10-K capital expenditure filings. Silicon represents approximately 55% of total CapEx; the remainder covers power, construction, and networking. Total system CapEx estimated at $745B.</p>
+      <p>Anchored from NVIDIA Data Centre revenue (Tier 1A), which sets the silicon floor. Cross-checked against MSFT, GOOG, META, and AMZN 10-K capital expenditure filings. Silicon represents approximately 55% of total CapEx; the remainder covers power, construction, and networking. Current total system CapEx is published on the <a href="/capital.html">Capital Ledger</a>.</p>
     </div>
     <div class="card">
       <div class="card-tag revenue">Revenue</div>
       <h3>Revenue Ledger</h3>
-      <p>Entity-by-entity rollup sourced from earnings calls, SEC filings, and investor presentations. Consumer vs. enterprise split informed by The Information reporting and company segment disclosures. Each entity carries its own provenance tier. Total AI revenue system: $26.86B quarterly.</p>
+      <p>Entity-by-entity rollup sourced from earnings calls, SEC filings, and investor presentations. Revenue uses collected-revenue methodology — never run-rated or exit-ARR. Consumer vs. enterprise split informed by The Information reporting and company segment disclosures. Each entity carries its own provenance tier; current quarterly aggregate is on the <a href="/revenue.html">Revenue Ledger</a>.</p>
     </div>
     <div class="card">
       <div class="card-tag usage">Usage</div>
       <h3>Usage Ledger</h3>
-      <p>Multi-model consensus methodology tracking 14 providers. Primary anchors: OpenRouter public throughput statistics and NVIDIA inference throughput disclosures. Daily global volume estimated at 280–370T tokens. China accounts for approximately 50% of global volume. No single provider discloses full usage data, so all figures are Tier 2 or Tier 3.</p>
+      <p>Multi-model consensus methodology tracking 14 providers. Primary anchors: OpenRouter public throughput statistics and NVIDIA inference throughput disclosures. China accounts for approximately 50% of global volume. No single provider discloses full usage data, so all figures are Med or Low confidence. Current daily-volume range is published on the <a href="/usage.html">Usage Ledger</a>.</p>
     </div>
   </div>
 
-  <!-- Section 3: Tier Classification -->
-  <h2>Tier Classification</h2>
-  <p>Every data point in the AI Ledger carries a provenance tier. This is our confidence taxonomy — it tells you where the number came from and how much weight to give it.</p>
+  <!-- Section 3a: V2 single-axis convention -->
+  <h2>How confidence is rendered (V2)</h2>
+  <p>For the V2 launch, every datapoint carries a single confidence value — High, Med, or Low — and is rendered as one pill in the colour grammar shared with the Hepburn Advisory site.</p>
+
+  <table class="tier-table">
+    <thead>
+      <tr><th>Confidence in data</th><th>Pill rendered as</th><th>Colour</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="tier-code">High</span></td><td><span class="pill tier-1">T1 High</span></td><td>Green</td></tr>
+      <tr><td><span class="tier-code">Med</span></td><td><span class="pill tier-2">T2 Med</span></td><td>Amber</td></tr>
+      <tr><td><span class="tier-code">Low</span></td><td><span class="pill tier-3">T3 Low</span></td><td>Violet</td></tr>
+    </tbody>
+  </table>
+
+  <p style="margin-top:16px;"><em>This is a simplified surface signal. The richer provenance taxonomy below (1A through 4) is the underlying classification framework — every datapoint is classified against that detailed scheme, then mapped down to the High / Med / Low pill that ships on the page. Splitting the two axes (provenance separate from confidence) is V1.1 work, deferred.</em></p>
+
+  <!-- Section 3b: Tier Classification -->
+  <h2>Tier Classification (provenance taxonomy)</h2>
+  <p>Every data point in the AI Ledger carries a provenance tier. This is the underlying classification — it tells you where the number came from and how much weight to give it. The single-axis pill above is derived from this.</p>
 
   <table class="tier-table">
     <thead>
