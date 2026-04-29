@@ -198,7 +198,7 @@
   <div class="hero-grid" id="hero-stats"></div>
   <div id="token-reconciliation" style="font-size:11px;color:var(--text-dim);text-align:center;margin-top:10px;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;"></div>
   <p class="reconciliation-note" style="font-size:11px;color:var(--text-dim);line-height:1.6;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;margin-top:6px;text-align:center;">
-    <strong>Revenue reconciliation:</strong> This page shows combined provider ARR (annualised Q4 run-rate, includes inference from ad-platform workloads). The home page shows $22B customer revenue (CY23–25 cumulative, collected). See <a href="methodology.html" style="color:var(--accent);">Methodology</a> for the reconciliation.
+    <strong>Revenue reconciliation:</strong> This page shows combined provider ARR (trailing-quarter run-rate × 4, includes inference from ad-platform workloads). The home page shows $22B customer revenue (CY23–25 cumulative, collected). Audited fiscal-year collected revenue surfaces on <a href="timeline.html#fy-revenue" style="color:var(--accent);">/timeline</a> when available. See <a href="methodology.html#arr-vs-collected" style="color:var(--accent);">Methodology</a> for the reconciliation. Per <em>SKILL.md hard rule #6</em>, ARR and collected revenue are never interchangeable.
   </p>
 </section>
 
@@ -503,8 +503,8 @@ function updateHeroStats() {
 
   document.getElementById('hero-stats').innerHTML =
     '<div class="hero-stat"><div class="label">Provider Rollup</div><div class="value" style="color:var(--accent);">~' + Math.ceil(totalTokens) + 'T/day</div><div class="detail">' + provCount + ' providers tracked <span class="tier-pill tier-3a">Tier 2A/3A</span></div><div class="kpi-period">Current run-rate</div></div>' +
-    '<div class="hero-stat"><div class="label">Combined Provider ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail">Current annualised run-rate <span class="tier-pill tier-2a">Tier 1B/2A</span></div><div class="kpi-period">Annualised</div></div>' +
-    '<div class="hero-stat"><div class="label">Top 3 Revenue Share</div><div class="value" style="color:var(--accent2);">' + top3Pct + '%</div><div class="detail">' + top3Names + '</div><div class="kpi-period">Current</div></div>' +
+    '<div class="hero-stat" title="ARR = trailing-quarter revenue × 4. NOT the same as audited fiscal-year collected revenue (see methodology.html#arr-vs-collected). For audited annual figures, see timeline.html#fy-revenue."><div class="label">Combined Provider ARR (run-rate)</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail">Trailing-quarter × 4 <span class="tier-pill tier-2a">Tier 1B/2A</span></div><div class="kpi-period">ARR, not collected</div></div>' +
+    '<div class="hero-stat"><div class="label">Top 3 ARR Share</div><div class="value" style="color:var(--accent2);">' + top3Pct + '%</div><div class="detail">' + top3Names + '</div><div class="kpi-period">Current ARR</div></div>' +
     '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">Frontier-equivalent cost (ARK Invest)</div><div class="kpi-period">YoY</div></div>';
 
   // Reconciliation note: provider rollup methodology
@@ -537,14 +537,14 @@ function updateProviderChart() {
     type: 'bar',
     data: { labels, datasets: [
       { label: 'Tokens (T/day)', data: tokenVals, backgroundColor: colors.map(c => c + 'cc'), yAxisID: 'y', borderRadius: 4, order: 1 },
-      { label: 'ARR ($B)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
+      { label: 'ARR ($B, run-rate)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       onClick: (e, els) => { if (els.length > 0) { const label = charts.provider.data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="providers"][data-value="' + label + '"]'); if (pill) pill.click(); } },
-      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR' } } },
-      scales: { y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid }, y1: { position: 'right', title: { display: true, text: 'ARR ($B)' }, grid: noGrid }, x: { grid: noGrid } }
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR (run-rate, not collected)' } } },
+      scales: { y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid }, y1: { position: 'right', title: { display: true, text: 'ARR ($B, run-rate)' }, grid: noGrid }, x: { grid: noGrid } }
     }
   });
 }

@@ -196,6 +196,31 @@
     </div>
   </div>
 
+  <!-- Section 2b: ARR vs collected revenue (wq-032 P1B closes wq-035 F2) -->
+  <h2 id="arr-vs-collected">ARR vs collected revenue — what each surface shows</h2>
+  <p>The Ledger surfaces two distinct revenue measures for AI providers, and they are <strong>not interchangeable</strong> per <em>SKILL.md hard rule #6</em>. Mixing them is the most common mistake when reading frontier-AI financials.</p>
+  <table class="tier-table">
+    <thead>
+      <tr><th>Measure</th><th>Definition</th><th>Where it surfaces</th><th>Time orientation</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>ARR</strong> (run-rate)</td>
+        <td>Trailing-quarter revenue × 4. Forward-looking proxy for the next 12 months at the current pace.</td>
+        <td><a href="/usage.html">Usage Ledger</a> hero stat ("Combined Provider ARR") and per-provider chart bars; provider tile <code>data.rev</code> in <code>site-data.json</code>.</td>
+        <td>Forward-looking</td>
+      </tr>
+      <tr>
+        <td><strong>Collected revenue</strong> (audited)</td>
+        <td>GAAP-style revenue actually booked over a fiscal year. Backward-looking, audit-grade.</td>
+        <td>Home page hero ("$22B of AI revenue earned, CY23–25") and <a href="/revenue.html">Revenue Ledger</a> sankey; per-provider year-keyed entries on <a href="/timeline.html#fy-revenue">/timeline</a>.</td>
+        <td>Backward-looking</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>The two measures typically diverge by <strong>5–6×</strong> for frontier model providers because ARR captures the latest quarter annualised (currently growing rapidly) while collected revenue captures the audited annual figure (which lags). For example, OpenAI's reported ARR was around $25B (Q1 2026 run-rate) while its 2025 collected revenue was around $4.3B — the same company, two different numbers, both correct for what they measure. The Ledger keeps both and labels each surface explicitly.</p>
+  <p>Year-keyed audited revenue (e.g. Anthropic's 2026 collected revenue at $6B from the wq-028 P1.6 replay) surfaces on the <a href="/timeline.html#fy-revenue">timeline page's FY revenue section</a>, not the dashboard tile, by editorial choice (wq-032 Phase 1B). The dashboard tile is intentionally ARR-only because the dashboard's purpose is "current state at run-rate"; year-keyed audited figures belong on the timeline where the time orientation is explicit.</p>
+
   <!-- Section 3a: V2 single-axis convention -->
   <h2>How confidence is rendered (V2)</h2>
   <p>For the V2 launch, every datapoint carries a single confidence value — High, Med, or Low — and is rendered as one pill in the colour grammar shared with the Hepburn Advisory site.</p>

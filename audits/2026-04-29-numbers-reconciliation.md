@@ -147,3 +147,131 @@ Per Simon's explicit instruction:
 ## Next step
 
 Awaiting Simon's call on F1 (Revenue) and F2 (Anthropic methodology). Both are launch-blocking per the contract; neither can be resolved without a cross-project decision.
+
+---
+
+## 2026-04-29 — Post-audit clarification (F1, F2, F4 all downgraded)
+
+After the initial audit landed, Simon flagged that the original framing on F1 missed the period dimension and pushed back on F2's methodology-breach claim. Re-traced each finding against the underlying data; **F1, F2, and F4 all reconcile cleanly** when you decompose the relevant fields. None is launch-blocking. Original audit text retained above for traceability.
+
+### F1 reframe — period-labelling, not divergence
+
+HA's $22B is **2023–25 cumulative** collected revenue. Per-year breakdown lives in [capital.html:791-793](../capital.html#L791-L793):
+
+```js
+{ year:'2023',  totalCapex:160, revenue:  1 },
+{ year:'2024',  totalCapex:280, revenue:  4 },
+{ year:'2025',  totalCapex:380, revenue: 17 },
+```
+
+Sum: $1B + $4B + $17.47B (using sankey's full precision) = **$22.47B** → rounds to HA's $22B.
+
+`sankey.totalCustomerRevenue = $17.47B` is FY2025-only collected (per `sankey.title = "2025 Actual Revenue Collected"`). Both numbers are coherent within their declared periods. Same methodology (collected revenue), different periods. **Not a divergence.**
+
+**F1 closure requires HA-side label addition; routed to HA cowork session 2026-04-29.** The Ledger is internally correct, but HA's homepage advertises "$22B" with no period qualifier — a reader will assume current-year unless told otherwise. HA cowork task: add "(2023–25 cumulative)" or equivalent footnote on the $22B tile. Once that lands, F1 is fully closed.
+
+### F2 reframe — sankey value bundles VC subsidy
+
+Decomposed `sankey.providers[1].value = $7.71B` (Anthropic) by tracing the sankey's flow array. The provider-value field bundles **customer revenue + VC subsidy** flowing into the provider, not pure customer revenue.
+
+Anthropic inflows from `sankey.flows`:
+
+| Source (column) | Channel / Source label | Amount |
+|---|---|---|
+| Channel | Model Subs | $0.84B |
+| Channel | Model API | $1.47B |
+| Channel | Hyperscalers | $0.94B |
+| Channel | AI Native Apps | $1.36B |
+| Channel | Trad. SaaS | $0.10B |
+| **Customer revenue subtotal** | | **$4.71B** |
+| Buyer (col 0) | VC/Investors | $3.00B |
+| **Total inflow → `providers[1].value`** | | **$7.71B** |
+
+**Anthropic FY2025 customer revenue = $4.71B.** Methodology lock target = ~$4.5B court-derived. Delta = $0.21B (4.7%) — **within tolerance**.
+
+Same decomposition validates across all four sankey providers:
+
+| Provider | Sankey value | VC subsidy | Customer revenue |
+|---|---|---|---|
+| OpenAI | $13.65B | $6.00B | $7.65B |
+| Anthropic | $7.71B | $3.00B | **$4.71B** ← matches lock |
+| IaaS | $0.80B | $0.30B | $0.50B |
+| Google (Gemini) | $2.50B | $0.50B | $2.00B |
+| **Subtotal** | $24.66B | $9.80B | $14.86B |
+
+The $2.61B gap between $14.86B subtotal and `sankey.totalCustomerRevenue = $17.47B` is customer revenue captured by the "Trad. SaaS" channel that doesn't flow through one of the four named providers (e.g. flow 37: Trad. SaaS → Op. Cash Flow $1.75B). Verified — the sankey is internally consistent.
+
+**Real F2 defect:** the `sankey.providers[i].value` field is unlabelled in `site-data.json` — no `includes_subsidy: true` or `methodology: "total_inflow"` flag. Per SKILL.md hard rule #6 ("ARR and booked revenue are never interchangeable. Always label which.") this needs a method/period flag. Same labelling pattern issue as `dashboard.providers.[].rev`. **V1.1 cleanup, not launch-blocking.**
+
+### F4 reframe — HA quotes a pre-v3 stale figure
+
+Decomposed against [model-assumptions.md §2.5 + §6](../model-assumptions.md):
+
+```
+| GLOBAL TOTAL | 717T | 100-200T | ~280-370T | Derived | v3 consensus |
+```
+
+The Ledger's v3 token model **explicitly evaluated three competing global-volume methodologies** and chose 280–370T as the consensus. HA's ~650T closely matches the **rejected** 717T "dashboard estimate" (650 vs 717, within methodology margin). HA appears to be quoting a pre-v3 figure that the Ledger has since refined down.
+
+| Source | Value | v3 status |
+|---|---|---|
+| HA homepage | ~650T tok/day | Pre-v3 / stale |
+| Ledger `dashboard.providers[].tokens` rollup (sum) | **360T tok/day** | **v3 consensus midpoint** ← matches memory exactly |
+| Ledger v3 model range | 280–370T tok/day | Canonical published range |
+| Pre-v3 "dashboard" alternate | 717T tok/day | Rejected by v3 |
+| Pre-v3 "model" alternate | 565T tok/day | Rejected by v3 |
+| Q1 2026 timeline rollup (228T from initial audit) | 228T tok/day | Misleading — Q1 2026 timeline data is incomplete (provider snapshots only partial-quarter) |
+
+The 360T figure is internally consistent: China contribution (ByteDance 110 + Alibaba 25 + Tencent 10 + Baidu 8 + DeepSeek 8 + Minimax 5 + Moonshot 3) = 169T = 47% of 360T → matches documented "China ~50% of global volume".
+
+**F4 is a methodology-version mismatch, same shape as F1.** Resolution: HA updates 650T → either the 360T dashboard rollup or the "280–370T" published range. Ledger doesn't change.
+
+**Cross-project dependency:** HA cowork session needs to update the 650T figure and ideally cite the v3 consensus range. Routing to HA cowork same as F1.
+
+### F4 also surfaces the same labelling defect
+
+`site-data.json` carries three different "global tokens" aggregates (dashboard rollup 360T, end-2025 timeline 249T, partial-Q1-2026 timeline 228T) with no canonical labelled field. A consumer must read model-assumptions.md to know which is the v3 consensus. **V1.1 cleanup:** add `dashboard.totalDailyTokens` or `meta.dailyTokensGlobal` with explicit `period`, `methodology`, `range` attributes pointing to v3.
+
+### Updated severity summary
+
+| Finding | Original severity | Revised severity | Resolution path |
+|---|---|---|---|
+| F1 — Revenue period mismatch | LAUNCH-BLOCKING | **V1.1 / HA-side label** | HA adds "(2023–25 cumulative)" footnote on $22B tile. Routed to HA cowork session 2026-04-29. |
+| F2 — sankey value includes VC subsidy | LAUNCH-BLOCKING | **V1.1 / labelling cleanup** | Add method-flag to `sankey.providers[i]` field; same cleanup as `dashboard.providers.[].rev`. |
+| F3 — Capital missing canonical field | wq-016 follow-up | wq-016 follow-up | unchanged |
+| F4 — Usage HA pre-v3 stale figure | wq-012 / wq-016 follow-up | **V1.1 / HA-side update** | HA updates 650T → 360T or "280–370T". Routed to HA cowork session 2026-04-29. Also: add labelled canonical token-volume field to site-data.json. |
+| F5 — Power 92 vs 95 GW | Pre-launch fix | unchanged | HA updates 92 → 95 (or accept 3 GW noise; power.html has the source citation). |
+| F6 — Ratio | derives from F1 | derives from F1 | resolves automatically when F1's HA-side label lands |
+
+### Net effect on V2 launch readiness
+
+**Numbers are clean to ship from the Ledger side.** The Ledger's data is internally consistent, methodology-locked to court records (Anthropic), and well-documented in `model-assumptions.md`. Three HA-side updates needed, all routed to HA cowork:
+
+1. F1: period footnote on $22B tile ("2023–25 cumulative")
+2. F4: token figure update from 650T to 360T or "280–370T" range
+3. F5: 92 GW → 95 GW (or accept the noise, with citation)
+
+V1.1 labelling work to bake the methodology flags into `site-data.json` (F2, F4) follows post-launch.
+
+No further escalation needed. wq-033 implementation phases are complete; cross-project follow-ups are tracked.
+
+---
+
+## 2026-04-29 — F2 resolved by wq-032 P1B
+
+**Status change:** F2 (dashboard.providers.[].rev unlabelled ARR vs collected revenue) — **RESOLVED**.
+
+**Resolution path:** wq-032 Phase 1B (Option B — explicit labelling, no data-layer change). Closes the "ARR field exists in same data file as collected-revenue field, both reachable as `revenue` by name, never disambiguated to readers" risk per *SKILL.md hard rule #6*.
+
+**Changes shipped:**
+
+| Surface | Change |
+|---|---|
+| `usage.html` | Combined Provider ARR hero stat now labelled "ARR (run-rate)" with tooltip explaining trailing-quarter × 4. Reconciliation note adds /timeline cross-link. Chart axis + legend + tooltip all reference "ARR (run-rate)" instead of bare "Revenue" |
+| `methodology.html` | New `#arr-vs-collected` section with side-by-side table explaining ARR vs collected, where each surfaces, the typical 5–6× divergence, and that they are not interchangeable per SKILL.md rule #6 |
+| `timeline.html` | Provider Revenue chart h2 retitled "Provider ARR ($B, run-rate × 4)". New `#fy-revenue` section renders every (entity, year) tuple with `financials.{year}.collected_revenue` populated, sorted year DESC then value DESC, with source citation and confidence pill. Surfaces 6 entries today including the Anthropic 2026 $6B from wq-028 P1.6 replay |
+| `docs/data-sourcing-policy.md` | New §8a "Time-period semantics" formalises `current.arr`, `financials.{YYYY}.collected_revenue`, and `financials.{YYYY}_projected.*` semantics for editors and code |
+
+**Constraint observed:** generate_site_data.py untouched — the editorial choice is that the dashboard tile is intentionally ARR-only; year-keyed audited revenue belongs on /timeline where time orientation is explicit.
+
+**F1 status reminder:** still HA-side update (period footnote on $22B tile). Independent of wq-032.

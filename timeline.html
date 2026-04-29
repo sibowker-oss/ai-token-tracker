@@ -151,7 +151,7 @@
 
   <div class="grid-2">
     <div class="card">
-      <h2>Provider Revenue ($B annualized)</h2>
+      <h2 title="ARR = trailing-quarter run-rate × 4. NOT the same as audited fiscal-year collected revenue. See the FY revenue section below for audited annual figures.">Provider ARR ($B, run-rate × 4)</h2>
       <div class="chart-wrap"><canvas id="chart-rev"></canvas></div>
     </div>
     <div class="card">
@@ -163,6 +163,15 @@
   <div class="card">
     <h2>Blended Token Price ($/1M tokens, 70% input + 30% output, most-used model)</h2>
     <div class="chart-wrap"><canvas id="chart-price"></canvas></div>
+  </div>
+
+  <!-- wq-032 P1B: FY revenue surface — audited fiscal-year collected revenue -->
+  <div class="card" id="fy-revenue">
+    <h2>Audited fiscal-year revenue (where disclosed)</h2>
+    <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.6;">
+      Year-keyed <strong>collected revenue</strong> from filings, court records, and CEO disclosures. Distinct from the <strong>ARR</strong> shown on the dashboard tile and the chart above — see <a href="methodology.html#arr-vs-collected" style="color:var(--accent);">Methodology</a>. Sorted by year (newest first), then by value.
+    </p>
+    <div id="fy-revenue-content" style="font-size:12px;">Loading…</div>
   </div>
 
 </div>
@@ -313,6 +322,86 @@ function playAnimation() {
 
 // Load data and initialize
 loadTimelineData();
+
+// wq-032 P1B: FY revenue surface — read entities.json directly and
+// render a table of every (entity, year) tuple where
+// financials.{year}.collected_revenue is populated. Sorted by year DESC,
+// then by value DESC. Renders a placeholder if no entries exist.
+async function loadFyRevenue() {
+  const target = document.getElementById('fy-revenue-content');
+  if (!target) return;
+  try {
+    const r = await fetch('entities.json?v=' + Date.now());
+    if (!r.ok) throw new Error('Failed to load entities.json: ' + r.status);
+    const ents = await r.json();
+    const rows = [];
+    for (const e of ents.companies || []) {
+      const fin = e.financials || {};
+      for (const [year, yearData] of Object.entries(fin)) {
+        if (!yearData || typeof yearData !== 'object') continue;
+        if (year.endsWith('_projected')) continue;
+        const cr = yearData.collected_revenue;
+        if (cr == null) continue;
+        // Look up provenance for this exact field/year for tier + source
+        const provKey = year + '.collected_revenue';
+        const prov = (e.provenance || {})[provKey];
+        const conf = prov ? prov.confidence : 'low';
+        const sourceClaim = prov && prov.claims && prov.claims[0] ? prov.claims[0] : null;
+        rows.push({
+          entity: e.name || e.slug,
+          slug: e.slug,
+          year,
+          value: cr,
+          confidence: conf,
+          source: sourceClaim ? (sourceClaim.source || '') : '',
+          sourceUrl: sourceClaim ? (sourceClaim.source_url || '') : '',
+          claimCount: prov ? prov.claim_count : 0,
+        });
+      }
+    }
+    if (rows.length === 0) {
+      target.innerHTML = '<div style="padding:16px;color:var(--text-dim);font-style:italic;text-align:center;">No audited annual figures yet captured — this section populates as fiscal-year claims land in the review queue.</div>';
+      return;
+    }
+    // Sort: year DESC, then value DESC
+    rows.sort((a, b) => (b.year.localeCompare(a.year)) || (b.value - a.value));
+
+    const fmtVal = v => {
+      if (v == null) return '—';
+      if (Math.abs(v) >= 1e9) return '$' + (v / 1e9).toFixed(2) + 'B';
+      if (Math.abs(v) >= 1e6) return '$' + (v / 1e6).toFixed(0) + 'M';
+      if (Math.abs(v) >= 1) return '$' + v.toFixed(2) + 'B';
+      return '$' + v;
+    };
+    const tierStyle = c => {
+      if (c === 'high') return 'background:rgba(16,185,129,0.15);color:#10b981;';
+      if (c === 'medium') return 'background:rgba(245,158,11,0.15);color:#f59e0b;';
+      return 'background:rgba(148,163,184,0.15);color:#94a3b8;';
+    };
+    const tierLabel = c => c === 'high' ? 'T1 High' : c === 'medium' ? 'T2 Med' : 'T3 Low';
+
+    let html = '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    html += '<thead><tr style="border-bottom:1px solid var(--card-border);text-align:left;color:var(--text-dim);">';
+    html += '<th style="padding:8px 6px;">Entity</th><th style="padding:8px 6px;">Year</th><th style="padding:8px 6px;text-align:right;font-variant-numeric:tabular-nums;">Collected revenue</th><th style="padding:8px 6px;">Source</th><th style="padding:8px 6px;">Confidence</th></tr></thead><tbody>';
+    for (const row of rows) {
+      const srcCell = row.sourceUrl
+        ? '<a href="' + row.sourceUrl + '" target="_blank" rel="noopener" style="color:var(--accent);">' + (row.source || row.sourceUrl) + '</a>'
+        : (row.source || '<span style="color:var(--text-dim);">—</span>');
+      html += '<tr style="border-bottom:1px solid var(--card-border);">';
+      html += '<td style="padding:8px 6px;font-weight:600;">' + row.entity + '</td>';
+      html += '<td style="padding:8px 6px;">' + row.year + '</td>';
+      html += '<td style="padding:8px 6px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">' + fmtVal(row.value) + '</td>';
+      html += '<td style="padding:8px 6px;font-size:11px;">' + srcCell + (row.claimCount > 1 ? ' <span style="color:var(--text-dim);">(+' + (row.claimCount - 1) + ' more)</span>' : '') + '</td>';
+      html += '<td style="padding:8px 6px;"><span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;' + tierStyle(row.confidence) + '">' + tierLabel(row.confidence) + '</span></td>';
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+    target.innerHTML = html;
+  } catch (err) {
+    target.innerHTML = '<div style="padding:16px;color:var(--red);">Could not load FY revenue data: ' + err.message + '</div>';
+  }
+}
+loadFyRevenue();
 </script>
 <aside class="byline">
   <span>Prepared by</span>

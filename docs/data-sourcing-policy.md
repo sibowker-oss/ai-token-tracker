@@ -157,6 +157,26 @@ When any Claude or Claude Code agent touches data:
 5. **Snapshots always.** The agent saves raw source material to `data/snapshots/` before parsing.
 6. **No silent confidence changes.** An agent may propose a confidence change; a human approves it.
 
+## 8a. Time-period semantics (revenue measures) — added 2026-04-29 by wq-032 P1B
+
+Two distinct revenue measures live in the Ledger; they are **never interchangeable** per *SKILL.md hard rule #6*. Every consumer of these fields must label which one is being shown.
+
+| Field path | Meaning | Direction | Where it surfaces |
+|---|---|---|---|
+| `entity.current.arr` | Trailing-quarter revenue × 4 (run-rate). Forward-looking proxy. | Forward | `dashboard.providers[X].rev` in site-data.json; usage.html hero stats and per-provider chart bars |
+| `entity.financials.{YYYY}.collected_revenue` | Audited / disclosed annual GAAP revenue actually booked over fiscal year YYYY. | Backward | timeline.html FY revenue table; revenue.html sankey provider column |
+| `entity.financials.{YYYY}_projected.*` | Forward estimate (Tier 2 or 3 confidence). | Forward | Reserved — not currently surfaced on public pages |
+
+The `current.arr` field is point-in-time and overwrites on each new claim that beats provenance. The `financials.{YYYY}.*` block is year-keyed and never overwrites a populated cell from a stronger source (see Provenance Guard, §3).
+
+**Editorial rule:** every public page that displays a revenue value must disambiguate via label, tooltip, or section heading. "Revenue" alone is never acceptable. Acceptable labels:
+
+- `ARR` / `Annual Run Rate` / `Run-rate × 4`
+- `Collected revenue (FY{YYYY})` / `Audited revenue (FY{YYYY})` / `FY{YYYY} revenue`
+- `Forward estimate (FY{YYYY}E)`
+
+Cross-reference: methodology.html#arr-vs-collected explains the distinction for end-readers; this section is the authoritative policy for code and editors.
+
 ## 9. Editorial guardrails
 
 Data sourcing is inseparable from editorial voice.
