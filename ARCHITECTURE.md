@@ -121,7 +121,8 @@ AI industry data is fragmented across earnings calls, podcast discussions, API o
 │  $711M/day)      forecasts)    IPO cos)    ARR → rank)      │
 │                                                              │
 │  Weekly Feed                                                 │
-│  (newsletter + Formspree email capture)                      │
+│  (parked; Formspree decommissioned wq-034 — signup via       │
+│   hepburnadvisory.com.au/contact/?subscribe=ledger)          │
 └──────────────────────────────────────────────────────────────┘
 
                                │
