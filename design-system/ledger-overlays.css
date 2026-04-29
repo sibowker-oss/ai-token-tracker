@@ -67,3 +67,250 @@
 .surface-dark .h2 {
   font-variant-numeric: tabular-nums;
 }
+
+/* ============================================================
+   3. SHARED HEADER (wq-033 Phase 2)
+   Brand mark + wordmark + 7-item nav + HA reciprocal CTA.
+   Sticky top bar across every public Ledger page.
+   ============================================================ */
+
+.ds-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-dark);
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.ds-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.ds-header__brand img {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.ds-header__brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ds-header__brand-name {
+  font: var(--weight-bold) 15px/1.1 var(--font-sans);
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, var(--blue), var(--violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ds-header__brand-sub {
+  font: var(--weight-medium) 10px/1 var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-dark-3);
+}
+
+.ds-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ds-header__nav::-webkit-scrollbar { display: none; }
+
+.ds-header__nav-link {
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font: var(--weight-medium) 13px/1 var(--font-sans);
+  color: var(--fg-dark-2);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: background var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out);
+}
+
+.ds-header__nav-link:hover {
+  color: var(--fg-dark-1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ds-header__nav-link.is-active {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--blue);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.ds-header__cta {
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  font: var(--weight-semi) 13px/1 var(--font-sans);
+  color: var(--fg-dark-1);
+  text-decoration: none;
+  border: 1px solid var(--border-dark);
+  background: var(--surface-dark);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.ds-header__cta:hover { border-color: var(--blue); }
+
+@media (max-width: 768px) {
+  .ds-header { padding: 10px 14px; gap: 12px; }
+  .ds-header__brand-sub { display: none; }
+  .ds-header__nav {
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  }
+  .ds-header__nav-link { font-size: 12px; padding: 8px 10px; min-height: 36px; display: inline-flex; align-items: center; }
+  .ds-header__cta { font-size: 12px; padding: 8px 10px; }
+}
+
+/* ============================================================
+   4. PER-PAGE BYLINE (wq-033 Phase 2 §4.8)
+   Drops in below the methodology block. One line, restrained.
+   ============================================================ */
+
+.byline {
+  max-width: 1200px;
+  margin: 32px auto 0;
+  padding: 18px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  font: var(--weight-medium) 12px/1.5 var(--font-sans);
+  color: var(--fg-dark-3);
+  border-top: 1px solid var(--border-dark);
+}
+
+.byline a {
+  color: var(--fg-dark-1);
+  text-decoration: none;
+  font-weight: var(--weight-semi);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+.byline a:hover { border-bottom-color: var(--blue); }
+
+.byline .meta {
+  color: var(--fg-dark-3);
+  font-weight: var(--weight-regular);
+}
+
+/* ============================================================
+   5. SHARED FOOTER (wq-033 Phase 2 §4.4)
+   Logo + desc + 4 columns + base line.
+   Disclosure column (privacy / conflicts) deferred to V1.1
+   pending source pages.
+   ============================================================ */
+
+.ds-footer {
+  margin-top: 48px;
+  padding: 48px 32px 32px;
+  border-top: 1px solid var(--border-dark);
+  background: var(--bg-dark-alt);
+  color: var(--fg-dark-2);
+  font: var(--type-body);
+}
+
+.ds-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.2fr) repeat(4, 1fr);
+  gap: 32px;
+}
+
+.ds-footer__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ds-footer__brand img { width: 32px; height: 32px; }
+
+.ds-footer__brand-name {
+  font: var(--weight-bold) 14px/1.3 var(--font-sans);
+  color: var(--fg-dark-1);
+}
+
+.ds-footer__brand-desc {
+  font: var(--weight-regular) 12px/1.5 var(--font-sans);
+  color: var(--fg-dark-3);
+  max-width: 28ch;
+}
+
+.ds-footer__col-title {
+  font: var(--weight-semi) 10px/1.2 var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-dark-3);
+  margin: 0 0 12px;
+}
+
+.ds-footer__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ds-footer__col a {
+  color: var(--fg-dark-2);
+  text-decoration: none;
+  font: var(--weight-medium) 12px/1.4 var(--font-sans);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.ds-footer__col a:hover { color: var(--fg-dark-1); }
+
+.ds-footer__base {
+  max-width: 1200px;
+  margin: 32px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-dark);
+  font: var(--weight-regular) 11px/1.6 var(--font-mono);
+  color: var(--fg-dark-3);
+}
+
+.ds-footer__base a {
+  color: var(--fg-dark-2);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.ds-footer__base a:hover { border-bottom-color: var(--fg-dark-3); }
+
+@media (max-width: 768px) {
+  .ds-footer { padding: 32px 16px 24px; }
+  .ds-footer__inner { grid-template-columns: 1fr; gap: 24px; }
+  .ds-footer__base { font-size: 10px; }
+}
