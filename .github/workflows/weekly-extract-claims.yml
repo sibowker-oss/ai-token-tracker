@@ -12,6 +12,10 @@ permissions:
 jobs:
   extract-claims:
     runs-on: ubuntu-latest
+    env:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+      PYTHONIOENCODING: utf-8
     steps:
       - uses: actions/checkout@v4
 

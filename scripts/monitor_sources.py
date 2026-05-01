@@ -93,7 +93,16 @@ def save_snapshot(source, content, ext='html'):
     return path
 
 
+# Per-source fetch-failure counter. Reset at the top of process_source(); read by
+# main() to decide whether to advance next_check. Avoids the silent-disable bug
+# where a TLS error swallowed by an adapter returned 0 claims and looked clean.
+_fetch_failures = 0
+
+
 def log(msg):
+    global _fetch_failures
+    if 'fetch failed' in msg.lower():
+        _fetch_failures += 1
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     line = f"[{ts}] {msg}"
     print(line)
@@ -1192,18 +1201,27 @@ ADAPTERS = {
 
 
 def process_source(source, dry_run=False):
-    """Process a single source through its extraction adapter."""
+    """Process a single source through its extraction adapter.
+
+    Returns (claims_count, had_fetch_failures). Caller uses had_fetch_failures
+    to skip advancing next_check when an adapter swallowed a fetch error and
+    returned 0 claims — without this guard a TLS/404 day silently disables the
+    source for its full frequency window.
+    """
+    global _fetch_failures
+    _fetch_failures = 0
+
     log(f"\n📄 {source['title']} ({source['type']})")
     log(f"   Method: {source['extraction_method']}, URL: {source['url'][:80]}")
 
     if dry_run:
         log("   [DRY RUN] Would extract")
-        return 0
+        return 0, False
 
     adapter = ADAPTERS.get(source['extraction_method'])
     if not adapter:
         log(f"   Unknown extraction method: {source['extraction_method']}")
-        return 0
+        return 0, False
 
     claims = adapter(source)
     log(f"   Extracted {len(claims)} claim(s)")
@@ -1225,7 +1243,7 @@ def process_source(source, dry_run=False):
         added = _append_to_vault_inbox(claims, source, today)
         log(f"   Appended {added} pending item(s) to vault-inbox.json")
 
-    return len(claims)
+    return len(claims), _fetch_failures > 0
 
 
 VAULT_INBOX_PATH = os.path.join(BASE_DIR, 'vault-inbox.json')
@@ -1425,17 +1443,22 @@ def main():
 
     total_claims = 0
     for source in due:
-        claims_count = process_source(source, dry_run)
+        claims_count, had_fetch_failures = process_source(source, dry_run)
         total_claims += claims_count
 
         if not dry_run:
             # Update registry
             source['last_checked'] = today_str
             source['last_claims_count'] = claims_count
-            source['status'] = 'active' if claims_count >= 0 else 'error'
-            # Set next check
-            freq_days = FREQUENCY_DAYS.get(source['frequency'], 7)
-            source['next_check'] = (datetime.now() + timedelta(days=freq_days)).strftime('%Y-%m-%d')
+            if claims_count == 0 and had_fetch_failures:
+                # Adapter swallowed a fetch failure — leave next_check alone so
+                # we retry tomorrow instead of silent-disabling the source.
+                source['status'] = 'error'
+                log(f"   ⚠ Fetch failures with 0 claims — next_check unchanged for retry")
+            else:
+                source['status'] = 'active'
+                freq_days = FREQUENCY_DAYS.get(source['frequency'], 7)
+                source['next_check'] = (datetime.now() + timedelta(days=freq_days)).strftime('%Y-%m-%d')
 
     if not dry_run:
         registry['meta']['lastUpdated'] = today_str
