@@ -56526,7 +56526,7 @@
         "ai-revenue"
       ],
       "notes": "Amazon Q1 2026 earnings call. AWS beat $36.64B estimate. AI revenue driven by Bedrock, Trainium, and Anthropic capacity sales.",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null
     },
     {
@@ -56550,7 +56550,7 @@
         "ai-revenue"
       ],
       "notes": "Azure AI services contribution = ~12pts of 31% total growth. Useful for Azure OpenAI revenue contribution tracking.",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null
     },
     {
@@ -56573,7 +56573,7 @@
         "token-volume"
       ],
       "notes": "Bedrock benefited from OpenAI model availability following Azure exclusivity end. QoQ growth of 170% in customer spend.",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null
     },
     {
@@ -56597,7 +56597,7 @@
         "revenue-share"
       ],
       "notes": "Caps OpenAI's previously unbounded 20% revenue share to MSFT. Microsoft IP license extends through 2032 (no longer exclusive).",
-      "status": "pending",
+      "status": "declined",
       "replaces": null
     },
     {
@@ -56621,7 +56621,7 @@
         "partnership"
       ],
       "notes": "Removes the long-standing AGI escape clause that would have voided MSFT IP rights upon AGI declaration. Major governance shift.",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null
     },
     {
@@ -56645,7 +56645,7 @@
         "cloud"
       ],
       "notes": "MSFT received 27% stake in OpenAI for-profit entity. OpenAI's $250B Azure commitment runs through 2032. End of cloud exclusivity is structural shift for AWS/Google/Oracle competition.",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null
     },
     {
@@ -56687,7 +56687,7 @@
         "provider_revenue"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "ARR",
@@ -56712,7 +56712,7 @@
         "provider_revenue"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "ARR",
@@ -56737,7 +56737,7 @@
         "enterprise_adoption"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "ARR threshold",
@@ -56762,7 +56762,7 @@
         "enterprise_adoption"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "ARR per employee",
@@ -56787,7 +56787,7 @@
         "valuation_funding"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "employee count threshold",
@@ -56812,7 +56812,7 @@
         "valuation_funding"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "valuation per employee",
@@ -56837,7 +56837,7 @@
         "provider_revenue"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "revenue per employee",
@@ -56862,7 +56862,7 @@
         "other"
       ],
       "notes": "From Lean AI Leaderboard",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-009",
       "metricKey": "company age threshold",
@@ -56887,7 +56887,7 @@
         "valuation_funding"
       ],
       "notes": "Anthropic\u4f30\u503c\u5373\u5c06\u51b2\u78349000\u4ebf\u7f8e\u5143\uff0cOpenAI\u7684\u7528\u6237\u6b63\u5728\u7528\u811a\u6295\u7968\u2014\u2014\u4e24\u5bb6\u516c\u53f8\u7684\u547d\u8fd0\u66f2\u7ebf\uff0c\u6b63\u5728\u4ea4\u53c9\u3002",
-      "status": "pending",
+      "status": "declined",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "valuation",
@@ -56912,7 +56912,7 @@
         "enterprise_adoption"
       ],
       "notes": "ChatGPT\u5378\u8f7d\u66b4\u6da8413%\uff0cClaude\u4e0b\u8f7d\u6fc0\u589e100%\uff0c\u5965\u7279\u66fc\u5e1d\u56fd\u5f00\u59cb\u6f0f\u6c34\u4e86",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "app uninstall rate / download growth",
@@ -56937,7 +56937,7 @@
         "gpu_infrastructure"
       ],
       "notes": "\u5bd2\u6b66\u7eaa\u8d5a\u4e8610\u4ebf\u3001\u6469\u5c14\u7ebf\u7a0b\u9996\u6b21\u76c8\u5229\u3001\u6c90\u66e6\u8fd8\u5728\u4e8f\uff1a\u4e09\u5bb6\u56fd\u4ea7GPU\u653e\u5728\u4e00\u8d77\u6bd4\uff0c\u5dee\u8ddd\u5df2\u7ecf\u53ef\u4ee5\u91cf\u5316\u4e86",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "profit",
@@ -56962,7 +56962,7 @@
         "gpu_infrastructure"
       ],
       "notes": "\u6469\u5c14\u7ebf\u7a0b\u9996\u6b21\u76c8\u5229",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "profitability status",
@@ -56987,7 +56987,7 @@
         "gpu_infrastructure"
       ],
       "notes": "\u6c90\u66e6\u8fd8\u5728\u4e8f",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "profitability status",
@@ -57012,7 +57012,7 @@
         "gpu_infrastructure"
       ],
       "notes": "DeepSeek V4\u53d1\u5e03\uff0c\u6210\u672c\u5927\u964d\uff0c\u534e\u4e3a\u6607\u817e\u9002\u914d\uff0cAI\u4ea7\u4e1a\u683c\u5c40\u751f\u53d8\u3002",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "inference cost reduction",
@@ -57037,7 +57037,7 @@
         "token_volume"
       ],
       "notes": "DeepSeekV4 \u4e0e\u7f8e\u56e2 LongCat \u540c\u65f6\u300c\u7834\u4e07\u4ebf\u300d\uff0c\u91ca\u653e\u4e86\u54ea\u4e9b\u4fe1\u53f7\uff1f\u56fd\u5185 AI \u4f01\u4e1a\u5f00\u59cb\u5c1d\u8bd5\u94fa\u8bbe\u81ea\u5df1\u7684\u8f68\u9053\u3002",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "token scale milestone",
@@ -57062,7 +57062,7 @@
         "valuation_funding"
       ],
       "notes": "\u6700\u7ec8\u4ec5\u62ff\u4e0b50\u4e07\u7f8e\u5143\uff0c\u9f99\u867e\u966a\u4f34\u786c\u4ef6\u7684\u4e00\u6b21\u5931\u8d25\u5c1d\u8bd5",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "fundraising amount",
@@ -57087,7 +57087,7 @@
         "pricing"
       ],
       "notes": "Claude \u5b9a\u4ef7\u53cd\u590d\u6a2a\u8df3\uff1a\u5148\u628a\u4f60\u517b\u719f\uff0c\u518d\u4e00\u5200\u4e00\u5200\u300c\u5272\u300d \u4ee5\u540e\u6bcf\u5bb6\u90fd\u4f1a\u8fd9\u4e48\u505a\u7684",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-037",
       "metricKey": "pricing strategy pattern",
@@ -57112,7 +57112,7 @@
         "provider_revenue"
       ],
       "notes": "\u79d1\u5927\u8baf\u98de2025\u5e74\u5b9e\u73b0\u51c0\u5229\u6da68.39\u4ebf\u5143 \u540c\u6bd4\u589e\u957f49.85% 4\u670828\u65e5\uff0c\u79d1\u5927\u8baf\u98de(002230)\u53d1\u5e03\u5e74\u5ea6\u62a5\u544a\uff0c2025\u5e74\u516c\u53f8\u5b9e\u73b0\u8425\u6536271.05\u4ebf\u5143\uff0c\u540c\u6bd4\u589e\u957f16.12%\uff1b\u5f52\u6bcd\u51c0\u5229\u6da68.39\u4ebf\u5143\uff0c\u540c\u6bd4\u589e\u957f49.85%\uff1b\u6263\u975e\u51c0\u5229\u6da62.64\u4ebf\u5143\uff0c\u540c\u6bd4\u589e\u957f40.47%\u3002",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-038",
       "metricKey": "Annual net profit and revenue",
@@ -57137,7 +57137,7 @@
         "provider_revenue"
       ],
       "notes": "\u6263\u975e\u51c0\u5229\u6da62.64\u4ebf\u5143\uff0c\u540c\u6bd4\u589e\u957f40.47%\u3002",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-038",
       "metricKey": "Non-recurring adjusted net profit",
@@ -57162,7 +57162,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-047",
       "metricKey": "daily PyPI downloads",
@@ -57187,7 +57187,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-047",
       "metricKey": "weekly PyPI downloads",
@@ -57212,7 +57212,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-047",
       "metricKey": "monthly PyPI downloads",
@@ -57237,7 +57237,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 OpenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-047",
       "metricKey": "SDK version",
@@ -57262,7 +57262,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-048",
       "metricKey": "daily SDK downloads",
@@ -57287,7 +57287,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-048",
       "metricKey": "weekly SDK downloads",
@@ -57312,7 +57312,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-048",
       "metricKey": "monthly SDK downloads",
@@ -57337,7 +57337,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-048",
       "metricKey": "SDK version number",
@@ -57362,7 +57362,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Anthropic SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-048",
       "metricKey": "cloud platform integrations",
@@ -57387,7 +57387,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-049",
       "metricKey": "daily PyPI downloads",
@@ -57412,7 +57412,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-049",
       "metricKey": "weekly PyPI downloads",
@@ -57437,7 +57437,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-049",
       "metricKey": "monthly PyPI downloads",
@@ -57462,7 +57462,7 @@
         "enterprise_adoption"
       ],
       "notes": "From PyPI Stats \u00e2\u0080\u0094 Google GenAI SDK",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-049",
       "metricKey": "library version",
@@ -57488,7 +57488,7 @@
         "anthropic"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"anthropic\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 439, \"open_roles_ai_titled\": 139, \"open_roles_prompt_engineer\": 2, \"ai_titled_share\": 0.317, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "anthropic-hiring_snapshot",
@@ -57535,7 +57535,7 @@
         "fireworks"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"fireworks\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 31, \"open_roles_ai_titled\": 11, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.355, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "fireworks-hiring_snapshot",
@@ -57582,7 +57582,7 @@
         "glean"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"glean\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 160, \"open_roles_ai_titled\": 10, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.062, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "glean-hiring_snapshot",
@@ -57629,7 +57629,7 @@
         "databricks"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"databricks\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 822, \"open_roles_ai_titled\": 133, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.162, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "databricks-hiring_snapshot",
@@ -57676,7 +57676,7 @@
         "scale"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"scale\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 172, \"open_roles_ai_titled\": 61, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.355, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-069",
       "metricKey": "scale-hiring_snapshot",
@@ -57723,7 +57723,7 @@
         "mistral"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"mistral\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 161, \"open_roles_ai_titled\": 52, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.323, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-070",
       "metricKey": "mistral-hiring_snapshot",
@@ -57770,7 +57770,7 @@
         "cohere"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"cohere\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 122, \"open_roles_ai_titled\": 11, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.09, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "cohere-hiring_snapshot",
@@ -57817,7 +57817,7 @@
         "lambda"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"lambda\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 31, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "lambda-hiring_snapshot",
@@ -57834,7 +57834,7 @@
           "open_roles_total": 31,
           "open_roles_ai_titled": 0,
           "open_roles_prompt_engineer": 0,
-          "ai_titled_share": 0.0,
+          "ai_titled_share": 0,
           "new_ai_roles_7d": 0
         },
         "source": {
@@ -57864,7 +57864,7 @@
         "modal"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"modal\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 28, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "modal-hiring_snapshot",
@@ -57881,7 +57881,7 @@
           "open_roles_total": 28,
           "open_roles_ai_titled": 0,
           "open_roles_prompt_engineer": 0,
-          "ai_titled_share": 0.0,
+          "ai_titled_share": 0,
           "new_ai_roles_7d": 0
         },
         "source": {
@@ -57911,7 +57911,7 @@
         "anyscale"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"anyscale\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 8, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "anyscale-hiring_snapshot",
@@ -57928,7 +57928,7 @@
           "open_roles_total": 8,
           "open_roles_ai_titled": 0,
           "open_roles_prompt_engineer": 0,
-          "ai_titled_share": 0.0,
+          "ai_titled_share": 0,
           "new_ai_roles_7d": 0
         },
         "source": {
@@ -57958,7 +57958,7 @@
         "cursor"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"cursor\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 76, \"open_roles_ai_titled\": 2, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.026, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "cursor-hiring_snapshot",
@@ -58005,7 +58005,7 @@
         "harvey"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"harvey\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 245, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "accepted",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "harvey-hiring_snapshot",
@@ -58022,7 +58022,7 @@
           "open_roles_total": 245,
           "open_roles_ai_titled": 0,
           "open_roles_prompt_engineer": 0,
-          "ai_titled_share": 0.0,
+          "ai_titled_share": 0,
           "new_ai_roles_7d": 0
         },
         "source": {
@@ -58052,7 +58052,7 @@
         "perplexity"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"perplexity\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 69, \"open_roles_ai_titled\": 14, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.203, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "perplexity-hiring_snapshot",
@@ -58099,7 +58099,7 @@
         "elevenlabs"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"elevenlabs\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 134, \"open_roles_ai_titled\": 1, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.007, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "elevenlabs-hiring_snapshot",
@@ -58146,7 +58146,7 @@
         "runway"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"runway\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 4, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "runway-hiring_snapshot",
@@ -58163,7 +58163,7 @@
           "open_roles_total": 4,
           "open_roles_ai_titled": 0,
           "open_roles_prompt_engineer": 0,
-          "ai_titled_share": 0.0,
+          "ai_titled_share": 0,
           "new_ai_roles_7d": 0
         },
         "source": {
@@ -58193,7 +58193,7 @@
         "writer"
       ],
       "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"writer\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 49, \"open_roles_ai_titled\": 4, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.082, \"new_ai_roles_7d\": 0}}",
-      "status": "pending",
+      "status": "raw_pool",
       "replaces": null,
       "source_id": "src-071",
       "metricKey": "writer-hiring_snapshot",
