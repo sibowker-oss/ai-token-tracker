@@ -124,23 +124,38 @@ def fetch_page(url):
 
 
 def extract_claims(text, source_title, client):
-    """Send text to Claude, return list of claim dicts."""
+    """Send text to Claude, return list of claim dicts.
+
+    On UnicodeEncodeError, retry once with ASCII-stripped text. Some
+    code path inside the SDK / httpx chokes on UTF-8 on the GHA runner
+    (LC_ALL=C.UTF-8 doesn't help). Workaround keeps English sources flowing
+    at the cost of losing non-Latin content (36Kr / Jiemian).
+    """
     prompt = EXTRACT_PROMPT.format(text=text)
 
-    try:
-        response = client.messages.create(
-            model=MODEL,
-            max_tokens=4096,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        raw = response.content[0].text.strip()
-        raw = re.sub(r'^```(?:json)?\s*', '', raw)
-        raw = re.sub(r'\s*```$', '', raw)
-        claims = json.loads(raw.strip())
-        return claims if isinstance(claims, list) else []
-    except Exception as e:
-        print(f"    ⚠ Claude error: {e}")
-        return []
+    for attempt in (1, 2):
+        try:
+            response = client.messages.create(
+                model=MODEL,
+                max_tokens=4096,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            raw = response.content[0].text.strip()
+            raw = re.sub(r'^```(?:json)?\s*', '', raw)
+            raw = re.sub(r'\s*```$', '', raw)
+            claims = json.loads(raw.strip())
+            return claims if isinstance(claims, list) else []
+        except UnicodeEncodeError as e:
+            if attempt == 1:
+                print(f"    ⚠ UTF-8 encoding error — retrying ASCII-only")
+                prompt = prompt.encode('ascii', errors='ignore').decode('ascii')
+                continue
+            print(f"    ⚠ Claude encoding error (retry failed): {e}")
+            return []
+        except Exception as e:
+            print(f"    ⚠ Claude error: {e}")
+            return []
+    return []
 
 
 def main():

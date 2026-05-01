@@ -32,3 +32,421 @@
 [2026-04-01 09:30:41] 
 ============================================================
 [2026-04-01 09:30:41] ✅ Done — 3 sources processed, 0 total claims extracted
+[2026-05-01 13:42:38] 
+============================================================
+[2026-05-01 13:42:38] 📡 Source Monitor — 2026-05-01
+[2026-05-01 13:42:38]   Registry: 72 sources
+[2026-05-01 13:42:38]   Due for extraction: 23
+[2026-05-01 13:42:38] 
+📄 Latent Space Podcast (rss_feed)
+[2026-05-01 13:42:38]    Method: podcast_scraper, URL: https://www.latent.space/feed
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 All-In Podcast (rss_feed)
+[2026-05-01 13:42:38]    Method: podcast_scraper, URL: https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Big Technology Podcast (rss_feed)
+[2026-05-01 13:42:38]    Method: podcast_scraper, URL: https://feeds.megaphone.fm/LI3617121267
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 OpenRouter Weekly Rankings (web_scrape)
+[2026-05-01 13:42:38]    Method: signal_scraper, URL: https://openrouter.ai/rankings
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 OpenRouter Model Catalog API (api)
+[2026-05-01 13:42:38]    Method: signal_scraper, URL: https://openrouter.ai/api/v1/models
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 PyPI Download Stats (api)
+[2026-05-01 13:42:38]    Method: signal_scraper, URL: https://pypistats.org/api/packages
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Lean AI Leaderboard (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://leanaileaderboard.com/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Recode Decode (podcast_feed)
+[2026-05-01 13:42:38]    Method: podcast_scraper, URL: https://feeds.megaphone.fm/DVVTS2890392624
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Sacra (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://sacra.com
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 36Kr â AI News (China) (rss_feed)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://36kr.com/information/AI/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Jiemian â Tech/AI Section (China) (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://www.jiemian.com/lists/900.html
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 a16z â AI Essays (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://a16z.com/ai/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Sequoia â Articles (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://www.sequoiacap.com/articles/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Cloudflare Radar â Domain Rankings (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://radar.cloudflare.com/domains
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 PyPI Stats â OpenAI SDK (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://pypistats.org/packages/openai
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 PyPI Stats â Anthropic SDK (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://pypistats.org/packages/anthropic
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 PyPI Stats â Google GenAI SDK (web_page)
+[2026-05-01 13:42:38]    Method: web_extract, URL: https://pypistats.org/packages/google-generativeai
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 EIA API — 860M / 930 / STEO (gov_api)
+[2026-05-01 13:42:38]    Method: eia_api, URL: https://www.eia.gov/opendata/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 NESO TEC Register (UK) (iso_queue)
+[2026-05-01 13:42:38]    Method: neso_tec, URL: https://www.neso.energy/data-portal/transmission-entry-capacity-tec-register
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Greenhouse Job Board API (ats_api)
+[2026-05-01 13:42:38]    Method: greenhouse_board, URL: https://boards-api.greenhouse.io/v1/boards/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Lever Postings API (ats_api)
+[2026-05-01 13:42:38]    Method: lever_postings, URL: https://api.lever.co/v0/postings/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Ashby Public Job Posting API (ats_api)
+[2026-05-01 13:42:38]    Method: ashby_public, URL: https://api.ashbyhq.com/posting-api/job-board/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+📄 Workable Jobs widget API (ats_api)
+[2026-05-01 13:42:38]    Method: workable_jobs, URL: https://apply.workable.com/api/v1/widget/accounts/
+[2026-05-01 13:42:38]    [DRY RUN] Would extract
+[2026-05-01 13:42:38] 
+============================================================
+[2026-05-01 13:42:38] ✅ Done — 23 sources processed, 0 total claims extracted
+[2026-05-01 13:42:49] 
+============================================================
+[2026-05-01 13:42:49] 📡 Source Monitor — 2026-05-01
+[2026-05-01 13:42:49]   Registry: 72 sources
+[2026-05-01 13:42:49]   Due for extraction: 23
+[2026-05-01 13:42:49] 
+📄 Latent Space Podcast (rss_feed)
+[2026-05-01 13:42:49]    Method: podcast_scraper, URL: https://www.latent.space/feed
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 All-In Podcast (rss_feed)
+[2026-05-01 13:42:49]    Method: podcast_scraper, URL: https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 Big Technology Podcast (rss_feed)
+[2026-05-01 13:42:49]    Method: podcast_scraper, URL: https://feeds.megaphone.fm/LI3617121267
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 OpenRouter Weekly Rankings (web_scrape)
+[2026-05-01 13:42:49]    Method: signal_scraper, URL: https://openrouter.ai/rankings
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 OpenRouter Model Catalog API (api)
+[2026-05-01 13:42:49]    Method: signal_scraper, URL: https://openrouter.ai/api/v1/models
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 PyPI Download Stats (api)
+[2026-05-01 13:42:49]    Method: signal_scraper, URL: https://pypistats.org/api/packages
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 Lean AI Leaderboard (web_page)
+[2026-05-01 13:42:49]    Method: web_extract, URL: https://leanaileaderboard.com/
+[2026-05-01 13:42:49]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:49]   Page content too short (0 chars)
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 Recode Decode (podcast_feed)
+[2026-05-01 13:42:49]    Method: podcast_scraper, URL: https://feeds.megaphone.fm/DVVTS2890392624
+[2026-05-01 13:42:49]    Extracted 0 claim(s)
+[2026-05-01 13:42:49] 
+📄 Sacra (web_page)
+[2026-05-01 13:42:49]    Method: web_extract, URL: https://sacra.com
+[2026-05-01 13:42:50]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:50]   Page content too short (0 chars)
+[2026-05-01 13:42:50]    Extracted 0 claim(s)
+[2026-05-01 13:42:50] 
+📄 36Kr â AI News (China) (rss_feed)
+[2026-05-01 13:42:50]    Method: web_extract, URL: https://36kr.com/information/AI/
+[2026-05-01 13:42:51]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)>
+[2026-05-01 13:42:51]   Page content too short (0 chars)
+[2026-05-01 13:42:51]    Extracted 0 claim(s)
+[2026-05-01 13:42:51] 
+📄 Jiemian â Tech/AI Section (China) (web_page)
+[2026-05-01 13:42:51]    Method: web_extract, URL: https://www.jiemian.com/lists/900.html
+[2026-05-01 13:42:52]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:52]   Page content too short (0 chars)
+[2026-05-01 13:42:52]    Extracted 0 claim(s)
+[2026-05-01 13:42:52] 
+📄 a16z â AI Essays (web_page)
+[2026-05-01 13:42:52]    Method: web_extract, URL: https://a16z.com/ai/
+[2026-05-01 13:42:52]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:52]   Page content too short (0 chars)
+[2026-05-01 13:42:52]    Extracted 0 claim(s)
+[2026-05-01 13:42:52] 
+📄 Sequoia â Articles (web_page)
+[2026-05-01 13:42:52]    Method: web_extract, URL: https://www.sequoiacap.com/articles/
+[2026-05-01 13:42:53]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:53]   Page content too short (0 chars)
+[2026-05-01 13:42:53]    Extracted 0 claim(s)
+[2026-05-01 13:42:53] 
+📄 Cloudflare Radar â Domain Rankings (web_page)
+[2026-05-01 13:42:53]    Method: web_extract, URL: https://radar.cloudflare.com/domains
+[2026-05-01 13:42:53]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:53]   Page content too short (0 chars)
+[2026-05-01 13:42:53]    Extracted 0 claim(s)
+[2026-05-01 13:42:53] 
+📄 PyPI Stats â OpenAI SDK (web_page)
+[2026-05-01 13:42:53]    Method: web_extract, URL: https://pypistats.org/packages/openai
+[2026-05-01 13:42:54]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:54]   Page content too short (0 chars)
+[2026-05-01 13:42:54]    Extracted 0 claim(s)
+[2026-05-01 13:42:54] 
+📄 PyPI Stats â Anthropic SDK (web_page)
+[2026-05-01 13:42:54]    Method: web_extract, URL: https://pypistats.org/packages/anthropic
+[2026-05-01 13:42:54]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:54]   Page content too short (0 chars)
+[2026-05-01 13:42:54]    Extracted 0 claim(s)
+[2026-05-01 13:42:54] 
+📄 PyPI Stats â Google GenAI SDK (web_page)
+[2026-05-01 13:42:54]    Method: web_extract, URL: https://pypistats.org/packages/google-generativeai
+[2026-05-01 13:42:55]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]   Page content too short (0 chars)
+[2026-05-01 13:42:55]    Extracted 0 claim(s)
+[2026-05-01 13:42:55] 
+📄 EIA API — 860M / 930 / STEO (gov_api)
+[2026-05-01 13:42:55]    Method: eia_api, URL: https://www.eia.gov/opendata/
+[2026-05-01 13:42:55]   EIA_API_KEY env var not set — eia_api adapter requires one (free registration at https://www.eia.gov/opendata/register.php). Returning [].
+[2026-05-01 13:42:55]    Extracted 0 claim(s)
+[2026-05-01 13:42:55] 
+📄 NESO TEC Register (UK) (iso_queue)
+[2026-05-01 13:42:55]    Method: neso_tec, URL: https://www.neso.energy/data-portal/transmission-entry-capacity-tec-register
+[2026-05-01 13:42:55]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]   No CSV link found on NESO data-portal page — manual download required. Returning [].
+[2026-05-01 13:42:55]    Extracted 0 claim(s)
+[2026-05-01 13:42:55] 
+📄 Greenhouse Job Board API (ats_api)
+[2026-05-01 13:42:55]    Method: greenhouse_board, URL: https://boards-api.greenhouse.io/v1/boards/
+[2026-05-01 13:42:55]   greenhouse — fanning out to 9 company target(s)
+[2026-05-01 13:42:55]     openai (openai): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]     anthropic (anthropic): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]     ai21 (ai21labs): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]     groq (groq): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]     fireworks (fireworksai): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]     glean (gleanwork): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:55]     databricks (databricks): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]     scale (scaleai): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]     wandb (wandb): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]    Extracted 0 claim(s)
+[2026-05-01 13:42:56] 
+📄 Lever Postings API (ats_api)
+[2026-05-01 13:42:56]    Method: lever_postings, URL: https://api.lever.co/v0/postings/
+[2026-05-01 13:42:56]   lever — fanning out to 1 company target(s)
+[2026-05-01 13:42:56]     mistral (mistral): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]    Extracted 0 claim(s)
+[2026-05-01 13:42:56] 
+📄 Ashby Public Job Posting API (ats_api)
+[2026-05-01 13:42:56]    Method: ashby_public, URL: https://api.ashbyhq.com/posting-api/job-board/
+[2026-05-01 13:42:56]   ashby — fanning out to 11 company target(s)
+[2026-05-01 13:42:56]     cohere (cohere): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]     together (together): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]     lambda (lambda): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]     modal (modal): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]     anyscale (anyscale): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:56]     cursor (cursor): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:57]     harvey (harvey): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:57]     perplexity (perplexity): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:57]     elevenlabs (elevenlabs): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:57]     runway (runway): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:57]     writer (writer): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:57]    Extracted 0 claim(s)
+[2026-05-01 13:42:57] 
+📄 Workable Jobs widget API (ats_api)
+[2026-05-01 13:42:57]    Method: workable_jobs, URL: https://apply.workable.com/api/v1/widget/accounts/
+[2026-05-01 13:42:57]   workable — fanning out to 1 company target(s)
+[2026-05-01 13:42:57]     huggingface (huggingface): fetch failed — <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-01 13:42:57]    Extracted 0 claim(s)
+[2026-05-01 13:42:57] 
+============================================================
+[2026-05-01 13:42:57] ✅ Done — 23 sources processed, 0 total claims extracted
+[2026-05-01 13:43:25] 
+============================================================
+[2026-05-01 13:43:25] 📡 Source Monitor — 2026-05-01
+[2026-05-01 13:43:25]   Registry: 72 sources
+[2026-05-01 13:43:25]   Due for extraction: 0
+[2026-05-01 13:43:25]   Nothing due today
+[2026-05-01 13:45:19] 
+============================================================
+[2026-05-01 13:45:19] 📡 Source Monitor — 2026-05-01
+[2026-05-01 13:45:19]   Registry: 72 sources
+[2026-05-01 13:45:19]   Due for extraction: 23
+[2026-05-01 13:45:19] 
+📄 Latent Space Podcast (rss_feed)
+[2026-05-01 13:45:19]    Method: podcast_scraper, URL: https://www.latent.space/feed
+[2026-05-01 13:45:19]    Extracted 0 claim(s)
+[2026-05-01 13:45:19] 
+📄 All-In Podcast (rss_feed)
+[2026-05-01 13:45:19]    Method: podcast_scraper, URL: https://podcasts.happyscribe.com/all-in-with-chamath-jason-sacks-friedberg
+[2026-05-01 13:45:19]    Extracted 0 claim(s)
+[2026-05-01 13:45:19] 
+📄 Big Technology Podcast (rss_feed)
+[2026-05-01 13:45:19]    Method: podcast_scraper, URL: https://feeds.megaphone.fm/LI3617121267
+[2026-05-01 13:45:19]    Extracted 0 claim(s)
+[2026-05-01 13:45:19] 
+📄 OpenRouter Weekly Rankings (web_scrape)
+[2026-05-01 13:45:19]    Method: signal_scraper, URL: https://openrouter.ai/rankings
+[2026-05-01 13:45:19]    Extracted 0 claim(s)
+[2026-05-01 13:45:19] 
+📄 OpenRouter Model Catalog API (api)
+[2026-05-01 13:45:19]    Method: signal_scraper, URL: https://openrouter.ai/api/v1/models
+[2026-05-01 13:45:19]    Extracted 0 claim(s)
+[2026-05-01 13:45:19] 
+📄 PyPI Download Stats (api)
+[2026-05-01 13:45:19]    Method: signal_scraper, URL: https://pypistats.org/api/packages
+[2026-05-01 13:45:19]    Extracted 0 claim(s)
+[2026-05-01 13:45:19] 
+📄 Lean AI Leaderboard (web_page)
+[2026-05-01 13:45:19]    Method: web_extract, URL: https://leanaileaderboard.com/
+[2026-05-01 13:45:20]   Fetched 3,756 chars
+[2026-05-01 13:45:31]    Extracted 8 claim(s)
+[2026-05-01 13:45:31]    Appended 8 pending item(s) to vault-inbox.json
+[2026-05-01 13:45:31] 
+📄 Recode Decode (podcast_feed)
+[2026-05-01 13:45:31]    Method: podcast_scraper, URL: https://feeds.megaphone.fm/DVVTS2890392624
+[2026-05-01 13:45:31]    Extracted 0 claim(s)
+[2026-05-01 13:45:31] 
+📄 Sacra (web_page)
+[2026-05-01 13:45:31]    Method: web_extract, URL: https://sacra.com
+[2026-05-01 13:45:32]   Fetched 1,777 chars
+[2026-05-01 13:45:33]    Extracted 0 claim(s)
+[2026-05-01 13:45:33] 
+📄 36Kr â AI News (China) (rss_feed)
+[2026-05-01 13:45:33]    Method: web_extract, URL: https://36kr.com/information/AI/
+[2026-05-01 13:45:35]   Fetched 2,682 chars
+[2026-05-01 13:46:00]   Claude JSON parse recovered (per-object) — salvaged 9 claim(s) from broken response.
+[2026-05-01 13:46:00]    Extracted 9 claim(s)
+[2026-05-01 13:46:00]    Appended 9 pending item(s) to vault-inbox.json
+[2026-05-01 13:46:00] 
+📄 Jiemian â Tech/AI Section (China) (web_page)
+[2026-05-01 13:46:00]    Method: web_extract, URL: https://www.jiemian.com/lists/900.html
+[2026-05-01 13:46:02]   Fetched 4,176 chars
+[2026-05-01 13:46:17]   Claude JSON parse recovered (per-object) — salvaged 2 claim(s) from broken response.
+[2026-05-01 13:46:17]    Extracted 2 claim(s)
+[2026-05-01 13:46:17]    Appended 2 pending item(s) to vault-inbox.json
+[2026-05-01 13:46:17] 
+📄 a16z â AI Essays (web_page)
+[2026-05-01 13:46:17]    Method: web_extract, URL: https://a16z.com/ai/
+[2026-05-01 13:46:18]   Fetched 19,371 chars
+[2026-05-01 13:46:19]    Extracted 0 claim(s)
+[2026-05-01 13:46:19] 
+📄 Sequoia â Articles (web_page)
+[2026-05-01 13:46:19]    Method: web_extract, URL: https://www.sequoiacap.com/articles/
+[2026-05-01 13:46:21]   Fetch failed: HTTP Error 404: Not Found
+[2026-05-01 13:46:21]   Page content too short (0 chars)
+[2026-05-01 13:46:21]    Extracted 0 claim(s)
+[2026-05-01 13:46:21] 
+📄 Cloudflare Radar â Domain Rankings (web_page)
+[2026-05-01 13:46:21]    Method: web_extract, URL: https://radar.cloudflare.com/domains
+[2026-05-01 13:46:22]   Fetched 2,908 chars
+[2026-05-01 13:46:23]    Extracted 0 claim(s)
+[2026-05-01 13:46:23] 
+📄 PyPI Stats â OpenAI SDK (web_page)
+[2026-05-01 13:46:23]    Method: web_extract, URL: https://pypistats.org/packages/openai
+[2026-05-01 13:46:25]   Fetched 555 chars
+[2026-05-01 13:46:31]    Extracted 4 claim(s)
+[2026-05-01 13:46:31]    Appended 4 pending item(s) to vault-inbox.json
+[2026-05-01 13:46:31] 
+📄 PyPI Stats â Anthropic SDK (web_page)
+[2026-05-01 13:46:31]    Method: web_extract, URL: https://pypistats.org/packages/anthropic
+[2026-05-01 13:46:33]   Fetched 545 chars
+[2026-05-01 13:46:41]    Extracted 5 claim(s)
+[2026-05-01 13:46:41]    Appended 5 pending item(s) to vault-inbox.json
+[2026-05-01 13:46:41] 
+📄 PyPI Stats â Google GenAI SDK (web_page)
+[2026-05-01 13:46:41]    Method: web_extract, URL: https://pypistats.org/packages/google-generativeai
+[2026-05-01 13:46:43]   Fetched 628 chars
+[2026-05-01 13:46:50]    Extracted 4 claim(s)
+[2026-05-01 13:46:50]    Appended 4 pending item(s) to vault-inbox.json
+[2026-05-01 13:46:50] 
+📄 EIA API — 860M / 930 / STEO (gov_api)
+[2026-05-01 13:46:50]    Method: eia_api, URL: https://www.eia.gov/opendata/
+[2026-05-01 13:46:50]   EIA_API_KEY env var not set — eia_api adapter requires one (free registration at https://www.eia.gov/opendata/register.php). Returning [].
+[2026-05-01 13:46:50]    Extracted 0 claim(s)
+[2026-05-01 13:46:50] 
+📄 NESO TEC Register (UK) (iso_queue)
+[2026-05-01 13:46:50]    Method: neso_tec, URL: https://www.neso.energy/data-portal/transmission-entry-capacity-tec-register
+[2026-05-01 13:46:50]   Fetch failed: HTTP Error 403: Forbidden
+[2026-05-01 13:46:50]   No CSV link found on NESO data-portal page — manual download required. Returning [].
+[2026-05-01 13:46:50]    Extracted 0 claim(s)
+[2026-05-01 13:46:50] 
+📄 Greenhouse Job Board API (ats_api)
+[2026-05-01 13:46:50]    Method: greenhouse_board, URL: https://boards-api.greenhouse.io/v1/boards/
+[2026-05-01 13:46:50]   greenhouse — fanning out to 9 company target(s)
+[2026-05-01 13:46:51]     openai (openai): fetch failed — HTTP Error 404: Not Found
+[2026-05-01 13:46:54]     anthropic: 439 total / 139 AI-titled (31.7%)
+[2026-05-01 13:46:54]     ai21 (ai21labs): fetch failed — HTTP Error 404: Not Found
+[2026-05-01 13:46:55]     groq (groq): fetch failed — HTTP Error 404: Not Found
+[2026-05-01 13:46:55]     fireworks: 31 total / 11 AI-titled (35.5%)
+[2026-05-01 13:46:57]     glean: 160 total / 10 AI-titled (6.2%)
+[2026-05-01 13:47:01]     databricks: 822 total / 133 AI-titled (16.2%)
+[2026-05-01 13:47:02]     scale: 172 total / 61 AI-titled (35.5%)
+[2026-05-01 13:47:02]     wandb (wandb): fetch failed — HTTP Error 404: Not Found
+[2026-05-01 13:47:02]    Extracted 5 claim(s)
+[2026-05-01 13:47:02]    Appended 5 pending item(s) to vault-inbox.json
+[2026-05-01 13:47:02] 
+📄 Lever Postings API (ats_api)
+[2026-05-01 13:47:02]    Method: lever_postings, URL: https://api.lever.co/v0/postings/
+[2026-05-01 13:47:02]   lever — fanning out to 1 company target(s)
+[2026-05-01 13:47:05]     mistral: 161 total / 52 AI-titled (32.3%)
+[2026-05-01 13:47:05]    Extracted 1 claim(s)
+[2026-05-01 13:47:05]    Appended 1 pending item(s) to vault-inbox.json
+[2026-05-01 13:47:05] 
+📄 Ashby Public Job Posting API (ats_api)
+[2026-05-01 13:47:05]    Method: ashby_public, URL: https://api.ashbyhq.com/posting-api/job-board/
+[2026-05-01 13:47:05]   ashby — fanning out to 11 company target(s)
+[2026-05-01 13:47:10]     cohere: 122 total / 11 AI-titled (9.0%)
+[2026-05-01 13:47:10]     together (together): fetch failed — HTTP Error 404: Not Found
+[2026-05-01 13:47:11]     lambda: 31 total / 0 AI-titled (0.0%)
+[2026-05-01 13:47:11]     modal: 28 total / 0 AI-titled (0.0%)
+[2026-05-01 13:47:11]     anyscale: 8 total / 0 AI-titled (0.0%)
+[2026-05-01 13:47:14]     cursor: 76 total / 2 AI-titled (2.6%)
+[2026-05-01 13:47:22]     harvey: 245 total / 0 AI-titled (0.0%)
+[2026-05-01 13:47:25]     perplexity: 69 total / 14 AI-titled (20.3%)
+[2026-05-01 13:47:29]     elevenlabs: 134 total / 1 AI-titled (0.7%)
+[2026-05-01 13:47:30]     runway: 4 total / 0 AI-titled (0.0%)
+[2026-05-01 13:47:33]     writer: 49 total / 4 AI-titled (8.2%)
+[2026-05-01 13:47:33]    Extracted 10 claim(s)
+[2026-05-01 13:47:33]    Appended 10 pending item(s) to vault-inbox.json
+[2026-05-01 13:47:33] 
+📄 Workable Jobs widget API (ats_api)
+[2026-05-01 13:47:33]    Method: workable_jobs, URL: https://apply.workable.com/api/v1/widget/accounts/
+[2026-05-01 13:47:33]   workable — fanning out to 1 company target(s)
+[2026-05-01 13:47:33]     huggingface (huggingface): fetch failed — HTTP Error 404: Not Found
+[2026-05-01 13:47:33]    Extracted 0 claim(s)
+[2026-05-01 13:47:33] 
+============================================================
+[2026-05-01 13:47:33] ✅ Done — 23 sources processed, 48 total claims extracted
+[2026-05-01 13:52:22] 
+============================================================
+[2026-05-01 13:52:22] 📡 Source Monitor — 2026-05-01
+[2026-05-01 13:52:22]   Registry: 72 sources
+[2026-05-01 13:52:22]   Due for extraction: 0
+[2026-05-01 13:52:22]   Nothing due today
+[2026-05-01 13:52:52] 
+============================================================
+[2026-05-01 13:52:52] 📡 Source Monitor — 2026-05-01
+[2026-05-01 13:52:52]   Registry: 72 sources
+[2026-05-01 13:52:52]   Due for extraction: 0
+[2026-05-01 13:52:52]   Nothing due today
