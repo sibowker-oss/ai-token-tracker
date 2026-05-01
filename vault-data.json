@@ -4915,6 +4915,256 @@
       "metricKey": "named customer count",
       "status": "accepted",
       "source_id": "src-052"
+    },
+    {
+      "id": "dp-226",
+      "claim": "Henry Shi built Super.com starting in 2016 and grew it to $150MM+ in annual revenues before exiting.",
+      "value": 150000000,
+      "unit": "USD",
+      "sourceUrl": "https://leanaileaderboard.com/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Lean AI Leaderboard",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "From Lean AI Leaderboard",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "ARR",
+      "status": "accepted",
+      "source_id": "src-009"
+    },
+    {
+      "id": "dp-227",
+      "claim": "The founder previously built a $100MM+ ARR startup by hiring hundreds of people and raising hundreds of millions of VC funding.",
+      "value": 100000000,
+      "unit": "USD",
+      "sourceUrl": "https://leanaileaderboard.com/",
+      "sourceType": "web_page",
+      "sourceAuthor": "Lean AI Leaderboard",
+      "confidence": "estimated",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "From Lean AI Leaderboard",
+      "tags": [
+        "provider_revenue"
+      ],
+      "metricKey": "ARR",
+      "status": "accepted",
+      "source_id": "src-009"
+    },
+    {
+      "id": "dp-228",
+      "claim": "fireworks \u2014 11 AI roles / 31 total (2026-W18)",
+      "value": 11,
+      "unit": "AI roles",
+      "sourceUrl": "https://boards-api.greenhouse.io/v1/boards/fireworksai",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Greenhouse Software",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"fireworks\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 31, \"open_roles_ai_titled\": 11, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.355, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "fireworks"
+      ],
+      "metricKey": "fireworks-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-069"
+    },
+    {
+      "id": "dp-229",
+      "claim": "glean \u2014 10 AI roles / 160 total (2026-W18)",
+      "value": 10,
+      "unit": "AI roles",
+      "sourceUrl": "https://boards-api.greenhouse.io/v1/boards/gleanwork",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Greenhouse Software",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"glean\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 160, \"open_roles_ai_titled\": 10, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.062, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "glean"
+      ],
+      "metricKey": "glean-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-069"
+    },
+    {
+      "id": "dp-230",
+      "claim": "databricks \u2014 133 AI roles / 822 total (2026-W18)",
+      "value": 133,
+      "unit": "AI roles",
+      "sourceUrl": "https://boards-api.greenhouse.io/v1/boards/databricks",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Greenhouse Software",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"databricks\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 822, \"open_roles_ai_titled\": 133, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.162, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "databricks"
+      ],
+      "metricKey": "databricks-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-069"
+    },
+    {
+      "id": "dp-231",
+      "claim": "scale \u2014 61 AI roles / 172 total (2026-W18)",
+      "value": 61,
+      "unit": "AI roles",
+      "sourceUrl": "https://boards-api.greenhouse.io/v1/boards/scaleai",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Greenhouse Software",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"scale\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 172, \"open_roles_ai_titled\": 61, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.355, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "scale"
+      ],
+      "metricKey": "scale-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-069"
+    },
+    {
+      "id": "dp-232",
+      "claim": "cohere \u2014 11 AI roles / 122 total (2026-W18)",
+      "value": 11,
+      "unit": "AI roles",
+      "sourceUrl": "https://api.ashbyhq.com/posting-api/job-board/cohere",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Ashby",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"cohere\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 122, \"open_roles_ai_titled\": 11, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.09, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "cohere"
+      ],
+      "metricKey": "cohere-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-071"
+    },
+    {
+      "id": "dp-233",
+      "claim": "lambda \u2014 0 AI roles / 31 total (2026-W18)",
+      "value": 0,
+      "unit": "AI roles",
+      "sourceUrl": "https://api.ashbyhq.com/posting-api/job-board/lambda",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Ashby",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"lambda\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 31, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "lambda"
+      ],
+      "metricKey": "lambda-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-071"
+    },
+    {
+      "id": "dp-234",
+      "claim": "modal \u2014 0 AI roles / 28 total (2026-W18)",
+      "value": 0,
+      "unit": "AI roles",
+      "sourceUrl": "https://api.ashbyhq.com/posting-api/job-board/modal",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Ashby",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"modal\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 28, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "modal"
+      ],
+      "metricKey": "modal-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-071"
+    },
+    {
+      "id": "dp-235",
+      "claim": "anyscale \u2014 0 AI roles / 8 total (2026-W18)",
+      "value": 0,
+      "unit": "AI roles",
+      "sourceUrl": "https://api.ashbyhq.com/posting-api/job-board/anyscale",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Ashby",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"anyscale\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 8, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "anyscale"
+      ],
+      "metricKey": "anyscale-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-071"
+    },
+    {
+      "id": "dp-236",
+      "claim": "cursor \u2014 2 AI roles / 76 total (2026-W18)",
+      "value": 2,
+      "unit": "AI roles",
+      "sourceUrl": "https://api.ashbyhq.com/posting-api/job-board/cursor",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Ashby",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"cursor\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 76, \"open_roles_ai_titled\": 2, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.026, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "cursor"
+      ],
+      "metricKey": "cursor-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-071"
+    },
+    {
+      "id": "dp-237",
+      "claim": "harvey \u2014 0 AI roles / 245 total (2026-W18)",
+      "value": 0,
+      "unit": "AI roles",
+      "sourceUrl": "https://api.ashbyhq.com/posting-api/job-board/harvey",
+      "sourceType": "ats_api",
+      "sourceAuthor": "Ashby",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05-01",
+      "dateAdded": "2026-05-01",
+      "usedOn": [],
+      "notes": "{\"type\": \"hiring_snapshot\", \"company_slug\": \"harvey\", \"window\": \"2026-W18\", \"metrics\": {\"open_roles_total\": 245, \"open_roles_ai_titled\": 0, \"open_roles_prompt_engineer\": 0, \"ai_titled_share\": 0.0, \"new_ai_roles_7d\": 0}}",
+      "tags": [
+        "hiring_snapshot",
+        "harvey"
+      ],
+      "metricKey": "harvey-hiring_snapshot",
+      "status": "accepted",
+      "source_id": "src-071"
     }
   ]
 }
