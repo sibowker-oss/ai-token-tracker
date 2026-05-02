@@ -266,7 +266,10 @@ def apply_accepted(claim, vault_data, entities, schema):
     # bridge across tag/metricKey boundaries (gpu_infrastructure + spend
     # = false-positive capex). Two-pass keeps multi-word rules intact for
     # claim text while still catching ~140 metricKey-only routings.
-    search_text = (claim.get("claim", "") + " " + " ".join(claim.get("tags", []))).lower()
+    # wq-039 follow-on: include the inbox item's structured `entity` field
+    # so claims like "databricks — 130 AI roles..." anchor on the entity
+    # name even when the claim text is bare. Catches ~10–15 prior misses.
+    search_text = (claim.get("claim", "") + " " + claim.get("entity", "") + " " + " ".join(claim.get("tags", []))).lower()
     metric_key_text = (claim.get("metricKey") or "").lower()
     entity_slug = match_entity(search_text, schema.get("entity_match_rules", []))
     field_id = match_field(search_text, schema.get("field_match_rules", []))
@@ -470,7 +473,8 @@ def replay_accepted(vault_inbox, vault_data, entities, schema, dry_run=False, on
             continue
 
         # Two-pass match (mirrors apply_accepted §2)
-        search_text = (item.get("claim", "") + " " + " ".join(item.get("tags", []))).lower()
+        # wq-039 follow-on: include the inbox item's structured `entity` field
+        search_text = (item.get("claim", "") + " " + item.get("entity", "") + " " + " ".join(item.get("tags", []))).lower()
         metric_key_text = (item.get("metricKey") or "").lower()
         entity_slug = match_entity(search_text, schema.get("entity_match_rules", []))
         field_id = match_field(search_text, schema.get("field_match_rules", []))
