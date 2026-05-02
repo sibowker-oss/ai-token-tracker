@@ -171,8 +171,120 @@ def generate(entities_path, existing_site_data_path, output_path):
         if "total_margin" in market and len(site["sankey"].get("outcomes", [])) > 2:
             site["sankey"]["outcomes"][2]["value"] = market["total_margin"]
 
+    # ── wq-044 wire-completion (Phase 1.2): propagate per-provider engine ──
+    # output into site-data.json:sankey.providers AND
+    # data/sankey-projections.json:<year>.providers. Without this propagation
+    # the rendered Sankey reads stale hand-curated values regardless of what
+    # the engine wrote into entities.json:market_aggregates.providers.
+    #
+    # Single-regenerator approach (option a from the wq-044 wire-completion
+    # brief §1.2): generate_site_data.py owns BOTH writes. No separate
+    # build_sankey.py — keeps the entry point single and the data flow
+    # linear: derive_market_aggregates.py → entities.json → generate_site_data.py
+    # → site-data.json + sankey-projections.json → renderer.
+    #
+    # Slug → display label mapping for sankey-projections.json which uses
+    # "Google (Gemini)" / "IaaS/Open" labels (vs site-data.json which uses
+    # "Google (Gemini)" / "IaaS"). Keep both shapes in sync with their
+    # respective existing schemas.
+    if market and isinstance(market.get("providers"), dict):
+        provider_block = market["providers"]
+        # Preserve order per existing site-data.json:sankey.providers (OpenAI,
+        # Anthropic, IaaS, Google) by reading the existing labels and matching
+        # by slug-to-label mapping. Unknown slugs append at end.
+        existing_sankey_providers = site["sankey"].get("providers") or []
+        sankey_label_to_slug = {
+            "OpenAI": "openai",
+            "Anthropic": "anthropic",
+            "Google (Gemini)": "google",
+            "Google/Gemini": "google",
+            "Meta (Llama)": "meta",
+            "Meta": "meta",
+            "DeepSeek": "deepseek",
+            "Mistral": "mistral",
+            "xAI": "xai",
+            "Minimax": "minimax",
+            "Moonshot": "moonshot",
+        }
+        new_sankey_providers = []
+        seen_slugs = set()
+        for existing in existing_sankey_providers:
+            slug = sankey_label_to_slug.get(existing.get("label", ""))
+            if slug and slug in provider_block:
+                p = provider_block[slug]
+                new_sankey_providers.append({
+                    "label": existing.get("label", p["label"]),
+                    "value": round(p["value"], 4),
+                    "color": existing.get("color", p["color"]),
+                })
+                seen_slugs.add(slug)
+            else:
+                # Preserve aggregation entries (e.g. "IaaS") that don't map to
+                # a single entity. Their value stays hand-curated.
+                new_sankey_providers.append(existing)
+        # Append any model_provider entities not already in the existing
+        # sankey.providers list (e.g. small providers DeepSeek/Mistral/xAI).
+        # Skip if value=0 to avoid cluttering the chart with zero-value bars.
+        for slug, p in provider_block.items():
+            if slug in seen_slugs:
+                continue
+            if p["value"] <= 0:
+                continue
+            new_sankey_providers.append({
+                "label": p["label"],
+                "value": round(p["value"], 4),
+                "color": p["color"],
+            })
+        site["sankey"]["providers"] = new_sankey_providers
+
     # ── Write output ──
     save_json(output_path, site)
+
+    # ── wq-044 wire-completion (Phase 1.2): also regenerate sankey-projections.json ──
+    sankey_proj_path = os.path.join(SITE_DIR, "data", "sankey-projections.json")
+    if os.path.exists(sankey_proj_path) and market and isinstance(market.get("providers"), dict):
+        sankey_proj = load_json(sankey_proj_path)
+        year_block = sankey_proj.get("2025") or {}
+        existing_proj_providers = year_block.get("providers") or []
+        sankey_label_to_slug_proj = {
+            "OpenAI": "openai",
+            "Anthropic": "anthropic",
+            "Google (Gemini)": "google",
+            "IaaS/Open": None,
+            "Meta (Llama)": "meta",
+            "DeepSeek": "deepseek",
+            "Mistral": "mistral",
+            "xAI": "xai",
+            "Minimax": "minimax",
+            "Moonshot": "moonshot",
+        }
+        new_proj_providers = []
+        for existing in existing_proj_providers:
+            slug = sankey_label_to_slug_proj.get(existing.get("label", ""))
+            if slug and slug in market["providers"]:
+                p = market["providers"][slug]
+                tier = p.get("tier", "3C")
+                src = (
+                    f"wq-044 engine-derived from entities.json:market_aggregates.2025.providers.{slug} "
+                    f"(${p['customer_revenue']}B customer + ${p['vc_subsidy']}B {p['subsidy_source'].split(' ')[0]})"
+                )
+                new_proj_providers.append({
+                    "label": existing.get("label", p["label"]),
+                    "value": round(p["value"], 4),
+                    "color": existing.get("color", p["color"]),
+                    "tier": tier,
+                    "src": src,
+                })
+            else:
+                # Preserve aggregation entries (IaaS/Open).
+                new_proj_providers.append(existing)
+        year_block["providers"] = new_proj_providers
+        if "total_customer_revenue" in market:
+            year_block["totalCustomerRevenue"] = market["total_customer_revenue"]
+        if "total_vc_subsidy" in market:
+            year_block["totalVCSubsidy"] = market["total_vc_subsidy"]
+        sankey_proj["2025"] = year_block
+        save_json(sankey_proj_path, sankey_proj)
 
     # ── Summary ──
     provider_count = len([p for p in providers if SLUG_TO_DASHBOARD_KEY.get(p["slug"])])

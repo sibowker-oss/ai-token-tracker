@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-01T23:36:31Z",
+    "generatedAt": "2026-05-02T11:33:41Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -50,8 +50,8 @@
   },
   "sankey": {
     "title": "2025 Actual Revenue Collected",
-    "totalCustomerRevenue": 17.47,
-    "totalVCSubsidy": 9.8,
+    "totalCustomerRevenue": 19.667,
+    "totalVCSubsidy": 9.5,
     "totalSystem": 27.27,
     "colLabels": [
       "Who Pays",
@@ -116,7 +116,7 @@
     "providers": [
       {
         "label": "OpenAI",
-        "value": 13.65,
+        "value": 15.3147,
         "color": "#10a37f"
       },
       {
@@ -131,8 +131,33 @@
       },
       {
         "label": "Google (Gemini)",
-        "value": 2.5,
+        "value": 2.7516,
         "color": "#4285f4"
+      },
+      {
+        "label": "DeepSeek",
+        "value": 0.1615,
+        "color": "#6c5ce7"
+      },
+      {
+        "label": "Mistral",
+        "value": 0.2154,
+        "color": "#ff7000"
+      },
+      {
+        "label": "xAI",
+        "value": 0.2692,
+        "color": "#000000"
+      },
+      {
+        "label": "Minimax",
+        "value": 0.0808,
+        "color": "#9333ea"
+      },
+      {
+        "label": "Moonshot",
+        "value": 0.0538,
+        "color": "#ec4899"
       }
     ],
     "outcomes": [
