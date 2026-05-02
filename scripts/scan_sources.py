@@ -293,6 +293,13 @@ def main():
                 "unit": claim.get("unit", ""),
                 "sourceUrl": url,
                 "sourceType": "reporting",
+                # wq-041: source grounding pass-through. Null until the
+                # EXTRACT_PROMPT in this script is updated to request these
+                # fields (follow-on). Schema kept consistent so review.html
+                # renders nothing instead of crashing.
+                "sourceExcerpt": claim.get("source_excerpt"),
+                "isPrimarySource": claim.get("is_primary_source"),
+                "originalSourceCited": claim.get("original_source_cited"),
                 "sourceAuthor": claim.get("entity", title),
                 "confidence": claim.get("confidence", "estimated"),
                 "dateOfClaim": coerce_or_keep(claim.get("dateOfClaim") or today, today),

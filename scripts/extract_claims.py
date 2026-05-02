@@ -143,6 +143,104 @@ def chunk_transcript(text, chunk_size=CHUNK_SIZE):
     return chunks
 
 
+# wq-041 — source-excerpt extraction
+# Find the claim's value or first words of its text in the source chunk and
+# return ~200 chars of surrounding context with the matched value bolded.
+# Best-effort: returns None if no anchor can be located. Used by the review UI
+# (review.html) to show source context inline without a click-out.
+
+_NUM_FORMATS = [
+    lambda v: f"{v:.0f}",
+    lambda v: f"{v:.1f}",
+    lambda v: f"{v:.2f}",
+    lambda v: f"{v:,.0f}",
+    lambda v: f"{v:,.1f}",
+]
+_EXCERPT_CONTEXT_CHARS = 200
+
+
+def _format_value_candidates(value):
+    """Build a list of plausible string forms a number might take in source text.
+
+    Returned list is sorted longest-first so the matching loop prefers the
+    most specific form. Without this, an integer value's bare "7" candidate
+    could match "$7 billion" elsewhere in the chunk before the more accurate
+    "$6.9 billion" form for value=6900000000 was tried.
+
+    Covers digit forms ($14B, 14B, 14.5B), spelled-out forms ($14 billion,
+    14 billion, $14.5 billion, 14 million, etc.), and bare integers. Spelled-
+    out forms matter most — they're the dominant pattern in podcast/news
+    transcripts. wq-041 tuning fix 2026-05-02 (was hitting 39% on podcasts).
+    """
+    if value is None:
+        return []
+    candidates = set()
+    try:
+        for fmt in _NUM_FORMATS:
+            candidates.add(fmt(value))
+    except (TypeError, ValueError):
+        pass
+    if isinstance(value, (int, float)):
+        # Digit-suffix forms ($14B, 14B, $14.5B, 14M, etc.)
+        for unit, divisor in (('B', 1e9), ('M', 1e6), ('T', 1e12), ('K', 1e3)):
+            if abs(value) >= divisor:
+                scaled = value / divisor
+                for fmt in _NUM_FORMATS[:3]:
+                    candidates.add(f"{fmt(scaled)}{unit}")
+                    candidates.add(f"${fmt(scaled)}{unit}")
+        # Spelled-out unit forms — the dominant pattern in podcast transcripts.
+        # Examples generated: "$20 billion", "20 billion", "$6.9 billion",
+        # "950 million", "$2 trillion".
+        for unit_word, divisor in (('billion', 1e9), ('million', 1e6),
+                                    ('trillion', 1e12), ('thousand', 1e3)):
+            if abs(value) >= divisor:
+                scaled = value / divisor
+                for fmt in _NUM_FORMATS[:3]:
+                    scaled_str = fmt(scaled)
+                    candidates.add(f"{scaled_str} {unit_word}")
+                    candidates.add(f"${scaled_str} {unit_word}")
+        # Bare integer for small numbers
+        if abs(value) < 1e9 and float(value).is_integer():
+            candidates.add(str(int(value)))
+    # Drop empty / pathological short candidates that would over-match,
+    # then sort longest-first so the matcher prefers more specific forms.
+    return sorted(
+        (c for c in candidates if c and len(c) >= 2),
+        key=lambda c: (-len(c), c),
+    )
+
+
+def _extract_excerpt(chunk_text, claim, context_chars=_EXCERPT_CONTEXT_CHARS):
+    if not chunk_text or not isinstance(chunk_text, str):
+        return None
+    value = claim.get('value')
+    claim_text = claim.get('claim') or ''
+
+    # Try the value forms first — they're the most distinctive anchor.
+    for candidate in _format_value_candidates(value):
+        idx = chunk_text.find(candidate)
+        if idx < 0:
+            # Try case-insensitive for unit-suffixed forms ($14B vs $14b)
+            idx = chunk_text.lower().find(candidate.lower())
+        if idx >= 0:
+            start = max(0, idx - context_chars)
+            end = min(len(chunk_text), idx + len(candidate) + context_chars)
+            excerpt = chunk_text[start:end].strip()
+            # Bold the matched value in the excerpt (markdown rendered by review.html)
+            return excerpt.replace(candidate, f"**{candidate}**", 1)
+
+    # Fallback: first 30 chars of claim text (lowercased compare for robustness)
+    snippet = claim_text[:30].strip()
+    if len(snippet) >= 8:
+        idx = chunk_text.lower().find(snippet.lower())
+        if idx >= 0:
+            start = max(0, idx - 80)
+            end = min(len(chunk_text), idx + context_chars * 2)
+            return chunk_text[start:end].strip()
+
+    return None
+
+
 def extract_from_transcript(filepath, client):
     """Run Claude extraction on a transcript file. Returns list of claim dicts."""
     meta = parse_transcript_meta(filepath)
@@ -199,6 +297,9 @@ def extract_from_transcript(filepath, client):
                 # Ensure weight field exists; default to indicative if model omitted it
                 if 'weight' not in claim:
                     claim['weight'] = 'indicative'
+                # wq-041: extract source excerpt from the chunk so the
+                # review UI can show context inline without a click-out.
+                claim['source_excerpt'] = _extract_excerpt(chunk, claim)
 
             if len(chunks) > 1:
                 print(f"{len(claims)} claim(s)")
@@ -535,6 +636,11 @@ def main():
             "weight": claim.get("weight", "indicative"),
             "dedup_status": claim.get("dedup_status", "new"),
             "dedup_note": claim.get("dedup_note"),
+            # wq-041: source grounding for review UI. Reduces mis-interpretation
+            # by surfacing the surrounding text and primary-source signals.
+            "sourceExcerpt": claim.get("source_excerpt"),
+            "isPrimarySource": claim.get("is_primary_source"),
+            "originalSourceCited": claim.get("original_source_cited"),
         })
         added += 1
 

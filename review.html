@@ -85,6 +85,18 @@
   .claim-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
   .claim-meta strong { color:var(--text); font-weight:600; }
   .claim-conflict { font-size:11px; color:var(--red); margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.06); border-radius:6px; }
+  /* wq-041: source grounding */
+  .source-context { margin-top:8px; border-left:2px solid var(--purple); padding:6px 12px; background:rgba(139,92,246,0.04); border-radius:0 6px 6px 0; }
+  .source-context-header { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--purple); }
+  .source-context-header .sc-toggle { transition:transform 0.15s; opacity:0.6; font-size:11px; }
+  .source-context[data-collapsed="true"] .sc-toggle { transform:rotate(-90deg); }
+  .source-context[data-collapsed="true"] .source-context-body { display:none; }
+  .source-context-body { margin-top:6px; }
+  .source-context-body blockquote { font-size:12px; color:var(--text); line-height:1.5; font-style:italic; margin:0 0 6px 0; padding:0; border:none; }
+  .source-context-body blockquote strong { color:var(--green); font-weight:700; font-style:normal; background:rgba(16,185,129,0.10); padding:0 3px; border-radius:3px; }
+  .source-context-meta { display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:10px; color:var(--text-dim); }
+  .badge-primary-src { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-cites-src { background:rgba(139,92,246,0.15); color:var(--purple); }
 
   /* Actions */
   .claim-actions { display:flex; gap:6px; margin-top:10px; align-items:center; flex-wrap:wrap; }
@@ -348,6 +360,10 @@ async function loadAll() {
           replaces: i.replaces || null,
           metricKey: i.metricKey || null,
           metric: inferMetric(i),
+          // wq-041: source grounding
+          sourceExcerpt: i.sourceExcerpt || null,
+          isPrimarySource: i.isPrimarySource ?? null,
+          originalSourceCited: i.originalSourceCited || null,
         });
         } catch(e) { console.error('Failed to add inbox item:', i.id, e); }
       });
@@ -1111,6 +1127,25 @@ function setFilter(f) {
   renderClaims();
 }
 
+// wq-041 — source context helpers
+function renderExcerpt(raw) {
+  // Escape HTML, then convert minimal markdown bold (**X**) to <strong>.
+  // The extractor only uses **value** for the matched number; no other
+  // markdown is expected. Keep this strict so source text can't inject HTML.
+  const esced = esc(raw);
+  return esced.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>');
+}
+
+function toggleSourceContext(headerEl) {
+  const wrapper = headerEl.closest('.source-context');
+  if (!wrapper) return;
+  const collapsed = wrapper.getAttribute('data-collapsed') === 'true';
+  wrapper.setAttribute('data-collapsed', collapsed ? 'false' : 'true');
+  // Persist user preference for next render. Per-card override stays in DOM
+  // until next renderClaims() call — fine for the review session.
+  try { localStorage.setItem('sc-default', collapsed ? 'expanded' : 'collapsed'); } catch(e) {}
+}
+
 function renderClaims() {
   let filtered;
 
@@ -1211,11 +1246,31 @@ function renderClaims() {
     // Claim text
     html += '<div class="claim-quote">"' + esc(item.claim) + '"</div>';
 
+    // wq-041: Source context — surrounding text from the source so reviewer
+    // can verify interpretation without click-out. Default expanded; user can
+    // collapse via the chevron. Lane-aware default behaviour comes with wq-040.
+    if (item.sourceExcerpt) {
+      const startCollapsed = (localStorage.getItem('sc-default') === 'collapsed');
+      html += '<div class="source-context" data-collapsed="' + (startCollapsed ? 'true' : 'false') + '">';
+      html += '<div class="source-context-header" onclick="toggleSourceContext(this)">';
+      html += '<span>Source context</span><span class="sc-toggle">▾</span>';
+      html += '</div>';
+      html += '<div class="source-context-body">';
+      html += '<blockquote>' + renderExcerpt(item.sourceExcerpt) + '</blockquote>';
+      html += '<div class="source-context-meta">';
+      if (item.isPrimarySource === true) html += '<span class="badge badge-primary-src">🎙 primary source</span>';
+      if (item.originalSourceCited) html += '<span class="badge badge-cites-src">📰 cites ' + esc(item.originalSourceCited) + '</span>';
+      if (item.sourceUrl) html += '<a href="' + esc(item.sourceUrl) + '" target="_blank" style="color:var(--accent);font-size:10px;margin-left:auto;">Open source ↗</a>';
+      html += '</div>';
+      html += '</div></div>';
+    }
+
     // Metadata
     html += '<div class="claim-meta">';
     if (item.metric) html += '<strong>Metric:</strong> ' + esc(item.metric) + ' &nbsp; ';
     if (item.speaker) html += '<strong>Speaker:</strong> ' + esc(item.speaker) + ' &nbsp; ';
-    if (item.original_source_cited) html += '<strong>Cites:</strong> ' + esc(item.original_source_cited) + ' &nbsp; ';
+    // Backwards compat: legacy snake_case field; new items use originalSourceCited surfaced as a badge above
+    if (item.original_source_cited && !item.originalSourceCited) html += '<strong>Cites:</strong> ' + esc(item.original_source_cited) + ' &nbsp; ';
     if (item.notes) html += '<br><span style="color:var(--text-dim);font-size:10px;">' + esc(item.notes) + '</span>';
     html += '</div>';
 

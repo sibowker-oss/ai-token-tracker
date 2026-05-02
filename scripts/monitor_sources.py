@@ -1301,6 +1301,12 @@ def _freetext_claim_to_vault(claim, source, claim_id, today):
         'weight': claim.get('weight', 'indicative'),
         'dedup_status': claim.get('dedup_status', 'new'),
         'dedup_note': claim.get('dedup_note'),
+        # wq-041: source grounding pass-through. Null until extraction prompts
+        # in this script are updated to request these fields (follow-on).
+        # The reuse of source_excerpt_original keeps any existing excerpt content.
+        'sourceExcerpt': claim.get('source_excerpt') or claim.get('source_excerpt_original'),
+        'isPrimarySource': claim.get('is_primary_source'),
+        'originalSourceCited': claim.get('original_source_cited'),
     }
 
 
