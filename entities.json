@@ -1728,6 +1728,7 @@
       ],
       "financials": {
         "2024": {
+          "arr": 2.0,
           "collected_revenue": 1.5
         },
         "2025": {
@@ -1751,7 +1752,7 @@
           "employees": 2500,
           "monthly_revenue_peak": 6,
           "market_share_pct": 73,
-          "collected_revenue": 6000000000
+          "collected_revenue": 6
         }
       },
       "current": {
@@ -1768,6 +1769,25 @@
         "customer_count": 300000
       },
       "provenance": {
+        "2024.arr": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "wq-048-phase-c-anthropic-2024-arr",
+              "claim": "Anthropic 2024 year-end ARR set to $2.0B per audit §1.2 trajectory ($1.5B 2024 collected revenue + 1167% YoY growth claim implies year-end ARR ~$2B). Populated to enable consensus engine log_mean growth method instead of the over-conservative ending_x_0.60 fallback. Even with this populated, engine still bottoms out below hand-curated $4.71B (per §7.2 weighted consensus across 3 independent sources) — see consensus override on 2025.collected_revenue.",
+              "value": 2.0,
+              "unit": "$B",
+              "weight": "authoritative",
+              "confidence": "estimated",
+              "source": "wq-048 Phase C reconciliation (Simon 2026-05-02)",
+              "source_url": "briefings/wq-048-consensus-engine-arr-to-revenue.md",
+              "date": "2026-05-02",
+              "origin": "editorial_reconciliation",
+              "role": "primary"
+            }
+          ]
+        },
         "2024.collected_revenue": {
           "confidence": "high",
           "claim_count": 1,
@@ -2812,8 +2832,21 @@
         },
         "2026.collected_revenue": {
           "confidence": "low",
-          "claim_count": 2,
+          "claim_count": 3,
           "claims": [
+            {
+              "id": "wq-048-phase-c-anthropic-2026-unit-fix",
+              "claim": "Unit correction: anthropic.financials.2026.collected_revenue normalised from raw dollars (6000000000) to $B (6) per the schema convention used elsewhere in financials. The underlying claim — Anthropic generating $6B in a single month (Feb 2026) — is preserved in the supporting Brad Gerstner claims below; only the storage representation changed. NOTE: the field nominally represents annual collected revenue; storing a single-month peak here is itself a methodology question, but unit normalisation is the immediate fix per wq-048 Phase B finding.",
+              "value": 6,
+              "unit": "$B",
+              "weight": "authoritative",
+              "confidence": "estimated",
+              "source": "wq-048 Phase C unit reconciliation (Simon 2026-05-02)",
+              "source_url": "briefings/wq-048-consensus-engine-arr-to-revenue.md",
+              "date": "2026-05-02",
+              "origin": "editorial_reconciliation",
+              "role": "primary"
+            },
             {
               "id": "dp-130",
               "claim": "Anthropic had a $6 billion month in February 2026, which is more revenue than the annual revenue of Databricks and Snowf",
@@ -6734,7 +6767,7 @@
       ],
       "financials": {
         "2025": {
-          "arr": 148,
+          "arr": 0.148,
           "valuation": 20
         },
         "2026": {
@@ -6757,9 +6790,22 @@
       "provenance": {
         "2025.arr": {
           "confidence": "low",
-          "claim_count": 2,
+          "claim_count": 3,
           "needs_source": false,
           "claims": [
+            {
+              "id": "wq-048-phase-c-perplexity-2025-unit-fix",
+              "claim": "Unit correction: perplexity.financials.2025.arr normalised from 148 to 0.148. The underlying dp-196 claim correctly stated '$148M in annualized revenue' with unit 'USD millions', but the apply-pipeline serialised the value as raw 148 into a field whose schema convention is $B (e.g. anthropic 2025.arr=4.5 means $4.5B). Engine output was producing $79.68B for Perplexity 2025 collected_revenue as a downstream effect \u2014 clearly wrong. Fix: set field value to 0.148 ($B) per the schema convention. Underlying claim preserved below.",
+              "value": 0.148,
+              "unit": "$B",
+              "weight": "authoritative",
+              "confidence": "estimated",
+              "source": "wq-048 Phase C unit reconciliation (Simon 2026-05-02)",
+              "source_url": "briefings/wq-048-consensus-engine-arr-to-revenue.md",
+              "date": "2026-05-02",
+              "origin": "editorial_reconciliation",
+              "role": "primary"
+            },
             {
               "id": "editorial-perplexity-2025-arr",
               "claim": "Perplexity 2025 arr: 0.2 $B",
