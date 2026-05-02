@@ -34,18 +34,28 @@ const provStatus = run('node', ['scripts/validate-provenance.mjs'], { RELEASE_CH
 // must trace to consensus_engine_derived | editorial_override | accepted |
 // editorial_reconciliation. Catches silent untraceable values from a
 // future engine bug or a partial backfill.
-console.log('\n→ 2/4  Consensus provenance (wq-048 §2 #10)');
+console.log('\n→ 2/5  Consensus provenance (wq-048 §2 #10)');
 const consensusJson = join(reportDir, 'consensus-provenance.json');
 const consensusStatus = run('node', ['scripts/validate-consensus-provenance.mjs'], {
   RELEASE_CHECK_CONSENSUS_JSON_OUT: consensusJson,
 });
 
-// Step 3: Playwright suite
-console.log('\n→ 3/4  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 3 (wq-044 wire-completion §1.4): sankey wire — site-data.json:sankey.providers
+// must agree with entities.json:market_aggregates.providers within 1%. Catches
+// the 2026-05-02 miss where the engine ran but generate_site_data.py was never
+// regenerated, leaving stale hand-curated values in the rendered Sankey.
+console.log('\n→ 3/5  Sankey wire (wq-044 wire-completion §1.4)');
+const sankeyJson = join(reportDir, 'sankey-wire.json');
+const sankeyStatus = run('node', ['scripts/validate-sankey-wire.mjs'], {
+  RELEASE_CHECK_SANKEY_JSON_OUT: sankeyJson,
+});
+
+// Step 4: Playwright suite
+console.log('\n→ 4/5  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 4: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 4/4  Editorial read-through (§11.5)');
+// Step 5: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 5/5  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -55,6 +65,9 @@ const provAdvisories = provFindings.filter(f => f.severity === 'advisory');
 
 const consensusFindings = existsSync(consensusJson) ? JSON.parse(readFileSync(consensusJson, 'utf8')) : [];
 const consensusFails = consensusFindings.filter(f => f.severity === 'fail');
+
+const sankeyFindings = existsSync(sankeyJson) ? JSON.parse(readFileSync(sankeyJson, 'utf8')) : [];
+const sankeyFails = sankeyFindings.filter(f => f.severity === 'fail');
 
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
@@ -79,12 +92,13 @@ const report = `# Release-check report
 |---|---|---|---|
 | Provenance (§4.2/§5.5) | ${provFindings.length === 0 ? '✓' : ''} | ${provAdvisories.length} | ${provFails.length} |
 | Consensus provenance (wq-048) | ${consensusFindings.length === 0 ? '✓' : ''} | 0 | ${consensusFails.length} |
+| Sankey wire (wq-044) | ${sankeyFindings.length === 0 ? '✓' : ''} | 0 | ${sankeyFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyFails.length + pwSummary.failures, provAdvisories.length)}
 
 ## Provenance findings
 
@@ -93,6 +107,10 @@ ${renderFindings(provFindings)}
 ## Consensus-provenance findings (wq-048 §2 #10)
 
 ${renderFindings(consensusFindings)}
+
+## Sankey-wire findings (wq-044 wire-completion §1.4)
+
+${renderFindings(sankeyFindings)}
 
 ## Playwright suite
 
@@ -123,6 +141,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   commit: gitShortSha(),
   provenance: provFindings,
   consensus_provenance: consensusFindings,
+  sankey_wire: sankeyFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -130,7 +149,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);
