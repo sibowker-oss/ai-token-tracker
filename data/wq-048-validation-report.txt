@@ -1,0 +1,232 @@
+# wq-048 validation report
+_Generated 2026-05-02T05:41:10Z_
+
+## Validation gate vs assumptions-audit.md §4.4 (±15% band)
+
+Provider      Year     Hand-curated    Engine output       Delta    Within band?  Origin
+------------  ------  -------------  ---------------  ----------  --------------  ------------------------------
+openai        2025    $       7.65B           $9.31B      +21.8%            ✗ NO  consensus_engine_derived
+anthropic     2025    $       4.71B           $2.92B      -37.9%            ✗ NO  consensus_engine_derived
+google        2025    $       2.00B           $2.25B      +12.6%           ✓ yes  consensus_engine_derived
+iaas          2025    $       0.50B                —           —            ✗ NO  entity not in entities.json
+
+## Backfill diff — every entity × year with populated ARR
+_DRY-RUN — no writes_
+
+Slug                    Year      Existing      Engine    Resolved        Δ%  Method                  Profile       Origin
+----------------------  ------  ----------  ----------  ----------  --------  ----------------------  ------------  ------------------------------
+openai                  2024        $3.60B      $2.58B      $2.58B    -28.3%  ending_x_0.60           openai        consensus_engine_derived
+openai                  2025        $4.30B      $9.31B      $9.31B   +116.6%  logarithmic_mean        openai        consensus_engine_derived
+openai                  2026             —     $18.94B     $18.94B         —  simple_average          openai        consensus_engine_derived
+openai                  2030             —    $144.62B    $144.62B         —  ending_x_0.60           openai        consensus_engine_derived
+anthropic               2025        $4.50B      $2.92B      $2.92B    -35.0%  ending_x_0.60           anthropic     consensus_engine_derived
+anthropic               2026    $6000000000.00B     $10.54B     $10.54B   -100.0%  logarithmic_mean        anthropic     consensus_engine_derived
+google                  2025             —      $2.25B      $2.25B         —  ending_x_0.60           google        consensus_engine_derived
+deepseek                2025             —      $0.16B      $0.16B         —  ending_x_0.60           _default      consensus_engine_derived
+mistral                 2025             —      $0.22B      $0.22B         —  ending_x_0.60           _default      consensus_engine_derived
+xai                     2025             —      $0.27B      $0.27B         —  ending_x_0.60           _default      consensus_engine_derived
+minimax                 2025             —      $0.08B      $0.08B         —  ending_x_0.60           _default      consensus_engine_derived
+moonshot                2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+coreweave               2025             —      $1.02B      $1.02B         —  ending_x_0.60           _default      consensus_engine_derived
+lambda                  2025             —      $0.27B      $0.27B         —  ending_x_0.60           _default      consensus_engine_derived
+together                2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+github-copilot          2025             —      $0.89B      $0.89B         —  ending_x_0.60           _default      consensus_engine_derived
+cursor-(anysphere)      2025             —      $0.54B      $0.54B         —  ending_x_0.60           _default      consensus_engine_derived
+perplexity              2025             —     $79.68B     $79.68B         —  ending_x_0.60           _default      consensus_engine_derived
+perplexity              2026             —    $259.46B    $259.46B         —  logarithmic_mean        _default      consensus_engine_derived
+replit                  2025             —      $0.14B      $0.14B         —  ending_x_0.60           _default      consensus_engine_derived
+cognition-(devin)       2025             —      $0.08B      $0.08B         —  ending_x_0.60           _default      consensus_engine_derived
+together-ai             2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+lovable                 2025             —      $0.22B      $0.22B         —  ending_x_0.60           _default      consensus_engine_derived
+characterai             2025             —      $0.08B      $0.08B         —  ending_x_0.60           _default      consensus_engine_derived
+elevenlabs              2025             —      $0.18B      $0.18B         —  ending_x_0.60           _default      consensus_engine_derived
+wrtn-technologies       2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+micro1                  2025             —      $0.13B      $0.13B         —  ending_x_0.60           _default      consensus_engine_derived
+midjourney              2025             —      $0.16B      $0.16B         —  ending_x_0.60           _default      consensus_engine_derived
+harvey-ai               2025             —      $0.10B      $0.10B         —  ending_x_0.60           _default      consensus_engine_derived
+monica-ai               2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+jasper                  2025             —      $0.07B      $0.07B         —  ending_x_0.60           _default      consensus_engine_derived
+glean                   2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+descript                2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+yellowai                2025             —      $0.04B      $0.04B         —  ending_x_0.60           _default      consensus_engine_derived
+intercom-fin            2025             —      $0.03B      $0.03B         —  ending_x_0.60           _default      consensus_engine_derived
+writer                  2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+blackboxai              2025             —      $0.02B      $0.02B         —  ending_x_0.60           _default      consensus_engine_derived
+deepl                   2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+falai                   2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+salesforce-agentforce   2025             —      $0.16B      $0.16B         —  ending_x_0.60           _default      consensus_engine_derived
+clay                    2025             —      $0.03B      $0.03B         —  ending_x_0.60           _default      consensus_engine_derived
+gamma                   2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+mercor                  2025             —      $0.04B      $0.04B         —  ending_x_0.60           _default      consensus_engine_derived
+synthesia               2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+genspark                2025             —      $0.03B      $0.03B         —  ending_x_0.60           _default      consensus_engine_derived
+chai-research           2025             —      $0.02B      $0.02B         —  ending_x_0.60           _default      consensus_engine_derived
+openart                 2025             —      $0.04B      $0.04B         —  ending_x_0.60           _default      consensus_engine_derived
+abridge                 2025             —      $0.03B      $0.03B         —  ending_x_0.60           _default      consensus_engine_derived
+photoroom               2025             —      $0.03B      $0.03B         —  ending_x_0.60           _default      consensus_engine_derived
+runway                  2025             —      $0.05B      $0.05B         —  ending_x_0.60           _default      consensus_engine_derived
+fathom                  2025             —      $0.01B      $0.01B         —  ending_x_0.60           _default      consensus_engine_derived
+retell-ai               2025             —      $0.02B      $0.02B         —  ending_x_0.60           _default      consensus_engine_derived
+cal-ai                  2025             —      $0.01B      $0.01B         —  ending_x_0.60           _default      consensus_engine_derived
+
+## Summary
+  Total entity-years derived:                    53
+  With existing collected_revenue value:         4
+  Engine output within ±15% of existing:         0
+  Editorial overrides applied:                   0
+
+## Diagnosis per validation outlier
+
+### OpenAI 2025 — engine $9.31B vs hand-curated $7.65B (+21.8%)
+
+This is the EXPECTED outcome from Phase A (paper math predicted $9.31B exactly).
+Engine path: log_mean(20, 5) × 0.88 × 0.91 × 1.075 = 9.31.
+
+Decomposition of where the $1.66B gap comes from:
+  - Hand-curated $7.65B comes from `consensus weighted ~$7.64B customer revenue`
+    blending Zitron $11.9B (64% credibility) and The Information H1 $4.3B (56%).
+    See assumptions-audit.md §7.2 openai-revenue-2025.
+  - Engine output reflects the documented §2 methodology cleanly. The gap
+    means EITHER the §2 methodology produces a less-conservative estimate
+    than the hand-curated weighted-average, OR the hand-curated value is
+    pinned conservatively pending fuller H2 2025 data (per the brief's
+    suggested override reason).
+
+Recommended calibrations (in order of impact):
+
+  1. EDITORIAL OVERRIDE for openai.2025.collected_revenue → 7.65 with reason
+     "Per assumptions-audit.md §1.1, conservative editorial position pending
+     fuller H2 2025 data" expires_at=2026-08-01. This is the brief's own
+     §3.3 example. Brings the validation gate to PASS without engine tuning.
+     IMPACT: gap → 0%.
+
+  2. ALTERNATIVE: tighten OpenAI's best_period_x12 factor from 0.88 to 0.80.
+     Engine output drops 9.31 → 9.31 × (0.80/0.88) = 8.46. Brings to within
+     ±10.6%. The audit §2.3 says "best period x12 inflates 10-15%"; 0.88 is
+     the low end of that range, 0.85 (= -15%) is the middle, 0.80 is the high
+     end. Defensible move if Zitron's specific OpenAI data shows the
+     inflation is closer to the high end of the range. IMPACT: 21.8% → 10.6%.
+
+  3. ALTERNATIVE: lower OpenAI NRR from 1.30 to 1.15. Engine output drops
+     to 8.66 × 1.0375 = 8.99 (2.4% lower). Marginal effect alone.
+
+### Anthropic 2025 — engine $2.92B vs hand-curated $4.71B (-37.9%)
+
+Root cause: Anthropic 2024 ARR is None in entities.json. Engine falls back
+to `ending_x_0.60` (60% haircut) per audit §2.4 "only ending ARR known".
+
+Engine path: 4.5 × 0.60 × 1.00 × 0.9625 × 1.125 = 2.92.
+
+The 60% haircut is too conservative for Anthropic specifically because:
+  - Anthropic's growth trajectory in 2025 was fast (1.5 → 4.5 implied),
+    which the log_mean would have given 4.5 × ln(1)/(ln(4.5/1.5)) = 2.73
+    averaged over the year — actually about the same as the haircut!
+  - The hand-curated $4.71B is NOT derived from §2 pipeline at all. It's
+    a consensus weighted average of three independent sources ($5B court
+    affidavit + $4.5B Sacra + $4.5B The Information). See audit §7.2
+    anthropic-revenue-2025.
+  - The §2 pipeline assumes all sources should converge on one method
+    output; Anthropic's hand-curated bypasses the pipeline.
+
+Recommended calibrations (in order of impact):
+
+  1. POPULATE anthropic.financials.2024.arr. Per audit §1.2, "Cumulative
+     collected revenue (all-time through early 2025) ~$5B" + 2024 collected
+     of $1.5B already in entities.json + the 1,167% YoY claim suggests 2024
+     year-end ARR was ~$1.5–2B. With startingARR=1.5: ratio=3.0 → log_mean
+     fires → log_mean(4.5, 1.5) × 1.0 × 0.9625 × 1.125 = 3.30. Closer to
+     hand-curated but still -30%. With startingARR=2.0: ratio=2.25 → log_mean
+     → log_mean(4.5, 2.0) × 1.0 × 0.9625 × 1.125 = 3.59. Still under.
+     IMPACT: gap → -30% to -24%, still outside band.
+
+  2. EDITORIAL OVERRIDE for anthropic.2025.collected_revenue → 4.71 with
+     reason "Hand-curated via consensus weighted average of 3 independent
+     sources (sworn court affidavit + Sacra + The Information). Not derivable
+     via §2 pipeline because Anthropic has no comparable starting ARR for
+     log_mean and the 60% haircut is too conservative for high-growth
+     companies entering a year." expires_at=2027-01-01.
+     IMPACT: gap → 0%.
+
+  3. RAISE Anthropic NRR from 1.50 to a higher value. Each 0.10 NRR rise
+     adds 2.5% via the dampened formula. To bridge -37% gap would need
+     NRR ~3.0+ which is not defensible. NOT recommended.
+
+  4. METHODOLOGY EVOLUTION: the audit §2.4 should grow a fifth growth-method
+     scenario for "starting ARR unknown but growth rate documented" — would
+     use `endingARR / (1 + growth_rate)` to back-fill startingARR, then run
+     log_mean. Not in scope for this brief but flagged as a follow-on.
+
+### Google 2025 — engine $2.25B vs hand-curated $2.00B (+12.6%) ✓ within band
+
+Engine path: 4.2 × 0.60 × 0.93 × 0.915 × 1.05 = 2.25.
+
+Within the ±15% band. Engine fired ending_x_0.60 (no 2024 ARR present)
+with the moderate 0.93 unknown-method factor. The +12.6% bias is acceptable
+per §4 calibration table. NO action required.
+
+### IaaS 2025 — engine N/A vs hand-curated $0.50B
+
+Cause: 'iaas' is an aggregation node ($0.50B = together + fireworks + groq +
+similar), not a single entity slug in entities.json. The engine derives
+per-entity collected_revenue, not category aggregates.
+
+Recommended fix:
+
+  1. SKIP this validation target — it's not a single-entity comparable.
+     Either remove from `validation_targets.iaas` in consensus_config.json,
+     OR change validation logic to sum across entities tagged with role
+     `iaas_provider`. The latter is the cleaner long-term answer but
+     out-of-scope for this brief — IaaS provider entities (together,
+     fireworks, lambda, coreweave) currently have no ARR populated in
+     entities.json so the sum would be ~0 anyway.
+
+  2. ALTERNATIVELY: ship Phase C with iaas validation target removed (or
+     marked _doc_only); add a Notion follow-on for "populate IaaS provider
+     ARR records + change validation to sum across role=iaas_provider".
+
+## Recommended calibration plan (for Simon to confirm before Phase C)
+
+In rough order of effort/impact:
+
+  1. Add editorial override openai.2025.collected_revenue → 7.65 (brief's
+     own example, ships immediately, no engine tuning)
+  2. Add editorial override anthropic.2025.collected_revenue → 4.71
+     (documented reason: §7.2 weighted consensus, not §2 derivable)
+  3. Drop iaas from validation_targets pending IaaS provider entity
+     records being populated
+  4. Re-run --validate; expect 4 of 4 targets to pass (3 actual targets
+     within band, 1 dropped).
+  5. THEN (and only then) run --backfill --apply.
+
+Optional follow-on tuning that does NOT require overrides:
+  - OpenAI best_period_x12 factor 0.88 → 0.85 brings OpenAI engine output
+    from 9.31 → 8.99, gap from +21.8% → +17.5% (still outside band by 2.5pp)
+  - Adding anthropic.2024.arr=2 manually via review queue gets Anthropic
+    engine output from 2.92 → 3.59, gap from -37.9% → -23.8% (still
+    outside band but closer)
+
+Neither of those alone gets all targets to pass — overrides are the cleanest
+path to ship, and overrides are the brief's recommended mechanism (§3.3, §5
+expiry-driven re-review).
+
+## Backfill data-quality findings (surfaced by engine, OUT OF SCOPE)
+
+These are pre-existing entities.json bugs the engine surfaced. NOT fixed
+in this commit per "do not decide editorial values on Simon's behalf":
+
+  1. perplexity.2025.arr = 148  → almost certainly $148M (i.e., 0.148 in
+     the schema's $B convention), not $148B. Engine produces $79.68B for
+     2025 collected_revenue as a result — clearly wrong.
+
+  2. anthropic.2026.collected_revenue = 6000000000 → raw dollars instead
+     of $B units. Should be 6 (i.e. $6B/month per Brad Gerstner). Engine
+     "delta vs existing" is meaningless until units are normalised.
+
+  3. openai.2026.arr = 24, openai.2027_projected.arr = 50, openai.2030.arr
+     = 280 → engine derives plausible-looking values for projection years.
+     Not a bug per se, just worth noting that engine output for projected
+     years inherits the projection's accuracy (or lack thereof).
+
+Suggest a separate cleanup pass on entities.json units before Phase C,
+OR ship Phase C with overrides only on the validation targets and accept
+that backfill output for unit-buggy entities will be wrong until fixed.
