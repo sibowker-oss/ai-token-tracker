@@ -50,6 +50,7 @@
           "arr": 20,
           "collected_revenue": 9.3147,
           "operating_loss": 6.0,
+          "vc_subsidy": 6.0,
           "revenue_by_channel": {
             "subscription_pct": 55,
             "api_pct": 30,
@@ -99,6 +100,25 @@
         "subscriber_count": 50000000
       },
       "provenance": {
+        "2025.vc_subsidy": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "editorial-20260502-openai-2025-vc_subsidy",
+              "claim": "VC subsidy editorial balance value: currently equal to operating_loss; no documented non-VC funding source. Set to support the wq-044 Sankey wire's split between operating_loss (documented financial fact) and vc_subsidy (editorial-balance value).",
+              "value": 6.0,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Editorial balance calculation per assumptions-audit.md \u00a74.4",
+              "source_url": "assumptions-audit.md#section-4-4",
+              "date": "2026-05-02",
+              "origin": "editorial_balance_calculation",
+              "role": "primary"
+            }
+          ]
+        },
         "2022.inference_cost": {
           "confidence": "high",
           "claim_count": 2,
@@ -1898,6 +1918,7 @@
           "arr": 4.5,
           "collected_revenue": 4.71,
           "operating_loss": 5.2,
+          "vc_subsidy": 3.0,
           "cash_burn": 3.0,
           "revenue_by_channel": {
             "api_pct": 72,
@@ -1932,6 +1953,25 @@
         "customer_count": 300000
       },
       "provenance": {
+        "2025.vc_subsidy": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "editorial-20260502-anthropic-2025-vc_subsidy",
+              "claim": "VC subsidy editorial balance value: documented operating loss is $5.2B; the $2.2B gap to vc_subsidy reflects non-VC funding sources — API operating cash, MSFT/AWS credits, debt. Per assumptions-audit.md §4.4 hand-curated Sankey ($3.0B). Held until reconciliation with FY2026 disclosures.",
+              "value": 3.0,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Editorial balance calculation per assumptions-audit.md §4.4",
+              "source_url": "assumptions-audit.md#section-4-4",
+              "date": "2026-05-02",
+              "origin": "editorial_balance_calculation",
+              "role": "primary"
+            }
+          ]
+        },
         "2024.arr": {
           "confidence": "medium",
           "claim_count": 1,
@@ -3226,7 +3266,8 @@
         "2025": {
           "arr": 4.2,
           "user_count": 650000000,
-          "collected_revenue": 2.2516
+          "collected_revenue": 2.2516,
+          "vc_subsidy": 0.5
         },
         "2026": {
           "valuation": 11
@@ -3242,6 +3283,25 @@
         "user_count": 650000000
       },
       "provenance": {
+        "2025.vc_subsidy": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "editorial-20260502-google-2025-vc_subsidy",
+              "claim": "VC subsidy editorial balance value: editorial estimate of Alphabet internal subsidy to Google AI division ($0.5B per assumptions-audit.md §4.4). Google has no documented operating_loss for the AI carve-out; the $0.5B represents implied internal Alphabet subsidy covering the gap between AI revenue and AI cost.",
+              "value": 0.5,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Editorial balance calculation per assumptions-audit.md §4.4",
+              "source_url": "assumptions-audit.md#section-4-4",
+              "date": "2026-05-02",
+              "origin": "editorial_balance_calculation",
+              "role": "primary"
+            }
+          ]
+        },
         "2026.valuation": {
           "confidence": "high",
           "claim_count": 2,
