@@ -126,14 +126,6 @@
 
   <div class="timeline">
 
-    <div class="entry" data-scope="revenue">
-      <div class="entry-meta">
-        <span class="entry-date">2 May 2026</span>
-        <span class="entry-scope revenue">Revenue Ledger</span>
-      </div>
-      <div class="entry-text"><strong>OpenAI 2025 customer revenue updated $7.65B → $9.31B (+22%).</strong> We've adopted the §2 ARR-to-revenue conversion methodology (now automated in <code>scripts/derive_collected_revenue.py</code>) over the previous §7.2 weighted-consensus method that produced $7.65B. The new methodology applies the documented growth-method math (logarithmic mean of $5B 2024 starting ARR and $20B 2025 ending ARR) with OpenAI's segment mix, the best-period-x12 ARR haircut (0.88), and the dampened NRR boost (1.075) — yielding $9.31B as the engine output. The hand-curated $7.65B reflected a more conservative editorial position pending fuller H2 2025 data; the engine output reflects the trajectory the documented methodology actually predicts. Anthropic 2025 stays at $4.71B via editorial override (engine §2 method bottoms out below for Anthropic; override expires 2027-01-01 to force re-review). Google 2025 moves $2.00B → $2.25B (engine native, within ±15%). Sankey customer revenue total rises by the OpenAI difference; downstream allocations recompute on next build. See <code>data/wq-048-apply-report.txt</code> for the full per-entity backfill diff and <code>assumptions-audit.md</code> §2 for the methodology reference. wq-048.</div>
-    </div>
-
     <div class="entry" data-scope="methodology">
       <div class="entry-meta">
         <span class="entry-date">21 Apr 2026</span>
