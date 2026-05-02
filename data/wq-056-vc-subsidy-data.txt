@@ -1,0 +1,207 @@
+# wq-056 vc_subsidy gap audit — 4 providers from wq-044 fallback log
+
+_Generated 2026-05-03 (overnight session continuation), post wq-048 + wq-040
+merges + wq-044 wire-completion (still on branch). Data gather only — no
+entity writes._
+
+## Background
+
+wq-044 wire-completion's `derive_market_aggregates.py` runs every model_provider
+entity through `provider.value = collected_revenue + (vc_subsidy or operating_loss
+fallback)`. For 4 providers, BOTH `vc_subsidy` AND `operating_loss` are absent
+in `entities.json:financials.2025`, so they fall to $0 subsidy and contribute
+nothing to the Sankey VC band:
+
+  - Mistral
+  - xAI
+  - DeepSeek
+  - Meta (Llama)
+
+This file gathers what vault evidence exists to either populate vc_subsidy
+hand-curated (option a) or document why we should wait for wq-055 systematic
+automation (option b).
+
+## Vault evidence summary
+
+  Searched: `vault-inbox.json:items[].claim`, `vault-data.json:dataPoints[].claim`,
+  `entities.json:provenance.<*>.claims[].{claim,source}` for each of the 4 slugs.
+  Filtered to topics: operating_loss, cash_burn, funding_round, valuation,
+  subsidy, arr_revenue.
+
+  Inbox hits: 21 across all 4 providers.
+  Vault hits: 1 across all 4 providers.
+  Entity provenance hits: 19 across all 4 providers.
+
+  None of the 4 providers have a direct `operating_loss` or `cash_burn`
+  claim in any of the three sources. Funding/valuation context exists for
+  3 of 4 (Mistral, xAI, DeepSeek). Meta has 12 entity-prov hits but most
+  are about Meta's broader business, not Meta-AI-specific operating loss.
+
+## Per-provider analysis + proposed vc_subsidy
+
+### Mistral
+
+  Existing entity 2025 data:
+    arr: 0.4 ($B)
+    collected_revenue: 0.2154 ($B, wq-048 engine output)
+    operating_loss: None
+    cash_burn: None
+    vc_subsidy: None  ← gap
+
+  Vault evidence:
+    - "Mistral raised the largest European AI funding round in history" (no value)
+    - "Calculated from funding round valuations and reported revenue growth" (no value)
+
+  Public context (NOT in vault — would need to be added as accepted claims):
+    - Mistral raised ~€600M Series B (Dec 2024)
+    - Mistral closed ~$2B Series C late 2025 at ~$13B post-money valuation
+    - No public op_loss disclosure
+
+  Proposed vc_subsidy: **DEFER** ($0 fallback acceptable for now)
+  Reasoning: too thin. Could extrapolate from raised-vs-revenue ratio
+  (~$2.6B raised / $0.4B ARR = 6.5x), but that's leveraging cumulative
+  funding into an annual subsidy figure — methodologically muddled.
+  Better to wait for an op_loss disclosure or wq-055 automation that
+  derives subsidy from Sankey balancing.
+
+### xAI
+
+  Existing entity 2025 data:
+    arr: 0.5 ($B)
+    collected_revenue: 0.2692 ($B, wq-048 engine output)
+    operating_loss: None
+    cash_burn: None
+    vc_subsidy: None  ← gap
+
+  Vault evidence:
+    - "xAI raised $20B in Q1 2026"
+    - "SpaceX acquired xAI early April 2026; combined SpaceX+xAI entity
+      valued at $1.25T; xAI component at $250B"
+
+  Public context (well-reported, NOT in vault yet):
+    - Musk publicly stated xAI was burning ~$1B/month mid-2025 training Grok
+    - Colossus DC build: ~$5B capex (separate from operating)
+    - Annual operating burn estimated $8-12B for 2025
+
+  Proposed vc_subsidy: **$8.0B** (CONSERVATIVE)
+  Reasoning: midpoint of the reported $1B/month run-rate × 12 months =
+  $12B (high), conservative haircut for partial-year ramp + Tesla/SpaceX
+  cross-funding subsidy reduces the pure-VC portion → $8B. Defensible
+  with origin = `editorial_balance_calculation` matching the
+  openai/anthropic/google pattern from wq-048 Phase C.
+
+  Caveat: would benefit from a real op_loss claim being accepted via the
+  review queue; the $8B number is editorial estimate, not documented fact.
+
+### DeepSeek
+
+  Existing entity 2025 data:
+    arr: 0.3 ($B)
+    collected_revenue: 0.1615 ($B, wq-048 engine output)
+    operating_loss: None
+    cash_burn: None
+    vc_subsidy: None  ← gap
+
+  Vault evidence:
+    - "DeepSeek is reportedly valued at approximately 20 billion USD,
+       with both Alibaba and Tencent competing to invest, as founder
+       Liang Wenfeng c…"
+
+  Public context:
+    - DeepSeek is famously capital-efficient — V3 model trained for ~$6M
+    - Funding has been minimal vs Western frontier peers
+    - Backed by High-Flyer hedge fund profits, not pure VC
+
+  Proposed vc_subsidy: **$0.5B** (very conservative)
+  Reasoning: DeepSeek's documented capital efficiency means subsidy is
+  dramatically smaller than Western peers. $0.5B reflects R&D + inference
+  burn estimate net of API revenue. Could equally well stay at $0 fallback
+  given the High-Flyer funding model isn't traditional VC at all — the
+  framing might not fit.
+
+  Recommend either: $0.5B with a note explaining the High-Flyer caveat,
+  OR defer with `_doc` field explaining why VC subsidy framing doesn't
+  fit cleanly.
+
+### Meta (Llama)
+
+  Existing entity 2025 data:
+    (entire financials block empty — no arr, no collected_revenue, no op_loss)
+
+  Vault evidence: 12 entity-prov hits, mostly about Meta broader business.
+  Most relevant:
+    - "Meta's SPV deal was valued at $26B" (general Meta finance)
+    - Various Meta capex / GPU procurement claims
+
+  Per audit §1.4: Meta tagged with "$0 ARR, 80T tokens/day, Open model,
+  no direct revenue."
+
+  Proposed vc_subsidy: **DEFER** — VC subsidy framing doesn't fit
+  Reasoning: Meta has no direct AI revenue (Llama is open-weights, no
+  API revenue). Meta AI's costs are absorbed by Meta's broader business
+  (subsidised by ad revenue, not VC). Slotting a `vc_subsidy` value
+  here would be miscategorising — closer to "internal Meta subsidy"
+  parallel to Google's Alphabet-internal-subsidy framing ($0.5B in
+  audit §4.4, set as Google vc_subsidy editorially).
+
+  Recommend: leave fallback to $0 for Meta in the Sankey, with a note
+  in the wq-044 wire that Meta is "intentional zero — Llama is open
+  model with no direct revenue path; subsidy is Meta-internal not VC".
+  Could also set vc_subsidy = ~$5B editorially mirroring Google's
+  treatment, but Meta AI's annual cost is much larger (~$15-20B Llama
+  development + inference) so that figure is genuinely speculative.
+
+## Aggregate summary table
+
+  | Provider  | Proposed vc_subsidy ($B) | Confidence | Path               |
+  |-----------|--------------------------|------------|--------------------|
+  | Mistral   | (defer — $0 fallback)    | n/a        | Wait for op_loss claim or wq-055 |
+  | xAI       | $8.0                     | medium     | Hand-curate now (editorial_balance_calculation) |
+  | DeepSeek  | $0.5  (or defer)         | low        | Hand-curate with High-Flyer caveat OR defer |
+  | Meta      | (defer — framing wrong)  | n/a        | Document why subsidy framing doesn't fit |
+
+  If Simon hand-curates xAI + DeepSeek per these proposals:
+    - Sankey total VC subsidy moves: $9.5B → $9.5B + $8.0 + $0.5 = **$18.0B**
+    - That's an 89% increase in the displayed VC subsidy total — a meaningful
+      public change that would warrant a changelog entry alongside the wq-044
+      wire-completion ship.
+
+  If Simon defers all 4: existing $9.5B stays; small providers continue to
+  show $0 subsidy in the Sankey VC band. wq-055 (vc_subsidy automation)
+  would then handle these systematically when it ships.
+
+## Decision needed
+
+Pick one of:
+
+  (a) HAND-CURATE NOW the 2 actionable values (xAI $8.0B, DeepSeek $0.5B).
+      Skip Mistral + Meta with documented reasons. I'd write the entries
+      with origin = `editorial_balance_calculation`, weight = `indicative`,
+      same shape as the openai/anthropic/google wq-048 Phase C entries.
+      Triggers a Sankey total VC subsidy revision ($9.5B → $18.0B) that
+      should be flagged in the wq-044 changelog entry as a second public
+      change alongside the OpenAI customer revenue revision.
+
+  (b) DEFER ALL 4 to wq-055 automation. Existing $9.5B Sankey VC subsidy
+      stays; the 4 providers continue showing $0 in the VC band until
+      wq-055 ships an engine that derives subsidy systematically. Cleaner
+      story (no editorial mid-revision); slower (wq-055 isn't built yet).
+
+  (c) HAND-CURATE xAI ONLY ($8.0B). Skip DeepSeek + Mistral + Meta. xAI
+      has the best evidence base and the largest potential subsidy.
+      Sankey total VC subsidy moves $9.5B → $17.5B. Smaller editorial
+      surface area; same changelog implications.
+
+Recommendation: lean (c) if the xAI move is small enough not to warrant
+a fresh public revision while wq-044 wire-completion is mid-eyeball; lean
+(b) if you want the wire-completion ship to be ONLY about OpenAI/Google
+revenue changes and nothing else.
+
+## Refs
+
+- wq-056 brief (parent)
+- wq-044 wire-completion: data/wq-044-final-diff.txt fallback log
+- wq-048 Phase C: editorial vc_subsidy values for openai/anthropic/google
+  (origin: editorial_balance_calculation) — pattern to follow
+- assumptions-audit.md §1.4 (Other Providers data)
+- assumptions-audit.md §4.4 (Sankey VC subsidy hand-curated $9.80B baseline)
