@@ -87,16 +87,66 @@ def log(msg):
     with open(LOG_FILE, "a") as f:
         f.write(line + "\n")
 
+# wq-039 matcher resolution order: overrides → generated → legacy.
+# Caches loaded once per process; rebuild via scripts/build_matcher_rules.py.
+_GENERATED_PATH = os.path.join(ROOT_DIR, "data", "matcher_rules.generated.json")
+_OVERRIDES_PATH = os.path.join(ROOT_DIR, "data", "matcher_overrides.json")
+_RULE_CACHE = None
+
+
+def _load_rule_layers():
+    global _RULE_CACHE
+    if _RULE_CACHE is not None:
+        return _RULE_CACHE
+    layers = {"overrides_entity": [], "overrides_field": [],
+              "generated_entity": [], "generated_field": []}
+    if os.path.exists(_OVERRIDES_PATH):
+        try:
+            with open(_OVERRIDES_PATH) as f:
+                ov = json.load(f)
+            layers["overrides_entity"] = ov.get("entity_overrides", []) or []
+            layers["overrides_field"] = ov.get("field_overrides", []) or []
+        except (json.JSONDecodeError, OSError):
+            pass
+    if os.path.exists(_GENERATED_PATH):
+        try:
+            with open(_GENERATED_PATH) as f:
+                gen = json.load(f)
+            layers["generated_entity"] = gen.get("entity_match_rules", []) or []
+            layers["generated_field"] = gen.get("field_match_rules", []) or []
+        except (json.JSONDecodeError, OSError):
+            pass
+    _RULE_CACHE = layers
+    return _RULE_CACHE
+
+
 def match_entity(text, rules):
-    for rule in rules:
-        if re.search(rule["pattern"], text, re.I):
-            return rule["slug"]
+    """Resolution order: overrides → generated → legacy (the `rules` arg).
+
+    `rules` is the legacy hand-maintained list from metric-schema.json,
+    preserved as the lowest-priority fallback so existing rules still
+    catch what the canonical-derived rules miss.
+    """
+    layers = _load_rule_layers()
+    for source in (layers["overrides_entity"], layers["generated_entity"], rules):
+        for rule in source:
+            try:
+                if re.search(rule["pattern"], text, re.I):
+                    return rule["slug"]
+            except re.error:
+                continue
     return None
 
+
 def match_field(text, rules):
-    for rule in rules:
-        if re.search(rule["pattern"], text, re.I):
-            return rule["field"]
+    layers = _load_rule_layers()
+    for source in (layers["overrides_field"], layers["generated_field"], rules):
+        for rule in source:
+            try:
+                if re.search(rule["pattern"], text, re.I):
+                    return rule["field"]
+            except re.error:
+                continue
     return None
 
 def match_year(text):

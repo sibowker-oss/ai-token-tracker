@@ -1,0 +1,55 @@
+name: Weekly Matcher Rule Rebuild (wq-039)
+
+on:
+  schedule:
+    - cron: '23 22 * * 1'  # Monday 8:23am AEST (UTC+10)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  rebuild-matchers:
+    runs-on: ubuntu-latest
+    env:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      - name: Build matcher rules
+        env:
+          RUN_TRIGGER: github_action
+        run: python scripts/build_matcher_rules.py
+
+      - name: Open PR if rules changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet data/matcher_rules.generated.json data/matcher_coverage.md data/runs.jsonl; then
+            echo "No matcher changes — skipping PR."
+            exit 0
+          fi
+
+          BRANCH="auto/matcher-rebuild-$(date +%Y-%m-%d)"
+          git checkout -b "$BRANCH"
+          git add data/matcher_rules.generated.json data/matcher_coverage.md data/runs.jsonl
+          git commit -m "chore(matchers): wq-039 weekly rebuild $(date +%Y-%m-%d)"
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --title "chore(matchers): weekly rebuild $(date +%Y-%m-%d)" \
+            --body "Auto-generated from \`build_matcher_rules.py\`. See data/matcher_coverage.md for the report." \
+            --base main \
+            --head "$BRANCH"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
