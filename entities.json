@@ -39,7 +39,7 @@
       ],
       "financials": {
         "2024": {
-          "arr": 24,
+          "arr": 5,
           "collected_revenue": 3.6,
           "operating_loss": 5.0,
           "total_funding": 122,
@@ -649,10 +649,23 @@
         },
         "2024.arr": {
           "confidence": "high",
-          "claim_count": 3,
+          "claim_count": 4,
           "needs_source": false,
           "recovered_from": "original_conversation",
           "claims": [
+            {
+              "id": "wq-048-phase-a-reconciliation",
+              "claim": "OpenAI 2024 year-end ARR reconciled to ~$5B. The prior $24B value (annualised from a Dec 2024 $2B/month snapshot using best-period-x12) is methodologically inconsistent with the $20B 2025 year-end ARR (standard run-rate). Both can be true ARR snapshots under different methodologies, but the consensus engine treats startingARR/endingARR as a growth pair on a comparable basis. Per assumptions-audit.md \u00a71.1 trajectory ($2B Jan-2024 \u2192 $20B Dec-2025) and the supporting claim citing $3.4B Q1 \u2192 $7B Q4 2024, the comparable-basis end-2024 ARR sits in $5\u20137B; setting to $5B (low end) keeps the engine conservative.",
+              "value": 5,
+              "unit": "$B",
+              "weight": "authoritative",
+              "confidence": "estimated",
+              "source": "wq-048 Phase A methodology reconciliation",
+              "source_url": "briefings/wq-048-consensus-engine-arr-to-revenue.md",
+              "date": "2026-05-02",
+              "origin": "editorial_reconciliation",
+              "role": "primary"
+            },
             {
               "id": "conv-openai-2024-arr",
               "claim": "Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 \u2192",
