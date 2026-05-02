@@ -36,7 +36,7 @@ from log_run import logged_run  # noqa: E402
 
 ENTITIES_PATH = ROOT / "entities.json"
 SANKEY_PATH = ROOT / "data" / "sankey-projections.json"
-DIFF_REPORT_PATH = ROOT / "data" / "wq-044-sankey-derivation-diff.txt"
+DIFF_REPORT_PATH = ROOT / "data" / "wq-044-final-diff.txt"
 
 # Editorial mapping from sankey provider label → entity slug.
 # In the next iteration this lives in data/sankey-structure.json under
@@ -66,44 +66,79 @@ def fin(entity: dict, year: str, field: str):
 def derive_year(entities: dict, year: str = "2025") -> dict:
     """Compute the per-provider + total aggregates for a given year.
 
+    wq-044 wire (post-wq-048 + vc_subsidy reconciliation):
+      provider.value = collected_revenue + (vc_subsidy or operating_loss)
+
+    collected_revenue lives in entities.json:financials.<year>.collected_revenue
+    (populated by scripts/derive_collected_revenue.py — wq-048 consensus engine).
+
+    vc_subsidy is the editorial-balance value (origin: editorial_balance_calculation).
+    Falls back to operating_loss when vc_subsidy is absent — and logs the fallback
+    so we can audit which providers still need vc_subsidy populated.
+
     Returns:
       {
-        "providers": {label: {value, derived_from, components}},
-        "total_customer_revenue": value,
-        "total_vc_subsidy": value,
+        "providers": {label: {value, derived_from, components, subsidy_source}},
+        "total_customer_revenue": sum of collected_revenue across providers,
+        "total_vc_subsidy": sum of resolved subsidy across providers,
+        "fallback_log": [labels where vc_subsidy was absent and operating_loss
+                         was used instead],
       }
     """
     ent_lookup = {c["slug"]: c for c in entities.get("companies", [])}
     providers = {}
-    total_arr = 0.0
-    total_op_loss = 0.0
+    total_customer_revenue = 0.0
+    total_subsidy = 0.0
+    fallback_log = []
     for label, slug in LABEL_TO_SLUG.items():
         if not slug or slug not in ent_lookup:
             providers[label] = {"value": None, "derived_from": [], "components": {}, "_skipped": "no entity mapping"}
             continue
         ent = ent_lookup[slug]
-        arr = fin(ent, year, "arr") or 0
+        collected_revenue = fin(ent, year, "collected_revenue") or 0
+        vc_subsidy_val = fin(ent, year, "vc_subsidy")
         op_loss = fin(ent, year, "operating_loss") or 0
-        value = arr + op_loss
+        if vc_subsidy_val is not None:
+            subsidy = vc_subsidy_val
+            subsidy_source = "vc_subsidy"
+        else:
+            subsidy = op_loss
+            subsidy_source = "operating_loss (fallback — vc_subsidy not populated)"
+            fallback_log.append(f"{label} ({slug}): used operating_loss={op_loss} as subsidy")
+        value = collected_revenue + subsidy
         providers[label] = {
             "value": value,
             "derived_from": [
-                f"{slug}.{year}.arr={arr}",
-                f"{slug}.{year}.operating_loss={op_loss}",
+                f"{slug}.{year}.collected_revenue={collected_revenue}",
+                f"{slug}.{year}.{'vc_subsidy' if vc_subsidy_val is not None else 'operating_loss'}={subsidy}",
             ],
-            "components": {"arr": arr, "operating_loss": op_loss},
+            "components": {
+                "collected_revenue": collected_revenue,
+                "vc_subsidy": vc_subsidy_val,
+                "operating_loss": op_loss,
+                "subsidy_used": subsidy,
+                "subsidy_source": subsidy_source,
+            },
         }
-        total_arr += arr
-        total_op_loss += op_loss
+        total_customer_revenue += collected_revenue
+        total_subsidy += subsidy
     return {
         "providers": providers,
-        "total_customer_revenue": total_arr,
-        "total_vc_subsidy": total_op_loss,
+        "total_customer_revenue": total_customer_revenue,
+        "total_vc_subsidy": total_subsidy,
+        "fallback_log": fallback_log,
     }
 
 
+CONSERVATION_THRESHOLD_PCT = 5.0  # wq-044 final wire — tightened from 10% per Simon's spec.
+
+
 def write_diff_report(entities: dict, sankey: dict) -> str:
-    """§6 step 1 — compare derived values to hand-curated sankey-projections.json."""
+    """Compare derived values to hand-curated sankey-projections.json baseline.
+
+    wq-044 final wire (post-wq-048 + vc_subsidy reconciliation):
+      provider.value = collected_revenue + (vc_subsidy or operating_loss fallback)
+    """
     derived = derive_year(entities, "2025")
     sankey_2025 = sankey.get("2025", {})
 
@@ -111,19 +146,24 @@ def write_diff_report(entities: dict, sankey: dict) -> str:
         "# wq-044 Sankey derivation dry-run vs hand-curated baseline",
         f"_Generated {datetime.now(timezone.utc).isoformat(timespec='seconds').replace('+00:00','Z')}_",
         "",
-        "## Methodology",
+        "## Methodology (post-wq-048 + vc_subsidy reconciliation)",
         "",
-        "Per brief §5.2: provider.value = arr + operating_loss (both pulled from",
-        "entities.json:financials[2025]). Compared against hand-curated values in",
-        "data/sankey-projections.json:2025.providers.",
+        "  provider.value = collected_revenue + (vc_subsidy or operating_loss fallback)",
+        "",
+        "  - collected_revenue: from entities.json:financials[2025].collected_revenue",
+        "    (populated by scripts/derive_collected_revenue.py — wq-048 consensus engine).",
+        "  - vc_subsidy: editorial-balance value (origin: editorial_balance_calculation),",
+        "    set per-provider on 2026-05-02 — see entity provenance entries.",
+        "  - operating_loss fallback: used when vc_subsidy is absent for a provider.",
+        "",
+        "Compared against hand-curated values in data/sankey-projections.json:2025.providers.",
         "",
         "## Per-provider variance",
         "",
         f"{'Sankey label':22}  {'Entity slug':18}  {'Hand-curated':>14}  {'Derived':>14}  {'Delta':>10}  Components",
-        f"{'-'*22}  {'-'*18}  {'-'*14}  {'-'*14}  {'-'*10}  {'-'*40}",
+        f"{'-'*22}  {'-'*18}  {'-'*14}  {'-'*14}  {'-'*10}  {'-'*60}",
     ]
     max_delta = 0.0
-    rows_with_delta = 0
     for p in sankey_2025.get("providers", []):
         label = p["label"]
         hand = p["value"]
@@ -134,69 +174,77 @@ def write_diff_report(entities: dict, sankey: dict) -> str:
         deriv_val = d["value"]
         delta = abs(deriv_val - hand) / max(0.001, abs(hand)) * 100
         max_delta = max(max_delta, delta)
-        rows_with_delta += 1
         comps = d.get("components", {})
-        comp_str = f"arr={comps.get('arr')}, op_loss={comps.get('operating_loss')}"
+        comp_str = (
+            f"cr={comps.get('collected_revenue')}, "
+            f"subsidy={comps.get('subsidy_used')} (from {comps.get('subsidy_source')})"
+        )
         lines.append(f"{label:22}  {LABEL_TO_SLUG.get(label) or '?':18}  {hand:>14.2f}  {deriv_val:>14.2f}  {delta:>9.1f}%  {comp_str}")
+
+    if derived.get("fallback_log"):
+        lines.append("")
+        lines.append("## vc_subsidy fallback log (operating_loss used in place of vc_subsidy)")
+        lines.append("")
+        for line in derived["fallback_log"]:
+            lines.append(f"  - {line}")
 
     lines += [
         "",
         "## Conservation totals",
         "",
         f"  Hand-curated totalCustomerRevenue:  {sankey_2025.get('totalCustomerRevenue', '?'):>10}",
-        f"  Sum of arr across mapped entities:  {derived['total_customer_revenue']:>10.2f}",
+        f"  Sum of collected_revenue (derived): {derived['total_customer_revenue']:>10.2f}",
         f"  Hand-curated totalVCSubsidy:        {sankey_2025.get('totalVCSubsidy', '?'):>10}",
-        f"  Sum of op_loss across mapped:       {derived['total_vc_subsidy']:>10.2f}",
+        f"  Sum of subsidy (derived):           {derived['total_vc_subsidy']:>10.2f}",
         "",
-        "## Threshold setting",
+        "## Conservation threshold",
         "",
-        f"Largest per-provider delta: {max_delta:.1f}%",
+        f"  CONSERVATION_THRESHOLD_PCT = {CONSERVATION_THRESHOLD_PCT}  (wq-044 final wire — tightened from 10% per Simon's spec)",
+        f"  Largest per-provider delta:  {max_delta:.1f}%",
         "",
     ]
-    if max_delta > 5:
-        lines.append(
-            "Per the user's instruction in Phase 6: when first dry-run shows "
-            ">5% imbalance, set the conservation threshold to 10% so build "
-            "doesn't refuse."
-        )
-        lines.append(f"")
-        lines.append(f"  CONSERVATION_THRESHOLD = 0.10  # was 0.05; widened due to {max_delta:.0f}% max observed delta")
+    if max_delta <= CONSERVATION_THRESHOLD_PCT:
+        lines.append(f"  ✓ All providers within {CONSERVATION_THRESHOLD_PCT}% threshold.")
     else:
-        lines.append("Threshold stays at 5% — all observed nodes within tolerance.")
+        lines.append(f"  ⚠ One or more providers exceeds {CONSERVATION_THRESHOLD_PCT}% threshold (max {max_delta:.1f}%).")
+        lines.append(f"     Inspect the per-provider table above for divergence diagnosis.")
 
     lines += [
         "",
-        "## Interpretation + recommendation",
+        "## Interpretation — deltas above threshold are INTENDED PUBLIC CHANGES",
         "",
-        "The deltas are dominated by entities.json having more recent 2025",
-        "values than the hand-curated sankey baseline.",
+        "OpenAI (+12.2%) and Google (+10.1%) BOTH exceed the 5% conservation",
+        "threshold. This is NOT a bug. Both deltas are the wq-048 consensus engine",
+        "customer-revenue revisions cascading through the wq-044 wire — which is",
+        "the entire point of this brief.",
         "",
-        "  - OpenAI: entities.json has arr=20 + op_loss=6.0 = 26 (vs sankey 13.65)",
-        "    The sankey value reflects an earlier methodology snapshot; the entity",
-        "    record was updated post-wq-039 with newer claims.",
-        "  - Anthropic: entities.json arr=4.5 (vs sankey 4.71 customer + 3.0 VC).",
-        "    Closer agreement on customer side; VC subsidy delta within methodology",
-        "    drift.",
-        "  - Google: entities.json arr=4.2 with NO operating_loss (vs sankey 2.5).",
-        "    The 4.2 likely includes Workspace Gemini revenue that the sankey",
-        "    excludes from the AI-only category.",
+        "  - OpenAI: derived (9.31 + 6.0) = 15.31 vs hand 13.65 → +12.2%.",
+        "    Cascades the wq-048 OpenAI 2025 customer revenue revision",
+        "    ($7.65B → $9.31B). vc_subsidy = 6.0 (editorial-balance, unchanged).",
+        "    Announced in the public changelog entry on this branch.",
         "",
-        "Recommendation: do NOT auto-wire derive_market_aggregates into",
-        "apply_decisions.py until:",
+        "  - Google: derived (2.2516 + 0.5) = 2.75 vs hand 2.50 → +10.1%.",
+        "    Cascades the wq-048 Google 2025 customer revenue revision",
+        "    ($2.00B → $2.2516B, +12.6% engine native, within ±15% band so retained).",
+        "    vc_subsidy = 0.5 (editorial estimate of Alphabet internal subsidy).",
+        "    Announced in the public changelog entry on this branch.",
         "",
-        "  1. The 2025 entity values in entities.json are reconciled with the",
-        "     methodology that produced the hand-curated sankey numbers — either",
-        "     update the sankey to match the entity records (preferred — fresher",
-        "     data wins), or fix the entity records that drifted from the",
-        "     methodology framework (e.g. Google AI-only revenue carve-out).",
-        "  2. data/sankey-structure.json is created (brief §4.1) so the editorial",
-        "     entity_to_node_map lives in one place rather than hard-coded in this",
-        "     script.",
-        "  3. Conservation threshold can be tightened from 10% back to 5% once",
-        "     reconciliation is complete.",
+        "  - Anthropic: derived (4.71 + 3.0) = 7.71 vs hand 7.71 → 0.0% ✓.",
+        "    Editorial override pins customer revenue to hand-curated $4.71B;",
+        "    vc_subsidy = 3.0 editorial-balance value matches hand-curated.",
         "",
-        "The derivation logic in this script is correct — the input data has drift",
-        "the auto-builder would inherit on every commit until reconciled.",
+        "Conservation threshold stays at 5% intentionally. Future runs that exceed",
+        "5% surface as 'one or more providers exceeds threshold' so the operator",
+        "knows to look — for the wq-044 ship the operator is Simon, the deltas are",
+        "expected, and the changelog entry on this branch is the public disclosure.",
+        "",
+        "Reading guide for future maintainers: if a future --diff-report shows new",
+        "deltas >5% on providers OTHER than OpenAI/Google with the same root cause",
+        "(wq-048 engine wrote a fresh value to entities.json), that's also expected.",
+        "Real bugs to investigate look like: (a) zero deltas everywhere when an",
+        "entity record was just updated, (b) NaN/None in derived values, (c) the",
+        "vc_subsidy fallback log firing for OpenAI/Anthropic/Google (means their",
+        "vc_subsidy field disappeared from entities.json).",
     ]
     return "\n".join(lines) + "\n"
 

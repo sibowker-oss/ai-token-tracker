@@ -1,0 +1,80 @@
+# wq-044 Sankey derivation dry-run vs hand-curated baseline
+_Generated 2026-05-02T10:00:13Z_
+
+## Methodology (post-wq-048 + vc_subsidy reconciliation)
+
+  provider.value = collected_revenue + (vc_subsidy or operating_loss fallback)
+
+  - collected_revenue: from entities.json:financials[2025].collected_revenue
+    (populated by scripts/derive_collected_revenue.py — wq-048 consensus engine).
+  - vc_subsidy: editorial-balance value (origin: editorial_balance_calculation),
+    set per-provider on 2026-05-02 — see entity provenance entries.
+  - operating_loss fallback: used when vc_subsidy is absent for a provider.
+
+Compared against hand-curated values in data/sankey-projections.json:2025.providers.
+
+## Per-provider variance
+
+Sankey label            Entity slug           Hand-curated         Derived       Delta  Components
+----------------------  ------------------  --------------  --------------  ----------  ------------------------------------------------------------
+OpenAI                  openai                       13.65           15.31       12.2%  cr=9.3147, subsidy=6.0 (from vc_subsidy)
+Anthropic               anthropic                     7.71            7.71        0.0%  cr=4.71, subsidy=3.0 (from vc_subsidy)
+Google (Gemini)         google                        2.50            2.75       10.1%  cr=2.2516, subsidy=0.5 (from vc_subsidy)
+IaaS/Open               (no entity)                   0.80               —           —  no entity mapping
+
+## vc_subsidy fallback log (operating_loss used in place of vc_subsidy)
+
+  - Mistral (mistral): used operating_loss=0 as subsidy
+  - xAI (xai): used operating_loss=0 as subsidy
+  - DeepSeek (deepseek): used operating_loss=0 as subsidy
+  - Meta (Llama) (meta): used operating_loss=0 as subsidy
+
+## Conservation totals
+
+  Hand-curated totalCustomerRevenue:       17.47
+  Sum of collected_revenue (derived):      16.92
+  Hand-curated totalVCSubsidy:              9.39
+  Sum of subsidy (derived):                 9.50
+
+## Conservation threshold
+
+  CONSERVATION_THRESHOLD_PCT = 5.0  (wq-044 final wire — tightened from 10% per Simon's spec)
+  Largest per-provider delta:  12.2%
+
+  ⚠ One or more providers exceeds 5.0% threshold (max 12.2%).
+     Inspect the per-provider table above for divergence diagnosis.
+
+## Interpretation — deltas above threshold are INTENDED PUBLIC CHANGES
+
+OpenAI (+12.2%) and Google (+10.1%) BOTH exceed the 5% conservation
+threshold. This is NOT a bug. Both deltas are the wq-048 consensus engine
+customer-revenue revisions cascading through the wq-044 wire — which is
+the entire point of this brief.
+
+  - OpenAI: derived (9.31 + 6.0) = 15.31 vs hand 13.65 → +12.2%.
+    Cascades the wq-048 OpenAI 2025 customer revenue revision
+    ($7.65B → $9.31B). vc_subsidy = 6.0 (editorial-balance, unchanged).
+    Announced in the public changelog entry on this branch.
+
+  - Google: derived (2.2516 + 0.5) = 2.75 vs hand 2.50 → +10.1%.
+    Cascades the wq-048 Google 2025 customer revenue revision
+    ($2.00B → $2.2516B, +12.6% engine native, within ±15% band so retained).
+    vc_subsidy = 0.5 (editorial estimate of Alphabet internal subsidy).
+    Announced in the public changelog entry on this branch.
+
+  - Anthropic: derived (4.71 + 3.0) = 7.71 vs hand 7.71 → 0.0% ✓.
+    Editorial override pins customer revenue to hand-curated $4.71B;
+    vc_subsidy = 3.0 editorial-balance value matches hand-curated.
+
+Conservation threshold stays at 5% intentionally. Future runs that exceed
+5% surface as 'one or more providers exceeds threshold' so the operator
+knows to look — for the wq-044 ship the operator is Simon, the deltas are
+expected, and the changelog entry on this branch is the public disclosure.
+
+Reading guide for future maintainers: if a future --diff-report shows new
+deltas >5% on providers OTHER than OpenAI/Google with the same root cause
+(wq-048 engine wrote a fresh value to entities.json), that's also expected.
+Real bugs to investigate look like: (a) zero deltas everywhere when an
+entity record was just updated, (b) NaN/None in derived values, (c) the
+vc_subsidy fallback log firing for OpenAI/Anthropic/Google (means their
+vc_subsidy field disappeared from entities.json).
