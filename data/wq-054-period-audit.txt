@@ -1,0 +1,452 @@
+# wq-054 period-attribution audit
+_Generated 2026-05-02T11:45:08Z_
+
+## Methodology
+
+Walks every entities.json provenance.<year>.<field> claim where field is
+in the ANNUAL_FIELDS set (arr, collected_revenue, operating_loss, etc.).
+Searches the claim text + source string for period qualifiers (H1/H2/
+Q1-Q4/monthly/specific-month/best-4-week/exit/year-end). Flags any
+mismatch where a sub-period claim is sitting in a year-total field.
+
+Suppresses two intentional matches: 'exit' qualifier on the `exit_arr`
+field (purpose-built); 'monthly' qualifier on `monthly_revenue_peak`
+(also purpose-built). Audit-only — no entities.json mutations.
+
+## Headline: 63 flagged claims across 3 entities
+
+## Breakdown by period qualifier
+
+  specific_month          18  ( 28.6%)
+  q1                      11  ( 17.5%)
+  q4                       9  ( 14.3%)
+  monthly                  7  ( 11.1%)
+  q3                       6  (  9.5%)
+  q2                       4  (  6.3%)
+  exit/year_end            3  (  4.8%)
+  best_4_week              2  (  3.2%)
+  h1                       2  (  3.2%)
+  h2                       1  (  1.6%)
+
+## Top 10 affected entities
+
+  openai                           37
+  anthropic                        23
+  perplexity                        3
+
+## Breakdown by field
+
+  arr                              52
+  valuation                         9
+  subscription_revenue              1
+  collected_revenue                 1
+
+## Per-entity flagged claims (full table)
+
+### anthropic  (23 flag(s))
+
+  - 2024.arr  qualifier='exit/year_end'  origin=editorial_reconciliation
+    claim_id: wq-048-phase-c-anthropic-2024-arr
+    value: 2.0
+    text: 'Anthropic 2024 year-end ARR set to $2.0B per audit §1.2 trajectory ($1.5B 2024 collected revenue + 1167% YoY growth claim implies year-end ARR ~$2B). Populated '
+    suggested: move to 2024.exit_arr (or set field=exit_arr if applicable)
+
+  - 2025.collected_revenue  qualifier='h2'  origin=editorial_override
+    claim_id: override-2026-05-02
+    value: 4.71
+    text: 'Editorial override (engine output: $3.3382B): Hand-curated via §7.2 weighted consensus across 3 independent sources (court affidavit + Sacra + The Information).'
+    suggested: move to 2025_h2.collected_revenue (new sub-year block)
+
+  - 2026.arr  qualifier='specific_month'  origin=accepted
+    claim_id: dp-026
+    value: 14
+    text: 'Anthropic hit $14B ARR in February 2026, grown from $1B in 14 months (12x YoY)'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='specific_month'  origin=pending
+    claim_id: email-20260328-a1x
+    value: 19
+    text: 'Anthropic annualized revenue $19B (March 2026), up 1,167% YoY'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='specific_month'  origin=accepted
+    claim_id: dp-043
+    value: 19
+    text: 'Anthropic annualized revenue $19B (March 2026), up 1,167% YoY'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='specific_month'  origin=accepted
+    claim_id: dp-206
+    value: 30
+    text: 'Anthropic hit $30B in annualized revenue in March 2026, up about 1,400% year-over-year.'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-028
+    value: 380
+    text: 'Anthropic valued at $380B (February 2026)'
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-187
+    value: 800
+    text: 'Anthropic drawing investor offers at $800B+ valuation (April 2026), up from $350B pre-money valuation at February Series'
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-189
+    value: 800
+    text: 'Anthropic IPO target as early as October 2026; Bloomberg reports unsolicited investor offers at $800B+ valuation'
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-208
+    value: 380
+    text: "Anthropic's post-money valuation reached $380 billion at Series G closing in February 2026."
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - Q1 2024.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-anthropic-q1-2024-arr
+    value: 0.2
+    text: 'Anthropic Q1 2024 ARR ~$0.2B'
+    suggested: move to Q1 2024_q1.arr (new sub-year block)
+
+  - Q2 2024.arr  qualifier='q2'  origin=interpolated
+    claim_id: interpolated-anthropic-q2-2024-arr
+    value: 0.5
+    text: 'Anthropic Q2 2024 ARR ~$0.5B'
+    suggested: move to Q2 2024_q2.arr (new sub-year block)
+
+  - Q3 2024.arr  qualifier='q3'  origin=interpolated
+    claim_id: interpolated-anthropic-q3-2024-arr
+    value: 1.0
+    text: 'Anthropic Q3 2024 ARR ~$1.0B'
+    suggested: move to Q3 2024_q3.arr (new sub-year block)
+
+  - Q4 2024.arr  qualifier='q4'  origin=interpolated
+    claim_id: interpolated-anthropic-q4-2024-arr
+    value: 2.0
+    text: 'Anthropic Q4 2024 ARR ~$2.0B'
+    suggested: move to Q4 2024_q4.arr (new sub-year block)
+
+  - Q1 2025.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-anthropic-q1-2025-arr
+    value: 4.0
+    text: 'Anthropic Q1 2025 ARR ~$4.0B'
+    suggested: move to Q1 2025_q1.arr (new sub-year block)
+
+  - Q2 2025.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-anthropic-q2-2025-arr
+    value: 6.5
+    text: 'Anthropic Q2 2025 ARR ~$6.5B'
+    suggested: move to Q2 2025_q1.arr (new sub-year block)
+
+  - Q2 2025.arr  qualifier='q2'  origin=interpolated
+    claim_id: interpolated-anthropic-q2-2025-arr
+    value: 6.5
+    text: 'Anthropic Q2 2025 ARR ~$6.5B'
+    suggested: move to Q2 2025_q2.arr (new sub-year block)
+
+  - Q2 2025.arr  qualifier='q3'  origin=interpolated
+    claim_id: interpolated-anthropic-q2-2025-arr
+    value: 6.5
+    text: 'Anthropic Q2 2025 ARR ~$6.5B'
+    suggested: move to Q2 2025_q3.arr (new sub-year block)
+
+  - Q3 2025.arr  qualifier='q3'  origin=interpolated
+    claim_id: interpolated-anthropic-q3-2025-arr
+    value: 9.0
+    text: 'Anthropic Q3 2025 ARR ~$9.0B'
+    suggested: move to Q3 2025_q3.arr (new sub-year block)
+
+  - Q4 2025.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-anthropic-q4-2025-arr
+    value: 11.5
+    text: 'Anthropic Q4 2025 ARR ~$11.5B'
+    suggested: move to Q4 2025_q1.arr (new sub-year block)
+
+  - Q4 2025.arr  qualifier='q3'  origin=interpolated
+    claim_id: interpolated-anthropic-q4-2025-arr
+    value: 11.5
+    text: 'Anthropic Q4 2025 ARR ~$11.5B'
+    suggested: move to Q4 2025_q3.arr (new sub-year block)
+
+  - Q4 2025.arr  qualifier='q4'  origin=interpolated
+    claim_id: interpolated-anthropic-q4-2025-arr
+    value: 11.5
+    text: 'Anthropic Q4 2025 ARR ~$11.5B'
+    suggested: move to Q4 2025_q4.arr (new sub-year block)
+
+  - Q1 2026.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-anthropic-q1-2026-arr
+    value: 14.0
+    text: 'Anthropic Q1 2026 ARR ~$14.0B'
+    suggested: move to Q1 2026_q1.arr (new sub-year block)
+
+### openai  (37 flag(s))
+
+  - 2025.arr  qualifier='specific_month'  origin=accepted
+    claim_id: dp-215
+    value: 25
+    text: 'OpenAI hit $25B in annualized revenue in February 2026, up from $20B at the end of 2025.'
+    suggested: move to 2025_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='specific_month'  origin=pending
+    claim_id: email-20260328-c3z
+    value: 25
+    text: 'OpenAI annualized revenue ~$25B (March 2026)'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='monthly'  origin=pending
+    claim_id: zitron-20260328-f6
+    value: 25
+    text: 'OpenAI $25B ARR uses best 4-week period × 12 (not monthly × 12)'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='best_4_week'  origin=pending
+    claim_id: zitron-20260328-f6
+    value: 25
+    text: 'OpenAI $25B ARR uses best 4-week period × 12 (not monthly × 12)'
+    suggested: annotate field with `arr_method: best_period_x12` (already handled by wq-048 consensus engine for OpenAI specifically)
+
+  - 2026.arr  qualifier='specific_month'  origin=accepted
+    claim_id: dp-044
+    value: 25
+    text: 'OpenAI annualized revenue ~$25B (March 2026)'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='monthly'  origin=accepted
+    claim_id: dp-064
+    value: 25
+    text: 'OpenAI $25B ARR uses best 4-week period × 12 (not monthly × 12)'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='best_4_week'  origin=accepted
+    claim_id: dp-064
+    value: 25
+    text: 'OpenAI $25B ARR uses best 4-week period × 12 (not monthly × 12)'
+    suggested: annotate field with `arr_method: best_period_x12` (already handled by wq-048 consensus engine for OpenAI specifically)
+
+  - 2026.arr  qualifier='monthly'  origin=accepted
+    claim_id: dp-190
+    value: 24
+    text: 'OpenAI confirmed $2B/month revenue (~$24B ARR) at $122B funding close (March 31, 2026) [annualised: 24]'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-030
+    value: 840
+    text: 'OpenAI valued at $840B (February 2026)'
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=pending
+    claim_id: scan-20260330-b2c
+    value: 840
+    text: 'OpenAI funding round extended to $120B total at $840B post-money valuation (March 2026)'
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-065
+    value: 840
+    text: 'OpenAI funding round extended to $120B total at $840B post-money valuation (March 2026)'
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-220
+    value: 852
+    text: 'OpenAI announced $122B in new investment at an $852B valuation in April 2026, co-led by SoftBank alongside Andreessen Ho'
+    suggested: move to 2026_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2024.arr  qualifier='q1'  origin=editorial_reconciliation
+    claim_id: wq-048-phase-a-reconciliation
+    value: 5
+    text: 'OpenAI 2024 year-end ARR reconciled to ~$5B. The prior $24B value (annualised from a Dec 2024 $2B/month snapshot using best-period-x12) is methodologically inco'
+    suggested: move to 2024_q1.arr (new sub-year block)
+
+  - 2024.arr  qualifier='q4'  origin=editorial_reconciliation
+    claim_id: wq-048-phase-a-reconciliation
+    value: 5
+    text: 'OpenAI 2024 year-end ARR reconciled to ~$5B. The prior $24B value (annualised from a Dec 2024 $2B/month snapshot using best-period-x12) is methodologically inco'
+    suggested: move to 2024_q4.arr (new sub-year block)
+
+  - 2024.arr  qualifier='monthly'  origin=editorial_reconciliation
+    claim_id: wq-048-phase-a-reconciliation
+    value: 5
+    text: 'OpenAI 2024 year-end ARR reconciled to ~$5B. The prior $24B value (annualised from a Dec 2024 $2B/month snapshot using best-period-x12) is methodologically inco'
+    suggested: move to 2024_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2024.arr  qualifier='exit/year_end'  origin=editorial_reconciliation
+    claim_id: wq-048-phase-a-reconciliation
+    value: 5
+    text: 'OpenAI 2024 year-end ARR reconciled to ~$5B. The prior $24B value (annualised from a Dec 2024 $2B/month snapshot using best-period-x12) is methodologically inco'
+    suggested: move to 2024.exit_arr (or set field=exit_arr if applicable)
+
+  - 2024.arr  qualifier='h1'  origin=conversation_recovery
+    claim_id: conv-openai-2024-arr
+    value: None
+    text: 'Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 →'
+    suggested: move to 2024_h1.arr (new sub-year block)
+
+  - 2024.arr  qualifier='q1'  origin=conversation_recovery
+    claim_id: conv-openai-2024-arr
+    value: None
+    text: 'Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 →'
+    suggested: move to 2024_q1.arr (new sub-year block)
+
+  - 2024.arr  qualifier='q4'  origin=conversation_recovery
+    claim_id: conv-openai-2024-arr
+    value: None
+    text: 'Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 →'
+    suggested: move to 2024_q4.arr (new sub-year block)
+
+  - 2024.arr  qualifier='monthly'  origin=accepted
+    claim_id: dp-106
+    value: 24
+    text: 'OpenAI is now generating $2B in revenue per month [annualised: 24]'
+    suggested: move to 2024_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2024.arr  qualifier='monthly'  origin=accepted
+    claim_id: dp-114
+    value: 24
+    text: 'OpenAI is now generating $2B in revenue per month [annualised: 24]'
+    suggested: move to 2024_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - Q1 2024.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-openai-q1-2024-arr
+    value: 3.4
+    text: 'OpenAI Q1 2024 ARR ~$3.4B'
+    suggested: move to Q1 2024_q1.arr (new sub-year block)
+
+  - Q2 2024.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-openai-q2-2024-arr
+    value: 4.5
+    text: 'OpenAI Q2 2024 ARR ~$4.5B'
+    suggested: move to Q2 2024_q1.arr (new sub-year block)
+
+  - Q2 2024.arr  qualifier='q2'  origin=interpolated
+    claim_id: interpolated-openai-q2-2024-arr
+    value: 4.5
+    text: 'OpenAI Q2 2024 ARR ~$4.5B'
+    suggested: move to Q2 2024_q2.arr (new sub-year block)
+
+  - Q2 2024.arr  qualifier='q4'  origin=interpolated
+    claim_id: interpolated-openai-q2-2024-arr
+    value: 4.5
+    text: 'OpenAI Q2 2024 ARR ~$4.5B'
+    suggested: move to Q2 2024_q4.arr (new sub-year block)
+
+  - Q3 2024.arr  qualifier='q3'  origin=interpolated
+    claim_id: interpolated-openai-q3-2024-arr
+    value: 5.5
+    text: 'OpenAI Q3 2024 ARR ~$5.5B'
+    suggested: move to Q3 2024_q3.arr (new sub-year block)
+
+  - Q4 2024.arr  qualifier='h1'  origin=interpolated
+    claim_id: interpolated-openai-q4-2024-arr
+    value: 7.0
+    text: 'OpenAI Q4 2024 ARR ~$7.0B'
+    suggested: move to Q4 2024_h1.arr (new sub-year block)
+
+  - Q4 2024.arr  qualifier='q4'  origin=interpolated
+    claim_id: interpolated-openai-q4-2024-arr
+    value: 7.0
+    text: 'OpenAI Q4 2024 ARR ~$7.0B'
+    suggested: move to Q4 2024_q4.arr (new sub-year block)
+
+  - Q1 2025.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-openai-q1-2025-arr
+    value: 9.0
+    text: 'OpenAI Q1 2025 ARR ~$9.0B'
+    suggested: move to Q1 2025_q1.arr (new sub-year block)
+
+  - Q1 2025.arr  qualifier='q4'  origin=interpolated
+    claim_id: interpolated-openai-q1-2025-arr
+    value: 9.0
+    text: 'OpenAI Q1 2025 ARR ~$9.0B'
+    suggested: move to Q1 2025_q4.arr (new sub-year block)
+
+  - Q2 2025.arr  qualifier='q2'  origin=interpolated
+    claim_id: interpolated-openai-q2-2025-arr
+    value: 11.0
+    text: 'OpenAI Q2 2025 ARR ~$11.0B'
+    suggested: move to Q2 2025_q2.arr (new sub-year block)
+
+  - Q2 2025.arr  qualifier='exit/year_end'  origin=interpolated
+    claim_id: interpolated-openai-q2-2025-arr
+    value: 11.0
+    text: 'OpenAI Q2 2025 ARR ~$11.0B'
+    suggested: move to Q2 2025.exit_arr (or set field=exit_arr if applicable)
+
+  - Q3 2025.arr  qualifier='q3'  origin=interpolated
+    claim_id: interpolated-openai-q3-2025-arr
+    value: 13.0
+    text: 'OpenAI Q3 2025 ARR ~$13.0B'
+    suggested: move to Q3 2025_q3.arr (new sub-year block)
+
+  - Q3 2025.arr  qualifier='q4'  origin=interpolated
+    claim_id: interpolated-openai-q3-2025-arr
+    value: 13.0
+    text: 'OpenAI Q3 2025 ARR ~$13.0B'
+    suggested: move to Q3 2025_q4.arr (new sub-year block)
+
+  - Q4 2025.arr  qualifier='q4'  origin=interpolated
+    claim_id: interpolated-openai-q4-2025-arr
+    value: 16.0
+    text: 'OpenAI Q4 2025 ARR ~$16.0B'
+    suggested: move to Q4 2025_q4.arr (new sub-year block)
+
+  - Q1 2026.arr  qualifier='q1'  origin=interpolated
+    claim_id: interpolated-openai-q1-2026-arr
+    value: 20.0
+    text: 'OpenAI Q1 2026 ARR ~$20.0B'
+    suggested: move to Q1 2026_q1.arr (new sub-year block)
+
+  - 2026.subscription_revenue  qualifier='monthly'  origin=accepted
+    claim_id: dp-094
+    value: 50
+    text: "Consumer subscriptions are roughly half of OpenAI's revenue; consumer subscribers at ~$20/month are clearly getting valu"
+    suggested: move to 2026_<month>.subscription_revenue (no current schema; needs new field type) OR convert to annual via × 12
+
+### perplexity  (3 flag(s))
+
+  - 2025.arr  qualifier='specific_month'  origin=accepted
+    claim_id: dp-196
+    value: 148
+    text: 'Perplexity had approximately $148M in annualized revenue in June 2025.'
+    suggested: move to 2025_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2026.arr  qualifier='specific_month'  origin=accepted
+    claim_id: dp-195
+    value: 500
+    text: 'Perplexity hit $500M in annualized revenue in April 2026, up 335% year-over-year.'
+    suggested: move to 2026_<month>.arr (no current schema; needs new field type) OR convert to annual via × 12
+
+  - 2025.valuation  qualifier='specific_month'  origin=accepted
+    claim_id: dp-197
+    value: 20
+    text: 'Perplexity was valued at $20B after raising $200M in a round announced in September 2025.'
+    suggested: move to 2025_<month>.valuation (no current schema; needs new field type) OR convert to annual via × 12
+
+## Decision framing (for Simon — wq-054 brief Options A/B/C)
+
+  Total scale: 63 flagged claims across 3 entities.
+
+  Option A (highest-leverage flagged claims only): walk the top affected
+  entities (typically the providers like openai/anthropic/google whose
+  numbers feed the Sankey) and re-attribute their flagged sub-period
+  claims to either (i) a new year_<period>.<field> sub-block or (ii)
+  the existing exit_arr / monthly_revenue_peak buckets where applicable.
+  Engine impact: directly reduces wq-048 consensus-engine inflation risk.
+
+  Option B (schema-first): add year_h1, year_h2, year_q1-q4 as standard
+  sub-year blocks in entities.json schema, then bulk-migrate flagged
+  claims via a follow-on script. Higher upfront cost; pays off when
+  the next sub-period claim arrives via the review queue.
+
+  Option C (provenance annotation only): add a `period_qualifier` field
+  to each flagged provenance claim (e.g. `"period_qualifier": "monthly"`)
+  so downstream consumers can filter or convert. Doesn't move data;
+  documents the issue in-place. Smallest change; doesn't fix the root.
+
+  Pick A if Sankey accuracy is the priority. Pick B if you expect more
+  sub-period claims long-term. Pick C if this is acceptable rot for now.
