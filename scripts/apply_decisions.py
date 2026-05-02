@@ -360,6 +360,74 @@ def apply_accepted(claim, vault_data, entities, schema):
 
             log(f"  PROVENANCE: {entity['name']} → {prov_key}: {prov['confidence']} ({prov['claim_count']} sources)")
 
+            # wq-048 §3.5: when an `arr` field updates, re-derive
+            # collected_revenue for that entity-year. Per brief §5 edge case:
+            # only re-derive if the source claim's dateOfClaim is in Q4 of
+            # the year being derived — earlier-quarter ARR snapshots are
+            # mid-year leaks that would inflate the engine if treated as
+            # year-end ARR.
+            if field_id == "arr" and year:
+                date_of_claim = (claim.get("dateOfClaim") or "").strip()
+                in_q4 = (
+                    date_of_claim.startswith(f"{year}-10")
+                    or date_of_claim.startswith(f"{year}-11")
+                    or date_of_claim.startswith(f"{year}-12")
+                )
+                if in_q4:
+                    try:
+                        # Lazy import — derive engine + config; no cost when
+                        # field_id != arr or claim is not Q4.
+                        sys.path.insert(0, SCRIPT_DIR)
+                        from derive_collected_revenue import (
+                            derive_collected_revenue,
+                            load_config,
+                            load_overrides,
+                            resolve_with_override,
+                        )
+                        cfg = load_config()
+                        overrides = load_overrides()
+                        engine_block = derive_collected_revenue(entity, year, cfg)
+                        if engine_block is not None:
+                            resolved = resolve_with_override(
+                                entity_slug, year, engine_block, overrides
+                            )
+                            new_cr = resolved["value"]
+                            old_cr = (entity.get("financials") or {}).get(year, {}).get("collected_revenue")
+                            entity.setdefault("financials", {}).setdefault(year, {})
+                            entity["financials"][year]["collected_revenue"] = new_cr
+                            cr_prov_key = f"{year}.collected_revenue"
+                            prior_cr_prov = entity.get("provenance", {}).get(cr_prov_key)
+                            if resolved["origin"] == "editorial_override":
+                                from derive_collected_revenue import _override_provenance_block
+                                cr_block = _override_provenance_block(resolved, engine_block)
+                            else:
+                                cr_block = engine_block
+                            # Preserve prior provenance as superseded — same
+                            # logic as backfill (--apply) so the trail is
+                            # consistent however the field gets written.
+                            if prior_cr_prov and prior_cr_prov.get("claims"):
+                                today_str = datetime.now().strftime("%Y-%m-%d")
+                                for prior in prior_cr_prov["claims"]:
+                                    sup = dict(prior)
+                                    sup["role"] = "superseded"
+                                    sup["superseded_at"] = today_str
+                                    sup["superseded_by"] = cr_block["claims"][0]["id"]
+                                    cr_block["claims"].append(sup)
+                            entity["provenance"][cr_prov_key] = cr_block
+                            log(
+                                f"  CONSENSUS: arr update triggered re-derivation "
+                                f"of {entity['name']} {year}.collected_revenue: "
+                                f"{old_cr} → {new_cr} (origin={resolved['origin']}, "
+                                f"trigger_claim={dp_id})"
+                            )
+                    except Exception as exc:
+                        log(f"  CONSENSUS: re-derivation failed for {entity['name']} {year}: {exc}")
+                else:
+                    log(
+                        f"  CONSENSUS: arr update for {entity['name']} {year} skipped re-derivation "
+                        f"(dateOfClaim={date_of_claim!r} not in Q4 of {year} per wq-048 §5 edge case)"
+                    )
+
     return dp_id
 
 
