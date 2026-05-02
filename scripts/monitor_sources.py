@@ -25,6 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
 from log_run import logged_run  # noqa: E402
+from score_materiality import score as score_materiality  # noqa: E402  (wq-040)
 REGISTRY_PATH = os.path.join(BASE_DIR, 'sources-registry.json')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 LOG_FILE = os.path.join(BASE_DIR, 'data', 'monitor_sources.log')
@@ -1395,9 +1396,22 @@ def _append_to_vault_inbox(claims, source, today):
         if removed:
             log(f"   Replaced {removed} prior pending item(s) from {src_id}")
 
+    # wq-040 — load entities + schema once for materiality scoring per item
+    try:
+        with open(os.path.join(BASE_DIR, 'entities.json')) as f:
+            _entities = json.load(f)
+        with open(os.path.join(BASE_DIR, 'metric-schema.json')) as f:
+            _schema = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        _entities, _schema = {"companies": []}, {}
+
     added = 0
     for i, claim in enumerate(claims):
         item = _claim_to_vault_item(claim, source, today, i)
+        try:
+            item["materiality"] = score_materiality(item, _entities, _schema)
+        except Exception:
+            pass
         inbox['items'].append(item)
         added += 1
 

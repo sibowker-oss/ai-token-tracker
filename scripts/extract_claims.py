@@ -25,6 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
 from log_run import logged_run  # noqa: E402
+from score_materiality import score as score_materiality  # noqa: E402  (wq-040)
 TRANSCRIPT_DIR = os.path.join(BASE_DIR, 'transcripts')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 PROCESSED_FILE = os.path.join(OUTPUT_DIR, '.processed')
@@ -621,6 +622,15 @@ def _main_impl(outputs):
     else:
         inbox = {"items": [], "lastProcessed": None}
 
+    # wq-040 — load entities + schema once for materiality scoring per item
+    try:
+        with open(os.path.join(BASE_DIR, 'entities.json')) as f:
+            _entities = json.load(f)
+        with open(os.path.join(BASE_DIR, 'metric-schema.json')) as f:
+            _schema = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        _entities, _schema = {"companies": []}, {}
+
     date_str = today.replace('-', '')
     added = 0
     for i, claim in enumerate(all_claims):
@@ -628,7 +638,7 @@ def _main_impl(outputs):
         # Skip if already in inbox
         if any(item['id'] == claim_id for item in inbox['items']):
             continue
-        inbox['items'].append({
+        new_item = {
             "id": claim_id,
             "claim": claim.get("claim", ""),
             "value": claim.get("value"),
@@ -655,7 +665,13 @@ def _main_impl(outputs):
             "sourceExcerpt": claim.get("source_excerpt"),
             "isPrimarySource": claim.get("is_primary_source"),
             "originalSourceCited": claim.get("original_source_cited"),
-        })
+        }
+        # wq-040: score materiality at write time so review.html lane filter works.
+        try:
+            new_item["materiality"] = score_materiality(new_item, _entities, _schema)
+        except Exception:
+            pass
+        inbox['items'].append(new_item)
         added += 1
 
     inbox["lastProcessed"] = today
