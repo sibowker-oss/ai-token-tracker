@@ -17,6 +17,7 @@
 | H1 2025 actual collected | ~$4.3B | The Information (cited by Zitron) | Estimated | Zitron's MSFT rev share analysis implies it may be closer to $2.27B — a ~$2B gap. Used $4.3B as the more conservative figure |
 | H1 2025 inference spend | $5.022B | Zitron / Microsoft leaked documents | Verified | EXCEEDS H1 revenue of $4.3B. Full 2024-Sep2025 inference total: $12.4B |
 | 2025 full-year estimated collected | ~$11.9B | Zitron extrapolation from MSFT docs | Estimated (parked) | Below Altman's claim of "well more than $13B" and far below $20B ARR. Our original Sankey had $6B (too low) |
+| **2025 engine output (current, wq-048)** | **$9.31B** | `scripts/derive_collected_revenue.py` | Estimated | Was $7.65B (hand-curated §7.2 weighted consensus). As of 2026-05-02 publishing $9.31B (engine §2 method on $5B start / $20B end ARR with NRR boost 1.075). Editorial position revised upward to reflect documented methodology. See changelog entry 2026-05-02. |
 | 2025 end-of-year ARR | $20B | All-In Podcast / Jason Calacanis / multiple reports | Verified | Grown from $2B to $20B in 24 months |
 | March 2026 ARR | $25B | Sacra | Estimated | Uses best 4-week period x 12, NOT calendar month x 12 — confirmed by Zitron |
 | $25B ARR methodology | Best 4-week period x 12 | Zitron / confirmed methodology | Verified | CRITICAL: inflates figure by 10-15% vs monthly calculation |
@@ -34,6 +35,7 @@
 |--------|-------|--------|------------|-------|
 | Cumulative collected revenue (all-time through early 2025) | ~$5B | Sworn court affidavit | Verified (95% credibility) | Highest confidence data point. Cumulative, not ARR |
 | 2025 actual collected revenue | ~$4.5B | The Information / Sacra | Verified | Cross-referenced with court affidavit. Consensus-confirmed at $4.71B weighted avg |
+| **2025 engine output (current, wq-048)** | **$4.71B** (override) | `data/consensus_overrides.json` | Verified | Engine §2 method bottoms out at $2.92B–$3.34B for Anthropic due to fallback haircut (no comparable starting ARR for log_mean). Hand-curated $4.71B per §7.2 weighted consensus pinned via editorial override; expires 2027-01-01 to force re-review. |
 | 2025 cash burn | ~$3B | Sacra | Estimated (parked) | Down from $5.6B prior year. Our Sankey had $5.2B operating loss — $3B cash burn may reflect different accounting |
 | 2025 operating loss | ~$5.2B | APAC AI Intel (derived) | Estimated | Total system cost $9.7B minus $4.5B customer revenue |
 | February 2026 ARR | $14B | Brad Gerstner (Altimeter Capital, investor, All-In Podcast) | Verified | Authoritative — direct investor with board-level access |
@@ -57,6 +59,7 @@
 |--------|-------|--------|------------|-------|
 | Google Cloud Q4 2025 revenue | $17.66B (+47.8% YoY) | Alphabet / TrendForce | Verified | $240B cloud backlog doubled YoY |
 | Sankey provider total | $2.5B | APAC AI Intel (derived) | Estimated | Vertex AI revenue. Alphabet internal subsidy covers $0.5B loss |
+| **2025 engine output (current, wq-048)** | **$2.25B** | `scripts/derive_collected_revenue.py` | Estimated | Hand-curated $2.00B was the customer-revenue node value. Engine §2 method on Google profile (segments 20/50/0/30, NRR 1.20, unknown ARR method 0.93) produces $2.25B from 2025 ARR=$4.2B with no startingARR (fallback to ending_x_0.60). Within ±15% confidence band of hand-curated. |
 | Dashboard tokens/day | 90T | Editorial estimate | — | |
 | Dashboard ARR | $4.2B | Editorial estimate | — | |
 
@@ -85,6 +88,20 @@
 ---
 
 ## 2. ARR-to-Revenue Conversion Framework
+
+> **Implementation status (as of 2026-05-02 / wq-048):** This section is now the
+> methodology reference; the canonical implementation is
+> [`scripts/derive_collected_revenue.py`](scripts/derive_collected_revenue.py).
+> Lookup tables are codified in [`data/consensus_config.json`](data/consensus_config.json).
+> Editorial overrides live in [`data/consensus_overrides.json`](data/consensus_overrides.json).
+> The post-write hook in `apply_decisions.py` re-runs the engine when an
+> accepted Q4 ARR claim updates an entity-year (per §5 edge case).
+> `release-check.mjs` enforces every `collected_revenue` value has traceable
+> provenance (origin ∈ {consensus_engine_derived, editorial_override, accepted,
+> editorial_reconciliation}). Two methodology decisions made during wq-048
+> Phase A: NRR uses §2.5 formula `nrrBoost = 1.0 + (NRR - 1.0) × 0.25`;
+> ARR_METHOD.factor is applied to the growth-method output, not to endingARR
+> before growth math.
 
 ### 2.1 Segment Collection Factors (SEGMENT_FACTORS)
 

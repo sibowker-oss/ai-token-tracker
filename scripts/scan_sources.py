@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
 from log_run import logged_run  # noqa: E402
+from score_materiality import score as score_materiality  # noqa: E402  (wq-040)
 REGISTRY_PATH = os.path.join(BASE_DIR, "sources-registry.json")
 INBOX_PATH = os.path.join(BASE_DIR, "vault-inbox.json")
 MODEL = "claude-sonnet-4-6"
@@ -193,6 +194,10 @@ def _main_impl(outputs):
     # Get existing claim IDs to avoid duplicates
     existing_ids = {item["id"] for item in inbox["items"]}
 
+    # wq-040 — load entities + schema for materiality scoring per item
+    _ENTITIES_CACHE = load_json(os.path.join(BASE_DIR, "entities.json")) or {"companies": []}
+    _SCHEMA_CACHE = load_json(os.path.join(BASE_DIR, "metric-schema.json")) or {}
+
     # Filter to sources that are due for scanning
     fetchable_methods = {"web_extract", "pdf_export"}
     freq_days = {
@@ -292,7 +297,7 @@ def _main_impl(outputs):
             if is_dupe:
                 continue
 
-            inbox["items"].append({
+            new_item = {
                 "id": claim_id,
                 "claim": claim.get("claim", ""),
                 "value": claim.get("value"),
@@ -317,7 +322,14 @@ def _main_impl(outputs):
                 "replaces": None,
                 "source_id": sid,
                 "metricKey": None,
-            })
+                "entity": claim.get("entity", ""),
+            }
+            # wq-040 — score materiality before write so review.html lanes work
+            try:
+                new_item["materiality"] = score_materiality(new_item, _ENTITIES_CACHE, _SCHEMA_CACHE)
+            except Exception:
+                pass
+            inbox["items"].append(new_item)
             existing_ids.add(claim_id)
             added += 1
 
