@@ -24,6 +24,7 @@ from urllib.error import URLError
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
+from log_run import logged_run  # noqa: E402
 REGISTRY_PATH = os.path.join(BASE_DIR, 'sources-registry.json')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 LOG_FILE = os.path.join(BASE_DIR, 'data', 'monitor_sources.log')
@@ -1407,72 +1408,88 @@ def _append_to_vault_inbox(claims, source, today):
 
 
 def main():
-    dry_run = '--dry-run' in sys.argv
-    force_id = None
-    if '--force' in sys.argv:
-        idx = sys.argv.index('--force')
-        force_id = sys.argv[idx + 1] if idx + 1 < len(sys.argv) else None
+    with logged_run("monitor_sources.py") as outputs:
+        dry_run = '--dry-run' in sys.argv
+        force_id = None
+        if '--force' in sys.argv:
+            idx = sys.argv.index('--force')
+            force_id = sys.argv[idx + 1] if idx + 1 < len(sys.argv) else None
 
-    today_str = datetime.now().strftime('%Y-%m-%d')
-    log(f"\n{'='*60}")
-    log(f"📡 Source Monitor — {today_str}")
+        today_str = datetime.now().strftime('%Y-%m-%d')
+        log(f"\n{'='*60}")
+        log(f"📡 Source Monitor — {today_str}")
 
-    if not os.path.exists(REGISTRY_PATH):
-        log("  No sources-registry.json found")
-        return
+        if not os.path.exists(REGISTRY_PATH):
+            log("  No sources-registry.json found")
+            outputs["sources_total"] = 0
+            outputs["sources_due"] = 0
+            return
 
-    with open(REGISTRY_PATH) as f:
-        registry = json.load(f)
+        with open(REGISTRY_PATH) as f:
+            registry = json.load(f)
 
-    sources = registry['sources']
-    log(f"  Registry: {len(sources)} sources")
+        sources = registry['sources']
+        log(f"  Registry: {len(sources)} sources")
 
-    # Find due sources
-    due = []
-    for s in sources:
-        if force_id and s['id'] != force_id:
-            continue
-        if force_id:
-            due.append(s)
-            continue
-        if s['status'] == 'disabled':
-            continue
-        next_check = s.get('next_check', '2099-01-01')
-        if next_check <= today_str:
-            due.append(s)
+        # Find due sources
+        due = []
+        for s in sources:
+            if force_id and s['id'] != force_id:
+                continue
+            if force_id:
+                due.append(s)
+                continue
+            if s['status'] == 'disabled':
+                continue
+            next_check = s.get('next_check', '2099-01-01')
+            if next_check <= today_str:
+                due.append(s)
 
-    log(f"  Due for extraction: {len(due)}")
+        log(f"  Due for extraction: {len(due)}")
 
-    if not due:
-        log("  Nothing due today")
-        return
+        outputs["sources_total"] = len(sources)
+        outputs["sources_due"] = len(due)
+        outputs["dry_run"] = dry_run
 
-    total_claims = 0
-    for source in due:
-        claims_count, had_fetch_failures = process_source(source, dry_run)
-        total_claims += claims_count
+        if not due:
+            log("  Nothing due today")
+            outputs["claims_added"] = 0
+            outputs["sources_processed"] = 0
+            return
+
+        total_claims = 0
+        fetch_failure_count = 0
+        for source in due:
+            claims_count, had_fetch_failures = process_source(source, dry_run)
+            total_claims += claims_count
+            if had_fetch_failures:
+                fetch_failure_count += 1
+
+            if not dry_run:
+                # Update registry
+                source['last_checked'] = today_str
+                source['last_claims_count'] = claims_count
+                if claims_count == 0 and had_fetch_failures:
+                    # Adapter swallowed a fetch failure — leave next_check alone so
+                    # we retry tomorrow instead of silent-disabling the source.
+                    source['status'] = 'error'
+                    log(f"   ⚠ Fetch failures with 0 claims — next_check unchanged for retry")
+                else:
+                    source['status'] = 'active'
+                    freq_days = FREQUENCY_DAYS.get(source['frequency'], 7)
+                    source['next_check'] = (datetime.now() + timedelta(days=freq_days)).strftime('%Y-%m-%d')
 
         if not dry_run:
-            # Update registry
-            source['last_checked'] = today_str
-            source['last_claims_count'] = claims_count
-            if claims_count == 0 and had_fetch_failures:
-                # Adapter swallowed a fetch failure — leave next_check alone so
-                # we retry tomorrow instead of silent-disabling the source.
-                source['status'] = 'error'
-                log(f"   ⚠ Fetch failures with 0 claims — next_check unchanged for retry")
-            else:
-                source['status'] = 'active'
-                freq_days = FREQUENCY_DAYS.get(source['frequency'], 7)
-                source['next_check'] = (datetime.now() + timedelta(days=freq_days)).strftime('%Y-%m-%d')
+            registry['meta']['lastUpdated'] = today_str
+            with open(REGISTRY_PATH, 'w') as f:
+                json.dump(registry, f, indent=2)
 
-    if not dry_run:
-        registry['meta']['lastUpdated'] = today_str
-        with open(REGISTRY_PATH, 'w') as f:
-            json.dump(registry, f, indent=2)
+        outputs["sources_processed"] = len(due)
+        outputs["claims_added"] = total_claims
+        outputs["sources_with_fetch_failures"] = fetch_failure_count
 
-    log(f"\n{'='*60}")
-    log(f"✅ Done — {len(due)} sources processed, {total_claims} total claims extracted")
+        log(f"\n{'='*60}")
+        log(f"✅ Done — {len(due)} sources processed, {total_claims} total claims extracted")
 
 
 if __name__ == '__main__':
