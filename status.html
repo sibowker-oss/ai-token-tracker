@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Automation Status — Admin</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; --gray:#64748b; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1200px; margin:0 auto; padding:24px; }
+  .nav { display:flex; gap:16px; align-items:center; margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid var(--card-border); }
+  .nav a { color:var(--accent); text-decoration:none; font-size:13px; }
+  .nav .nav-brand { font-size:14px; font-weight:600; color:var(--text); margin-right:12px; }
+  h1 { font-size:22px; font-weight:600; margin-bottom:4px; }
+  .subtitle { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+
+  .section { margin-bottom:32px; }
+  .section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); margin-bottom:12px; }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+  .card { background:var(--card); border:1px solid var(--card-border); border-radius:8px; padding:14px; }
+  .card.s-success { border-left:3px solid var(--green); }
+  .card.s-failure { border-left:3px solid var(--red); }
+  .card.s-running { border-left:3px solid var(--accent); }
+  .card.s-stalled { border-left:3px solid var(--orange); }
+  .card.s-unknown { border-left:3px solid var(--gray); }
+
+  .card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .card-title { font-size:13px; font-weight:600; color:var(--text); }
+  .card-status { font-size:10px; text-transform:uppercase; letter-spacing:0.5px; padding:2px 8px; border-radius:4px; font-weight:600; }
+  .status-success { background:rgba(16,185,129,0.15); color:var(--green); }
+  .status-failure { background:rgba(239,68,68,0.15); color:var(--red); }
+  .status-running { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .status-stalled { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .status-unknown { background:rgba(100,116,139,0.15); color:var(--gray); }
+
+  .card-meta { font-size:11px; color:var(--text-dim); margin-bottom:8px; line-height:1.6; }
+  .card-meta strong { color:var(--text); font-weight:500; }
+  .sparkline { display:flex; gap:2px; margin-top:6px; height:18px; align-items:flex-end; }
+  .spark-tick { flex:1; min-width:3px; border-radius:1px; }
+  .spark-success { background:var(--green); opacity:0.7; }
+  .spark-failure { background:var(--red); }
+  .spark-empty { background:var(--card-border); }
+
+  .outputs { font-size:10px; color:var(--text-dim); margin-top:6px; padding-top:6px; border-top:1px solid var(--card-border); }
+  .outputs span { display:inline-block; margin-right:8px; }
+  .outputs strong { color:var(--text); font-weight:500; }
+
+  .schedule-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--card-border); font-size:12px; }
+  .schedule-row:last-child { border-bottom:none; }
+  .schedule-script { flex:0 0 220px; font-weight:500; color:var(--text); }
+  .schedule-cadence { flex:0 0 110px; color:var(--text-dim); font-size:11px; }
+  .schedule-last { flex:1; color:var(--text-dim); font-size:11px; }
+  .schedule-pill { font-size:9px; text-transform:uppercase; padding:2px 6px; border-radius:3px; font-weight:600; letter-spacing:0.5px; }
+  .pill-on-time { background:rgba(16,185,129,0.15); color:var(--green); }
+  .pill-late { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .pill-overdue { background:rgba(239,68,68,0.15); color:var(--red); }
+  .pill-never { background:rgba(100,116,139,0.15); color:var(--gray); }
+
+  .failure-row { padding:10px 0; border-bottom:1px solid var(--card-border); font-size:12px; }
+  .failure-row:last-child { border-bottom:none; }
+  .failure-header { display:flex; gap:12px; align-items:baseline; margin-bottom:6px; }
+  .failure-script { font-weight:600; color:var(--red); }
+  .failure-time { font-size:11px; color:var(--text-dim); }
+  .failure-error { font-family:ui-monospace,'SF Mono',monospace; font-size:10px; color:var(--text-dim); background:rgba(239,68,68,0.05); padding:6px 10px; border-radius:4px; white-space:pre-wrap; max-height:80px; overflow:auto; }
+
+  .empty { text-align:center; padding:24px; color:var(--text-dim); font-size:13px; }
+  details { margin-top:8px; }
+  summary { cursor:pointer; font-size:12px; color:var(--text-dim); user-select:none; padding:6px 0; }
+  summary:hover { color:var(--text); }
+
+  .refresh-btn { font-size:11px; background:var(--card); border:1px solid var(--card-border); color:var(--text-dim); padding:4px 10px; border-radius:4px; cursor:pointer; margin-left:auto; }
+  .refresh-btn:hover { color:var(--text); border-color:var(--text-dim); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="nav">
+    <span class="nav-brand">Automation status</span>
+    <a href="review.html">Review →</a>
+    <a href="admin.html">Command Centre →</a>
+    <a href="dashboard.html">Dashboard →</a>
+    <button class="refresh-btn" onclick="loadAndRender()">↻ Refresh</button>
+  </div>
+
+  <h1>Run log</h1>
+  <p class="subtitle" id="loaded-meta">Loading…</p>
+
+  <div class="section">
+    <div class="section-title">Workflow status — last run per script</div>
+    <div id="workflow-grid" class="grid"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Schedule view — when each script last ran vs expected cadence</div>
+    <div id="schedule-list"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Recent failures (last 20)</div>
+    <div id="failure-log"></div>
+  </div>
+</div>
+
+<script>
+// Per brief §3.5 — single-file admin page reading data/runs.jsonl
+// Aggregates per-script status; schedule check uses brief §3 cadences.
+
+// Cadences sourced from .github/workflows/*.yml and known local invocations
+const SCHEDULE = {
+  'monitor_sources.py':   { cadence: 'daily',   maxAgeHours: 36 },
+  'scan_sources.py':      { cadence: 'daily',   maxAgeHours: 36 },
+  'news_monitor.py':      { cadence: 'daily',   maxAgeHours: 36 },
+  'enrich_vault.py':      { cadence: 'daily',   maxAgeHours: 36 },
+  'apply_decisions.py':   { cadence: 'on-push', maxAgeHours: 168 },
+  'extract_claims.py':    { cadence: 'weekly',  maxAgeHours: 192 },
+  'scrape_podcasts.py':   { cadence: 'weekly',  maxAgeHours: 192 },
+  'enrich.py':            { cadence: 'weekly',  maxAgeHours: 192 },
+  'newsletter.py':        { cadence: 'weekly',  maxAgeHours: 192 },
+  'auto_update.py':       { cadence: 'daily',   maxAgeHours: 36 },
+};
+
+const STALL_THRESHOLD_MS = 60 * 60 * 1000;  // 60 minutes per brief §4
+
+let _runs = [];
+
+async function loadAndRender() {
+  const meta = document.getElementById('loaded-meta');
+  meta.textContent = 'Loading data/runs.jsonl…';
+  try {
+    const res = await fetch('data/runs.jsonl?_=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    _runs = parseJsonl(text);
+    meta.textContent = `${_runs.length} record(s) loaded · last refresh ${new Date().toLocaleString()}`;
+    render();
+  } catch (e) {
+    meta.textContent = `Failed to load data/runs.jsonl: ${e.message}`;
+  }
+}
+
+function parseJsonl(text) {
+  return text.split('\n')
+    .map(l => l.trim())
+    .filter(Boolean)
+    .map(l => { try { return JSON.parse(l); } catch (e) { return null; } })
+    .filter(Boolean);
+}
+
+// For each script, the latest record per run_id is the truth (start gets overwritten by end).
+function latestPerRun(records) {
+  const byId = new Map();
+  for (const r of records) {
+    const prev = byId.get(r.run_id);
+    if (!prev) { byId.set(r.run_id, r); continue; }
+    // Prefer the record that has ended_at (the end record is later)
+    if (r.ended_at && !prev.ended_at) byId.set(r.run_id, r);
+    else if (r.ended_at && prev.ended_at && r.ended_at > prev.ended_at) byId.set(r.run_id, r);
+  }
+  return Array.from(byId.values());
+}
+
+function effectiveStatus(run) {
+  if (run.status === 'failure') return 'failure';
+  if (run.status === 'success') return 'success';
+  if (run.status === 'running') {
+    const startedMs = Date.parse(run.started_at);
+    if (Date.now() - startedMs > STALL_THRESHOLD_MS) return 'stalled';
+    return 'running';
+  }
+  return 'unknown';
+}
+
+function relativeTime(iso) {
+  if (!iso) return 'never';
+  const d = Date.parse(iso);
+  const diffMs = Date.now() - d;
+  const min = Math.round(diffMs / 60000);
+  if (min < 60) return `${min}m ago`;
+  const hr = Math.round(min / 60);
+  if (hr < 48) return `${hr}h ago`;
+  const day = Math.round(hr / 24);
+  return `${day}d ago`;
+}
+
+function fmtDuration(s) {
+  if (s == null) return '—';
+  if (s < 60) return `${s.toFixed(1)}s`;
+  return `${(s / 60).toFixed(1)}m`;
+}
+
+function render() {
+  const finalRuns = latestPerRun(_runs);
+  // Group by script
+  const byScript = new Map();
+  for (const r of finalRuns) {
+    const list = byScript.get(r.script) || [];
+    list.push(r);
+    byScript.set(r.script, list);
+  }
+  // Sort each script's runs newest-first
+  for (const list of byScript.values()) {
+    list.sort((a, b) => (b.started_at || '').localeCompare(a.started_at || ''));
+  }
+
+  renderWorkflowGrid(byScript);
+  renderSchedule(byScript);
+  renderFailures(finalRuns);
+}
+
+function renderWorkflowGrid(byScript) {
+  const root = document.getElementById('workflow-grid');
+  // Show all known scripts even if no runs yet
+  const allScripts = new Set([...Object.keys(SCHEDULE), ...byScript.keys()]);
+  const cards = [];
+  for (const script of [...allScripts].sort()) {
+    const runs = byScript.get(script) || [];
+    const latest = runs[0];
+    const status = latest ? effectiveStatus(latest) : 'unknown';
+    const recent = runs.slice(0, 14).reverse();
+    const sparkHtml = recent.length === 0
+      ? '<div class="sparkline"><div class="spark-tick spark-empty" style="height:6px;flex:none;width:3px;"></div></div>'
+      : '<div class="sparkline">' + recent.map(r => {
+          const ok = r.status === 'success';
+          const h = Math.max(4, Math.min(18, Math.log2((r.duration_s || 1) + 1) * 4));
+          return `<div class="spark-tick ${ok ? 'spark-success' : 'spark-failure'}" style="height:${h}px" title="${r.script} · ${r.status} · ${fmtDuration(r.duration_s)} · ${new Date(r.started_at).toLocaleString()}"></div>`;
+        }).join('') + '</div>';
+
+    let outputsHtml = '';
+    if (latest && latest.outputs && Object.keys(latest.outputs).length) {
+      outputsHtml = '<div class="outputs">' +
+        Object.entries(latest.outputs).slice(0, 6).map(([k, v]) =>
+          `<span><strong>${escapeHtml(String(k))}:</strong> ${escapeHtml(String(v))}</span>`
+        ).join('') + '</div>';
+    }
+
+    cards.push(`
+      <div class="card s-${status}">
+        <div class="card-header">
+          <div class="card-title">${escapeHtml(script)}</div>
+          <div class="card-status status-${status}">${status}</div>
+        </div>
+        <div class="card-meta">
+          <strong>Last:</strong> ${latest ? relativeTime(latest.started_at) : 'never'}
+          ${latest ? ` · <strong>Took:</strong> ${fmtDuration(latest.duration_s)}` : ''}
+          ${latest && latest.trigger ? ` · <strong>Via:</strong> ${escapeHtml(latest.trigger)}` : ''}
+        </div>
+        ${sparkHtml}
+        ${outputsHtml}
+      </div>
+    `);
+  }
+  root.innerHTML = cards.join('') || '<div class="empty">No runs recorded yet.</div>';
+}
+
+function renderSchedule(byScript) {
+  const root = document.getElementById('schedule-list');
+  const rows = [];
+  const scripts = Object.keys(SCHEDULE).sort();
+  for (const script of scripts) {
+    const sched = SCHEDULE[script];
+    const runs = byScript.get(script) || [];
+    const latest = runs[0];
+    let pill = 'pill-never';
+    let pillText = 'never run';
+    let lastText = 'no runs recorded';
+    if (latest) {
+      lastText = `last ${latest.status} ${relativeTime(latest.started_at)}`;
+      const ageMs = Date.now() - Date.parse(latest.started_at);
+      const ageHrs = ageMs / 3600000;
+      if (ageHrs < sched.maxAgeHours) { pill = 'pill-on-time'; pillText = 'on time'; }
+      else if (ageHrs < sched.maxAgeHours * 1.5) { pill = 'pill-late'; pillText = 'late'; }
+      else { pill = 'pill-overdue'; pillText = 'overdue'; }
+    }
+    rows.push(`
+      <div class="schedule-row">
+        <div class="schedule-script">${escapeHtml(script)}</div>
+        <div class="schedule-cadence">${escapeHtml(sched.cadence)}</div>
+        <div class="schedule-last">${escapeHtml(lastText)}</div>
+        <div class="schedule-pill ${pill}">${escapeHtml(pillText)}</div>
+      </div>
+    `);
+  }
+  root.innerHTML = rows.join('');
+}
+
+function renderFailures(finalRuns) {
+  const root = document.getElementById('failure-log');
+  const failures = finalRuns
+    .filter(r => r.status === 'failure')
+    .sort((a, b) => (b.ended_at || b.started_at || '').localeCompare(a.ended_at || a.started_at || ''))
+    .slice(0, 20);
+  if (failures.length === 0) {
+    root.innerHTML = '<div class="empty">No failures recorded. ✓</div>';
+    return;
+  }
+  root.innerHTML = failures.map(r => `
+    <div class="failure-row">
+      <div class="failure-header">
+        <span class="failure-script">${escapeHtml(r.script)}</span>
+        <span class="failure-time">${relativeTime(r.started_at)} · ${escapeHtml(r.host || 'unknown')} · ${fmtDuration(r.duration_s)}</span>
+      </div>
+      <details><summary>traceback</summary><div class="failure-error">${escapeHtml(r.error || '(no traceback captured)')}</div></details>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+loadAndRender();
+</script>
+</body>
+</html>
