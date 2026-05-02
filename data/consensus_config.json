@@ -43,10 +43,9 @@
   "confidence_band": [0.85, 1.15],
 
   "validation_targets": {
-    "_doc": "§4.4 hand-curated values used by --validate to gate calibration. ±15% per acceptance criteria #4.",
+    "_doc": "§4.4 hand-curated values used by --validate to gate calibration. ±15% per acceptance criteria #4. iaas dropped pending IaaS provider entity records — see wq-053 Notion card.",
     "openai":    {"2025": 7.65},
     "anthropic": {"2025": 4.71},
-    "google":    {"2025": 2.00},
-    "iaas":      {"2025": 0.50}
+    "google":    {"2025": 2.00}
   }
 }
