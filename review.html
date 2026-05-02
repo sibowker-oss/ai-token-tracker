@@ -34,6 +34,24 @@
 
   /* Source tabs */
   .source-tabs { display:flex; gap:4px; margin-bottom:16px; flex-wrap:wrap; }
+  /* wq-040 — lane toggle (Material vs Context) sits above source-tabs */
+  .lane-toggle { display:flex; gap:4px; margin:14px 0 8px 0; padding:4px; background:rgba(255,255,255,0.02); border-radius:10px; width:fit-content; }
+  .lane-btn { padding:8px 18px; border-radius:8px; border:none; background:transparent; color:var(--text-dim); font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.15s; }
+  .lane-btn:hover { color:var(--text); }
+  .lane-btn.active { background:var(--card); color:var(--text); }
+  .lane-btn .lane-count { font-size:10px; padding:2px 8px; border-radius:10px; background:rgba(255,255,255,0.08); font-weight:700; }
+  .lane-btn[data-lane="material"].active { background:rgba(16,185,129,0.15); color:var(--green); }
+  .lane-btn[data-lane="context"].active { background:rgba(100,116,139,0.18); color:var(--text); }
+  .lane-helper { font-size:11px; color:var(--text-dim); margin-bottom:14px; }
+  /* sublane / age badges */
+  .badge-sub-would { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-sub-expansion { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .badge-sub-context { background:rgba(100,116,139,0.18); color:var(--text-dim); }
+  .badge-age-yellow { background:rgba(234,179,8,0.18); color:#facc15; }
+  .badge-age-orange { background:rgba(245,158,11,0.20); color:var(--orange); }
+  .badge-age-red { background:rgba(239,68,68,0.20); color:var(--red); }
+  .claim-card.sub-would { border-left:3px solid var(--green); }
+  .claim-card.sub-expansion { border-left:3px solid var(--purple); }
   .source-tab { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:12px; font-weight:500; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:6px; }
   .source-tab:hover { border-color:var(--text-dim); color:var(--text); }
   .source-tab.active { background:var(--accent); color:white; border-color:var(--accent); }
@@ -239,6 +257,12 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
   </div>
 
   <div class="stats-row" id="stats-row"></div>
+  <!-- wq-040 — lane toggle. Material lane is the daily review queue; Context is opt-in. -->
+  <div class="lane-toggle" id="lane-toggle">
+    <button class="lane-btn active" data-lane="material" onclick="setLane('material')">Material <span class="lane-count" id="material-count">0</span></button>
+    <button class="lane-btn" data-lane="context" onclick="setLane('context')">Context <span class="lane-count" id="context-count">0</span></button>
+  </div>
+  <div class="lane-helper" id="lane-helper"></div>
   <div class="source-tabs" id="source-tabs"></div>
   <div class="filters" id="filters"></div>
   <div class="bulk-bar hidden" id="bulk-bar">
@@ -280,6 +304,8 @@ let activeSource = 'all';
 let activeFilter = 'pending';
 let activeConfidence = 'all';
 let activeBatch = null; // null | 'first' — quick-filter chip per wq-018 §4
+// wq-040 — lane filter persists in localStorage; default to material
+let activeLane = (localStorage.getItem('review-lane') || 'material');
 let siteData = null;
 // wq-029: baseline mojibake-marker count captured at page load. Each commit
 // of vault-inbox.json re-counts the outgoing object and aborts if it rose.
@@ -364,6 +390,8 @@ async function loadAll() {
           sourceExcerpt: i.sourceExcerpt || null,
           isPrimarySource: i.isPrimarySource ?? null,
           originalSourceCited: i.originalSourceCited || null,
+          // wq-040: materiality block (lane / sublane / reason / age_days / pct_delta / etc.)
+          materiality: i.materiality || null,
         });
         } catch(e) { console.error('Failed to add inbox item:', i.id, e); }
       });
@@ -374,7 +402,12 @@ async function loadAll() {
     renderSourceTabs();
     renderStats();
     renderFilters();
-      renderClaims();
+    // wq-040 — sync the lane toggle UI with persisted state and compute counts
+    document.querySelectorAll('.lane-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lane') === activeLane);
+    });
+    updateLaneCounts();
+    renderClaims();
     updateSubmitBar();
     } catch(e) {
     document.getElementById('claims-list').innerHTML = '<div style="color:var(--red);padding:20px;">Error loading claims: ' + e.message + '</div>';
@@ -1127,6 +1160,58 @@ function setFilter(f) {
   renderClaims();
 }
 
+// wq-040 — lane toggle (Material vs Context)
+function setLane(lane) {
+  activeLane = lane;
+  try { localStorage.setItem('review-lane', lane); } catch(e) {}
+  document.querySelectorAll('.lane-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lane') === lane);
+  });
+  updateLaneCounts();
+  renderClaims();
+}
+
+function laneOf(item) {
+  // Material if scored material; Context otherwise (incl. unscored).
+  return (item.materiality && item.materiality.lane) || 'context';
+}
+
+function updateLaneCounts() {
+  // Count *pending* items per lane so the badge reflects the daily review queue.
+  const pending = allItems.filter(i => i.inboxStatus === 'pending');
+  const m = pending.filter(i => laneOf(i) === 'material').length;
+  const c = pending.filter(i => laneOf(i) === 'context').length;
+  const mEl = document.getElementById('material-count');
+  const cEl = document.getElementById('context-count');
+  if (mEl) mEl.textContent = m;
+  if (cEl) cEl.textContent = c;
+  const helper = document.getElementById('lane-helper');
+  if (helper) {
+    helper.textContent = activeLane === 'material'
+      ? 'Material lane: claims that would change a tracked metric or expand the schema.'
+      : 'Context lane: claims that match no entity, have no value, or confirm existing data within tolerance. Sorted oldest first.';
+  }
+}
+
+function ageBadgeClass(days) {
+  if (days <= 7) return null;
+  if (days <= 14) return 'badge-age-yellow';
+  if (days <= 30) return 'badge-age-orange';
+  return 'badge-age-red';
+}
+
+function sublaneBadge(item) {
+  const m = item.materiality;
+  if (!m) return '';
+  if (m.lane === 'context') return '<span class="badge badge-sub-context">📋 context</span>';
+  if (m.sublane === 'field_expansion') return '<span class="badge badge-sub-expansion">🌱 new field</span>';
+  if (m.reason === 'would_change_existing_value') return '<span class="badge badge-sub-would">🎯 would change</span>';
+  if (m.reason === 'new_value_for_known_field') return '<span class="badge badge-sub-would">🆕 new value</span>';
+  if (m.reason === 'stronger_provenance_for_existing') return '<span class="badge badge-sub-would">🔬 stronger source</span>';
+  if (m.reason === 'proposed_field_evidence') return '<span class="badge badge-sub-expansion">🧪 proposed-field evidence</span>';
+  return '';
+}
+
 // wq-041 — source context helpers
 function renderExcerpt(raw) {
   // Escape HTML, then convert minimal markdown bold (**X**) to <strong>.
@@ -1153,6 +1238,8 @@ function renderClaims() {
     filtered = allItems.filter(isFirstBatchItem);
   } else {
     filtered = allItems;
+    // wq-040 — apply lane filter first so all subsequent filters apply within the chosen lane
+    filtered = filtered.filter(i => laneOf(i) === activeLane);
     // Source filter
     if (activeSource !== 'all') {
       if (activeSource === 'unsourced') {
@@ -1199,7 +1286,10 @@ function renderClaims() {
     const decidedClass = d.decision ? ' decided-' + d.decision : '';
     const sourceName = getSourceName(item.source_id);
 
-    html += '<div class="claim-card w-' + item.weight + decidedClass + '">';
+    // wq-040 — sublane visual: green border for would_change, purple for field_expansion
+    const subClass = item.materiality?.sublane === 'field_expansion' ? ' sub-expansion'
+                   : item.materiality?.sublane === 'would_change' ? ' sub-would' : '';
+    html += '<div class="claim-card w-' + item.weight + decidedClass + subClass + '">';
     html += '<input type="checkbox" class="select-check" id="sel-' + item.id + '"' + (selectedIds.has(item.id) ? ' checked' : '') + ' onclick="event.stopPropagation();toggleSelect(\'' + item.id + '\')">';
 
     // Header
@@ -1227,6 +1317,12 @@ function renderClaims() {
     html += '<span class="badge badge-' + item.weight + '">' + item.weight + '</span>';
     html += '<span class="badge badge-' + item.confidence + '">' + item.confidence + '</span>';
     if (item.origin === 'extraction') html += '<span class="badge badge-source">podcast</span>';
+    // wq-040 — sublane reason badge
+    html += sublaneBadge(item);
+    // wq-040 — age pill (yellow 8-14d, orange 15-30d, red >30d). Hide ≤7d.
+    const ageDays = item.materiality?.age_days || 0;
+    const ageCls = ageBadgeClass(ageDays);
+    if (ageCls) html += '<span class="badge ' + ageCls + '">' + ageDays + 'd</span>';
     html += '</div></div>';
 
     // Source row

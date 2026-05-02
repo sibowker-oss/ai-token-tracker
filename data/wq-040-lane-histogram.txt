@@ -1,0 +1,79 @@
+# wq-040 materiality histogram
+_Generated 2026-05-02T04:17:59Z_
+
+## Total scored: 2201
+
+## Lane split
+  material     1087  ( 49.4%)
+  context      1114  ( 50.6%)
+
+## Sublane split (material only)
+  would_change          772
+  field_expansion       315
+  —                    1114
+
+## Reason breakdown
+  no_entity_match                               723  ( 32.8%)
+  new_value_for_known_field                     624  ( 28.4%)
+  matches_entity_no_field                       315  ( 14.3%)
+  no_value                                      284  ( 12.9%)
+  would_change_existing_value                   147  (  6.7%)
+  confirms_existing_within_tolerance            107  (  4.9%)
+  stronger_provenance_for_existing                1  (  0.0%)
+
+## Age distribution
+  <=7d         87  (  4.0%)
+  8-14d       695  ( 31.6%)
+  15-30d     1376  ( 62.5%)
+  >30d         43  (  2.0%)
+======================================================================
+CALIBRATION SAMPLES (manually pick from each bucket)
+======================================================================
+
+MATERIAL — would_change_existing_value (sample)
+    id=audit-20260405-gap-20, lane=material, sublane=would_change
+    reason=would_change_existing_value
+    claim: Early December, it was 60-40 in OpenAI's favor
+    entity='?', value=40, current=1.1
+    pct_delta=3536.4%
+
+MATERIAL — new_value_for_known_field (sample)
+    id=podcast-20260416-400, lane=material, sublane=would_change
+    reason=new_value_for_known_field
+    claim: The speaker personally spends approximately $600–$700 per month on AI subscriptions across multiple services, totaling roughly $10,000 per year.
+    entity='multiple AI services', value=120000, current=None
+
+MATERIAL — matches_entity_no_field / field_expansion (sample)
+    id=auto-20260424-src-034-44, lane=material, sublane=field_expansion
+    reason=matches_entity_no_field
+    claim: The Broadcom collaboration focuses on a co-designed inference chip manufactured by TSMC, targeting 10GW between 2026–2029.
+    entity='OpenAI / Broadcom', value=10, current=None
+
+CONTEXT — no_entity_match (3 samples that look correct)
+    id=auto-20260423-src-001-62, lane=context, sublane=None
+    reason=no_entity_match
+    claim: Odyssey's public research preview streams a new frame every ~40ms (up to ~30 fps) for 5+ minute sessions.
+    entity='Odyssey', value=30, current=None
+
+    id=auto-20260423-src-001-306, lane=context, sublane=None
+    reason=no_entity_match
+    claim: Only 15% of users who reported productivity gains were on free plans.
+    entity='AI tools (general)', value=15, current=None
+
+    id=podcast-20260416-147, lane=context, sublane=None
+    reason=no_entity_match
+    claim: Bank One had a $21 billion market cap when Jamie Dimon joined as CEO around 2000.
+    entity='Bank One', value=21, current=None
+
+QUESTIONABLE — confirms_existing_within_tolerance (2 samples)
+    id=resource-lambda-2025-arr, lane=context, sublane=None
+    reason=confirms_existing_within_tolerance
+    claim: [NEEDS SOURCE] Lambda Labs 2025 arr: 0.5 $B
+    entity='?', value=0.5, current=0.5
+
+    id=scan-20260405-e5f, lane=context, sublane=None
+    reason=confirms_existing_within_tolerance
+    claim: Anthropic grew from $1B ARR (Dec 2024) to $19B ARR (Mar 2026) Ã¢ÂÂ 19x in approximately 15 months
+    entity='?', value=19, current=18
+    pct_delta=5.6%
+
