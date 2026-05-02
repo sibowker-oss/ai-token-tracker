@@ -163,6 +163,27 @@ def check_provenance_guard(entity, prov_key, new_weight):
 def apply_accepted(claim, vault_data, entities, schema):
     """Process an accepted claim: vault-data + entities + provenance."""
 
+    # wq-043 §3.6: refuse to insert a duplicate of an existing dp-N whose
+    # claim text is identical and was added in the last 7 days. Catches
+    # re-submitted decisions files (e.g. dp-001 Cursor $2B ARR was added 4×
+    # in 30min on 2026-04-29). Verbose log line so the audit trail shows
+    # every guard fire — drop into apply_decisions.log to debug if needed.
+    incoming_claim = (claim.get("claim") or "").strip()
+    if incoming_claim:
+        from datetime import timedelta
+        seven_days_ago = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
+        for existing in vault_data.get("dataPoints", []):
+            if (existing.get("claim") or "").strip() != incoming_claim:
+                continue
+            if (existing.get("dateAdded") or "") < seven_days_ago:
+                continue
+            log(
+                f"  GUARD-DUP: refusing duplicate of {existing.get('id')} "
+                f"(same claim text added {existing.get('dateAdded')}, "
+                f"<7d ago); incoming={claim.get('id')!r} claim={incoming_claim[:80]!r}"
+            )
+            return existing.get("id")
+
     # 1. Add to vault-data.json — safe_str on every text field guards against
     #    mojibake leaking through from upstream (vault-inbox or decisions
     #    payload). See briefs/active/2026-04-26-mojibake-roundtrip-fix.md.
