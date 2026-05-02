@@ -411,6 +411,17 @@ def run_backfill(entities: dict, config: dict, overrides: dict,
                 if isinstance(existing, (int, float))
                 else None
             )
+            # Brief §2 #6: write only where MISSING, OR where engine disagrees
+            # with existing beyond the confidence band, OR where editorial
+            # override is present. Never silently overwrite a within-band
+            # hand-curated historical value.
+            override_present = resolved["origin"] == "editorial_override"
+            existing_is_numeric = isinstance(existing, (int, float))
+            should_write = (
+                override_present
+                or not existing_is_numeric
+                or (within_band is False)  # explicit False, not None
+            )
             results.append({
                 "slug": slug,
                 "year": year,
@@ -424,15 +435,37 @@ def run_backfill(entities: dict, config: dict, overrides: dict,
                 "profile_used": inputs["profileUsed"],
                 "starting_arr": inputs["startingARR"],
                 "ending_arr": inputs["endingARR"],
-                "would_write": (resolved_value is not None and not dry_run),
+                "should_write": should_write,
+                "skip_reason": (
+                    None if should_write
+                    else "existing_within_band_no_override"
+                ),
+                "would_write": (should_write and resolved_value is not None and not dry_run),
             })
-            if not dry_run and resolved_value is not None:
+            if not dry_run and should_write and resolved_value is not None:
                 fin_year["collected_revenue"] = resolved_value
-                entity.setdefault("provenance", {})[f"{year}.collected_revenue"] = (
+                prov_key = f"{year}.collected_revenue"
+                prior_prov = (entity.get("provenance") or {}).get(prov_key)
+                new_block = (
                     _override_provenance_block(resolved, engine_block)
                     if resolved["origin"] == "editorial_override"
                     else engine_block
                 )
+                # wq-048: preserve the prior provenance trail when the engine
+                # overwrites a hand-curated value. Without this, the original
+                # justification (e.g. Zitron's reverse-engineered $3.6B for
+                # openai 2024) disappears the moment the engine writes. We
+                # append the prior claims with role='superseded' + a
+                # superseded_at timestamp so the audit trail stays intact.
+                if prior_prov and prior_prov.get("claims"):
+                    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                    for prior_claim in prior_prov["claims"]:
+                        sup = dict(prior_claim)
+                        sup["role"] = "superseded"
+                        sup["superseded_at"] = today
+                        sup["superseded_by"] = new_block["claims"][0]["id"]
+                        new_block["claims"].append(sup)
+                entity.setdefault("provenance", {})[prov_key] = new_block
     return results
 
 
@@ -493,6 +526,8 @@ def format_backfill_report(results: list[dict], dry_run: bool) -> str:
     with_existing = sum(1 for r in results if isinstance(r.get("existing"), (int, float)))
     in_band = sum(1 for r in results if r.get("within_band_vs_existing") is True)
     overrides_in = sum(1 for r in results if r.get("origin") == "editorial_override")
+    written = sum(1 for r in results if r.get("should_write"))
+    skipped = total - written
     lines += [
         "",
         "## Summary",
@@ -500,6 +535,8 @@ def format_backfill_report(results: list[dict], dry_run: bool) -> str:
         f"  With existing collected_revenue value:         {with_existing}",
         f"  Engine output within ±15% of existing:         {in_band}",
         f"  Editorial overrides applied:                   {overrides_in}",
+        f"  Wrote (missing OR outside band OR override):   {written}",
+        f"  Skipped (existing within band, no override):   {skipped}",
     ]
     return "\n".join(lines) + "\n"
 
