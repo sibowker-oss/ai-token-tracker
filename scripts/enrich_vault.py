@@ -22,6 +22,8 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from log_run import logged_run  # noqa: E402
 VAULT_PATH = os.path.join(BASE_DIR, 'vault-data.json')
 
 # Patterns for extracting financial data from text
@@ -266,6 +268,11 @@ def build_data_point(dp, findings, claude_extractions, text):
 
 
 def main():
+    with logged_run("enrich_vault.py") as outputs:
+        _main_impl(outputs)
+
+
+def _main_impl(outputs):
     dry_run = '--dry-run' in sys.argv
 
     print(f"🔍 Vault Enrichment — {datetime.now().strftime('%Y-%m-%d')}")
@@ -278,6 +285,8 @@ def main():
     if not to_enrich:
         print("  No entries with status='pending_enrichment'. Nothing to do.")
         print("  Add entries via the Quick Add form in vault.html.")
+        outputs["items_enriched"] = 0
+        outputs["items_to_enrich"] = 0
         return
 
     print(f"  Found {len(to_enrich)} entries to enrich\n")
@@ -333,6 +342,10 @@ def main():
         print(f"\n✅ Vault updated ({len(to_enrich)} entries enriched)")
     else:
         print(f"\n[DRY RUN] Would update {len(to_enrich)} entries")
+
+    outputs["items_enriched"] = len(to_enrich) if not dry_run else 0
+    outputs["items_to_enrich"] = len(to_enrich)
+    outputs["dry_run"] = dry_run
 
 
 if __name__ == '__main__':

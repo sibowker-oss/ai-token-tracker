@@ -18,6 +18,8 @@ import sys
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from log_run import logged_run  # noqa: E402
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 SIGNALS_PATH = os.path.join(DATA_DIR, 'signals_latest.json')
 DASHBOARD_PATH = os.path.join(BASE_DIR, 'dashboard.html')
@@ -209,37 +211,43 @@ def git_commit_push(date):
         print(f"⚠ Push failed: {result.stderr}")
 
 def main():
-    today = datetime.now().strftime('%Y-%m-%d')
-    print(f"\n{'='*60}")
-    print(f"🤖 AI Token Tracker Auto-Update — {today}")
-    print(f"{'='*60}\n")
+    with logged_run("auto_update.py") as outputs:
+        today = datetime.now().strftime('%Y-%m-%d')
+        print(f"\n{'='*60}")
+        print(f"🤖 AI Token Tracker Auto-Update — {today}")
+        print(f"{'='*60}\n")
 
-    # Step 1: Scrape
-    if not run_scraper():
-        print("⚠ Scraper had issues but continuing...")
+        # Step 1: Scrape
+        if not run_scraper():
+            print("⚠ Scraper had issues but continuing...")
+            outputs["scraper_ok"] = False
+        else:
+            outputs["scraper_ok"] = True
 
-    # Step 2: Load signals
-    signals = load_signals()
+        # Step 2: Load signals
+        signals = load_signals()
 
-    # Step 3: Update dashboard HTML
-    updated = update_dashboard(signals)
+        # Step 3: Update dashboard HTML
+        updated = update_dashboard(signals)
+        outputs["dashboard_updated"] = bool(updated)
 
-    # Step 4: Update self-hosted estimate in site-data.json
-    update_site_data(signals)
+        # Step 4: Update self-hosted estimate in site-data.json
+        update_site_data(signals)
 
-    # Step 5: Apply any approved claims from web review
-    try:
-        from apply_claims import main as apply_claims_main
-        apply_claims_main()
-    except Exception as e:
-        print(f"  Claims application: {e}")
+        # Step 5: Apply any approved claims from web review
+        try:
+            from apply_claims import main as apply_claims_main
+            apply_claims_main()
+        except Exception as e:
+            print(f"  Claims application: {e}")
+            outputs["apply_claims_error"] = str(e)[:120]
 
-    # Step 6: Commit and push
-    git_commit_push(today)
+        # Step 6: Commit and push
+        git_commit_push(today)
 
-    print(f"\n{'='*60}")
-    print(f"✅ Auto-update complete — {today}")
-    print(f"{'='*60}\n")
+        print(f"\n{'='*60}")
+        print(f"✅ Auto-update complete — {today}")
+        print(f"{'='*60}\n")
 
 if __name__ == '__main__':
     main()

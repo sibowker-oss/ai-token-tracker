@@ -21,6 +21,7 @@ from urllib.request import urlopen, Request
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
+from log_run import logged_run  # noqa: E402
 REGISTRY_PATH = os.path.join(BASE_DIR, "sources-registry.json")
 INBOX_PATH = os.path.join(BASE_DIR, "vault-inbox.json")
 MODEL = "claude-sonnet-4-6"
@@ -159,6 +160,11 @@ def extract_claims(text, source_title, client):
 
 
 def main():
+    with logged_run("scan_sources.py") as outputs:
+        _main_impl(outputs)
+
+
+def _main_impl(outputs):
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
         print("❌ ANTHROPIC_API_KEY not set")
@@ -339,6 +345,11 @@ def main():
     print(f"\n{'=' * 50}")
     print(f"✅ Scan complete: {total_added} new claims from {sources_updated} sources")
     print(f"   Total inbox items: {len(inbox['items'])}")
+    outputs["claims_added"] = total_added
+    outputs["sources_updated"] = sources_updated
+    outputs["sources_due"] = len(sources)
+    outputs["sources_skipped"] = skipped
+    outputs["inbox_total"] = len(inbox['items'])
 
 
 if __name__ == "__main__":

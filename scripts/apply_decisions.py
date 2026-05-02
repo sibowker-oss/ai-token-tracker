@@ -32,6 +32,9 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 SITE_DIR = ROOT_DIR
 
+sys.path.insert(0, SCRIPT_DIR)
+from log_run import logged_run  # noqa: E402
+
 VAULT_DATA = os.path.join(SITE_DIR, "vault-data.json")
 VAULT_INBOX = os.path.join(SITE_DIR, "vault-inbox.json")
 ENTITIES = os.path.join(SITE_DIR, "entities.json")
@@ -529,6 +532,11 @@ def run_replay(dry_run=False, only_ids=None):
 
 
 def main(decisions_path=None):
+    with logged_run("apply_decisions.py") as outputs:
+        _main_impl(decisions_path, outputs)
+
+
+def _main_impl(decisions_path, outputs):
     # Find decisions file
     if not decisions_path:
         # Look for latest review-decisions-*.json in data-updates/
@@ -540,6 +548,9 @@ def main(decisions_path=None):
 
     if not decisions_path or not os.path.exists(decisions_path):
         print("No decisions file found. Save review-decisions-*.json to beta/data-updates/")
+        outputs["items_accepted"] = 0
+        outputs["items_declined"] = 0
+        outputs["items_parked"] = 0
         return
 
     log(f"apply_decisions.py — Processing {decisions_path}")
@@ -608,6 +619,12 @@ def main(decisions_path=None):
     generate(ENTITIES, os.path.join(SITE_DIR, "site-data.json"), os.path.join(SITE_DIR, "site-data.json"))
 
     log(f"  Done. {len(accepted)} accepted, {len(declined)} declined, {len(parked)} parked, {len(new_fields)} new fields.")
+
+    outputs["items_accepted"] = len(accepted)
+    outputs["items_declined"] = len(declined)
+    outputs["items_parked"] = len(parked)
+    outputs["new_fields_approved"] = len(new_fields)
+    outputs["decisions_file"] = os.path.basename(decisions_path)
 
 
 if __name__ == "__main__":

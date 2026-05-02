@@ -39,6 +39,8 @@ from urllib.error import URLError, HTTPError
 import xml.etree.ElementTree as ET
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from log_run import logged_run  # noqa: E402
 TRANSCRIPT_DIR = os.path.join(BASE_DIR, 'transcripts')
 SEEN_FILE = os.path.join(TRANSCRIPT_DIR, '.seen')
 
@@ -675,6 +677,11 @@ def load_registry_podcasts():
 
 
 def main():
+    with logged_run("scrape_podcasts.py") as outputs:
+        return _main_impl(outputs)
+
+
+def _main_impl(outputs):
     # Load additional sources from registry before parsing args
     load_registry_podcasts()
 
@@ -711,6 +718,9 @@ def main():
     print(f"\n✅ Done — {len(all_saved)} new transcript(s) saved to {TRANSCRIPT_DIR}/")
     if all_saved:
         print("\nNext step: run python3 scripts/extract_claims.py to extract data points")
+
+    outputs["transcripts_saved"] = len(all_saved)
+    outputs["sources_attempted"] = len(sources)
 
     return all_saved
 

@@ -23,6 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 ALERTS_PATH = os.path.join(DATA_DIR, 'news_alerts.json')
 
+import sys  # noqa: E402
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from log_run import logged_run  # noqa: E402
+
 # Keywords that suggest dashboard numbers need updating
 TRIGGER_KEYWORDS = [
     # Revenue / earnings
@@ -99,47 +103,52 @@ def check_triggers(items):
     return alerts
 
 def main():
-    today = datetime.now().strftime('%Y-%m-%d')
-    print(f"📰 News Monitor — {today}\n{'='*50}")
+    with logged_run("news_monitor.py") as outputs:
+        today = datetime.now().strftime('%Y-%m-%d')
+        print(f"📰 News Monitor — {today}\n{'='*50}")
 
-    all_items = []
-    for url, name in RSS_FEEDS:
-        print(f"  Checking {name}...")
-        items = fetch_rss(url, name)
-        all_items.extend(items)
-        print(f"    Found {len(items)} items")
+        all_items = []
+        for url, name in RSS_FEEDS:
+            print(f"  Checking {name}...")
+            items = fetch_rss(url, name)
+            all_items.extend(items)
+            print(f"    Found {len(items)} items")
 
-    print(f"\n📊 Total items: {len(all_items)}")
+        print(f"\n📊 Total items: {len(all_items)}")
 
-    # Check for triggers
-    alerts = check_triggers(all_items)
-    alerts.sort(key=lambda a: len(a['matched_keywords']), reverse=True)
+        # Check for triggers
+        alerts = check_triggers(all_items)
+        alerts.sort(key=lambda a: len(a['matched_keywords']), reverse=True)
 
-    print(f"🚨 Alerts (items matching dashboard keywords): {len(alerts)}")
-    for a in alerts[:10]:
-        priority_icon = '🔴' if a['priority'] == 'high' else '🟡'
-        print(f"  {priority_icon} [{a['source']}] {a['title'][:80]}")
-        print(f"     Keywords: {', '.join(a['matched_keywords'])}")
+        print(f"🚨 Alerts (items matching dashboard keywords): {len(alerts)}")
+        for a in alerts[:10]:
+            priority_icon = '🔴' if a['priority'] == 'high' else '🟡'
+            print(f"  {priority_icon} [{a['source']}] {a['title'][:80]}")
+            print(f"     Keywords: {', '.join(a['matched_keywords'])}")
 
-    # Save
-    result = {
-        'date': today,
-        'total_items_scanned': len(all_items),
-        'alerts': alerts[:30],  # Top 30
-    }
+        # Save
+        result = {
+            'date': today,
+            'total_items_scanned': len(all_items),
+            'alerts': alerts[:30],  # Top 30
+        }
 
-    os.makedirs(DATA_DIR, exist_ok=True)
-    with open(ALERTS_PATH, 'w') as f:
-        json.dump(result, f, indent=2)
+        os.makedirs(DATA_DIR, exist_ok=True)
+        with open(ALERTS_PATH, 'w') as f:
+            json.dump(result, f, indent=2)
 
-    print(f"\n✅ Saved {len(alerts)} alerts to {ALERTS_PATH}")
+        print(f"\n✅ Saved {len(alerts)} alerts to {ALERTS_PATH}")
 
-    # Flag if any high-priority alerts
-    high = [a for a in alerts if a['priority'] == 'high']
-    if high:
-        print(f"\n⚠️  {len(high)} HIGH PRIORITY alerts — dashboard may need manual update!")
-        for h in high[:5]:
-            print(f"   → {h['title'][:100]}")
+        high = [a for a in alerts if a['priority'] == 'high']
+        if high:
+            print(f"\n⚠️  {len(high)} HIGH PRIORITY alerts — dashboard may need manual update!")
+            for h in high[:5]:
+                print(f"   → {h['title'][:100]}")
+
+        outputs["items_scanned"] = len(all_items)
+        outputs["alerts_total"] = len(alerts)
+        outputs["alerts_high_priority"] = len(high)
+        outputs["feeds_checked"] = len(RSS_FEEDS)
 
 if __name__ == '__main__':
     main()

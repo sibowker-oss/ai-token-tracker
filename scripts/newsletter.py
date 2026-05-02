@@ -15,8 +15,13 @@ Usage:
 
 import json
 import argparse
+import os
+import sys
 from datetime import date, datetime, timedelta
 from pathlib import Path
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from log_run import logged_run  # noqa: E402
 
 DB_PATH = Path(__file__).parent.parent / "companies.json"
 OUTPUT_DIR = Path(__file__).parent.parent / "newsletters"
@@ -239,6 +244,11 @@ def markdown_to_text(md_content):
 
 
 def main():
+    with logged_run("newsletter.py") as outputs:
+        _main_impl(outputs)
+
+
+def _main_impl(outputs):
     parser = argparse.ArgumentParser(description="APAC AI Intel Newsletter Generator")
     parser.add_argument("--format", choices=["markdown", "html", "text"], default="markdown")
     parser.add_argument("--new-only", action="store_true", help="Only include recently added companies")
@@ -274,6 +284,10 @@ def main():
     print(f"[OK] Newsletter written to {out_path}")
     print(f"     Format: {args.format}")
     print(f"     Companies: {len(db['companies'])}")
+
+    outputs["newsletter_path"] = str(out_path)
+    outputs["format"] = args.format
+    outputs["companies_in_brief"] = len(db['companies'])
 
 
 if __name__ == "__main__":

@@ -24,6 +24,7 @@ from datetime import datetime
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
+from log_run import logged_run  # noqa: E402
 TRANSCRIPT_DIR = os.path.join(BASE_DIR, 'transcripts')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 PROCESSED_FILE = os.path.join(OUTPUT_DIR, '.processed')
@@ -534,6 +535,11 @@ def generate_auto_pr(claims, today):
 
 
 def main():
+    with logged_run("extract_claims.py") as outputs:
+        _main_impl(outputs)
+
+
+def _main_impl(outputs):
     parser = argparse.ArgumentParser(description='Extract claims from podcast transcripts')
     parser.add_argument('--transcript', help='Process a single transcript file')
     parser.add_argument('--all', action='store_true', help='Re-process already-processed files')
@@ -560,12 +566,17 @@ def main():
     files = get_transcript_files(args.transcript)
     if not files:
         print("No transcript files found. Run scrape_podcasts.py first.")
-        sys.exit(0)
+        outputs["transcripts_found"] = 0
+        outputs["claims_added"] = 0
+        return
 
     processed = set() if args.all else load_processed()
     to_process = [f for f in files if f not in processed]
 
     print(f"Transcripts found: {len(files)} total, {len(to_process)} unprocessed")
+    outputs["transcripts_found"] = len(files)
+    outputs["transcripts_processed"] = len(to_process)
+    outputs["dry_run"] = bool(args.dry_run)
 
     if args.dry_run:
         for f in to_process:
@@ -574,6 +585,7 @@ def main():
 
     if not to_process:
         print("Nothing new to process. Use --all to re-process everything.")
+        outputs["claims_added"] = 0
         return
 
     all_claims = []
@@ -585,6 +597,8 @@ def main():
 
     if not all_claims:
         print("\nNo claims extracted.")
+        outputs["claims_added"] = 0
+        outputs["claims_extracted_pre_filter"] = 0
         return
 
     # Filter out off-topic claims before dedup
@@ -650,6 +664,9 @@ def main():
 
     print(f"\n✅ {added} claim(s) added to vault-inbox.json as pending")
     print(f"   Total inbox items: {len(inbox['items'])}")
+    outputs["claims_added"] = added
+    outputs["claims_extracted_pre_filter"] = pre_count
+    outputs["inbox_total"] = len(inbox['items'])
 
     # Also save candidates file for archival reference
     os.makedirs(OUTPUT_DIR, exist_ok=True)

@@ -23,6 +23,9 @@ import argparse
 import urllib.request
 import urllib.error
 from datetime import datetime, date
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from log_run import logged_run  # noqa: E402
 from pathlib import Path
 
 DB_PATH = Path(__file__).parent.parent / "companies.json"
@@ -268,6 +271,11 @@ def generate_summary_stats(db):
 
 
 def main():
+    with logged_run("enrich.py") as outputs:
+        _main_impl(outputs)
+
+
+def _main_impl(outputs):
     parser = argparse.ArgumentParser(description="APAC AI Intel Enrichment Pipeline")
     parser.add_argument("--company", help="Enrich a specific company by ID")
     parser.add_argument("--add", help="Add a new company (provide name)")
@@ -304,6 +312,9 @@ def main():
 
     save_db(db)
     generate_summary_stats(db)
+
+    outputs["companies_enriched"] = len(targets)
+    outputs["companies_total"] = len(db.get("companies", []))
 
 
 if __name__ == "__main__":
