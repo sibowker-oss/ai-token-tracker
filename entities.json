@@ -1959,12 +1959,12 @@
           "claims": [
             {
               "id": "editorial-20260502-anthropic-2025-vc_subsidy",
-              "claim": "VC subsidy editorial balance value: documented operating loss is $5.2B; the $2.2B gap to vc_subsidy reflects non-VC funding sources — API operating cash, MSFT/AWS credits, debt. Per assumptions-audit.md §4.4 hand-curated Sankey ($3.0B). Held until reconciliation with FY2026 disclosures.",
+              "claim": "VC subsidy editorial balance value: documented operating loss is $5.2B; the $2.2B gap to vc_subsidy reflects non-VC funding sources \u2014 API operating cash, MSFT/AWS credits, debt. Per assumptions-audit.md \u00a74.4 hand-curated Sankey ($3.0B). Held until reconciliation with FY2026 disclosures.",
               "value": 3.0,
               "unit": "$B",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Editorial balance calculation per assumptions-audit.md §4.4",
+              "source": "Editorial balance calculation per assumptions-audit.md \u00a74.4",
               "source_url": "assumptions-audit.md#section-4-4",
               "date": "2026-05-02",
               "origin": "editorial_balance_calculation",
@@ -3289,12 +3289,12 @@
           "claims": [
             {
               "id": "editorial-20260502-google-2025-vc_subsidy",
-              "claim": "VC subsidy editorial balance value: editorial estimate of Alphabet internal subsidy to Google AI division ($0.5B per assumptions-audit.md §4.4). Google has no documented operating_loss for the AI carve-out; the $0.5B represents implied internal Alphabet subsidy covering the gap between AI revenue and AI cost.",
+              "claim": "VC subsidy editorial balance value: editorial estimate of Alphabet internal subsidy to Google AI division ($0.5B per assumptions-audit.md \u00a74.4). Google has no documented operating_loss for the AI carve-out; the $0.5B represents implied internal Alphabet subsidy covering the gap between AI revenue and AI cost.",
               "value": 0.5,
               "unit": "$B",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Editorial balance calculation per assumptions-audit.md §4.4",
+              "source": "Editorial balance calculation per assumptions-audit.md \u00a74.4",
               "source_url": "assumptions-audit.md#section-4-4",
               "date": "2026-05-02",
               "origin": "editorial_balance_calculation",
@@ -13957,8 +13957,8 @@
   ],
   "market_aggregates": {
     "2025": {
-      "total_customer_revenue": 17.47,
-      "total_vc_subsidy": 9.8,
+      "total_customer_revenue": 19.667,
+      "total_vc_subsidy": 9.5,
       "total_system_cost": 27.27,
       "total_inference_cost": 14.03,
       "total_people_cost": 11.08,
@@ -13966,7 +13966,129 @@
       "total_vc_investment": 150,
       "mag7_capex": 250,
       "training_compute_spend": "30-50",
-      "investment_to_revenue_ratio": 15
+      "investment_to_revenue_ratio": 15,
+      "providers": {
+        "openai": {
+          "label": "OpenAI",
+          "color": "#10a37f",
+          "customer_revenue": 9.3147,
+          "vc_subsidy": 6.0,
+          "value": 15.3147,
+          "tier": "3C",
+          "subsidy_source": "vc_subsidy",
+          "derived_from": [
+            "openai.2025.collected_revenue=9.3147",
+            "openai.2025.vc_subsidy=6.0"
+          ]
+        },
+        "anthropic": {
+          "label": "Anthropic",
+          "color": "#d97706",
+          "customer_revenue": 4.71,
+          "vc_subsidy": 3.0,
+          "value": 7.71,
+          "tier": "3C",
+          "subsidy_source": "vc_subsidy",
+          "derived_from": [
+            "anthropic.2025.collected_revenue=4.71",
+            "anthropic.2025.vc_subsidy=3.0"
+          ]
+        },
+        "google": {
+          "label": "Google (Gemini)",
+          "color": "#4285f4",
+          "customer_revenue": 2.2516,
+          "vc_subsidy": 0.5,
+          "value": 2.7516,
+          "tier": "3C",
+          "subsidy_source": "vc_subsidy",
+          "derived_from": [
+            "google.2025.collected_revenue=2.2516",
+            "google.2025.vc_subsidy=0.5"
+          ]
+        },
+        "meta": {
+          "label": "Meta (Llama)",
+          "color": "#1877f2",
+          "customer_revenue": 0,
+          "vc_subsidy": 0,
+          "value": 0,
+          "tier": "4",
+          "subsidy_source": "operating_loss (fallback \u2014 vc_subsidy not populated)",
+          "derived_from": [
+            "meta.2025.collected_revenue=0",
+            "meta.2025.operating_loss=0"
+          ]
+        },
+        "deepseek": {
+          "label": "DeepSeek",
+          "color": "#6c5ce7",
+          "customer_revenue": 0.1615,
+          "vc_subsidy": 0,
+          "value": 0.1615,
+          "tier": "4",
+          "subsidy_source": "operating_loss (fallback \u2014 vc_subsidy not populated)",
+          "derived_from": [
+            "deepseek.2025.collected_revenue=0.1615",
+            "deepseek.2025.operating_loss=0"
+          ]
+        },
+        "mistral": {
+          "label": "Mistral",
+          "color": "#ff7000",
+          "customer_revenue": 0.2154,
+          "vc_subsidy": 0,
+          "value": 0.2154,
+          "tier": "4",
+          "subsidy_source": "operating_loss (fallback \u2014 vc_subsidy not populated)",
+          "derived_from": [
+            "mistral.2025.collected_revenue=0.2154",
+            "mistral.2025.operating_loss=0"
+          ]
+        },
+        "xai": {
+          "label": "xAI",
+          "color": "#000000",
+          "customer_revenue": 0.2692,
+          "vc_subsidy": 0,
+          "value": 0.2692,
+          "tier": "4",
+          "subsidy_source": "operating_loss (fallback \u2014 vc_subsidy not populated)",
+          "derived_from": [
+            "xai.2025.collected_revenue=0.2692",
+            "xai.2025.operating_loss=0"
+          ]
+        },
+        "minimax": {
+          "label": "Minimax",
+          "color": "#9333ea",
+          "customer_revenue": 0.0808,
+          "vc_subsidy": 0,
+          "value": 0.0808,
+          "tier": "4",
+          "subsidy_source": "operating_loss (fallback \u2014 vc_subsidy not populated)",
+          "derived_from": [
+            "minimax.2025.collected_revenue=0.0808",
+            "minimax.2025.operating_loss=0"
+          ]
+        },
+        "moonshot": {
+          "label": "Moonshot",
+          "color": "#ec4899",
+          "customer_revenue": 0.0538,
+          "vc_subsidy": 0,
+          "value": 0.0538,
+          "tier": "4",
+          "subsidy_source": "operating_loss (fallback \u2014 vc_subsidy not populated)",
+          "derived_from": [
+            "moonshot.2025.collected_revenue=0.0538",
+            "moonshot.2025.operating_loss=0"
+          ]
+        }
+      },
+      "_residual_customer_revenue": 2.61,
+      "_residual_vc_subsidy": 0.0,
+      "_residual_doc": "Customer-revenue and VC-subsidy contributions NOT covered by the per-provider block. Captures Traditional SaaS AI revenue (Microsoft Copilot etc., audit \u00a71.5) and the IaaS aggregation node (Together/Fireworks/Groq, audit \u00a74.4). Held constant across engine runs so total = provider_sum + residual stays consistent with audit \u00a74 totals."
     }
   }
 }

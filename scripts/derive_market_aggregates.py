@@ -63,6 +63,42 @@ def fin(entity: dict, year: str, field: str):
     return (entity.get("current") or {}).get(field)
 
 
+# wq-044 wire-completion (Phase 1.1) — confidence-tier mapping for the
+# per-provider block written into entities.json:market_aggregates. The Sankey
+# renderer consumes a `tier` field per provider node; map our provenance
+# origins to the existing tier vocabulary so the rendered Sankey carries an
+# accurate confidence read on every cell.
+ORIGIN_TO_TIER = {
+    "consensus_engine_derived": "2A",
+    "editorial_override": "1B",
+    "editorial_balance_calculation": "3C",
+    "editorial_reconciliation": "1B",
+    "accepted": "1B",
+}
+
+
+def _provenance_origin(entity: dict, year: str, field: str) -> str | None:
+    """Return the primary (non-superseded) provenance claim's origin for the
+    given entity-year-field, or None if no provenance exists."""
+    prov = (entity.get("provenance") or {}).get(f"{year}.{field}") or {}
+    for c in (prov.get("claims") or []):
+        if c.get("role") != "superseded":
+            return c.get("origin")
+    return None
+
+
+def _weakest_tier(*tiers: str | None) -> str:
+    """Return the weakest tier across the inputs (highest tier number wins,
+    e.g. 3C beats 2A beats 1B). None inputs are treated as 3C."""
+    rank = {"1A": 1, "1B": 2, "2A": 3, "2B": 4, "3A": 5, "3B": 6, "3C": 7, "4": 8}
+    worst = "1A"
+    for t in tiers:
+        t = t or "3C"
+        if rank.get(t, 9) > rank.get(worst, 0):
+            worst = t
+    return worst
+
+
 def derive_year(entities: dict, year: str = "2025") -> dict:
     """Compute the per-provider + total aggregates for a given year.
 
@@ -131,6 +167,175 @@ def derive_year(entities: dict, year: str = "2025") -> dict:
 
 
 CONSERVATION_THRESHOLD_PCT = 5.0  # wq-044 final wire — tightened from 10% per Simon's spec.
+
+
+# wq-044 wire-completion (Phase 1.1) — display name + colour mapping.
+# Used when writing the per-provider block into entities.json:market_aggregates
+# so consumers (generate_site_data.py + the renderer) get the right label and
+# accent without having to look up entity records again.
+SLUG_TO_DISPLAY = {
+    "openai":    {"label": "OpenAI",          "color": "#10a37f"},
+    "anthropic": {"label": "Anthropic",       "color": "#d97706"},
+    "google":    {"label": "Google (Gemini)", "color": "#4285f4"},
+    "meta":      {"label": "Meta (Llama)",    "color": "#1877f2"},
+    "deepseek":  {"label": "DeepSeek",        "color": "#6c5ce7"},
+    "mistral":   {"label": "Mistral",         "color": "#ff7000"},
+    "xai":       {"label": "xAI",             "color": "#000000"},
+    "minimax":   {"label": "Minimax",         "color": "#9333ea"},
+    "moonshot":  {"label": "Moonshot",        "color": "#ec4899"},
+}
+
+
+def derive_provider_block(entities: dict, year: str = "2025") -> dict:
+    """Walk every model_provider entity → build per-provider block.
+
+    Returns the full mapping that wq-044 wire-completion writes into
+    entities.json:market_aggregates.<year>.providers, keyed by entity slug:
+
+        {
+          "<slug>": {
+            "label": "OpenAI",
+            "color": "#10a37f",
+            "customer_revenue": 9.3147,
+            "vc_subsidy": 6.0,
+            "value": 15.3147,
+            "tier": "2A",
+            "subsidy_source": "vc_subsidy",  # or "operating_loss (fallback)"
+            "derived_from": [
+              "openai.2025.collected_revenue=9.3147",
+              "openai.2025.vc_subsidy=6.0"
+            ]
+          },
+          ...
+        }
+
+    Any model_provider entity with no collected_revenue AND no vc_subsidy
+    AND no operating_loss is INCLUDED with value=0 + tier=4 so the absence
+    is visible (not silently dropped).
+    """
+    providers = {}
+    for ent in entities.get("companies", []):
+        if "model_provider" not in (ent.get("roles") or []):
+            continue
+        slug = ent.get("slug", "")
+        cr = fin(ent, year, "collected_revenue") or 0
+        vc = fin(ent, year, "vc_subsidy")
+        op_loss = fin(ent, year, "operating_loss") or 0
+        if vc is not None:
+            subsidy = vc
+            subsidy_source = "vc_subsidy"
+            subsidy_field = "vc_subsidy"
+        else:
+            subsidy = op_loss
+            subsidy_source = "operating_loss (fallback — vc_subsidy not populated)"
+            subsidy_field = "operating_loss"
+
+        cr_origin = _provenance_origin(ent, year, "collected_revenue")
+        vc_origin = _provenance_origin(ent, year, "vc_subsidy") if vc is not None else _provenance_origin(ent, year, "operating_loss")
+        cr_tier = ORIGIN_TO_TIER.get(cr_origin or "", "3C") if cr else "4"
+        vc_tier = ORIGIN_TO_TIER.get(vc_origin or "", "3C") if subsidy else "4"
+        provider_tier = _weakest_tier(cr_tier, vc_tier)
+
+        display = SLUG_TO_DISPLAY.get(slug, {"label": ent.get("name", slug), "color": ent.get("color", "#888")})
+        providers[slug] = {
+            "label": display["label"],
+            "color": display["color"],
+            "customer_revenue": cr,
+            "vc_subsidy": subsidy,
+            "value": cr + subsidy,
+            "tier": provider_tier,
+            "subsidy_source": subsidy_source,
+            "derived_from": [
+                f"{slug}.{year}.collected_revenue={cr}",
+                f"{slug}.{year}.{subsidy_field}={subsidy}",
+            ],
+        }
+    return providers
+
+
+def apply_market_aggregates(entities: dict, year: str = "2025") -> dict:
+    """Write the per-provider block AND recompute totals into
+    entities.json:market_aggregates.<year>. MUTATES the entities dict in place.
+
+    Recompute approach (preserves audit §4 sankey semantics):
+      1. New provider sums = sum of (customer_revenue, vc_subsidy) across model_provider entities.
+      2. Capture residual = (existing total) - (existing per-provider sum, if a
+         providers block already existed; else assume residual=0 and the new
+         total is the new provider sum).
+      3. New total = new_provider_sum + residual.
+
+    On first run (no prior providers block), there's no residual to subtract,
+    so the new total = new_provider_sum exactly. Subsequent runs preserve
+    whatever residual was set on first run by deriving from the previous
+    providers + total. This keeps the writes idempotent.
+
+    Returns a summary dict for the caller's report:
+      {
+        "providers": <provider block>,
+        "totals": {"total_customer_revenue": ..., "total_vc_subsidy": ..., ...},
+        "deltas": {"total_customer_revenue": (old, new), ...},
+      }
+    """
+    providers = derive_provider_block(entities, year)
+    new_provider_cr_sum = sum(p["customer_revenue"] for p in providers.values())
+    new_provider_vc_sum = sum(p["vc_subsidy"] for p in providers.values())
+
+    market_aggregates = entities.setdefault("market_aggregates", {})
+    year_block = market_aggregates.setdefault(year, {})
+    old_providers = year_block.get("providers") or {}
+    old_total_cr = year_block.get("total_customer_revenue")
+    old_total_vc = year_block.get("total_vc_subsidy")
+
+    if old_providers:
+        # Subsequent run — residual = old_total - old_provider_sum
+        old_provider_cr_sum = sum(p.get("customer_revenue", 0) for p in old_providers.values())
+        old_provider_vc_sum = sum(p.get("vc_subsidy", 0) for p in old_providers.values())
+        residual_cr = (old_total_cr or 0) - old_provider_cr_sum
+        residual_vc = (old_total_vc or 0) - old_provider_vc_sum
+    elif old_total_cr is not None:
+        # First run — there's an existing total but no provider block.
+        # Compute residual from the OLD hand-curated sankey provider sums:
+        # OpenAI 7.65 + Anthropic 4.71 + Google 2.0 + IaaS 0.5 = 14.86 customer
+        # OpenAI 6.0 + Anthropic 3.0 + Google 0.5 + IaaS 0.3 = 9.80 vc_subsidy
+        # These constants encode the audit §4.4 sankey baseline. Documented
+        # in the script docstring + commit message so a future maintainer
+        # understands why these specific numbers appear.
+        OLD_SANKEY_PROVIDER_CR_SUM = 7.65 + 4.71 + 2.0 + 0.5
+        OLD_SANKEY_PROVIDER_VC_SUM = 6.0 + 3.0 + 0.5 + 0.3
+        residual_cr = old_total_cr - OLD_SANKEY_PROVIDER_CR_SUM
+        residual_vc = (old_total_vc or 0) - OLD_SANKEY_PROVIDER_VC_SUM
+    else:
+        residual_cr = 0.0
+        residual_vc = 0.0
+
+    new_total_cr = round(new_provider_cr_sum + residual_cr, 4)
+    new_total_vc = round(new_provider_vc_sum + residual_vc, 4)
+
+    year_block["providers"] = providers
+    year_block["total_customer_revenue"] = new_total_cr
+    year_block["total_vc_subsidy"] = new_total_vc
+    year_block["_residual_customer_revenue"] = round(residual_cr, 4)
+    year_block["_residual_vc_subsidy"] = round(residual_vc, 4)
+    year_block["_residual_doc"] = (
+        "Customer-revenue and VC-subsidy contributions NOT covered by the per-provider block. "
+        "Captures Traditional SaaS AI revenue (Microsoft Copilot etc., audit §1.5) and the "
+        "IaaS aggregation node (Together/Fireworks/Groq, audit §4.4). Held constant across "
+        "engine runs so total = provider_sum + residual stays consistent with audit §4 totals."
+    )
+
+    return {
+        "providers": providers,
+        "totals": {
+            "total_customer_revenue": new_total_cr,
+            "total_vc_subsidy": new_total_vc,
+            "_residual_customer_revenue": round(residual_cr, 4),
+            "_residual_vc_subsidy": round(residual_vc, 4),
+        },
+        "deltas": {
+            "total_customer_revenue": (old_total_cr, new_total_cr),
+            "total_vc_subsidy": (old_total_vc, new_total_vc),
+        },
+    }
 
 
 def write_diff_report(entities: dict, sankey: dict) -> str:
@@ -251,10 +456,13 @@ def write_diff_report(entities: dict, sankey: dict) -> str:
 
 def main() -> None:
     with logged_run("derive_market_aggregates.py") as outputs:
-        parser = argparse.ArgumentParser(description="Derive market aggregates (wq-044 calibration scaffold).")
+        parser = argparse.ArgumentParser(description="Derive market aggregates (wq-044 wire-completion).")
         parser.add_argument("--diff-report", action="store_true",
-                            help="Write data/wq-044-sankey-derivation-diff.txt comparing derived vs hand-curated.")
-        parser.add_argument("--dry-run", action="store_true")
+                            help="Write data/wq-044-final-diff.txt comparing derived vs hand-curated.")
+        parser.add_argument("--apply", action="store_true",
+                            help="Write per-provider block + recomputed totals into entities.json:market_aggregates. MUTATES entities.json.")
+        parser.add_argument("--dry-run", action="store_true",
+                            help="With --apply: report only, do not write to entities.json.")
         parser.add_argument("--year", default="2025")
         args = parser.parse_args()
 
@@ -262,6 +470,32 @@ def main() -> None:
             entities = json.load(f)
         with open(SANKEY_PATH) as f:
             sankey = json.load(f)
+
+        if args.apply:
+            summary = apply_market_aggregates(entities, args.year)
+            print("=== wq-044 wire-completion: per-provider block ===\n")
+            for slug, p in summary["providers"].items():
+                print(f"  {slug:14}  cr={p['customer_revenue']:>8.4f}  vc={p['vc_subsidy']:>8.4f}  value={p['value']:>8.4f}  tier={p['tier']}  ({p['subsidy_source']})")
+            print()
+            print("=== Totals (after recompute) ===")
+            t = summary["totals"]
+            d = summary["deltas"]
+            print(f"  total_customer_revenue:  {d['total_customer_revenue'][0]} → {t['total_customer_revenue']}")
+            print(f"  total_vc_subsidy:        {d['total_vc_subsidy'][0]} → {t['total_vc_subsidy']}")
+            print(f"  _residual_customer_revenue: {t['_residual_customer_revenue']}")
+            print(f"  _residual_vc_subsidy:       {t['_residual_vc_subsidy']}")
+            print()
+            if args.dry_run:
+                print("[DRY-RUN] entities.json NOT written.")
+            else:
+                with open(ENTITIES_PATH, "w") as f:
+                    json.dump(entities, f, indent=2)
+                print(f"✓ entities.json written: {len(summary['providers'])} providers + recomputed totals")
+            outputs["providers_written"] = len(summary["providers"])
+            outputs["total_customer_revenue"] = t["total_customer_revenue"]
+            outputs["total_vc_subsidy"] = t["total_vc_subsidy"]
+            outputs["dry_run"] = args.dry_run
+            return
 
         if args.diff_report:
             txt = write_diff_report(entities, sankey)
