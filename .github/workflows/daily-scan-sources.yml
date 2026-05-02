@@ -28,12 +28,14 @@ jobs:
       - name: Scan sources for new claims
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RUN_TRIGGER: github_action
         run: python scripts/scan_sources.py
 
       - name: Commit and push
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vault-inbox.json sources-registry.json
+          git add vault-inbox.json sources-registry.json data/runs.jsonl
           git diff --cached --quiet || git commit -m "Vault scan: $(python3 -c "import json; d=json.load(open('vault-inbox.json')); print(len([i for i in d['items'] if i['status']=='pending']), 'pending claims')")"
           git push

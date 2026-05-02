@@ -28,12 +28,14 @@ jobs:
       - name: Enrich pending vault entries
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RUN_TRIGGER: github_action
         run: python scripts/enrich_vault.py
 
       - name: Commit enriched entries
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add vault-data.json
+          git add vault-data.json data/runs.jsonl
           git diff --cached --quiet || git commit -m "Vault enrichment: $(date +%Y-%m-%d)"
           git push

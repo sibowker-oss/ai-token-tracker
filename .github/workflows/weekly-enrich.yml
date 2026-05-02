@@ -19,12 +19,17 @@ jobs:
           python-version: '3.14'
 
       - name: Run company enrichment
+        env:
+          RUN_TRIGGER: github_action
         run: python scripts/enrich.py --all
 
       - name: Generate newsletter
+        env:
+          RUN_TRIGGER: github_action
         run: python scripts/newsletter.py --format html
 
       - name: Commit and push
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
