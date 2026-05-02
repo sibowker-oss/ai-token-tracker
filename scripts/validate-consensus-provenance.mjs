@@ -6,9 +6,13 @@
 //   - editorial_override       (data/consensus_overrides.json)
 //   - accepted                 (raw claim accepted via review queue)
 //   - editorial_reconciliation (Phase A/C manual reconciliation entries)
+//   - editorial_balance_calculation (wq-044: vc_subsidy editorial-balance values)
 //
-// No silent untraceable values. Exit non-zero if any collected_revenue field
-// lacks a matching-origin provenance claim.
+// wq-044 extension: same gate also applies to `vc_subsidy` fields, which the
+// Sankey wire reads in preference to operating_loss for provider VC node values.
+//
+// No silent untraceable values. Exit non-zero if any tracked field lacks a
+// matching-origin provenance claim.
 
 import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -26,7 +30,15 @@ const ALLOWED_ORIGINS = new Set([
   'editorial_override',
   'accepted',
   'editorial_reconciliation',
+  // wq-044: vc_subsidy fields are editorial-balance values that don't have
+  // a single underlying claim (they're derived from a Sankey-balancing
+  // judgment, not from data). Allow this origin so the wq-044 wire passes
+  // the same provenance gate as collected_revenue.
+  'editorial_balance_calculation',
 ]);
+
+// Fields whose values must trace back to an allowed origin.
+const TRACKED_FIELDS = ['collected_revenue', 'vc_subsidy'];
 
 const data = JSON.parse(readFileSync(entitiesPath, 'utf8'));
 const findings = [];
@@ -38,43 +50,45 @@ for (const company of data.companies ?? []) {
 
   for (const [year, yearBlock] of Object.entries(fin)) {
     if (!yearBlock || typeof yearBlock !== 'object') continue;
-    if (!('collected_revenue' in yearBlock)) continue;
-    const value = yearBlock.collected_revenue;
-    if (value === null || value === undefined) continue;
+    for (const field of TRACKED_FIELDS) {
+      if (!(field in yearBlock)) continue;
+      const value = yearBlock[field];
+      if (value === null || value === undefined) continue;
 
-    const provKey = `${year}.collected_revenue`;
-    const provBlock = prov[provKey];
+      const provKey = `${year}.${field}`;
+      const provBlock = prov[provKey];
 
-    if (!provBlock || !Array.isArray(provBlock.claims) || provBlock.claims.length === 0) {
-      findings.push({
-        severity: 'fail',
-        section: 'wq-048 §2 #10',
-        ref: `${slug}.financials.${year}.collected_revenue`,
-        msg: `value=${value} has no provenance entry at provenance['${provKey}']`,
-      });
-      continue;
-    }
+      if (!provBlock || !Array.isArray(provBlock.claims) || provBlock.claims.length === 0) {
+        findings.push({
+          severity: 'fail',
+          section: 'wq-048 §2 #10',
+          ref: `${slug}.financials.${year}.${field}`,
+          msg: `value=${value} has no provenance entry at provenance['${provKey}']`,
+        });
+        continue;
+      }
 
-    // At least one PRIMARY (non-superseded) claim must have an allowed origin.
-    const primaryClaims = provBlock.claims.filter(c => c.role !== 'superseded');
-    if (primaryClaims.length === 0) {
-      findings.push({
-        severity: 'fail',
-        section: 'wq-048 §2 #10',
-        ref: `${slug}.financials.${year}.collected_revenue`,
-        msg: `provenance['${provKey}'] has only superseded claims — no current attribution`,
-      });
-      continue;
-    }
-    const matchedOrigin = primaryClaims.find(c => ALLOWED_ORIGINS.has(c.origin));
-    if (!matchedOrigin) {
-      const seenOrigins = primaryClaims.map(c => c.origin || '<missing>').join(', ');
-      findings.push({
-        severity: 'fail',
-        section: 'wq-048 §2 #10',
-        ref: `${slug}.financials.${year}.collected_revenue`,
-        msg: `value=${value} provenance origins [${seenOrigins}] don't include any allowed origin (${[...ALLOWED_ORIGINS].join('|')})`,
-      });
+      // At least one PRIMARY (non-superseded) claim must have an allowed origin.
+      const primaryClaims = provBlock.claims.filter(c => c.role !== 'superseded');
+      if (primaryClaims.length === 0) {
+        findings.push({
+          severity: 'fail',
+          section: 'wq-048 §2 #10',
+          ref: `${slug}.financials.${year}.${field}`,
+          msg: `provenance['${provKey}'] has only superseded claims — no current attribution`,
+        });
+        continue;
+      }
+      const matchedOrigin = primaryClaims.find(c => ALLOWED_ORIGINS.has(c.origin));
+      if (!matchedOrigin) {
+        const seenOrigins = primaryClaims.map(c => c.origin || '<missing>').join(', ');
+        findings.push({
+          severity: 'fail',
+          section: 'wq-048 §2 #10',
+          ref: `${slug}.financials.${year}.${field}`,
+          msg: `value=${value} provenance origins [${seenOrigins}] don't include any allowed origin (${[...ALLOWED_ORIGINS].join('|')})`,
+        });
+      }
     }
   }
 }
@@ -85,7 +99,7 @@ if (jsonOut) {
 }
 
 if (findings.length === 0) {
-  console.log('✓ consensus-provenance: every collected_revenue field has traceable provenance.');
+  console.log(`✓ consensus-provenance: every ${TRACKED_FIELDS.join(' / ')} field has traceable provenance.`);
   process.exit(0);
 }
 
