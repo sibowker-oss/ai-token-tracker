@@ -1,0 +1,19 @@
+{
+  "_doc": "wq-048 — editorial overrides for the consensus engine. When key '<slug>.<year>.collected_revenue' is present and not expired, override.value wins over engine output. Provenance records both the engine calc AND the override reason. Set expiry dates to force re-review.",
+  "_schema_example": {
+    "openai.2025.collected_revenue": {
+      "value": 7.65,
+      "reason": "Per assumptions-audit.md §1.1, conservative editorial position pending fuller H2 2025 data",
+      "set_by": "simon",
+      "set_at": "2026-05-02",
+      "expires_at": "2026-08-01"
+    }
+  },
+  "anthropic.2025.collected_revenue": {
+    "value": 4.71,
+    "reason": "Hand-curated via §7.2 weighted consensus across 3 independent sources (court affidavit + Sacra + The Information). Engine §2 method bottoms out at $2.92B due to fallback haircut even with 2024 ARR populated; full reconciliation to engine pending more H2 2025 data.",
+    "set_by": "simon",
+    "set_at": "2026-05-02",
+    "expires_at": "2027-01-01"
+  }
+}

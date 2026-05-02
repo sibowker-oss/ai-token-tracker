@@ -26,22 +26,35 @@ function run(cmd, args, env = {}) {
 console.log(`\n=== AI Ledger release-check — ${stamp} (${MODE}) ===\n`);
 
 // Step 1: provenance validator
-console.log('\n→ 1/3  Provenance validator (§4.2, §4.4, §4.5, §5.5, §5.6, §11.2)');
+console.log('\n→ 1/4  Provenance validator (§4.2, §4.4, §4.5, §5.5, §5.6, §11.2)');
 const provJson = join(reportDir, 'provenance.json');
 const provStatus = run('node', ['scripts/validate-provenance.mjs'], { RELEASE_CHECK_JSON_OUT: provJson });
 
-// Step 2: Playwright suite
-console.log('\n→ 2/3  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 2 (wq-048): consensus provenance — every entity-year collected_revenue
+// must trace to consensus_engine_derived | editorial_override | accepted |
+// editorial_reconciliation. Catches silent untraceable values from a
+// future engine bug or a partial backfill.
+console.log('\n→ 2/4  Consensus provenance (wq-048 §2 #10)');
+const consensusJson = join(reportDir, 'consensus-provenance.json');
+const consensusStatus = run('node', ['scripts/validate-consensus-provenance.mjs'], {
+  RELEASE_CHECK_CONSENSUS_JSON_OUT: consensusJson,
+});
+
+// Step 3: Playwright suite
+console.log('\n→ 3/4  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 3: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 3/3  Editorial read-through (§11.5)');
+// Step 4: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 4/4  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
 const provFindings = existsSync(provJson) ? JSON.parse(readFileSync(provJson, 'utf8')) : [];
 const provFails = provFindings.filter(f => f.severity === 'fail');
 const provAdvisories = provFindings.filter(f => f.severity === 'advisory');
+
+const consensusFindings = existsSync(consensusJson) ? JSON.parse(readFileSync(consensusJson, 'utf8')) : [];
+const consensusFails = consensusFindings.filter(f => f.severity === 'fail');
 
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
@@ -65,16 +78,21 @@ const report = `# Release-check report
 | Stage | Pass | Advisory | Fail |
 |---|---|---|---|
 | Provenance (§4.2/§5.5) | ${provFindings.length === 0 ? '✓' : ''} | ${provAdvisories.length} | ${provFails.length} |
+| Consensus provenance (wq-048) | ${consensusFindings.length === 0 ? '✓' : ''} | 0 | ${consensusFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + pwSummary.failures, provAdvisories.length)}
 
 ## Provenance findings
 
 ${renderFindings(provFindings)}
+
+## Consensus-provenance findings (wq-048 §2 #10)
+
+${renderFindings(consensusFindings)}
 
 ## Playwright suite
 
@@ -104,6 +122,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   mode: MODE,
   commit: gitShortSha(),
   provenance: provFindings,
+  consensus_provenance: consensusFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -111,7 +130,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);
