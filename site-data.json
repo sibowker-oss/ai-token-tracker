@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-03T21:31:31Z",
+    "generatedAt": "2026-05-03T23:48:24Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -50,9 +50,9 @@
   },
   "sankey": {
     "title": "2025 Actual Revenue Collected",
-    "totalCustomerRevenue": 17.557,
+    "totalCustomerRevenue": 17.3608,
     "totalVCSubsidy": 8.4479,
-    "totalSystem": 28.3097,
+    "totalSystem": 28.1135,
     "colLabels": [
       "Who Pays",
       "Channel",
@@ -62,17 +62,17 @@
     "buyers": [
       {
         "label": "Consumer",
-        "value": 5.8665,
+        "value": 5.8085,
         "color": "#f59e0b"
       },
       {
         "label": "SME",
-        "value": 3.8314,
+        "value": 3.7936,
         "color": "#8b5cf6"
       },
       {
         "label": "Enterprise",
-        "value": 10.1639,
+        "value": 10.0635,
         "color": "#3b82f6"
       },
       {
@@ -84,12 +84,12 @@
     "channels": [
       {
         "label": "Model Subs",
-        "value": 7.1483,
+        "value": 7.0698,
         "color": "#f59e0b"
       },
       {
         "label": "Model API",
-        "value": 5.7428,
+        "value": 5.6643,
         "color": "#3b82f6"
       },
       {
@@ -99,7 +99,7 @@
       },
       {
         "label": "AI Native Apps",
-        "value": 0.7065,
+        "value": 0.6673,
         "color": "#10b981"
       },
       {
@@ -129,7 +129,7 @@
       },
       {
         "label": "IaaS/Open",
-        "value": 0.8,
+        "value": 0.6038,
         "color": "#8b5cf6",
         "slug": "iaas"
       },
@@ -143,12 +143,12 @@
     "outcomes": [
       {
         "label": "Inference",
-        "value": 9.0564,
+        "value": 8.9583,
         "color": "#10b981"
       },
       {
         "label": "People/SG&A",
-        "value": 16.9485,
+        "value": 16.8504,
         "color": "#f59e0b"
       },
       {
@@ -554,9 +554,9 @@
         "AI Native Apps": 0.4503
       },
       "iaas": {
-        "Model Subs": 0.2,
-        "Model API": 0.2,
-        "AI Native Apps": 0.1
+        "Model Subs": 0.1215,
+        "Model API": 0.1215,
+        "AI Native Apps": 0.0608
       },
       "_other_model_providers": {
         "Model Subs": 0.3123,
@@ -577,7 +577,7 @@
         "Trad. SaaS": 0.6
       }
     },
-    "totalCustomerRevenue_gross": 19.8618
+    "totalCustomerRevenue_gross": 19.6656
   },
   "dashboard": {
     "providers": {
@@ -4501,8 +4501,8 @@
     "snapshots": {}
   },
   "cumulative": {
-    "customer_revenue_gross": 25.7618,
-    "customer_revenue_net": 17.557,
+    "customer_revenue_gross": 25.5656,
+    "customer_revenue_net": 17.3608,
     "capex": 766.0,
     "tokens": 406.5,
     "by_year": {
@@ -4523,8 +4523,8 @@
         "_engine_run": false
       },
       "2025": {
-        "customer_revenue_gross": 19.8618,
-        "customer_revenue_net": 17.557,
+        "customer_revenue_gross": 19.6656,
+        "customer_revenue_net": 17.3608,
         "capex": 330,
         "tokens": 310.0,
         "_gross_source": "engine_gross_field",
@@ -4539,7 +4539,7 @@
     "_sources": [
       "2023: gross=None (missing), net=None, capex=167",
       "2024: gross=5.9 (per_entity_collected_revenue), net=None, capex=269",
-      "2025: gross=19.8618 (engine_gross_field), net=17.557, capex=330"
+      "2025: gross=19.6656 (engine_gross_field), net=17.3608, capex=330"
     ],
     "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
   },
@@ -4577,23 +4577,23 @@
       "total_capex": 330,
       "tokens_per_day_total": 310.0,
       "tokens_annual_inference": 1.1315e+17,
-      "total_segment_consumer": 8.9843,
-      "total_segment_sme": 3.7738,
-      "total_segment_enterprise": 9.3889,
+      "total_segment_consumer": 9.0843,
+      "total_segment_sme": 3.8138,
+      "total_segment_enterprise": 9.4989,
       "total_per_channel": {
-        "Model Subs": 7.1483,
-        "Model API": 5.7428,
+        "Model Subs": 7.0698,
+        "Model API": 5.6643,
         "Hyperscalers": 3.6344,
-        "AI Native Apps": 0.7065,
+        "AI Native Apps": 0.6673,
         "Trad. SaaS": 2.6298
       },
-      "infra_to_revenue_ratio": 16.61,
+      "infra_to_revenue_ratio": 16.78,
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
       "yoy_total_capex_growth_pct": 22.68,
-      "yoy_tokens_annual_inference_growth_pct": 210.88,
-      "total_customer_revenue": 17.557,
-      "total_customer_revenue_gross": 19.8618,
+      "yoy_tokens_annual_inference_growth_pct": 221.24,
+      "total_customer_revenue": 17.3608,
+      "total_customer_revenue_gross": 19.6656,
       "total_vc_subsidy": 8.4479
     }
   },

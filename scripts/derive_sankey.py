@@ -473,29 +473,70 @@ def derive_sankey(entities: dict, cost_structure_full: dict, year: str,
         if block["opex_origin"] == "estimated":
             fallback_log.append(f"{block['slug']}: opex ESTIMATED (no source/op_loss path)")
 
-    # Add the IaaS aggregation node (preserved hand-curated, no entity slug)
+    # wq-053 — Derive the IaaS aggregation node from role=iaas_provider entities
+    # when populated; fall back to hand-curated cost_structure block otherwise.
+    # Roll up customer_revenue (sourced) and let vc_subsidy emerge as balancing
+    # plug like other providers. Same color/label as the legacy hand-curated block.
     iaas_block = cs_year.get("iaas_aggregation")
     if iaas_block:
-        iaas_provider = {
-            "slug": "iaas",
-            "label": iaas_block["label"],
-            "color": iaas_block["color"],
-            "customer_revenue": iaas_block["customer_revenue"],
-            "vc_subsidy": iaas_block["vc_subsidy"],
-            "vc_origin": "preserved_hand_curated",
-            "value": iaas_block["value"],
-            "tier": iaas_block.get("tier"),
-            "src": iaas_block.get("src"),
-            # Synthesise inference/opex split from value × inferencePct
-            # so totals math doesn't break. Marked source explicitly.
-            "inference_cost": round(iaas_block["value"] * 0.50, 4),  # IaaS rate
-            "inference_cost_origin": "preserved_hand_curated",
-            "inference_cost_derived_from": ["iaas_aggregation.value × 0.50 (inference rate)"],
-            "opex": round(iaas_block["value"] * 0.50, 4),
-            "opex_origin": "preserved_hand_curated",
-            "opex_derived_from": ["iaas_aggregation.value × 0.50"],
-            "override_discrepancy": None,
-        }
+        iaas_entities = [
+            c for c in (entities.get("companies") or [])
+            if "iaas_provider" in (c.get("roles") or [])
+        ]
+        iaas_cr_rollup = sum(
+            ((c.get("financials") or {}).get(year, {}).get("collected_revenue") or 0)
+            for c in iaas_entities
+        )
+
+        if iaas_cr_rollup > 0:
+            # Engine-derived path: sum customer_revenue across iaas_provider entities.
+            # vc_subsidy preserved at hand-curated level (IaaS providers rarely
+            # disclose operating losses; engine's balancing plug logic doesn't apply
+            # to a rollup node without per-entity cost components).
+            iaas_value = iaas_cr_rollup + iaas_block["vc_subsidy"]
+            iaas_provider = {
+                "slug": "iaas",
+                "label": iaas_block["label"],
+                "color": iaas_block["color"],
+                "customer_revenue": round(iaas_cr_rollup, 4),
+                "vc_subsidy": iaas_block["vc_subsidy"],
+                "vc_origin": "preserved_hand_curated",
+                "value": round(iaas_value, 4),
+                "tier": "2A",  # upgraded from hand-curated 1B → derived 2A
+                "src": (
+                    f"wq-053 engine — rolled up from {len(iaas_entities)} iaas_provider entities "
+                    f"({', '.join(c['slug'] for c in iaas_entities)}); "
+                    f"customer_revenue=${iaas_cr_rollup:.2f}B + vc_subsidy=${iaas_block['vc_subsidy']:.2f}B (hand-curated)"
+                ),
+                "inference_cost": round(iaas_value * 0.50, 4),
+                "inference_cost_origin": "estimated",
+                "inference_cost_derived_from": [f"iaas rollup × 0.50 (inference rate)"],
+                "opex": round(iaas_value * 0.50, 4),
+                "opex_origin": "estimated",
+                "opex_derived_from": [f"iaas rollup × 0.50"],
+                "override_discrepancy": None,
+                "_iaas_members": [c["slug"] for c in iaas_entities],
+            }
+        else:
+            # Fallback: hand-curated block (no entity data populated yet)
+            iaas_provider = {
+                "slug": "iaas",
+                "label": iaas_block["label"],
+                "color": iaas_block["color"],
+                "customer_revenue": iaas_block["customer_revenue"],
+                "vc_subsidy": iaas_block["vc_subsidy"],
+                "vc_origin": "preserved_hand_curated",
+                "value": iaas_block["value"],
+                "tier": iaas_block.get("tier"),
+                "src": iaas_block.get("src"),
+                "inference_cost": round(iaas_block["value"] * 0.50, 4),
+                "inference_cost_origin": "preserved_hand_curated",
+                "inference_cost_derived_from": ["iaas_aggregation.value × 0.50 (inference rate)"],
+                "opex": round(iaas_block["value"] * 0.50, 4),
+                "opex_origin": "preserved_hand_curated",
+                "opex_derived_from": ["iaas_aggregation.value × 0.50"],
+                "override_discrepancy": None,
+            }
         raw_providers.append(iaas_provider)
 
     aggregated_providers = aggregate_small_providers(raw_providers, cs_year)

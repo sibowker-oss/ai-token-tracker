@@ -6136,7 +6136,11 @@
       ],
       "region": "US",
       "products": [],
-      "financials": {},
+      "financials": {
+        "2025": {
+          "collected_revenue": 0.1
+        }
+      },
       "current": {
         "total_funding": 0.077
       },
@@ -6161,6 +6165,22 @@
               "note": "Current snapshot set during site build. Needs external source."
             }
           ]
+        },
+        "2025.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-fireworks-2025-rev",
+              "claim": "fireworks 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "value": 0.1,
+              "unit": "$B",
+              "weight": "indicative",
+              "source": "Editorial estimate per brief \u00a73 #3 (~$0.10B 2025; combined IaaS ~$0.50B per audit \u00a74.4)",
+              "origin": "editorial_override",
+              "date": "2026-05-03"
+            }
+          ]
         }
       }
     },
@@ -6172,7 +6192,11 @@
       ],
       "region": "US",
       "products": [],
-      "financials": {},
+      "financials": {
+        "2025": {
+          "collected_revenue": 0.05
+        }
+      },
       "current": {
         "total_funding": 0.058
       },
@@ -6195,6 +6219,22 @@
               "origin": "editorial",
               "role": "editorial_estimate",
               "note": "Current snapshot set during site build. Needs external source."
+            }
+          ]
+        },
+        "2025.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-replicate-2025-rev",
+              "claim": "replicate 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "value": 0.05,
+              "unit": "$B",
+              "weight": "indicative",
+              "source": "Editorial estimate per brief \u00a73 #3 (inference + open model hosting; ~$0.05B 2025)",
+              "origin": "editorial_override",
+              "date": "2026-05-03"
             }
           ]
         }
@@ -9569,7 +9609,7 @@
       "slug": "groq",
       "name": "Groq",
       "roles": [
-        "ai_app"
+        "iaas_provider"
       ],
       "region": "US",
       "category": "ai-infrastructure",
@@ -9581,7 +9621,11 @@
           "role": "ai_app"
         }
       ],
-      "financials": {},
+      "financials": {
+        "2025": {
+          "collected_revenue": 0.1
+        }
+      },
       "current": {
         "tokens_per_day": 40.0,
         "providers": [
@@ -9656,6 +9700,30 @@
               "origin": "editorial",
               "role": "editorial_estimate",
               "note": "Current snapshot set during site build. Needs external source."
+            }
+          ]
+        },
+        "_role_fix_wq053": {
+          "claim": "Role corrected ['ai_app'] \u2192 ['iaas_provider'] per wq-053 \u00a73 #2 \u2014 Groq is LPU-based inference platform; classified as iaas_provider",
+          "origin": "editorial_classification_fix",
+          "date": "2026-05-03",
+          "previous_roles": [
+            "ai_app"
+          ]
+        },
+        "2025.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-groq-2025-rev",
+              "claim": "groq 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "value": 0.1,
+              "unit": "$B",
+              "weight": "indicative",
+              "source": "Editorial estimate per brief \u00a73 #2 (LPU-based inference; ~$0.10B 2025)",
+              "origin": "editorial_override",
+              "date": "2026-05-03"
             }
           ]
         }
@@ -14249,7 +14317,7 @@
   ],
   "market_aggregates": {
     "2025": {
-      "total_customer_revenue": 17.557,
+      "total_customer_revenue": 17.3608,
       "total_vc_subsidy": 8.4479,
       "total_system_cost": 27.27,
       "total_inference_cost": 14.03,
@@ -14442,23 +14510,31 @@
           "slug": "iaas",
           "label": "IaaS/Open",
           "color": "#8b5cf6",
-          "customer_revenue": 0.5,
+          "customer_revenue": 0.3038,
           "vc_subsidy": 0.3,
           "vc_origin": "preserved_hand_curated",
-          "value": 0.8,
-          "tier": "1B",
-          "src": "AI Ledger methodology \u00a77.2 ($0.5B customer + $0.3B VC). Preserved hand-curated until wq-053 populates IaaS provider entity records.",
-          "inference_cost": 0.4,
-          "inference_cost_origin": "preserved_hand_curated",
+          "value": 0.6038,
+          "tier": "2A",
+          "src": "wq-053 engine \u2014 rolled up from 6 iaas_provider entities (together, fireworks, replicate, anyscale, groq, modal); customer_revenue=$0.30B + vc_subsidy=$0.30B (hand-curated)",
+          "inference_cost": 0.3019,
+          "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "iaas_aggregation.value \u00d7 0.50 (inference rate)"
+            "iaas rollup \u00d7 0.50 (inference rate)"
           ],
-          "opex": 0.4,
-          "opex_origin": "preserved_hand_curated",
+          "opex": 0.3019,
+          "opex_origin": "estimated",
           "opex_derived_from": [
-            "iaas_aggregation.value \u00d7 0.50"
+            "iaas rollup \u00d7 0.50"
           ],
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "_iaas_members": [
+            "together",
+            "fireworks",
+            "replicate",
+            "anyscale",
+            "groq",
+            "modal"
+          ]
         }
       },
       "providers_visible": [
@@ -14483,7 +14559,7 @@
         ],
         "aggregation_rule": "value < 2.0% of total AND outside top 4"
       },
-      "total_provider_value": 26.0049,
+      "total_provider_value": 25.8087,
       "fallback_log": [
         "anthropic: inference_cost ESTIMATED (no source/op_loss path)",
         "anthropic: opex ESTIMATED (no source/op_loss path)",
@@ -14501,7 +14577,7 @@
         "moonshot: opex ESTIMATED (no source/op_loss path)"
       ],
       "_residual_doc": "Engine writes per-provider customer_revenue derived from entities.json:financials.<year>.collected_revenue (wq-048). Channel/buyer totals computed by generate_site_data.py from this block + the existing editorial channel structure (proportional rescale to total_customer_revenue). Non-provider revenue (e.g. Microsoft Copilot via Trad SaaS channel) handled in the channel structure, not in providers.",
-      "_engine_run_at": "2026-05-03T10:35:54Z",
+      "_engine_run_at": "2026-05-03T23:48:23Z",
       "_engine": "scripts/derive_sankey.py (wq-055)",
       "routing": {
         "openai": {
@@ -14522,9 +14598,9 @@
           "AI Native Apps": 0.4503
         },
         "iaas": {
-          "Model Subs": 0.2,
-          "Model API": 0.2,
-          "AI Native Apps": 0.1
+          "Model Subs": 0.1215,
+          "Model API": 0.1215,
+          "AI Native Apps": 0.0608
         },
         "_other_model_providers": {
           "Model Subs": 0.3123,
@@ -14535,15 +14611,15 @@
       "channels_grossed": [
         {
           "label": "Model Subs",
-          "value": 7.1483,
-          "chPass": 7.1483,
+          "value": 7.0698,
+          "chPass": 7.0698,
           "margin": 0,
           "gross_up_factor": 1.0
         },
         {
           "label": "Model API",
-          "value": 5.7428,
-          "chPass": 5.7428,
+          "value": 5.6643,
+          "chPass": 5.6643,
           "margin": 0,
           "gross_up_factor": 1.0
         },
@@ -14556,8 +14632,8 @@
         },
         {
           "label": "AI Native Apps",
-          "value": 0.7065,
-          "chPass": 0.7065,
+          "value": 0.6673,
+          "chPass": 0.6673,
           "margin": 0,
           "gross_up_factor": 1.0
         },
@@ -14569,7 +14645,7 @@
           "gross_up_factor": 2.5
         }
       ],
-      "total_customer_revenue_gross": 19.8618,
+      "total_customer_revenue_gross": 19.6656,
       "neocloud_capex": 45,
       "sovereign_capex": 20,
       "enterprise_capex": 15,
@@ -14577,22 +14653,22 @@
       "tokens_per_day_total": 310.0,
       "tokens_annual_inference": 1.1315e+17,
       "tokens_annual_training": null,
-      "total_segment_consumer": 8.9843,
-      "total_segment_sme": 3.7738,
-      "total_segment_enterprise": 9.3889,
+      "total_segment_consumer": 9.0843,
+      "total_segment_sme": 3.8138,
+      "total_segment_enterprise": 9.4989,
       "total_per_channel": {
-        "Model Subs": 7.1483,
-        "Model API": 5.7428,
+        "Model Subs": 7.0698,
+        "Model API": 5.6643,
         "Hyperscalers": 3.6344,
-        "AI Native Apps": 0.7065,
+        "AI Native Apps": 0.6673,
         "Trad. SaaS": 2.6298
       },
-      "infra_to_revenue_ratio": 16.61,
+      "infra_to_revenue_ratio": 16.78,
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
       "yoy_total_customer_revenue_growth_pct": null,
       "yoy_total_capex_growth_pct": 22.68,
-      "yoy_tokens_annual_inference_growth_pct": 210.88,
+      "yoy_tokens_annual_inference_growth_pct": 221.24,
       "_market_provenance": {
         "mag7_capex": {
           "origin": "sourced",
@@ -14620,7 +14696,7 @@
           "derived_from": [
             "market_aggregates.2025.enterprise_capex"
           ],
-          "engine_rollup_value": 4.6557
+          "engine_rollup_value": 4.7807
         },
         "total_capex": {
           "origin": "derived_sum",
@@ -14647,7 +14723,7 @@
         "segments": {
           "origin": "derived_per_entity_rollup",
           "sourced_via_rbc": 2,
-          "fallback_via_default_split": 46
+          "fallback_via_default_split": 49
         },
         "total_per_channel": {
           "origin": "sourced",
@@ -14663,7 +14739,7 @@
             "tokens_annual_inference"
           ]
         },
-        "_market_engine_run_at": "2026-05-03T11:09:45Z",
+        "_market_engine_run_at": "2026-05-03T23:48:24Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14673,8 +14749,8 @@
       }
     },
     "_cumulative_2023_2025": {
-      "customer_revenue_gross": 25.7618,
-      "customer_revenue_net": 17.557,
+      "customer_revenue_gross": 25.5656,
+      "customer_revenue_net": 17.3608,
       "capex": 766.0,
       "tokens": 406.5,
       "by_year": {
@@ -14695,8 +14771,8 @@
           "_engine_run": false
         },
         "2025": {
-          "customer_revenue_gross": 19.8618,
-          "customer_revenue_net": 17.557,
+          "customer_revenue_gross": 19.6656,
+          "customer_revenue_net": 17.3608,
           "capex": 330,
           "tokens": 310.0,
           "_gross_source": "engine_gross_field",
@@ -14711,7 +14787,7 @@
       "_sources": [
         "2023: gross=None (missing), net=None, capex=167",
         "2024: gross=5.9 (per_entity_collected_revenue), net=None, capex=269",
-        "2025: gross=19.8618 (engine_gross_field), net=17.557, capex=330"
+        "2025: gross=19.6656 (engine_gross_field), net=17.3608, capex=330"
       ],
       "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
     },
@@ -14798,7 +14874,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T11:09:45Z",
+        "_market_engine_run_at": "2026-05-03T23:48:24Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14890,7 +14966,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T11:09:45Z",
+        "_market_engine_run_at": "2026-05-03T23:48:24Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -15337,7 +15413,7 @@
         ]
       ],
       "_engine": "scripts/derive_capital_sankey.py (wq-074)",
-      "_engine_run_at": "2026-05-03T21:31:31Z",
+      "_engine_run_at": "2026-05-03T23:48:24Z",
       "_doc": "Capital sankey engine output. Column 0 sources derived from market_aggregates bucket totals \u00d7 structure.column0_sub_allocation. Columns 1+2 = pure editorial ratios applied to total. FLOWS guaranteed to satisfy per-node conservation by construction (proportional cross-product). capital.html reads via site-data.json."
     }
   }
