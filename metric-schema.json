@@ -92,18 +92,32 @@
   ],
   "inbox_statuses": {
     "_description": "Valid status values for items in vault-inbox.json. Source of truth for review.html, scripts/apply_claims.py, scripts/auto_clear_inbox.py, and scripts/migrate_orphan_accepts.py. Added under wq-023 (briefs/active/2026-04-25-raw-pool-status.md).",
-    "values": ["pending", "accepted", "declined", "parked", "raw_pool"],
+    "values": [
+      "pending",
+      "accepted",
+      "declined",
+      "parked",
+      "raw_pool"
+    ],
     "definitions": {
       "pending": "Awaiting human review in admin.html#review.",
       "accepted": "Reviewed and trusted; updates a live data point in site-data.json. Must have a mapped metric (metricKey) post-wq-023.",
-      "raw_pool": "Reviewed and trusted, but no mapped metric — filed for later, not surfaced on the site.",
+      "raw_pool": "Reviewed and trusted, but no mapped metric \u2014 filed for later, not surfaced on the site.",
       "declined": "Reviewed and rejected.",
       "parked": "Held for triangulation or future review."
     }
   },
   "page_lifecycle_statuses": {
     "_description": "Valid status values for entries in data/page-registry.json. Source of truth for scripts/validate_page_registry.py, scripts/build-lint.js (dataReferences gating), and archive.html (Concepts/Retired/Parked sections). Added under wq-031 (briefs/active/2026-04-26-page-lifecycle-registry.md).",
-    "values": ["live", "admin", "concept", "beta", "parked", "retired", "newsletter"],
+    "values": [
+      "live",
+      "admin",
+      "concept",
+      "beta",
+      "parked",
+      "retired",
+      "newsletter"
+    ],
     "definitions": {
       "live": "Public ledger / infrastructure page. In nav. Linted (full dataReferences) unless the entry carries lintExclusions.",
       "admin": "Tooling page (review queue, source admin, settings, etc.). Not in public nav. Schema-checked but skipped on dataReferences.",
@@ -114,17 +128,67 @@
       "newsletter": "Immutable timestamped artefact under /newsletters/. Not in nav. Excluded from audits."
     },
     "folder_rules": {
-      "live": {"required_folder": "<root>", "in_public_nav": true, "linted": true},
-      "admin": {"required_folder": "<root> or data-updates/", "in_public_nav": false, "linted": false},
-      "concept": {"required_folder": "<root>", "in_public_nav": false, "linted": false},
-      "beta": {"required_folder": "beta/", "in_public_nav": false, "linted": false},
-      "parked": {"required_folder": "parked/", "in_public_nav": false, "linted": false},
-      "retired": {"required_folder": "archive/", "in_public_nav": false, "linted": false, "transition_flag": "pendingMove allows status=retired with path at <root> until the P2 git mv lands"},
-      "newsletter": {"required_folder": "newsletters/", "in_public_nav": false, "linted": false}
+      "live": {
+        "required_folder": "<root>",
+        "in_public_nav": true,
+        "linted": true
+      },
+      "admin": {
+        "required_folder": "<root> or data-updates/",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "concept": {
+        "required_folder": "<root>",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "beta": {
+        "required_folder": "beta/",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "parked": {
+        "required_folder": "parked/",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "retired": {
+        "required_folder": "archive/",
+        "in_public_nav": false,
+        "linted": false,
+        "transition_flag": "pendingMove allows status=retired with path at <root> until the P2 git mv lands"
+      },
+      "newsletter": {
+        "required_folder": "newsletters/",
+        "in_public_nav": false,
+        "linted": false
+      }
     },
-    "entry_required_fields": ["path", "status", "title", "purpose", "supersedes", "supersededBy", "addedOn", "retiredOn"],
-    "entry_optional_fields": ["lastReviewed", "retiredReason", "lintExclusions", "pendingMove", "pendingMoveTo", "_provenance", "_lintExclusionsReason"],
-    "retired_required_fields": ["supersededBy", "retiredOn", "retiredReason"]
+    "entry_required_fields": [
+      "path",
+      "status",
+      "title",
+      "purpose",
+      "supersedes",
+      "supersededBy",
+      "addedOn",
+      "retiredOn"
+    ],
+    "entry_optional_fields": [
+      "lastReviewed",
+      "retiredReason",
+      "lintExclusions",
+      "pendingMove",
+      "pendingMoveTo",
+      "_provenance",
+      "_lintExclusionsReason"
+    ],
+    "retired_required_fields": [
+      "supersededBy",
+      "retiredOn",
+      "retiredReason"
+    ]
   },
   "roles": {
     "model_provider": {
@@ -1217,6 +1281,26 @@
     {
       "pattern": "perplexity",
       "slug": "perplexity"
+    },
+    {
+      "pattern": "bytedance|doubao|tiktok.*ai|volcano.*engine",
+      "slug": "bytedance"
+    },
+    {
+      "pattern": "alibaba|qwen|aliyun|tongyi",
+      "slug": "alibaba"
+    },
+    {
+      "pattern": "tencent|hunyuan|wechat.*ai|yuanbao",
+      "slug": "tencent"
+    },
+    {
+      "pattern": "baidu|ernie|wenxin|yiyan",
+      "slug": "baidu"
+    },
+    {
+      "pattern": "self.host|llama.deployed|open.model.run|on.prem.inference",
+      "slug": "_self_hosted"
     }
   ],
   "field_match_rules": [

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-03T10:04:09Z",
+    "generatedAt": "2026-05-03T10:36:10Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -4501,10 +4501,10 @@
     "snapshots": {}
   },
   "cumulative": {
-    "customer_revenue_gross": 28,
+    "customer_revenue_gross": 23.9444,
     "customer_revenue_net": 17.557,
     "capex": 630.5844,
-    "tokens": 0.0,
+    "tokens": 336.0,
     "by_year": {
       "2023": {
         "customer_revenue_gross": null,
@@ -4518,7 +4518,7 @@
         "customer_revenue_gross": 4.0826,
         "customer_revenue_net": null,
         "capex": 226,
-        "tokens": null,
+        "tokens": 36.0,
         "_gross_source": "per_entity_collected_revenue",
         "_engine_run": false
       },
@@ -4526,14 +4526,14 @@
         "customer_revenue_gross": 19.8618,
         "customer_revenue_net": 17.557,
         "capex": 252.5844,
-        "tokens": null,
+        "tokens": 300.0,
         "_gross_source": "engine_gross_field",
         "_engine_run": true
       }
     },
     "capex_total": 745,
     "tokens_2025_annualized": 360,
-    "infra_to_revenue_ratio_2025": 27,
+    "infra_to_revenue_ratio_2025": 31,
     "_overrides": {
       "capex_total": {
         "engine_value": 630.5844,
@@ -4543,16 +4543,8 @@
         "set_at": "2026-05-03",
         "expires_at": "2026-09-01"
       },
-      "customer_revenue_gross": {
-        "engine_value": 23.9444,
-        "override_value": 28,
-        "reason": "Engine output of ~$24B undercounts because 2024 collected_revenue isn't populated for most providers and 2023 entirely absent. $28B reflects historic editorial cumulative. Override pending wq-066 backfill of 2023+2024 per-provider revenue.",
-        "set_by": "simon",
-        "set_at": "2026-05-03",
-        "expires_at": "2026-09-01"
-      },
       "tokens_2025_annualized": {
-        "engine_value": null,
+        "engine_value": 300.0,
         "override_value": 360,
         "reason": "Editorial cumulative tokens per model-assumptions.md \u00a72; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
         "set_by": "simon",
@@ -4591,7 +4583,8 @@
       "total_segment_consumer": 1.633,
       "total_segment_sme": 0.6532,
       "total_segment_enterprise": 1.7963,
-      "total_per_channel": {}
+      "total_per_channel": {},
+      "yoy_total_capex_growth_pct": 49.22
     },
     "2025": {
       "mag7_capex": 250,
@@ -4599,8 +4592,8 @@
       "sovereign_capex": 0.0,
       "enterprise_capex": 4.6557,
       "total_capex": 257.2401,
-      "tokens_per_day_total": 330,
-      "tokens_annual_inference": 1.2045e+17,
+      "tokens_per_day_total": 300.0,
+      "tokens_annual_inference": 1.095e+17,
       "total_segment_consumer": 8.9843,
       "total_segment_sme": 3.7738,
       "total_segment_enterprise": 9.3889,
@@ -4614,7 +4607,7 @@
       "infra_to_revenue_ratio": 12.95,
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
-      "yoy_total_capex_growth_pct": 31405.22,
+      "yoy_total_capex_growth_pct": 13.41,
       "yoy_tokens_annual_inference_growth_pct": 816.67,
       "total_customer_revenue": 17.557,
       "total_customer_revenue_gross": 19.8618,

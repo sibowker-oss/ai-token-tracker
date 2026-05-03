@@ -195,7 +195,12 @@ def derive_tokens_annual(entities_doc: dict, year: str, cs_year: dict) -> dict:
     for entity in companies:
         slug = entity.get("slug")
         roles = entity.get("roles") or []
-        if "model_provider" not in roles:
+        # wq-070 — include model_providers AND _synthetic aggregator entities
+        # (e.g. _self_hosted = open-model deployments running on customer infra).
+        # Synthetic entities are token-only contributors; they don't get
+        # customer_revenue / vc_subsidy derivations elsewhere in the engine.
+        is_synthetic = entity.get("_synthetic") is True
+        if "model_provider" not in roles and not is_synthetic:
             continue
         fin = (entity.get("financials") or {}).get(year) or {}
         cur = entity.get("current") or {}
@@ -235,7 +240,7 @@ def derive_tokens_annual(entities_doc: dict, year: str, cs_year: dict) -> dict:
         "_provenance": {
             "tokens_per_day_total": {
                 "origin": "derived_per_entity_rollup",
-                "scope": "model_provider role only (audit §5.3 method — aggregators + apps consume model_provider tokens, summing all double-counts)",
+                "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
                 "rate_used_for_estimation": default_rate,
                 "n_contributors": len(sources),
             },
