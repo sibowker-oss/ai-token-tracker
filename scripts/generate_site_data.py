@@ -395,6 +395,32 @@ def generate(entities_path, existing_site_data_path, output_path):
     if cumulative:
         site["cumulative"] = cumulative
 
+    # ── wq-067: market aggregates per year (read from entities.json) ──
+    # Surfaces per-source capex / tokens / segment composition / per-channel
+    # totals / derived ratios / YoY deltas for the public site to consume
+    # without re-deriving in JS.
+    market_section = {}
+    for year in ("2023", "2024", "2025"):
+        ma_year = (entities.get("market_aggregates") or {}).get(year) or {}
+        if not ma_year:
+            continue
+        # Surface only the public-facing wq-067 fields (skip provenance/internal).
+        public_fields = (
+            "mag7_capex", "neocloud_capex", "sovereign_capex", "enterprise_capex", "total_capex",
+            "tokens_per_day_total", "tokens_annual_inference", "tokens_annual_training",
+            "total_segment_consumer", "total_segment_sme", "total_segment_enterprise",
+            "total_per_channel",
+            "infra_to_revenue_ratio", "capex_per_token_usd", "revenue_per_token_usd",
+            "yoy_total_customer_revenue_growth_pct", "yoy_total_capex_growth_pct",
+            "yoy_tokens_annual_inference_growth_pct",
+            "total_customer_revenue", "total_customer_revenue_gross", "total_vc_subsidy",
+        )
+        out_year = {k: ma_year.get(k) for k in public_fields if ma_year.get(k) is not None}
+        if out_year:
+            market_section[year] = out_year
+    if market_section:
+        site["market"] = market_section
+
     # ── wq-055: write FULL Sankey from market_aggregates engine output ──
     # Per brief §2 #3: providers, costParams.vcSubsidy, buyers, channels,
     # outcomes, totals — all derived consistently from one engine block.

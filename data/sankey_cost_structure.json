@@ -89,6 +89,47 @@
       "color": "#8b5cf6",
       "tier": "1B",
       "src": "AI Ledger methodology §7.2 ($0.5B customer + $0.3B VC). Preserved hand-curated until wq-053 populates IaaS provider entity records."
+    },
+    "market_aggregates_estimation": {
+      "_doc": "wq-067 — fallback parameters used when entity-level data isn't sourced. All editorial; same tiered structure as inference/opex estimation.",
+      "tokens_per_dollar_rate": {
+        "_doc": "Estimated tokens-per-$1-revenue. Used when entity has no current.tokens_per_day AND no entity.financials.<year>.tokens_annual_inference. Per assumptions-audit.md §5.2 GPU triangulation: ~565T tokens/day total inference at ~$48B annualized provider revenue ⇒ ~4.3B tokens per dollar inference revenue. Conservative for revenue-side scaling.",
+        "value": 4.3e9,
+        "tier": "3C",
+        "src": "Derived from assumptions-audit.md §5.1 (565T tokens/day) and §4.1 ($17.47B customer revenue) annualized; rounded for stability."
+      },
+      "capex_per_revenue_rate": {
+        "_doc": "Used when entity has no per-source capex documented and isn't in the mag7/neocloud allocation buckets. Editorial fallback rate (capex per $1 of provider revenue).",
+        "by_role": {
+          "model_provider": 0.30,
+          "hyperscaler": 1.10,
+          "neo_cloud": 2.00,
+          "iaas_provider": 0.50,
+          "ai_app": 0.05,
+          "_default": 0.20
+        },
+        "tier": "3C",
+        "src": "Editorial allocation based on AI Ledger §4.1 totals: $250B mag7 capex (hyperscalers) ÷ ~$220B AI-attributable hyperscaler revenue ≈ 1.10. Neoclouds run roughly 2× revenue in capex due to GPU build-out. Frontier model providers spend ~30% of revenue on dedicated infra ex-cloud rentals."
+      },
+      "capex_source_allocation": {
+        "_doc": "Maps entity slugs to the capex source class. Used to bucket per-entity capex into mag7/neocloud/sovereign/enterprise totals. Anything not listed defaults to 'enterprise' (broad bucket for non-classified spend).",
+        "mag7": ["microsoft", "google", "meta", "amazon", "apple", "nvidia", "tesla"],
+        "neo_cloud": ["coreweave", "lambda", "crusoe", "nebius", "applied-digital"],
+        "sovereign": ["g42", "sda-ai", "scaleway", "humain"],
+        "enterprise_default": true,
+        "tier": "3C",
+        "src": "Editorial classification per AI Ledger structure; sovereign list is short and growing — amend as new sovereign AI funds appear."
+      },
+      "segment_composition": {
+        "_doc": "Editorial mapping from per-provider revenue_by_channel into Consumer/SME/Enterprise total buckets. subscription_pct → consumer; api_pct splits 40/60 SME/Enterprise; enterprise_pct → enterprise. When entity has no rbc, falls back to channel_mapping._default_for_unmapped from above + segment_default_split.",
+        "subscription_to_consumer": 1.0,
+        "api_to_sme": 0.4,
+        "api_to_enterprise": 0.6,
+        "enterprise_to_enterprise": 1.0,
+        "_default_split": {"consumer": 0.4, "sme": 0.16, "enterprise": 0.44},
+        "tier": "3C",
+        "src": "Editorial split. Subscription is consumer-dominated (ChatGPT Plus, Claude Pro). API is mostly enterprise integrations + SME developer accounts. Enterprise contracts route entirely to enterprise. Default split derived from channel_mapping defaults applied to segment mapping."
+      }
     }
   }
 }
