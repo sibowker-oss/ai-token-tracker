@@ -227,7 +227,7 @@
         <div class="cf-detail">
           Meta, Google, and Microsoft allocate approximately $170B of AI CapEx to ad ranking, search, recommendations, and cloud workloads.
           These investments are funded by existing business models and do not depend on new AI revenue.
-          Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from">$34:$1</strong> to <strong id="cf-ratio-to">~$13:$1</strong>.
+          Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-ratio="cumulative.infra_to_revenue_ratio_2025">$34:$1</strong> to <strong id="cf-ratio-to" data-ratio="cumulative.infra_to_revenue_ratio_2025_excl_self_use">~$13:$1</strong>.
         </div>
       </div>
     </div>
@@ -435,12 +435,24 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12"></script>
 <script>
-// ─── SCENARIO DATA ────────────────────────────────────────────────
-const SCENARIOS = {
+// ─── SCENARIO DATA (wq-073 — fetched from data/scenarios.json) ────
+// Inline defaults remain as graceful fallback if fetch fails.
+let SCENARIOS = {
   bear:  { totalCapex:745, revenue:17, ratio:44, label:'Bear case' },
   base:  { totalCapex:745, revenue:22, ratio:34, label:'Base case' },
   bull:  { totalCapex:745, revenue:27, ratio:28, label:'Bull case' },
 };
+fetch('data/scenarios.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(s => {
+    if (s && s.capex_view) {
+      SCENARIOS = s.capex_view;
+      // Re-render against the fetched scenario set if the page has already initialised.
+      if (typeof updateHero === 'function') updateHero();
+      if (typeof updateSensitivity === 'function') updateSensitivity();
+    }
+  })
+  .catch(() => { /* fallback SCENARIOS already in place */ });
 let currentScenario = (function() {
   const p = new URLSearchParams(location.search).get('s');
   if (p && ['bear','base','bull'].includes(p)) return p;
@@ -963,6 +975,34 @@ document.querySelectorAll('.cite-btn').forEach(btn => {
     © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated 2026-04-29 · <a href="/methodology.html">Methodology at /methodology</a>
   </div>
 </footer>
+
+<script>
+// wq-073 — hydrate [data-ratio] spans from site-data.json:cumulative
+// (computes ratio at render time from cumulative aggregator output).
+// Falls back silently to existing inline literals if fetch fails.
+(function() {
+  fetch('site-data.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(d => {
+      const cum = d && d.cumulative;
+      if (!cum) return;
+      const ratio = cum.infra_to_revenue_ratio_2025;
+      if (ratio == null) return;
+      // Excl. self-use ratio: editorial assumption that ~$170B of mag7 capex
+      // funds existing ad/cloud workloads (not new AI revenue). Capital.html
+      // narrative cites the 'to' ratio as ~$13:$1 — derive consistently.
+      const cfFrom = document.getElementById('cf-ratio-from');
+      const cfTo = document.getElementById('cf-ratio-to');
+      if (cfFrom) cfFrom.textContent = '$' + ratio + ':$1';
+      if (cfTo && cum.capex_total && cum.customer_revenue_gross) {
+        const adjustedCapex = cum.capex_total - 170;
+        const adjustedRatio = Math.round(adjustedCapex / cum.customer_revenue_gross);
+        cfTo.textContent = '~$' + adjustedRatio + ':$1';
+      }
+    })
+    .catch(() => { /* graceful fallback to inline literals */ });
+})();
+</script>
 
 </body>
 </html>
