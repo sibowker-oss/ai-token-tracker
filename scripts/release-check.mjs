@@ -70,18 +70,29 @@ const marketAggStatus = run('node', ['scripts/validate-market-aggregates.mjs'], 
 // Step 6 (wq-073 §3 #5): no-hardcoded-constants — assert capital/revenue/ask/in-development
 // HTML pages stay wired to data files (catches future regressions where someone
 // re-hardcodes a ratio literal or scenario object).
-console.log('\n→ 6/8  No-hardcoded-constants (wq-073 §3 #5)');
+console.log('\n→ 6/9  No-hardcoded-constants (wq-073 §3 #5)');
 const noHardcodedJson = join(reportDir, 'no-hardcoded-constants.json');
 const noHardcodedStatus = run('node', ['scripts/validate-no-hardcoded-constants.mjs'], {
   RELEASE_CHECK_NO_HARDCODED_JSON_OUT: noHardcodedJson,
 });
 
-// Step 7: Playwright suite
-console.log('\n→ 7/8  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 7 (wq-074 §3 #6): capital-sankey per-node conservation — sum(sources)
+// == sum(destinations) == sum(utilization) == total; per-source outflow ==
+// source value; per-destination inflow == outflow == destination value;
+// per-utilization inflow == utilization value. Same lesson as wq-044/062 —
+// rendered output must reconcile to engine input at every node boundary.
+console.log('\n→ 7/9  Capital-sankey conservation (wq-074 §3 #6)');
+const capitalSankeyJson = join(reportDir, 'capital-sankey.json');
+const capitalSankeyStatus = run('node', ['scripts/validate-capital-sankey.mjs'], {
+  RELEASE_CHECK_CAPITAL_SANKEY_JSON_OUT: capitalSankeyJson,
+});
+
+// Step 8: Playwright suite
+console.log('\n→ 8/9  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 8: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 8/8  Editorial read-through (§11.5)');
+// Step 9: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 9/9  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -103,6 +114,9 @@ const marketAggFails = marketAggFindings.filter(f => f.severity === 'fail');
 
 const noHardcodedFindings = existsSync(noHardcodedJson) ? JSON.parse(readFileSync(noHardcodedJson, 'utf8')) : [];
 const noHardcodedFails = noHardcodedFindings.filter(f => f.severity === 'fail');
+
+const capitalSankeyFindings = existsSync(capitalSankeyJson) ? JSON.parse(readFileSync(capitalSankeyJson, 'utf8')) : [];
+const capitalSankeyFails = capitalSankeyFindings.filter(f => f.severity === 'fail');
 
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
@@ -131,12 +145,13 @@ const report = `# Release-check report
 | Cross-page consistency (wq-063) | ${crossPageFindings.length === 0 ? '✓' : ''} | 0 | ${crossPageFails.length} |
 | Market-aggregates consistency (wq-067) | ${marketAggFindings.length === 0 ? '✓' : ''} | 0 | ${marketAggFails.length} |
 | No-hardcoded-constants (wq-073) | ${noHardcodedFindings.length === 0 ? '✓' : ''} | 0 | ${noHardcodedFails.length} |
+| Capital-sankey conservation (wq-074) | ${capitalSankeyFindings.length === 0 ? '✓' : ''} | 0 | ${capitalSankeyFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + pwSummary.failures, provAdvisories.length)}
 
 ## Provenance findings
 
@@ -161,6 +176,10 @@ ${renderFindings(marketAggFindings)}
 ## No-hardcoded-constants findings (wq-073 §3 #5)
 
 ${renderFindings(noHardcodedFindings)}
+
+## Capital-sankey conservation findings (wq-074 §3 #6)
+
+${renderFindings(capitalSankeyFindings)}
 
 ## Playwright suite
 
@@ -195,6 +214,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   cross_page_consistency: crossPageFindings,
   market_aggregates: marketAggFindings,
   no_hardcoded_constants: noHardcodedFindings,
+  capital_sankey: capitalSankeyFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -202,7 +222,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);

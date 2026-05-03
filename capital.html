@@ -473,7 +473,12 @@ function setScenario(s) {
 }
 
 // ─── CUMULATIVE 2023–25 DATA (USD billions) ────────────────────────
-const FLOWS = [
+// wq-074 — FLOWS becomes mutable. Inline default below is the FALLBACK_FLOWS
+// (rendered if site-data.json:capital_sankey fetch fails). On success, FLOWS
+// is replaced with engine output (~$766B from market_aggregates._capital_sankey
+// = mag7 sub-allocated across MSFT/AWS/Google/Meta/Oracle/AI labs direct +
+// neocloud + sovereign sub-allocated across China + Sovereign/Gov + enterprise).
+let FLOWS = [
   // ── Stage 1 → Stage 2 ──
   ['Microsoft CapEx','NVIDIA GPUs',85],['Microsoft CapEx','Other silicon',5],['Microsoft CapEx','Networking',12],['Microsoft CapEx','Data Centre Costs',40],['Microsoft CapEx','Electricity & ops',18],
   ['AWS CapEx','NVIDIA GPUs',38],['AWS CapEx','Other silicon',20],['AWS CapEx','Networking',10],['AWS CapEx','Data Centre Costs',37],['AWS CapEx','Electricity & ops',15],
@@ -908,6 +913,28 @@ function renderLagChart() {
 window.addEventListener('resize',()=>{render(); renderLagChart();});
 // Apply persisted scenario on load
 document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === currentScenario));
+
+// wq-074 — load capital_sankey from site-data.json (engine output) and replace
+// the inline-default FLOWS. Falls back to inline default on fetch failure
+// (graceful degradation; page still renders the legacy $745B view).
+fetch('site-data.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    const cs = d && d.capital_sankey;
+    if (!cs || !cs.flows || !cs.flows.length) {
+      console.warn('wq-074 — capital_sankey not in site-data.json; using FALLBACK_FLOWS');
+      return;
+    }
+    FLOWS = cs.flows;
+    render();
+    renderLagChart();
+    updateSensitivity();
+  })
+  .catch(err => {
+    console.warn('wq-074 — capital_sankey fetch failed; using FALLBACK_FLOWS', err);
+  });
+
+// Initial render uses inline-default FLOWS; fetch above re-renders on success.
 render();
 renderLagChart();
 updateSensitivity();

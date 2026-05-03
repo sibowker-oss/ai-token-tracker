@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-03T11:09:45Z",
+    "generatedAt": "2026-05-03T21:31:31Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -4596,5 +4596,443 @@
       "total_customer_revenue_gross": 19.8618,
       "total_vc_subsidy": 8.4479
     }
+  },
+  "capital_sankey": {
+    "total": 766.0,
+    "bucket_totals": {
+      "mag7": 628.0,
+      "neocloud": 78.0,
+      "sovereign": 33.0,
+      "enterprise": 27.0
+    },
+    "sources": {
+      "Microsoft CapEx": 176.2917082917083,
+      "AWS CapEx": 132.37562437562437,
+      "Google CapEx": 137.39460539460538,
+      "Meta CapEx": 99.12487512487512,
+      "Oracle CapEx": 55.2087912087912,
+      "AI labs direct": 27.6043956043956,
+      "Neoclouds": 78.0,
+      "China": 20.294999999999998,
+      "Sovereign / Gov": 12.705,
+      "Enterprise": 27.0
+    },
+    "destinations": {
+      "NVIDIA GPUs": 311.45054945054943,
+      "Other silicon": 74.22777222777223,
+      "Networking": 58.92307692307693,
+      "Data Centre Costs": 224.97902097902096,
+      "Electricity & ops": 96.41958041958043
+    },
+    "utilization": {
+      "Inference (Paid)": 51.322,
+      "Inference (Free Tier)": 32.937999999999995,
+      "Inference (Ad Platform)": 206.82000000000002,
+      "Model Training": 86.558,
+      "Idle": 69.706,
+      "In build / in transit": 318.656
+    },
+    "flows": [
+      [
+        "Microsoft CapEx",
+        "NVIDIA GPUs",
+        71.67904622849677
+      ],
+      [
+        "Microsoft CapEx",
+        "Other silicon",
+        17.083212491803902
+      ],
+      [
+        "Microsoft CapEx",
+        "Networking",
+        13.560900637823716
+      ],
+      [
+        "Microsoft CapEx",
+        "Data Centre Costs",
+        51.77798425350873
+      ],
+      [
+        "Microsoft CapEx",
+        "Electricity & ops",
+        22.19056468007517
+      ],
+      [
+        "AWS CapEx",
+        "NVIDIA GPUs",
+        53.8230560648143
+      ],
+      [
+        "AWS CapEx",
+        "Other silicon",
+        12.827607956479087
+      ],
+      [
+        "AWS CapEx",
+        "Networking",
+        10.182740336586491
+      ],
+      [
+        "AWS CapEx",
+        "Data Centre Costs",
+        38.879554012421146
+      ],
+      [
+        "AWS CapEx",
+        "Electricity & ops",
+        16.66266600532335
+      ],
+      [
+        "Google CapEx",
+        "NVIDIA GPUs",
+        55.86374065494944
+      ],
+      [
+        "Google CapEx",
+        "Other silicon",
+        13.313962760516207
+      ],
+      [
+        "Google CapEx",
+        "Networking",
+        10.56881579958503
+      ],
+      [
+        "Google CapEx",
+        "Data Centre Costs",
+        40.35366032568829
+      ],
+      [
+        "Google CapEx",
+        "Electricity & ops",
+        17.294425853866414
+      ],
+      [
+        "Meta CapEx",
+        "NVIDIA GPUs",
+        40.303520655169
+      ],
+      [
+        "Meta CapEx",
+        "Other silicon",
+        9.605507379733154
+      ],
+      [
+        "Meta CapEx",
+        "Networking",
+        7.624990394221164
+      ],
+      [
+        "Meta CapEx",
+        "Data Centre Costs",
+        29.11359968702626
+      ],
+      [
+        "Meta CapEx",
+        "Electricity & ops",
+        12.477257008725541
+      ],
+      [
+        "Oracle CapEx",
+        "NVIDIA GPUs",
+        22.447530491486532
+      ],
+      [
+        "Oracle CapEx",
+        "Other silicon",
+        5.349902844408338
+      ],
+      [
+        "Oracle CapEx",
+        "Networking",
+        4.246830092983939
+      ],
+      [
+        "Oracle CapEx",
+        "Data Centre Costs",
+        16.215169445938674
+      ],
+      [
+        "Oracle CapEx",
+        "Electricity & ops",
+        6.949358333973718
+      ],
+      [
+        "AI labs direct",
+        "NVIDIA GPUs",
+        11.223765245743266
+      ],
+      [
+        "AI labs direct",
+        "Other silicon",
+        2.674951422204169
+      ],
+      [
+        "AI labs direct",
+        "Networking",
+        2.1234150464919694
+      ],
+      [
+        "AI labs direct",
+        "Data Centre Costs",
+        8.107584722969337
+      ],
+      [
+        "AI labs direct",
+        "Electricity & ops",
+        3.474679166986859
+      ],
+      [
+        "Neoclouds",
+        "NVIDIA GPUs",
+        31.714285714285715
+      ],
+      [
+        "Neoclouds",
+        "Other silicon",
+        7.558441558441559
+      ],
+      [
+        "Neoclouds",
+        "Networking",
+        6.0
+      ],
+      [
+        "Neoclouds",
+        "Data Centre Costs",
+        22.90909090909091
+      ],
+      [
+        "Neoclouds",
+        "Electricity & ops",
+        9.818181818181818
+      ],
+      [
+        "China",
+        "NVIDIA GPUs",
+        8.251813186813186
+      ],
+      [
+        "China",
+        "Other silicon",
+        1.9666483516483517
+      ],
+      [
+        "China",
+        "Networking",
+        1.5611538461538461
+      ],
+      [
+        "China",
+        "Data Centre Costs",
+        5.96076923076923
+      ],
+      [
+        "China",
+        "Electricity & ops",
+        2.5546153846153845
+      ],
+      [
+        "Sovereign / Gov",
+        "NVIDIA GPUs",
+        5.1657692307692304
+      ],
+      [
+        "Sovereign / Gov",
+        "Other silicon",
+        1.2311538461538463
+      ],
+      [
+        "Sovereign / Gov",
+        "Networking",
+        0.9773076923076923
+      ],
+      [
+        "Sovereign / Gov",
+        "Data Centre Costs",
+        3.7315384615384612
+      ],
+      [
+        "Sovereign / Gov",
+        "Electricity & ops",
+        1.5992307692307695
+      ],
+      [
+        "Enterprise",
+        "NVIDIA GPUs",
+        10.978021978021978
+      ],
+      [
+        "Enterprise",
+        "Other silicon",
+        2.6163836163836165
+      ],
+      [
+        "Enterprise",
+        "Networking",
+        2.076923076923077
+      ],
+      [
+        "Enterprise",
+        "Data Centre Costs",
+        7.93006993006993
+      ],
+      [
+        "Enterprise",
+        "Electricity & ops",
+        3.3986013986013988
+      ],
+      [
+        "NVIDIA GPUs",
+        "Inference (Paid)",
+        20.867186813186812
+      ],
+      [
+        "NVIDIA GPUs",
+        "Inference (Free Tier)",
+        13.392373626373624
+      ],
+      [
+        "NVIDIA GPUs",
+        "Inference (Ad Platform)",
+        84.09164835164835
+      ],
+      [
+        "NVIDIA GPUs",
+        "Model Training",
+        35.19391208791209
+      ],
+      [
+        "NVIDIA GPUs",
+        "Idle",
+        28.342
+      ],
+      [
+        "NVIDIA GPUs",
+        "In build / in transit",
+        129.56342857142855
+      ],
+      [
+        "Other silicon",
+        "Inference (Paid)",
+        4.97326073926074
+      ],
+      [
+        "Other silicon",
+        "Inference (Free Tier)",
+        3.191794205794206
+      ],
+      [
+        "Other silicon",
+        "Inference (Ad Platform)",
+        20.041498501498506
+      ],
+      [
+        "Other silicon",
+        "Model Training",
+        8.387738261738264
+      ],
+      [
+        "Other silicon",
+        "Idle",
+        6.754727272727274
+      ],
+      [
+        "Other silicon",
+        "In build / in transit",
+        30.87875324675325
+      ],
+      [
+        "Networking",
+        "Inference (Paid)",
+        3.9478461538461542
+      ],
+      [
+        "Networking",
+        "Inference (Free Tier)",
+        2.5336923076923075
+      ],
+      [
+        "Networking",
+        "Inference (Ad Platform)",
+        15.90923076923077
+      ],
+      [
+        "Networking",
+        "Model Training",
+        6.658307692307693
+      ],
+      [
+        "Networking",
+        "Idle",
+        5.362
+      ],
+      [
+        "Networking",
+        "In build / in transit",
+        24.512
+      ],
+      [
+        "Data Centre Costs",
+        "Inference (Paid)",
+        15.073594405594406
+      ],
+      [
+        "Data Centre Costs",
+        "Inference (Free Tier)",
+        9.6740979020979
+      ],
+      [
+        "Data Centre Costs",
+        "Inference (Ad Platform)",
+        60.744335664335665
+      ],
+      [
+        "Data Centre Costs",
+        "Model Training",
+        25.42262937062937
+      ],
+      [
+        "Data Centre Costs",
+        "Idle",
+        20.473090909090907
+      ],
+      [
+        "Data Centre Costs",
+        "In build / in transit",
+        93.59127272727271
+      ],
+      [
+        "Electricity & ops",
+        "Inference (Paid)",
+        6.460111888111889
+      ],
+      [
+        "Electricity & ops",
+        "Inference (Free Tier)",
+        4.146041958041958
+      ],
+      [
+        "Electricity & ops",
+        "Inference (Ad Platform)",
+        26.033286713286717
+      ],
+      [
+        "Electricity & ops",
+        "Model Training",
+        10.895412587412588
+      ],
+      [
+        "Electricity & ops",
+        "Idle",
+        8.774181818181818
+      ],
+      [
+        "Electricity & ops",
+        "In build / in transit",
+        40.11054545454546
+      ]
+    ]
   }
 }
