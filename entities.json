@@ -14223,7 +14223,22 @@
           "gross_up_factor": 2.5
         }
       ],
-      "total_customer_revenue_gross": 19.8618
+      "total_customer_revenue_gross": 19.8618,
+      "_market_provenance": {
+        "tokens_per_day_total": {
+          "claim": "tokens_per_day_total 2025 = 565.0 per assumptions-audit.md \u00a71, \u00a74, \u00a75, \u00a76",
+          "value": 565.0,
+          "source": "assumptions-audit.md",
+          "section": "\u00a71, \u00a74, \u00a75, \u00a76",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_backfill",
+          "date": "2026-05-03",
+          "engine_value_at_backfill": null,
+          "authoritative_supersedes_engine": true
+        }
+      },
+      "tokens_per_day_total": 565.0
     },
     "_cumulative_2023_2025": {
       "customer_revenue_gross": 28,
@@ -14292,6 +14307,12 @@
         "2025: gross=19.8618 (engine_gross_field), net=17.557, capex=250"
       ],
       "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
+    },
+    "2023": {
+      "_market_provenance": {}
+    },
+    "2024": {
+      "_market_provenance": {}
     }
   }
 }
