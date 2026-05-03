@@ -119,23 +119,45 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
             new_vc_subsidy[other_block["label"]] = other_block["vc_subsidy"]
         sankey["costParams"]["vcSubsidy"] = new_vc_subsidy
 
-    # ── Channels (proportional rescale) ──
+    # ── Channels (wq-062: use engine-grossed values when available) ──
+    # market.channels_grossed is the per-channel block from derive_sankey_routing:
+    #   [{label, value (gross), chPass (net), margin, gross_up_factor}, ...]
+    # Fall back to proportional rescale of the existing channel structure if
+    # the routing block isn't present (backward compat with pre-wq-062 data).
+    channels_grossed = market.get("channels_grossed") or []
     old_channels = sankey.get("channels") or []
-    old_channel_total = sum(c.get("value", 0) for c in old_channels)
-    if old_channels and old_channel_total > 0:
-        scale = total_cr / old_channel_total
+    if channels_grossed:
+        # Build label → existing channel dict so we can preserve color/etc.
+        old_by_label = {c.get("label"): c for c in old_channels}
         new_channels = []
-        for c in old_channels:
-            nc = dict(c)
-            nc["value"] = round(c["value"] * scale, 4)
-            new_channels.append(nc)
+        for grossed in channels_grossed:
+            base = dict(old_by_label.get(grossed["label"]) or {"label": grossed["label"]})
+            base["label"] = grossed["label"]
+            base["value"] = round(grossed["value"], 4)
+            new_channels.append(base)
         sankey["channels"] = new_channels
+    elif old_channels:
+        # Backward compat — proportional rescale (wq-055 behaviour)
+        old_channel_total = sum(c.get("value", 0) for c in old_channels)
+        if old_channel_total > 0:
+            scale = total_cr / old_channel_total
+            new_channels = []
+            for c in old_channels:
+                nc = dict(c)
+                nc["value"] = round(c["value"] * scale, 4)
+                new_channels.append(nc)
+            sankey["channels"] = new_channels
 
-    # ── Buyers (non-VC proportional rescale; VC = engine sum) ──
+    # ── Buyers (non-VC = sum(channel.value); VC = engine sum) ──
+    # wq-062: with grossed channels, non-VC buyer total = sum(channels gross)
+    # to preserve buyer↔channel conservation. Without channels_grossed, fall
+    # back to proportional rescale to total_cr (wq-055 behaviour).
+    new_channel_total = sum(c.get("value", 0) for c in (sankey.get("channels") or []))
     old_buyers = sankey.get("buyers") or []
     old_non_vc_total = sum(b.get("value", 0) for b in old_buyers if b.get("label") != "VC/Investors")
+    target_non_vc = new_channel_total if channels_grossed else total_cr
     if old_buyers and old_non_vc_total > 0:
-        scale = total_cr / old_non_vc_total
+        scale = target_non_vc / old_non_vc_total
         new_buyers = []
         for b in old_buyers:
             nb = dict(b)
@@ -185,6 +207,28 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
     sankey["totalCustomerRevenue"] = round(total_cr, 4)
     sankey["totalVCSubsidy"] = round(total_vc, 4)
     sankey["totalSystem"] = round(total_provider + cashflow, 4)
+
+    # ── wq-062: per-provider routing block ──
+    # Renderer reads this to assemble channel→provider flows directly
+    # (bypasses proportional routing). Falls back to proportional in
+    # buildSankey() if absent (backward compat).
+    routing = market.get("routing") or {}
+    if routing:
+        # Map slug → provider label so the renderer can look up by either.
+        sankey["routing"] = routing
+        # Also surface the slug on each provider entry so renderer can match.
+        provider_label_to_slug = {}
+        for slug, p in providers_by_slug.items():
+            provider_label_to_slug[p.get("label")] = slug
+        if other_block:
+            # Other Model Providers slug is a fixed sentinel from cost_structure;
+            # also matches the routing dict key written by derive_sankey.
+            other_slug = next((k for k in routing.keys() if k.startswith("_other")), "_other_model_providers")
+            provider_label_to_slug[other_block.get("label")] = other_slug
+        for prov_entry in sankey.get("providers", []):
+            slug = provider_label_to_slug.get(prov_entry.get("label"))
+            if slug:
+                prov_entry["slug"] = slug
 
 
 def _tier_from_origins(p):

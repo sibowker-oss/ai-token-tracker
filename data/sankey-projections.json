@@ -17,7 +17,7 @@
     "label": "2025",
     "totalCustomerRevenue": 17.557,
     "totalVCSubsidy": 8.4479,
-    "totalSystem": 28.2111,
+    "totalSystem": 28.3097,
     "infrastructureCapex": {
       "value": 250,
       "tier": "1B",
@@ -57,21 +57,21 @@
     "buyers": [
       {
         "label": "Consumer",
-        "value": 5.1857,
+        "value": 5.8665,
         "color": "#f59e0b",
         "tier": "1B",
         "src": "AI Ledger rollup; consumer split per The Information"
       },
       {
         "label": "SME",
-        "value": 3.3868,
+        "value": 3.8314,
         "color": "#8b5cf6",
         "tier": "1B",
         "src": "AI Ledger rollup from entity filings"
       },
       {
         "label": "Enterprise",
-        "value": 8.9845,
+        "value": 10.1639,
         "color": "#3b82f6",
         "tier": "1B",
         "src": "OpenAI press release Mar 2026; >40% enterprise share corroborated by The Information"
@@ -87,42 +87,35 @@
     "channels": [
       {
         "label": "Model Subs",
-        "value": 5.3395,
+        "value": 7.1483,
         "color": "#f59e0b",
         "tier": "1B",
         "src": "AI Ledger rollup from entity filings"
       },
       {
         "label": "Model API",
-        "value": 3.4189,
+        "value": 5.7428,
         "color": "#3b82f6",
         "tier": "1B",
         "src": "AI Ledger rollup from entity filings"
       },
       {
         "label": "Hyperscalers",
-        "value": 2.1619,
+        "value": 3.6344,
         "color": "#06b6d4",
         "tier": "1B",
         "src": "AI Ledger rollup (Azure OpenAI + Bedrock + Vertex resold)"
       },
       {
         "label": "AI Native Apps",
-        "value": 3.3787,
+        "value": 0.7065,
         "color": "#10b981",
         "tier": "1B",
         "src": "AI Ledger rollup (Cursor, Glean, Harvey, Perplexity etc.)"
       },
       {
-        "label": "IaaS & Agg.",
-        "value": 0.3017,
-        "color": "#8b5cf6",
-        "tier": "1B",
-        "src": "AI Ledger rollup (Together, Fireworks, Groq, OpenRouter aggregated)"
-      },
-      {
         "label": "Trad. SaaS",
-        "value": 2.9563,
+        "value": 2.6298,
         "color": "#ef4444",
         "tier": "1B",
         "src": "AI Ledger rollup (MSFT/CRM/NOW AI SKU revenue per state-of-AI SKU analysis)"
@@ -134,35 +127,40 @@
         "value": 13.65,
         "color": "#10a37f",
         "tier": "2A",
-        "src": "wq-055 engine \u2014 customer_revenue=$9.3147B (wq-048 engine); inference_cost=$5B (sourced); opex=$8.65B (derived); vc_subsidy=$4.3353B (balancing_plug_derived)"
+        "src": "wq-055 engine \u2014 customer_revenue=$9.3147B (wq-048 engine); inference_cost=$5B (sourced); opex=$8.65B (derived); vc_subsidy=$4.3353B (balancing_plug_derived)",
+        "slug": "openai"
       },
       {
         "label": "Anthropic",
         "value": 7.3005,
         "color": "#d97706",
         "tier": "3C",
-        "src": "wq-055 engine \u2014 customer_revenue=$4.71B (wq-048 engine); inference_cost=$2.5905B (estimated); opex=$4.71B (estimated); vc_subsidy=$2.5905B (balancing_plug_derived)"
+        "src": "wq-055 engine \u2014 customer_revenue=$4.71B (wq-048 engine); inference_cost=$2.5905B (estimated); opex=$4.71B (estimated); vc_subsidy=$2.5905B (balancing_plug_derived)",
+        "slug": "anthropic"
       },
       {
         "label": "Google/Gemini",
         "value": 2.9271,
         "color": "#4285f4",
         "tier": "3C",
-        "src": "wq-055 engine \u2014 customer_revenue=$2.2516B (wq-048 engine); inference_cost=$0.6755B (estimated); opex=$2.2516B (estimated); vc_subsidy=$0.6755B (balancing_plug_derived)"
+        "src": "wq-055 engine \u2014 customer_revenue=$2.2516B (wq-048 engine); inference_cost=$0.6755B (estimated); opex=$2.2516B (estimated); vc_subsidy=$0.6755B (balancing_plug_derived)",
+        "slug": "google"
       },
       {
         "label": "IaaS/Open",
         "value": 0.8,
         "color": "#8b5cf6",
         "tier": "1B",
-        "src": "wq-055 engine \u2014 customer_revenue=$0.5B (wq-048 engine); inference_cost=$0.4B (preserved_hand_curated); opex=$0.4B (preserved_hand_curated); vc_subsidy=$0.3B (preserved_hand_curated)"
+        "src": "wq-055 engine \u2014 customer_revenue=$0.5B (wq-048 engine); inference_cost=$0.4B (preserved_hand_curated); opex=$0.4B (preserved_hand_curated); vc_subsidy=$0.3B (preserved_hand_curated)",
+        "slug": "iaas"
       },
       {
         "label": "Other Model Providers",
         "value": 1.3273,
         "color": "#94a3b8",
         "tier": "3C",
-        "src": "wq-055 small-provider aggregation: xai, mistral, deepseek, minimax, moonshot (value < 2.0% of total AND outside top 4)"
+        "src": "wq-055 small-provider aggregation: xai, mistral, deepseek, minimax, moonshot (value < 2.0% of total AND outside top 4)",
+        "slug": "_other_model_providers"
       }
     ],
     "outcomes": [
@@ -182,7 +180,7 @@
       },
       {
         "label": "Generated Cashflow",
-        "value": 2.2062,
+        "value": 2.3048,
         "color": "#94a3b8",
         "tier": "2A",
         "src": "= channel margins (Hyperscaler 0.20\u00d7$2.15B + Trad SaaS 0.60\u00d7$2.94B). Cross-checks AI Ledger rollup $2.15B."
@@ -229,6 +227,35 @@
           "tier": "1B",
           "src": "Per-provider routing deficit using AI Ledger provider values + chPass routing. Sum 9.39B vs AI Ledger methodology \u00a77.2 9.80B (4% rounding)."
         }
+      }
+    },
+    "routing": {
+      "openai": {
+        "Model Subs": 5.1231,
+        "Model API": 1.9561,
+        "Hyperscalers": 1.5369,
+        "Trad. SaaS": 0.6986
+      },
+      "anthropic": {
+        "Model Subs": 0.6123,
+        "Model API": 2.3738,
+        "Hyperscalers": 1.3706,
+        "Trad. SaaS": 0.3533
+      },
+      "google": {
+        "Model Subs": 0.9006,
+        "Model API": 0.9006,
+        "AI Native Apps": 0.4503
+      },
+      "iaas": {
+        "Model Subs": 0.2,
+        "Model API": 0.2,
+        "AI Native Apps": 0.1
+      },
+      "_other_model_providers": {
+        "Model Subs": 0.3123,
+        "Model API": 0.3123,
+        "AI Native Apps": 0.1562
       }
     }
   },

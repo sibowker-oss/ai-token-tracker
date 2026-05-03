@@ -265,6 +265,10 @@ def derive_provider(entity: dict, year: str, cost_structure: dict, overrides: di
         "color": entity.get("color", "#888"),
     }
 
+    # wq-062 — capture revenue_by_channel (may be None) so derive_sankey_routing
+    # can split per-provider customer_revenue across Sankey channels.
+    revenue_by_channel = _fin(entity, year, "revenue_by_channel")
+
     return {
         "slug": slug,
         "label": display["label"],
@@ -280,6 +284,7 @@ def derive_provider(entity: dict, year: str, cost_structure: dict, overrides: di
         "vc_origin": vc_origin,
         "value": round(provider_total, 4),
         "override_discrepancy": override_discrepancy,
+        "revenue_by_channel": revenue_by_channel,
     }
 
 
@@ -328,6 +333,110 @@ def aggregate_small_providers(providers: list[dict], cost_structure: dict) -> li
     }
     visible.append(other)
     return visible
+
+
+# ---------------------------------------------------------------------------
+# wq-062 — per-provider-per-channel routing
+# ---------------------------------------------------------------------------
+
+def _routing_for_provider(provider: dict, channel_mapping: dict) -> dict:
+    """Compute one provider's per-channel net routing values.
+
+    Returns {channel_label: value_net_to_provider}. Sums to provider's
+    customer_revenue exactly (modulo float rounding).
+
+    Uses provider.revenue_by_channel when present; falls back to
+    channel_mapping["_default_for_unmapped"] when absent. Default is a flat
+    split across the configured default channels (Subs/API/AI Native).
+    """
+    cr = provider.get("customer_revenue") or 0
+    rbc = provider.get("revenue_by_channel")
+    routing = {}
+
+    if rbc:
+        # Walk entity-key → channel-splits per channel_mapping
+        for entity_key, channel_splits in channel_mapping.items():
+            if entity_key.startswith("_"):
+                continue
+            entity_pct = (rbc.get(entity_key, 0) or 0) / 100.0
+            entity_value = cr * entity_pct
+            for split in channel_splits:
+                ch = split["channel"]
+                weight = split["weight"]
+                value = entity_value * weight
+                routing[ch] = routing.get(ch, 0) + value
+    else:
+        # Default split — apply percentages to cr directly
+        defaults = channel_mapping.get("_default_for_unmapped") or {}
+        for ch, pct in defaults.items():
+            if ch.startswith("_"):
+                continue
+            routing[ch] = routing.get(ch, 0) + cr * pct
+
+    return {ch: round(v, 4) for ch, v in routing.items() if v > 0}
+
+
+def derive_sankey_routing(providers_visible: list[dict],
+                           providers_pre_aggregation: list[dict],
+                           channel_mapping: dict,
+                           channel_margins: dict,
+                           preserve_channels: list[str]) -> tuple[dict, list[dict]]:
+    """Compute per-provider-per-channel routing + grossed-up channel list.
+
+    For Other Model Providers, sums routing across the aggregated members
+    (since each member has its own revenue_by_channel or _default fallback).
+
+    Returns (routing, channels):
+      routing  = {provider_slug: {channel_label: net_value}}
+      channels = [{label, value (gross), chPass (net), margin}, ...]
+                 in the order of preserve_channels (channels with chPass>0)
+    """
+    routing: dict[str, dict[str, float]] = {}
+
+    # Build a slug → pre-aggregation provider lookup so we can route Other
+    # by walking its members rather than trying to route the aggregate.
+    pre_by_slug = {p["slug"]: p for p in providers_pre_aggregation}
+
+    for p in providers_visible:
+        slug = p["slug"]
+        if p.get("vc_origin") == "small_provider_aggregation":
+            # Aggregate routing across members
+            agg_routing: dict[str, float] = {}
+            for member_slug in p.get("members") or []:
+                member = pre_by_slug.get(member_slug)
+                if not member:
+                    continue
+                member_routing = _routing_for_provider(member, channel_mapping)
+                for ch, v in member_routing.items():
+                    agg_routing[ch] = agg_routing.get(ch, 0) + v
+            routing[slug] = {ch: round(v, 4) for ch, v in agg_routing.items() if v > 0}
+            continue
+        # Regular provider (incl. preserved IaaS — which has no rbc; uses defaults)
+        routing[slug] = _routing_for_provider(p, channel_mapping)
+
+    # Sum chPass per channel
+    chPass_by_channel: dict[str, float] = {ch: 0.0 for ch in preserve_channels}
+    for slug, channel_values in routing.items():
+        for ch, v in channel_values.items():
+            chPass_by_channel[ch] = chPass_by_channel.get(ch, 0) + v
+
+    # Gross up: channel.value × (1 - margin) = chPass → channel.value = chPass / (1 - margin)
+    channels = []
+    for ch_label in preserve_channels:
+        chPass = chPass_by_channel.get(ch_label, 0)
+        if chPass <= 0:
+            continue
+        margin = channel_margins.get(ch_label, 0)
+        gross = chPass / (1 - margin) if margin < 1 else chPass
+        channels.append({
+            "label": ch_label,
+            "value": round(gross, 4),
+            "chPass": round(chPass, 4),
+            "margin": margin,
+            "gross_up_factor": round(1 / (1 - margin), 4) if margin < 1 else 1.0,
+        })
+
+    return routing, channels
 
 
 # ---------------------------------------------------------------------------
@@ -395,6 +504,15 @@ def derive_sankey(entities: dict, cost_structure_full: dict, year: str,
     total_vc = round(sum(p["vc_subsidy"] for p in aggregated_providers), 4)
     total_provider = round(sum(p["value"] for p in aggregated_providers), 4)
 
+    # wq-062 — per-provider-per-channel routing + grossed-up channels
+    channel_mapping = cs_year.get("channel_mapping") or {}
+    channel_margins = cs_year.get("marginPcts") or {}
+    preserve_channels = (cs_year.get("channelRouting") or {}).get("preserve_channels") or []
+    routing, channels_grossed = derive_sankey_routing(
+        aggregated_providers, raw_providers,
+        channel_mapping, channel_margins, preserve_channels,
+    )
+
     return {
         "providers": aggregated_providers,
         "providers_pre_aggregation": raw_providers,
@@ -404,6 +522,8 @@ def derive_sankey(entities: dict, cost_structure_full: dict, year: str,
             "total_provider_value": total_provider,
         },
         "fallback_log": fallback_log,
+        "routing": routing,
+        "channels_grossed": channels_grossed,
     }
 
 
@@ -670,6 +790,9 @@ def apply_market_aggregates(entities: dict, sankey: dict, year: str) -> dict:
     year_block["total_vc_subsidy"] = sankey["totals"]["total_vc_subsidy"]
     year_block["total_provider_value"] = sankey["totals"]["total_provider_value"]
     year_block["fallback_log"] = sankey["fallback_log"]
+    # wq-062 — per-provider-per-channel routing + grossed-up channels
+    year_block["routing"] = sankey.get("routing") or {}
+    year_block["channels_grossed"] = sankey.get("channels_grossed") or []
     year_block["_residual_doc"] = (
         "Engine writes per-provider customer_revenue derived from "
         "entities.json:financials.<year>.collected_revenue (wq-048). "

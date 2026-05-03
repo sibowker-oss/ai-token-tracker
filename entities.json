@@ -13934,7 +13934,12 @@
           "vc_subsidy": 4.3353,
           "vc_origin": "balancing_plug_derived",
           "value": 13.65,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": {
+            "subscription_pct": 55,
+            "api_pct": 30,
+            "enterprise_pct": 15
+          }
         },
         "anthropic": {
           "slug": "anthropic",
@@ -13954,7 +13959,12 @@
           "vc_subsidy": 2.5905,
           "vc_origin": "balancing_plug_derived",
           "value": 7.3005,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": {
+            "api_pct": 72,
+            "subscription_pct": 13,
+            "enterprise_pct": 15
+          }
         },
         "google": {
           "slug": "google",
@@ -13974,7 +13984,8 @@
           "vc_subsidy": 0.6755,
           "vc_origin": "balancing_plug_derived",
           "value": 2.9271,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": null
         },
         "deepseek": {
           "slug": "deepseek",
@@ -13994,7 +14005,8 @@
           "vc_subsidy": 0.1131,
           "vc_origin": "balancing_plug_derived",
           "value": 0.2746,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": null
         },
         "mistral": {
           "slug": "mistral",
@@ -14014,7 +14026,8 @@
           "vc_subsidy": 0.1508,
           "vc_origin": "balancing_plug_derived",
           "value": 0.3662,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": null
         },
         "xai": {
           "slug": "xai",
@@ -14034,7 +14047,8 @@
           "vc_subsidy": 0.1884,
           "vc_origin": "balancing_plug_derived",
           "value": 0.4576,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": null
         },
         "minimax": {
           "slug": "minimax",
@@ -14054,7 +14068,8 @@
           "vc_subsidy": 0.0566,
           "vc_origin": "balancing_plug_derived",
           "value": 0.1374,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": null
         },
         "moonshot": {
           "slug": "moonshot",
@@ -14074,7 +14089,8 @@
           "vc_subsidy": 0.0377,
           "vc_origin": "balancing_plug_derived",
           "value": 0.0915,
-          "override_discrepancy": null
+          "override_discrepancy": null,
+          "revenue_by_channel": null
         },
         "iaas": {
           "slug": "iaas",
@@ -14139,8 +14155,74 @@
         "moonshot: opex ESTIMATED (no source/op_loss path)"
       ],
       "_residual_doc": "Engine writes per-provider customer_revenue derived from entities.json:financials.<year>.collected_revenue (wq-048). Channel/buyer totals computed by generate_site_data.py from this block + the existing editorial channel structure (proportional rescale to total_customer_revenue). Non-provider revenue (e.g. Microsoft Copilot via Trad SaaS channel) handled in the channel structure, not in providers.",
-      "_engine_run_at": "2026-05-03T02:46:13Z",
-      "_engine": "scripts/derive_sankey.py (wq-055)"
+      "_engine_run_at": "2026-05-03T03:39:07Z",
+      "_engine": "scripts/derive_sankey.py (wq-055)",
+      "routing": {
+        "openai": {
+          "Model Subs": 5.1231,
+          "Model API": 1.9561,
+          "Hyperscalers": 1.5369,
+          "Trad. SaaS": 0.6986
+        },
+        "anthropic": {
+          "Model Subs": 0.6123,
+          "Model API": 2.3738,
+          "Hyperscalers": 1.3706,
+          "Trad. SaaS": 0.3533
+        },
+        "google": {
+          "Model Subs": 0.9006,
+          "Model API": 0.9006,
+          "AI Native Apps": 0.4503
+        },
+        "iaas": {
+          "Model Subs": 0.2,
+          "Model API": 0.2,
+          "AI Native Apps": 0.1
+        },
+        "_other_model_providers": {
+          "Model Subs": 0.3123,
+          "Model API": 0.3123,
+          "AI Native Apps": 0.1562
+        }
+      },
+      "channels_grossed": [
+        {
+          "label": "Model Subs",
+          "value": 7.1483,
+          "chPass": 7.1483,
+          "margin": 0,
+          "gross_up_factor": 1.0
+        },
+        {
+          "label": "Model API",
+          "value": 5.7428,
+          "chPass": 5.7428,
+          "margin": 0,
+          "gross_up_factor": 1.0
+        },
+        {
+          "label": "Hyperscalers",
+          "value": 3.6344,
+          "chPass": 2.9075,
+          "margin": 0.2,
+          "gross_up_factor": 1.25
+        },
+        {
+          "label": "AI Native Apps",
+          "value": 0.7065,
+          "chPass": 0.7065,
+          "margin": 0,
+          "gross_up_factor": 1.0
+        },
+        {
+          "label": "Trad. SaaS",
+          "value": 2.6298,
+          "chPass": 1.0519,
+          "margin": 0.6,
+          "gross_up_factor": 2.5
+        }
+      ]
     }
   }
 }
