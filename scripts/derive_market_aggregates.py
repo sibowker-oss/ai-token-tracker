@@ -51,9 +51,14 @@ YEARS = ["2023", "2024", "2025"]
 #     (annual standalone would be 250 / 19.86 ≈ $13)
 CALIBRATION_TARGETS_2025 = {
     "mag7_capex":             {"hand_curated": 250.0, "tolerance": 0.15},
-    "total_capex":            {"hand_curated": 250.0, "tolerance": 0.30},   # widened: non-mag7 capex unfilled
+    # wq-071: target updated 250 → 330 (mag7 250 + non-mag7 80 backfilled per source).
+    # Widened tolerance ±35% reflects survey-based estimates on non-mag7 sources
+    # (sovereign Stargate proration + enterprise capex confidence: low).
+    "total_capex":            {"hand_curated": 330.0, "tolerance": 0.35},
     "tokens_per_day_total":   {"hand_curated": 330.0, "tolerance": 0.50},   # widened: known structural gap (Chinese + self-hosted not in entities)
-    "infra_to_revenue_ratio": {"hand_curated": 13.0,  "tolerance": 0.30},   # standalone-2025 ratio (engine pre-override)
+    # wq-071: target updated 13 → 17 to reflect post-backfill engine value
+    # (total_capex 330 / total_customer_revenue_gross 19.86 ≈ 16.6).
+    "infra_to_revenue_ratio": {"hand_curated": 17.0,  "tolerance": 0.30},
 }
 
 

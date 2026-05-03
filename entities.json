@@ -40,7 +40,7 @@
       "financials": {
         "2024": {
           "arr": 5,
-          "collected_revenue": 2.5826,
+          "collected_revenue": 3.6,
           "operating_loss": 5.0,
           "total_funding": 122,
           "valuation": 852,
@@ -138,54 +138,18 @@
           "claim_count": 1,
           "claims": [
             {
-              "id": "derived-2024-collected_revenue",
-              "claim": "Derived via consensus engine from 2024 ARR + segment mix + ARR method haircut + growth method + NRR",
-              "value": 2.5826,
-              "unit": "$B",
-              "weight": "corroborating",
-              "confidence": "estimated",
-              "source": "scripts/derive_collected_revenue.py",
-              "source_url": "",
-              "date": "2026-05-02",
-              "origin": "consensus_engine_derived",
-              "inputs": {
-                "endingARR": 5,
-                "startingARR": null,
-                "quarterly_arrs": null,
-                "arrMethod": "best_period_x12",
-                "arrMethodFactor": 0.88,
-                "blendedSegmentFactor": 0.91,
-                "nrrRaw": 1.3,
-                "nrrBoost": 1.075,
-                "growthMethod": "ending_x_0.60",
-                "profileUsed": "openai",
-                "stages": {
-                  "adjustedEndingARR": 4.4,
-                  "baseRevenuePreHaircut": 3.0,
-                  "baseRevenue": 2.64,
-                  "segmentAdjusted": 2.4024,
-                  "finalEstimate": 2.5826,
-                  "confidenceBand": [
-                    2.1952,
-                    2.97
-                  ]
-                }
-              }
-            },
-            {
-              "id": "zitron-20260328-a1",
-              "claim": "OpenAI 2024 actual collected revenue ~$3.6B (from MSFT rev share docs)",
+              "id": "audit-20260503-openai-2024-revenue",
+              "claim": "openai 2024 collected_revenue = $3.6B per Zitron / Microsoft leaked documents (audit \u00a71.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
               "value": 3.6,
               "unit": "$B",
-              "weight": "authoritative",
+              "weight": "indicative",
               "confidence": "estimated",
-              "source": "Ed Zitron / Microsoft leaked documents",
-              "source_url": "https://www.wheresyoured.at/oai_docs/",
-              "date": "2025-11-01",
-              "origin": "pending",
-              "role": "superseded",
-              "superseded_at": "2026-05-02",
-              "superseded_by": "derived-2024-collected_revenue"
+              "source": "Zitron / Microsoft leaked documents (audit \u00a71.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
+              "origin": "editorial_override",
+              "date": "2026-05-03",
+              "previous_value": 2.5826,
+              "supersedes_engine": true,
+              "role": "supports"
             }
           ]
         },
@@ -3222,6 +3186,9 @@
         },
         "2026": {
           "valuation": 11
+        },
+        "2024": {
+          "collected_revenue": 0.8
         }
       },
       "current": {
@@ -3620,6 +3587,26 @@
               }
             }
           ]
+        },
+        "2024.collected_revenue": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-google-2024-revenue",
+              "claim": "google 2024 collected_revenue = $0.8B per Editorial estimate per brief \u00a73.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
+              "value": 0.8,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Editorial estimate per brief \u00a73.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
+              "origin": "editorial_override",
+              "date": "2026-05-03",
+              "previous_value": null,
+              "supersedes_engine": true,
+              "role": "supports"
+            }
+          ]
         }
       }
     },
@@ -3643,6 +3630,9 @@
       "financials": {
         "2026": {
           "capex": 125
+        },
+        "2024": {
+          "collected_revenue": 0.0
         }
       },
       "current": {
@@ -3941,6 +3931,26 @@
               "source": "Derived from Llama download counts (1.2B+ cumulative, dp-015) and vLLM Docker Hub pulls. Meta serves $0 revenue but massive token volume.",
               "date": "",
               "origin": "signal_derived",
+              "role": "supports"
+            }
+          ]
+        },
+        "2024.collected_revenue": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-meta-2024-revenue",
+              "claim": "meta 2024 collected_revenue = $0.0B per Meta AI not commercialized in 2024 (free product; no separately disclosed revenue)",
+              "value": 0.0,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Meta AI not commercialized in 2024 (free product; no separately disclosed revenue)",
+              "origin": "editorial_override",
+              "date": "2026-05-03",
+              "previous_value": null,
+              "supersedes_engine": true,
               "role": "supports"
             }
           ]
@@ -14385,10 +14395,10 @@
         }
       ],
       "total_customer_revenue_gross": 19.8618,
-      "neocloud_capex": 2.5844,
-      "sovereign_capex": 0.0,
-      "enterprise_capex": 4.6557,
-      "total_capex": 257.2401,
+      "neocloud_capex": 45,
+      "sovereign_capex": 20,
+      "enterprise_capex": 15,
+      "total_capex": 330,
       "tokens_per_day_total": 300.0,
       "tokens_annual_inference": 1.095e+17,
       "tokens_annual_training": null,
@@ -14402,12 +14412,12 @@
         "AI Native Apps": 0.7065,
         "Trad. SaaS": 2.6298
       },
-      "infra_to_revenue_ratio": 12.95,
+      "infra_to_revenue_ratio": 16.61,
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
       "yoy_total_customer_revenue_growth_pct": null,
       "yoy_total_capex_growth_pct": 13.41,
-      "yoy_tokens_annual_inference_growth_pct": 816.67,
+      "yoy_tokens_annual_inference_growth_pct": 733.33,
       "_market_provenance": {
         "mag7_capex": {
           "origin": "sourced",
@@ -14478,7 +14488,7 @@
             "tokens_annual_inference"
           ]
         },
-        "_market_engine_run_at": "2026-05-03T10:33:43Z",
+        "_market_engine_run_at": "2026-05-03T10:39:05Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14488,48 +14498,40 @@
       }
     },
     "_cumulative_2023_2025": {
-      "customer_revenue_gross": 23.9444,
+      "customer_revenue_gross": 25.7618,
       "customer_revenue_net": 17.557,
-      "capex": 630.5844,
-      "tokens": 336.0,
+      "capex": 766.0,
+      "tokens": 396.5,
       "by_year": {
         "2023": {
           "customer_revenue_gross": null,
           "customer_revenue_net": null,
-          "capex": 152,
+          "capex": 167,
           "tokens": null,
           "_gross_source": "missing",
           "_engine_run": false
         },
         "2024": {
-          "customer_revenue_gross": 4.0826,
+          "customer_revenue_gross": 5.9,
           "customer_revenue_net": null,
-          "capex": 226,
-          "tokens": 36.0,
+          "capex": 269,
+          "tokens": 96.5,
           "_gross_source": "per_entity_collected_revenue",
           "_engine_run": false
         },
         "2025": {
           "customer_revenue_gross": 19.8618,
           "customer_revenue_net": 17.557,
-          "capex": 252.5844,
+          "capex": 330,
           "tokens": 300.0,
           "_gross_source": "engine_gross_field",
           "_engine_run": true
         }
       },
-      "capex_total": 745,
+      "capex_total": 766.0,
       "tokens_2025_annualized": 360,
-      "infra_to_revenue_ratio_2025": 31,
+      "infra_to_revenue_ratio_2025": 30,
       "_overrides": {
-        "capex_total": {
-          "engine_value": 630.5844,
-          "override_value": 745,
-          "reason": "Editorial cumulative per assumptions-audit.md \u00a74.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
-          "set_by": "simon",
-          "set_at": "2026-05-03",
-          "expires_at": "2026-09-01"
-        },
         "tokens_2025_annualized": {
           "engine_value": 300.0,
           "override_value": 360,
@@ -14541,18 +14543,18 @@
       },
       "_engine": "scripts/derive_cumulative_aggregates.py (wq-063)",
       "_sources": [
-        "2023: gross=None (missing), net=None, capex=152",
-        "2024: gross=4.0826 (per_entity_collected_revenue), net=None, capex=226",
-        "2025: gross=19.8618 (engine_gross_field), net=17.557, capex=252.5844"
+        "2023: gross=None (missing), net=None, capex=167",
+        "2024: gross=5.9 (per_entity_collected_revenue), net=None, capex=269",
+        "2025: gross=19.8618 (engine_gross_field), net=17.557, capex=330"
       ],
       "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
     },
     "2023": {
       "mag7_capex": 152,
-      "neocloud_capex": 0.0,
-      "sovereign_capex": 0.0,
-      "enterprise_capex": 0.0,
-      "total_capex": 152.0,
+      "neocloud_capex": 8,
+      "sovereign_capex": 3,
+      "enterprise_capex": 4,
+      "total_capex": 167,
       "tokens_per_day_total": null,
       "tokens_annual_inference": null,
       "tokens_annual_training": null,
@@ -14630,7 +14632,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T10:33:43Z",
+        "_market_engine_run_at": "2026-05-03T10:39:05Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14641,16 +14643,16 @@
     },
     "2024": {
       "mag7_capex": 226,
-      "neocloud_capex": 0.0,
-      "sovereign_capex": 0.0,
-      "enterprise_capex": 0.8165,
-      "total_capex": 226.8165,
-      "tokens_per_day_total": 36.0,
-      "tokens_annual_inference": 1.314e+16,
+      "neocloud_capex": 25,
+      "sovereign_capex": 10,
+      "enterprise_capex": 8,
+      "total_capex": 269,
+      "tokens_per_day_total": 96.5,
+      "tokens_annual_inference": 3.52225e+16,
       "tokens_annual_training": null,
-      "total_segment_consumer": 1.633,
-      "total_segment_sme": 0.6532,
-      "total_segment_enterprise": 1.7963,
+      "total_segment_consumer": 2.36,
+      "total_segment_sme": 0.944,
+      "total_segment_enterprise": 2.596,
       "total_per_channel": {},
       "infra_to_revenue_ratio": null,
       "capex_per_token_usd": null,
@@ -14685,7 +14687,7 @@
           "derived_from": [
             "market_aggregates.2024.enterprise_capex"
           ],
-          "engine_rollup_value": 0.8165
+          "engine_rollup_value": 1.18
         },
         "total_capex": {
           "origin": "derived_sum",
@@ -14700,7 +14702,7 @@
           "origin": "derived_per_entity_rollup",
           "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
           "rate_used_for_estimation": null,
-          "n_contributors": 2
+          "n_contributors": 4
         },
         "tokens_annual_inference": {
           "origin": "derived_pure_function",
@@ -14712,7 +14714,7 @@
         "segments": {
           "origin": "derived_per_entity_rollup",
           "sourced_via_rbc": 0,
-          "fallback_via_default_split": 2
+          "fallback_via_default_split": 3
         },
         "total_per_channel": {
           "origin": "missing",
@@ -14722,12 +14724,12 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T10:33:43Z",
+        "_market_engine_run_at": "2026-05-03T10:39:05Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
         "sourced": 0,
-        "derived_daily_x365": 2,
+        "derived_daily_x365": 4,
         "estimated_revenue_rate": 0
       }
     }

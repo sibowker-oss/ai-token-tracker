@@ -99,10 +99,10 @@ def _gross_from_per_entity(companies: list, year: str) -> float | None:
 
 
 def _capex_for_year(ma_year: dict) -> float:
-    """Capex = mag7_capex + neocloud_capex + sovereign_capex (when present).
-    Currently only mag7_capex is populated; others default to 0."""
+    """Capex = mag7 + neocloud + sovereign + enterprise (wq-071 added enterprise).
+    Each source defaults to 0 when not yet populated."""
     return sum(
-        (ma_year.get(k) or 0) for k in ("mag7_capex", "neocloud_capex", "sovereign_capex")
+        (ma_year.get(k) or 0) for k in ("mag7_capex", "neocloud_capex", "sovereign_capex", "enterprise_capex")
     )
 
 
