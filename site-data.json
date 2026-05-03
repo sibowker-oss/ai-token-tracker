@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-03T03:48:10Z",
+    "generatedAt": "2026-05-03T08:20:37Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -576,7 +576,8 @@
         "Hyperscalers": 0.2,
         "Trad. SaaS": 0.6
       }
-    }
+    },
+    "totalCustomerRevenue_gross": 19.8618
   },
   "dashboard": {
     "providers": {
@@ -4498,5 +4499,73 @@
   },
   "patents": {
     "snapshots": {}
+  },
+  "cumulative": {
+    "customer_revenue_gross": 28,
+    "customer_revenue_net": 17.557,
+    "capex": 250.0,
+    "tokens": 0.0,
+    "by_year": {
+      "2023": {
+        "customer_revenue_gross": null,
+        "customer_revenue_net": null,
+        "capex": null,
+        "tokens": null,
+        "_gross_source": "missing",
+        "_engine_run": false
+      },
+      "2024": {
+        "customer_revenue_gross": 4.0826,
+        "customer_revenue_net": null,
+        "capex": null,
+        "tokens": null,
+        "_gross_source": "per_entity_collected_revenue",
+        "_engine_run": false
+      },
+      "2025": {
+        "customer_revenue_gross": 19.8618,
+        "customer_revenue_net": 17.557,
+        "capex": 250,
+        "tokens": null,
+        "_gross_source": "engine_gross_field",
+        "_engine_run": true
+      }
+    },
+    "capex_total": 745,
+    "tokens_2025_annualized": 360,
+    "infra_to_revenue_ratio_2025": 27,
+    "_overrides": {
+      "capex_total": {
+        "engine_value": 250.0,
+        "override_value": 745,
+        "reason": "Editorial cumulative per assumptions-audit.md \u00a74.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
+        "set_by": "simon",
+        "set_at": "2026-05-03",
+        "expires_at": "2026-09-01"
+      },
+      "customer_revenue_gross": {
+        "engine_value": 23.9444,
+        "override_value": 28,
+        "reason": "Engine output of ~$24B undercounts because 2024 collected_revenue isn't populated for most providers and 2023 entirely absent. $28B reflects historic editorial cumulative. Override pending wq-066 backfill of 2023+2024 per-provider revenue.",
+        "set_by": "simon",
+        "set_at": "2026-05-03",
+        "expires_at": "2026-09-01"
+      },
+      "tokens_2025_annualized": {
+        "engine_value": null,
+        "override_value": 360,
+        "reason": "Editorial cumulative tokens per model-assumptions.md \u00a72; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
+        "set_by": "simon",
+        "set_at": "2026-05-03",
+        "expires_at": "2026-09-01"
+      }
+    },
+    "_engine": "scripts/derive_cumulative_aggregates.py (wq-063)",
+    "_sources": [
+      "2023: gross=None (missing), net=None, capex=0",
+      "2024: gross=4.0826 (per_entity_collected_revenue), net=None, capex=0",
+      "2025: gross=19.8618 (engine_gross_field), net=17.557, capex=250"
+    ],
+    "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
   }
 }

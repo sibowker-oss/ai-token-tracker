@@ -244,13 +244,17 @@ function renderYear(yr) {
   // Base scenario = the data as-is. Bear/bull scale the customer revenue headline.
   const scenarioData = SCENARIOS[currentScenario];
   const mult = scenarioData.multiplier[yr] || 1.0;
-  // wq-062: prefer totalCustomerRevenue (provider-received revenue, $17.5B) over
-  // sum-of-non-VC-buyers (now $19.9B since channels are grossed up to include
-  // channel margins). Only the former is what the headline "Customer Revenue"
-  // card has historically represented.
-  const baseRevenue = (d.totalCustomerRevenue != null)
-    ? d.totalCustomerRevenue
-    : d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  // wq-063: hero "Customer Revenue" displays BUYER-GROSS (what customers
+  // actually paid, ~$19.86B). Provider-received chPass (~$17.56B) remains
+  // visible as the secondary "→ providers receive" line and via the Sankey
+  // provider column. Falls back to net (totalCustomerRevenue) when gross is
+  // absent (older site-data.json), then to summing non-VC buyers (oldest fallback).
+  const baseRevenue = (d.totalCustomerRevenue_gross != null)
+    ? d.totalCustomerRevenue_gross
+    : (d.totalCustomerRevenue != null)
+      ? d.totalCustomerRevenue
+      : d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  const revenueNet = (d.totalCustomerRevenue != null) ? d.totalCustomerRevenue : null;
   const revenue = baseRevenue * mult;
 
   // VC subsidy scales inversely with revenue growth (higher revenue = less subsidy needed)
@@ -271,8 +275,14 @@ function renderYear(yr) {
   // Tier degrades for non-base scenarios on projected years
   const scenarioTier = (yr === '2025' || currentScenario === 'base') ? '' : ' (scenario)';
 
+  // wq-063: secondary line shows provider-received (net) when gross is the
+  // primary number — gives readers transparency into the channel-margin gap.
+  const heroSecondary = (d.totalCustomerRevenue_gross != null && revenueNet != null)
+    ? '<div class="detail" style="margin-top:2px;font-size:9px;opacity:0.75;">→ providers receive $'+ (revenueNet * mult).toFixed(1) +'B</div>'
+    : '';
+
   let h = '';
-  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div class="kpi-period">'+yr+'</div></div>';
   h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
   h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+vcSubsidy+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
   h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+cashflow+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';

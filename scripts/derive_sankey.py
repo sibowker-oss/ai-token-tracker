@@ -793,6 +793,15 @@ def apply_market_aggregates(entities: dict, sankey: dict, year: str) -> dict:
     # wq-062 — per-provider-per-channel routing + grossed-up channels
     year_block["routing"] = sankey.get("routing") or {}
     year_block["channels_grossed"] = sankey.get("channels_grossed") or []
+    # wq-063 — buyer-gross customer total = sum(channels_grossed.value).
+    # Channels are grossed up so chPass = sum(provider routing per channel),
+    # and channel margins flow direct to cashflow (kept by Hyperscaler/SaaS
+    # resellers, not received by providers). The gross figure is what
+    # customers actually paid; total_customer_revenue (= net) is what
+    # providers received. Renderer reads gross for the headline.
+    year_block["total_customer_revenue_gross"] = round(
+        sum((c.get("value") or 0) for c in (sankey.get("channels_grossed") or [])), 4
+    )
     year_block["_residual_doc"] = (
         "Engine writes per-provider customer_revenue derived from "
         "entities.json:financials.<year>.collected_revenue (wq-048). "

@@ -209,6 +209,16 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
     sankey["totalCustomerRevenue"] = round(total_cr, 4)
     sankey["totalVCSubsidy"] = round(total_vc, 4)
     sankey["totalSystem"] = round(total_provider + cashflow, 4)
+    # wq-063 — buyer-gross customer revenue (= sum(channels grossed) =
+    # what customers actually paid, including channel margins kept by
+    # Hyperscaler/SaaS resellers). Renderer reads this for the headline
+    # Customer Revenue card; net (totalCustomerRevenue) remains for the
+    # Sankey provider column / Column-C math.
+    gross = market.get("total_customer_revenue_gross")
+    if gross is None and channels_grossed:
+        gross = round(sum((c.get("value") or 0) for c in channels_grossed), 4)
+    if gross is not None:
+        sankey["totalCustomerRevenue_gross"] = round(gross, 4)
 
     # ── wq-062: per-provider routing block ──
     # Renderer reads this to assemble channel→provider flows directly
@@ -377,6 +387,13 @@ def generate(entities_path, existing_site_data_path, output_path):
         if tokens is not None:
             if isinstance(tokens, (int, float)):
                 consumer["tokensNumeric"] = int(tokens * 1e9) if tokens < 1e6 else int(tokens)
+
+    # ── wq-063: cumulative aggregates (read from entities.json) ──
+    # Mirrors entities.json:market_aggregates._cumulative_2023_2025 into
+    # site-data.json:cumulative for index.html SCENARIOS to consume.
+    cumulative = (entities.get("market_aggregates") or {}).get("_cumulative_2023_2025")
+    if cumulative:
+        site["cumulative"] = cumulative
 
     # ── wq-055: write FULL Sankey from market_aggregates engine output ──
     # Per brief §2 #3: providers, costParams.vcSubsidy, buyers, channels,

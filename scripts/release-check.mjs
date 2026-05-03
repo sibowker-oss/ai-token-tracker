@@ -50,12 +50,21 @@ const sankeyConservationStatus = run('node', ['scripts/validate-sankey-conservat
   RELEASE_CHECK_SANKEY_CONSERVATION_JSON_OUT: sankeyConservationJson,
 });
 
-// Step 4: Playwright suite
-console.log('\n→ 4/5  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 4 (wq-063 §3 #6): cross-page consistency — site-data.json:cumulative
+// and site-data.json:sankey must agree on the latest year's gross figure;
+// index.html SCENARIOS must be data-driven (no hardcoded $X literals).
+console.log('\n→ 4/6  Cross-page consistency (wq-063 §3 #6)');
+const crossPageJson = join(reportDir, 'cross-page-consistency.json');
+const crossPageStatus = run('node', ['scripts/validate-cross-page-consistency.mjs'], {
+  RELEASE_CHECK_CROSS_PAGE_JSON_OUT: crossPageJson,
+});
+
+// Step 5: Playwright suite
+console.log('\n→ 5/6  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 5: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 5/5  Editorial read-through (§11.5)');
+// Step 6: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 6/6  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -68,6 +77,9 @@ const consensusFails = consensusFindings.filter(f => f.severity === 'fail');
 
 const sankeyConsFindings = existsSync(sankeyConservationJson) ? JSON.parse(readFileSync(sankeyConservationJson, 'utf8')) : [];
 const sankeyConsFails = sankeyConsFindings.filter(f => f.severity === 'fail');
+
+const crossPageFindings = existsSync(crossPageJson) ? JSON.parse(readFileSync(crossPageJson, 'utf8')) : [];
+const crossPageFails = crossPageFindings.filter(f => f.severity === 'fail');
 
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
@@ -93,12 +105,13 @@ const report = `# Release-check report
 | Provenance (§4.2/§5.5) | ${provFindings.length === 0 ? '✓' : ''} | ${provAdvisories.length} | ${provFails.length} |
 | Consensus provenance (wq-048) | ${consensusFindings.length === 0 ? '✓' : ''} | 0 | ${consensusFails.length} |
 | Sankey conservation (wq-055) | ${sankeyConsFindings.length === 0 ? '✓' : ''} | 0 | ${sankeyConsFails.length} |
+| Cross-page consistency (wq-063) | ${crossPageFindings.length === 0 ? '✓' : ''} | 0 | ${crossPageFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + pwSummary.failures, provAdvisories.length)}
 
 ## Provenance findings
 
@@ -111,6 +124,10 @@ ${renderFindings(consensusFindings)}
 ## Sankey-conservation findings (wq-055 §3.2)
 
 ${renderFindings(sankeyConsFindings)}
+
+## Cross-page consistency findings (wq-063 §3 #6)
+
+${renderFindings(crossPageFindings)}
 
 ## Playwright suite
 
@@ -142,6 +159,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   provenance: provFindings,
   consensus_provenance: consensusFindings,
   sankey_conservation: sankeyConsFindings,
+  cross_page_consistency: crossPageFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -149,7 +167,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);
