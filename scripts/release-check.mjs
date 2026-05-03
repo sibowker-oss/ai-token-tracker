@@ -53,18 +53,26 @@ const sankeyConservationStatus = run('node', ['scripts/validate-sankey-conservat
 // Step 4 (wq-063 §3 #6): cross-page consistency — site-data.json:cumulative
 // and site-data.json:sankey must agree on the latest year's gross figure;
 // index.html SCENARIOS must be data-driven (no hardcoded $X literals).
-console.log('\n→ 4/6  Cross-page consistency (wq-063 §3 #6)');
+console.log('\n→ 4/7  Cross-page consistency (wq-063 §3 #6)');
 const crossPageJson = join(reportDir, 'cross-page-consistency.json');
 const crossPageStatus = run('node', ['scripts/validate-cross-page-consistency.mjs'], {
   RELEASE_CHECK_CROSS_PAGE_JSON_OUT: crossPageJson,
 });
 
-// Step 5: Playwright suite
-console.log('\n→ 5/6  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 5 (wq-067 §3 #5): market-aggregates internal consistency — sum(per_source_capex)
+// == total_capex; sum(per_channel) == total_customer_revenue_gross; tokens identity.
+console.log('\n→ 5/7  Market-aggregates internal consistency (wq-067 §3 #5)');
+const marketAggJson = join(reportDir, 'market-aggregates.json');
+const marketAggStatus = run('node', ['scripts/validate-market-aggregates.mjs'], {
+  RELEASE_CHECK_MARKET_AGGREGATES_JSON_OUT: marketAggJson,
+});
+
+// Step 6: Playwright suite
+console.log('\n→ 6/7  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 6: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 6/6  Editorial read-through (§11.5)');
+// Step 7: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 7/7  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -80,6 +88,9 @@ const sankeyConsFails = sankeyConsFindings.filter(f => f.severity === 'fail');
 
 const crossPageFindings = existsSync(crossPageJson) ? JSON.parse(readFileSync(crossPageJson, 'utf8')) : [];
 const crossPageFails = crossPageFindings.filter(f => f.severity === 'fail');
+
+const marketAggFindings = existsSync(marketAggJson) ? JSON.parse(readFileSync(marketAggJson, 'utf8')) : [];
+const marketAggFails = marketAggFindings.filter(f => f.severity === 'fail');
 
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
@@ -106,12 +117,13 @@ const report = `# Release-check report
 | Consensus provenance (wq-048) | ${consensusFindings.length === 0 ? '✓' : ''} | 0 | ${consensusFails.length} |
 | Sankey conservation (wq-055) | ${sankeyConsFindings.length === 0 ? '✓' : ''} | 0 | ${sankeyConsFails.length} |
 | Cross-page consistency (wq-063) | ${crossPageFindings.length === 0 ? '✓' : ''} | 0 | ${crossPageFails.length} |
+| Market-aggregates consistency (wq-067) | ${marketAggFindings.length === 0 ? '✓' : ''} | 0 | ${marketAggFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + pwSummary.failures, provAdvisories.length)}
 
 ## Provenance findings
 
@@ -128,6 +140,10 @@ ${renderFindings(sankeyConsFindings)}
 ## Cross-page consistency findings (wq-063 §3 #6)
 
 ${renderFindings(crossPageFindings)}
+
+## Market-aggregates consistency findings (wq-067 §3 #5)
+
+${renderFindings(marketAggFindings)}
 
 ## Playwright suite
 
@@ -160,6 +176,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   consensus_provenance: consensusFindings,
   sankey_conservation: sankeyConsFindings,
   cross_page_consistency: crossPageFindings,
+  market_aggregates: marketAggFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -167,7 +184,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);

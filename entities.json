@@ -14223,7 +14223,170 @@
           "gross_up_factor": 2.5
         }
       ],
-      "total_customer_revenue_gross": 19.8618
+      "total_customer_revenue_gross": 19.8618,
+      "neocloud_capex": 2.5844,
+      "sovereign_capex": 0.0,
+      "enterprise_capex": 4.6557,
+      "total_capex": 257.2401,
+      "tokens_per_day_total": 164.0,
+      "tokens_annual_inference": 5.986e+16,
+      "tokens_annual_training": null,
+      "total_segment_consumer": 8.9843,
+      "total_segment_sme": 3.7738,
+      "total_segment_enterprise": 9.3889,
+      "total_per_channel": {
+        "Model Subs": 7.1483,
+        "Model API": 5.7428,
+        "Hyperscalers": 3.6344,
+        "AI Native Apps": 0.7065,
+        "Trad. SaaS": 2.6298
+      },
+      "infra_to_revenue_ratio": 12.95,
+      "capex_per_token_usd": 0.0,
+      "revenue_per_token_usd": 0.0,
+      "yoy_total_customer_revenue_growth_pct": null,
+      "yoy_total_capex_growth_pct": null,
+      "yoy_tokens_annual_inference_growth_pct": null,
+      "_market_provenance": {
+        "mag7_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2025.mag7_capex"
+          ],
+          "engine_rollup_value": 0.6755
+        },
+        "neocloud_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 2 entities (0 sourced + 2 estimated)"
+          ],
+          "members": [
+            [
+              "estimated_revenue_x_rate",
+              "coreweave",
+              2.046
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "lambda",
+              0.5384
+            ]
+          ]
+        },
+        "sovereign_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "enterprise_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 45 entities (0 sourced + 45 estimated)"
+          ],
+          "members": [
+            [
+              "estimated_revenue_x_rate",
+              "openai",
+              2.79441
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "anthropic",
+              1.413
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "deepseek",
+              0.04845
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "mistral",
+              0.06462
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "xai",
+              0.08076
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "minimax",
+              0.024239999999999998
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "moonshot",
+              0.016139999999999998
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "together",
+              0.0269
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "github-copilot",
+              0.04442
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "cursor-(anysphere)",
+              0.02692
+            ]
+          ]
+        },
+        "total_capex": {
+          "origin": "derived_sum",
+          "derived_from": [
+            "mag7_capex",
+            "neocloud_capex",
+            "sovereign_capex",
+            "enterprise_capex"
+          ]
+        },
+        "tokens_per_day_total": {
+          "origin": "derived_per_entity_rollup",
+          "scope": "model_provider role only (audit \u00a75.3 method \u2014 aggregators + apps consume model_provider tokens, summing all double-counts)",
+          "rate_used_for_estimation": 4300000000.0,
+          "n_contributors": 9
+        },
+        "tokens_annual_inference": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "tokens_per_day_total",
+            "\u00d7 365"
+          ]
+        },
+        "segments": {
+          "origin": "derived_per_entity_rollup",
+          "sourced_via_rbc": 2,
+          "fallback_via_default_split": 46
+        },
+        "total_per_channel": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.<year>.channels_grossed (wq-062)"
+          ]
+        },
+        "ratios": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "total_capex",
+            "total_customer_revenue_gross",
+            "tokens_annual_inference"
+          ]
+        },
+        "_market_engine_run_at": "2026-05-03T08:29:14Z",
+        "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
+      },
+      "_market_token_sources_count": {
+        "sourced": 0,
+        "derived_daily_x365": 9,
+        "estimated_revenue_rate": 0
+      }
     },
     "_cumulative_2023_2025": {
       "customer_revenue_gross": 28,
@@ -14292,6 +14455,201 @@
         "2025: gross=19.8618 (engine_gross_field), net=17.557, capex=250"
       ],
       "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
+    },
+    "2023": {
+      "mag7_capex": 0.0,
+      "neocloud_capex": 0.0,
+      "sovereign_capex": 0.0,
+      "enterprise_capex": 0.0,
+      "total_capex": 0.0,
+      "tokens_per_day_total": null,
+      "tokens_annual_inference": null,
+      "tokens_annual_training": null,
+      "total_segment_consumer": 0.0,
+      "total_segment_sme": 0.0,
+      "total_segment_enterprise": 0.0,
+      "total_per_channel": {},
+      "infra_to_revenue_ratio": null,
+      "capex_per_token_usd": null,
+      "revenue_per_token_usd": null,
+      "yoy_total_customer_revenue_growth_pct": null,
+      "yoy_total_capex_growth_pct": null,
+      "yoy_tokens_annual_inference_growth_pct": null,
+      "_market_provenance": {
+        "mag7_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "neocloud_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "sovereign_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "enterprise_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "total_capex": {
+          "origin": "derived_sum",
+          "derived_from": [
+            "mag7_capex",
+            "neocloud_capex",
+            "sovereign_capex",
+            "enterprise_capex"
+          ]
+        },
+        "tokens_per_day_total": {
+          "origin": "derived_per_entity_rollup",
+          "scope": "model_provider role only (audit \u00a75.3 method \u2014 aggregators + apps consume model_provider tokens, summing all double-counts)",
+          "rate_used_for_estimation": null,
+          "n_contributors": 0
+        },
+        "tokens_annual_inference": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "tokens_per_day_total",
+            "\u00d7 365"
+          ]
+        },
+        "segments": {
+          "origin": "derived_per_entity_rollup",
+          "sourced_via_rbc": 0,
+          "fallback_via_default_split": 0
+        },
+        "total_per_channel": {
+          "origin": "missing",
+          "reason": "channels_grossed not populated"
+        },
+        "ratios": {
+          "origin": "missing",
+          "reason": "no customer revenue"
+        },
+        "_market_engine_run_at": "2026-05-03T08:29:14Z",
+        "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
+      },
+      "_market_token_sources_count": {
+        "sourced": 0,
+        "derived_daily_x365": 0,
+        "estimated_revenue_rate": 0
+      }
+    },
+    "2024": {
+      "mag7_capex": 0.0,
+      "neocloud_capex": 0.0,
+      "sovereign_capex": 0.0,
+      "enterprise_capex": 0.8165,
+      "total_capex": 0.8165,
+      "tokens_per_day_total": 36.0,
+      "tokens_annual_inference": 1.314e+16,
+      "tokens_annual_training": null,
+      "total_segment_consumer": 1.633,
+      "total_segment_sme": 0.6532,
+      "total_segment_enterprise": 1.7963,
+      "total_per_channel": {},
+      "infra_to_revenue_ratio": null,
+      "capex_per_token_usd": null,
+      "revenue_per_token_usd": null,
+      "yoy_total_customer_revenue_growth_pct": null,
+      "yoy_total_capex_growth_pct": null,
+      "yoy_tokens_annual_inference_growth_pct": null,
+      "_market_provenance": {
+        "mag7_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "neocloud_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "sovereign_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 0 entities (0 sourced + 0 estimated)"
+          ],
+          "members": []
+        },
+        "enterprise_capex": {
+          "origin": "derived_per_entity_rollup",
+          "derived_from": [
+            "sum across 2 entities (0 sourced + 2 estimated)"
+          ],
+          "members": [
+            [
+              "estimated_revenue_x_rate",
+              "openai",
+              0.51652
+            ],
+            [
+              "estimated_revenue_x_rate",
+              "anthropic",
+              0.30000000000000004
+            ]
+          ]
+        },
+        "total_capex": {
+          "origin": "derived_sum",
+          "derived_from": [
+            "mag7_capex",
+            "neocloud_capex",
+            "sovereign_capex",
+            "enterprise_capex"
+          ]
+        },
+        "tokens_per_day_total": {
+          "origin": "derived_per_entity_rollup",
+          "scope": "model_provider role only (audit \u00a75.3 method \u2014 aggregators + apps consume model_provider tokens, summing all double-counts)",
+          "rate_used_for_estimation": null,
+          "n_contributors": 2
+        },
+        "tokens_annual_inference": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "tokens_per_day_total",
+            "\u00d7 365"
+          ]
+        },
+        "segments": {
+          "origin": "derived_per_entity_rollup",
+          "sourced_via_rbc": 0,
+          "fallback_via_default_split": 2
+        },
+        "total_per_channel": {
+          "origin": "missing",
+          "reason": "channels_grossed not populated"
+        },
+        "ratios": {
+          "origin": "missing",
+          "reason": "no customer revenue"
+        },
+        "_market_engine_run_at": "2026-05-03T08:29:14Z",
+        "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
+      },
+      "_market_token_sources_count": {
+        "sourced": 0,
+        "derived_daily_x365": 2,
+        "estimated_revenue_rate": 0
+      }
     }
   }
 }
