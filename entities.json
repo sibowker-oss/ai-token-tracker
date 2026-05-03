@@ -14060,6 +14060,42 @@
       },
       "_synthetic": true,
       "_aggregates": "Open-weight model deployments (Llama, DeepSeek-open, Mistral-open, Qwen, etc.) running on customer infrastructure"
+    },
+    {
+      "slug": "_other_closed",
+      "name": "Other Closed Providers",
+      "displayName": "Other Closed Model Providers",
+      "roles": [
+        "aggregator"
+      ],
+      "_synthetic": true,
+      "_aggregates": "Closed-weight providers not individually tracked: Cohere + AI21 + Samsung Gauss + Apple Intelligence",
+      "region": "Global",
+      "color": "#94a3b8",
+      "current": {
+        "tokens_per_day": 10,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-other-closed-tokens",
+              "claim": "Aggregated estimate of closed-weight providers not individually tracked: ~10T/day across Cohere + AI21 + Samsung Gauss + Apple Intelligence",
+              "value": 10,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "speculative",
+              "source": "model-assumptions.md \u00a72.4 v3 'Other closed' aggregate estimate",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      }
     }
   ],
   "market_aggregates": {
@@ -14389,8 +14425,8 @@
       "sovereign_capex": 0.0,
       "enterprise_capex": 4.6557,
       "total_capex": 257.2401,
-      "tokens_per_day_total": 300.0,
-      "tokens_annual_inference": 1.095e+17,
+      "tokens_per_day_total": 310.0,
+      "tokens_annual_inference": 1.1315e+17,
       "tokens_annual_training": null,
       "total_segment_consumer": 8.9843,
       "total_segment_sme": 3.7738,
@@ -14407,7 +14443,7 @@
       "revenue_per_token_usd": 0.0,
       "yoy_total_customer_revenue_growth_pct": null,
       "yoy_total_capex_growth_pct": 13.41,
-      "yoy_tokens_annual_inference_growth_pct": 816.67,
+      "yoy_tokens_annual_inference_growth_pct": 733.33,
       "_market_provenance": {
         "mag7_capex": {
           "origin": "sourced",
@@ -14450,7 +14486,7 @@
           "origin": "derived_per_entity_rollup",
           "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
           "rate_used_for_estimation": 4300000000.0,
-          "n_contributors": 14
+          "n_contributors": 15
         },
         "tokens_annual_inference": {
           "origin": "derived_pure_function",
@@ -14478,12 +14514,12 @@
             "tokens_annual_inference"
           ]
         },
-        "_market_engine_run_at": "2026-05-03T10:33:43Z",
+        "_market_engine_run_at": "2026-05-03T11:06:34Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
         "sourced": 0,
-        "derived_daily_x365": 14,
+        "derived_daily_x365": 15,
         "estimated_revenue_rate": 0
       }
     },
@@ -14491,7 +14527,7 @@
       "customer_revenue_gross": 23.9444,
       "customer_revenue_net": 17.557,
       "capex": 630.5844,
-      "tokens": 336.0,
+      "tokens": 346.0,
       "by_year": {
         "2023": {
           "customer_revenue_gross": null,
@@ -14513,27 +14549,19 @@
           "customer_revenue_gross": 19.8618,
           "customer_revenue_net": 17.557,
           "capex": 252.5844,
-          "tokens": 300.0,
+          "tokens": 310.0,
           "_gross_source": "engine_gross_field",
           "_engine_run": true
         }
       },
       "capex_total": 745,
-      "tokens_2025_annualized": 360,
+      "tokens_2025_annualized": 310.0,
       "infra_to_revenue_ratio_2025": 31,
       "_overrides": {
         "capex_total": {
           "engine_value": 630.5844,
           "override_value": 745,
           "reason": "Editorial cumulative per assumptions-audit.md \u00a74.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
-          "set_by": "simon",
-          "set_at": "2026-05-03",
-          "expires_at": "2026-09-01"
-        },
-        "tokens_2025_annualized": {
-          "engine_value": 300.0,
-          "override_value": 360,
-          "reason": "Editorial cumulative tokens per model-assumptions.md \u00a72; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
           "set_by": "simon",
           "set_at": "2026-05-03",
           "expires_at": "2026-09-01"
@@ -14630,7 +14658,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T10:33:43Z",
+        "_market_engine_run_at": "2026-05-03T11:06:34Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14722,7 +14750,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T10:33:43Z",
+        "_market_engine_run_at": "2026-05-03T11:06:34Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {

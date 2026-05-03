@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-03T10:36:10Z",
+    "generatedAt": "2026-05-03T11:06:46Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -4504,7 +4504,7 @@
     "customer_revenue_gross": 23.9444,
     "customer_revenue_net": 17.557,
     "capex": 630.5844,
-    "tokens": 336.0,
+    "tokens": 346.0,
     "by_year": {
       "2023": {
         "customer_revenue_gross": null,
@@ -4526,27 +4526,19 @@
         "customer_revenue_gross": 19.8618,
         "customer_revenue_net": 17.557,
         "capex": 252.5844,
-        "tokens": 300.0,
+        "tokens": 310.0,
         "_gross_source": "engine_gross_field",
         "_engine_run": true
       }
     },
     "capex_total": 745,
-    "tokens_2025_annualized": 360,
+    "tokens_2025_annualized": 310.0,
     "infra_to_revenue_ratio_2025": 31,
     "_overrides": {
       "capex_total": {
         "engine_value": 630.5844,
         "override_value": 745,
         "reason": "Editorial cumulative per assumptions-audit.md \u00a74.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
-        "set_by": "simon",
-        "set_at": "2026-05-03",
-        "expires_at": "2026-09-01"
-      },
-      "tokens_2025_annualized": {
-        "engine_value": 300.0,
-        "override_value": 360,
-        "reason": "Editorial cumulative tokens per model-assumptions.md \u00a72; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
         "set_by": "simon",
         "set_at": "2026-05-03",
         "expires_at": "2026-09-01"
@@ -4592,8 +4584,8 @@
       "sovereign_capex": 0.0,
       "enterprise_capex": 4.6557,
       "total_capex": 257.2401,
-      "tokens_per_day_total": 300.0,
-      "tokens_annual_inference": 1.095e+17,
+      "tokens_per_day_total": 310.0,
+      "tokens_annual_inference": 1.1315e+17,
       "total_segment_consumer": 8.9843,
       "total_segment_sme": 3.7738,
       "total_segment_enterprise": 9.3889,
@@ -4608,7 +4600,7 @@
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
       "yoy_total_capex_growth_pct": 13.41,
-      "yoy_tokens_annual_inference_growth_pct": 816.67,
+      "yoy_tokens_annual_inference_growth_pct": 733.33,
       "total_customer_revenue": 17.557,
       "total_customer_revenue_gross": 19.8618,
       "total_vc_subsidy": 8.4479

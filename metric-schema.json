@@ -1301,6 +1301,10 @@
     {
       "pattern": "self.host|llama.deployed|open.model.run|on.prem.inference",
       "slug": "_self_hosted"
+    },
+    {
+      "pattern": "cohere|ai21|samsung.*gauss|apple.*intelligence",
+      "slug": "_other_closed"
     }
   ],
   "field_match_rules": [
