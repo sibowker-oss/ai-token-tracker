@@ -80,6 +80,7 @@
     .footer-grid{grid-template-columns:1fr;gap:16px;}
   }
 </style>
+<script src="data/format-helpers.js"></script>
 </head>
 <body class="surface-dark">
 
@@ -269,14 +270,15 @@ function renderYear(yr) {
   const revenue = baseRevenue * mult;
 
   // VC subsidy scales inversely with revenue growth (higher revenue = less subsidy needed)
+  // wq-076: keep as Number; format at display via formatCurrency()
   const baseVC = d.totalVCSubsidy || 0;
   const vcMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 1.3 : currentScenario === 'bull' ? 0.5 : 1.0);
-  const vcSubsidy = (baseVC * vcMultiplier).toFixed(1);
+  const vcSubsidy = baseVC * vcMultiplier;
 
   // Cashflow scales with revenue scenario
   const baseCF = cf ? cf.value : 0;
   const cfMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 0.4 : currentScenario === 'bull' ? 2.2 : 1.0);
-  const cashflow = (baseCF * cfMultiplier).toFixed(1);
+  const cashflow = baseCF * cfMultiplier;
 
   const capex = (d.infrastructureCapex || {}).value || 0;
   const capexTier = (d.infrastructureCapex || {}).tier || '';
@@ -289,14 +291,14 @@ function renderYear(yr) {
   // wq-063: secondary line shows provider-received (net) when gross is the
   // primary number — gives readers transparency into the channel-margin gap.
   const heroSecondary = (d.totalCustomerRevenue_gross != null && revenueNet != null)
-    ? '<div class="detail" style="margin-top:2px;font-size:9px;opacity:0.75;">→ providers receive $'+ (revenueNet * mult).toFixed(1) +'B</div>'
+    ? '<div class="detail" style="margin-top:2px;font-size:9px;opacity:0.75;">→ providers receive '+ formatCurrency(revenueNet * mult) +'</div>'
     : '';
 
   let h = '';
-  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+vcSubsidy+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+cashflow+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">'+formatCurrency(revenue)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">'+formatCurrency(capex)+'</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">'+formatCurrency(vcSubsidy)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">'+formatCurrency(cashflow)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
   document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
 
@@ -305,7 +307,7 @@ function renderYear(yr) {
   if (yr === '2025') {
     subtitle = '$17.5B in customer revenue and $9.4B in VC-funded operating losses across frontier AI providers.';
   } else {
-    subtitle = scenarioData.label + ' case: $' + revenue.toFixed(0) + 'B in customer revenue. VC subsidy $' + vcSubsidy + 'B. Growth assumption: ' + scenarioData.growth + ' annually.';
+    subtitle = scenarioData.label + ' case: ' + formatCurrency(revenue) + ' in customer revenue. VC subsidy ' + formatCurrency(vcSubsidy) + '. Growth assumption: ' + scenarioData.growth + ' annually.';
   }
   const subtitleEl = document.getElementById('page-subtitle');
   if (subtitleEl) subtitleEl.textContent = subtitle;
@@ -602,7 +604,7 @@ function renderCanvas(ctx, W) {
     ctx.fillText(labels[ci], x, 18);
     ctx.font = '11px -apple-system,sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('$'+colTotals[ci].toFixed(1)+'B', x, 33);
+    ctx.fillText(formatCurrency(colTotals[ci]), x, 33);
     ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(nodes[0].x, 38); ctx.lineTo(nodes[0].x+nodes[0].w, 38); ctx.stroke();
   });
@@ -652,8 +654,7 @@ function renderCanvas(ctx, W) {
       ctx.fillText(label, n.x+3, n.y+n.h/2-2);
       ctx.font = '9px -apple-system,sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.8)';
-      const vt = '$'+n.value.toFixed(n.value<10?1:0)+'B';
-      ctx.fillText(vt, n.x+3, n.y+n.h/2+10);
+      ctx.fillText(formatCurrency(n.value), n.x+3, n.y+n.h/2+10);
     }
     // Tier badge
     if(n.tier && n.h >= 10) {
@@ -678,21 +679,21 @@ function renderCanvas(ctx, W) {
       ? '<span style="display:inline-block;background:'+tierColor(active.tier)+';color:#0a0e1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;">TIER '+active.tier+'</span>'
       : '';
     let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;">';
-    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div>';
+    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">'+formatCurrency(active.value)+'</div>';
     if(active.src) {
       html += '<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:4px;max-width:240px;">'+active.src+'</div>';
     }
     html += '</div>';
     if(inflows.length) {
       const inTotal = inflows.reduce((s,f)=>s+f.value,0);
-      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows $'+inTotal.toFixed(1)+'B</div>';
-      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows '+formatCurrency(inTotal)+'</div>';
+      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>'+formatCurrency(f.value)+'</strong></div>'; });
       html += '</div>';
     }
     if(outflows.length) {
       const outTotal = outflows.reduce((s,f)=>s+f.value,0);
-      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows $'+outTotal.toFixed(1)+'B</div>';
-      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows '+formatCurrency(outTotal)+'</div>';
+      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>'+formatCurrency(f.value)+'</strong></div>'; });
       html += '</div>';
     }
     html += '</div>';

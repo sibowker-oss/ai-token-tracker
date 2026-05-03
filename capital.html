@@ -434,6 +434,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12"></script>
+<script src="data/format-helpers.js"></script>
 <script>
 // ─── SCENARIO DATA (wq-073 — fetched from data/scenarios.json) ────
 // Inline defaults remain as graceful fallback if fetch fails.
@@ -593,10 +594,10 @@ function updateHero() {
   const effectiveRatio = Math.round(effectiveCapex / effectiveRev);
 
   document.getElementById('hero').innerHTML=`
-    <div class="hero-stat"><div class="label">2023-25 AI CapEx</div><div class="value" style="color:var(--accent)">$${v.t0}B</div><div class="detail">${sc.label} &middot; cumulative balance sheet</div><div class="kpi-period">2023\u201325</div></div>
-    <div class="hero-stat"><div class="label">NVIDIA share</div><div class="value" style="color:#22c55e">$${nvidiaTotal}B</div><div class="detail">${nvidiaShare}% of total &middot; GPU $${nvidiaGpu}B + networking $${nvidiaNet}B</div><div class="kpi-period">2023\u201325</div></div>
-    <div class="hero-stat"><div class="label">Infrastructure per $1 revenue</div><div class="value" style="color:${counterfactualActive ? 'var(--cyan)' : 'var(--orange)'}">$${effectiveRatio}</div><div class="detail">${counterfactualActive ? '$'+(effectiveCapex)+'B (ex-ad) ' : '$'+v.t0+'B '}CapEx / $${effectiveRev}B revenue${counterfactualActive ? ' (excl. ad platform)' : ''}</div><div class="kpi-period">2025</div></div>
-    <div class="hero-stat"><div class="label">Idle + In Build</div><div class="value" style="color:var(--orange)">$${idle+inBuild}B</div><div class="detail">${((idle+inBuild)/v.t0*100).toFixed(0)}% of CapEx &middot; not yet generating revenue</div><div class="kpi-period">Current</div></div>
+    <div class="hero-stat"><div class="label">2023-25 AI CapEx</div><div class="value" style="color:var(--accent)">${formatCurrency(v.t0)}</div><div class="detail">${sc.label} &middot; cumulative balance sheet</div><div class="kpi-period">2023\u201325</div></div>
+    <div class="hero-stat"><div class="label">NVIDIA share</div><div class="value" style="color:#22c55e">${formatCurrency(nvidiaTotal)}</div><div class="detail">${nvidiaShare}% of total &middot; GPU ${formatCurrency(nvidiaGpu)} + networking ${formatCurrency(nvidiaNet)}</div><div class="kpi-period">2023\u201325</div></div>
+    <div class="hero-stat"><div class="label">Infrastructure per $1 revenue</div><div class="value" style="color:${counterfactualActive ? 'var(--cyan)' : 'var(--orange)'}">$${effectiveRatio}</div><div class="detail">${counterfactualActive ? formatCurrency(effectiveCapex) + ' (ex-ad) ' : formatCurrency(v.t0) + ' '}CapEx / ${formatCurrency(effectiveRev)} revenue${counterfactualActive ? ' (excl. ad platform)' : ''}</div><div class="kpi-period">2025</div></div>
+    <div class="hero-stat"><div class="label">Idle + In Build</div><div class="value" style="color:var(--orange)">${formatCurrency(idle+inBuild)}</div><div class="detail">${((idle+inBuild)/v.t0*100).toFixed(0)}% of CapEx &middot; not yet generating revenue</div><div class="kpi-period">Current</div></div>
   `;
 
   // Update counterfactual ratio labels
@@ -610,12 +611,12 @@ function updateHero() {
   const ratio = (fleet / annualCOGS).toFixed(1);
   document.getElementById('bridge-pl').innerHTML=`
     <div><strong style="color:#10b981;font-size:13px;">1. How much is generating revenue?</strong></div>
-    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">The <a href="revenue.html" class="link-revenue">Revenue Ledger</a> reports <strong style="color:#e2e8f0;">$${annualCOGS}B inference COGS</strong> in 2025. This chart shows the <strong style="color:#e2e8f0;">$${fleet}B fleet</strong> (Paid $${paid}B + Free $${consumer}B) that generates it. Ratio: ${ratio}x &mdash; consistent with ~3.5yr GPU life + operating overhead.</div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">The <a href="revenue.html" class="link-revenue">Revenue Ledger</a> reports <strong style="color:#e2e8f0;">${formatCurrency(annualCOGS)} inference COGS</strong> in 2025. This chart shows the <strong style="color:#e2e8f0;">${formatCurrency(fleet)} fleet</strong> (Paid ${formatCurrency(paid)} + Free ${formatCurrency(consumer)}) that generates it. Ratio: ${ratio}x &mdash; consistent with ~3.5yr GPU life + operating overhead.</div>
   `;
 
   document.getElementById('bridge-ads').innerHTML=`
     <div><strong style="color:var(--cyan);font-size:13px;">2. Ad-platform infrastructure (the largest allocation)</strong></div>
-    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">At <strong style="color:#e2e8f0;">$${adPlatform}B</strong> (${((adPlatform/v.t0)*100).toFixed(0)}% of total CapEx), the Ad Platform fleet is the largest single allocation. Meta, Google, and Microsoft fund this infrastructure through existing ad/cloud revenue. This CapEx does not depend on new AI revenue streams. When excluded, the infrastructure-to-revenue ratio drops from $${Math.round(v.t0/sc.revenue)}:$1 to ~$${Math.round((v.t0-adPlatform)/sc.revenue)}:$1.</div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">At <strong style="color:#e2e8f0;">${formatCurrency(adPlatform)}</strong> (${((adPlatform/v.t0)*100).toFixed(0)}% of total CapEx), the Ad Platform fleet is the largest single allocation. Meta, Google, and Microsoft fund this infrastructure through existing ad/cloud revenue. This CapEx does not depend on new AI revenue streams. When excluded, the infrastructure-to-revenue ratio drops from $${Math.round(v.t0/sc.revenue)}:$1 to ~$${Math.round((v.t0-adPlatform)/sc.revenue)}:$1.</div>
   `;
 }
 
@@ -629,7 +630,7 @@ function render() {
   const ratio = (fleet / annualCOGS).toFixed(1);
   if (v.errors.length===0) {
     vEl.className='ok';
-    vEl.innerHTML=`Conservation OK: $${v.t0}B in = $${v.t2}B out. Inference fleet (Paid $${paid}B + Consumer $${consumer}B) = $${fleet}B generates $${annualCOGS}B/yr COGS (ratio ${ratio}x).`;
+    vEl.innerHTML=`Conservation OK: ${formatCurrency(v.t0)} in = ${formatCurrency(v.t2)} out. Inference fleet (Paid ${formatCurrency(paid)} + Consumer ${formatCurrency(consumer)}) = ${formatCurrency(fleet)} generates ${formatCurrency(annualCOGS)}/yr COGS (ratio ${ratio}x).`;
   } else {
     vEl.className='bad';
     vEl.innerHTML='Error: '+v.errors.join('<br>');
@@ -696,7 +697,7 @@ function render() {
     .attr('y',d=>(d.y0+d.y1)/2)
     .attr('dy','0.35em')
     .attr('text-anchor',d=>STAGE[d.name]===0?'end':'start');
-  labelGs.append('tspan').text(d=>`${d.name} · $${d.value}B `);
+  labelGs.append('tspan').text(d=>`${d.name} · ${formatCurrency(d.value)} `);
   labelGs.append('tspan')
     .attr('fill',d=>TIER_COLOR[NODE_TIER[d.name]]||'#94a3b8')
     .style('font-size','10px')
@@ -716,11 +717,11 @@ function render() {
     const pct = ((d.value/v.t0)*100).toFixed(1);
     const tier = NODE_TIER[d.name];
     const tierHtml = tier ? `<span style="color:${TIER_COLOR[tier]};font-size:10px;font-weight:700;"> ${tier}</span>` : '';
-    showTip(ev, `<div class="tt-label" style="color:${NODE_COLOR[d.name]||'#e2e8f0'}">${d.name}${tierHtml}</div><div>$${d.value}B &middot; ${pct}% of total CapEx</div>`);
+    showTip(ev, `<div class="tt-label" style="color:${NODE_COLOR[d.name]||'#e2e8f0'}">${d.name}${tierHtml}</div><div>${formatCurrency(d.value)} &middot; ${pct}% of total CapEx</div>`);
   });
 
   linkEls.on('mousemove', function(ev,d) {
-    showTip(ev, `<div class="tt-label">${d.source.name} &rarr; ${d.target.name}</div><div>$${d.value}B</div>`);
+    showTip(ev, `<div class="tt-label">${d.source.name} &rarr; ${d.target.name}</div><div>${formatCurrency(d.value)}</div>`);
   }).on('mouseleave', hideTip);
 
   // Click-to-lock highlight
@@ -862,7 +863,7 @@ function renderLagChart() {
         .attr('x', x(d.year)+xSub(key)).attr('y', y(val))
         .attr('width', xSub.bandwidth()).attr('height', H-y(val))
         .attr('fill', COLORS[key]).attr('opacity', isE?0.65:0.95)
-        .append('title').text(`${d.year}: ${LABELS[key]}: $${val}B`);
+        .append('title').text(`${d.year}: ${LABELS[key]}: ${formatCurrency(val)}`);
       if (val >= maxVal * 0.05) {
         g.append('text')
           .attr('x', x(d.year)+xSub(key)+xSub.bandwidth()/2)
