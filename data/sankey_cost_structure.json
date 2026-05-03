@@ -1,0 +1,81 @@
+{
+  "_schema": {
+    "version": "1.0",
+    "purpose": "Editorial cost-structure assumptions feeding the Sankey balancing engine (wq-055). Used as estimation fallback when entity-level data isn't sourced/derivable. Hand-curated; provenance documented per parameter.",
+    "principle": "sourced > derived > estimated — engine prefers entity-documented data; falls back here only when entity data is absent",
+    "tier_legend": "see model-assumptions.md §6 / assumptions-audit.md §3.1"
+  },
+  "2025": {
+    "inference_estimation": {
+      "_doc": "TIER 3 fallback for resolve_inference_cost(). Used only when entity has no inference_cost field AND no derivable opex+op_loss path. Per-provider rates; _default for unmapped providers.",
+      "default_rate": 0.57,
+      "providerRates": {
+        "openai": 0.55,
+        "anthropic": 0.55,
+        "google": 0.30,
+        "iaas": 0.30,
+        "_default": 0.50
+      },
+      "_provenance": {
+        "default_rate": {"tier": "2B", "src": "AI Ledger methodology §7.1: $14.03B inference / $24.66B providers ≈ 0.57"},
+        "providerRates.openai": {"tier": "3C", "src": "Frontier model providers run inference-heavy; 0.55× revenue conservative"},
+        "providerRates.anthropic": {"tier": "3C", "src": "Same as openai — frontier, inference-dominant"},
+        "providerRates.google": {"tier": "3C", "src": "Google's TPU-based inference cheaper per token than GPU-based"},
+        "providerRates.iaas": {"tier": "3C", "src": "IaaS providers (Together/Fireworks/Groq) are pass-through; lower inference rate"},
+        "providerRates._default": {"tier": "3C", "src": "Catch-all for new providers without specific rate; midpoint of frontier and efficient"}
+      }
+    },
+    "opex_estimation": {
+      "_doc": "TIER 3 fallback for resolve_opex(). Size-band rates capture the typical opex-to-revenue pattern: early-stage opex outpaces revenue, mature operations achieve efficiency at scale.",
+      "size_bands": [
+        {"max_revenue": 1.0,  "rate": 1.20, "label": "Sub-$1B (early stage, opex >> revenue)"},
+        {"max_revenue": 5.0,  "rate": 1.00, "label": "$1-5B (heavy R&D investment)"},
+        {"max_revenue": 15.0, "rate": 0.90, "label": "$5-15B (scaling efficiency)"},
+        {"max_revenue": 50.0, "rate": 0.75, "label": "$15-50B (mature operations)"},
+        {"max_revenue": null, "rate": 0.60, "label": "$50B+ (efficient at scale)"}
+      ],
+      "_provenance": {
+        "size_bands": {"tier": "3C", "src": "Editorial estimate of opex-to-revenue ratio scaled by company size band; reflects typical pattern of opex efficiency improving with scale. Not derived from data — calibrate against known cases. Phase A confirmed sane for 2025 model_provider population."}
+      }
+    },
+    "marginPcts": {
+      "_doc": "Channel pass-through margins. Hyperscalers take 20% on AI model serving; Trad SaaS takes 60% on AI SKUs. Editorial; not derived.",
+      "Hyperscalers": 0.20,
+      "Trad. SaaS": 0.60,
+      "_provenance": {
+        "Hyperscalers": {"tier": "3C", "src": "Industry-standard hyperscaler take rate on AI model serving (~20%)"},
+        "Trad. SaaS": {"tier": "3C", "src": "Industry-standard SaaS gross margin (~60%) for AI add-on SKUs"}
+      }
+    },
+    "channelRouting": {
+      "_doc": "Editorial channel structure. Determines how customer revenue maps to channels (Model Subs / Model API / Hyperscalers / AI Native Apps / IaaS & Aggregators / Traditional SaaS). Currently used as a pass-through to the existing hand-curated channels list in sankey-projections.json — engine preserves channel labels + colours and rescales values proportionally to new total customer revenue. Per-entity channel routing (revenue_by_channel field on entity records) is a future refinement (wq-060).",
+      "rescale_mode": "proportional_to_total",
+      "preserve_channels": ["Model Subs", "Model API", "Hyperscalers", "AI Native Apps", "IaaS & Agg.", "Trad. SaaS"]
+    },
+    "small_provider_aggregation": {
+      "_doc": "Per brief §5. Providers below threshold_pct of total provider value collapse into 'Other Model Providers' node, with a floor of always showing top min_visible_rank by value. Provenance preserved via members[] list on the Other node.",
+      "threshold_pct": 0.02,
+      "min_visible_rank": 4,
+      "other_node_color": "#94a3b8",
+      "other_node_label": "Other Model Providers",
+      "other_node_slug": "_other_model_providers"
+    },
+    "validation_targets": {
+      "_doc": "§4 calibration gate. Engine output for these provider slugs must land within ±15% of the hand-curated value below, OR Simon explicitly approves divergence with an override.",
+      "openai":    {"value": 13.65, "customer_revenue": 7.65, "vc_subsidy": 5.20},
+      "anthropic": {"value": 7.71,  "customer_revenue": 4.71, "vc_subsidy": 2.94},
+      "google":    {"value": 2.50,  "customer_revenue": 2.00, "vc_subsidy": 0.95},
+      "iaas":      {"value": 0.80,  "customer_revenue": 0.50, "vc_subsidy": 0.30}
+    },
+    "iaas_aggregation": {
+      "_doc": "IaaS/Open is an aggregation node (audit §4.4: Together/Fireworks/Groq combined). Not a single entity slug. wq-055 preserves the hand-curated value for now — wq-053 tracks populating the underlying IaaS provider entities so this can become engine-derived.",
+      "value": 0.80,
+      "customer_revenue": 0.50,
+      "vc_subsidy": 0.30,
+      "label": "IaaS/Open",
+      "color": "#8b5cf6",
+      "tier": "1B",
+      "src": "AI Ledger methodology §7.2 ($0.5B customer + $0.3B VC). Preserved hand-curated until wq-053 populates IaaS provider entity records."
+    }
+  }
+}
