@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-01T23:36:31Z",
+    "generatedAt": "2026-05-03T02:49:17Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -50,9 +50,9 @@
   },
   "sankey": {
     "title": "2025 Actual Revenue Collected",
-    "totalCustomerRevenue": 17.47,
-    "totalVCSubsidy": 9.8,
-    "totalSystem": 27.27,
+    "totalCustomerRevenue": 17.557,
+    "totalVCSubsidy": 8.4479,
+    "totalSystem": 28.2111,
     "colLabels": [
       "Who Pays",
       "Channel",
@@ -62,54 +62,54 @@
     "buyers": [
       {
         "label": "Consumer",
-        "value": 5.16,
+        "value": 5.1857,
         "color": "#f59e0b"
       },
       {
         "label": "SME",
-        "value": 3.37,
+        "value": 3.3868,
         "color": "#8b5cf6"
       },
       {
         "label": "Enterprise",
-        "value": 8.94,
+        "value": 8.9845,
         "color": "#3b82f6"
       },
       {
         "label": "VC/Investors",
-        "value": 9.8,
+        "value": 8.4479,
         "color": "#dc2626"
       }
     ],
     "channels": [
       {
         "label": "Model Subs",
-        "value": 5.31,
+        "value": 5.3395,
         "color": "#f59e0b"
       },
       {
         "label": "Model API",
-        "value": 3.4,
+        "value": 3.4189,
         "color": "#3b82f6"
       },
       {
         "label": "Hyperscalers",
-        "value": 2.15,
+        "value": 2.1619,
         "color": "#06b6d4"
       },
       {
         "label": "AI Native Apps",
-        "value": 3.36,
+        "value": 3.3787,
         "color": "#10b981"
       },
       {
         "label": "IaaS & Agg.",
-        "value": 0.3,
+        "value": 0.3017,
         "color": "#8b5cf6"
       },
       {
         "label": "Trad. SaaS",
-        "value": 2.94,
+        "value": 2.9563,
         "color": "#ef4444"
       }
     ],
@@ -121,34 +121,39 @@
       },
       {
         "label": "Anthropic",
-        "value": 7.71,
+        "value": 7.3005,
         "color": "#d97706"
       },
       {
-        "label": "IaaS",
+        "label": "Google/Gemini",
+        "value": 2.9271,
+        "color": "#4285f4"
+      },
+      {
+        "label": "IaaS/Open",
         "value": 0.8,
         "color": "#8b5cf6"
       },
       {
-        "label": "Google (Gemini)",
-        "value": 2.5,
-        "color": "#4285f4"
+        "label": "Other Model Providers",
+        "value": 1.3273,
+        "color": "#94a3b8"
       }
     ],
     "outcomes": [
       {
         "label": "Inference",
-        "value": 14.03,
+        "value": 9.0564,
         "color": "#10b981"
       },
       {
         "label": "People/SG&A",
-        "value": 11.08,
+        "value": 16.9485,
         "color": "#f59e0b"
       },
       {
         "label": "Op. Cash Flow",
-        "value": 2.15,
+        "value": 2.2062,
         "color": "#94a3b8"
       }
     ],

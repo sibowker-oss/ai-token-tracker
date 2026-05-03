@@ -128,6 +128,14 @@
 
     <div class="entry" data-scope="methodology">
       <div class="entry-meta">
+        <span class="entry-date">3 May 2026</span>
+        <span class="entry-scope methodology">Methodology</span>
+      </div>
+      <div class="entry-text"><strong>The Follow the Dollar Sankey is now systematically derived from a single methodology applied to every provider.</strong> Previously, per-provider customer revenue and VC subsidy values were hand-curated from a §7.2 weighted-consensus process; the chart was balanced by manually adjusting numbers when one input changed. Today, every value in the Sankey traces back to entity-level data through a documented engine (<code>scripts/derive_sankey.py</code>) that preserves source-tier visibility per provider — sourced &gt; derived &gt; estimated. The architectural shift: <strong>vc_subsidy is now a derived balancing plug, not a stored editorial value.</strong> When customer revenue is revised upward by new data — as wq-048 did for OpenAI — the engine holds the provider's total cost steady (driven by documented inference costs and operating-loss math) and lowers vc_subsidy to maintain Sankey balance. Future revenue updates produce stable provider node sizes; the visible flow shifts between customer and VC inflows as the data sharpens. Per-provider deltas in this update: <strong>OpenAI</strong> customer revenue $7.65B → $9.31B (+22%), provider node STABLE at $13.65B, vc_subsidy $5.20B → $4.34B (the architectural intent in action). <strong>Google</strong> customer revenue $2.00B → $2.25B and provider node $2.50B → $2.93B (+17%), engine-estimated throughout (lower data depth than OpenAI; no documented op_loss yet — TIER 3 estimation across the chain). <strong>Anthropic</strong> provider node $7.71B → $7.30B (-5.3%, methodology-driven small adjustment). <strong>Five small providers</strong> (DeepSeek, Mistral, xAI, Minimax, Moonshot) collapsed into a new "Other Model Providers" node at $1.33B aggregate — visual readability rule (below 2% of total AND outside top 4); long-tail data preserved in the provenance trail with each provider's individual derived values. Per-provider tier visibility (sourced/derived/estimated) now in <code>data/sankey-projections.json</code>; engine architecture in <code>briefings/wq-055-vc-subsidy-balancing-engine.md</code>; Phase A paper-math trace in <code>data/wq-055-phase-a-paper-math.txt</code>. wq-055 (replaces the held wq-044 wire).</div>
+    </div>
+
+    <div class="entry" data-scope="methodology">
+      <div class="entry-meta">
         <span class="entry-date">21 Apr 2026</span>
         <span class="entry-scope methodology">Methodology</span>
       </div>

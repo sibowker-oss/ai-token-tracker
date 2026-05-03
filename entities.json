@@ -13903,8 +13903,8 @@
   ],
   "market_aggregates": {
     "2025": {
-      "total_customer_revenue": 17.47,
-      "total_vc_subsidy": 9.8,
+      "total_customer_revenue": 17.557,
+      "total_vc_subsidy": 8.4479,
       "total_system_cost": 27.27,
       "total_inference_cost": 14.03,
       "total_people_cost": 11.08,
@@ -13912,7 +13912,235 @@
       "total_vc_investment": 150,
       "mag7_capex": 250,
       "training_compute_spend": "30-50",
-      "investment_to_revenue_ratio": 15
+      "investment_to_revenue_ratio": 15,
+      "providers": {
+        "openai": {
+          "slug": "openai",
+          "label": "OpenAI",
+          "color": "#10a37f",
+          "customer_revenue": 9.3147,
+          "inference_cost": 5,
+          "inference_cost_origin": "sourced",
+          "inference_cost_derived_from": [
+            "openai.2025.inference_cost"
+          ],
+          "opex": 8.65,
+          "opex_origin": "derived",
+          "opex_derived_from": [
+            "openai.2025.operating_loss",
+            "openai.2025.inference_cost",
+            "reference_revenue=7.65 (openai.2025.operating_loss.reference_revenue)"
+          ],
+          "vc_subsidy": 4.3353,
+          "vc_origin": "balancing_plug_derived",
+          "value": 13.65,
+          "override_discrepancy": null
+        },
+        "anthropic": {
+          "slug": "anthropic",
+          "label": "Anthropic",
+          "color": "#d97706",
+          "customer_revenue": 4.71,
+          "inference_cost": 2.5905,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.55 (provider rate from cost_structure)"
+          ],
+          "opex": 4.71,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+          ],
+          "vc_subsidy": 2.5905,
+          "vc_origin": "balancing_plug_derived",
+          "value": 7.3005,
+          "override_discrepancy": null
+        },
+        "google": {
+          "slug": "google",
+          "label": "Google/Gemini",
+          "color": "#4285f4",
+          "customer_revenue": 2.2516,
+          "inference_cost": 0.6755,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.3 (provider rate from cost_structure)"
+          ],
+          "opex": 2.2516,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.6755,
+          "vc_origin": "balancing_plug_derived",
+          "value": 2.9271,
+          "override_discrepancy": null
+        },
+        "deepseek": {
+          "slug": "deepseek",
+          "label": "DeepSeek",
+          "color": "#a78bfa",
+          "customer_revenue": 0.1615,
+          "inference_cost": 0.0808,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.1938,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.1131,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.2746,
+          "override_discrepancy": null
+        },
+        "mistral": {
+          "slug": "mistral",
+          "label": "Mistral",
+          "color": "#f97316",
+          "customer_revenue": 0.2154,
+          "inference_cost": 0.1077,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.2585,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.1508,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.3662,
+          "override_discrepancy": null
+        },
+        "xai": {
+          "slug": "xai",
+          "label": "xAI",
+          "color": "#e2e8f0",
+          "customer_revenue": 0.2692,
+          "inference_cost": 0.1346,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.323,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.1884,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.4576,
+          "override_discrepancy": null
+        },
+        "minimax": {
+          "slug": "minimax",
+          "label": "Minimax",
+          "color": "#ec4899",
+          "customer_revenue": 0.0808,
+          "inference_cost": 0.0404,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.097,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.0566,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.1374,
+          "override_discrepancy": null
+        },
+        "moonshot": {
+          "slug": "moonshot",
+          "label": "Moonshot/Kimi",
+          "color": "#14b8a6",
+          "customer_revenue": 0.0538,
+          "inference_cost": 0.0269,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.0646,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.0377,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.0915,
+          "override_discrepancy": null
+        },
+        "iaas": {
+          "slug": "iaas",
+          "label": "IaaS/Open",
+          "color": "#8b5cf6",
+          "customer_revenue": 0.5,
+          "vc_subsidy": 0.3,
+          "vc_origin": "preserved_hand_curated",
+          "value": 0.8,
+          "tier": "1B",
+          "src": "AI Ledger methodology \u00a77.2 ($0.5B customer + $0.3B VC). Preserved hand-curated until wq-053 populates IaaS provider entity records.",
+          "inference_cost": 0.4,
+          "inference_cost_origin": "preserved_hand_curated",
+          "inference_cost_derived_from": [
+            "iaas_aggregation.value \u00d7 0.50 (inference rate)"
+          ],
+          "opex": 0.4,
+          "opex_origin": "preserved_hand_curated",
+          "opex_derived_from": [
+            "iaas_aggregation.value \u00d7 0.50"
+          ],
+          "override_discrepancy": null
+        }
+      },
+      "providers_visible": [
+        "openai",
+        "anthropic",
+        "google",
+        "iaas",
+        "_other_model_providers"
+      ],
+      "other_aggregation": {
+        "label": "Other Model Providers",
+        "color": "#94a3b8",
+        "value": 1.3273,
+        "customer_revenue": 0.7807,
+        "vc_subsidy": 0.5466,
+        "members": [
+          "xai",
+          "mistral",
+          "deepseek",
+          "minimax",
+          "moonshot"
+        ],
+        "aggregation_rule": "value < 2.0% of total AND outside top 4"
+      },
+      "total_provider_value": 26.0049,
+      "fallback_log": [
+        "anthropic: inference_cost ESTIMATED (no source/op_loss path)",
+        "anthropic: opex ESTIMATED (no source/op_loss path)",
+        "google: inference_cost ESTIMATED (no source/op_loss path)",
+        "google: opex ESTIMATED (no source/op_loss path)",
+        "deepseek: inference_cost ESTIMATED (no source/op_loss path)",
+        "deepseek: opex ESTIMATED (no source/op_loss path)",
+        "mistral: inference_cost ESTIMATED (no source/op_loss path)",
+        "mistral: opex ESTIMATED (no source/op_loss path)",
+        "xai: inference_cost ESTIMATED (no source/op_loss path)",
+        "xai: opex ESTIMATED (no source/op_loss path)",
+        "minimax: inference_cost ESTIMATED (no source/op_loss path)",
+        "minimax: opex ESTIMATED (no source/op_loss path)",
+        "moonshot: inference_cost ESTIMATED (no source/op_loss path)",
+        "moonshot: opex ESTIMATED (no source/op_loss path)"
+      ],
+      "_residual_doc": "Engine writes per-provider customer_revenue derived from entities.json:financials.<year>.collected_revenue (wq-048). Channel/buyer totals computed by generate_site_data.py from this block + the existing editorial channel structure (proportional rescale to total_customer_revenue). Non-provider revenue (e.g. Microsoft Copilot via Trad SaaS channel) handled in the channel structure, not in providers.",
+      "_engine_run_at": "2026-05-03T02:46:13Z",
+      "_engine": "scripts/derive_sankey.py (wq-055)"
     }
   }
 }

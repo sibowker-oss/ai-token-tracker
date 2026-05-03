@@ -44,6 +44,174 @@ def get_providers(entities):
     """Extract model_provider entities."""
     return [c for c in entities["companies"] if "model_provider" in c.get("roles", [])]
 
+
+# ── wq-055 Phase C — write full Sankey from market_aggregates engine output ──
+
+def _apply_sankey_engine_output(target, market, year, is_projections=False):
+    """Apply engine output to target dict.
+
+    For site-data.json the target is `site` and we mutate `site["sankey"]`.
+    For sankey-projections.json the target is the year block (e.g. sp["2025"])
+    and we mutate it directly.
+
+    Per wq-055 §3.2 conservation:
+      sum(non-VC buyers) == sum(channels) == total_customer_revenue (engine)
+      sum(provider value) == total_provider_value (engine)
+      Channels rescale proportionally from existing structure.
+      Buyers (non-VC) rescale proportionally; VC = sum(provider vc_subsidy).
+      Outcomes: Inference = sum(provider inference_cost),
+                People/SG&A = sum(provider opex),
+                Op Cash Flow = sum(channel margins).
+    """
+    sankey = target if is_projections else target["sankey"]
+
+    # Engine totals
+    total_cr = market["total_customer_revenue"]
+    total_vc = market["total_vc_subsidy"]
+    total_provider = market["total_provider_value"]
+
+    # ── Providers list (visible, post-aggregation) ──
+    providers_visible_slugs = market.get("providers_visible") or list(market["providers"].keys())
+    providers_by_slug = market["providers"]
+    other_block = market.get("other_aggregation")
+
+    new_providers = []
+    for slug in providers_visible_slugs:
+        if slug == (other_block or {}).get("_slug") or (other_block and slug not in providers_by_slug):
+            continue
+        p = providers_by_slug.get(slug)
+        if not p:
+            continue
+        entry = {
+            "label": p["label"],
+            "value": p["value"],
+            "color": p["color"],
+        }
+        if is_projections:
+            entry["tier"] = _tier_from_origins(p)
+            entry["src"] = _src_from_origins(p)
+        new_providers.append(entry)
+    if other_block:
+        entry = {
+            "label": other_block["label"],
+            "value": other_block["value"],
+            "color": other_block["color"],
+        }
+        if is_projections:
+            entry["tier"] = "3C"
+            entry["src"] = (
+                "wq-055 small-provider aggregation: "
+                + ", ".join(other_block["members"])
+                + f" ({other_block['aggregation_rule']})"
+            )
+        new_providers.append(entry)
+    sankey["providers"] = new_providers
+
+    # ── costParams.vcSubsidy per provider (sankey-projections.json only;
+    # site-data.json doesn't carry costParams) ──
+    if is_projections and "costParams" in sankey:
+        new_vc_subsidy = {}
+        for slug in providers_visible_slugs:
+            p = providers_by_slug.get(slug)
+            if p:
+                new_vc_subsidy[p["label"]] = p["vc_subsidy"]
+        if other_block:
+            new_vc_subsidy[other_block["label"]] = other_block["vc_subsidy"]
+        sankey["costParams"]["vcSubsidy"] = new_vc_subsidy
+
+    # ── Channels (proportional rescale) ──
+    old_channels = sankey.get("channels") or []
+    old_channel_total = sum(c.get("value", 0) for c in old_channels)
+    if old_channels and old_channel_total > 0:
+        scale = total_cr / old_channel_total
+        new_channels = []
+        for c in old_channels:
+            nc = dict(c)
+            nc["value"] = round(c["value"] * scale, 4)
+            new_channels.append(nc)
+        sankey["channels"] = new_channels
+
+    # ── Buyers (non-VC proportional rescale; VC = engine sum) ──
+    old_buyers = sankey.get("buyers") or []
+    old_non_vc_total = sum(b.get("value", 0) for b in old_buyers if b.get("label") != "VC/Investors")
+    if old_buyers and old_non_vc_total > 0:
+        scale = total_cr / old_non_vc_total
+        new_buyers = []
+        for b in old_buyers:
+            nb = dict(b)
+            if b.get("label") == "VC/Investors":
+                nb["value"] = round(total_vc, 4)
+            else:
+                nb["value"] = round(b["value"] * scale, 4)
+            new_buyers.append(nb)
+        sankey["buyers"] = new_buyers
+
+    # ── Outcomes ──
+    # Inference = sum(provider inference_cost)
+    # People/SG&A = sum(provider opex)
+    # Op Cash Flow = sum(channel margins)
+    total_inf = sum(p.get("inference_cost", 0) for p in providers_by_slug.values())
+    total_opex = sum(p.get("opex", 0) for p in providers_by_slug.values())
+    if other_block:
+        # Aggregation node: split by inferencePct 0.50 (its constituents are estimated)
+        # Per derive_sankey aggregation, the Other node already sums per-provider
+        # inference_cost and opex implicitly through its `value`. Add explicitly
+        # using the same per-component pattern.
+        for slug in other_block["members"]:
+            p = providers_by_slug.get(slug)
+            if p:
+                # Already counted above (loop is across providers_by_slug)
+                pass
+    total_inf = round(total_inf, 4)
+    total_opex = round(total_opex, 4)
+
+    new_channels = sankey.get("channels") or []
+    margin_pcts = {"Hyperscalers": 0.20, "Trad. SaaS": 0.60}
+    cashflow = sum(c.get("value", 0) * margin_pcts.get(c.get("label"), 0) for c in new_channels)
+    cashflow = round(cashflow, 4)
+
+    old_outcomes = sankey.get("outcomes") or []
+    if old_outcomes:
+        for o in old_outcomes:
+            label = o.get("label", "")
+            if label == "Inference":
+                o["value"] = total_inf
+            elif "People" in label or "SG&A" in label or "Operating Cost" in label or "Other Op" in label:
+                o["value"] = total_opex
+            elif "Cash" in label or "Margin" in label:
+                o["value"] = cashflow
+
+    # ── Top-level totals ──
+    sankey["totalCustomerRevenue"] = round(total_cr, 4)
+    sankey["totalVCSubsidy"] = round(total_vc, 4)
+    sankey["totalSystem"] = round(total_provider + cashflow, 4)
+
+
+def _tier_from_origins(p):
+    """Per-provider tier derives from weakest cost-component origin.
+    Sourced → 1B/2A. Derived → 2A/2B. Estimated → 3C. Override → 1B/3C."""
+    origins = (p.get("inference_cost_origin"), p.get("opex_origin"), p.get("vc_origin"))
+    if any(o == "estimated" for o in origins):
+        return "3C"
+    if any(o == "derived" for o in origins):
+        return "2A"
+    if any(o == "editorial_override" for o in origins):
+        return "1B"
+    if all(o == "preserved_hand_curated" for o in origins if o):
+        return "1B"
+    return "2A"
+
+
+def _src_from_origins(p):
+    """Per-provider src string for sankey-projections.json reader."""
+    bits = [
+        f"customer_revenue=${p.get('customer_revenue', '?')}B (wq-048 engine)",
+        f"inference_cost=${p.get('inference_cost', '?')}B ({p.get('inference_cost_origin', '?')})",
+        f"opex=${p.get('opex', '?')}B ({p.get('opex_origin', '?')})",
+        f"vc_subsidy=${p.get('vc_subsidy', '?')}B ({p.get('vc_origin', '?')})",
+    ]
+    return "wq-055 engine — " + "; ".join(bits)
+
 def generate(entities_path, existing_site_data_path, output_path):
     entities = load_json(entities_path)
     site = load_json(existing_site_data_path)
@@ -154,22 +322,24 @@ def generate(entities_path, existing_site_data_path, output_path):
             if isinstance(tokens, (int, float)):
                 consumer["tokensNumeric"] = int(tokens * 1e9) if tokens < 1e6 else int(tokens)
 
-    # ── Update market aggregate totals ──
+    # ── wq-055: write FULL Sankey from market_aggregates engine output ──
+    # Per brief §2 #3: providers, costParams.vcSubsidy, buyers, channels,
+    # outcomes, totals — all derived consistently from one engine block.
     market = entities.get("market_aggregates", {}).get("2025", {})
-    if market:
-        if "total_customer_revenue" in market:
-            site["sankey"]["totalCustomerRevenue"] = market["total_customer_revenue"]
-        if "total_vc_subsidy" in market:
-            site["sankey"]["totalVCSubsidy"] = market["total_vc_subsidy"]
-        if "total_system_cost" in market:
-            site["sankey"]["totalSystem"] = market["total_system_cost"]
-        # Update outcome totals
-        if "total_inference_cost" in market and len(site["sankey"].get("outcomes", [])) > 0:
-            site["sankey"]["outcomes"][0]["value"] = market["total_inference_cost"]
-        if "total_people_cost" in market and len(site["sankey"].get("outcomes", [])) > 1:
-            site["sankey"]["outcomes"][1]["value"] = market["total_people_cost"]
-        if "total_margin" in market and len(site["sankey"].get("outcomes", [])) > 2:
-            site["sankey"]["outcomes"][2]["value"] = market["total_margin"]
+    if market and market.get("providers"):
+        _apply_sankey_engine_output(site, market, year="2025")
+        # Also write the full Sankey to data/sankey-projections.json so the
+        # Sankey renderer (revenue.html, follow-the-trillion.html) reads
+        # consistent values from both files.
+        sankey_proj_path = os.path.join(SITE_DIR, "data", "sankey-projections.json")
+        if os.path.exists(sankey_proj_path):
+            with open(sankey_proj_path) as f:
+                sp = json.load(f)
+            if "2025" in sp:
+                _apply_sankey_engine_output(sp["2025"], market, year="2025", is_projections=True)
+            with open(sankey_proj_path, "w") as f:
+                json.dump(sp, f, indent=2)
+            print(f"  Written: {sankey_proj_path} (sankey block, year=2025)")
 
     # ── Write output ──
     save_json(output_path, site)

@@ -597,11 +597,99 @@ def main() -> None:
             outputs["fallback_count"] = len(sankey["fallback_log"])
 
             if args.backfill and args.apply:
-                # Phase C territory — gated by Simon's calibration approval. The
-                # --apply path writes to entities.json:market_aggregates.<year>
-                # with full per-component provenance. Not implemented in Phase B.
-                print("\n--apply NOT IMPLEMENTED in Phase B. Phase C will add the writer.")
-                outputs["apply_skipped"] = True
+                written_block = apply_market_aggregates(entities, sankey, args.year)
+                with open(ENTITIES_PATH, "w") as f:
+                    json.dump(entities, f, indent=2)
+                today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+                with open(CONSENSUS_LOG_PATH, "a") as f:
+                    f.write(
+                        f"\n## {today} — wq-055 derive_sankey.py --apply\n"
+                        f"- Year: {args.year}\n"
+                        f"- Providers written: {len(written_block['providers'])}\n"
+                        f"- Visible (post-aggregation): {len(sankey['providers'])}\n"
+                        f"- total_customer_revenue: {written_block['totals']['total_customer_revenue']}\n"
+                        f"- total_vc_subsidy: {written_block['totals']['total_vc_subsidy']}\n"
+                        f"- total_provider_value: {written_block['totals']['total_provider_value']}\n"
+                    )
+                print(f"\n✓ entities.json:market_aggregates.{args.year} written.")
+                print(f"  Run scripts/generate_site_data.py to regenerate site-data.json:sankey + sankey-projections.json:{args.year}.")
+                outputs["entities_written"] = True
+
+
+def apply_market_aggregates(entities: dict, sankey: dict, year: str) -> dict:
+    """Write engine output to entities.json:market_aggregates.<year>.
+
+    Idempotent: re-runs overwrite the prior block. Mutates entities in place;
+    caller saves the file.
+
+    Block shape (preserved from prior wq-044 wire-completion + extended for
+    wq-055 per-component visibility):
+
+        market_aggregates.<year>:
+          total_customer_revenue: float
+          total_vc_subsidy:       float
+          total_provider_value:   float
+          providers:              {<slug>: {full per-provider block including
+                                            per-component tier + override
+                                            discrepancy details}}
+          providers_visible:      [<slug>, ...] (post-aggregation order)
+          other_aggregation:      {members, value, customer_revenue, vc_subsidy}
+                                  if Other node was created; else null
+          fallback_log:           [strings noting TIER 3 estimates]
+          _residual_doc:          context for non-provider revenue (Trad SaaS)
+          _engine_run_at:         ISO timestamp
+    """
+    market_aggregates = entities.setdefault("market_aggregates", {})
+    year_block = market_aggregates.setdefault(year, {})
+
+    # Per-provider block keyed by slug (for stable lookup)
+    providers_by_slug = {p["slug"]: p for p in sankey["providers_pre_aggregation"]}
+
+    # Order in which they appear post-aggregation (Other Model Providers may
+    # be the last entry if it was created)
+    providers_visible_order = [p["slug"] for p in sankey["providers"]]
+
+    # Other-aggregation summary if it fired
+    other = next((p for p in sankey["providers"] if p.get("vc_origin") == "small_provider_aggregation"), None)
+    other_block = None
+    if other is not None:
+        other_block = {
+            "label": other["label"],
+            "color": other["color"],
+            "value": other["value"],
+            "customer_revenue": other["customer_revenue"],
+            "vc_subsidy": other["vc_subsidy"],
+            "members": other["members"],
+            "aggregation_rule": other["aggregation_rule"],
+        }
+
+    year_block["providers"] = providers_by_slug
+    year_block["providers_visible"] = providers_visible_order
+    year_block["other_aggregation"] = other_block
+    year_block["total_customer_revenue"] = sankey["totals"]["total_customer_revenue"]
+    year_block["total_vc_subsidy"] = sankey["totals"]["total_vc_subsidy"]
+    year_block["total_provider_value"] = sankey["totals"]["total_provider_value"]
+    year_block["fallback_log"] = sankey["fallback_log"]
+    year_block["_residual_doc"] = (
+        "Engine writes per-provider customer_revenue derived from "
+        "entities.json:financials.<year>.collected_revenue (wq-048). "
+        "Channel/buyer totals computed by generate_site_data.py from this "
+        "block + the existing editorial channel structure (proportional "
+        "rescale to total_customer_revenue). Non-provider revenue (e.g. "
+        "Microsoft Copilot via Trad SaaS channel) handled in the channel "
+        "structure, not in providers."
+    )
+    year_block["_engine_run_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    year_block["_engine"] = "scripts/derive_sankey.py (wq-055)"
+
+    return {
+        "providers": providers_by_slug,
+        "totals": {
+            "total_customer_revenue": sankey["totals"]["total_customer_revenue"],
+            "total_vc_subsidy": sankey["totals"]["total_vc_subsidy"],
+            "total_provider_value": sankey["totals"]["total_provider_value"],
+        },
+    }
 
 
 if __name__ == "__main__":
