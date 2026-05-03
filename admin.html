@@ -83,6 +83,9 @@
   <button class="tab" onclick="switchTab('dev')" data-tab="dev" style="margin-left:auto;">
     <span class="tab-icon">&#128736;</span>In Dev
   </button>
+  <button class="tab" onclick="switchTab('status')" data-tab="status">
+    <span class="tab-icon">&#128202;</span>Status
+  </button>
   <button class="tab" onclick="switchTab('pages')" data-tab="pages">
     <span class="tab-icon">&#128194;</span>Page Archive
   </button>
@@ -99,6 +102,7 @@
   <iframe id="frame-ask" src="about:blank"></iframe>
   <iframe id="frame-add" src="about:blank"></iframe>
   <iframe id="frame-dev" src="about:blank"></iframe>
+  <iframe id="frame-status" src="about:blank"></iframe>
   <iframe id="frame-pages" src="about:blank"></iframe>
   <iframe id="frame-settings" src="about:blank"></iframe>
 </div>
@@ -112,6 +116,7 @@ const TAB_PAGES = {
   ask: 'ask.html',
   add: 'add.html',
   dev: 'in-development.html',
+  status: 'status.html',
   pages: 'page-archive.html',
   settings: 'settings.html'
 };
