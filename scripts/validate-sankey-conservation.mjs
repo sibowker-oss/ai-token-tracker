@@ -14,6 +14,13 @@
 //      (Inference + People/SG&A + Op Cash Flow == published total system)
 //   4. Per provider: implied customer_revenue (= value - vc_subsidy) >= 0
 //      (engine self-consistency; sankey-projections.json only)
+//   5. wq-062 — per provider Column C balance:
+//        sum(routing inflows for slug) + vc_subsidy == provider.value
+//      within 0.5%. Required because the wq-055 renderer routed channels
+//      to providers proportionally, which silently masked per-provider
+//      gaps (OpenAI 12.40 in vs 13.65 out at the 2026-05-03 audit).
+//      Skipped when sankey.routing is absent (renderer fell back to
+//      proportional — old data).
 //
 // What we DON'T check (intentionally):
 //   - sum(providers) == sum(outcomes): they differ by cashflow (channel
@@ -65,12 +72,20 @@ function checkSankey(name, sankey, opts = {}) {
     });
   }
 
-  // Rule 2
-  if (pctDelta(sumNonVc + vcVal, sumProviders) > TOLERANCE) {
+  // Rule 2 — wq-062: with grossed-up channels, channel margins flow direct
+  // to cashflow without passing through providers. So buyers+VC equals
+  // providers + channel_margins, not providers alone. Subtract the margin
+  // contribution. When marginPcts is absent (pre-wq-062 data) the term is
+  // zero and the original wq-055 invariant (buyers+VC=providers) applies.
+  const marginPcts = sankey.costParams?.marginPcts ?? {};
+  const channelMargins = channels.reduce((s, c) => s + (c.value ?? 0) * (marginPcts[c.label] ?? 0), 0);
+  const buyersAndVc = sumNonVc + vcVal;
+  const providersPlusMargins = sumProviders + channelMargins;
+  if (pctDelta(buyersAndVc, providersPlusMargins) > TOLERANCE) {
     findings.push({
       severity: 'fail',
-      ref: `${name}.sankey.buyers + VC vs providers`,
-      msg: `sum(buyers)=${(sumNonVc + vcVal).toFixed(4)} vs sum(providers)=${sumProviders.toFixed(4)} — delta ${(pctDelta(sumNonVc + vcVal, sumProviders) * 100).toFixed(2)}%`,
+      ref: `${name}.sankey.buyers + VC vs providers + channel_margins`,
+      msg: `sum(buyers)=${buyersAndVc.toFixed(4)} vs sum(providers)+channel_margins=${sumProviders.toFixed(4)}+${channelMargins.toFixed(4)}=${providersPlusMargins.toFixed(4)} — delta ${(pctDelta(buyersAndVc, providersPlusMargins) * 100).toFixed(2)}%`,
     });
   }
 
@@ -95,6 +110,43 @@ function checkSankey(name, sankey, opts = {}) {
           severity: 'fail',
           ref: `${name}.sankey.providers[${p.label}].self-consistency`,
           msg: `implied customer_revenue=${cr.toFixed(4)} < 0 (value=${p.value} - vc_subsidy=${vc})`,
+        });
+      }
+    }
+  }
+
+  // Rule 5 (wq-062) — per-provider Column C balance.
+  // sum(routing[slug]) + vcSubsidy[label] must equal provider.value.
+  const routing = sankey.routing;
+  if (routing && typeof routing === 'object') {
+    const vcByLabel = (sankey.costParams?.vcSubsidy) ?? {};
+    for (const p of providers) {
+      const slug = p.slug;
+      if (!slug) {
+        findings.push({
+          severity: 'fail',
+          ref: `${name}.sankey.providers[${p.label}].slug`,
+          msg: `provider has no slug field — required for routing-aware balance check`,
+        });
+        continue;
+      }
+      const provRouting = routing[slug];
+      if (!provRouting) {
+        findings.push({
+          severity: 'fail',
+          ref: `${name}.sankey.routing[${slug}]`,
+          msg: `routing entry missing for provider ${p.label} (slug=${slug})`,
+        });
+        continue;
+      }
+      const inflow = Object.values(provRouting).reduce((s, v) => s + (v ?? 0), 0);
+      const vc = vcByLabel[p.label] ?? 0;
+      const total = inflow + vc;
+      if (pctDelta(total, p.value) > TOLERANCE) {
+        findings.push({
+          severity: 'fail',
+          ref: `${name}.sankey.providers[${p.label}].column-C-balance`,
+          msg: `routing inflow=${inflow.toFixed(4)} + vc_subsidy=${vc.toFixed(4)} = ${total.toFixed(4)} vs provider.value=${p.value.toFixed(4)} — delta ${(pctDelta(total, p.value) * 100).toFixed(2)}% > ${TOLERANCE * 100}%`,
         });
       }
     }

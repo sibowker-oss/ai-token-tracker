@@ -107,16 +107,18 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
         new_providers.append(entry)
     sankey["providers"] = new_providers
 
-    # ── costParams.vcSubsidy per provider (sankey-projections.json only;
-    # site-data.json doesn't carry costParams) ──
+    # ── costParams.vcSubsidy per provider ──
+    # Built from engine output. wq-062: also surfaced on site-data.json:sankey
+    # (was sankey-projections.json only) so the per-provider Column C balance
+    # validator + renderer can read it from either file.
+    new_vc_subsidy = {}
+    for slug in providers_visible_slugs:
+        p = providers_by_slug.get(slug)
+        if p:
+            new_vc_subsidy[p["label"]] = round(p["vc_subsidy"], 4)
+    if other_block:
+        new_vc_subsidy[other_block["label"]] = round(other_block["vc_subsidy"], 4)
     if is_projections and "costParams" in sankey:
-        new_vc_subsidy = {}
-        for slug in providers_visible_slugs:
-            p = providers_by_slug.get(slug)
-            if p:
-                new_vc_subsidy[p["label"]] = p["vc_subsidy"]
-        if other_block:
-            new_vc_subsidy[other_block["label"]] = other_block["vc_subsidy"]
         sankey["costParams"]["vcSubsidy"] = new_vc_subsidy
 
     # ── Channels (wq-062: use engine-grossed values when available) ──
@@ -229,6 +231,16 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
             slug = provider_label_to_slug.get(prov_entry.get("label"))
             if slug:
                 prov_entry["slug"] = slug
+
+    # ── wq-062: surface marginPcts + vcSubsidy on site-data.json:sankey ──
+    # site-data.json:sankey didn't carry costParams pre-wq-062. The per-provider
+    # Column C balance check (validate-sankey-conservation rule 5) needs both
+    # vcSubsidy (per-provider) and marginPcts (to subtract channel margins from
+    # the buyers↔providers identity).
+    if not is_projections:
+        sankey.setdefault("costParams", {})
+        sankey["costParams"]["vcSubsidy"] = new_vc_subsidy
+        sankey["costParams"]["marginPcts"] = {"Hyperscalers": 0.20, "Trad. SaaS": 0.60}
 
 
 def _tier_from_origins(p):

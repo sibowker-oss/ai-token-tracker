@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-03T03:40:23Z",
+    "generatedAt": "2026-05-03T03:48:10Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -562,6 +562,19 @@
         "Model Subs": 0.3123,
         "Model API": 0.3123,
         "AI Native Apps": 0.1562
+      }
+    },
+    "costParams": {
+      "vcSubsidy": {
+        "OpenAI": 4.3353,
+        "Anthropic": 2.5905,
+        "Google/Gemini": 0.6755,
+        "IaaS/Open": 0.3,
+        "Other Model Providers": 0.5466
+      },
+      "marginPcts": {
+        "Hyperscalers": 0.2,
+        "Trad. SaaS": 0.6
       }
     }
   },
