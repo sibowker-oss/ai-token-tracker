@@ -14226,7 +14226,7 @@
       "total_customer_revenue_gross": 19.8618
     },
     "_cumulative_2023_2025": {
-      "customer_revenue_gross": 23.9444,
+      "customer_revenue_gross": 28,
       "customer_revenue_net": 17.557,
       "capex": 250.0,
       "tokens": 0.0,
@@ -14256,9 +14256,35 @@
           "_engine_run": true
         }
       },
-      "capex_total": 250.0,
-      "tokens_2025_annualized": null,
-      "infra_to_revenue_ratio_2025": 13,
+      "capex_total": 745,
+      "tokens_2025_annualized": 360,
+      "infra_to_revenue_ratio_2025": 27,
+      "_overrides": {
+        "capex_total": {
+          "engine_value": 250.0,
+          "override_value": 745,
+          "reason": "Editorial cumulative per assumptions-audit.md \u00a74.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
+          "set_by": "simon",
+          "set_at": "2026-05-03",
+          "expires_at": "2026-09-01"
+        },
+        "customer_revenue_gross": {
+          "engine_value": 23.9444,
+          "override_value": 28,
+          "reason": "Engine output of ~$24B undercounts because 2024 collected_revenue isn't populated for most providers and 2023 entirely absent. $28B reflects historic editorial cumulative. Override pending wq-066 backfill of 2023+2024 per-provider revenue.",
+          "set_by": "simon",
+          "set_at": "2026-05-03",
+          "expires_at": "2026-09-01"
+        },
+        "tokens_2025_annualized": {
+          "engine_value": null,
+          "override_value": 360,
+          "reason": "Editorial cumulative tokens per model-assumptions.md \u00a72; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
+          "set_by": "simon",
+          "set_at": "2026-05-03",
+          "expires_at": "2026-09-01"
+        }
+      },
       "_engine": "scripts/derive_cumulative_aggregates.py (wq-063)",
       "_sources": [
         "2023: gross=None (missing), net=None, capex=0",

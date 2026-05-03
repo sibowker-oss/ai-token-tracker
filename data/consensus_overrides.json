@@ -40,5 +40,26 @@
     "set_by": "simon",
     "set_at": "2026-05-02",
     "expires_at": "2027-01-01"
+  },
+  "_cumulative_2023_2025.capex_total": {
+    "value": 745,
+    "reason": "Editorial cumulative per assumptions-audit.md §4.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
+    "set_by": "simon",
+    "set_at": "2026-05-03",
+    "expires_at": "2026-09-01"
+  },
+  "_cumulative_2023_2025.customer_revenue_gross": {
+    "value": 28,
+    "reason": "Engine output of ~$24B undercounts because 2024 collected_revenue isn't populated for most providers and 2023 entirely absent. $28B reflects historic editorial cumulative. Override pending wq-066 backfill of 2023+2024 per-provider revenue.",
+    "set_by": "simon",
+    "set_at": "2026-05-03",
+    "expires_at": "2026-09-01"
+  },
+  "_cumulative_2023_2025.tokens_2025_annualized": {
+    "value": 360,
+    "reason": "Editorial cumulative tokens per model-assumptions.md §2; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
+    "set_by": "simon",
+    "set_at": "2026-05-03",
+    "expires_at": "2026-09-01"
   }
 }

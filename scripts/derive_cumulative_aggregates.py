@@ -27,8 +27,52 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ENTITIES_PATH = ROOT / "entities.json"
+OVERRIDES_PATH = ROOT / "data" / "consensus_overrides.json"
 
 YEARS = ["2023", "2024", "2025"]
+
+
+_SCHEMA_DOC_KEYS = {"_doc", "_schema_examples", "_schema", "_notes"}
+
+
+def _load_overrides() -> dict:
+    """Editorial overrides. Drops schema/doc keys (`_doc`, `_schema_examples`)
+    but RETAINS real override keys that happen to start with `_` like
+    `_cumulative_2023_2025.<field>`. Checks expiry — expired overrides are ignored."""
+    if not OVERRIDES_PATH.exists():
+        return {}
+    raw = json.loads(OVERRIDES_PATH.read_text())
+    today = "2026-05-03"  # used as the comparison date for expiry semantics
+    out = {}
+    for k, v in raw.items():
+        if k in _SCHEMA_DOC_KEYS:
+            continue
+        if not isinstance(v, dict):
+            continue
+        # A real override always has a 'value' field; schema examples nest other dicts
+        if "value" not in v:
+            continue
+        expires = v.get("expires_at")
+        if expires and expires < today:
+            continue
+        out[k] = v
+    return out
+
+
+def _apply_override(field_name: str, engine_value, overrides: dict) -> tuple:
+    """Returns (final_value, override_metadata_or_None). field_name is
+    the dotted key as it appears in consensus_overrides.json."""
+    ov = overrides.get(field_name)
+    if not ov:
+        return (engine_value, None)
+    return (ov.get("value"), {
+        "engine_value": engine_value,
+        "override_value": ov.get("value"),
+        "reason": ov.get("reason"),
+        "set_by": ov.get("set_by"),
+        "set_at": ov.get("set_at"),
+        "expires_at": ov.get("expires_at"),
+    })
 
 
 def _gross_from_channels_grossed(channels_grossed: list) -> float | None:
@@ -142,6 +186,29 @@ def derive_cumulative(entities: dict) -> dict:
         )
     else:
         cumulative["infra_to_revenue_ratio_2025"] = None
+
+    # ── Editorial overrides (consensus_overrides.json) ────────────────────
+    # Each override key is "_cumulative_2023_2025.<field>". When present and
+    # not expired, override.value wins over engine output. Engine value is
+    # preserved on the cumulative._overrides metadata for audit traceability.
+    overrides = _load_overrides()
+    overrides_log = {}
+    for field in ("capex_total", "customer_revenue_gross", "customer_revenue_net", "tokens_2025_annualized"):
+        key = f"_cumulative_2023_2025.{field}"
+        engine_val = cumulative.get(field)
+        final_val, meta = _apply_override(key, engine_val, overrides)
+        if meta is not None:
+            cumulative[field] = final_val
+            overrides_log[field] = meta
+    # If overrides changed gross/capex, recompute ratio. Match the semantics
+    # that index.html SCENARIOS uses (capex_total / cumulative gross), so the
+    # field served from site-data.json:cumulative agrees with the rendered
+    # hook-ratio number.
+    if overrides_log and cumulative.get("capex_total") and cumulative.get("customer_revenue_gross"):
+        cumulative["infra_to_revenue_ratio_2025"] = round(
+            cumulative["capex_total"] / cumulative["customer_revenue_gross"]
+        )
+    cumulative["_overrides"] = overrides_log
 
     cumulative["_engine"] = "scripts/derive_cumulative_aggregates.py (wq-063)"
     cumulative["_sources"] = sources_log
