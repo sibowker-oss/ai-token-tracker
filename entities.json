@@ -13836,6 +13836,266 @@
           ]
         }
       }
+    },
+    {
+      "slug": "bytedance",
+      "name": "ByteDance",
+      "displayName": "ByteDance / Doubao",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "proprietary",
+      "color": "#000000",
+      "products": [
+        "Doubao",
+        "Coze",
+        "Cici"
+      ],
+      "current": {
+        "tokens_per_day": 110,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 110
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-bytedance-tokens",
+              "claim": "ByteDance/Doubao token volume v3 consensus ~110T/day per model-assumptions.md \u00a72.4 (Volcano Engine 120T disclosure, confirmed by 4/7 models)",
+              "value": 110,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 100-120T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://www.bytedance.com"
+    },
+    {
+      "slug": "alibaba",
+      "name": "Alibaba",
+      "displayName": "Alibaba / Qwen",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "both",
+      "color": "#ff6a00",
+      "products": [
+        "Qwen (open-weights)",
+        "Tongyi"
+      ],
+      "current": {
+        "tokens_per_day": 25,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 25
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-alibaba-tokens",
+              "claim": "Alibaba/Qwen token volume v3 consensus ~25T/day per model-assumptions.md \u00a72.4 (5T external + 16-17T internal company statements)",
+              "value": 25,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 20-30T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://www.alibabacloud.com"
+    },
+    {
+      "slug": "tencent",
+      "name": "Tencent",
+      "displayName": "Tencent / Hunyuan",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "proprietary",
+      "color": "#1ba1e2",
+      "products": [
+        "Hunyuan",
+        "Yuanbao"
+      ],
+      "current": {
+        "tokens_per_day": 10,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 10
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-tencent-tokens",
+              "claim": "Tencent/Hunyuan token volume v3 consensus ~10T/day per model-assumptions.md \u00a72.4 (market share inference from China 140T total)",
+              "value": 10,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 8-12T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://hunyuan.tencent.com"
+    },
+    {
+      "slug": "baidu",
+      "name": "Baidu",
+      "displayName": "Baidu / Ernie",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "proprietary",
+      "color": "#2932e1",
+      "products": [
+        "Ernie",
+        "Wenxin"
+      ],
+      "current": {
+        "tokens_per_day": 8,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 8
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-baidu-tokens",
+              "claim": "Baidu/Ernie token volume v3 consensus ~8T/day per model-assumptions.md \u00a72.4 (1T/day Aug 2024 + 33x annual growth extrapolation)",
+              "value": 8,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 6-10T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://yiyan.baidu.com"
+    },
+    {
+      "slug": "_self_hosted",
+      "name": "Self-Hosted Open Models",
+      "displayName": "Self-Hosted Open Models",
+      "roles": [
+        "aggregator"
+      ],
+      "region": "Global",
+      "model_type": "open",
+      "color": "#94a3b8",
+      "products": [],
+      "current": {
+        "tokens_per_day": 30,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 30
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-selfhosted-tokens",
+              "claim": "Self-hosted open models token volume v3 consensus ~30T/day per model-assumptions.md \u00a72.4 (Llama/Qwen/Mistral on vLLM/Ollama/enterprise GPU)",
+              "value": 30,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 20-40T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "_synthetic": true,
+      "_aggregates": "Open-weight model deployments (Llama, DeepSeek-open, Mistral-open, Qwen, etc.) running on customer infrastructure"
+    },
+    {
+      "slug": "_other_closed",
+      "name": "Other Closed Providers",
+      "displayName": "Other Closed Model Providers",
+      "roles": [
+        "aggregator"
+      ],
+      "_synthetic": true,
+      "_aggregates": "Closed-weight providers not individually tracked: Cohere + AI21 + Samsung Gauss + Apple Intelligence",
+      "region": "Global",
+      "color": "#94a3b8",
+      "current": {
+        "tokens_per_day": 10,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-other-closed-tokens",
+              "claim": "Aggregated estimate of closed-weight providers not individually tracked: ~10T/day across Cohere + AI21 + Samsung Gauss + Apple Intelligence",
+              "value": 10,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "speculative",
+              "source": "model-assumptions.md \u00a72.4 v3 'Other closed' aggregate estimate",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      }
     }
   ],
   "market_aggregates": {
@@ -14092,7 +14352,7 @@
         "moonshot: opex ESTIMATED (no source/op_loss path)"
       ],
       "_residual_doc": "Engine writes per-provider customer_revenue derived from entities.json:financials.<year>.collected_revenue (wq-048). Channel/buyer totals computed by generate_site_data.py from this block + the existing editorial channel structure (proportional rescale to total_customer_revenue). Non-provider revenue (e.g. Microsoft Copilot via Trad SaaS channel) handled in the channel structure, not in providers.",
-      "_engine_run_at": "2026-05-03T05:52:54Z",
+      "_engine_run_at": "2026-05-03T10:35:54Z",
       "_engine": "scripts/derive_sankey.py (wq-055)",
       "routing": {
         "openai": {
@@ -14165,8 +14425,8 @@
       "sovereign_capex": 0.0,
       "enterprise_capex": 4.6557,
       "total_capex": 257.2401,
-      "tokens_per_day_total": 330,
-      "tokens_annual_inference": 1.2045e+17,
+      "tokens_per_day_total": 310.0,
+      "tokens_annual_inference": 1.1315e+17,
       "tokens_annual_training": null,
       "total_segment_consumer": 8.9843,
       "total_segment_sme": 3.7738,
@@ -14182,8 +14442,8 @@
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
       "yoy_total_customer_revenue_growth_pct": null,
-      "yoy_total_capex_growth_pct": 31405.22,
-      "yoy_tokens_annual_inference_growth_pct": 816.67,
+      "yoy_total_capex_growth_pct": 13.41,
+      "yoy_tokens_annual_inference_growth_pct": 733.33,
       "_market_provenance": {
         "mag7_capex": {
           "origin": "sourced",
@@ -14223,17 +14483,10 @@
           ]
         },
         "tokens_per_day_total": {
-          "claim": "tokens_per_day_total 2025 = 330 per model-assumptions.md \u00a72.4 v3 consensus global midpoint",
-          "value": 330,
-          "source": "model-assumptions.md \u00a72.4 v3 consensus global midpoint (280-370T/day across Western 9 + Chinese + self-hosted)",
-          "section": "\u00a72.4",
-          "weight": "indicative",
-          "confidence": "estimated",
-          "origin": "editorial_audit_doc_refresh",
-          "date": "2026-05-03",
-          "previous_value": 117.0,
-          "supersedes": "wq-066 incorrect \u00a75.1 backfill of 565 (\u00a75.1 is v1/v2 lineage; v3 explicitly revised down to 280-370T)",
-          "authoritative_supersedes_engine": true
+          "origin": "derived_per_entity_rollup",
+          "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
+          "rate_used_for_estimation": 4300000000.0,
+          "n_contributors": 15
         },
         "tokens_annual_inference": {
           "origin": "derived_pure_function",
@@ -14261,20 +14514,20 @@
             "tokens_annual_inference"
           ]
         },
-        "_market_engine_run_at": "2026-05-03T10:01:59Z",
+        "_market_engine_run_at": "2026-05-03T11:06:34Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
         "sourced": 0,
-        "derived_daily_x365": 9,
+        "derived_daily_x365": 15,
         "estimated_revenue_rate": 0
       }
     },
     "_cumulative_2023_2025": {
-      "customer_revenue_gross": 28,
+      "customer_revenue_gross": 23.9444,
       "customer_revenue_net": 17.557,
       "capex": 630.5844,
-      "tokens": 0.0,
+      "tokens": 346.0,
       "by_year": {
         "2023": {
           "customer_revenue_gross": null,
@@ -14288,7 +14541,7 @@
           "customer_revenue_gross": 4.0826,
           "customer_revenue_net": null,
           "capex": 226,
-          "tokens": null,
+          "tokens": 36.0,
           "_gross_source": "per_entity_collected_revenue",
           "_engine_run": false
         },
@@ -14296,35 +14549,19 @@
           "customer_revenue_gross": 19.8618,
           "customer_revenue_net": 17.557,
           "capex": 252.5844,
-          "tokens": null,
+          "tokens": 310.0,
           "_gross_source": "engine_gross_field",
           "_engine_run": true
         }
       },
       "capex_total": 745,
-      "tokens_2025_annualized": 360,
-      "infra_to_revenue_ratio_2025": 27,
+      "tokens_2025_annualized": 310.0,
+      "infra_to_revenue_ratio_2025": 31,
       "_overrides": {
         "capex_total": {
           "engine_value": 630.5844,
           "override_value": 745,
           "reason": "Editorial cumulative per assumptions-audit.md \u00a74.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
-          "set_by": "simon",
-          "set_at": "2026-05-03",
-          "expires_at": "2026-09-01"
-        },
-        "customer_revenue_gross": {
-          "engine_value": 23.9444,
-          "override_value": 28,
-          "reason": "Engine output of ~$24B undercounts because 2024 collected_revenue isn't populated for most providers and 2023 entirely absent. $28B reflects historic editorial cumulative. Override pending wq-066 backfill of 2023+2024 per-provider revenue.",
-          "set_by": "simon",
-          "set_at": "2026-05-03",
-          "expires_at": "2026-09-01"
-        },
-        "tokens_2025_annualized": {
-          "engine_value": null,
-          "override_value": 360,
-          "reason": "Editorial cumulative tokens per model-assumptions.md \u00a72; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
           "set_by": "simon",
           "set_at": "2026-05-03",
           "expires_at": "2026-09-01"
@@ -14359,42 +14596,11 @@
       "yoy_tokens_annual_inference_growth_pct": null,
       "_market_provenance": {
         "mag7_capex": {
-          "claim": "mag7_capex 2023 = $152B (Meta + Microsoft + Google + Amazon + Apple per public 10-K disclosures, AI-attributable subsets)",
-          "value": 152,
-          "source": "public 10-K filings (Meta, Microsoft, Google/Alphabet, Amazon, Apple)",
-          "weight": "indicative",
-          "confidence": "estimated",
-          "origin": "editorial_audit_doc_backfill",
-          "date": "2026-05-03",
-          "previous_value": 152,
-          "members": [
-            {
-              "slug": "meta",
-              "value": 28,
-              "src": "Meta 2023 10-K capex (AI-attributable subset)"
-            },
-            {
-              "slug": "microsoft",
-              "value": 33,
-              "src": "Microsoft FY2023 10-K capex; cloud + AI subset"
-            },
-            {
-              "slug": "google",
-              "value": 32,
-              "src": "Alphabet 2023 10-K technical infrastructure capex"
-            },
-            {
-              "slug": "amazon",
-              "value": 48,
-              "src": "Amazon 2023 10-K capex; AWS subset"
-            },
-            {
-              "slug": "apple",
-              "value": 11,
-              "src": "Apple 2023 10-K capex (smaller AI share)"
-            }
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2023.mag7_capex"
           ],
-          "_doc": "wq-068 \u00a73.2 starter values; verified within \u00b115% of public 10-K disclosures. NVIDIA + Tesla excluded (NVIDIA spends on R&D not infra; Tesla not Mag7 AI capex per Sankey methodology)."
+          "engine_rollup_value": null
         },
         "neocloud_capex": {
           "origin": "sourced",
@@ -14428,7 +14634,7 @@
         },
         "tokens_per_day_total": {
           "origin": "derived_per_entity_rollup",
-          "scope": "model_provider role only (audit \u00a75.3 method \u2014 aggregators + apps consume model_provider tokens, summing all double-counts)",
+          "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
           "rate_used_for_estimation": null,
           "n_contributors": 0
         },
@@ -14452,7 +14658,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T10:01:59Z",
+        "_market_engine_run_at": "2026-05-03T11:06:34Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14478,46 +14684,15 @@
       "capex_per_token_usd": null,
       "revenue_per_token_usd": null,
       "yoy_total_customer_revenue_growth_pct": null,
-      "yoy_total_capex_growth_pct": null,
+      "yoy_total_capex_growth_pct": 49.22,
       "yoy_tokens_annual_inference_growth_pct": null,
       "_market_provenance": {
         "mag7_capex": {
-          "claim": "mag7_capex 2024 = $226B (Meta + Microsoft + Google + Amazon + Apple per public 10-K disclosures, AI-attributable subsets)",
-          "value": 226,
-          "source": "public 10-K filings (Meta, Microsoft, Google/Alphabet, Amazon, Apple)",
-          "weight": "indicative",
-          "confidence": "estimated",
-          "origin": "editorial_audit_doc_backfill",
-          "date": "2026-05-03",
-          "previous_value": 226,
-          "members": [
-            {
-              "slug": "meta",
-              "value": 35,
-              "src": "Meta 2024 10-K capex (AI-attributable subset)"
-            },
-            {
-              "slug": "microsoft",
-              "value": 50,
-              "src": "Microsoft FY2024 10-K capex; cloud + AI subset"
-            },
-            {
-              "slug": "google",
-              "value": 52,
-              "src": "Alphabet 2024 10-K technical infrastructure capex"
-            },
-            {
-              "slug": "amazon",
-              "value": 77,
-              "src": "Amazon 2024 10-K capex; AWS subset"
-            },
-            {
-              "slug": "apple",
-              "value": 12,
-              "src": "Apple 2024 10-K capex (smaller AI share)"
-            }
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2024.mag7_capex"
           ],
-          "_doc": "wq-068 \u00a73.2 starter values; verified within \u00b115% of public 10-K disclosures. NVIDIA + Tesla excluded (NVIDIA spends on R&D not infra; Tesla not Mag7 AI capex per Sankey methodology)."
+          "engine_rollup_value": null
         },
         "neocloud_capex": {
           "origin": "sourced",
@@ -14551,7 +14726,7 @@
         },
         "tokens_per_day_total": {
           "origin": "derived_per_entity_rollup",
-          "scope": "model_provider role only (audit \u00a75.3 method \u2014 aggregators + apps consume model_provider tokens, summing all double-counts)",
+          "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
           "rate_used_for_estimation": null,
           "n_contributors": 2
         },
@@ -14575,7 +14750,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T10:01:59Z",
+        "_market_engine_run_at": "2026-05-03T11:06:34Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {

@@ -1,5 +1,5 @@
 {
-  "_doc": "wq-048 + wq-055 — editorial overrides. When key is present and not expired, override.value wins over engine output. Provenance records both engine calc AND override reason. Set expiry dates to force re-review.",
+  "_doc": "wq-048 + wq-055 \u2014 editorial overrides. When key is present and not expired, override.value wins over engine output. Provenance records both engine calc AND override reason. Set expiry dates to force re-review.",
   "_schema_examples": {
     "wq-048 collected_revenue override (consensus engine)": {
       "openai.2025.collected_revenue": {
@@ -12,7 +12,7 @@
     },
     "wq-055 vc_subsidy override (Sankey balancing engine)": {
       "openai.2025.vc_subsidy": {
-        "value": 5.20,
+        "value": 5.2,
         "reason": "Hand-set to historical Sankey value pending re-calibration. Engine derives lower (~$4.34B) given OpenAI customer revenue revision. Editorial choice to keep VC node at $5.20B for narrative continuity until H2 2025 data lands.",
         "set_by": "simon",
         "set_at": "2026-05-03",
@@ -22,13 +22,13 @@
     "wq-055 cost-structure parameter override (calibration tuning)": {
       "2025.cost_structure.opex_estimation.size_bands.1.rate": {
         "value": 0.85,
-        "reason": "Tightening $1-5B band rate from 1.00 → 0.85 to bring Google engine output closer to hand-curated $2.50B without affecting Anthropic significantly.",
+        "reason": "Tightening $1-5B band rate from 1.00 \u2192 0.85 to bring Google engine output closer to hand-curated $2.50B without affecting Anthropic significantly.",
         "set_by": "simon",
         "set_at": "2026-05-03"
       },
       "2025.cost_structure.inference_estimation.providerRates.google": {
-        "value": 0.40,
-        "reason": "Raising Google's inference rate from 0.30 → 0.40 to bring engine output closer to hand-curated $2.50B.",
+        "value": 0.4,
+        "reason": "Raising Google's inference rate from 0.30 \u2192 0.40 to bring engine output closer to hand-curated $2.50B.",
         "set_by": "simon",
         "set_at": "2026-05-03"
       }
@@ -36,28 +36,14 @@
   },
   "anthropic.2025.collected_revenue": {
     "value": 4.71,
-    "reason": "Hand-curated via §7.2 weighted consensus across 3 independent sources (court affidavit + Sacra + The Information). Engine §2 method bottoms out at $2.92B due to fallback haircut even with 2024 ARR populated; full reconciliation to engine pending more H2 2025 data.",
+    "reason": "Hand-curated via \u00a77.2 weighted consensus across 3 independent sources (court affidavit + Sacra + The Information). Engine \u00a72 method bottoms out at $2.92B due to fallback haircut even with 2024 ARR populated; full reconciliation to engine pending more H2 2025 data.",
     "set_by": "simon",
     "set_at": "2026-05-02",
     "expires_at": "2027-01-01"
   },
   "_cumulative_2023_2025.capex_total": {
     "value": 745,
-    "reason": "Editorial cumulative per assumptions-audit.md §4.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
-    "set_by": "simon",
-    "set_at": "2026-05-03",
-    "expires_at": "2026-09-01"
-  },
-  "_cumulative_2023_2025.customer_revenue_gross": {
-    "value": 28,
-    "reason": "Engine output of ~$24B undercounts because 2024 collected_revenue isn't populated for most providers and 2023 entirely absent. $28B reflects historic editorial cumulative. Override pending wq-066 backfill of 2023+2024 per-provider revenue.",
-    "set_by": "simon",
-    "set_at": "2026-05-03",
-    "expires_at": "2026-09-01"
-  },
-  "_cumulative_2023_2025.tokens_2025_annualized": {
-    "value": 360,
-    "reason": "Editorial cumulative tokens per model-assumptions.md §2; engine has no annual aggregation field yet. Override pending wq-067 token engine extension.",
+    "reason": "Editorial cumulative per assumptions-audit.md \u00a74.1; engine reflects only populated mag7_capex 2025 ($250B). Awaiting backfill of neocloud + sovereign + enterprise capex per year via wq-066. Override holds published value until backfill ships.",
     "set_by": "simon",
     "set_at": "2026-05-03",
     "expires_at": "2026-09-01"

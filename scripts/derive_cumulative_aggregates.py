@@ -107,9 +107,13 @@ def _capex_for_year(ma_year: dict) -> float:
 
 
 def _tokens_for_year(ma_year: dict) -> float:
-    """Annual token volume. Currently no aggregated annual field exists in
-    market_aggregates — return None and let the renderer fall back to the
-    hardcoded display value with a documented warning."""
+    """Tokens display value (T/day to match index.html convention).
+    wq-070 — read tokens_per_day_total written by wq-067 engine; falls back
+    to legacy tokens_annual / annual_tokens fields if needed. Returns None
+    when no source is populated."""
+    val = ma_year.get("tokens_per_day_total")
+    if val is not None:
+        return val
     val = ma_year.get("tokens_annual") or ma_year.get("annual_tokens")
     return val if isinstance(val, (int, float)) else None
 
