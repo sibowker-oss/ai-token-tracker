@@ -159,6 +159,7 @@
     .footer-grid{grid-template-columns:1fr;gap:16px;}
   }
 </style>
+<script src="data/format-helpers.js"></script>
 </head>
 <body class="surface-dark">
 
@@ -350,7 +351,10 @@ let SCENARIOS = _buildScenarios(FALLBACK_BASE);
 
 function _buildScenarios(base) {
   const r = base.revenue, c = base.capex, t = base.tokens;
-  const fmt$ = v => '$' + Math.round(v) + 'B';
+  // wq-076: fmt$ uses formatCurrency for magnitude-aware rounding (loaded
+  // from data/format-helpers.js). Falls back to inline format if helper
+  // hasn't loaded yet (e.g. fetch-failure path).
+  const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
   const fmtT = v => '~' + Math.round(v) + 'T';
   const fmtRatio = v => '$' + Math.round(v);
   return {

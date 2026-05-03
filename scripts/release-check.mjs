@@ -81,18 +81,27 @@ const noHardcodedStatus = run('node', ['scripts/validate-no-hardcoded-constants.
 // source value; per-destination inflow == outflow == destination value;
 // per-utilization inflow == utilization value. Same lesson as wq-044/062 —
 // rendered output must reconcile to engine input at every node boundary.
-console.log('\n→ 7/9  Capital-sankey conservation (wq-074 §3 #6)');
+console.log('\n→ 7/10  Capital-sankey conservation (wq-074 §3 #6)');
 const capitalSankeyJson = join(reportDir, 'capital-sankey.json');
 const capitalSankeyStatus = run('node', ['scripts/validate-capital-sankey.mjs'], {
   RELEASE_CHECK_CAPITAL_SANKEY_JSON_OUT: capitalSankeyJson,
 });
 
-// Step 8: Playwright suite
-console.log('\n→ 8/9  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 8 (wq-076 §3 #6): currency-format — assert no excess-decimal dollar
+// literals (e.g. $176.48B) in wq-076-wired pages, and that format-helpers.js
+// is loaded so formatCurrency() is defined.
+console.log('\n→ 8/10  Currency-format (wq-076 §3 #6)');
+const currencyFormatJson = join(reportDir, 'currency-format.json');
+const currencyFormatStatus = run('node', ['scripts/validate-currency-format.mjs'], {
+  RELEASE_CHECK_CURRENCY_FORMAT_JSON_OUT: currencyFormatJson,
+});
+
+// Step 9: Playwright suite
+console.log('\n→ 9/10  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 9: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 9/9  Editorial read-through (§11.5)');
+// Step 10: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 10/10  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -117,6 +126,9 @@ const noHardcodedFails = noHardcodedFindings.filter(f => f.severity === 'fail');
 
 const capitalSankeyFindings = existsSync(capitalSankeyJson) ? JSON.parse(readFileSync(capitalSankeyJson, 'utf8')) : [];
 const capitalSankeyFails = capitalSankeyFindings.filter(f => f.severity === 'fail');
+
+const currencyFormatFindings = existsSync(currencyFormatJson) ? JSON.parse(readFileSync(currencyFormatJson, 'utf8')) : [];
+const currencyFormatFails = currencyFormatFindings.filter(f => f.severity === 'fail');
 
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
@@ -146,12 +158,13 @@ const report = `# Release-check report
 | Market-aggregates consistency (wq-067) | ${marketAggFindings.length === 0 ? '✓' : ''} | 0 | ${marketAggFails.length} |
 | No-hardcoded-constants (wq-073) | ${noHardcodedFindings.length === 0 ? '✓' : ''} | 0 | ${noHardcodedFails.length} |
 | Capital-sankey conservation (wq-074) | ${capitalSankeyFindings.length === 0 ? '✓' : ''} | 0 | ${capitalSankeyFails.length} |
+| Currency-format (wq-076) | ${currencyFormatFindings.length === 0 ? '✓' : ''} | 0 | ${currencyFormatFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + pwSummary.failures, provAdvisories.length)}
 
 ## Provenance findings
 
@@ -180,6 +193,10 @@ ${renderFindings(noHardcodedFindings)}
 ## Capital-sankey conservation findings (wq-074 §3 #6)
 
 ${renderFindings(capitalSankeyFindings)}
+
+## Currency-format findings (wq-076 §3 #6)
+
+${renderFindings(currencyFormatFindings)}
 
 ## Playwright suite
 
@@ -215,6 +232,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   market_aggregates: marketAggFindings,
   no_hardcoded_constants: noHardcodedFindings,
   capital_sankey: capitalSankeyFindings,
+  currency_format: currencyFormatFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -222,7 +240,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);
