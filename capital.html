@@ -195,7 +195,7 @@
   <h1>Capital Ledger</h1>
   <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
   <div class="sub">
-    <strong>$745B of AI infrastructure investment, 2023&ndash;2025.</strong>
+    <strong><span data-narrative="capital_sankey_total">$745B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
     Every dollar of cumulative AI capital expenditure &mdash; from spender &rarr; silicon &rarr; current workload &mdash; mapped as a balance-sheet view.
     Anchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.
     The balance-sheet mirror of <a href="revenue.html" class="link-revenue">the Revenue Ledger</a>.
@@ -242,7 +242,7 @@
 
       <div style="margin-bottom:6px;">
         <strong style="color:var(--accent); font-size:13px;">3. Revenue vs. depreciation</strong>
-        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx reached approximately $380B in 2025. Current AI customer revenue is approximately $17.5B/yr.</span>
+        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx reached approximately <span data-narrative="market_2025_total_capex">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative="market_2025_total_customer_revenue_gross">$17.5B</span>/yr.</span>
       </div>
       <table class="convergence-table" style="margin-top:8px;">
         <tr><th>Question</th><th>What it requires</th><th style="text-align:right;">Current status</th></tr>
@@ -310,7 +310,7 @@
       <div class="conv-path">
         <div class="cp-num">1</div>
         <div class="cp-title">Revenue compounds at 3&ndash;4x annually</div>
-        <div class="cp-desc">AI customer revenue ($17.5B in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categories all contribute.</div>
+        <div class="cp-desc">AI customer revenue (<span data-narrative="market_2025_total_customer_revenue_gross">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categories all contribute.</div>
         <div class="cp-signal">Signal to watch: quarterly revenue growth rate across OpenAI, Anthropic, Google Cloud AI, AWS Bedrock</div>
       </div>
       <div class="conv-path">
@@ -333,7 +333,7 @@
     <h2>Structure notes</h2>
     <div class="notes">
       <ul>
-        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> ($745B). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
+        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative="capital_sankey_total">$745B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
         <li><strong>Middle = 5 nodes</strong> &mdash; what the money physically bought. NVIDIA GPU $303B cross-checks against calendarised NVIDIA DC revenue (Tier 1A).</li>
         <li><strong>RHS = 6 nodes = current physical state of each asset</strong> (balance-sheet view, full purchase price):
           <ul>
@@ -921,6 +921,11 @@ document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('acti
 fetch('site-data.json?v=' + Date.now())
   .then(r => r.json())
   .then(d => {
+    // wq-077 — hydrate [data-narrative] spans from engine values regardless
+    // of capital_sankey availability. Standalone path so narrative copy stays
+    // current even if FLOWS fetch fails.
+    if (typeof hydrateNarrative === 'function') hydrateNarrative(d);
+
     const cs = d && d.capital_sankey;
     if (!cs || !cs.flows || !cs.flows.length) {
       console.warn('wq-074 — capital_sankey not in site-data.json; using FALLBACK_FLOWS');

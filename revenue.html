@@ -230,6 +230,13 @@ async function init() {
   document.getElementById('year-toggle').innerHTML = html;
   document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === activeYear));
   renderYear(activeYear);
+
+  // wq-077 — hydrate [data-narrative] spans from site-data.json. Independent
+  // fetch from the sankey-projections one above; failure leaves inline defaults.
+  fetch('site-data.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(d => { if (typeof hydrateNarrative === 'function') hydrateNarrative(d); })
+    .catch(() => { /* graceful fallback to inline defaults */ });
 }
 
 function switchYear(yr) {
@@ -302,10 +309,13 @@ function renderYear(yr) {
   document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
 
-  // Dynamic subtitles incorporating scenario
+  // Dynamic subtitles incorporating scenario.
+  // wq-077: 2025 branch hydrates from engine values (was hardcoded "$17.5B" / "$9.4B").
   let subtitle = '';
   if (yr === '2025') {
-    subtitle = '$17.5B in customer revenue and $9.4B in VC-funded operating losses across frontier AI providers.';
+    const grossYr = (d.totalCustomerRevenue_gross != null) ? d.totalCustomerRevenue_gross : revenue;
+    const vcYr = (d.totalVCSubsidy != null) ? d.totalVCSubsidy : vcSubsidy;
+    subtitle = formatCurrency(grossYr) + ' in customer revenue and ' + formatCurrency(vcYr) + ' in VC-funded operating losses across frontier AI providers.';
   } else {
     subtitle = scenarioData.label + ' case: ' + formatCurrency(revenue) + ' in customer revenue. VC subsidy ' + formatCurrency(vcSubsidy) + '. Growth assumption: ' + scenarioData.growth + ' annually.';
   }
