@@ -244,7 +244,13 @@ function renderYear(yr) {
   // Base scenario = the data as-is. Bear/bull scale the customer revenue headline.
   const scenarioData = SCENARIOS[currentScenario];
   const mult = scenarioData.multiplier[yr] || 1.0;
-  const baseRevenue = d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  // wq-062: prefer totalCustomerRevenue (provider-received revenue, $17.5B) over
+  // sum-of-non-VC-buyers (now $19.9B since channels are grossed up to include
+  // channel margins). Only the former is what the headline "Customer Revenue"
+  // card has historically represented.
+  const baseRevenue = (d.totalCustomerRevenue != null)
+    ? d.totalCustomerRevenue
+    : d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
   const revenue = baseRevenue * mult;
 
   // VC subsidy scales inversely with revenue growth (higher revenue = less subsidy needed)
@@ -382,7 +388,10 @@ function buildSankey(d) {
   const spacing = (W - margin*2 - colW*4) / 3;
   const barH = 450, gap = 5, topY = 50;
 
-  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null}));
+  // wq-062 — pass color + slug through so the renderer can use data-supplied colors
+  // (fixes Google/Gemini and Other Model Providers grey-fallback bug) and so the
+  // routing-aware Channels→Providers builder can match routing entries by slug.
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null}));
   const colDefs = [
     { label:'Who Pays', items: wrap(d.buyers) },
     { label:'Channels', items: wrap(d.channels) },
@@ -401,7 +410,7 @@ function buildSankey(d) {
     const x = margin + ci*(colW + spacing);
     col.items.forEach(item => {
       const h = item.value * scale;
-      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, color:item.color, slug:item.slug, x, y, w:colW, h, col:ci, _in:0, _out:0 });
       y += h + gap;
     });
   });
@@ -449,11 +458,30 @@ function buildSankey(d) {
   const baseValue = (p) => (p.name==='OpenAI' ? Math.max(p.value - adsBump, 0) : p.value);
   const frontierBaseTotal = frontierNodes.reduce((s,n)=>s+baseValue(n),0);
 
+  // wq-062 — routing-aware Channels→Providers. d.routing is keyed by provider slug;
+  // each entry maps Sankey channel label → customer-revenue contribution. Channel
+  // values are already grossed up by the engine so chPass = sum(routing per channel)
+  // and the channel margin still flows to Generated Cashflow. Falls back to the
+  // pre-wq-062 proportional logic when d.routing is absent (backward compat).
+  const routing = d.routing || null;
+  const provBySlug = {};
+  if (routing) {
+    provNodes.forEach(p => { if (p.slug) provBySlug[p.slug] = p; });
+  }
+
   chNodes.forEach(ch => {
     const mPct = marginPcts[ch.name]||0;
     const pass = ch.value * (1-mPct);
 
-    if(ch.name==='Ads') {
+    if (routing && ch.name !== 'Ads') {
+      Object.entries(routing).forEach(([slug, channels]) => {
+        const v = channels[ch.name] || 0;
+        const prov = provBySlug[slug];
+        if (v > 0.01 && prov) {
+          flowDefs.push({from:ch.name, to:prov.name, value:v, fc:1, tc:2});
+        }
+      });
+    } else if(ch.name==='Ads') {
       flowDefs.push({from:ch.name, to:'OpenAI', value:pass, fc:1, tc:2});
     } else if(ch.name==='IaaS & Agg.' && iaasNode) {
       flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass, fc:1, tc:2});
@@ -564,7 +592,8 @@ function renderCanvas(ctx, W) {
     const connected = aName && (f.from.name===aName || f.to.name===aName);
     const dimmed = aName && !connected;
     ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.5 : 0.18;
-    ctx.fillStyle = COLORS[f.from.name] || '#475569';
+    // wq-062 — prefer node-supplied color (from data) over the hard-coded COLORS map
+    ctx.fillStyle = f.from.color || COLORS[f.from.name] || '#475569';
     ctx.beginPath();
     const cp = (f.rx - f.lx) * 0.4;
     ctx.moveTo(f.lx, f.ly);
@@ -590,7 +619,8 @@ function renderCanvas(ctx, W) {
     const isActive = n.name === aName;
     const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
     ctx.globalAlpha = dimmed ? 0.25 : 1;
-    ctx.fillStyle = COLORS[n.name] || '#475569';
+    // wq-062 — prefer node-supplied color over the hard-coded COLORS map
+    ctx.fillStyle = n.color || COLORS[n.name] || '#475569';
     ctx.beginPath(); ctx.roundRect(n.x, n.y, n.w, Math.max(n.h,2), 4); ctx.fill();
     if(isActive) { ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke(); }
     if(n.h > 16) {
