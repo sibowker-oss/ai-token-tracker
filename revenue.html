@@ -155,14 +155,25 @@
 </div>
 
 <script>
-// ── Scenario data ──
+// ── Scenario data (wq-073 — fetched from data/scenarios.json) ──
+// Inline defaults remain as graceful fallback if fetch fails.
 // Scenario multipliers: 2025 is actual (no flex). 2026E/2027E flex by scenario.
 // Bear = current trajectory decelerates. Base = data as modeled. Bull = agent-driven acceleration.
-const SCENARIOS = {
+let SCENARIOS = {
   bear:  { revenue: 17, label: 'Bear', growth: '20-30%', multiplier: { '2025': 1.0, '2026E': 0.55, '2027E': 0.40 } },
   base:  { revenue: 22, label: 'Base', growth: '80-100%', multiplier: { '2025': 1.0, '2026E': 1.0, '2027E': 1.0 } },
   bull:  { revenue: 27, label: 'Bull', growth: '200%+', multiplier: { '2025': 1.0, '2026E': 1.35, '2027E': 1.80 } }
 };
+fetch('data/scenarios.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(s => {
+    if (s && s.revenue_projection) {
+      SCENARIOS = s.revenue_projection;
+      // Re-render against fetched scenarios if the page has already initialised.
+      if (typeof renderYear === 'function' && typeof activeYear !== 'undefined') renderYear(activeYear);
+    }
+  })
+  .catch(() => { /* fallback SCENARIOS already in place */ });
 // Bear 2026E: $64B * 0.55 = ~$35B (growth decelerates to ~2x from $17.5B)
 // Bear 2027E: $112B * 0.40 = ~$45B (growth continues at ~30% from bear-26)
 // Bull 2026E: $64B * 1.35 = ~$86B (agent workflows accelerate adoption)

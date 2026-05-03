@@ -114,7 +114,7 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
     <button class="qq-btn" onclick="askQuick(this)">What is Anthropic's current revenue?</button>
     <button class="qq-btn" onclick="askQuick(this)">How much do AI providers lose per year?</button>
     <button class="qq-btn" onclick="askQuick(this)">What sources do we have on OpenAI financials?</button>
-    <button class="qq-btn" onclick="askQuick(this)">What's the evidence for the $15:$1 investment ratio?</button>
+    <button class="qq-btn" onclick="askQuick(this)">What's the evidence for the <span data-method="headline.investment_to_revenue_ratio_label">$15:$1</span> investment ratio?</button>
     <button class="qq-btn" onclick="askQuick(this)">How fast is Anthropic growing?</button>
   </div>
 
@@ -454,6 +454,21 @@ function esc(s) {
 }
 
 init();
+
+// wq-073 — hydrate [data-method] spans from data/methodology_constants.json.
+// Falls back silently to existing inline literals if fetch fails.
+(function() {
+  fetch('data/methodology_constants.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(c => {
+      document.querySelectorAll('[data-method]').forEach(el => {
+        const path = el.dataset.method;
+        const v = path.split('.').reduce((o, k) => (o == null ? o : o[k]), c);
+        if (v != null) el.textContent = v;
+      });
+    })
+    .catch(() => { /* graceful fallback to inline literals */ });
+})();
 </script>
 </body>
 </html>

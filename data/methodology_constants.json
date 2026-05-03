@@ -1,0 +1,45 @@
+{
+  "_schema": {
+    "version": "1.0",
+    "purpose": "wq-073 — single source-of-truth for editorial methodology constants currently hardcoded across HTML pages. HTML pages fetch this file and interpolate into [data-method] spans at render time.",
+    "principle": "If a value appears in narrative text but represents an editorial methodology constant (a rate, percentage, or industry-figure that would change as data updates), it lives here.",
+    "fetch_pattern": "fetch('data/methodology_constants.json').then(r => r.json()).then(c => { document.querySelectorAll('[data-method]').forEach(el => { const path = el.dataset.method; const v = path.split('.').reduce((o,k) => o && o[k], c); if (v != null) el.textContent = v; }); })"
+  },
+  "headline": {
+    "annual_ai_investment_usd_b": 260,
+    "annual_ai_investment_usd_b_label": "$260B",
+    "annual_ai_investment_per_day_usd_m": 711,
+    "annual_ai_investment_per_day_usd_m_label": "$711M",
+    "investment_to_revenue_ratio": 15,
+    "investment_to_revenue_ratio_label": "$15:$1",
+    "_doc": "$260B/yr industry investment ($711M/day; $15 per $1 of revenue) per assumptions-audit.md §6 'Annual Investment (capex + VC subsidy) ~$260B'. The ~$15:$1 ratio = $260B annual investment / ~$17B annual customer revenue (cumulative-equivalent at run rate). Pre-formatted *_label variants for direct innerHTML injection."
+  },
+  "tier_definitions": {
+    "tier_1b_agreement_pct": 15,
+    "_doc": "Tier 1B 'Corroborated' source-credibility threshold: independent reporting sources agreeing within ~15% per methodology.html §3.1 / source credibility scoring. See model-assumptions.md §3."
+  },
+  "_provenance": {
+    "headline.annual_ai_investment_usd_b": {
+      "source": "assumptions-audit.md §6 'Annual Investment (capex + VC subsidy) ~$260B | Ticks the clock'",
+      "tier": "1B",
+      "set_by": "simon",
+      "set_at": "2026-05-03"
+    },
+    "headline.annual_ai_investment_per_day_usd_m": {
+      "source": "Derived: 260e9 / 365 = ~711e6 (= $711M/day)",
+      "tier": "2A",
+      "set_at": "2026-05-03"
+    },
+    "headline.investment_to_revenue_ratio": {
+      "source": "Editorial framing per AI Ledger 'follow the dollar' narrative; matches $260B annual investment / ~$17B run-rate customer revenue.",
+      "tier": "3C",
+      "set_by": "simon",
+      "set_at": "2026-05-03"
+    },
+    "tier_definitions.tier_1b_agreement_pct": {
+      "source": "methodology.html §3.1 source-credibility scoring",
+      "tier": "1B",
+      "set_at": "2026-05-03"
+    }
+  }
+}
