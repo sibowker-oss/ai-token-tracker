@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
 from log_run import logged_run  # noqa: E402
 from score_materiality import score as score_materiality  # noqa: E402  (wq-040)
+from _telemetry_router import is_telemetry, append_to_telemetry_feed  # noqa: E402  (wq-047)
 REGISTRY_PATH = os.path.join(BASE_DIR, "sources-registry.json")
 INBOX_PATH = os.path.join(BASE_DIR, "vault-inbox.json")
 MODEL = "claude-sonnet-4-6"
@@ -303,7 +304,7 @@ def _main_impl(outputs):
                 "value": claim.get("value"),
                 "unit": claim.get("unit", ""),
                 "sourceUrl": url,
-                "sourceType": "reporting",
+                "sourceType": source.get("type") or "reporting",
                 # wq-041: source grounding pass-through. Null until the
                 # EXTRACT_PROMPT in this script is updated to request these
                 # fields (follow-on). Schema kept consistent so review.html
@@ -321,9 +322,15 @@ def _main_impl(outputs):
                 "status": "pending",
                 "replaces": None,
                 "source_id": sid,
-                "metricKey": None,
+                "metricKey": claim.get("metric_key") or claim.get("metricKey"),
                 "entity": claim.get("entity", ""),
             }
+            # wq-047 — operational telemetry routes to data/telemetry-feed.json,
+            # not the human review queue.
+            if is_telemetry(new_item, source):
+                append_to_telemetry_feed(new_item, source, today)
+                existing_ids.add(claim_id)
+                continue
             # wq-040 — score materiality before write so review.html lanes work
             try:
                 new_item["materiality"] = score_materiality(new_item, _ENTITIES_CACHE, _SCHEMA_CACHE)

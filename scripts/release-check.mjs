@@ -105,12 +105,21 @@ const narrativeStatus = run('node', ['scripts/validate-narrative-hydration.mjs']
   RELEASE_CHECK_NARRATIVE_JSON_OUT: narrativeJson,
 });
 
-// Step 10: Playwright suite
-console.log('\n→ 10/11  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 10 (wq-047 §3 #7): telemetry-routing — assert vault-inbox.json contains
+// no operational-telemetry items (hiring scrapes, package downloads, etc).
+// Transitional → strict on 2026-06-01: failures advisory before then.
+console.log('\n→ 10/12  Telemetry-routing (wq-047 §3 #7)');
+const telemetryRoutingJson = join(reportDir, 'telemetry-routing.json');
+const telemetryRoutingStatus = run('node', ['scripts/validate-telemetry-routing.mjs'], {
+  RELEASE_CHECK_TELEMETRY_ROUTING_JSON_OUT: telemetryRoutingJson,
+});
+
+// Step 11: Playwright suite
+console.log('\n→ 11/12  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 11: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 11/11  Editorial read-through (§11.5)');
+// Step 12: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 12/12  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -142,6 +151,10 @@ const currencyFormatFails = currencyFormatFindings.filter(f => f.severity === 'f
 const narrativeFindings = existsSync(narrativeJson) ? JSON.parse(readFileSync(narrativeJson, 'utf8')) : [];
 const narrativeFails = narrativeFindings.filter(f => f.severity === 'fail');
 
+const telemetryRoutingFindings = existsSync(telemetryRoutingJson) ? JSON.parse(readFileSync(telemetryRoutingJson, 'utf8')) : [];
+const telemetryRoutingFails = telemetryRoutingFindings.filter(f => f.severity === 'fail');
+const telemetryRoutingAdvisories = telemetryRoutingFindings.filter(f => f.severity === 'advisory');
+
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
 if (existsSync(pwResultsPath)) {
@@ -172,12 +185,13 @@ const report = `# Release-check report
 | Capital-sankey conservation (wq-074) | ${capitalSankeyFindings.length === 0 ? '✓' : ''} | 0 | ${capitalSankeyFails.length} |
 | Currency-format (wq-076) | ${currencyFormatFindings.length === 0 ? '✓' : ''} | 0 | ${currencyFormatFails.length} |
 | Narrative-hydration (wq-077) | ${narrativeFindings.length === 0 ? '✓' : ''} | 0 | ${narrativeFails.length} |
+| Telemetry-routing (wq-047) | ${telemetryRoutingFindings.length === 0 ? '✓' : ''} | ${telemetryRoutingAdvisories.length} | ${telemetryRoutingFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + telemetryRoutingFails.length + pwSummary.failures, provAdvisories.length + telemetryRoutingAdvisories.length)}
 
 ## Provenance findings
 
@@ -215,6 +229,10 @@ ${renderFindings(currencyFormatFindings)}
 
 ${renderFindings(narrativeFindings)}
 
+## Telemetry-routing findings (wq-047 §3 #7)
+
+${renderFindings(telemetryRoutingFindings)}
+
 ## Playwright suite
 
 See \`${join('tests', 'reports', 'html', 'index.html')}\` for the full Playwright HTML report.
@@ -251,6 +269,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   capital_sankey: capitalSankeyFindings,
   currency_format: currencyFormatFindings,
   narrative_hydration: narrativeFindings,
+  telemetry_routing: telemetryRoutingFindings,
   playwright: pwSummary,
 }, null, 2));
 

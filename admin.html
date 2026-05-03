@@ -86,6 +86,9 @@
   <button class="tab" onclick="switchTab('status')" data-tab="status">
     <span class="tab-icon">&#128202;</span>Status
   </button>
+  <button class="tab" onclick="switchTab('telemetry')" data-tab="telemetry">
+    <span class="tab-icon">&#128225;</span>Telemetry
+  </button>
   <button class="tab" onclick="switchTab('pages')" data-tab="pages">
     <span class="tab-icon">&#128194;</span>Page Archive
   </button>
@@ -103,6 +106,7 @@
   <iframe id="frame-add" src="about:blank"></iframe>
   <iframe id="frame-dev" src="about:blank"></iframe>
   <iframe id="frame-status" src="about:blank"></iframe>
+  <iframe id="frame-telemetry" src="about:blank"></iframe>
   <iframe id="frame-pages" src="about:blank"></iframe>
   <iframe id="frame-settings" src="about:blank"></iframe>
 </div>
@@ -117,6 +121,7 @@ const TAB_PAGES = {
   add: 'add.html',
   dev: 'in-development.html',
   status: 'status.html',
+  telemetry: 'telemetry.html',
   pages: 'page-archive.html',
   settings: 'settings.html'
 };
