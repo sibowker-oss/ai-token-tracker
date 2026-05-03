@@ -5,21 +5,21 @@ Generated: audit_hardcoded_numbers.py
 ## Summary
 
 - **Total HTML files scanned:** 22
-- **Total numeric values found:** 537
+- **Total numeric values found:** 535
 - **Source state:**
-  - hardcoded literals: 464 (86%)
+  - hardcoded literals: 462 (86%)
   - hardcoded literal inside script (textContent/innerHTML): 0 (0%)
   - HTML element with id (likely wired by JS): 64 (12%)
   - script-derived: 9 (2%)
   - unclear: 0 (0%)
 - **Should be derived:**
-  - YES (rewire candidates): 323 (60%)
+  - YES (rewire candidates): 321 (60%)
   - NO (intentionally editorial / factual): 1 (0%)
   - UNCLEAR (needs human judgment): 213 (40%)
 - **Semantic category breakdown:**
-  - `per_entity_metric`: 189
+  - `per_entity_metric`: 185
   - `other`: 117
-  - `market_aggregate`: 102
+  - `market_aggregate`: 104
   - `percentage`: 96
   - `ratio_derived`: 22
   - `scenario_assumption`: 5
@@ -33,26 +33,26 @@ hardcoded-literal status.
 
 | # | Page | Line | Value | Context | Why it matters |
 |---|---|---|---|---|---|
-| 1 | `index.html` | 206 | `$745B` | "color:var(--capital);" id="hero-capex">$745B</div> | market_aggregate → should-be-derived; appears in 1 location(s) |
-| 2 | `index.html` | 211 | `$22B` | olor:var(--revenue);" id="hero-revenue">$22B</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
-| 3 | `index.html` | 216 | `~360T` | ="color:var(--usage);" id="hero-tokens">~360T</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 1 | `index.html` | 207 | `$745B` | "color:var(--capital);" id="hero-capex">$745B</div> | market_aggregate → should-be-derived; appears in 1 location(s) |
+| 2 | `index.html` | 212 | `$22B` | olor:var(--revenue);" id="hero-revenue">$22B</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 3 | `index.html` | 217 | `~360T` | ="color:var(--usage);" id="hero-tokens">~360T</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
 | 4 | `in-development.html` | 195 | `$260B` | dline.annual_ai_investment_usd_b_label">$260B</span>/yr (<span data-method="head | market_aggregate → should-be-derived; appears in 1 location(s) |
 | 5 | `methodology.html` | 216 | `$22B` | <td>Home page hero ("$22B of AI revenue earned, CY23–25") and <a | per_entity_metric → should-be-derived; appears in 1 location(s) |
-| 6 | `revenue.html` | 296 | `1B` | +scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div c | per_entity_metric → should-be-derived; appears in 1 location(s) |
-| 7 | `revenue.html` | 331 | `$17B` | th compounding', threshold: '3.5x+ YoY ($17B to $64B)', observed: 'On pace if H2 | per_entity_metric → should-be-derived; appears in 1 location(s) |
-| 8 | `revenue.html` | 331 | `$64B` | unding', threshold: '3.5x+ YoY ($17B to $64B)', observed: 'On pace if H2 ramp su | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 6 | `revenue.html` | 305 | `1B` | +scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div c | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 7 | `revenue.html` | 343 | `$17B` | th compounding', threshold: '3.5x+ YoY ($17B to $64B)', observed: 'On pace if H2 | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 8 | `revenue.html` | 343 | `$64B` | unding', threshold: '3.5x+ YoY ($17B to $64B)', observed: 'On pace if H2 ramp su | per_entity_metric → should-be-derived; appears in 1 location(s) |
 | 9 | `timeline.html` | 164 | `1M` | <h2>Blended Token Price ($/1M tokens, 70% input + 30% output, most-us | per_entity_metric → should-be-derived; appears in 1 location(s) |
 | 10 | `timeline.html` | 164 | `70%` | <h2>Blended Token Price ($/1M tokens, 70% input + 30% output, most-used model)</ | per_entity_metric → should-be-derived; appears in 1 location(s) |
 | 11 | `timeline.html` | 164 | `30%` | d Token Price ($/1M tokens, 70% input + 30% output, most-used model)</h2> | per_entity_metric → should-be-derived; appears in 1 location(s) |
 | 12 | `usage.html` | 213 | `$1` | Actual 2025 collected revenue. Not all "$1 of AI revenue" is equal.</span></h2> | per_entity_metric → should-be-derived; appears in 1 location(s) |
 | 13 | `index.html` | 11 | `$745B` | meta property="og:description" content="$745B of infrastructure investment. $22B | per_entity_metric → should-be-derived; appears in 1 location(s) |
 | 14 | `openrouter.html` | 234 | `1M` | :400;color:var(--text-dim);">— output $/1M tokens, live</span></h2> | per_entity_metric → should-be-derived; appears in 2 location(s) |
-| 15 | `index.html` | 236 | `$745B` | e="color:var(--accent);" id="nar-capex">$745B</div> | market_aggregate → should-be-derived; appears in 1 location(s) |
-| 16 | `index.html` | 248 | `~360T` | ="color:var(--purple);" id="nar-tokens">~360T/day</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
-| 17 | `index.html` | 254 | `$22B` | ="color:var(--green);" id="nar-revenue">$22B</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
-| 18 | `index.html` | 284 | `$745B` | ="color:var(--accent);" id="card-capex">$745B</div> | market_aggregate → should-be-derived; appears in 1 location(s) |
-| 19 | `index.html` | 295 | `$22B` | "color:var(--green);" id="card-revenue">$22B</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
-| 20 | `index.html` | 306 | `~360T` | "color:var(--purple);" id="card-tokens">~360T/day</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 15 | `index.html` | 237 | `$745B` | e="color:var(--accent);" id="nar-capex">$745B</div> | market_aggregate → should-be-derived; appears in 1 location(s) |
+| 16 | `index.html` | 249 | `~360T` | ="color:var(--purple);" id="nar-tokens">~360T/day</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 17 | `index.html` | 255 | `$22B` | ="color:var(--green);" id="nar-revenue">$22B</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 18 | `index.html` | 285 | `$745B` | ="color:var(--accent);" id="card-capex">$745B</div> | market_aggregate → should-be-derived; appears in 1 location(s) |
+| 19 | `index.html` | 296 | `$22B` | "color:var(--green);" id="card-revenue">$22B</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
+| 20 | `index.html` | 307 | `~360T` | "color:var(--purple);" id="card-tokens">~360T/day</div> | per_entity_metric → should-be-derived; appears in 1 location(s) |
 
 ## Suggested follow-on briefs
 
@@ -127,7 +127,7 @@ prioritises which class to attack first.
 | 188 | `30%` | trajectory continues. Revenue grows 20-30% annually.">Bear</button> | per_entity_metric |
 | 189 | `100%` | ks up through 2026-27. Revenue grows 80-100% annually.">Base</button> | per_entity_metric |
 | 190 | `200%` | ive step-change in usage. Revenue grows 200%+.">Bull</button> | per_entity_metric |
-| 198 | `$745B` | <strong>$745B of AI infrastructure investment, 2023&n | market_aggregate |
+| 198 | `$745B` | n data-narrative="capital_sankey_total">$745B</span> of AI infrastruct | market_aggregate |
 | 200 | `$356B` | nchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tie | market_aggregate |
 | 228 | `$170B` | e, and Microsoft allocate approximately $170B of AI CapEx to ad rankin | market_aggregate |
 | 230 | `$34` | cumulative.infra_to_revenue_ratio_2025">$34:$1</strong> to <strong id= | market_aggregate |
@@ -209,13 +209,13 @@ prioritises which class to attack first.
 | 11 | `$745B` | meta property="og:description" content="$745B of infrastructure invest | per_entity_metric |
 | 11 | `$22B` | nt="$745B of infrastructure investment. $22B of AI revenue. ~360T toke | per_entity_metric |
 | 11 | `~360T` | ructure investment. $22B of AI revenue. ~360T tokens/day. The full AI  | per_entity_metric |
-| 189 | `30%` | trajectory continues. Revenue grows 20-30% annually, tokens follow.">B | per_entity_metric |
-| 190 | `100%` | ks up through 2026-27. Revenue grows 80-100% annually.">Base</button> | per_entity_metric |
-| 191 | `200%` | ive step-change in usage. Revenue grows 200%+.">Bull</button> | per_entity_metric |
-| 206 | `$745B` | "color:var(--capital);" id="hero-capex">$745B</div> | market_aggregate |
-| 211 | `$22B` | olor:var(--revenue);" id="hero-revenue">$22B</div> | per_entity_metric |
-| 216 | `~360T` | ="color:var(--usage);" id="hero-tokens">~360T</div> | per_entity_metric |
-| 236 | `$745B` | e="color:var(--accent);" id="nar-capex">$745B</div> | market_aggregate |
+| 190 | `30%` | trajectory continues. Revenue grows 20-30% annually, tokens follow.">B | per_entity_metric |
+| 191 | `100%` | ks up through 2026-27. Revenue grows 80-100% annually.">Base</button> | per_entity_metric |
+| 192 | `200%` | ive step-change in usage. Revenue grows 200%+.">Bull</button> | per_entity_metric |
+| 207 | `$745B` | "color:var(--capital);" id="hero-capex">$745B</div> | market_aggregate |
+| 212 | `$22B` | olor:var(--revenue);" id="hero-revenue">$22B</div> | per_entity_metric |
+| 217 | `~360T` | ="color:var(--usage);" id="hero-tokens">~360T</div> | per_entity_metric |
+| 237 | `$745B` | e="color:var(--accent);" id="nar-capex">$745B</div> | market_aggregate |
 
 ### `ipo-watch.html` (18 values)
 
@@ -225,16 +225,16 @@ prioritises which class to attack first.
 
 | Line | Value | Context | Semantic |
 |---|---|---|---|
-| 124 | `$64B` | 'Foundation Model', hq: 'US', funding: '$64B', note: 'Jensen expects I | per_entity_metric |
-| 125 | `$17B` | 'Foundation Model', hq: 'US', funding: '$17B', note: '$6B revenue in F | per_entity_metric |
-| 125 | `$6B` | del', hq: 'US', funding: '$17B', note: '$6B revenue in February alone. | per_entity_metric |
-| 125 | `$380B` | , note: '$6B revenue in February alone. $380B valuation at 27x ARR. IP | per_entity_metric |
-| 126 | `$19B` | egory: 'Data + AI', hq: 'US', funding: '$19B', note: 'Unity Catalog an | per_entity_metric |
-| 127 | `$1.6B` | egory: 'GPU Cloud', hq: 'US', funding: '$1.6B', note: 'Filed S-1 March | per_entity_metric |
-| 128 | `$9.4B` | ry: 'Fintech + AI', hq: 'US', funding: '$9.4B', note: 'Not pure AI but | per_entity_metric |
-| 129 | `$1.6B` | AI Infrastructure', hq: 'US', funding: '$1.6B', note: 'Data labeling s | per_entity_metric |
-| 130 | `$900M` | ory: 'AI Dev Tool', hq: 'US', funding: '$900M', note: '$1B+ ARR in 2 y | per_entity_metric |
-| 130 | `$1B` | ol', hq: 'US', funding: '$900M', note: '$1B+ ARR in 2 years. 10x reven | per_entity_metric |
+| 125 | `$64B` | 'Foundation Model', hq: 'US', funding: '$64B', note: 'Jensen expects I | per_entity_metric |
+| 126 | `$17B` | 'Foundation Model', hq: 'US', funding: '$17B', note: '$6B revenue in F | per_entity_metric |
+| 126 | `$6B` | del', hq: 'US', funding: '$17B', note: '$6B revenue in February alone. | per_entity_metric |
+| 126 | `$380B` | , note: '$6B revenue in February alone. $380B valuation at 27x ARR. IP | per_entity_metric |
+| 127 | `$19B` | egory: 'Data + AI', hq: 'US', funding: '$19B', note: 'Unity Catalog an | per_entity_metric |
+| 128 | `$1.6B` | egory: 'GPU Cloud', hq: 'US', funding: '$1.6B', note: 'Filed S-1 March | per_entity_metric |
+| 129 | `$9.4B` | ry: 'Fintech + AI', hq: 'US', funding: '$9.4B', note: 'Not pure AI but | per_entity_metric |
+| 130 | `$1.6B` | AI Infrastructure', hq: 'US', funding: '$1.6B', note: 'Data labeling s | per_entity_metric |
+| 131 | `$900M` | ory: 'AI Dev Tool', hq: 'US', funding: '$900M', note: '$1B+ ARR in 2 y | per_entity_metric |
+| 131 | `$1B` | ol', hq: 'US', funding: '$900M', note: '$1B+ ARR in 2 years. 10x reven | per_entity_metric |
 
 ### `methodology.html` (34 values)
 
@@ -299,24 +299,24 @@ prioritises which class to attack first.
 | 144 | `85%` | Stepfun = 54% of non-frontier volume', '85% of startup tokens on open  | market_aggregate |
 | 145 | `28%` | haven\'t closed yet', 'Coding use case (28% of all tokens) strongly fa | market_aggregate |
 
-### `revenue.html` (69 values)
+### `revenue.html` (67 values)
 
-- YES (should derive): 59
+- YES (should derive): 57
 - NO (factual / fixed): 0
 - UNCLEAR: 10
 
 | Line | Value | Context | Semantic |
 |---|---|---|---|
-| 110 | `30%` | trajectory continues. Revenue grows 20-30% annually.">Bear</button> | per_entity_metric |
-| 111 | `100%` | ks up through 2026-27. Revenue grows 80-100% annually.">Base</button> | per_entity_metric |
-| 112 | `200%` | ive step-change in usage. Revenue grows 200%+.">Bull</button> | per_entity_metric |
-| 140 | `20%` | el Providers &mdash; Hyperscalers clip ~20%, Trad. SaaS ~60%. That ret | per_entity_metric |
-| 140 | `60%` | sh; Hyperscalers clip ~20%, Trad. SaaS ~60%. That retained margin flow | per_entity_metric |
-| 163 | `30%` | revenue: 17, label: 'Bear', growth: '20-30%', multiplier: { '2025': 1. | per_entity_metric |
-| 164 | `100%` | revenue: 22, label: 'Base', growth: '80-100%', multiplier: { '2025': 1 | per_entity_metric |
-| 165 | `200%` | { revenue: 27, label: 'Bull', growth: '200%+', multiplier: { '2025': 1 | per_entity_metric |
-| 296 | `1B` | +scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSeconda | per_entity_metric |
-| 298 | `1B` | +scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="k | market_aggregate |
+| 111 | `30%` | trajectory continues. Revenue grows 20-30% annually.">Bear</button> | per_entity_metric |
+| 112 | `100%` | ks up through 2026-27. Revenue grows 80-100% annually.">Base</button> | per_entity_metric |
+| 113 | `200%` | ive step-change in usage. Revenue grows 200%+.">Bull</button> | per_entity_metric |
+| 141 | `20%` | el Providers &mdash; Hyperscalers clip ~20%, Trad. SaaS ~60%. That ret | per_entity_metric |
+| 141 | `60%` | sh; Hyperscalers clip ~20%, Trad. SaaS ~60%. That retained margin flow | per_entity_metric |
+| 164 | `30%` | revenue: 17, label: 'Bear', growth: '20-30%', multiplier: { '2025': 1. | per_entity_metric |
+| 165 | `100%` | revenue: 22, label: 'Base', growth: '80-100%', multiplier: { '2025': 1 | per_entity_metric |
+| 166 | `200%` | { revenue: 27, label: 'Bull', growth: '200%+', multiplier: { '2025': 1 | per_entity_metric |
+| 305 | `1B` | +scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSeconda | per_entity_metric |
+| 307 | `1B` | +scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="k | market_aggregate |
 
 ### `review.html` (15 values)
 

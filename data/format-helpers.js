@@ -49,6 +49,52 @@
     return { passed: cases.length - fails.length, total: cases.length, fails };
   }
 
+  // wq-077 — narrative copy hydration. Resolves `[data-narrative="key"]` spans
+  // against site-data.json values + formats with formatCurrency. Falls back to
+  // inline default text when the path is missing (graceful degradation).
+  //
+  // Path keys map to dotted accessors on site-data; supports a small set of
+  // common derivation patterns (cumulative.X, market.<year>.X, sankey.X,
+  // capital_sankey.X). Add new keys here as narrative wiring expands.
+  function resolveNarrativeValue(key, siteData) {
+    if (!siteData || !key) return null;
+    const PATHS = {
+      // cumulative aggregator (wq-063)
+      'cumulative_capex_total':           siteData.cumulative?.capex_total,
+      'cumulative_customer_revenue_gross':siteData.cumulative?.customer_revenue_gross,
+      'cumulative_customer_revenue_net':  siteData.cumulative?.customer_revenue_net,
+      // sankey gross/net (wq-055/062/063)
+      'sankey_total_customer_revenue_gross': siteData.sankey?.totalCustomerRevenue_gross,
+      'sankey_total_customer_revenue_net':   siteData.sankey?.totalCustomerRevenue,
+      'sankey_total_vc_subsidy':             siteData.sankey?.totalVCSubsidy,
+      // market aggregates per year (wq-067)
+      'market_2025_total_capex':          siteData.market?.['2025']?.total_capex,
+      'market_2025_total_customer_revenue':siteData.market?.['2025']?.total_customer_revenue,
+      'market_2025_total_customer_revenue_gross':siteData.market?.['2025']?.total_customer_revenue_gross,
+      // capital sankey (wq-074)
+      'capital_sankey_total':             siteData.capital_sankey?.total,
+    };
+    return PATHS[key] != null ? PATHS[key] : null;
+  }
+
+  function hydrateNarrative(siteData, formatter) {
+    formatter = formatter || formatCurrency;
+    const spans = (typeof document !== 'undefined') ? document.querySelectorAll('[data-narrative]') : [];
+    let hydrated = 0;
+    spans.forEach(span => {
+      const key = span.dataset.narrative;
+      const value = resolveNarrativeValue(key, siteData);
+      if (value != null) {
+        span.textContent = formatter(value);
+        hydrated++;
+      }
+      // else: keep inline default text (graceful fallback)
+    });
+    return hydrated;
+  }
+
   root.formatCurrency = formatCurrency;
   root.formatHelpersTests = formatHelpersTests;
+  root.resolveNarrativeValue = resolveNarrativeValue;
+  root.hydrateNarrative = hydrateNarrative;
 })(typeof window !== 'undefined' ? window : globalThis);
