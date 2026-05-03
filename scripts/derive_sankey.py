@@ -453,6 +453,8 @@ def format_validation_report(sankey: dict, cost_structure_year: dict) -> str:
     ]
     by_slug = {p["slug"]: p for p in sankey["providers_pre_aggregation"]}
     for slug, target in targets.items():
+        if slug.startswith("_") or not isinstance(target, dict):
+            continue
         p = by_slug.get(slug)
         if not p:
             lines.append(f"{slug:12}  {'—':>8}  {'(not derived)':>22}  {'':>22}  {'—':>10}  ${target['value']:>8.2f}B  {'—':>8}  {'—':>9}  {'—':>11}")
@@ -469,8 +471,9 @@ def format_validation_report(sankey: dict, cost_structure_year: dict) -> str:
     lines += ["", "## New providers (no hand-curated baseline; engine output only)", ""]
     lines.append(f"{'Provider':12}  {'CR':>8}  {'Inf cost (tier)':>22}  {'Opex (tier)':>22}  {'Total':>10}  {'vc_subsidy':>11}")
     lines.append(f"{'-'*12}  {'-'*8}  {'-'*22}  {'-'*22}  {'-'*10}  {'-'*11}")
+    target_slugs = {k for k in targets.keys() if not k.startswith("_")}
     for p in by_slug.values():
-        if p["slug"] in targets or p["slug"] == "iaas":
+        if p["slug"] in target_slugs or p["slug"] == "iaas":
             continue
         inf_str = f"${p['inference_cost']:.2f}B ({p['inference_cost_origin'][:6]})"
         opex_str = f"${p['opex']:.2f}B ({p['opex_origin'][:6]})"
