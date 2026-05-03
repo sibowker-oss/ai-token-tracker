@@ -1,0 +1,81 @@
+{
+  "_schema": {
+    "version": "1.0",
+    "purpose": "wq-074 — editorial structure for capital.html 3-column sankey. Column 0 bucket totals come from market_aggregates._cumulative_2023_2025 (engine-derived). This file editorially sub-allocates within mag7 + sovereign to preserve narrative granularity (MSFT/AWS/Google/Meta/Oracle/AI labs direct as distinct nodes within mag7; China + Sovereign/Gov within sovereign). Columns 1 + 2 are pure editorial ratios — Column 1 = capex destinations (silicon/networking/etc.); Column 2 = current utilization state.",
+    "principle": "Engine drives bucket totals; editorial drives within-bucket structure. Sub-shares scale proportionally with bucket totals unless individually overridden.",
+    "engine_input": "entities.json:market_aggregates._cumulative_2023_2025.{mag7_capex,neocloud_capex,sovereign_capex,enterprise_capex}",
+    "engine_output": "entities.json:market_aggregates._capital_sankey + site-data.json:capital_sankey"
+  },
+  "column0_sub_allocation": {
+    "_comment": "Engine produces 4 bucket totals from market_aggregates; this file editorially sub-allocates within mag7 and sovereign for narrative granularity. Sub-shares scale proportionally as bucket totals change unless individually overridden in consensus_overrides. Sub-shares within each bucket sum to 1.0.",
+    "mag7": {
+      "microsoft": 0.281,
+      "aws": 0.211,
+      "google": 0.219,
+      "meta": 0.158,
+      "oracle": 0.088,
+      "ai_labs_direct": 0.044
+    },
+    "sovereign": {
+      "china": 0.615,
+      "sovereign_gov": 0.385
+    },
+    "_provenance": {
+      "tier": "3C",
+      "src": "Editorial sub-allocation derived from capital.html hardcoded FLOWS at time of wq-074 rewire (2026-05-03). mag7: MSFT 28% + AWS 21% + Google 22% + Meta 16% + Oracle 9% + AI labs direct 4%. sovereign: China 62% + Sovereign/Gov 38%. Tunable; overrideable per company via consensus_overrides if specific data lands."
+    }
+  },
+  "column1_destination_ratios": {
+    "_comment": "What % of total capex went to each hardware/infra category. Sums to 1.0. Empirical ratios from capital.html FLOWS at time of wq-074 rewire (745B baseline pre-engine-rewire). NVIDIA GPUs 40.7% reflects mag7 + neocloud GPU-heavy spend; Data Centre Costs 29.4% covers DC build-out + cooling.",
+    "nvidia_gpus": 0.407,
+    "other_silicon": 0.097,
+    "networking": 0.077,
+    "datacenter_costs": 0.294,
+    "electricity_ops": 0.126,
+    "_provenance": {
+      "tier": "3B",
+      "src": "Industry-standard hardware procurement allocation. Verified against capital.html FLOWS (303 + 72 + 57 + 219 + 94 = 745). Cross-check: NVIDIA DC revenue ~$130B 2024 supports the GPU-heavy share. Tunable as procurement mix shifts (e.g. ASIC growth in 2026 may compress NVIDIA share)."
+    }
+  },
+  "column2_utilization_splits": {
+    "_comment": "Current utilization of deployed capex. Sums to 1.0. Empirical ratios from capital.html FLOWS at time of wq-074 rewire. Heavy 'in_build_or_transit' (41.6%) reflects ongoing buildout across cumulative 2023-25 horizon — not all capex has deployed and become productive yet. 'inference_ad_platform' (27%) is the Meta/Google self-use story; paid customer inference is only ~6.7%.",
+    "inference_paid": 0.067,
+    "inference_free": 0.043,
+    "inference_ad_platform": 0.270,
+    "model_training": 0.113,
+    "idle": 0.091,
+    "in_build_or_transit": 0.416,
+    "_provenance": {
+      "tier": "3C",
+      "src": "Editorial estimate of GPU/infra utilization. Empirical ratios from capital.html FLOWS at wq-074 rewire baseline. The high in_build_or_transit share (~42%) reflects cumulative 2023-25 horizon — capex deployed in 2024-25 hasn't all reached productive use yet. Sliders in capital.html let users adjust at render time without changing this baseline."
+    }
+  },
+  "source_display_names": {
+    "_comment": "Maps slug-style sub-allocation keys to capital.html label conventions (matches NODE_COLOR / NODE_TIER maps in the existing render).",
+    "microsoft": "Microsoft CapEx",
+    "aws": "AWS CapEx",
+    "google": "Google CapEx",
+    "meta": "Meta CapEx",
+    "oracle": "Oracle CapEx",
+    "ai_labs_direct": "AI labs direct",
+    "neocloud": "Neoclouds",
+    "china": "China",
+    "sovereign_gov": "Sovereign / Gov",
+    "enterprise": "Enterprise"
+  },
+  "destination_display_names": {
+    "nvidia_gpus": "NVIDIA GPUs",
+    "other_silicon": "Other silicon",
+    "networking": "Networking",
+    "datacenter_costs": "Data Centre Costs",
+    "electricity_ops": "Electricity & ops"
+  },
+  "utilization_display_names": {
+    "inference_paid": "Inference (Paid)",
+    "inference_free": "Inference (Free Tier)",
+    "inference_ad_platform": "Inference (Ad Platform)",
+    "model_training": "Model Training",
+    "idle": "Idle",
+    "in_build_or_transit": "In build / in transit"
+  }
+}

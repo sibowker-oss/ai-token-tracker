@@ -421,6 +421,16 @@ def generate(entities_path, existing_site_data_path, output_path):
     if market_section:
         site["market"] = market_section
 
+    # ── wq-074: capital sankey (read from entities.json) ──
+    # Mirrors entities.json:market_aggregates._capital_sankey into
+    # site-data.json:capital_sankey for capital.html to consume via fetch.
+    capital_sankey = (entities.get("market_aggregates") or {}).get("_capital_sankey")
+    if capital_sankey:
+        # Surface public-facing fields only (skip _engine / _engine_run_at / _doc).
+        public = {k: v for k, v in capital_sankey.items() if not k.startswith("_")}
+        if public:
+            site["capital_sankey"] = public
+
     # ── wq-055: write FULL Sankey from market_aggregates engine output ──
     # Per brief §2 #3: providers, costParams.vcSubsidy, buyers, channels,
     # outcomes, totals — all derived consistently from one engine block.
