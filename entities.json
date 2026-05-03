@@ -14228,8 +14228,8 @@
       "sovereign_capex": 0.0,
       "enterprise_capex": 4.6557,
       "total_capex": 257.2401,
-      "tokens_per_day_total": 164.0,
-      "tokens_annual_inference": 5.986e+16,
+      "tokens_per_day_total": 565.0,
+      "tokens_annual_inference": 2.06225e+17,
       "tokens_annual_training": null,
       "total_segment_consumer": 8.9843,
       "total_segment_sme": 3.7738,
@@ -14348,10 +14348,16 @@
           ]
         },
         "tokens_per_day_total": {
-          "origin": "derived_per_entity_rollup",
-          "scope": "model_provider role only (audit \u00a75.3 method \u2014 aggregators + apps consume model_provider tokens, summing all double-counts)",
-          "rate_used_for_estimation": 4300000000.0,
-          "n_contributors": 9
+          "claim": "tokens_per_day_total 2025 = 565.0 per assumptions-audit.md \u00a71, \u00a74, \u00a75, \u00a76",
+          "value": 565.0,
+          "source": "assumptions-audit.md",
+          "section": "\u00a71, \u00a74, \u00a75, \u00a76",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_backfill",
+          "date": "2026-05-03",
+          "engine_value_at_backfill": 164.0,
+          "authoritative_supersedes_engine": true
         },
         "tokens_annual_inference": {
           "origin": "derived_pure_function",

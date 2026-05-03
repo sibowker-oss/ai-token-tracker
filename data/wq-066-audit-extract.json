@@ -1,0 +1,118 @@
+{
+  "_meta": {
+    "audit_doc": "assumptions-audit.md",
+    "extracted_at": "2026-05-03",
+    "extractor": "scripts/extract_audit_values.py (wq-066)",
+    "_doc": "Audit doc has limited per-year structured data. Most documented values are 2025-only. Earlier years (2023, 2024) are gaps requiring Simon's input or external research per wq-066 \u00a73 #6 gap report."
+  },
+  "market_aggregates": {
+    "2023": {
+      "total_customer_revenue": null,
+      "total_customer_revenue_gross": null,
+      "total_vc_subsidy": null,
+      "mag7_capex": null,
+      "neocloud_capex": null,
+      "sovereign_capex": null,
+      "enterprise_capex": null,
+      "tokens_per_day_total": null,
+      "_audit_section": null,
+      "_gap": "audit doc has no 2023-specific market aggregates; entities.json has no 2023 collected_revenue per provider"
+    },
+    "2024": {
+      "total_customer_revenue": null,
+      "total_customer_revenue_gross": null,
+      "total_vc_subsidy": null,
+      "mag7_capex": null,
+      "neocloud_capex": null,
+      "sovereign_capex": null,
+      "enterprise_capex": null,
+      "tokens_per_day_total": null,
+      "_audit_section": "\u00a71.1 (OpenAI 2024 ~$3.6B), \u00a71.2 (Anthropic ~$5B cumulative through early 2025)",
+      "_gap": "audit doc has 2024 entity-level revenue refs but no aggregated market totals or capex/tokens"
+    },
+    "2025": {
+      "total_customer_revenue": 17.47,
+      "total_customer_revenue_gross": null,
+      "total_vc_subsidy": 9.8,
+      "total_system_cost": 27.27,
+      "mag7_capex": 250.0,
+      "neocloud_capex": null,
+      "sovereign_capex": null,
+      "enterprise_capex": null,
+      "tokens_per_day_total": 565.0,
+      "total_inference_cost": 14.03,
+      "total_people_cost": 11.08,
+      "total_margin": 2.15,
+      "_audit_section": "\u00a71, \u00a74, \u00a75, \u00a76"
+    }
+  },
+  "providers_2025": {
+    "openai": {
+      "value": 13.65,
+      "customer_revenue": 7.65,
+      "vc_subsidy": 6.0,
+      "_audit_section": "\u00a74.4 Column 3"
+    },
+    "anthropic": {
+      "value": 7.71,
+      "customer_revenue": 4.71,
+      "vc_subsidy": 3.0,
+      "_audit_section": "\u00a74.4 Column 3"
+    },
+    "google": {
+      "value": 2.5,
+      "customer_revenue": 2.0,
+      "vc_subsidy": 0.5,
+      "_audit_section": "\u00a74.4 Column 3"
+    },
+    "iaas": {
+      "value": 0.8,
+      "customer_revenue": 0.5,
+      "vc_subsidy": 0.3,
+      "_audit_section": "\u00a74.4 Column 3"
+    }
+  },
+  "entity_2024_revenue": {
+    "openai": {
+      "collected_revenue": 3.6,
+      "_audit_section": "\u00a71.1 (Zitron / Microsoft leaked docs; $493.8M / 0.20)",
+      "_confidence": "estimated"
+    },
+    "anthropic": {
+      "collected_revenue": 0.5,
+      "_audit_section": "\u00a71.2 (cumulative $5B through early 2025; 2025 alone $4.71B implies ~$0.5B prior)",
+      "_confidence": "derived",
+      "_gap": "audit doesn't explicitly state 2024 standalone \u2014 derived from cumulative minus 2025"
+    },
+    "google": {
+      "collected_revenue": null,
+      "_gap": "audit only has 2025 Google revenue"
+    },
+    "meta": {
+      "collected_revenue": null,
+      "_gap": "audit shows $0 for 2025; 2024 not stated"
+    }
+  },
+  "tokens_per_day_2025": {
+    "openai": 200,
+    "anthropic": 110,
+    "google": 90,
+    "meta": 80,
+    "deepseek": 40,
+    "minimax": 30,
+    "mistral": 15,
+    "xai": 10,
+    "moonshot": 8,
+    "others_self_hosted": 134,
+    "_audit_section": "\u00a75.3",
+    "_total": 717,
+    "_gap": "entities.json model_provider tokens_per_day are stale \u2014 OpenAI=30 vs audit=200, Anthropic=6 vs 110, etc. Refresh candidate."
+  },
+  "cumulative_2023_2025": {
+    "customer_revenue_gross": null,
+    "capex_total": null,
+    "tokens_2025_annualized": null,
+    "_audit_section": null,
+    "_gap": "$745B cumulative capex + $28B cumulative customer revenue + 360T cumulative tokens NOT documented in audit; held as wq-063 editorial overrides pending external sourcing"
+  }
+}
