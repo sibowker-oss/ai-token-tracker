@@ -339,12 +339,44 @@
 </div>
 
 <script>
-// ── Scenario infrastructure ──
-const SCENARIOS = {
-  bear:  { capex: '$745B', revenue: '$17B', tokens: '~280T', ratio: '$44', label: 'Bear case' },
-  base:  { capex: '$745B', revenue: '$22B', tokens: '~360T', ratio: '$34', label: 'Base case' },
-  bull:  { capex: '$745B', revenue: '$27B', tokens: '~500T', ratio: '$28', label: 'Bull case' }
-};
+// ── wq-063: data-driven SCENARIOS ──
+// Loaded from site-data.json:cumulative on init. Bear/bull derive as ±15%
+// sensitivity bands around the engine value (per brief §2). Falls back to
+// the prior hardcoded literals when site-data.json is unavailable so the
+// page still renders if the fetch fails (graceful degradation per §3 #7).
+const FALLBACK_BASE = { capex: 745, revenue: 22, tokens: 360, ratio: 34 };
+const SENSITIVITY_BAND = 0.15;
+let SCENARIOS = _buildScenarios(FALLBACK_BASE);
+
+function _buildScenarios(base) {
+  const r = base.revenue, c = base.capex, t = base.tokens;
+  const fmt$ = v => '$' + Math.round(v) + 'B';
+  const fmtT = v => '~' + Math.round(v) + 'T';
+  const fmtRatio = v => '$' + Math.round(v);
+  return {
+    bear: { capex: fmt$(c), revenue: fmt$(r * (1 - SENSITIVITY_BAND)), tokens: fmtT(t * (1 - SENSITIVITY_BAND)), ratio: fmtRatio(c / (r * (1 - SENSITIVITY_BAND))), label: 'Bear case' },
+    base: { capex: fmt$(c), revenue: fmt$(r), tokens: fmtT(t), ratio: fmtRatio(c / r), label: 'Base case' },
+    bull: { capex: fmt$(c), revenue: fmt$(r * (1 + SENSITIVITY_BAND)), tokens: fmtT(t * (1 + SENSITIVITY_BAND)), ratio: fmtRatio(c / (r * (1 + SENSITIVITY_BAND))), label: 'Bull case' },
+  };
+}
+
+function _initScenariosFromData(cumulative) {
+  if (!cumulative) return; // fallback already set
+  const base = {
+    capex: cumulative.capex_total || FALLBACK_BASE.capex,
+    revenue: cumulative.customer_revenue_gross || FALLBACK_BASE.revenue,
+    tokens: cumulative.tokens_2025_annualized || FALLBACK_BASE.tokens,
+    ratio: cumulative.infra_to_revenue_ratio_2025 || FALLBACK_BASE.ratio,
+  };
+  SCENARIOS = _buildScenarios(base);
+  applyScenario(getScenario());
+}
+
+// Load cumulative aggregates and rebuild scenarios when ready.
+fetch('site-data.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(d => { window.cumulativeData = d.cumulative; _initScenariosFromData(d.cumulative); })
+  .catch(() => { /* fallback SCENARIOS already in place */ });
 
 function getScenario() {
   const p = new URLSearchParams(location.search).get('s');
