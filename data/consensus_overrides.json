@@ -1,12 +1,37 @@
 {
-  "_doc": "wq-048 — editorial overrides for the consensus engine. When key '<slug>.<year>.collected_revenue' is present and not expired, override.value wins over engine output. Provenance records both the engine calc AND the override reason. Set expiry dates to force re-review.",
-  "_schema_example": {
-    "openai.2025.collected_revenue": {
-      "value": 7.65,
-      "reason": "Per assumptions-audit.md §1.1, conservative editorial position pending fuller H2 2025 data",
-      "set_by": "simon",
-      "set_at": "2026-05-02",
-      "expires_at": "2026-08-01"
+  "_doc": "wq-048 + wq-055 — editorial overrides. When key is present and not expired, override.value wins over engine output. Provenance records both engine calc AND override reason. Set expiry dates to force re-review.",
+  "_schema_examples": {
+    "wq-048 collected_revenue override (consensus engine)": {
+      "openai.2025.collected_revenue": {
+        "value": 7.65,
+        "reason": "Conservative editorial position pending fuller H2 2025 data",
+        "set_by": "simon",
+        "set_at": "2026-05-02",
+        "expires_at": "2026-08-01"
+      }
+    },
+    "wq-055 vc_subsidy override (Sankey balancing engine)": {
+      "openai.2025.vc_subsidy": {
+        "value": 5.20,
+        "reason": "Hand-set to historical Sankey value pending re-calibration. Engine derives lower (~$4.34B) given OpenAI customer revenue revision. Editorial choice to keep VC node at $5.20B for narrative continuity until H2 2025 data lands.",
+        "set_by": "simon",
+        "set_at": "2026-05-03",
+        "expires_at": "2027-01-01"
+      }
+    },
+    "wq-055 cost-structure parameter override (calibration tuning)": {
+      "2025.cost_structure.opex_estimation.size_bands.1.rate": {
+        "value": 0.85,
+        "reason": "Tightening $1-5B band rate from 1.00 → 0.85 to bring Google engine output closer to hand-curated $2.50B without affecting Anthropic significantly.",
+        "set_by": "simon",
+        "set_at": "2026-05-03"
+      },
+      "2025.cost_structure.inference_estimation.providerRates.google": {
+        "value": 0.40,
+        "reason": "Raising Google's inference rate from 0.30 → 0.40 to bring engine output closer to hand-curated $2.50B.",
+        "set_by": "simon",
+        "set_at": "2026-05-03"
+      }
     }
   },
   "anthropic.2025.collected_revenue": {
