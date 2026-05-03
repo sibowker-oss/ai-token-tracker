@@ -48,9 +48,22 @@
       }
     },
     "channelRouting": {
-      "_doc": "Editorial channel structure. Determines how customer revenue maps to channels (Model Subs / Model API / Hyperscalers / AI Native Apps / IaaS & Aggregators / Traditional SaaS). Currently used as a pass-through to the existing hand-curated channels list in sankey-projections.json — engine preserves channel labels + colours and rescales values proportionally to new total customer revenue. Per-entity channel routing (revenue_by_channel field on entity records) is a future refinement (wq-060).",
-      "rescale_mode": "proportional_to_total",
+      "_doc": "Editorial channel structure. wq-055 used proportional rescaling of channel TOTALS only. wq-062 introduces per-provider routing via channel_mapping below — engine reads each entity's revenue_by_channel and writes an explicit per-provider-per-channel routing block. Renderer reads routing block; falls back to proportional rescale if routing is absent.",
+      "rescale_mode": "per_provider_routing_with_proportional_fallback",
       "preserve_channels": ["Model Subs", "Model API", "Hyperscalers", "AI Native Apps", "IaaS & Agg.", "Trad. SaaS"]
+    },
+    "channel_mapping": {
+      "_comment": "wq-062 §4.1 — maps entity.financials.<year>.revenue_by_channel keys to Sankey channel labels. Some entity keys split across multiple Sankey channels per editorial routing weights. Engine reads each provider's percent split, applies the mapping, and writes per-provider-per-channel routing values into market_aggregates.<year>.routing. Channel margins (Hyperscalers 0.20, Trad SaaS 0.60) gross up channel.value so chPass = sum(provider routing per channel) — margins continue to flow to the Op Cash Flow outcome.",
+      "subscription_pct": [{"channel": "Model Subs", "weight": 1.0}],
+      "api_pct": [{"channel": "Model API", "weight": 0.7}, {"channel": "Hyperscalers", "weight": 0.3}],
+      "enterprise_pct": [{"channel": "Trad. SaaS", "weight": 0.5}, {"channel": "Hyperscalers", "weight": 0.5}],
+      "_default_for_unmapped": {"Model Subs": 0.4, "Model API": 0.4, "AI Native Apps": 0.2},
+      "_provenance": {
+        "subscription_pct": {"tier": "1B", "src": "Subscription revenue routes 100% to Model Subs"},
+        "api_pct": {"tier": "3C", "src": "70/30 split between direct API and hyperscaler resale (Azure OpenAI, AWS Bedrock, etc.) — editorial estimate"},
+        "enterprise_pct": {"tier": "3C", "src": "50/50 split between Trad SaaS bundles and hyperscaler-routed enterprise contracts — editorial estimate"},
+        "_default_for_unmapped": {"tier": "3C", "src": "Default split for providers without revenue_by_channel populated. Skews to direct channels (Subs+API+AI Native) for new providers without enterprise/hyperscaler partnerships."}
+      }
     },
     "small_provider_aggregation": {
       "_doc": "Per brief §5. Providers below threshold_pct of total provider value collapse into 'Other Model Providers' node, with a floor of always showing top min_visible_rank by value. Provenance preserved via members[] list on the Other node.",
