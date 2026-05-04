@@ -916,6 +916,54 @@ def extract_worldbank_api(source):
     return claims
 
 
+def extract_abs_api(source):
+    """ABS SDMX-JSON API — Australian Bureau of Statistics (src-076, wq-081).
+
+    Public REST, no auth. v1 pulls quarterly nominal GDP from the National
+    Accounts dataflow (ABS_GDPE_H) as a smoke-test. Output: free-text claim per
+    observation, routes to vault-inbox.
+
+    Coverage classification: **denominator coverage** (AU macro, HA differentiator)."""
+    endpoint = ('https://data.api.abs.gov.au/rest/data/ABS,GDPE_H,1.0.0/all'
+                '?startPeriod=2024-Q1&format=jsondata&detail=dataonly&dimensionAtObservation=AllDimensions')
+    try:
+        req = Request(endpoint, headers={'User-Agent': 'Mozilla/5.0', 'Accept': 'application/vnd.sdmx.data+json;version=1.0.0'})
+        with urlopen(req, timeout=30) as resp:
+            payload = resp.read().decode('utf-8', errors='replace')
+        try:
+            save_snapshot(source, payload, ext='json')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+        parsed = json.loads(payload)
+    except Exception as e:
+        log(f"  ABS API fetch failed: {e}")
+        return []
+
+    obs = parsed.get('data', {}).get('dataSets', [{}])[0].get('observations', {})
+    if not obs:
+        log("  ABS SDMX returned no observations for ABS_GDPE_H")
+        return []
+    sample_key = next(iter(obs.keys()))
+    sample_val = obs[sample_key][0] if obs[sample_key] else None
+    log(f"  ABS GDPE: {len(obs)} observations fetched; first={sample_val}")
+    return [{
+        'claim': f"ABS National Accounts (GDPE_H) returned {len(obs)} observations from 2024-Q1 onward; sample value {sample_val}.",
+        'category': 'macro_denominator',
+        'entity': 'Australia',
+        'metric': 'ABS_GDPE_H',
+        'value': sample_val,
+        'unit': 'AUD millions (current prices, SA)',
+        'value_display': f"{sample_val}" if sample_val is not None else 'n/a',
+        'time_period': 'multi-quarter',
+        'confidence': 'high',
+        'weight': 'authoritative',
+        'source_type': source['type'],
+        'source_url': endpoint,
+        'source_title': source['title'],
+        'extracted_at': datetime.now().isoformat(),
+    }]
+
+
 def extract_neso_tec(source):
     """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
     CSV download under OGL licence; produces power_project claims with
@@ -1364,6 +1412,7 @@ NON_WEB_METHODS = {
     'eia_api',
     'fred_api',
     'worldbank_api',
+    'abs_api',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1392,6 +1441,7 @@ ADAPTERS = {
     'eia_api': extract_eia_api,
     'fred_api': extract_fred_api,
     'worldbank_api': extract_worldbank_api,
+    'abs_api': extract_abs_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:
