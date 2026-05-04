@@ -1758,6 +1758,31 @@
       "phase": "1.2",
       "routing": "vault-inbox",
       "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #10). DeepMind has historically irregular RSS exposure; per skip-and-log C, registered with extraction_method=web_extract on canonical blog URL rather than fighting the RSS spec. Maps to entity: google. Confidence pre-rating: Low until human review."
+    },
+    {
+      "id": "src-083",
+      "url": "https://ai.meta.com/blog/",
+      "title": "Meta AI Blog",
+      "type": "web_page",
+      "author": "",
+      "organization": "Meta",
+      "added": "2026-05-04",
+      "tags": [
+        "meta",
+        "lab-newsroom",
+        "wq-083",
+        "phase-1.2"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.2",
+      "routing": "vault-inbox",
+      "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #11). Meta AI Blog has irregular RSS exposure; per skip-and-log C, registered with extraction_method=web_extract on canonical blog URL. Maps to entity: meta. Confidence pre-rating: Low until human review."
     }
   ]
 }
