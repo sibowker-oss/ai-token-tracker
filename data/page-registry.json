@@ -209,6 +209,28 @@
       "lastReviewed": "2026-05-02"
     },
     {
+      "path": "telemetry.html",
+      "status": "admin",
+      "title": "Telemetry Feed — Admin",
+      "purpose": "Read-only admin view over data/telemetry-feed.json — operational telemetry routed away from the human review queue (hiring scrapes, package downloads, GitHub stats, SEC filings). Filterable by entity / type / date. Same admin gate as review.html. Shipped under wq-047.",
+      "supersedes": [],
+      "supersededBy": null,
+      "addedOn": "2026-05-04",
+      "retiredOn": null,
+      "lastReviewed": "2026-05-04"
+    },
+    {
+      "path": "anthropic-spotlight.html",
+      "status": "admin",
+      "title": "Anthropic Spotlight — Admin",
+      "purpose": "Monthly editorial cadence view over data/anthropic-monthly-*.md. Engine vs override gap, retirement-candidate flag, recent claims, pending inbox. Same admin gate as review.html. Shipped under wq-079.",
+      "supersedes": [],
+      "supersededBy": null,
+      "addedOn": "2026-05-04",
+      "retiredOn": null,
+      "lastReviewed": "2026-05-04"
+    },
+    {
       "path": "vault.html",
       "status": "admin",
       "title": "Intel Vault — Private Reference Data",

@@ -330,6 +330,51 @@ Key parameters:
 
 ---
 
+## 5a. Sub-period attribution (wq-054)
+
+Three independent instances surfaced during wq-048 + wq-055 work where sub-period claims silently routed to annual fields (OpenAI H1 2025 → annual `2025.collected_revenue`; Dec 2024 best-period-x12 → `2024.arr`; Anthropic Feb 2026 monthly peak → `2026.collected_revenue`). Recurring matcher blind spot. wq-054 closes it via Option C — schema additions for the common cases plus matcher refusal for the rest.
+
+### 5a.1 Field path conventions
+
+| Scope | Field path | Example |
+|---|---|---|
+| `annual` | `<entity>.financials.<year>.<field>` | `openai.financials.2025.collected_revenue` |
+| `h1` / `h2` | `<entity>.financials.<year>_h1.<field>` (or `_h2`) | `openai.financials.2025_h1.collected_revenue` |
+| `q1` … `q4` | `<entity>.financials.<year>_<q>.<field>` | `anthropic.financials.2026_q1.arr` |
+| `exit_snapshot` | `<entity>.financials.<year>.exit_<field>` | `openai.financials.2024.exit_arr` (year-end run-rate, often best-period-x12) |
+| `monthly_peak` | `<entity>.financials.<year>.monthly_peak_<field>` | `anthropic.financials.2026.monthly_peak_arr` (single-month, NOT annualised) |
+| `point_in_time` | `<entity>.current.<field>` | `openai.current.weekly_active_users` |
+
+Documented machine-readable in `metric-schema.json:field_patterns` (v2.3) and `metric-schema.json:time_period_scope_values`.
+
+### 5a.2 Extractor contract
+
+Every claim emitted by `extract_claims.py` / `monitor_sources.py` / `scan_sources.py` includes:
+
+- `time_period_scope` — one of the values above. Default `annual` only when the source text contains no period qualifier.
+- `period_qualifier_detected` — short string quoting the qualifier (e.g. `"H1 2025"`, `"best 4-week × 12"`, `"Feb 2026 monthly peak"`), or `null`.
+
+Detection rules in the prompt: H1/Q3/exit/monthly-peak/point-in-time, with a CRITICAL guardrail explicitly forbidding sub-period claims from being tagged `annual`.
+
+### 5a.3 Routing
+
+`scripts/apply_decisions.py:resolve_field_path()` reads `time_period_scope` from the accepted claim and chooses the corresponding sub-field. Unroutable scopes (sub-period without a year, unknown scope) are refused with a `REFUSE` log line; the vault entry is kept but the entity record stays unchanged so audit can surface the case.
+
+When a scope is missing from a legacy claim, `apply_decisions.py:detect_period_scope()` runs a conservative regex fallback over the claim text. If the fallback matches, scope + qualifier are logged and the routing proceeds; if it doesn't, the claim defaults to `annual`.
+
+Sub-period values are NOT annualised on write — `H1` stays half-year, `monthly_peak` stays one month. The annualise-monthly-or-quarterly multiplier only fires when scope is `annual`.
+
+### 5a.4 Engine compatibility
+
+The consensus engine (wq-048) reads BOTH annual + half-year fields where present. When `<year>_h1` and `<year>_h2` both exist, their sum is preferred over the annual field (better precision). For `exit_arr` vs annual `arr`: the engine prefers annual for collected-revenue calc, exit-arr for forward projections.
+
+### 5a.5 Audit + release-check
+
+- `scripts/audit_period_attribution.py` walks every entity provenance entry and flags claims whose text contains a sub-period qualifier that doesn't match the field-path scope. Generates `data/wq-054-existing-misroutes.md`. Read-only — Simon decides per-case whether to retire the value, move it to a sub-period field, or annotate it as ambiguous.
+- `scripts/validate-period-attribution.mjs` is a release-check validator that fires `advisory` for legacy claims and `fail` for newly-accepted claims (origin=accepted AND date ≥ 2026-06-01) where stored scope contradicts the field path or text qualifier doesn't match implied scope. Promotes to fail-everywhere when `CHECK_MODE=strict`.
+
+---
+
 ## 6. Source Credibility Scoring
 
 *Unchanged from v1. See assumptions-audit.md Section 3.*

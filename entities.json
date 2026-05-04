@@ -40,7 +40,7 @@
       "financials": {
         "2024": {
           "arr": 5,
-          "collected_revenue": 2.5826,
+          "collected_revenue": 3.6,
           "operating_loss": 5.0,
           "total_funding": 122,
           "valuation": 852,
@@ -96,7 +96,8 @@
         "valuation": 852,
         "valuation_date": "2026-03",
         "user_count": 900000000,
-        "subscriber_count": 50000000
+        "subscriber_count": 50000000,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2022.inference_cost": {
@@ -137,54 +138,18 @@
           "claim_count": 1,
           "claims": [
             {
-              "id": "derived-2024-collected_revenue",
-              "claim": "Derived via consensus engine from 2024 ARR + segment mix + ARR method haircut + growth method + NRR",
-              "value": 2.5826,
-              "unit": "$B",
-              "weight": "corroborating",
-              "confidence": "estimated",
-              "source": "scripts/derive_collected_revenue.py",
-              "source_url": "",
-              "date": "2026-05-02",
-              "origin": "consensus_engine_derived",
-              "inputs": {
-                "endingARR": 5,
-                "startingARR": null,
-                "quarterly_arrs": null,
-                "arrMethod": "best_period_x12",
-                "arrMethodFactor": 0.88,
-                "blendedSegmentFactor": 0.91,
-                "nrrRaw": 1.3,
-                "nrrBoost": 1.075,
-                "growthMethod": "ending_x_0.60",
-                "profileUsed": "openai",
-                "stages": {
-                  "adjustedEndingARR": 4.4,
-                  "baseRevenuePreHaircut": 3.0,
-                  "baseRevenue": 2.64,
-                  "segmentAdjusted": 2.4024,
-                  "finalEstimate": 2.5826,
-                  "confidenceBand": [
-                    2.1952,
-                    2.97
-                  ]
-                }
-              }
-            },
-            {
-              "id": "zitron-20260328-a1",
-              "claim": "OpenAI 2024 actual collected revenue ~$3.6B (from MSFT rev share docs)",
+              "id": "audit-20260503-openai-2024-revenue",
+              "claim": "openai 2024 collected_revenue = $3.6B per Zitron / Microsoft leaked documents (audit \u00a71.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
               "value": 3.6,
               "unit": "$B",
-              "weight": "authoritative",
+              "weight": "indicative",
               "confidence": "estimated",
-              "source": "Ed Zitron / Microsoft leaked documents",
-              "source_url": "https://www.wheresyoured.at/oai_docs/",
-              "date": "2025-11-01",
-              "origin": "pending",
-              "role": "superseded",
-              "superseded_at": "2026-05-02",
-              "superseded_by": "derived-2024-collected_revenue"
+              "source": "Zitron / Microsoft leaked documents (audit \u00a71.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
+              "origin": "editorial_override",
+              "date": "2026-05-03",
+              "previous_value": 2.5826,
+              "supersedes_engine": true,
+              "role": "supports"
             }
           ]
         },
@@ -383,7 +348,10 @@
               "source_url": "https://www.nytimes.com/2024/09/27/technology/openai-chatgpt-investors-funding.html",
               "date": "2025-09-01",
               "origin": "accepted",
-              "role": "supports"
+              "role": "supports",
+              "reference_revenue": 7.65,
+              "reference_revenue_source": "AI Ledger \u00a77.2 weighted-consensus (audit \u00a74.4) \u2014 published cr at time of dp-005 claim 2025-09-01",
+              "reference_revenue_set_at": "2026-05-03"
             }
           ]
         },
@@ -908,24 +876,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-openai-current-tokens_per_day",
-              "claim": "Derived from: OpenAI revenue ($20B ARR) / blended price ($1.5/1M) = ~36B tokens/day from paid. Scaled up 5-6x for free t",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "estimated",
-              "source": "Derived from: OpenAI revenue ($20B ARR) / blended price ($1.5/1M) = ~36B tokens/day from paid. Scaled up 5-6x for free tier volume. Cross-checked with OpenRouter rankings share.",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "openai v3 consensus tokens_per_day midpoint = 30T/day (range 25-35T) per model-assumptions.md \u00a72.4",
+          "value": 30,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 30,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -1929,7 +1889,8 @@
         "valuation_date": "2026-02",
         "total_funding": 30,
         "latest_round": "Series G at $380B (Feb 2026)",
-        "customer_count": 300000
+        "customer_count": 300000,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2024.arr": {
@@ -2152,7 +2113,10 @@
               "source_url": "",
               "date": "2026-03-28",
               "origin": "accepted",
-              "role": "supports"
+              "role": "supports",
+              "reference_revenue": 4.71,
+              "reference_revenue_source": "AI Ledger \u00a77.2 weighted-consensus (audit \u00a74.4) \u2014 published cr at time of dp-006 claim 2026-03-28",
+              "reference_revenue_set_at": "2026-05-03"
             }
           ]
         },
@@ -2576,24 +2540,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-anthropic-current-tokens_per_day",
-              "claim": "Derived from: Anthropic revenue ($14B ARR) / blended price ($5.8/1M) + usage scaling. Cross-checked with Portkey gateway",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "estimated",
-              "source": "Derived from: Anthropic revenue ($14B ARR) / blended price ($5.8/1M) + usage scaling. Cross-checked with Portkey gateway data showing ~30% Anthropic share of 1.9T/day enterprise traffic.",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "anthropic v3 consensus tokens_per_day midpoint = 6T/day (range 4-8T) per model-assumptions.md \u00a72.4",
+          "value": 6,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 6,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "medium",
@@ -3230,16 +3186,20 @@
         },
         "2026": {
           "valuation": 11
+        },
+        "2024": {
+          "collected_revenue": 0.8
         }
       },
       "current": {
         "arr": 4.2,
         "arr_date": "2026-01",
-        "tokens_per_day": 90,
+        "tokens_per_day": 49,
         "growth_rate": "14x in '24",
         "consumer_pct": 40,
         "biz_pct": 60,
-        "user_count": 650000000
+        "user_count": 650000000,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2026.valuation": {
@@ -3296,24 +3256,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-google-current-tokens_per_day",
-              "claim": "Derived from: Google Cloud AI revenue / Gemini pricing (~$0.60/1M for Flash). Gemini 2.0 Flash dominates by volume. Cros",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "estimated",
-              "source": "Derived from: Google Cloud AI revenue / Gemini pricing (~$0.60/1M for Flash). Gemini 2.0 Flash dominates by volume. Cross-checked with developer count (5M+).",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "google v3 consensus tokens_per_day midpoint = 49T/day (range 43-55T) per model-assumptions.md \u00a72.4",
+          "value": 49,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 49,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "high",
@@ -3635,6 +3587,26 @@
               }
             }
           ]
+        },
+        "2024.collected_revenue": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-google-2024-revenue",
+              "claim": "google 2024 collected_revenue = $0.8B per Editorial estimate per brief \u00a73.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
+              "value": 0.8,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Editorial estimate per brief \u00a73.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
+              "origin": "editorial_override",
+              "date": "2026-05-03",
+              "previous_value": null,
+              "supersedes_engine": true,
+              "role": "supports"
+            }
+          ]
         }
       }
     },
@@ -3658,14 +3630,18 @@
       "financials": {
         "2026": {
           "capex": 125
+        },
+        "2024": {
+          "collected_revenue": 0.0
         }
       },
       "current": {
         "arr": 0,
-        "tokens_per_day": 12,
+        "tokens_per_day": 11.5,
         "growth_rate": "+400% YoY",
         "consumer_pct": 0,
-        "biz_pct": 0
+        "biz_pct": 0,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2026.capex": {
@@ -3708,24 +3684,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-meta-current-tokens_per_day",
-              "claim": "Derived from: Llama downloads 1.2B+ (dp-015, Meta official). vLLM Docker Hub 16.3M pulls. HuggingFace Llama 3.1 download",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "estimated",
-              "source": "Derived from: Llama downloads 1.2B+ (dp-015, Meta official). vLLM Docker Hub 16.3M pulls. HuggingFace Llama 3.1 downloads 15.9M/30d. Estimated self-hosted volume.",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "meta v3 consensus tokens_per_day midpoint = 11.5T/day (range 8-15T) per model-assumptions.md \u00a72.4",
+          "value": 11.5,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 11.5,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -3966,6 +3934,26 @@
               "role": "supports"
             }
           ]
+        },
+        "2024.collected_revenue": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-meta-2024-revenue",
+              "claim": "meta 2024 collected_revenue = $0.0B per Meta AI not commercialized in 2024 (free product; no separately disclosed revenue)",
+              "value": 0.0,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Meta AI not commercialized in 2024 (free product; no separately disclosed revenue)",
+              "origin": "editorial_override",
+              "date": "2026-05-03",
+              "previous_value": null,
+              "supersedes_engine": true,
+              "role": "supports"
+            }
+          ]
         }
       }
     },
@@ -3994,10 +3982,11 @@
       },
       "current": {
         "arr": 0.3,
-        "tokens_per_day": 8,
+        "tokens_per_day": 8.5,
         "growth_rate": "+800% YoY",
         "consumer_pct": 50,
-        "biz_pct": 50
+        "biz_pct": 50,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2025.arr": {
@@ -4021,24 +4010,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-deepseek-current-tokens_per_day",
-              "claim": "Derived from OpenRouter rankings (DeepSeek R1 = top model by volume Jan 2025) + API traffic estimates.",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "estimated",
-              "source": "Derived from OpenRouter rankings (DeepSeek R1 = top model by volume Jan 2025) + API traffic estimates.",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "deepseek v3 consensus tokens_per_day midpoint = 8.5T/day (range 5-12T) per model-assumptions.md \u00a72.4",
+          "value": 8.5,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 8.5,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -4311,7 +4292,8 @@
         "tokens_per_day": 2,
         "growth_rate": "+250% YoY",
         "consumer_pct": 20,
-        "biz_pct": 80
+        "biz_pct": 80,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2025.arr": {
@@ -4335,24 +4317,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-mistral-current-tokens_per_day",
-              "claim": "Estimated from OpenRouter rankings + Mistral API traffic. Smaller than frontier peers.",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "estimated",
-              "source": "Estimated from OpenRouter rankings + Mistral API traffic. Smaller than frontier peers.",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "mistral v3 consensus tokens_per_day midpoint = 2T/day (range 1-3T) per model-assumptions.md \u00a72.4",
+          "value": 2,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 2,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -4662,10 +4636,11 @@
       },
       "current": {
         "arr": 0.5,
-        "tokens_per_day": 3,
+        "tokens_per_day": 2.5,
         "growth_rate": "+500% YoY",
         "consumer_pct": 70,
-        "biz_pct": 30
+        "biz_pct": 30,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2025.arr": {
@@ -4689,24 +4664,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-xai-current-tokens_per_day",
-              "claim": "Estimated from X platform integration volume. Grok serves X's 500M+ MAU base but most are free.",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "speculative",
-              "source": "Estimated from X platform integration volume. Grok serves X's 500M+ MAU base but most are free.",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "xai v3 consensus tokens_per_day midpoint = 2.5T/day (range 1-4T) per model-assumptions.md \u00a72.4",
+          "value": 2.5,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 2.5,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -4993,11 +4960,12 @@
       },
       "current": {
         "arr": 0.15,
-        "tokens_per_day": 5,
+        "tokens_per_day": 4.5,
         "growth_rate": "+400% YoY",
         "consumer_pct": 60,
         "biz_pct": 40,
-        "user_count": 212000000
+        "user_count": 212000000,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2026.market_share_pct": {
@@ -5054,24 +5022,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-minimax-current-tokens_per_day",
-              "claim": "Estimated from 212M user base + OpenRouter ranking data (24.6% of open models on OpenRouter per commit ffa2e64).",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "estimated",
-              "source": "Estimated from 212M user base + OpenRouter ranking data (24.6% of open models on OpenRouter per commit ffa2e64).",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "minimax v3 consensus tokens_per_day midpoint = 4.5T/day (range 3-6T) per model-assumptions.md \u00a72.4",
+          "value": 4.5,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 4.5,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -5341,10 +5301,11 @@
       },
       "current": {
         "arr": 0.1,
-        "tokens_per_day": 8,
+        "tokens_per_day": 3,
         "growth_rate": "+300% YoY",
         "consumer_pct": 50,
-        "biz_pct": 50
+        "biz_pct": 50,
+        "tokens_per_day_date": "2026-05-03"
       },
       "provenance": {
         "2025.arr": {
@@ -5368,24 +5329,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "confidence": "low",
-          "claim_count": 1,
-          "needs_source": false,
-          "recovered_from": "original_conversation",
-          "claims": [
-            {
-              "id": "conv-moonshot-current-tokens_per_day",
-              "claim": "Estimated from Kimi app popularity in China + API traffic.",
-              "value": null,
-              "unit": "",
-              "weight": "indicative",
-              "confidence": "speculative",
-              "source": "Estimated from Kimi app popularity in China + API traffic.",
-              "date": "2026-03-26",
-              "origin": "conversation_recovery",
-              "role": "supports"
-            }
-          ]
+          "claim": "moonshot v3 consensus tokens_per_day midpoint = 3T/day (range 2-4T) per model-assumptions.md \u00a72.4",
+          "value": 3,
+          "unit": "T/day",
+          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "weight": "indicative",
+          "confidence": "estimated",
+          "origin": "editorial_audit_doc_refresh",
+          "date": "2026-05-03",
+          "previous_value": 3,
+          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -6183,7 +6136,11 @@
       ],
       "region": "US",
       "products": [],
-      "financials": {},
+      "financials": {
+        "2025": {
+          "collected_revenue": 0.1
+        }
+      },
       "current": {
         "total_funding": 0.077
       },
@@ -6208,6 +6165,22 @@
               "note": "Current snapshot set during site build. Needs external source."
             }
           ]
+        },
+        "2025.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-fireworks-2025-rev",
+              "claim": "fireworks 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "value": 0.1,
+              "unit": "$B",
+              "weight": "indicative",
+              "source": "Editorial estimate per brief \u00a73 #3 (~$0.10B 2025; combined IaaS ~$0.50B per audit \u00a74.4)",
+              "origin": "editorial_override",
+              "date": "2026-05-03"
+            }
+          ]
         }
       }
     },
@@ -6219,7 +6192,11 @@
       ],
       "region": "US",
       "products": [],
-      "financials": {},
+      "financials": {
+        "2025": {
+          "collected_revenue": 0.05
+        }
+      },
       "current": {
         "total_funding": 0.058
       },
@@ -6242,6 +6219,22 @@
               "origin": "editorial",
               "role": "editorial_estimate",
               "note": "Current snapshot set during site build. Needs external source."
+            }
+          ]
+        },
+        "2025.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-replicate-2025-rev",
+              "claim": "replicate 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "value": 0.05,
+              "unit": "$B",
+              "weight": "indicative",
+              "source": "Editorial estimate per brief \u00a73 #3 (inference + open model hosting; ~$0.05B 2025)",
+              "origin": "editorial_override",
+              "date": "2026-05-03"
             }
           ]
         }
@@ -9616,7 +9609,7 @@
       "slug": "groq",
       "name": "Groq",
       "roles": [
-        "ai_app"
+        "iaas_provider"
       ],
       "region": "US",
       "category": "ai-infrastructure",
@@ -9628,7 +9621,11 @@
           "role": "ai_app"
         }
       ],
-      "financials": {},
+      "financials": {
+        "2025": {
+          "collected_revenue": 0.1
+        }
+      },
       "current": {
         "tokens_per_day": 40.0,
         "providers": [
@@ -9703,6 +9700,30 @@
               "origin": "editorial",
               "role": "editorial_estimate",
               "note": "Current snapshot set during site build. Needs external source."
+            }
+          ]
+        },
+        "_role_fix_wq053": {
+          "claim": "Role corrected ['ai_app'] \u2192 ['iaas_provider'] per wq-053 \u00a73 #2 \u2014 Groq is LPU-based inference platform; classified as iaas_provider",
+          "origin": "editorial_classification_fix",
+          "date": "2026-05-03",
+          "previous_roles": [
+            "ai_app"
+          ]
+        },
+        "2025.collected_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-groq-2025-rev",
+              "claim": "groq 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "value": 0.1,
+              "unit": "$B",
+              "weight": "indicative",
+              "source": "Editorial estimate per brief \u00a73 #2 (LPU-based inference; ~$0.10B 2025)",
+              "origin": "editorial_override",
+              "date": "2026-05-03"
             }
           ]
         }
@@ -13893,12 +13914,411 @@
           ]
         }
       }
+    },
+    {
+      "slug": "bytedance",
+      "name": "ByteDance",
+      "displayName": "ByteDance / Doubao",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "proprietary",
+      "color": "#000000",
+      "products": [
+        "Doubao",
+        "Coze",
+        "Cici"
+      ],
+      "current": {
+        "tokens_per_day": 110,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 110
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-bytedance-tokens",
+              "claim": "ByteDance/Doubao token volume v3 consensus ~110T/day per model-assumptions.md \u00a72.4 (Volcano Engine 120T disclosure, confirmed by 4/7 models)",
+              "value": 110,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 100-120T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://www.bytedance.com"
+    },
+    {
+      "slug": "alibaba",
+      "name": "Alibaba",
+      "displayName": "Alibaba / Qwen",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "both",
+      "color": "#ff6a00",
+      "products": [
+        "Qwen (open-weights)",
+        "Tongyi"
+      ],
+      "current": {
+        "tokens_per_day": 25,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 25
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-alibaba-tokens",
+              "claim": "Alibaba/Qwen token volume v3 consensus ~25T/day per model-assumptions.md \u00a72.4 (5T external + 16-17T internal company statements)",
+              "value": 25,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 20-30T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://www.alibabacloud.com"
+    },
+    {
+      "slug": "tencent",
+      "name": "Tencent",
+      "displayName": "Tencent / Hunyuan",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "proprietary",
+      "color": "#1ba1e2",
+      "products": [
+        "Hunyuan",
+        "Yuanbao"
+      ],
+      "current": {
+        "tokens_per_day": 10,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 10
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-tencent-tokens",
+              "claim": "Tencent/Hunyuan token volume v3 consensus ~10T/day per model-assumptions.md \u00a72.4 (market share inference from China 140T total)",
+              "value": 10,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 8-12T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://hunyuan.tencent.com"
+    },
+    {
+      "slug": "baidu",
+      "name": "Baidu",
+      "displayName": "Baidu / Ernie",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "model_type": "proprietary",
+      "color": "#2932e1",
+      "products": [
+        "Ernie",
+        "Wenxin"
+      ],
+      "current": {
+        "tokens_per_day": 8,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 8
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-baidu-tokens",
+              "claim": "Baidu/Ernie token volume v3 consensus ~8T/day per model-assumptions.md \u00a72.4 (1T/day Aug 2024 + 33x annual growth extrapolation)",
+              "value": 8,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 6-10T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "website": "https://yiyan.baidu.com"
+    },
+    {
+      "slug": "_self_hosted",
+      "name": "Self-Hosted Open Models",
+      "displayName": "Self-Hosted Open Models",
+      "roles": [
+        "aggregator"
+      ],
+      "region": "Global",
+      "model_type": "open",
+      "color": "#94a3b8",
+      "products": [],
+      "current": {
+        "tokens_per_day": 30,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "financials": {
+        "2025": {
+          "tokens_per_day_estimate": 30
+        }
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-selfhosted-tokens",
+              "claim": "Self-hosted open models token volume v3 consensus ~30T/day per model-assumptions.md \u00a72.4 (Llama/Qwen/Mistral on vLLM/Ollama/enterprise GPU)",
+              "value": 30,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 20-40T)",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      },
+      "_synthetic": true,
+      "_aggregates": "Open-weight model deployments (Llama, DeepSeek-open, Mistral-open, Qwen, etc.) running on customer infrastructure"
+    },
+    {
+      "slug": "_other_closed",
+      "name": "Other Closed Providers",
+      "displayName": "Other Closed Model Providers",
+      "roles": [
+        "aggregator"
+      ],
+      "_synthetic": true,
+      "_aggregates": "Closed-weight providers not individually tracked: Cohere + AI21 + Samsung Gauss + Apple Intelligence",
+      "region": "Global",
+      "color": "#94a3b8",
+      "current": {
+        "tokens_per_day": 10,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "provenance": {
+        "current.tokens_per_day": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "audit-20260503-other-closed-tokens",
+              "claim": "Aggregated estimate of closed-weight providers not individually tracked: ~10T/day across Cohere + AI21 + Samsung Gauss + Apple Intelligence",
+              "value": 10,
+              "unit": "T/day",
+              "weight": "indicative",
+              "confidence": "speculative",
+              "source": "model-assumptions.md \u00a72.4 v3 'Other closed' aggregate estimate",
+              "origin": "editorial_audit_doc_addition",
+              "date": "2026-05-03",
+              "role": "supports"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "databricks",
+      "name": "Databricks",
+      "displayName": "Databricks",
+      "roles": [
+        "traditional_saas",
+        "ai_app"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#ff3621",
+      "website": "https://www.databricks.com",
+      "products": [
+        "Mosaic AI",
+        "Unity Catalog",
+        "Lakehouse"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Data + AI platform; growing AI-specific revenue stream"
+        }
+      }
+    },
+    {
+      "slug": "scale",
+      "name": "Scale AI",
+      "displayName": "Scale AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#1a1a1a",
+      "website": "https://scale.com",
+      "products": [
+        "Data Engine",
+        "RLHF",
+        "Government"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Data labelling for AI training"
+        }
+      }
+    },
+    {
+      "slug": "modal",
+      "name": "Modal Labs",
+      "displayName": "Modal Labs",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#7fee64",
+      "website": "https://modal.com",
+      "products": [
+        "Modal Cloud",
+        "Serverless GPU"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Serverless GPU infrastructure for AI"
+        }
+      }
+    },
+    {
+      "slug": "cohere",
+      "name": "Cohere",
+      "displayName": "Cohere",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "Canada",
+      "model_type": "both",
+      "color": "#39594d",
+      "website": "https://cohere.com",
+      "products": [
+        "Command",
+        "Embed",
+        "Rerank"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Frontier model provider; open + commercial"
+        }
+      }
+    },
+    {
+      "slug": "super_com",
+      "name": "Super.com",
+      "displayName": "Super.com",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#ff5e8a",
+      "website": "https://www.super.com",
+      "products": [
+        "Super App",
+        "Travel + Finance"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Consumer AI travel/finance"
+        }
+      }
     }
   ],
   "market_aggregates": {
     "2025": {
-      "total_customer_revenue": 17.47,
-      "total_vc_subsidy": 9.8,
+      "total_customer_revenue": 17.3608,
+      "total_vc_subsidy": 8.4479,
       "total_system_cost": 27.27,
       "total_inference_cost": 14.03,
       "total_people_cost": 11.08,
@@ -13906,7 +14326,1095 @@
       "total_vc_investment": 150,
       "mag7_capex": 250,
       "training_compute_spend": "30-50",
-      "investment_to_revenue_ratio": 15
+      "investment_to_revenue_ratio": 15,
+      "providers": {
+        "openai": {
+          "slug": "openai",
+          "label": "OpenAI",
+          "color": "#10a37f",
+          "customer_revenue": 9.3147,
+          "inference_cost": 5,
+          "inference_cost_origin": "sourced",
+          "inference_cost_derived_from": [
+            "openai.2025.inference_cost"
+          ],
+          "opex": 8.65,
+          "opex_origin": "derived",
+          "opex_derived_from": [
+            "openai.2025.operating_loss",
+            "openai.2025.inference_cost",
+            "reference_revenue=7.65 (openai.2025.operating_loss.reference_revenue)"
+          ],
+          "vc_subsidy": 4.3353,
+          "vc_origin": "balancing_plug_derived",
+          "value": 13.65,
+          "override_discrepancy": null,
+          "revenue_by_channel": {
+            "subscription_pct": 55,
+            "api_pct": 30,
+            "enterprise_pct": 15
+          }
+        },
+        "anthropic": {
+          "slug": "anthropic",
+          "label": "Anthropic",
+          "color": "#d97706",
+          "customer_revenue": 4.71,
+          "inference_cost": 2.5905,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.55 (provider rate from cost_structure)"
+          ],
+          "opex": 4.71,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+          ],
+          "vc_subsidy": 2.5905,
+          "vc_origin": "balancing_plug_derived",
+          "value": 7.3005,
+          "override_discrepancy": null,
+          "revenue_by_channel": {
+            "api_pct": 72,
+            "subscription_pct": 13,
+            "enterprise_pct": 15
+          }
+        },
+        "google": {
+          "slug": "google",
+          "label": "Google/Gemini",
+          "color": "#4285f4",
+          "customer_revenue": 2.2516,
+          "inference_cost": 0.6755,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.3 (provider rate from cost_structure)"
+          ],
+          "opex": 2.2516,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.6755,
+          "vc_origin": "balancing_plug_derived",
+          "value": 2.9271,
+          "override_discrepancy": null,
+          "revenue_by_channel": null
+        },
+        "deepseek": {
+          "slug": "deepseek",
+          "label": "DeepSeek",
+          "color": "#a78bfa",
+          "customer_revenue": 0.1615,
+          "inference_cost": 0.0808,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.1938,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.1131,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.2746,
+          "override_discrepancy": null,
+          "revenue_by_channel": null
+        },
+        "mistral": {
+          "slug": "mistral",
+          "label": "Mistral",
+          "color": "#f97316",
+          "customer_revenue": 0.2154,
+          "inference_cost": 0.1077,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.2585,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.1508,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.3662,
+          "override_discrepancy": null,
+          "revenue_by_channel": null
+        },
+        "xai": {
+          "slug": "xai",
+          "label": "xAI",
+          "color": "#e2e8f0",
+          "customer_revenue": 0.2692,
+          "inference_cost": 0.1346,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.323,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.1884,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.4576,
+          "override_discrepancy": null,
+          "revenue_by_channel": null
+        },
+        "minimax": {
+          "slug": "minimax",
+          "label": "Minimax",
+          "color": "#ec4899",
+          "customer_revenue": 0.0808,
+          "inference_cost": 0.0404,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.097,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.0566,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.1374,
+          "override_discrepancy": null,
+          "revenue_by_channel": null
+        },
+        "moonshot": {
+          "slug": "moonshot",
+          "label": "Moonshot/Kimi",
+          "color": "#14b8a6",
+          "customer_revenue": 0.0538,
+          "inference_cost": 0.0269,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+          ],
+          "opex": 0.0646,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+          ],
+          "vc_subsidy": 0.0377,
+          "vc_origin": "balancing_plug_derived",
+          "value": 0.0915,
+          "override_discrepancy": null,
+          "revenue_by_channel": null
+        },
+        "iaas": {
+          "slug": "iaas",
+          "label": "IaaS/Open",
+          "color": "#8b5cf6",
+          "customer_revenue": 0.3038,
+          "vc_subsidy": 0.3,
+          "vc_origin": "preserved_hand_curated",
+          "value": 0.6038,
+          "tier": "2A",
+          "src": "wq-053 engine \u2014 rolled up from 6 iaas_provider entities (together, fireworks, replicate, anyscale, groq, modal); customer_revenue=$0.30B + vc_subsidy=$0.30B (hand-curated)",
+          "inference_cost": 0.3019,
+          "inference_cost_origin": "estimated",
+          "inference_cost_derived_from": [
+            "iaas rollup \u00d7 0.50 (inference rate)"
+          ],
+          "opex": 0.3019,
+          "opex_origin": "estimated",
+          "opex_derived_from": [
+            "iaas rollup \u00d7 0.50"
+          ],
+          "override_discrepancy": null,
+          "_iaas_members": [
+            "together",
+            "fireworks",
+            "replicate",
+            "anyscale",
+            "groq",
+            "modal"
+          ]
+        }
+      },
+      "providers_visible": [
+        "openai",
+        "anthropic",
+        "google",
+        "iaas",
+        "_other_model_providers"
+      ],
+      "other_aggregation": {
+        "label": "Other Model Providers",
+        "color": "#94a3b8",
+        "value": 1.3273,
+        "customer_revenue": 0.7807,
+        "vc_subsidy": 0.5466,
+        "members": [
+          "xai",
+          "mistral",
+          "deepseek",
+          "minimax",
+          "moonshot"
+        ],
+        "aggregation_rule": "value < 2.0% of total AND outside top 4"
+      },
+      "total_provider_value": 25.8087,
+      "fallback_log": [
+        "anthropic: inference_cost ESTIMATED (no source/op_loss path)",
+        "anthropic: opex ESTIMATED (no source/op_loss path)",
+        "google: inference_cost ESTIMATED (no source/op_loss path)",
+        "google: opex ESTIMATED (no source/op_loss path)",
+        "deepseek: inference_cost ESTIMATED (no source/op_loss path)",
+        "deepseek: opex ESTIMATED (no source/op_loss path)",
+        "mistral: inference_cost ESTIMATED (no source/op_loss path)",
+        "mistral: opex ESTIMATED (no source/op_loss path)",
+        "xai: inference_cost ESTIMATED (no source/op_loss path)",
+        "xai: opex ESTIMATED (no source/op_loss path)",
+        "minimax: inference_cost ESTIMATED (no source/op_loss path)",
+        "minimax: opex ESTIMATED (no source/op_loss path)",
+        "moonshot: inference_cost ESTIMATED (no source/op_loss path)",
+        "moonshot: opex ESTIMATED (no source/op_loss path)"
+      ],
+      "_residual_doc": "Engine writes per-provider customer_revenue derived from entities.json:financials.<year>.collected_revenue (wq-048). Channel/buyer totals computed by generate_site_data.py from this block + the existing editorial channel structure (proportional rescale to total_customer_revenue). Non-provider revenue (e.g. Microsoft Copilot via Trad SaaS channel) handled in the channel structure, not in providers.",
+      "_engine_run_at": "2026-05-03T23:48:23Z",
+      "_engine": "scripts/derive_sankey.py (wq-055)",
+      "routing": {
+        "openai": {
+          "Model Subs": 5.1231,
+          "Model API": 1.9561,
+          "Hyperscalers": 1.5369,
+          "Trad. SaaS": 0.6986
+        },
+        "anthropic": {
+          "Model Subs": 0.6123,
+          "Model API": 2.3738,
+          "Hyperscalers": 1.3706,
+          "Trad. SaaS": 0.3533
+        },
+        "google": {
+          "Model Subs": 0.9006,
+          "Model API": 0.9006,
+          "AI Native Apps": 0.4503
+        },
+        "iaas": {
+          "Model Subs": 0.1215,
+          "Model API": 0.1215,
+          "AI Native Apps": 0.0608
+        },
+        "_other_model_providers": {
+          "Model Subs": 0.3123,
+          "Model API": 0.3123,
+          "AI Native Apps": 0.1562
+        }
+      },
+      "channels_grossed": [
+        {
+          "label": "Model Subs",
+          "value": 7.0698,
+          "chPass": 7.0698,
+          "margin": 0,
+          "gross_up_factor": 1.0
+        },
+        {
+          "label": "Model API",
+          "value": 5.6643,
+          "chPass": 5.6643,
+          "margin": 0,
+          "gross_up_factor": 1.0
+        },
+        {
+          "label": "Hyperscalers",
+          "value": 3.6344,
+          "chPass": 2.9075,
+          "margin": 0.2,
+          "gross_up_factor": 1.25
+        },
+        {
+          "label": "AI Native Apps",
+          "value": 0.6673,
+          "chPass": 0.6673,
+          "margin": 0,
+          "gross_up_factor": 1.0
+        },
+        {
+          "label": "Trad. SaaS",
+          "value": 2.6298,
+          "chPass": 1.0519,
+          "margin": 0.6,
+          "gross_up_factor": 2.5
+        }
+      ],
+      "total_customer_revenue_gross": 19.6656,
+      "neocloud_capex": 45,
+      "sovereign_capex": 20,
+      "enterprise_capex": 15,
+      "total_capex": 330,
+      "tokens_per_day_total": 310.0,
+      "tokens_annual_inference": 1.1315e+17,
+      "tokens_annual_training": null,
+      "total_segment_consumer": 9.0843,
+      "total_segment_sme": 3.8138,
+      "total_segment_enterprise": 9.4989,
+      "total_per_channel": {
+        "Model Subs": 7.0698,
+        "Model API": 5.6643,
+        "Hyperscalers": 3.6344,
+        "AI Native Apps": 0.6673,
+        "Trad. SaaS": 2.6298
+      },
+      "infra_to_revenue_ratio": 16.78,
+      "capex_per_token_usd": 0.0,
+      "revenue_per_token_usd": 0.0,
+      "yoy_total_customer_revenue_growth_pct": null,
+      "yoy_total_capex_growth_pct": 22.68,
+      "yoy_tokens_annual_inference_growth_pct": 221.24,
+      "_market_provenance": {
+        "mag7_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2025.mag7_capex"
+          ],
+          "engine_rollup_value": 0.6755
+        },
+        "neocloud_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2025.neocloud_capex"
+          ],
+          "engine_rollup_value": 2.5844
+        },
+        "sovereign_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2025.sovereign_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "enterprise_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2025.enterprise_capex"
+          ],
+          "engine_rollup_value": 4.7807
+        },
+        "total_capex": {
+          "origin": "derived_sum",
+          "derived_from": [
+            "mag7_capex",
+            "neocloud_capex",
+            "sovereign_capex",
+            "enterprise_capex"
+          ]
+        },
+        "tokens_per_day_total": {
+          "origin": "derived_per_entity_rollup",
+          "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
+          "rate_used_for_estimation": 4300000000.0,
+          "n_contributors": 15
+        },
+        "tokens_annual_inference": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "tokens_per_day_total",
+            "\u00d7 365"
+          ]
+        },
+        "segments": {
+          "origin": "derived_per_entity_rollup",
+          "sourced_via_rbc": 2,
+          "fallback_via_default_split": 49
+        },
+        "total_per_channel": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.<year>.channels_grossed (wq-062)"
+          ]
+        },
+        "ratios": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "total_capex",
+            "total_customer_revenue_gross",
+            "tokens_annual_inference"
+          ]
+        },
+        "_market_engine_run_at": "2026-05-04T03:01:27Z",
+        "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
+      },
+      "_market_token_sources_count": {
+        "sourced": 0,
+        "derived_daily_x365": 15,
+        "estimated_revenue_rate": 0
+      }
+    },
+    "_cumulative_2023_2025": {
+      "customer_revenue_gross": 25.5656,
+      "customer_revenue_net": 17.3608,
+      "capex": 766.0,
+      "tokens": 406.5,
+      "by_year": {
+        "2023": {
+          "customer_revenue_gross": null,
+          "customer_revenue_net": null,
+          "capex": 167,
+          "tokens": null,
+          "_gross_source": "missing",
+          "_engine_run": false
+        },
+        "2024": {
+          "customer_revenue_gross": 5.9,
+          "customer_revenue_net": null,
+          "capex": 269,
+          "tokens": 96.5,
+          "_gross_source": "per_entity_collected_revenue",
+          "_engine_run": false
+        },
+        "2025": {
+          "customer_revenue_gross": 19.6656,
+          "customer_revenue_net": 17.3608,
+          "capex": 330,
+          "tokens": 310.0,
+          "_gross_source": "engine_gross_field",
+          "_engine_run": true
+        }
+      },
+      "capex_total": 766.0,
+      "tokens_2025_annualized": 310.0,
+      "infra_to_revenue_ratio_2025": 39,
+      "_overrides": {},
+      "_engine": "scripts/derive_cumulative_aggregates.py (wq-063)",
+      "_sources": [
+        "2023: gross=None (missing), net=None, capex=167",
+        "2024: gross=5.9 (per_entity_collected_revenue), net=None, capex=269",
+        "2025: gross=19.6656 (engine_gross_field), net=17.3608, capex=330"
+      ],
+      "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
+    },
+    "2023": {
+      "mag7_capex": 152,
+      "neocloud_capex": 8,
+      "sovereign_capex": 3,
+      "enterprise_capex": 4,
+      "total_capex": 167,
+      "tokens_per_day_total": null,
+      "tokens_annual_inference": null,
+      "tokens_annual_training": null,
+      "total_segment_consumer": 0.0,
+      "total_segment_sme": 0.0,
+      "total_segment_enterprise": 0.0,
+      "total_per_channel": {},
+      "infra_to_revenue_ratio": null,
+      "capex_per_token_usd": null,
+      "revenue_per_token_usd": null,
+      "yoy_total_customer_revenue_growth_pct": null,
+      "yoy_total_capex_growth_pct": null,
+      "yoy_tokens_annual_inference_growth_pct": null,
+      "_market_provenance": {
+        "mag7_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2023.mag7_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "neocloud_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2023.neocloud_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "sovereign_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2023.sovereign_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "enterprise_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2023.enterprise_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "total_capex": {
+          "origin": "derived_sum",
+          "derived_from": [
+            "mag7_capex",
+            "neocloud_capex",
+            "sovereign_capex",
+            "enterprise_capex"
+          ]
+        },
+        "tokens_per_day_total": {
+          "origin": "derived_per_entity_rollup",
+          "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
+          "rate_used_for_estimation": null,
+          "n_contributors": 0
+        },
+        "tokens_annual_inference": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "tokens_per_day_total",
+            "\u00d7 365"
+          ]
+        },
+        "segments": {
+          "origin": "derived_per_entity_rollup",
+          "sourced_via_rbc": 0,
+          "fallback_via_default_split": 0
+        },
+        "total_per_channel": {
+          "origin": "missing",
+          "reason": "channels_grossed not populated"
+        },
+        "ratios": {
+          "origin": "missing",
+          "reason": "no customer revenue"
+        },
+        "_market_engine_run_at": "2026-05-04T03:01:27Z",
+        "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
+      },
+      "_market_token_sources_count": {
+        "sourced": 0,
+        "derived_daily_x365": 0,
+        "estimated_revenue_rate": 0
+      }
+    },
+    "2024": {
+      "mag7_capex": 226,
+      "neocloud_capex": 25,
+      "sovereign_capex": 10,
+      "enterprise_capex": 8,
+      "total_capex": 269,
+      "tokens_per_day_total": 96.5,
+      "tokens_annual_inference": 3.52225e+16,
+      "tokens_annual_training": null,
+      "total_segment_consumer": 2.36,
+      "total_segment_sme": 0.944,
+      "total_segment_enterprise": 2.596,
+      "total_per_channel": {},
+      "infra_to_revenue_ratio": null,
+      "capex_per_token_usd": null,
+      "revenue_per_token_usd": null,
+      "yoy_total_customer_revenue_growth_pct": null,
+      "yoy_total_capex_growth_pct": 61.08,
+      "yoy_tokens_annual_inference_growth_pct": null,
+      "_market_provenance": {
+        "mag7_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2024.mag7_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "neocloud_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2024.neocloud_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "sovereign_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2024.sovereign_capex"
+          ],
+          "engine_rollup_value": null
+        },
+        "enterprise_capex": {
+          "origin": "sourced",
+          "derived_from": [
+            "market_aggregates.2024.enterprise_capex"
+          ],
+          "engine_rollup_value": 1.18
+        },
+        "total_capex": {
+          "origin": "derived_sum",
+          "derived_from": [
+            "mag7_capex",
+            "neocloud_capex",
+            "sovereign_capex",
+            "enterprise_capex"
+          ]
+        },
+        "tokens_per_day_total": {
+          "origin": "derived_per_entity_rollup",
+          "scope": "model_provider role + _synthetic aggregator entities (wq-070); regular aggregators + apps excluded (consume model_provider tokens, summing all double-counts)",
+          "rate_used_for_estimation": null,
+          "n_contributors": 4
+        },
+        "tokens_annual_inference": {
+          "origin": "derived_pure_function",
+          "derived_from": [
+            "tokens_per_day_total",
+            "\u00d7 365"
+          ]
+        },
+        "segments": {
+          "origin": "derived_per_entity_rollup",
+          "sourced_via_rbc": 0,
+          "fallback_via_default_split": 3
+        },
+        "total_per_channel": {
+          "origin": "missing",
+          "reason": "channels_grossed not populated"
+        },
+        "ratios": {
+          "origin": "missing",
+          "reason": "no customer revenue"
+        },
+        "_market_engine_run_at": "2026-05-04T03:01:27Z",
+        "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
+      },
+      "_market_token_sources_count": {
+        "sourced": 0,
+        "derived_daily_x365": 4,
+        "estimated_revenue_rate": 0
+      }
+    },
+    "_capital_sankey": {
+      "total": 766.0,
+      "bucket_totals": {
+        "mag7": 628.0,
+        "neocloud": 78.0,
+        "sovereign": 33.0,
+        "enterprise": 27.0
+      },
+      "sources": {
+        "Microsoft CapEx": 176.2917082917083,
+        "AWS CapEx": 132.37562437562437,
+        "Google CapEx": 137.39460539460538,
+        "Meta CapEx": 99.12487512487512,
+        "Oracle CapEx": 55.2087912087912,
+        "AI labs direct": 27.6043956043956,
+        "Neoclouds": 78.0,
+        "China": 20.294999999999998,
+        "Sovereign / Gov": 12.705,
+        "Enterprise": 27.0
+      },
+      "destinations": {
+        "NVIDIA GPUs": 311.45054945054943,
+        "Other silicon": 74.22777222777223,
+        "Networking": 58.92307692307693,
+        "Data Centre Costs": 224.97902097902096,
+        "Electricity & ops": 96.41958041958043
+      },
+      "utilization": {
+        "Inference (Paid)": 51.322,
+        "Inference (Free Tier)": 32.937999999999995,
+        "Inference (Ad Platform)": 206.82000000000002,
+        "Model Training": 86.558,
+        "Idle": 69.706,
+        "In build / in transit": 318.656
+      },
+      "flows": [
+        [
+          "Microsoft CapEx",
+          "NVIDIA GPUs",
+          71.67904622849677
+        ],
+        [
+          "Microsoft CapEx",
+          "Other silicon",
+          17.083212491803902
+        ],
+        [
+          "Microsoft CapEx",
+          "Networking",
+          13.560900637823716
+        ],
+        [
+          "Microsoft CapEx",
+          "Data Centre Costs",
+          51.77798425350873
+        ],
+        [
+          "Microsoft CapEx",
+          "Electricity & ops",
+          22.19056468007517
+        ],
+        [
+          "AWS CapEx",
+          "NVIDIA GPUs",
+          53.8230560648143
+        ],
+        [
+          "AWS CapEx",
+          "Other silicon",
+          12.827607956479087
+        ],
+        [
+          "AWS CapEx",
+          "Networking",
+          10.182740336586491
+        ],
+        [
+          "AWS CapEx",
+          "Data Centre Costs",
+          38.879554012421146
+        ],
+        [
+          "AWS CapEx",
+          "Electricity & ops",
+          16.66266600532335
+        ],
+        [
+          "Google CapEx",
+          "NVIDIA GPUs",
+          55.86374065494944
+        ],
+        [
+          "Google CapEx",
+          "Other silicon",
+          13.313962760516207
+        ],
+        [
+          "Google CapEx",
+          "Networking",
+          10.56881579958503
+        ],
+        [
+          "Google CapEx",
+          "Data Centre Costs",
+          40.35366032568829
+        ],
+        [
+          "Google CapEx",
+          "Electricity & ops",
+          17.294425853866414
+        ],
+        [
+          "Meta CapEx",
+          "NVIDIA GPUs",
+          40.303520655169
+        ],
+        [
+          "Meta CapEx",
+          "Other silicon",
+          9.605507379733154
+        ],
+        [
+          "Meta CapEx",
+          "Networking",
+          7.624990394221164
+        ],
+        [
+          "Meta CapEx",
+          "Data Centre Costs",
+          29.11359968702626
+        ],
+        [
+          "Meta CapEx",
+          "Electricity & ops",
+          12.477257008725541
+        ],
+        [
+          "Oracle CapEx",
+          "NVIDIA GPUs",
+          22.447530491486532
+        ],
+        [
+          "Oracle CapEx",
+          "Other silicon",
+          5.349902844408338
+        ],
+        [
+          "Oracle CapEx",
+          "Networking",
+          4.246830092983939
+        ],
+        [
+          "Oracle CapEx",
+          "Data Centre Costs",
+          16.215169445938674
+        ],
+        [
+          "Oracle CapEx",
+          "Electricity & ops",
+          6.949358333973718
+        ],
+        [
+          "AI labs direct",
+          "NVIDIA GPUs",
+          11.223765245743266
+        ],
+        [
+          "AI labs direct",
+          "Other silicon",
+          2.674951422204169
+        ],
+        [
+          "AI labs direct",
+          "Networking",
+          2.1234150464919694
+        ],
+        [
+          "AI labs direct",
+          "Data Centre Costs",
+          8.107584722969337
+        ],
+        [
+          "AI labs direct",
+          "Electricity & ops",
+          3.474679166986859
+        ],
+        [
+          "Neoclouds",
+          "NVIDIA GPUs",
+          31.714285714285715
+        ],
+        [
+          "Neoclouds",
+          "Other silicon",
+          7.558441558441559
+        ],
+        [
+          "Neoclouds",
+          "Networking",
+          6.0
+        ],
+        [
+          "Neoclouds",
+          "Data Centre Costs",
+          22.90909090909091
+        ],
+        [
+          "Neoclouds",
+          "Electricity & ops",
+          9.818181818181818
+        ],
+        [
+          "China",
+          "NVIDIA GPUs",
+          8.251813186813186
+        ],
+        [
+          "China",
+          "Other silicon",
+          1.9666483516483517
+        ],
+        [
+          "China",
+          "Networking",
+          1.5611538461538461
+        ],
+        [
+          "China",
+          "Data Centre Costs",
+          5.96076923076923
+        ],
+        [
+          "China",
+          "Electricity & ops",
+          2.5546153846153845
+        ],
+        [
+          "Sovereign / Gov",
+          "NVIDIA GPUs",
+          5.1657692307692304
+        ],
+        [
+          "Sovereign / Gov",
+          "Other silicon",
+          1.2311538461538463
+        ],
+        [
+          "Sovereign / Gov",
+          "Networking",
+          0.9773076923076923
+        ],
+        [
+          "Sovereign / Gov",
+          "Data Centre Costs",
+          3.7315384615384612
+        ],
+        [
+          "Sovereign / Gov",
+          "Electricity & ops",
+          1.5992307692307695
+        ],
+        [
+          "Enterprise",
+          "NVIDIA GPUs",
+          10.978021978021978
+        ],
+        [
+          "Enterprise",
+          "Other silicon",
+          2.6163836163836165
+        ],
+        [
+          "Enterprise",
+          "Networking",
+          2.076923076923077
+        ],
+        [
+          "Enterprise",
+          "Data Centre Costs",
+          7.93006993006993
+        ],
+        [
+          "Enterprise",
+          "Electricity & ops",
+          3.3986013986013988
+        ],
+        [
+          "NVIDIA GPUs",
+          "Inference (Paid)",
+          20.867186813186812
+        ],
+        [
+          "NVIDIA GPUs",
+          "Inference (Free Tier)",
+          13.392373626373624
+        ],
+        [
+          "NVIDIA GPUs",
+          "Inference (Ad Platform)",
+          84.09164835164835
+        ],
+        [
+          "NVIDIA GPUs",
+          "Model Training",
+          35.19391208791209
+        ],
+        [
+          "NVIDIA GPUs",
+          "Idle",
+          28.342
+        ],
+        [
+          "NVIDIA GPUs",
+          "In build / in transit",
+          129.56342857142855
+        ],
+        [
+          "Other silicon",
+          "Inference (Paid)",
+          4.97326073926074
+        ],
+        [
+          "Other silicon",
+          "Inference (Free Tier)",
+          3.191794205794206
+        ],
+        [
+          "Other silicon",
+          "Inference (Ad Platform)",
+          20.041498501498506
+        ],
+        [
+          "Other silicon",
+          "Model Training",
+          8.387738261738264
+        ],
+        [
+          "Other silicon",
+          "Idle",
+          6.754727272727274
+        ],
+        [
+          "Other silicon",
+          "In build / in transit",
+          30.87875324675325
+        ],
+        [
+          "Networking",
+          "Inference (Paid)",
+          3.9478461538461542
+        ],
+        [
+          "Networking",
+          "Inference (Free Tier)",
+          2.5336923076923075
+        ],
+        [
+          "Networking",
+          "Inference (Ad Platform)",
+          15.90923076923077
+        ],
+        [
+          "Networking",
+          "Model Training",
+          6.658307692307693
+        ],
+        [
+          "Networking",
+          "Idle",
+          5.362
+        ],
+        [
+          "Networking",
+          "In build / in transit",
+          24.512
+        ],
+        [
+          "Data Centre Costs",
+          "Inference (Paid)",
+          15.073594405594406
+        ],
+        [
+          "Data Centre Costs",
+          "Inference (Free Tier)",
+          9.6740979020979
+        ],
+        [
+          "Data Centre Costs",
+          "Inference (Ad Platform)",
+          60.744335664335665
+        ],
+        [
+          "Data Centre Costs",
+          "Model Training",
+          25.42262937062937
+        ],
+        [
+          "Data Centre Costs",
+          "Idle",
+          20.473090909090907
+        ],
+        [
+          "Data Centre Costs",
+          "In build / in transit",
+          93.59127272727271
+        ],
+        [
+          "Electricity & ops",
+          "Inference (Paid)",
+          6.460111888111889
+        ],
+        [
+          "Electricity & ops",
+          "Inference (Free Tier)",
+          4.146041958041958
+        ],
+        [
+          "Electricity & ops",
+          "Inference (Ad Platform)",
+          26.033286713286717
+        ],
+        [
+          "Electricity & ops",
+          "Model Training",
+          10.895412587412588
+        ],
+        [
+          "Electricity & ops",
+          "Idle",
+          8.774181818181818
+        ],
+        [
+          "Electricity & ops",
+          "In build / in transit",
+          40.11054545454546
+        ]
+      ],
+      "_engine": "scripts/derive_capital_sankey.py (wq-074)",
+      "_engine_run_at": "2026-05-04T03:01:33Z",
+      "_doc": "Capital sankey engine output. Column 0 sources derived from market_aggregates bucket totals \u00d7 structure.column0_sub_allocation. Columns 1+2 = pure editorial ratios applied to total. FLOWS guaranteed to satisfy per-node conservation by construction (proportional cross-product). capital.html reads via site-data.json."
     }
   }
 }

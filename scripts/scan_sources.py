@@ -23,6 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
 from log_run import logged_run  # noqa: E402
 from score_materiality import score as score_materiality  # noqa: E402  (wq-040)
+from _telemetry_router import is_telemetry, append_to_telemetry_feed  # noqa: E402  (wq-047)
 REGISTRY_PATH = os.path.join(BASE_DIR, "sources-registry.json")
 INBOX_PATH = os.path.join(BASE_DIR, "vault-inbox.json")
 MODEL = "claude-sonnet-4-6"
@@ -45,8 +46,39 @@ For each claim, return a JSON array. Each item:
   "unit": "unit — e.g. $B, $B ARR, %, count, T tokens/day",
   "confidence": "verified|estimated|speculative",
   "dateOfClaim": "YYYY-MM-DD or best guess",
+  "time_period_scope": "annual | h1 | h2 | q1 | q2 | q3 | q4 | exit_snapshot | monthly_peak | point_in_time",
+  "period_qualifier_detected": "short string quoting the period qualifier in the source text (e.g. 'H1 2025', 'best 4-week × 12'), or null when scope is annual",
   "tags": ["relevant", "tags"]
 }}
+
+TIME PERIOD SCOPE — RULES (wq-054):
+
+Rule A — INTERNAL CONSISTENCY (critical):
+If you populate period_qualifier_detected with a non-null value, time_period_scope MUST be the corresponding scope from the qualifier — NOT point_in_time. Specifically:
+  - Qualifier mentions "Q1" / "Q2" / "Q3" / "Q4" / "first/second/third/fourth quarter" → scope must be q1/q2/q3/q4
+  - Qualifier mentions "H1" / "H2" / "first half" / "second half" → scope must be h1/h2
+  - Qualifier mentions "exit" / "end of year" / "year-end run-rate" / "best 4-week × 12" → scope must be exit_snapshot
+  - Qualifier mentions "monthly" / "per month" / "single month peak" / "$X/month" → scope must be monthly_peak
+Failing this rule produces wrongly-routed claims and is a critical error. If you wrote "beginning of Q2" in period_qualifier_detected, time_period_scope MUST be "q2".
+
+Rule B — point_in_time BOUNDARY:
+point_in_time is reserved for ENTITY-CURRENT state metrics: weekly active users, headcount, current model version, current ARR run-rate WHEN explicitly described as "as of today / now / current".
+point_in_time is NOT for:
+  - Funding rounds (e.g. "$122B round closed Sep 2025") → scope=annual, year=2025
+  - Valuations at a specific time (e.g. "OpenAI valued at $850B Mar 2026") → scope=annual, year=2026
+  - Revenue or ARR figures with a year reference but no quarter/half/exit qualifier → scope=annual
+
+Rule C — DEFAULT:
+No period qualifier in the source text → scope=annual, period_qualifier_detected=null.
+Explicit "full year" / "FY2025" → scope=annual.
+
+WORKED EXAMPLES (one per scope):
+  annual:        "OpenAI 2025 collected revenue ~$11.9B"                            → scope=annual,        qualifier=null
+  h1:            "OpenAI H1 2025 revenue $4.3B per The Information"                 → scope=h1,            qualifier="H1 2025"
+  q2:            "Anthropic Q2 2025 ARR $5B"                                        → scope=q2,            qualifier="Q2 2025"
+  exit_snapshot: "OpenAI exit ARR 2024 was $20B (best-period × 12)"                 → scope=exit_snapshot, qualifier="exit ARR 2024"
+  monthly_peak:  "Brad Gerstner: Anthropic hit $6B/month run rate February 2026"    → scope=monthly_peak,  qualifier="$6B/month February 2026"
+  point_in_time: "OpenAI now has 700M WAU"                                          → scope=point_in_time, qualifier="now"
 
 Return ONLY a valid JSON array. No markdown, no explanation. If no claims found, return [].
 
@@ -303,7 +335,7 @@ def _main_impl(outputs):
                 "value": claim.get("value"),
                 "unit": claim.get("unit", ""),
                 "sourceUrl": url,
-                "sourceType": "reporting",
+                "sourceType": source.get("type") or "reporting",
                 # wq-041: source grounding pass-through. Null until the
                 # EXTRACT_PROMPT in this script is updated to request these
                 # fields (follow-on). Schema kept consistent so review.html
@@ -321,9 +353,20 @@ def _main_impl(outputs):
                 "status": "pending",
                 "replaces": None,
                 "source_id": sid,
-                "metricKey": None,
+                "metricKey": claim.get("metric_key") or claim.get("metricKey"),
                 "entity": claim.get("entity", ""),
+                # wq-054 — sub-period attribution. apply_decisions.py reads
+                # these fields to route to <year>_h1 / _q3 / .exit_<field> /
+                # .monthly_peak_<field> instead of the annual default.
+                "timePeriodScope": claim.get("time_period_scope") or "annual",
+                "periodQualifier": claim.get("period_qualifier_detected"),
             }
+            # wq-047 — operational telemetry routes to data/telemetry-feed.json,
+            # not the human review queue.
+            if is_telemetry(new_item, source):
+                append_to_telemetry_feed(new_item, source, today)
+                existing_ids.add(claim_id)
+                continue
             # wq-040 — score materiality before write so review.html lanes work
             try:
                 new_item["materiality"] = score_materiality(new_item, _ENTITIES_CACHE, _SCHEMA_CACHE)

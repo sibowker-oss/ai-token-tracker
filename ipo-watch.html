@@ -74,6 +74,7 @@
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-211EY55BEQ"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-211EY55BEQ");</script>
+<script src="data/format-helpers.js"></script>
 </head>
 <body>
 
@@ -157,8 +158,8 @@ function render() {
       '</div>' +
       '<div style="font-size:11px;color:var(--text-dim);margin-top:2px;">' + c.category + ' · ' + c.hq + ' · Timeline: ' + c.timeline + '</div>' +
       '<div class="val-row">' +
-        '<div class="val"><div class="num">$' + c.valuation + 'B</div><div class="lbl">Valuation</div></div>' +
-        '<div class="val"><div class="num">' + (c.arr ? '$' + (c.arr/1000).toFixed(1) + 'B' : '—') + '</div><div class="lbl">ARR</div></div>' +
+        '<div class="val"><div class="num">' + formatCurrency(c.valuation) + '</div><div class="lbl">Valuation</div></div>' +
+        '<div class="val"><div class="num">' + (c.arr ? formatCurrency(c.arr/1000) : '—') + '</div><div class="lbl">ARR</div></div>' +
         '<div class="val"><div class="num" style="color:var(--orange);">' + multiple + 'x</div><div class="lbl">Rev Multiple</div></div>' +
       '</div>' +
       '<div style="font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.5;">' + c.note + '</div>' +
@@ -173,8 +174,8 @@ function render() {
     html += '<tr>' +
       '<td class="co-name">' + c.co + '</td>' +
       '<td style="font-size:11px;">' + c.category + '</td>' +
-      '<td>$' + c.valuation + 'B</td>' +
-      '<td>' + (c.arr ? '$' + (c.arr >= 1000 ? (c.arr/1000).toFixed(1) + 'B' : c.arr + 'M') : '—') + '</td>' +
+      '<td>' + formatCurrency(c.valuation) + '</td>' +
+      '<td>' + (c.arr ? formatCurrency(c.arr/1000) : '—') + '</td>' +
       '<td class="multiple">' + multiple + '</td>' +
       '<td style="font-size:11px;">' + c.timeline + '</td>' +
       '<td><span class="spot-status ' + statusClass + '">' + c.status + '</span></td>' +

@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": "2.2",
-    "description": "Field definitions per role + structured claim types. Supports dynamic field discovery \u2014 new fields proposed by Claude are added to proposed_fields until approved. claim_types (v2.2) defines structured payloads emitted by Stream 2 / Stream 3 extractors per wq-014.",
-    "lastUpdated": "2026-04-23"
+    "version": "2.3",
+    "description": "Field definitions per role + structured claim types. Supports dynamic field discovery \u2014 new fields proposed by Claude are added to proposed_fields until approved. claim_types (v2.2) defines structured payloads emitted by Stream 2 / Stream 3 extractors per wq-014. v2.3 (wq-054): adds field_patterns + time_period_scope_values for sub-period claim routing.",
+    "lastUpdated": "2026-05-03"
   },
   "proposed_fields": [
     {
@@ -92,18 +92,32 @@
   ],
   "inbox_statuses": {
     "_description": "Valid status values for items in vault-inbox.json. Source of truth for review.html, scripts/apply_claims.py, scripts/auto_clear_inbox.py, and scripts/migrate_orphan_accepts.py. Added under wq-023 (briefs/active/2026-04-25-raw-pool-status.md).",
-    "values": ["pending", "accepted", "declined", "parked", "raw_pool"],
+    "values": [
+      "pending",
+      "accepted",
+      "declined",
+      "parked",
+      "raw_pool"
+    ],
     "definitions": {
       "pending": "Awaiting human review in admin.html#review.",
       "accepted": "Reviewed and trusted; updates a live data point in site-data.json. Must have a mapped metric (metricKey) post-wq-023.",
-      "raw_pool": "Reviewed and trusted, but no mapped metric — filed for later, not surfaced on the site.",
+      "raw_pool": "Reviewed and trusted, but no mapped metric \u2014 filed for later, not surfaced on the site.",
       "declined": "Reviewed and rejected.",
       "parked": "Held for triangulation or future review."
     }
   },
   "page_lifecycle_statuses": {
     "_description": "Valid status values for entries in data/page-registry.json. Source of truth for scripts/validate_page_registry.py, scripts/build-lint.js (dataReferences gating), and archive.html (Concepts/Retired/Parked sections). Added under wq-031 (briefs/active/2026-04-26-page-lifecycle-registry.md).",
-    "values": ["live", "admin", "concept", "beta", "parked", "retired", "newsletter"],
+    "values": [
+      "live",
+      "admin",
+      "concept",
+      "beta",
+      "parked",
+      "retired",
+      "newsletter"
+    ],
     "definitions": {
       "live": "Public ledger / infrastructure page. In nav. Linted (full dataReferences) unless the entry carries lintExclusions.",
       "admin": "Tooling page (review queue, source admin, settings, etc.). Not in public nav. Schema-checked but skipped on dataReferences.",
@@ -114,17 +128,67 @@
       "newsletter": "Immutable timestamped artefact under /newsletters/. Not in nav. Excluded from audits."
     },
     "folder_rules": {
-      "live": {"required_folder": "<root>", "in_public_nav": true, "linted": true},
-      "admin": {"required_folder": "<root> or data-updates/", "in_public_nav": false, "linted": false},
-      "concept": {"required_folder": "<root>", "in_public_nav": false, "linted": false},
-      "beta": {"required_folder": "beta/", "in_public_nav": false, "linted": false},
-      "parked": {"required_folder": "parked/", "in_public_nav": false, "linted": false},
-      "retired": {"required_folder": "archive/", "in_public_nav": false, "linted": false, "transition_flag": "pendingMove allows status=retired with path at <root> until the P2 git mv lands"},
-      "newsletter": {"required_folder": "newsletters/", "in_public_nav": false, "linted": false}
+      "live": {
+        "required_folder": "<root>",
+        "in_public_nav": true,
+        "linted": true
+      },
+      "admin": {
+        "required_folder": "<root> or data-updates/",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "concept": {
+        "required_folder": "<root>",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "beta": {
+        "required_folder": "beta/",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "parked": {
+        "required_folder": "parked/",
+        "in_public_nav": false,
+        "linted": false
+      },
+      "retired": {
+        "required_folder": "archive/",
+        "in_public_nav": false,
+        "linted": false,
+        "transition_flag": "pendingMove allows status=retired with path at <root> until the P2 git mv lands"
+      },
+      "newsletter": {
+        "required_folder": "newsletters/",
+        "in_public_nav": false,
+        "linted": false
+      }
     },
-    "entry_required_fields": ["path", "status", "title", "purpose", "supersedes", "supersededBy", "addedOn", "retiredOn"],
-    "entry_optional_fields": ["lastReviewed", "retiredReason", "lintExclusions", "pendingMove", "pendingMoveTo", "_provenance", "_lintExclusionsReason"],
-    "retired_required_fields": ["supersededBy", "retiredOn", "retiredReason"]
+    "entry_required_fields": [
+      "path",
+      "status",
+      "title",
+      "purpose",
+      "supersedes",
+      "supersededBy",
+      "addedOn",
+      "retiredOn"
+    ],
+    "entry_optional_fields": [
+      "lastReviewed",
+      "retiredReason",
+      "lintExclusions",
+      "pendingMove",
+      "pendingMoveTo",
+      "_provenance",
+      "_lintExclusionsReason"
+    ],
+    "retired_required_fields": [
+      "supersededBy",
+      "retiredOn",
+      "retiredReason"
+    ]
   },
   "roles": {
     "model_provider": {
@@ -1149,6 +1213,132 @@
       "description": "Cost of goods sold ratio."
     }
   },
+  "field_patterns": {
+    "_doc": "wq-054 \u2014 period-of-time attribution. Sub-period claims (H1, Q3, exit-snapshot, monthly-peak) MUST route to the corresponding sub-field instead of the annual field. apply_decisions.py:resolve_field_path enforces this.",
+    "annual_default": {
+      "path": "<entity>.financials.<year>.<field>",
+      "scope": "annual",
+      "example": "openai.financials.2025.collected_revenue"
+    },
+    "half_year_h1": {
+      "path": "<entity>.financials.<year>_h1.<field>",
+      "scope": "h1",
+      "example": "openai.financials.2025_h1.collected_revenue"
+    },
+    "half_year_h2": {
+      "path": "<entity>.financials.<year>_h2.<field>",
+      "scope": "h2",
+      "example": "openai.financials.2025_h2.collected_revenue"
+    },
+    "quarterly": {
+      "path": "<entity>.financials.<year>_<q1|q2|q3|q4>.<field>",
+      "scope": "q1|q2|q3|q4",
+      "example": "anthropic.financials.2026_q1.arr"
+    },
+    "exit_snapshot": {
+      "path": "<entity>.financials.<year>.exit_<field>",
+      "scope": "exit_snapshot",
+      "example": "openai.financials.2024.exit_arr \u2014 year-end run-rate, often via best-period-x12"
+    },
+    "monthly_peak": {
+      "path": "<entity>.financials.<year>.monthly_peak_<field>",
+      "scope": "monthly_peak",
+      "example": "anthropic.financials.2026.monthly_peak_arr \u2014 single-month figure, NOT annualised"
+    },
+    "point_in_time": {
+      "path": "<entity>.current.<field>",
+      "scope": "point_in_time",
+      "example": "openai.current.weekly_active_users"
+    }
+  },
+  "time_period_scope_values": {
+    "_doc": "wq-054 \u2014 extractor sets time_period_scope per claim. apply_decisions.py uses it to choose the field path. Default to 'annual' when no period qualifier detected in the source text.",
+    "annual": {
+      "description": "Whole calendar year (no qualifier, or explicit 'full year', '2025 revenue').",
+      "qualifier_examples": [
+        "FY2025",
+        "full year 2025",
+        "2025 revenue"
+      ]
+    },
+    "h1": {
+      "description": "First half of the year (Jan-Jun).",
+      "qualifier_examples": [
+        "H1 2025",
+        "first half",
+        "January through June",
+        "first six months"
+      ]
+    },
+    "h2": {
+      "description": "Second half of the year (Jul-Dec).",
+      "qualifier_examples": [
+        "H2 2025",
+        "second half",
+        "July through December"
+      ]
+    },
+    "q1": {
+      "description": "First quarter (Jan-Mar).",
+      "qualifier_examples": [
+        "Q1 2025",
+        "first quarter",
+        "Jan-Mar"
+      ]
+    },
+    "q2": {
+      "description": "Second quarter (Apr-Jun).",
+      "qualifier_examples": [
+        "Q2 2025",
+        "second quarter",
+        "Apr-Jun"
+      ]
+    },
+    "q3": {
+      "description": "Third quarter (Jul-Sep).",
+      "qualifier_examples": [
+        "Q3 2025",
+        "third quarter",
+        "Jul-Sep"
+      ]
+    },
+    "q4": {
+      "description": "Fourth quarter (Oct-Dec).",
+      "qualifier_examples": [
+        "Q4 2025",
+        "fourth quarter",
+        "Oct-Dec"
+      ]
+    },
+    "exit_snapshot": {
+      "description": "Year-end ARR run-rate, often computed as best-period-x12. NOT total annual cash collected.",
+      "qualifier_examples": [
+        "exit ARR",
+        "year-end run-rate",
+        "as of December",
+        "best 4-week \u00d7 12",
+        "December annualised"
+      ]
+    },
+    "monthly_peak": {
+      "description": "Single-month peak figure. NOT annualised.",
+      "qualifier_examples": [
+        "$X per month",
+        "monthly peak",
+        "single month run-rate",
+        "Feb 2026 hit $6B"
+      ]
+    },
+    "point_in_time": {
+      "description": "Most recent snapshot (e.g. headcount, WAU). Not period-bound.",
+      "qualifier_examples": [
+        "current",
+        "as of today",
+        "now",
+        "this week"
+      ]
+    }
+  },
   "entity_match_rules": [
     {
       "pattern": "openai|open.ai|chatgpt|gpt-",
@@ -1211,12 +1401,68 @@
       "slug": "portkey"
     },
     {
-      "pattern": "cursor|anysphere",
-      "slug": "cursor"
-    },
-    {
       "pattern": "perplexity",
       "slug": "perplexity"
+    },
+    {
+      "pattern": "bytedance|doubao|tiktok.*ai|volcano.*engine",
+      "slug": "bytedance"
+    },
+    {
+      "pattern": "alibaba|qwen|aliyun|tongyi",
+      "slug": "alibaba"
+    },
+    {
+      "pattern": "tencent|hunyuan|wechat.*ai|yuanbao",
+      "slug": "tencent"
+    },
+    {
+      "pattern": "baidu|ernie|wenxin|yiyan",
+      "slug": "baidu"
+    },
+    {
+      "pattern": "self.host|llama.deployed|open.model.run|on.prem.inference",
+      "slug": "_self_hosted"
+    },
+    {
+      "pattern": "cohere|ai21|samsung.*gauss|apple.*intelligence",
+      "slug": "_other_closed"
+    },
+    {
+      "pattern": "databricks",
+      "slug": "databricks"
+    },
+    {
+      "pattern": "\\bscale\\.?ai\\b|scale\\sai\\b",
+      "slug": "scale"
+    },
+    {
+      "pattern": "modal\\.com|modal\\s+labs|modal\\s+inc",
+      "slug": "modal"
+    },
+    {
+      "pattern": "cohere",
+      "slug": "cohere"
+    },
+    {
+      "pattern": "super\\.com|super\\s+app",
+      "slug": "super_com"
+    },
+    {
+      "pattern": "harvey\\.ai|harvey\\s+legal|\\bharvey\\b",
+      "slug": "harvey-ai"
+    },
+    {
+      "pattern": "lambda\\.labs|lambda\\.cloud|lambdalabs",
+      "slug": "lambda"
+    },
+    {
+      "pattern": "groq",
+      "slug": "groq"
+    },
+    {
+      "pattern": "replicate\\.com|\\breplicate\\b",
+      "slug": "replicate"
     }
   ],
   "field_match_rules": [

@@ -80,6 +80,7 @@
     .footer-grid{grid-template-columns:1fr;gap:16px;}
   }
 </style>
+<script src="data/format-helpers.js"></script>
 </head>
 <body class="surface-dark">
 
@@ -155,14 +156,25 @@
 </div>
 
 <script>
-// ── Scenario data ──
+// ── Scenario data (wq-073 — fetched from data/scenarios.json) ──
+// Inline defaults remain as graceful fallback if fetch fails.
 // Scenario multipliers: 2025 is actual (no flex). 2026E/2027E flex by scenario.
 // Bear = current trajectory decelerates. Base = data as modeled. Bull = agent-driven acceleration.
-const SCENARIOS = {
+let SCENARIOS = {
   bear:  { revenue: 17, label: 'Bear', growth: '20-30%', multiplier: { '2025': 1.0, '2026E': 0.55, '2027E': 0.40 } },
   base:  { revenue: 22, label: 'Base', growth: '80-100%', multiplier: { '2025': 1.0, '2026E': 1.0, '2027E': 1.0 } },
   bull:  { revenue: 27, label: 'Bull', growth: '200%+', multiplier: { '2025': 1.0, '2026E': 1.35, '2027E': 1.80 } }
 };
+fetch('data/scenarios.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(s => {
+    if (s && s.revenue_projection) {
+      SCENARIOS = s.revenue_projection;
+      // Re-render against fetched scenarios if the page has already initialised.
+      if (typeof renderYear === 'function' && typeof activeYear !== 'undefined') renderYear(activeYear);
+    }
+  })
+  .catch(() => { /* fallback SCENARIOS already in place */ });
 // Bear 2026E: $64B * 0.55 = ~$35B (growth decelerates to ~2x from $17.5B)
 // Bear 2027E: $112B * 0.40 = ~$45B (growth continues at ~30% from bear-26)
 // Bull 2026E: $64B * 1.35 = ~$86B (agent workflows accelerate adoption)
@@ -218,6 +230,13 @@ async function init() {
   document.getElementById('year-toggle').innerHTML = html;
   document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === activeYear));
   renderYear(activeYear);
+
+  // wq-077 — hydrate [data-narrative] spans from site-data.json. Independent
+  // fetch from the sankey-projections one above; failure leaves inline defaults.
+  fetch('site-data.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(d => { if (typeof hydrateNarrative === 'function') hydrateNarrative(d); })
+    .catch(() => { /* graceful fallback to inline defaults */ });
 }
 
 function switchYear(yr) {
@@ -244,18 +263,29 @@ function renderYear(yr) {
   // Base scenario = the data as-is. Bear/bull scale the customer revenue headline.
   const scenarioData = SCENARIOS[currentScenario];
   const mult = scenarioData.multiplier[yr] || 1.0;
-  const baseRevenue = d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  // wq-063: hero "Customer Revenue" displays BUYER-GROSS (what customers
+  // actually paid, ~$19.86B). Provider-received chPass (~$17.56B) remains
+  // visible as the secondary "→ providers receive" line and via the Sankey
+  // provider column. Falls back to net (totalCustomerRevenue) when gross is
+  // absent (older site-data.json), then to summing non-VC buyers (oldest fallback).
+  const baseRevenue = (d.totalCustomerRevenue_gross != null)
+    ? d.totalCustomerRevenue_gross
+    : (d.totalCustomerRevenue != null)
+      ? d.totalCustomerRevenue
+      : d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  const revenueNet = (d.totalCustomerRevenue != null) ? d.totalCustomerRevenue : null;
   const revenue = baseRevenue * mult;
 
   // VC subsidy scales inversely with revenue growth (higher revenue = less subsidy needed)
+  // wq-076: keep as Number; format at display via formatCurrency()
   const baseVC = d.totalVCSubsidy || 0;
   const vcMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 1.3 : currentScenario === 'bull' ? 0.5 : 1.0);
-  const vcSubsidy = (baseVC * vcMultiplier).toFixed(1);
+  const vcSubsidy = baseVC * vcMultiplier;
 
   // Cashflow scales with revenue scenario
   const baseCF = cf ? cf.value : 0;
   const cfMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 0.4 : currentScenario === 'bull' ? 2.2 : 1.0);
-  const cashflow = (baseCF * cfMultiplier).toFixed(1);
+  const cashflow = baseCF * cfMultiplier;
 
   const capex = (d.infrastructureCapex || {}).value || 0;
   const capexTier = (d.infrastructureCapex || {}).tier || '';
@@ -265,20 +295,29 @@ function renderYear(yr) {
   // Tier degrades for non-base scenarios on projected years
   const scenarioTier = (yr === '2025' || currentScenario === 'base') ? '' : ' (scenario)';
 
+  // wq-063: secondary line shows provider-received (net) when gross is the
+  // primary number — gives readers transparency into the channel-margin gap.
+  const heroSecondary = (d.totalCustomerRevenue_gross != null && revenueNet != null)
+    ? '<div class="detail" style="margin-top:2px;font-size:9px;opacity:0.75;">→ providers receive '+ formatCurrency(revenueNet * mult) +'</div>'
+    : '';
+
   let h = '';
-  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+vcSubsidy+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+cashflow+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">'+formatCurrency(revenue)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">'+formatCurrency(capex)+'</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">'+formatCurrency(vcSubsidy)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">'+formatCurrency(cashflow)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
   document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
 
-  // Dynamic subtitles incorporating scenario
+  // Dynamic subtitles incorporating scenario.
+  // wq-077: 2025 branch hydrates from engine values (was hardcoded "$17.5B" / "$9.4B").
   let subtitle = '';
   if (yr === '2025') {
-    subtitle = '$17.5B in customer revenue and $9.4B in VC-funded operating losses across frontier AI providers.';
+    const grossYr = (d.totalCustomerRevenue_gross != null) ? d.totalCustomerRevenue_gross : revenue;
+    const vcYr = (d.totalVCSubsidy != null) ? d.totalVCSubsidy : vcSubsidy;
+    subtitle = formatCurrency(grossYr) + ' in customer revenue and ' + formatCurrency(vcYr) + ' in VC-funded operating losses across frontier AI providers.';
   } else {
-    subtitle = scenarioData.label + ' case: $' + revenue.toFixed(0) + 'B in customer revenue. VC subsidy $' + vcSubsidy + 'B. Growth assumption: ' + scenarioData.growth + ' annually.';
+    subtitle = scenarioData.label + ' case: ' + formatCurrency(revenue) + ' in customer revenue. VC subsidy ' + formatCurrency(vcSubsidy) + '. Growth assumption: ' + scenarioData.growth + ' annually.';
   }
   const subtitleEl = document.getElementById('page-subtitle');
   if (subtitleEl) subtitleEl.textContent = subtitle;
@@ -382,7 +421,10 @@ function buildSankey(d) {
   const spacing = (W - margin*2 - colW*4) / 3;
   const barH = 450, gap = 5, topY = 50;
 
-  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null}));
+  // wq-062 — pass color + slug through so the renderer can use data-supplied colors
+  // (fixes Google/Gemini and Other Model Providers grey-fallback bug) and so the
+  // routing-aware Channels→Providers builder can match routing entries by slug.
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null}));
   const colDefs = [
     { label:'Who Pays', items: wrap(d.buyers) },
     { label:'Channels', items: wrap(d.channels) },
@@ -401,7 +443,7 @@ function buildSankey(d) {
     const x = margin + ci*(colW + spacing);
     col.items.forEach(item => {
       const h = item.value * scale;
-      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, color:item.color, slug:item.slug, x, y, w:colW, h, col:ci, _in:0, _out:0 });
       y += h + gap;
     });
   });
@@ -449,11 +491,30 @@ function buildSankey(d) {
   const baseValue = (p) => (p.name==='OpenAI' ? Math.max(p.value - adsBump, 0) : p.value);
   const frontierBaseTotal = frontierNodes.reduce((s,n)=>s+baseValue(n),0);
 
+  // wq-062 — routing-aware Channels→Providers. d.routing is keyed by provider slug;
+  // each entry maps Sankey channel label → customer-revenue contribution. Channel
+  // values are already grossed up by the engine so chPass = sum(routing per channel)
+  // and the channel margin still flows to Generated Cashflow. Falls back to the
+  // pre-wq-062 proportional logic when d.routing is absent (backward compat).
+  const routing = d.routing || null;
+  const provBySlug = {};
+  if (routing) {
+    provNodes.forEach(p => { if (p.slug) provBySlug[p.slug] = p; });
+  }
+
   chNodes.forEach(ch => {
     const mPct = marginPcts[ch.name]||0;
     const pass = ch.value * (1-mPct);
 
-    if(ch.name==='Ads') {
+    if (routing && ch.name !== 'Ads') {
+      Object.entries(routing).forEach(([slug, channels]) => {
+        const v = channels[ch.name] || 0;
+        const prov = provBySlug[slug];
+        if (v > 0.01 && prov) {
+          flowDefs.push({from:ch.name, to:prov.name, value:v, fc:1, tc:2});
+        }
+      });
+    } else if(ch.name==='Ads') {
       flowDefs.push({from:ch.name, to:'OpenAI', value:pass, fc:1, tc:2});
     } else if(ch.name==='IaaS & Agg.' && iaasNode) {
       flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass, fc:1, tc:2});
@@ -553,7 +614,7 @@ function renderCanvas(ctx, W) {
     ctx.fillText(labels[ci], x, 18);
     ctx.font = '11px -apple-system,sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('$'+colTotals[ci].toFixed(1)+'B', x, 33);
+    ctx.fillText(formatCurrency(colTotals[ci]), x, 33);
     ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(nodes[0].x, 38); ctx.lineTo(nodes[0].x+nodes[0].w, 38); ctx.stroke();
   });
@@ -564,7 +625,8 @@ function renderCanvas(ctx, W) {
     const connected = aName && (f.from.name===aName || f.to.name===aName);
     const dimmed = aName && !connected;
     ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.5 : 0.18;
-    ctx.fillStyle = COLORS[f.from.name] || '#475569';
+    // wq-062 — prefer node-supplied color (from data) over the hard-coded COLORS map
+    ctx.fillStyle = f.from.color || COLORS[f.from.name] || '#475569';
     ctx.beginPath();
     const cp = (f.rx - f.lx) * 0.4;
     ctx.moveTo(f.lx, f.ly);
@@ -590,7 +652,8 @@ function renderCanvas(ctx, W) {
     const isActive = n.name === aName;
     const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
     ctx.globalAlpha = dimmed ? 0.25 : 1;
-    ctx.fillStyle = COLORS[n.name] || '#475569';
+    // wq-062 — prefer node-supplied color over the hard-coded COLORS map
+    ctx.fillStyle = n.color || COLORS[n.name] || '#475569';
     ctx.beginPath(); ctx.roundRect(n.x, n.y, n.w, Math.max(n.h,2), 4); ctx.fill();
     if(isActive) { ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke(); }
     if(n.h > 16) {
@@ -601,8 +664,7 @@ function renderCanvas(ctx, W) {
       ctx.fillText(label, n.x+3, n.y+n.h/2-2);
       ctx.font = '9px -apple-system,sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.8)';
-      const vt = '$'+n.value.toFixed(n.value<10?1:0)+'B';
-      ctx.fillText(vt, n.x+3, n.y+n.h/2+10);
+      ctx.fillText(formatCurrency(n.value), n.x+3, n.y+n.h/2+10);
     }
     // Tier badge
     if(n.tier && n.h >= 10) {
@@ -627,21 +689,21 @@ function renderCanvas(ctx, W) {
       ? '<span style="display:inline-block;background:'+tierColor(active.tier)+';color:#0a0e1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;">TIER '+active.tier+'</span>'
       : '';
     let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;">';
-    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div>';
+    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">'+formatCurrency(active.value)+'</div>';
     if(active.src) {
       html += '<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:4px;max-width:240px;">'+active.src+'</div>';
     }
     html += '</div>';
     if(inflows.length) {
       const inTotal = inflows.reduce((s,f)=>s+f.value,0);
-      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows $'+inTotal.toFixed(1)+'B</div>';
-      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows '+formatCurrency(inTotal)+'</div>';
+      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>'+formatCurrency(f.value)+'</strong></div>'; });
       html += '</div>';
     }
     if(outflows.length) {
       const outTotal = outflows.reduce((s,f)=>s+f.value,0);
-      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows $'+outTotal.toFixed(1)+'B</div>';
-      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows '+formatCurrency(outTotal)+'</div>';
+      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>'+formatCurrency(f.value)+'</strong></div>'; });
       html += '</div>';
     }
     html += '</div>';

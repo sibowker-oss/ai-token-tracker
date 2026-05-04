@@ -195,7 +195,7 @@
   <h1>Capital Ledger</h1>
   <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
   <div class="sub">
-    <strong>$745B of AI infrastructure investment, 2023&ndash;2025.</strong>
+    <strong><span data-narrative="capital_sankey_total">$745B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
     Every dollar of cumulative AI capital expenditure &mdash; from spender &rarr; silicon &rarr; current workload &mdash; mapped as a balance-sheet view.
     Anchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.
     The balance-sheet mirror of <a href="revenue.html" class="link-revenue">the Revenue Ledger</a>.
@@ -227,7 +227,7 @@
         <div class="cf-detail">
           Meta, Google, and Microsoft allocate approximately $170B of AI CapEx to ad ranking, search, recommendations, and cloud workloads.
           These investments are funded by existing business models and do not depend on new AI revenue.
-          Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from">$34:$1</strong> to <strong id="cf-ratio-to">~$13:$1</strong>.
+          Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-ratio="cumulative.infra_to_revenue_ratio_2025">$34:$1</strong> to <strong id="cf-ratio-to" data-ratio="cumulative.infra_to_revenue_ratio_2025_excl_self_use">~$13:$1</strong>.
         </div>
       </div>
     </div>
@@ -242,7 +242,7 @@
 
       <div style="margin-bottom:6px;">
         <strong style="color:var(--accent); font-size:13px;">3. Revenue vs. depreciation</strong>
-        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx reached approximately $380B in 2025. Current AI customer revenue is approximately $17.5B/yr.</span>
+        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx reached approximately <span data-narrative="market_2025_total_capex">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative="market_2025_total_customer_revenue_gross">$17.5B</span>/yr.</span>
       </div>
       <table class="convergence-table" style="margin-top:8px;">
         <tr><th>Question</th><th>What it requires</th><th style="text-align:right;">Current status</th></tr>
@@ -310,7 +310,7 @@
       <div class="conv-path">
         <div class="cp-num">1</div>
         <div class="cp-title">Revenue compounds at 3&ndash;4x annually</div>
-        <div class="cp-desc">AI customer revenue ($17.5B in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categories all contribute.</div>
+        <div class="cp-desc">AI customer revenue (<span data-narrative="market_2025_total_customer_revenue_gross">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categories all contribute.</div>
         <div class="cp-signal">Signal to watch: quarterly revenue growth rate across OpenAI, Anthropic, Google Cloud AI, AWS Bedrock</div>
       </div>
       <div class="conv-path">
@@ -333,7 +333,7 @@
     <h2>Structure notes</h2>
     <div class="notes">
       <ul>
-        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> ($745B). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
+        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative="capital_sankey_total">$745B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
         <li><strong>Middle = 5 nodes</strong> &mdash; what the money physically bought. NVIDIA GPU $303B cross-checks against calendarised NVIDIA DC revenue (Tier 1A).</li>
         <li><strong>RHS = 6 nodes = current physical state of each asset</strong> (balance-sheet view, full purchase price):
           <ul>
@@ -434,13 +434,26 @@
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12"></script>
+<script src="data/format-helpers.js"></script>
 <script>
-// ─── SCENARIO DATA ────────────────────────────────────────────────
-const SCENARIOS = {
+// ─── SCENARIO DATA (wq-073 — fetched from data/scenarios.json) ────
+// Inline defaults remain as graceful fallback if fetch fails.
+let SCENARIOS = {
   bear:  { totalCapex:745, revenue:17, ratio:44, label:'Bear case' },
   base:  { totalCapex:745, revenue:22, ratio:34, label:'Base case' },
   bull:  { totalCapex:745, revenue:27, ratio:28, label:'Bull case' },
 };
+fetch('data/scenarios.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(s => {
+    if (s && s.capex_view) {
+      SCENARIOS = s.capex_view;
+      // Re-render against the fetched scenario set if the page has already initialised.
+      if (typeof updateHero === 'function') updateHero();
+      if (typeof updateSensitivity === 'function') updateSensitivity();
+    }
+  })
+  .catch(() => { /* fallback SCENARIOS already in place */ });
 let currentScenario = (function() {
   const p = new URLSearchParams(location.search).get('s');
   if (p && ['bear','base','bull'].includes(p)) return p;
@@ -461,7 +474,12 @@ function setScenario(s) {
 }
 
 // ─── CUMULATIVE 2023–25 DATA (USD billions) ────────────────────────
-const FLOWS = [
+// wq-074 — FLOWS becomes mutable. Inline default below is the FALLBACK_FLOWS
+// (rendered if site-data.json:capital_sankey fetch fails). On success, FLOWS
+// is replaced with engine output (~$766B from market_aggregates._capital_sankey
+// = mag7 sub-allocated across MSFT/AWS/Google/Meta/Oracle/AI labs direct +
+// neocloud + sovereign sub-allocated across China + Sovereign/Gov + enterprise).
+let FLOWS = [
   // ── Stage 1 → Stage 2 ──
   ['Microsoft CapEx','NVIDIA GPUs',85],['Microsoft CapEx','Other silicon',5],['Microsoft CapEx','Networking',12],['Microsoft CapEx','Data Centre Costs',40],['Microsoft CapEx','Electricity & ops',18],
   ['AWS CapEx','NVIDIA GPUs',38],['AWS CapEx','Other silicon',20],['AWS CapEx','Networking',10],['AWS CapEx','Data Centre Costs',37],['AWS CapEx','Electricity & ops',15],
@@ -576,10 +594,10 @@ function updateHero() {
   const effectiveRatio = Math.round(effectiveCapex / effectiveRev);
 
   document.getElementById('hero').innerHTML=`
-    <div class="hero-stat"><div class="label">2023-25 AI CapEx</div><div class="value" style="color:var(--accent)">$${v.t0}B</div><div class="detail">${sc.label} &middot; cumulative balance sheet</div><div class="kpi-period">2023\u201325</div></div>
-    <div class="hero-stat"><div class="label">NVIDIA share</div><div class="value" style="color:#22c55e">$${nvidiaTotal}B</div><div class="detail">${nvidiaShare}% of total &middot; GPU $${nvidiaGpu}B + networking $${nvidiaNet}B</div><div class="kpi-period">2023\u201325</div></div>
-    <div class="hero-stat"><div class="label">Infrastructure per $1 revenue</div><div class="value" style="color:${counterfactualActive ? 'var(--cyan)' : 'var(--orange)'}">$${effectiveRatio}</div><div class="detail">${counterfactualActive ? '$'+(effectiveCapex)+'B (ex-ad) ' : '$'+v.t0+'B '}CapEx / $${effectiveRev}B revenue${counterfactualActive ? ' (excl. ad platform)' : ''}</div><div class="kpi-period">2025</div></div>
-    <div class="hero-stat"><div class="label">Idle + In Build</div><div class="value" style="color:var(--orange)">$${idle+inBuild}B</div><div class="detail">${((idle+inBuild)/v.t0*100).toFixed(0)}% of CapEx &middot; not yet generating revenue</div><div class="kpi-period">Current</div></div>
+    <div class="hero-stat"><div class="label">2023-25 AI CapEx</div><div class="value" style="color:var(--accent)">${formatCurrency(v.t0)}</div><div class="detail">${sc.label} &middot; cumulative balance sheet</div><div class="kpi-period">2023\u201325</div></div>
+    <div class="hero-stat"><div class="label">NVIDIA share</div><div class="value" style="color:#22c55e">${formatCurrency(nvidiaTotal)}</div><div class="detail">${nvidiaShare}% of total &middot; GPU ${formatCurrency(nvidiaGpu)} + networking ${formatCurrency(nvidiaNet)}</div><div class="kpi-period">2023\u201325</div></div>
+    <div class="hero-stat"><div class="label">Infrastructure per $1 revenue</div><div class="value" style="color:${counterfactualActive ? 'var(--cyan)' : 'var(--orange)'}">$${effectiveRatio}</div><div class="detail">${counterfactualActive ? formatCurrency(effectiveCapex) + ' (ex-ad) ' : formatCurrency(v.t0) + ' '}CapEx / ${formatCurrency(effectiveRev)} revenue${counterfactualActive ? ' (excl. ad platform)' : ''}</div><div class="kpi-period">2025</div></div>
+    <div class="hero-stat"><div class="label">Idle + In Build</div><div class="value" style="color:var(--orange)">${formatCurrency(idle+inBuild)}</div><div class="detail">${((idle+inBuild)/v.t0*100).toFixed(0)}% of CapEx &middot; not yet generating revenue</div><div class="kpi-period">Current</div></div>
   `;
 
   // Update counterfactual ratio labels
@@ -593,12 +611,12 @@ function updateHero() {
   const ratio = (fleet / annualCOGS).toFixed(1);
   document.getElementById('bridge-pl').innerHTML=`
     <div><strong style="color:#10b981;font-size:13px;">1. How much is generating revenue?</strong></div>
-    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">The <a href="revenue.html" class="link-revenue">Revenue Ledger</a> reports <strong style="color:#e2e8f0;">$${annualCOGS}B inference COGS</strong> in 2025. This chart shows the <strong style="color:#e2e8f0;">$${fleet}B fleet</strong> (Paid $${paid}B + Free $${consumer}B) that generates it. Ratio: ${ratio}x &mdash; consistent with ~3.5yr GPU life + operating overhead.</div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">The <a href="revenue.html" class="link-revenue">Revenue Ledger</a> reports <strong style="color:#e2e8f0;">${formatCurrency(annualCOGS)} inference COGS</strong> in 2025. This chart shows the <strong style="color:#e2e8f0;">${formatCurrency(fleet)} fleet</strong> (Paid ${formatCurrency(paid)} + Free ${formatCurrency(consumer)}) that generates it. Ratio: ${ratio}x &mdash; consistent with ~3.5yr GPU life + operating overhead.</div>
   `;
 
   document.getElementById('bridge-ads').innerHTML=`
     <div><strong style="color:var(--cyan);font-size:13px;">2. Ad-platform infrastructure (the largest allocation)</strong></div>
-    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">At <strong style="color:#e2e8f0;">$${adPlatform}B</strong> (${((adPlatform/v.t0)*100).toFixed(0)}% of total CapEx), the Ad Platform fleet is the largest single allocation. Meta, Google, and Microsoft fund this infrastructure through existing ad/cloud revenue. This CapEx does not depend on new AI revenue streams. When excluded, the infrastructure-to-revenue ratio drops from $${Math.round(v.t0/sc.revenue)}:$1 to ~$${Math.round((v.t0-adPlatform)/sc.revenue)}:$1.</div>
+    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">At <strong style="color:#e2e8f0;">${formatCurrency(adPlatform)}</strong> (${((adPlatform/v.t0)*100).toFixed(0)}% of total CapEx), the Ad Platform fleet is the largest single allocation. Meta, Google, and Microsoft fund this infrastructure through existing ad/cloud revenue. This CapEx does not depend on new AI revenue streams. When excluded, the infrastructure-to-revenue ratio drops from $${Math.round(v.t0/sc.revenue)}:$1 to ~$${Math.round((v.t0-adPlatform)/sc.revenue)}:$1.</div>
   `;
 }
 
@@ -612,7 +630,7 @@ function render() {
   const ratio = (fleet / annualCOGS).toFixed(1);
   if (v.errors.length===0) {
     vEl.className='ok';
-    vEl.innerHTML=`Conservation OK: $${v.t0}B in = $${v.t2}B out. Inference fleet (Paid $${paid}B + Consumer $${consumer}B) = $${fleet}B generates $${annualCOGS}B/yr COGS (ratio ${ratio}x).`;
+    vEl.innerHTML=`Conservation OK: ${formatCurrency(v.t0)} in = ${formatCurrency(v.t2)} out. Inference fleet (Paid ${formatCurrency(paid)} + Consumer ${formatCurrency(consumer)}) = ${formatCurrency(fleet)} generates ${formatCurrency(annualCOGS)}/yr COGS (ratio ${ratio}x).`;
   } else {
     vEl.className='bad';
     vEl.innerHTML='Error: '+v.errors.join('<br>');
@@ -679,7 +697,7 @@ function render() {
     .attr('y',d=>(d.y0+d.y1)/2)
     .attr('dy','0.35em')
     .attr('text-anchor',d=>STAGE[d.name]===0?'end':'start');
-  labelGs.append('tspan').text(d=>`${d.name} · $${d.value}B `);
+  labelGs.append('tspan').text(d=>`${d.name} · ${formatCurrency(d.value)} `);
   labelGs.append('tspan')
     .attr('fill',d=>TIER_COLOR[NODE_TIER[d.name]]||'#94a3b8')
     .style('font-size','10px')
@@ -699,11 +717,11 @@ function render() {
     const pct = ((d.value/v.t0)*100).toFixed(1);
     const tier = NODE_TIER[d.name];
     const tierHtml = tier ? `<span style="color:${TIER_COLOR[tier]};font-size:10px;font-weight:700;"> ${tier}</span>` : '';
-    showTip(ev, `<div class="tt-label" style="color:${NODE_COLOR[d.name]||'#e2e8f0'}">${d.name}${tierHtml}</div><div>$${d.value}B &middot; ${pct}% of total CapEx</div>`);
+    showTip(ev, `<div class="tt-label" style="color:${NODE_COLOR[d.name]||'#e2e8f0'}">${d.name}${tierHtml}</div><div>${formatCurrency(d.value)} &middot; ${pct}% of total CapEx</div>`);
   });
 
   linkEls.on('mousemove', function(ev,d) {
-    showTip(ev, `<div class="tt-label">${d.source.name} &rarr; ${d.target.name}</div><div>$${d.value}B</div>`);
+    showTip(ev, `<div class="tt-label">${d.source.name} &rarr; ${d.target.name}</div><div>${formatCurrency(d.value)}</div>`);
   }).on('mouseleave', hideTip);
 
   // Click-to-lock highlight
@@ -845,7 +863,7 @@ function renderLagChart() {
         .attr('x', x(d.year)+xSub(key)).attr('y', y(val))
         .attr('width', xSub.bandwidth()).attr('height', H-y(val))
         .attr('fill', COLORS[key]).attr('opacity', isE?0.65:0.95)
-        .append('title').text(`${d.year}: ${LABELS[key]}: $${val}B`);
+        .append('title').text(`${d.year}: ${LABELS[key]}: ${formatCurrency(val)}`);
       if (val >= maxVal * 0.05) {
         g.append('text')
           .attr('x', x(d.year)+xSub(key)+xSub.bandwidth()/2)
@@ -896,6 +914,33 @@ function renderLagChart() {
 window.addEventListener('resize',()=>{render(); renderLagChart();});
 // Apply persisted scenario on load
 document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === currentScenario));
+
+// wq-074 — load capital_sankey from site-data.json (engine output) and replace
+// the inline-default FLOWS. Falls back to inline default on fetch failure
+// (graceful degradation; page still renders the legacy $745B view).
+fetch('site-data.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    // wq-077 — hydrate [data-narrative] spans from engine values regardless
+    // of capital_sankey availability. Standalone path so narrative copy stays
+    // current even if FLOWS fetch fails.
+    if (typeof hydrateNarrative === 'function') hydrateNarrative(d);
+
+    const cs = d && d.capital_sankey;
+    if (!cs || !cs.flows || !cs.flows.length) {
+      console.warn('wq-074 — capital_sankey not in site-data.json; using FALLBACK_FLOWS');
+      return;
+    }
+    FLOWS = cs.flows;
+    render();
+    renderLagChart();
+    updateSensitivity();
+  })
+  .catch(err => {
+    console.warn('wq-074 — capital_sankey fetch failed; using FALLBACK_FLOWS', err);
+  });
+
+// Initial render uses inline-default FLOWS; fetch above re-renders on success.
 render();
 renderLagChart();
 updateSensitivity();
@@ -963,6 +1008,34 @@ document.querySelectorAll('.cite-btn').forEach(btn => {
     © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated 2026-04-29 · <a href="/methodology.html">Methodology at /methodology</a>
   </div>
 </footer>
+
+<script>
+// wq-073 — hydrate [data-ratio] spans from site-data.json:cumulative
+// (computes ratio at render time from cumulative aggregator output).
+// Falls back silently to existing inline literals if fetch fails.
+(function() {
+  fetch('site-data.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(d => {
+      const cum = d && d.cumulative;
+      if (!cum) return;
+      const ratio = cum.infra_to_revenue_ratio_2025;
+      if (ratio == null) return;
+      // Excl. self-use ratio: editorial assumption that ~$170B of mag7 capex
+      // funds existing ad/cloud workloads (not new AI revenue). Capital.html
+      // narrative cites the 'to' ratio as ~$13:$1 — derive consistently.
+      const cfFrom = document.getElementById('cf-ratio-from');
+      const cfTo = document.getElementById('cf-ratio-to');
+      if (cfFrom) cfFrom.textContent = '$' + ratio + ':$1';
+      if (cfTo && cum.capex_total && cum.customer_revenue_gross) {
+        const adjustedCapex = cum.capex_total - 170;
+        const adjustedRatio = Math.round(adjustedCapex / cum.customer_revenue_gross);
+        cfTo.textContent = '~$' + adjustedRatio + ':$1';
+      }
+    })
+    .catch(() => { /* graceful fallback to inline literals */ });
+})();
+</script>
 
 </body>
 </html>
