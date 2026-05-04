@@ -842,6 +842,28 @@ def extract_eia_api(source):
     return claims
 
 
+def extract_fred_api(source):
+    """FRED API — St Louis Fed macro denominators (src-074, wq-081 Phase 1.1).
+
+    STUBBED pending FRED_API_KEY per stop-gate B in the wq-081 handoff. Adapter
+    activates the moment the key is added to repo secrets — no other code change
+    required. Mirrors the env-gated stub pattern used by src-066 (Google Patents
+    BigQuery) and src-067 (EPO OPS).
+
+    Coverage classification: **denominator coverage** (macro, not entity).
+    Initial v2 series target: GDP, GDPC1, CPIAUCSL — feeds Capital Sankey
+    + macro-denominator panels in the Markets page. Routing: free-text claims
+    flow to vault-inbox by default (no telemetry detection match) — these are
+    human-reviewable macro updates."""
+    api_key = os.environ.get('FRED_API_KEY')
+    if not api_key:
+        log("  FRED_API_KEY env var not set — fred_api is stubbed pending credentials.")
+        log("  Register free at https://fred.stlouisfed.org/docs/api/api_key.html, set FRED_API_KEY in repo secrets, flip src-074 status from pending_credentials → active, then --force src-074.")
+        return []
+    log("  FRED_API_KEY present but series fetch not yet implemented (v2); returning [].")
+    return []
+
+
 def extract_neso_tec(source):
     """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
     CSV download under OGL licence; produces power_project claims with
@@ -1288,6 +1310,7 @@ NON_WEB_METHODS = {
     'iso_queue_pjm',
     'iso_queue_caiso',
     'eia_api',
+    'fred_api',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1314,6 +1337,7 @@ ADAPTERS = {
     'iso_queue_pjm': extract_iso_queue_pjm,
     'iso_queue_caiso': extract_iso_queue_caiso,
     'eia_api': extract_eia_api,
+    'fred_api': extract_fred_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:

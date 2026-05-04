@@ -1517,6 +1517,33 @@
       "phase": "1.1",
       "routing": "telemetry-feed",
       "notes": "wq-081 Phase 1.1 Tier B \u2014 closes Stream 2 west-coast gap per source-collation-phase1-brief.md \u00a73a item 5. Clones iso_queue_ercot/pjm v1 posture: snapshot landing HTML, surface XLSX download links, defer row-parse to v2 (gated on openpyxl). Power-side denominator coverage \u2014 not entity coverage. Routing decision: structured power_project claims (when v2 lands) \u2192 telemetry-feed.json per _telemetry_router.TELEMETRY_STRUCTURED_TYPES."
+    },
+    {
+      "id": "src-074",
+      "url": "https://api.stlouisfed.org/fred/series/observations",
+      "title": "FRED API \u2014 St Louis Fed macro denominators",
+      "type": "gov_api",
+      "author": "",
+      "organization": "Federal Reserve Bank of St Louis",
+      "added": "2026-05-04",
+      "tags": [
+        "macro",
+        "denominators",
+        "us",
+        "primary",
+        "api",
+        "wq-081"
+      ],
+      "extraction_method": "fred_api",
+      "frequency": "daily",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_credentials",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "vault-inbox",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 STUB pending FRED_API_KEY (per stop-gate B; mirrors src-066 google_patents_bq pattern). Free registration at https://fred.stlouisfed.org/docs/api/api_key.html. When key added to repo secrets, flip status pending_credentials \u2192 active and run --force src-074. Coverage classification: **denominator coverage** (US macro: GDP, GDPC1, CPIAUCSL, etc.) \u2014 NOT entity coverage. Replaces wb-imf-weo manual copy per brief \u00a73a item 3."
     }
   ]
 }
