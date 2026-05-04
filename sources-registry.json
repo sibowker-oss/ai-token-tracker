@@ -1783,6 +1783,31 @@
       "phase": "1.2",
       "routing": "vault-inbox",
       "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #11). Meta AI Blog has irregular RSS exposure; per skip-and-log C, registered with extraction_method=web_extract on canonical blog URL. Maps to entity: meta. Confidence pre-rating: Low until human review."
+    },
+    {
+      "id": "src-084",
+      "url": "https://mistral.ai/news",
+      "title": "Mistral AI News",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "Mistral AI",
+      "added": "2026-05-04",
+      "tags": [
+        "mistral",
+        "lab-newsroom",
+        "wq-083",
+        "phase-1.2"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.2",
+      "routing": "vault-inbox",
+      "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #12). RSS endpoint not located after 2 attempts (/feed.xml \u2192 404, /rss.xml \u2192 404); URL points at canonical news landing page. extract_web_page fallback works for HTML. Maps to entity: mistral. Verify direct RSS URL on next manual check. Confidence pre-rating: Low until human review."
     }
   ]
 }
