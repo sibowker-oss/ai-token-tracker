@@ -15,9 +15,9 @@
   },
   "2025": {
     "label": "2025",
-    "totalCustomerRevenue": 17.557,
+    "totalCustomerRevenue": 17.3608,
     "totalVCSubsidy": 8.4479,
-    "totalSystem": 28.3097,
+    "totalSystem": 28.1135,
     "infrastructureCapex": {
       "value": 250,
       "tier": "1B",
@@ -57,21 +57,21 @@
     "buyers": [
       {
         "label": "Consumer",
-        "value": 5.8665,
+        "value": 5.8085,
         "color": "#f59e0b",
         "tier": "1B",
         "src": "AI Ledger rollup; consumer split per The Information"
       },
       {
         "label": "SME",
-        "value": 3.8314,
+        "value": 3.7936,
         "color": "#8b5cf6",
         "tier": "1B",
         "src": "AI Ledger rollup from entity filings"
       },
       {
         "label": "Enterprise",
-        "value": 10.1639,
+        "value": 10.0635,
         "color": "#3b82f6",
         "tier": "1B",
         "src": "OpenAI press release Mar 2026; >40% enterprise share corroborated by The Information"
@@ -87,14 +87,14 @@
     "channels": [
       {
         "label": "Model Subs",
-        "value": 7.1483,
+        "value": 7.0698,
         "color": "#f59e0b",
         "tier": "1B",
         "src": "AI Ledger rollup from entity filings"
       },
       {
         "label": "Model API",
-        "value": 5.7428,
+        "value": 5.6643,
         "color": "#3b82f6",
         "tier": "1B",
         "src": "AI Ledger rollup from entity filings"
@@ -108,7 +108,7 @@
       },
       {
         "label": "AI Native Apps",
-        "value": 0.7065,
+        "value": 0.6673,
         "color": "#10b981",
         "tier": "1B",
         "src": "AI Ledger rollup (Cursor, Glean, Harvey, Perplexity etc.)"
@@ -148,10 +148,10 @@
       },
       {
         "label": "IaaS/Open",
-        "value": 0.8,
+        "value": 0.6038,
         "color": "#8b5cf6",
-        "tier": "1B",
-        "src": "wq-055 engine \u2014 customer_revenue=$0.5B (wq-048 engine); inference_cost=$0.4B (preserved_hand_curated); opex=$0.4B (preserved_hand_curated); vc_subsidy=$0.3B (preserved_hand_curated)",
+        "tier": "3C",
+        "src": "wq-055 engine \u2014 customer_revenue=$0.3038B (wq-048 engine); inference_cost=$0.3019B (estimated); opex=$0.3019B (estimated); vc_subsidy=$0.3B (preserved_hand_curated)",
         "slug": "iaas"
       },
       {
@@ -166,14 +166,14 @@
     "outcomes": [
       {
         "label": "Inference",
-        "value": 9.0564,
+        "value": 8.9583,
         "color": "#10b981",
         "tier": "2A",
         "src": "= sum(provider \u00d7 inferencePct 0.57). Cross-checks AI Ledger rollup $14.03B."
       },
       {
         "label": "Other Operating Costs",
-        "value": 16.9485,
+        "value": 16.8504,
         "color": "#f59e0b",
         "tier": "2A",
         "src": "= sum(provider \u00d7 (1 \u2212 inferencePct)). AI Ledger rollup has $11.08B; 0.48 gap from routing approximations."
@@ -248,9 +248,9 @@
         "AI Native Apps": 0.4503
       },
       "iaas": {
-        "Model Subs": 0.2,
-        "Model API": 0.2,
-        "AI Native Apps": 0.1
+        "Model Subs": 0.1215,
+        "Model API": 0.1215,
+        "AI Native Apps": 0.0608
       },
       "_other_model_providers": {
         "Model Subs": 0.3123,
@@ -258,7 +258,7 @@
         "AI Native Apps": 0.1562
       }
     },
-    "totalCustomerRevenue_gross": 19.8618
+    "totalCustomerRevenue_gross": 19.6656
   },
   "2026E": {
     "label": "2026",

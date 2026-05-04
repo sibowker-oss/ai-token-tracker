@@ -1325,6 +1325,18 @@
     {
       "pattern": "harvey\\.ai|harvey\\s+legal|\\bharvey\\b",
       "slug": "harvey-ai"
+    },
+    {
+      "pattern": "lambda\\.labs|lambda\\.cloud|lambdalabs",
+      "slug": "lambda"
+    },
+    {
+      "pattern": "groq",
+      "slug": "groq"
+    },
+    {
+      "pattern": "replicate\\.com|\\breplicate\\b",
+      "slug": "replicate"
     }
   ],
   "field_match_rules": [
