@@ -1088,6 +1088,68 @@ def extract_github_api(source):
     return claims
 
 
+def extract_huggingface_api(source):
+    """Hugging Face Hub API — model-registry telemetry (src-080, wq-081 Tier C).
+
+    STRICTLY TELEMETRY-ONLY per stop-gate A: emits download counts and likes
+    per model, routed to telemetry-feed.json via _telemetry_router (source_type
+    'package_index' matches TELEMETRY_SOURCE_TYPES). New-model release
+    announcements are picked up via Week 2 lab newsroom RSS.
+
+    v1 fetches the public /api/models endpoint for a starter set of
+    frontier-lab orgs (Anthropic, Meta-Llama, DeepSeek, Mistral, Google,
+    OpenAI). No auth required for read access."""
+    orgs = ['meta-llama', 'mistralai', 'deepseek-ai', 'google', 'openai-community', 'Anthropic']
+    claims = []
+    for org in orgs:
+        endpoint = f'https://huggingface.co/api/models?author={org}&limit=10&sort=downloads&direction=-1'
+        try:
+            req = Request(endpoint, headers={'User-Agent': 'TheAILedger-wq081/0.1', 'Accept': 'application/json'})
+            with urlopen(req, timeout=15) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{org}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {org}: {e}")
+            models = json.loads(payload)
+        except Exception as e:
+            log(f"  HF Hub fetch failed for {org}: {e}")
+            continue
+        if not isinstance(models, list):
+            continue
+        for m in models[:5]:   # top-5 by downloads per org for v1
+            mid = m.get('modelId') or m.get('id')
+            dl = m.get('downloads', 0)
+            likes = m.get('likes', 0)
+            claims.append({
+                'claim': f"HF Hub {mid}: {dl:,} downloads, {likes} likes (telemetry).",
+                'category': 'oss_telemetry',
+                'entity': org,
+                'metric': 'hf_downloads',
+                'metric_key': 'hf_downloads',
+                'value': dl,
+                'unit': 'downloads',
+                'value_display': f"{dl:,} downloads",
+                'time_period': datetime.now().strftime('%Y-%m-%d'),
+                'confidence': 'high',
+                'weight': 'authoritative',
+                'source_type': source['type'],   # 'package_index' triggers telemetry routing
+                'source_url': endpoint,
+                'source_title': f"HF Hub — {mid}",
+                'extracted_at': datetime.now().isoformat(),
+                'structured_payload': {
+                    'model_id': mid,
+                    'org': org,
+                    'downloads': dl,
+                    'likes': likes,
+                    'last_modified': m.get('lastModified'),
+                    'pipeline_tag': m.get('pipeline_tag'),
+                },
+            })
+        log(f"  {org}: top-{min(5, len(models))} models cached")
+    return claims
+
+
 def extract_neso_tec(source):
     """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
     CSV download under OGL licence; produces power_project claims with
@@ -1540,6 +1602,7 @@ NON_WEB_METHODS = {
     'rba_api',
     'aemo_nem',
     'github_api',
+    'huggingface_api',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1572,6 +1635,7 @@ ADAPTERS = {
     'rba_api': extract_rba_api,
     'aemo_nem': extract_aemo_nem,
     'github_api': extract_github_api,
+    'huggingface_api': extract_huggingface_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:
