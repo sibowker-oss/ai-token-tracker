@@ -89,6 +89,9 @@
   <button class="tab" onclick="switchTab('telemetry')" data-tab="telemetry">
     <span class="tab-icon">&#128225;</span>Telemetry
   </button>
+  <button class="tab" onclick="switchTab('anthropic')" data-tab="anthropic">
+    <span class="tab-icon">&#128302;</span>Anthropic
+  </button>
   <button class="tab" onclick="switchTab('pages')" data-tab="pages">
     <span class="tab-icon">&#128194;</span>Page Archive
   </button>
@@ -107,6 +110,7 @@
   <iframe id="frame-dev" src="about:blank"></iframe>
   <iframe id="frame-status" src="about:blank"></iframe>
   <iframe id="frame-telemetry" src="about:blank"></iframe>
+  <iframe id="frame-anthropic" src="about:blank"></iframe>
   <iframe id="frame-pages" src="about:blank"></iframe>
   <iframe id="frame-settings" src="about:blank"></iframe>
 </div>
@@ -122,6 +126,7 @@ const TAB_PAGES = {
   dev: 'in-development.html',
   status: 'status.html',
   telemetry: 'telemetry.html',
+  anthropic: 'anthropic-spotlight.html',
   pages: 'page-archive.html',
   settings: 'settings.html'
 };
