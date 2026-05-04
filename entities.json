@@ -14739,7 +14739,7 @@
             "tokens_annual_inference"
           ]
         },
-        "_market_engine_run_at": "2026-05-03T23:48:24Z",
+        "_market_engine_run_at": "2026-05-04T03:01:27Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14874,7 +14874,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T23:48:24Z",
+        "_market_engine_run_at": "2026-05-04T03:01:27Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -14966,7 +14966,7 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-03T23:48:24Z",
+        "_market_engine_run_at": "2026-05-04T03:01:27Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
@@ -15413,7 +15413,7 @@
         ]
       ],
       "_engine": "scripts/derive_capital_sankey.py (wq-074)",
-      "_engine_run_at": "2026-05-03T23:48:24Z",
+      "_engine_run_at": "2026-05-04T03:01:33Z",
       "_doc": "Capital sankey engine output. Column 0 sources derived from market_aggregates bucket totals \u00d7 structure.column0_sub_allocation. Columns 1+2 = pure editorial ratios applied to total. FLOWS guaranteed to satisfy per-node conservation by construction (proportional cross-product). capital.html reads via site-data.json."
     }
   }

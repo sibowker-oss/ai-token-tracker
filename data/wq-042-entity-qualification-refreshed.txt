@@ -1,0 +1,123 @@
+# wq-042 entity-qualification REFRESHED
+_Generated 2026-05-02T11:43:07Z on feat/wq-042-renderer-widen post-merge of main (wq-048 + wq-040 included)._
+
+## Headline change vs original wq-042 calibration (10/92 default)
+
+  Default threshold:  10  →  52  (+42) — wq-048 backfill populated collected_revenue across 49 ai_app entities, lifting them above the field threshold
+
+## Threshold sensitivity
+
+Variant                                              Qualifying      %  Δ vs default
+--------------------------------------------------  -----------  -----  ---------------
+default      (fields≥3, conf≥medium, prov≥1)           52/92     57%   +0
+loosened_b   (fields≥2, conf≥medium, prov≥1)           52/92     57%   +0
+loosened_c   (fields≥2, conf≥low,    prov≥1)           82/92     89%   +30
+
+## Entities that gain qualification at variant (b) but not (a)
+  Count: 0
+  → Loosening fields≥3 → fields≥2 with conf still ≥medium adds NO entities. The binding constraint at default is best_confidence, not field count.
+
+## Entities that gain qualification at variant (c) but not (b)
+  Count: 30
+  + agent-zero                      Agent Zero                      (fields=4, best_conf=low, prov=1)
+  + aws                             AWS                             (fields=2, best_conf=low, prov=1)
+  + azure                           Azure                           (fields=2, best_conf=low, prov=1)
+  + canva                           Canva                           (fields=5, best_conf=low, prov=2)
+  + captions                        Captions                        (fields=5, best_conf=low, prov=2)
+  + cline                           Cline                           (fields=4, best_conf=low, prov=1)
+  + crusoe                          Crusoe Energy                   (fields=4, best_conf=low, prov=1)
+  + decagon                         Decagon                         (fields=5, best_conf=low, prov=2)
+  + duolingo                        Duolingo                        (fields=4, best_conf=low, prov=1)
+  + fireworks-ai                    Fireworks AI                    (fields=6, best_conf=low, prov=3)
+  + gcp                             GCP                             (fields=2, best_conf=low, prov=1)
+  + grab                            Grab                            (fields=4, best_conf=low, prov=1)
+  + groq                            Groq                            (fields=9, best_conf=low, prov=3)
+  + hebbia                          Hebbia                          (fields=6, best_conf=low, prov=3)
+  + janitor-ai                      Janitor AI                      (fields=4, best_conf=low, prov=1)
+  + kakao                           Kakao                           (fields=4, best_conf=low, prov=1)
+  + kilo-code                       Kilo Code                       (fields=4, best_conf=low, prov=1)
+  + klarna                          Klarna                          (fields=4, best_conf=low, prov=1)
+  + luminance                       Luminance                       (fields=5, best_conf=low, prov=2)
+  + openclaw                        OpenClaw                        (fields=4, best_conf=low, prov=1)
+  + openhands                       OpenHands                       (fields=4, best_conf=low, prov=1)
+  + pika                            Pika                            (fields=5, best_conf=low, prov=2)
+  + portkey                         Portkey.ai                      (fields=4, best_conf=low, prov=3)
+  + portkeyai                       Portkey.ai                      (fields=5, best_conf=low, prov=2)
+  + roo-code                        Roo Code                        (fields=4, best_conf=low, prov=1)
+  + sea/shopee                      Sea/Shopee                      (fields=4, best_conf=low, prov=1)
+  + sierra-ai                       Sierra AI                       (fields=6, best_conf=low, prov=3)
+  + sillytavern                     SillyTavern                     (fields=4, best_conf=low, prov=1)
+  + speak                           Speak                           (fields=6, best_conf=low, prov=3)
+  + suno                            Suno                            (fields=5, best_conf=low, prov=2)
+
+## Default-threshold qualifiers (52)
+
+  ✓ amd                             AMD                             (fields=4, best_conf=medium, prov=3)
+  ✓ abridge                         Abridge                         (fields=7, best_conf=medium, prov=4)
+  ✓ anthropic                       Anthropic                       (fields=21, best_conf=high, prov=43)
+  ✓ blackboxai                      BLACKBOX.AI                     (fields=6, best_conf=medium, prov=3)
+  ✓ cal-ai                          Cal AI                          (fields=6, best_conf=medium, prov=3)
+  ✓ chai-research                   Chai Research                   (fields=6, best_conf=medium, prov=3)
+  ✓ characterai                     Character.ai                    (fields=8, best_conf=medium, prov=5)
+  ✓ clay                            Clay                            (fields=7, best_conf=medium, prov=4)
+  ✓ cognition-(devin)               Cognition (Devin)               (fields=8, best_conf=medium, prov=5)
+  ✓ coreweave                       CoreWeave                       (fields=5, best_conf=high, prov=5)
+  ✓ cursor-(anysphere)              Cursor (Anysphere)              (fields=8, best_conf=medium, prov=5)
+  ✓ deepl                           DeepL                           (fields=7, best_conf=medium, prov=4)
+  ✓ deepseek                        DeepSeek                        (fields=6, best_conf=medium, prov=13)
+  ✓ descript                        Descript                        (fields=7, best_conf=medium, prov=4)
+  ✓ elevenlabs                      ElevenLabs                      (fields=8, best_conf=medium, prov=5)
+  ✓ falai                           Fal.ai                          (fields=6, best_conf=medium, prov=3)
+  ✓ fathom                          Fathom                          (fields=7, best_conf=medium, prov=4)
+  ✓ gamma                           Gamma                           (fields=6, best_conf=medium, prov=3)
+  ✓ genspark                        Genspark                        (fields=6, best_conf=medium, prov=3)
+  ✓ github-copilot                  GitHub Copilot                  (fields=6, best_conf=medium, prov=3)
+  ✓ glean                           Glean                           (fields=8, best_conf=medium, prov=5)
+  ✓ google                          Google/Gemini                   (fields=9, best_conf=high, prov=18)
+  ✓ harvey-ai                       Harvey AI                       (fields=8, best_conf=medium, prov=5)
+  ✓ intercom-fin                    Intercom Fin                    (fields=8, best_conf=medium, prov=5)
+  ✓ jasper                          Jasper                          (fields=8, best_conf=medium, prov=5)
+  ✓ lambda                          Lambda Labs                     (fields=3, best_conf=medium, prov=3)
+  ✓ lovable                         Lovable                         (fields=6, best_conf=medium, prov=3)
+  ✓ mercor                          Mercor                          (fields=7, best_conf=medium, prov=4)
+  ✓ meta                            Meta                            (fields=6, best_conf=high, prov=15)
+  ✓ midjourney                      Midjourney                      (fields=8, best_conf=medium, prov=5)
+  ✓ minimax                         Minimax                         (fields=8, best_conf=high, prov=14)
+  ✓ mistral                         Mistral                         (fields=6, best_conf=medium, prov=15)
+  ✓ monica-ai                       Monica AI                       (fields=6, best_conf=medium, prov=3)
+  ✓ moonshot                        Moonshot/Kimi                   (fields=6, best_conf=medium, prov=12)
+  ✓ nvidia                          NVIDIA                          (fields=9, best_conf=high, prov=10)
+  ✓ openai                          OpenAI                          (fields=18, best_conf=high, prov=60)
+  ✓ openart                         OpenArt                         (fields=6, best_conf=medium, prov=3)
+  ✓ openrouter                      OpenRouter                      (fields=6, best_conf=high, prov=5)
+  ✓ perplexity                      Perplexity                      (fields=8, best_conf=medium, prov=8)
+  ✓ photoroom                       Photoroom                       (fields=7, best_conf=medium, prov=4)
+  ✓ replit                          Replit                          (fields=8, best_conf=medium, prov=5)
+  ✓ retell-ai                       Retell AI                       (fields=6, best_conf=medium, prov=3)
+  ✓ runway                          Runway                          (fields=7, best_conf=medium, prov=4)
+  ✓ salesforce-agentforce           Salesforce Agentforce           (fields=6, best_conf=medium, prov=3)
+  ✓ synthesia                       Synthesia                       (fields=7, best_conf=medium, prov=4)
+  ✓ together                        Together AI                     (fields=4, best_conf=medium, prov=4)
+  ✓ together-ai                     Together AI                     (fields=8, best_conf=medium, prov=5)
+  ✓ writer                          Writer                          (fields=8, best_conf=medium, prov=5)
+  ✓ wrtn-technologies               Wrtn Technologies               (fields=7, best_conf=medium, prov=4)
+  ✓ yellowai                        Yellow.ai                       (fields=8, best_conf=medium, prov=5)
+  ✓ micro1                          micro1                          (fields=6, best_conf=medium, prov=3)
+  ✓ xai                             xAI                             (fields=6, best_conf=medium, prov=14)
+
+## Recommendation framing (for Simon's decision)
+
+  Option (a) ship at default 52/92: matches the brief's expected 25-40 range, more
+  than 5x the original calibration's 10. Detail pages auto-promote as wq-048 keeps
+  filling collected_revenue across more entities — natural growth as the engine runs.
+
+  Option (b) loosened_b: adds 0 — not worth the threshold weakening.
+
+  Option (c) loosened_c: adds 30 (total 82/92) but quality bar drops sharply — most
+  added entities have best_confidence=low (single editorial estimate or a single
+  scraped data point). Detail pages would render with thin justification. Suggests
+  upstream confidence improvements are the right path, not threshold weakening.
+
+  Recommendation: ship at (a) default. Add a Notion follow-on for upstream confidence
+  upgrades on the 30 'gained_c' entities (Groq, Fireworks, Klarna, Sierra, etc. —
+  most are well-known companies that just need better sourced claims).

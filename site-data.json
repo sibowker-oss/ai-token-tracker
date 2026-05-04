@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-03T23:48:24Z",
+    "generatedAt": "2026-05-04T03:01:33Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -5034,5 +5034,1961 @@
         40.11054545454546
       ]
     ]
-  }
+  },
+  "entityDirectory": [
+    {
+      "slug": "openai",
+      "name": "OpenAI",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "US",
+      "current": {
+        "arr": 25.0,
+        "arr_date": "2026-03",
+        "tokens_per_day": 30,
+        "growth_rate": "+150% YoY",
+        "consumer_pct": 58,
+        "biz_pct": 42,
+        "valuation": 852,
+        "valuation_date": "2026-03",
+        "user_count": 900000000,
+        "subscriber_count": 50000000,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 59,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "anthropic",
+      "name": "Anthropic",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "US",
+      "current": {
+        "arr": 19.0,
+        "arr_date": "2026-03",
+        "tokens_per_day": 6,
+        "growth_rate": "14x in 14mo",
+        "consumer_pct": 35,
+        "biz_pct": 65,
+        "valuation": 380,
+        "valuation_date": "2026-02",
+        "total_funding": 30,
+        "latest_round": "Series G at $380B (Feb 2026)",
+        "customer_count": 300000,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 42,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "google",
+      "name": "Google/Gemini",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "US",
+      "current": {
+        "arr": 4.2,
+        "arr_date": "2026-01",
+        "tokens_per_day": 49,
+        "growth_rate": "14x in '24",
+        "consumer_pct": 40,
+        "biz_pct": 60,
+        "user_count": 650000000,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 18,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "meta",
+      "name": "Meta",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "US",
+      "current": {
+        "arr": 0,
+        "tokens_per_day": 11.5,
+        "growth_rate": "+400% YoY",
+        "consumer_pct": 0,
+        "biz_pct": 0,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 15,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "deepseek",
+      "name": "DeepSeek",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "Asia",
+      "current": {
+        "arr": 0.3,
+        "tokens_per_day": 8.5,
+        "growth_rate": "+800% YoY",
+        "consumer_pct": 50,
+        "biz_pct": 50,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "estimated",
+      "provenance_entry_count": 12,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "mistral",
+      "name": "Mistral",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "Europe",
+      "current": {
+        "arr": 0.4,
+        "tokens_per_day": 2,
+        "growth_rate": "+250% YoY",
+        "consumer_pct": 20,
+        "biz_pct": 80,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 14,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "xai",
+      "name": "xAI",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "US",
+      "current": {
+        "arr": 0.5,
+        "tokens_per_day": 2.5,
+        "growth_rate": "+500% YoY",
+        "consumer_pct": 70,
+        "biz_pct": 30,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "estimated",
+      "provenance_entry_count": 13,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "minimax",
+      "name": "Minimax",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "Asia",
+      "current": {
+        "arr": 0.15,
+        "tokens_per_day": 4.5,
+        "growth_rate": "+400% YoY",
+        "consumer_pct": 60,
+        "biz_pct": 40,
+        "user_count": 212000000,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 13,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "moonshot",
+      "name": "Moonshot/Kimi",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "Asia",
+      "current": {
+        "arr": 0.1,
+        "tokens_per_day": 3,
+        "growth_rate": "+300% YoY",
+        "consumer_pct": 50,
+        "biz_pct": 50,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "estimated",
+      "provenance_entry_count": 11,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "aws",
+      "name": "AWS",
+      "roles": [
+        "hyperscaler"
+      ],
+      "region": "",
+      "current": {
+        "model_providers_resold": [
+          "anthropic",
+          "meta",
+          "mistral"
+        ],
+        "margin_on_resale_pct": 20
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "azure",
+      "name": "Azure",
+      "roles": [
+        "hyperscaler"
+      ],
+      "region": "",
+      "current": {
+        "model_providers_resold": [
+          "openai"
+        ],
+        "margin_on_resale_pct": 20
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "gcp",
+      "name": "GCP",
+      "roles": [
+        "hyperscaler"
+      ],
+      "region": "",
+      "current": {
+        "model_providers_resold": [
+          "anthropic",
+          "meta",
+          "mistral"
+        ],
+        "margin_on_resale_pct": 20
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "coreweave",
+      "name": "CoreWeave",
+      "roles": [
+        "neo_cloud"
+      ],
+      "region": "US",
+      "current": {
+        "total_funding": 12.0
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "nebius",
+      "name": "Nebius",
+      "roles": [
+        "neo_cloud"
+      ],
+      "region": "Europe",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "lambda",
+      "name": "Lambda Labs",
+      "roles": [
+        "neo_cloud"
+      ],
+      "region": "US",
+      "current": {
+        "total_funding": 1.7
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "crusoe",
+      "name": "Crusoe Energy",
+      "roles": [
+        "neo_cloud"
+      ],
+      "region": "US",
+      "current": {
+        "total_funding": 3.5,
+        "valuation": 10,
+        "gpu_count": 1000000,
+        "power_pipeline_gw": 45
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "together",
+      "name": "Together AI",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "current": {
+        "total_funding": 0.425,
+        "valuation": 3.3
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "fireworks",
+      "name": "Fireworks AI",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "current": {
+        "total_funding": 0.077
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "replicate",
+      "name": "Replicate",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "current": {
+        "total_funding": 0.058
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "anyscale",
+      "name": "Anyscale",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "current": {
+        "total_funding": 0.26
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "openrouter",
+      "name": "OpenRouter",
+      "roles": [
+        "aggregator"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 280,
+        "user_count": 2500000,
+        "model_count": 300,
+        "providers_connected": [
+          "openai",
+          "anthropic",
+          "google",
+          "meta",
+          "deepseek",
+          "mistral"
+        ],
+        "iaas_connected": [
+          "together",
+          "fireworks"
+        ]
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "portkey",
+      "name": "Portkey.ai",
+      "roles": [
+        "aggregator"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 1900,
+        "user_count": 24000,
+        "providers_connected": [
+          "openai",
+          "anthropic",
+          "google",
+          "meta"
+        ],
+        "total_funding": 0.018
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "nvidia",
+      "name": "NVIDIA",
+      "roles": [
+        "gpu_provider"
+      ],
+      "region": "",
+      "current": {
+        "market_share_pct": 90,
+        "key_products": [
+          "H100",
+          "B200",
+          "GB200"
+        ],
+        "data_center_revenue": 130,
+        "data_center_revenue_year": "2025",
+        "growth_rate": "+55% YoY"
+      },
+      "best_confidence": "high",
+      "provenance_entry_count": 10,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "amd",
+      "name": "AMD",
+      "roles": [
+        "gpu_provider"
+      ],
+      "region": "",
+      "current": {
+        "market_share_pct": 8,
+        "key_products": [
+          "MI300X",
+          "MI325X"
+        ],
+        "data_center_revenue": 12,
+        "data_center_revenue_year": "2025"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "microsoft-copilot",
+      "name": "Microsoft",
+      "roles": [
+        "traditional_saas"
+      ],
+      "region": "",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "salesforce-ai",
+      "name": "Salesforce",
+      "roles": [
+        "traditional_saas"
+      ],
+      "region": "",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "servicenow-ai",
+      "name": "ServiceNow",
+      "roles": [
+        "traditional_saas"
+      ],
+      "region": "",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "canva-ai",
+      "name": "Canva",
+      "roles": [
+        "traditional_saas"
+      ],
+      "region": "",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "adobe-ai",
+      "name": "Adobe",
+      "roles": [
+        "traditional_saas"
+      ],
+      "region": "",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "notion-ai",
+      "name": "Notion",
+      "roles": [
+        "traditional_saas"
+      ],
+      "region": "",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "portkeyai",
+      "name": "Portkey.ai",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US/India",
+      "current": {
+        "tokens_per_day": 1900.0,
+        "providers": [
+          "openai",
+          "anthropic",
+          "google",
+          "meta"
+        ],
+        "founded": 2023,
+        "total_funding": "$18M",
+        "confidence": "High"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "github-copilot",
+      "name": "GitHub Copilot",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 1000.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2021,
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "openclaw",
+      "name": "OpenClaw",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 829.0,
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "founded": 2025,
+        "confidence": "High"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "cursor-(anysphere)",
+      "name": "Cursor (Anysphere)",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 800.0,
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "founded": 2022,
+        "valuation": 10.0,
+        "total_funding": "$900M+",
+        "confidence": "Med-High"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "kilo-code",
+      "name": "Kilo Code",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 271.0,
+        "providers": [
+          "anthropic",
+          "openai",
+          "google"
+        ],
+        "founded": 2024,
+        "confidence": "High"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "perplexity",
+      "name": "Perplexity",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 200.0,
+        "providers": [
+          "openai",
+          "anthropic",
+          "mistral",
+          "meta"
+        ],
+        "founded": 2022,
+        "valuation": 18.0,
+        "total_funding": "$900M+",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 8,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "replit",
+      "name": "Replit",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 150.0,
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "founded": 2016,
+        "valuation": 9.0,
+        "total_funding": "$400M+",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "cognition-(devin)",
+      "name": "Cognition (Devin)",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 125.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2023,
+        "valuation": 3.0,
+        "total_funding": "$275M",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "duolingo",
+      "name": "Duolingo",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 100.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2011,
+        "confidence": "Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "together-ai",
+      "name": "Together AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 100.0,
+        "providers": [
+          "meta",
+          "mistral",
+          "deepseek"
+        ],
+        "founded": 2022,
+        "valuation": 3.3,
+        "total_funding": "$400M+",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "lovable",
+      "name": "Lovable",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Sweden",
+      "current": {
+        "tokens_per_day": 100.0,
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "founded": 2023,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "canva",
+      "name": "Canva",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Australia",
+      "current": {
+        "tokens_per_day": 75.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2012,
+        "valuation": 40.0,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "cline",
+      "name": "Cline",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 69.0,
+        "providers": [
+          "anthropic",
+          "openai",
+          "google"
+        ],
+        "founded": 2024,
+        "confidence": "High"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "characterai",
+      "name": "Character.ai",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 60.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2021,
+        "valuation": 1.0,
+        "total_funding": "$250M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "fireworks-ai",
+      "name": "Fireworks AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 60.0,
+        "providers": [
+          "meta",
+          "mistral",
+          "deepseek"
+        ],
+        "founded": 2022,
+        "valuation": 2.5,
+        "total_funding": "$220M+",
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "elevenlabs",
+      "name": "ElevenLabs",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US/UK",
+      "current": {
+        "tokens_per_day": 60.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2022,
+        "valuation": 3.3,
+        "total_funding": "$180M+",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "wrtn-technologies",
+      "name": "Wrtn Technologies",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Korea",
+      "current": {
+        "tokens_per_day": 50.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2021,
+        "total_funding": "$73.5M",
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "micro1",
+      "name": "micro1",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 50.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2022,
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "midjourney",
+      "name": "Midjourney",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 50.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2021,
+        "valuation": 10.0,
+        "total_funding": "$0 (self-funded)",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "harvey-ai",
+      "name": "Harvey AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 45.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2022,
+        "valuation": 11.0,
+        "total_funding": "$400M+",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "monica-ai",
+      "name": "Monica AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "China/SG",
+      "current": {
+        "tokens_per_day": 45.0,
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "founded": 2023,
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "groq",
+      "name": "Groq",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 40.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2016,
+        "valuation": 3.0,
+        "total_funding": "$640M+",
+        "confidence": "Low",
+        "acquired_by": "nvidia",
+        "acquisition_price": 20,
+        "arr_at_acquisition": 0.1
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "jasper",
+      "name": "Jasper",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 30.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2021,
+        "valuation": 1.5,
+        "total_funding": "$300M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "glean",
+      "name": "Glean",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 30.0,
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "founded": 2019,
+        "valuation": 4.6,
+        "total_funding": "$350M+",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "janitor-ai",
+      "name": "Janitor AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 29.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2023,
+        "confidence": "Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "descript",
+      "name": "Descript",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 27.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2017,
+        "total_funding": "$400M+",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "yellowai",
+      "name": "Yellow.ai",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "India",
+      "current": {
+        "tokens_per_day": 25.0,
+        "providers": [
+          "openai",
+          "google"
+        ],
+        "founded": 2016,
+        "valuation": 1.1,
+        "total_funding": "$100M+",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "intercom-fin",
+      "name": "Intercom Fin",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 25.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2011,
+        "valuation": 1.8,
+        "total_funding": "$240M+",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "writer",
+      "name": "Writer",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 25.0,
+        "providers": [
+          "own",
+          "openai"
+        ],
+        "founded": 2020,
+        "valuation": 1.9,
+        "total_funding": "$390M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 5,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "blackboxai",
+      "name": "BLACKBOX.AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "openai",
+          "anthropic",
+          "google"
+        ],
+        "founded": 2022,
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "klarna",
+      "name": "Klarna",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Sweden",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2005,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "grab",
+      "name": "Grab",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Singapore",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2012,
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "sea/shopee",
+      "name": "Sea/Shopee",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Singapore",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "openai",
+          "google"
+        ],
+        "founded": 2009,
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "kakao",
+      "name": "Kakao",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Korea",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2010,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "sierra-ai",
+      "name": "Sierra AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2023,
+        "valuation": 4.0,
+        "total_funding": "$300M+",
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "deepl",
+      "name": "DeepL",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Germany",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2017,
+        "total_funding": "$420M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "falai",
+      "name": "Fal.ai",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 20.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2021,
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "salesforce-agentforce",
+      "name": "Salesforce Agentforce",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 15.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 1999,
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "hebbia",
+      "name": "Hebbia",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 15.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2020,
+        "valuation": 0.7,
+        "total_funding": "$130M+",
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "clay",
+      "name": "Clay",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 15.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2017,
+        "total_funding": "$104M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "gamma",
+      "name": "Gamma",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 15.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2020,
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "roo-code",
+      "name": "Roo Code",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 12.0,
+        "providers": [
+          "anthropic",
+          "openai",
+          "google"
+        ],
+        "founded": 2024,
+        "confidence": "Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "captions",
+      "name": "Captions",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2021,
+        "total_funding": "$100M",
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "decagon",
+      "name": "Decagon",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2023,
+        "total_funding": "$100M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "luminance",
+      "name": "Luminance",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "UK",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "own",
+          "openai"
+        ],
+        "founded": 2015,
+        "total_funding": "$165M",
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "mercor",
+      "name": "Mercor",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2023,
+        "total_funding": "$135M",
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "speak",
+      "name": "Speak",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2016,
+        "valuation": 1.0,
+        "total_funding": "$162M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "synthesia",
+      "name": "Synthesia",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "UK",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "own",
+          "openai"
+        ],
+        "founded": 2017,
+        "total_funding": "$330M",
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "genspark",
+      "name": "Genspark",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2023,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "chai-research",
+      "name": "Chai Research",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2021,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "openart",
+      "name": "OpenArt",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 10.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2022,
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "sillytavern",
+      "name": "SillyTavern",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "Community",
+      "current": {
+        "tokens_per_day": 8.0,
+        "providers": [
+          "openai",
+          "anthropic",
+          "meta"
+        ],
+        "founded": 2023,
+        "confidence": "Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "abridge",
+      "name": "Abridge",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 8.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2018,
+        "total_funding": "$458M",
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "photoroom",
+      "name": "Photoroom",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "France",
+      "current": {
+        "tokens_per_day": 8.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2019,
+        "total_funding": "$64M",
+        "confidence": "Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "runway",
+      "name": "Runway",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 8.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2018,
+        "total_funding": "$545M",
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "agent-zero",
+      "name": "Agent Zero",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 7.0,
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "founded": 2024,
+        "confidence": "Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "fathom",
+      "name": "Fathom",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 6.575342466,
+        "providers": [
+          "openai",
+          "anthropic"
+        ],
+        "founded": 2020,
+        "total_funding": "$18M",
+        "confidence": "Low"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 4,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "pika",
+      "name": "Pika",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 5.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2023,
+        "total_funding": "$135M",
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "suno",
+      "name": "Suno",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 5.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2022,
+        "total_funding": "$125M",
+        "confidence": "Low"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 2,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "retell-ai",
+      "name": "Retell AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 5.0,
+        "providers": [
+          "own"
+        ],
+        "founded": 2023,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "openhands",
+      "name": "OpenHands",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 4.0,
+        "providers": [
+          "anthropic",
+          "openai"
+        ],
+        "founded": 2024,
+        "confidence": "Med"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "cal-ai",
+      "name": "Cal AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {
+        "tokens_per_day": 2.0,
+        "providers": [
+          "openai"
+        ],
+        "founded": 2024,
+        "confidence": "Low-Med"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 3,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "bytedance",
+      "name": "ByteDance",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "current": {
+        "tokens_per_day": 110,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "alibaba",
+      "name": "Alibaba",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "current": {
+        "tokens_per_day": 25,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "tencent",
+      "name": "Tencent",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "current": {
+        "tokens_per_day": 10,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "baidu",
+      "name": "Baidu",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "China",
+      "current": {
+        "tokens_per_day": 8,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "_self_hosted",
+      "name": "Self-Hosted Open Models",
+      "roles": [
+        "aggregator"
+      ],
+      "region": "Global",
+      "current": {
+        "tokens_per_day": 30,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "medium",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": true
+    },
+    {
+      "slug": "_other_closed",
+      "name": "Other Closed Providers",
+      "roles": [
+        "aggregator"
+      ],
+      "region": "Global",
+      "current": {
+        "tokens_per_day": 10,
+        "tokens_per_day_date": "2026-05-03"
+      },
+      "best_confidence": "low",
+      "provenance_entry_count": 1,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "databricks",
+      "name": "Databricks",
+      "roles": [
+        "traditional_saas",
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "scale",
+      "name": "Scale AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "modal",
+      "name": "Modal Labs",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "cohere",
+      "name": "Cohere",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "Canada",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    },
+    {
+      "slug": "super_com",
+      "name": "Super.com",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "current": {},
+      "best_confidence": "low",
+      "provenance_entry_count": 0,
+      "qualifies_for_detail_page": false
+    }
+  ]
 }

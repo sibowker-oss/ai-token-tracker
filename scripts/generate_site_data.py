@@ -31,6 +31,15 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 SITE_DIR = ROOT_DIR
 
+# wq-042 — entity-directory rendering shares the qualification function with
+# scripts/build_entity_pages.py so the directory marks each entity with the
+# same `qualifies_for_detail_page` boolean the page builder uses.
+sys.path.insert(0, SCRIPT_DIR)
+try:
+    from build_entity_pages import qualifies_for_detail_page  # noqa: E402
+except ImportError:
+    qualifies_for_detail_page = None  # graceful fallback
+
 def load_json(path):
     with open(path) as f:
         return json.load(f)
@@ -387,6 +396,45 @@ def generate(entities_path, existing_site_data_path, output_path):
         if tokens is not None:
             if isinstance(tokens, (int, float)):
                 consumer["tokensNumeric"] = int(tokens * 1e9) if tokens < 1e6 else int(tokens)
+
+    # ── wq-042: build entityDirectory (additive — does not touch dashboard.providers) ──
+    # Reads detail-page threshold from data/render_config.json so build_entity_pages.py
+    # and site-data.json agree on which entities qualify. Existing pages
+    # (revenue.html, capital.html, follow-the-trillion.html) are unaffected.
+    render_config_path = os.path.join(ROOT_DIR, "data", "render_config.json")
+    threshold = {"min_populated_fields": 3, "min_best_confidence": "medium", "min_provenance_entries": 1}
+    try:
+        with open(render_config_path) as f:
+            threshold = json.load(f).get("detail_page_threshold", threshold)
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+
+    directory = []
+    for ent in entities.get("companies", []):
+        current = ent.get("current") or {}
+        prov = ent.get("provenance") or {}
+        best_conf = "low"
+        rank = {"low": 0, "estimated": 1, "medium": 1, "high": 2, "verified": 2}
+        for p in prov.values():
+            if isinstance(p, dict):
+                c = p.get("confidence", "low")
+                if rank.get(c, 0) > rank.get(best_conf, 0):
+                    best_conf = c
+        qualifies = False
+        if qualifies_for_detail_page:
+            qualifies, _ = qualifies_for_detail_page(ent, threshold)
+        directory.append({
+            "slug": ent.get("slug"),
+            "name": ent.get("name"),
+            "roles": ent.get("roles", []) or [],
+            "region": ent.get("region", ""),
+            "current": {k: v for k, v in current.items() if v is not None},
+            "best_confidence": best_conf,
+            "provenance_entry_count": sum(1 for p in prov.values() if isinstance(p, dict) and p.get("claims")),
+            "qualifies_for_detail_page": qualifies,
+        })
+    site["entityDirectory"] = directory
+
 
     # ── wq-063: cumulative aggregates (read from entities.json) ──
     # Mirrors entities.json:market_aggregates._cumulative_2023_2025 into
