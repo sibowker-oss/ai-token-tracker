@@ -79,9 +79,16 @@ def logged_run(script_name, trigger=None):
     error = None
     try:
         yield outputs
-    except BaseException:
-        status = "failure"
-        error = traceback.format_exc()[-500:]
+    except BaseException as exc:
+        # wq-043 fix: SystemExit(0) is a clean exit (the script asked Python to
+        # quit with rc=0). Without this guard, scripts that call sys.exit(0)
+        # *inside* a `with logged_run(...)` block — e.g. derive_market_aggregates.py
+        # — got stamped status=failure even though they ran perfectly. The
+        # giveaway in runs.jsonl was outputs.return_code=0 alongside an error
+        # traceback ending in `SystemExit: 0`. Treat that case as success.
+        if not (isinstance(exc, SystemExit) and (exc.code is None or exc.code == 0)):
+            status = "failure"
+            error = traceback.format_exc()[-500:]
         raise
     finally:
         ended_at = datetime.now(timezone.utc)
