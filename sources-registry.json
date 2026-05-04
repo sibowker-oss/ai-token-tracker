@@ -1599,6 +1599,33 @@
       "phase": "1.1",
       "routing": "vault-inbox",
       "notes": "wq-081 Phase 1.1 Tier B \u2014 SDMX-JSON, public, no auth. v1 fetches ABS_GDPE_H (National Accounts expenditure) from 2024-Q1; v2 expands to series catalogue. Coverage classification: **denominator coverage** (AU macro, HA differentiator) \u2014 NOT entity coverage. Split from RBA per stop-gate D \u2014 operationally separate (SDMX vs CSV)."
+    },
+    {
+      "id": "src-077",
+      "url": "https://www.rba.gov.au/statistics/tables/",
+      "title": "RBA \u2014 Reserve Bank of Australia Statistical Tables",
+      "type": "gov_api",
+      "author": "",
+      "organization": "Reserve Bank of Australia",
+      "added": "2026-05-04",
+      "tags": [
+        "macro",
+        "denominators",
+        "au",
+        "primary",
+        "ha-differentiator",
+        "wq-081"
+      ],
+      "extraction_method": "rba_api",
+      "frequency": "monthly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "vault-inbox",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 CSV/XLSX statistical tables, public, no auth. v1 captures landing page snapshot + surfaces CSV download URLs (Table A1 baseline); v2 row-parse follow-up. Coverage classification: **denominator coverage** (AU monetary aggregates, HA differentiator) \u2014 NOT entity coverage. Split from ABS per stop-gate D."
     }
   ]
 }

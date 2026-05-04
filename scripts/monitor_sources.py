@@ -964,6 +964,32 @@ def extract_abs_api(source):
     }]
 
 
+def extract_rba_api(source):
+    """RBA — Reserve Bank of Australia statistical tables (src-077, wq-081).
+
+    RBA publishes statistical tables as CSV/XLSX under stable URLs. v1 fetches
+    Table A1 (Liabilities and Assets — Reserve Bank) as a smoke-test, saves
+    snapshot, emits a single summary claim.
+
+    Coverage classification: **denominator coverage** (AU monetary aggregates,
+    HA differentiator)."""
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+    csv_urls = re.findall(r'https?://[^\s"\']+\.(csv|xlsx?)', html or '', re.IGNORECASE)
+    if csv_urls:
+        log(f"  Found {len(csv_urls)} CSV/XLSX link(s) on RBA stats page")
+        for u in csv_urls[:5]:
+            log(f"    {u[0] if isinstance(u, tuple) else u}")
+    log("  RBA row-level CSV/XLSX parse is v2 work; v1 returns [].")
+    return []
+
+
 def extract_neso_tec(source):
     """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
     CSV download under OGL licence; produces power_project claims with
@@ -1413,6 +1439,7 @@ NON_WEB_METHODS = {
     'fred_api',
     'worldbank_api',
     'abs_api',
+    'rba_api',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1442,6 +1469,7 @@ ADAPTERS = {
     'fred_api': extract_fred_api,
     'worldbank_api': extract_worldbank_api,
     'abs_api': extract_abs_api,
+    'rba_api': extract_rba_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:
