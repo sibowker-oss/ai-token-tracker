@@ -2054,6 +2054,33 @@
       "routing": "vault-inbox",
       "coverage": "cross-cutting",
       "notes": "wq-085 Phase 1.3 Tier A \u2014 podcast (brief \u00a73c #23). Working RSS confirmed at dwarkesh.com/feed after redirect from www.dwarkeshpatel.com/feed (HTTP 200, 'Reiner Pope \u2013 The math behind how LLMs are trained and served'). Highest claim-density per brief \u2014 long-form interviews with frontier-lab researchers. Cross-cutting (interviews span Anthropic, OpenAI, DeepMind, etc.). Confidence pre-rating: Low until human review."
+    },
+    {
+      "id": "src-094",
+      "url": "https://www.chinatalk.media/feed",
+      "title": "ChinaTalk",
+      "type": "rss_feed",
+      "author": "Jordan Schneider",
+      "organization": "ChinaTalk",
+      "added": "2026-05-05",
+      "tags": [
+        "substack",
+        "china-policy",
+        "geo-policy",
+        "wq-085",
+        "phase-1.3"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "weekly",
+      "next_check": "2026-05-05",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.3",
+      "routing": "vault-inbox",
+      "coverage": "cross-cutting",
+      "notes": "wq-085 Phase 1.3 Tier A \u2014 newsletter/podcast (brief \u00a73c #24). Working Substack RSS confirmed at chinatalk.media/feed (HTTP 200, 'ChinaTalk'). Closes China policy gap per brief. Cross-cutting (US-China tech, semis, military analysis). Per Phase 1 brief \u00a78 #2, China sources don't VPN; chinatalk.media is US-hosted Substack so unaffected. Confidence pre-rating: Low until human review."
     }
   ]
 }
