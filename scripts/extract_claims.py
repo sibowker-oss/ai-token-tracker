@@ -67,16 +67,38 @@ For each concrete claim found, output a JSON object with these fields:
 - "value_display": human-readable value string (e.g. "$16.8B", "15M seats")
 - "time_period": when this applies (e.g. "Q1 2026", "2025", "as of March 2026")
 - "time_period_scope": one of: "annual" | "h1" | "h2" | "q1" | "q2" | "q3" | "q4" | "exit_snapshot" | "monthly_peak" | "point_in_time"
-    Detect the period qualifier in the source text and pick the matching scope:
-      "H1 2025" / "first half" / "January through June" → h1
-      "H2 2025" / "second half" / "July through December" → h2
-      "Q3 2024" / "third quarter" / "Jul-Sep" → q3 (same shape for q1/q2/q4)
-      "as of December" / "year-end" / "best 4-week × 12" / "exit ARR" → exit_snapshot
-      "$X per month" / "monthly peak" / "Feb 2026 hit $6B" / "single month" → monthly_peak
-      "current" / "as of today" / "now" / "this week" → point_in_time
-      otherwise (no qualifier OR explicit "full year" / "FY") → annual
-    CRITICAL: a claim saying "OpenAI H1 2025 revenue was $4.3B" must NOT be tagged annual — the H1 qualifier means it covers half the year only and downstream routing depends on this field.
 - "period_qualifier_detected": short string quoting the qualifier you matched (e.g. "H1 2025", "best 4-week × 12", "Feb 2026 monthly peak"), or null when scope is "annual" with no qualifier
+
+  TIME PERIOD SCOPE — RULES (wq-054):
+
+  Rule A — INTERNAL CONSISTENCY (critical):
+  If you populate period_qualifier_detected with a non-null value, time_period_scope MUST be the corresponding scope from the qualifier — NOT point_in_time. Specifically:
+    - Qualifier mentions "Q1" / "Q2" / "Q3" / "Q4" / "first/second/third/fourth quarter" → scope must be q1/q2/q3/q4
+    - Qualifier mentions "H1" / "H2" / "first half" / "second half" → scope must be h1/h2
+    - Qualifier mentions "exit" / "end of year" / "year-end run-rate" / "best 4-week × 12" → scope must be exit_snapshot
+    - Qualifier mentions "monthly" / "per month" / "single month peak" / "$X/month" → scope must be monthly_peak
+  Failing this rule produces wrongly-routed claims and is a critical error. If you wrote "beginning of Q2" in period_qualifier_detected, time_period_scope MUST be "q2".
+
+  Rule B — point_in_time BOUNDARY:
+  point_in_time is reserved for ENTITY-CURRENT state metrics: weekly active users, headcount, current model version, current ARR run-rate WHEN explicitly described as "as of today / now / current".
+
+  point_in_time is NOT for:
+    - Funding rounds (e.g. "$122B round closed Sep 2025") → scope=annual, year=2025
+    - Valuations at a specific time (e.g. "OpenAI valued at $850B Mar 2026") → scope=annual, year=2026
+    - Revenue or ARR figures with a year reference but no quarter/half/exit qualifier → scope=annual
+
+  Rule C — DEFAULT:
+  No period qualifier in the source text → scope=annual, period_qualifier_detected=null.
+  Explicit "full year" / "FY2025" → scope=annual.
+
+  WORKED EXAMPLES (one per scope):
+    annual:        "OpenAI 2025 collected revenue ~$11.9B"                            → scope=annual,        qualifier=null
+    h1:            "OpenAI H1 2025 revenue $4.3B per The Information"                 → scope=h1,            qualifier="H1 2025"
+    q2:            "Anthropic Q2 2025 ARR $5B"                                        → scope=q2,            qualifier="Q2 2025"
+    exit_snapshot: "OpenAI exit ARR 2024 was $20B (best-period × 12)"                 → scope=exit_snapshot, qualifier="exit ARR 2024"
+    monthly_peak:  "Brad Gerstner: Anthropic hit $6B/month run rate February 2026"    → scope=monthly_peak,  qualifier="$6B/month February 2026"
+    point_in_time: "OpenAI now has 700M WAU"                                          → scope=point_in_time, qualifier="now"
+
 - "confidence": "high" | "medium" | "low"
 - "speaker": name of speaker making the claim, or null
 - "is_primary_source": true if the speaker has direct first-hand knowledge (e.g. a founder discussing their own company), false if they are citing or repeating something heard elsewhere
