@@ -1,0 +1,68 @@
+name: Daily Monitor Adapters (non-web sources)
+
+# wq-043 follow-on — fires the 15 idle adapters in monitor_sources.py:
+# IR pages, SEC EDGAR multi-ticker, ISO power queues (ERCOT/PJM), EIA API,
+# NESO TEC, Epoch frontier datacenter attribution, hiring boards (Greenhouse,
+# Lever, Ashby, Workable), patent indices (PatentsView, Google Patents BQ,
+# EPO OPS), DOL LCA visa filings.
+#
+# Companion to daily-scan-sources.yml (which handles web_extract + pdf_export
+# at 0 22 * * *). The --non-web flag in monitor_sources.py restricts to the
+# NON_WEB_METHODS set so the two crons never collide on the same source.
+
+on:
+  schedule:
+    - cron: '30 1 * * *'   # 11:30am AEST (UTC+10) per script docstring;
+                            # 3.5h offset from daily-scan-sources.yml
+                            # aligns with overnight-US data settling for
+                            # hiring / IR / patent adapters.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    env:
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+      PYTHONIOENCODING: utf-8
+      RUN_TRIGGER: github_action
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Run non-web adapters
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Optional adapter creds — adapters skip cleanly if unset (return []).
+          # When credentials are added to the repo's Actions secrets, the
+          # corresponding adapter (eia_api / google_patents_bq / epo_ops) starts
+          # producing claims on its next due-cycle without further code changes.
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+          GCP_BIGQUERY_KEY: ${{ secrets.GCP_BIGQUERY_KEY }}
+          EPO_OPS_KEY: ${{ secrets.EPO_OPS_KEY }}
+        run: python scripts/monitor_sources.py --non-web
+
+      - name: Commit and push
+        if: always()
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          # Per data-sourcing-policy.md §6.4 — snapshots are append-only
+          # audit trail; non-negotiable. If repo size becomes a problem
+          # (>1GB), separate brief migrates to LFS.
+          git add vault-inbox.json data/telemetry-feed.json sources-registry.json data/runs.jsonl data/snapshots/ || true
+          if git diff --cached --quiet; then
+            echo "No changes — no due sources today, or all returned 0 claims."
+          else
+            git commit -m "monitor adapters (non-web): $(date +%Y-%m-%d)"
+            git push
+          fi

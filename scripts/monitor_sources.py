@@ -8,8 +8,13 @@ runs the appropriate extraction adapter, saves claims to data-updates/.
 Run: python3 scripts/monitor_sources.py
      python3 scripts/monitor_sources.py --dry-run
      python3 scripts/monitor_sources.py --force src-001  (force extract specific source)
+     python3 scripts/monitor_sources.py --non-web        (only NON_WEB_METHODS — adapter set
+                                                          owned exclusively by this script;
+                                                          GHA daily-monitor-sources-adapters
+                                                          uses this flag to avoid colliding
+                                                          with daily-scan-sources.yml)
 
-Cron: daily 11:30am
+Cron: daily-monitor-sources-adapters.yml runs `--non-web` at 11:30am AEST.
 """
 
 import json
@@ -1230,6 +1235,34 @@ def extract_pdf_report(source):
         return []
 
 
+# wq-043 follow-on — set of extraction methods owned by monitor_sources.py
+# *exclusively* (i.e. NOT also handled by scan_sources.py's daily GHA cron).
+# `--non-web` invocation processes only sources whose extraction_method is in
+# this set, so the daily-monitor-sources-adapters.yml workflow doesn't collide
+# with daily-scan-sources.yml on web_extract / pdf_export sources.
+#
+# When you add a new adapter to ADAPTERS below, decide whether it belongs in
+# NON_WEB_METHODS (independent fetch, never overlaps with scan_sources.py) or
+# in scan_sources.py's fetchable_methods set.
+NON_WEB_METHODS = {
+    'ir_page_extract',
+    'sec_edgar_scan',
+    'iso_queue_ercot',
+    'iso_queue_pjm',
+    'eia_api',
+    'neso_tec',
+    'epoch_frontier',
+    'greenhouse_board',
+    'lever_postings',
+    'ashby_public',
+    'workable_jobs',
+    'patentsview_search',
+    'google_patents_bq',
+    'epo_ops',
+    'dol_lca_xlsx',
+}
+
+
 # Extraction adapter dispatch
 ADAPTERS = {
     'pdf_export': extract_google_slides,
@@ -1507,6 +1540,11 @@ def _append_to_vault_inbox(claims, source, today):
 def main():
     with logged_run("monitor_sources.py") as outputs:
         dry_run = '--dry-run' in sys.argv
+        # wq-043 follow-on — `--non-web` restricts processing to NON_WEB_METHODS,
+        # the adapter set owned exclusively by this script (no overlap with
+        # scan_sources.py's daily GHA cron). Used by
+        # .github/workflows/daily-monitor-sources-adapters.yml.
+        non_web_only = '--non-web' in sys.argv
         force_id = None
         if '--force' in sys.argv:
             idx = sys.argv.index('--force')
@@ -1514,7 +1552,7 @@ def main():
 
         today_str = datetime.now().strftime('%Y-%m-%d')
         log(f"\n{'='*60}")
-        log(f"📡 Source Monitor — {today_str}")
+        log(f"📡 Source Monitor — {today_str}" + (" (--non-web)" if non_web_only else ""))
 
         if not os.path.exists(REGISTRY_PATH):
             log("  No sources-registry.json found")
@@ -1538,11 +1576,15 @@ def main():
                 continue
             if s['status'] == 'disabled':
                 continue
+            # wq-043 — `--non-web` skips sources owned by scan_sources.py
+            # (web_extract / pdf_export / etc.). `--force` bypasses this filter.
+            if non_web_only and s.get('extraction_method') not in NON_WEB_METHODS:
+                continue
             next_check = s.get('next_check', '2099-01-01')
             if next_check <= today_str:
                 due.append(s)
 
-        log(f"  Due for extraction: {len(due)}")
+        log(f"  Due for extraction: {len(due)}" + (f" (non-web filter active)" if non_web_only else ""))
 
         outputs["sources_total"] = len(sources)
         outputs["sources_due"] = len(due)
