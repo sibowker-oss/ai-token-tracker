@@ -1732,6 +1732,32 @@
       "phase": "1.2",
       "routing": "vault-inbox",
       "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #9). RSS endpoint not yet located after 2 attempts (/news/feed \u2192 404, /rss.xml \u2192 404); URL points at canonical news landing page. extract_web_page fallback works for HTML scraping. Verify direct RSS URL on next manual check. News page only \u2014 DO NOT include the technical blog (spec \u00a78 #3). Confidence pre-rating: Low (tertiary editorial source per data-sourcing-policy)."
+    },
+    {
+      "id": "src-082",
+      "url": "https://deepmind.google/discover/blog/",
+      "title": "Google DeepMind Blog",
+      "type": "web_page",
+      "author": "",
+      "organization": "Google DeepMind",
+      "added": "2026-05-04",
+      "tags": [
+        "google",
+        "deepmind",
+        "lab-newsroom",
+        "wq-083",
+        "phase-1.2"
+      ],
+      "extraction_method": "web_extract",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.2",
+      "routing": "vault-inbox",
+      "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #10). DeepMind has historically irregular RSS exposure; per skip-and-log C, registered with extraction_method=web_extract on canonical blog URL rather than fighting the RSS spec. Maps to entity: google. Confidence pre-rating: Low until human review."
     }
   ]
 }
