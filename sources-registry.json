@@ -2002,6 +2002,32 @@
       "routing": "vault-inbox",
       "coverage": "cross-cutting",
       "notes": "wq-085 Phase 1.3 Tier A \u2014 podcast (brief \u00a73c #21). Working RSS confirmed at feeds.simplecast.com/l2i9YnTd (HTTP 200, 'Hard Fork'). Mainstream framing; cross-cutting coverage (no single entity target \u2014 covers OpenAI, Anthropic, Google, Meta interviews regularly). Extraction handled by scrape_podcasts.py per src-002 convention. Confidence pre-rating: Low until human review."
+    },
+    {
+      "id": "src-092",
+      "url": "https://feeds.transistor.fm/acquired",
+      "title": "Acquired",
+      "type": "podcast_feed",
+      "author": "Ben Gilbert & David Rosenthal",
+      "organization": "Acquired LLC",
+      "added": "2026-05-05",
+      "tags": [
+        "podcast",
+        "company-history",
+        "wq-085",
+        "phase-1.3"
+      ],
+      "extraction_method": "podcast_scraper",
+      "frequency": "weekly",
+      "next_check": "2026-05-05",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.3",
+      "routing": "vault-inbox",
+      "coverage": "cross-cutting",
+      "notes": "wq-085 Phase 1.3 Tier A \u2014 podcast (brief \u00a73c #22). Working RSS confirmed at feeds.transistor.fm/acquired (HTTP 200, 'Acquired'). Canonical company-history references; cross-cutting coverage (covers many companies). Note: episode cadence is irregular (multi-hour deep-dives, often >1 month gap) \u2014 frequency=weekly is upper bound for cron, scrape_podcasts.py dedupes on episode GUID. Confidence pre-rating: Low until human review."
     }
   ]
 }
