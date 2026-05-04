@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-03-31",
+    "lastUpdated": "2026-05-05",
     "description": "Registry of all data sources \u2014 auto-classified with extraction method and check frequency"
   },
   "sources": [
@@ -397,6 +397,31 @@
       "next_check": "2026-04-02",
       "last_checked": "2026-04-02",
       "last_claims_count": 20,
+      "status": "active"
+    },
+    {
+      "id": "src-022",
+      "url": "https://www.wheresyoured.at",
+      "title": "AI Demand & Capacity Constraints \u2014 Where's Your Ed At (Ed Zitron, May 2026)",
+      "type": "newsletter",
+      "author": "Ed Zitron",
+      "organization": "Where's Your Ed At",
+      "added": "2026-05-05",
+      "tags": [
+        "AI-demand",
+        "capex",
+        "hyperscaler",
+        "capacity",
+        "openai",
+        "anthropic",
+        "compute",
+        "newsletter"
+      ],
+      "extraction_method": "manual_import",
+      "frequency": "one_time",
+      "next_check": "2026-05-05",
+      "last_checked": "2026-05-05",
+      "last_claims_count": 43,
       "status": "active"
     }
   ]
