@@ -1019,6 +1019,75 @@ def extract_aemo_nem(source):
     return []
 
 
+def extract_github_api(source):
+    """GitHub REST/GraphQL API — repo-level telemetry (src-079, wq-081 Tier C).
+
+    STRICTLY TELEMETRY-ONLY per stop-gate A: emits download/star/fork/release
+    counts that route to telemetry-feed.json via _telemetry_router
+    (TELEMETRY_SOURCE_TYPES contains 'github_repo'). Lab release announcements
+    are picked up via Week 2 newsroom RSS sources, not here, to avoid dedup
+    overhead.
+
+    v1 fetches the repos endpoint for a starter set of frontier-lab orgs and
+    emits a `github_stars` telemetry record per repo. GITHUB_TOKEN env var
+    optional — without it the rate limit is 60 req/hr (still enough for v1's
+    starter set of ~6 repos)."""
+    repos = [
+        'anthropics/anthropic-sdk-python',
+        'openai/openai-python',
+        'meta-llama/llama-models',
+        'mistralai/mistral-inference',
+        'deepseek-ai/DeepSeek-V3',
+        'huggingface/transformers',
+    ]
+    token = os.environ.get('GITHUB_TOKEN')
+    headers = {'Accept': 'application/vnd.github+json', 'User-Agent': 'TheAILedger-wq081/0.1'}
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
+    claims = []
+    for repo in repos:
+        endpoint = f'https://api.github.com/repos/{repo}'
+        try:
+            req = Request(endpoint, headers=headers)
+            with urlopen(req, timeout=15) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{repo.replace('/', '__')}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {repo}: {e}")
+            data = json.loads(payload)
+        except Exception as e:
+            log(f"  GitHub fetch failed for {repo}: {e}")
+            continue
+        claims.append({
+            'claim': f"GitHub {repo}: {data.get('stargazers_count')} stars, {data.get('forks_count')} forks (telemetry).",
+            'category': 'oss_telemetry',
+            'entity': repo.split('/')[0],
+            'metric': 'github_stars',
+            'metric_key': 'github_stars',
+            'value': data.get('stargazers_count'),
+            'unit': 'stars',
+            'value_display': f"{data.get('stargazers_count'):,} stars" if data.get('stargazers_count') is not None else 'n/a',
+            'time_period': datetime.now().strftime('%Y-%m-%d'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],   # 'github_repo' triggers telemetry routing
+            'source_url': endpoint,
+            'source_title': f"GitHub — {repo}",
+            'extracted_at': datetime.now().isoformat(),
+            'structured_payload': {
+                'repo': repo,
+                'stars': data.get('stargazers_count'),
+                'forks': data.get('forks_count'),
+                'open_issues': data.get('open_issues_count'),
+                'pushed_at': data.get('pushed_at'),
+                'subscribers': data.get('subscribers_count'),
+            },
+        })
+        log(f"  {repo}: ★{data.get('stargazers_count')} forks={data.get('forks_count')}")
+    return claims
+
+
 def extract_neso_tec(source):
     """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
     CSV download under OGL licence; produces power_project claims with
@@ -1470,6 +1539,7 @@ NON_WEB_METHODS = {
     'abs_api',
     'rba_api',
     'aemo_nem',
+    'github_api',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1501,6 +1571,7 @@ ADAPTERS = {
     'abs_api': extract_abs_api,
     'rba_api': extract_rba_api,
     'aemo_nem': extract_aemo_nem,
+    'github_api': extract_github_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:
@@ -1518,7 +1589,8 @@ ADAPTERS = {
     'rss_feed': extract_web_page,      # fetch latest item
     'youtube_captions': lambda s: [],  # scrape_podcasts.py handles this
     'thread_extract': extract_web_page,
-    'github_api': lambda s: [],        # enrich.py handles this
+    # 'github_api' was a no-op lambda routing to enrich.py; replaced by the
+    # real extract_github_api adapter under wq-081 Phase 1.1 (src-079).
     'sec_extract': extract_web_page,   # legacy single-ticker path; sec_edgar_scan is the multi-ticker replacement
     'api_fetch': lambda s: [],         # scrape_signals.py handles this
 }

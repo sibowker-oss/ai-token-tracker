@@ -1653,6 +1653,31 @@
       "phase": "1.1",
       "routing": "telemetry-feed",
       "notes": "wq-081 Phase 1.1 Tier B \u2014 public CSV, no auth. v1 captures landing page snapshot + surfaces CSV download URLs; v2 row-parse follow-up. Coverage classification: **denominator coverage** (AU grid + DC build-out, HA differentiator) \u2014 NOT entity coverage. Routing: structured power_project claims (v2) \u2192 telemetry-feed.json per _telemetry_router.TELEMETRY_STRUCTURED_TYPES."
+    },
+    {
+      "id": "src-079",
+      "url": "https://api.github.com/repos",
+      "title": "GitHub REST API \u2014 repo telemetry",
+      "type": "github_repo",
+      "author": "",
+      "organization": "GitHub",
+      "added": "2026-05-04",
+      "tags": [
+        "telemetry",
+        "oss",
+        "model-frontier",
+        "wq-081"
+      ],
+      "extraction_method": "github_api",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "telemetry-feed",
+      "notes": "wq-081 Phase 1.1 Tier C \u2014 STRICTLY TELEMETRY-ONLY per stop-gate A. Source type 'github_repo' is in _telemetry_router.TELEMETRY_SOURCE_TYPES, so all emitted records auto-route to telemetry-feed.json (NOT vault-inbox). v1 fetches stargazers/forks for 6 frontier-lab repos; v2 expands repo list + adds release-tag tracking. Lab release announcements are picked up via Week 2 newsroom RSS, NOT here, to avoid dedup overhead. GITHUB_TOKEN env var optional (raises rate limit 60\u21925000 req/hr); v1's 6-repo list works without it."
     }
   ]
 }
