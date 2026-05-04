@@ -2213,6 +2213,33 @@
       "routing": "vault-inbox",
       "coverage": "cross-cutting",
       "notes": "wq-085 Phase 1.3 Tier B \u2014 Australian press / HA differentiator (brief \u00a73c #30). Skip-and-log B applied: afr.com/rss/feed.xml and afr.com/rss both inaccessible from Claude Code harness (domain-blocked, not necessarily 404). AFR may have public RSS but couldn't verify. Registered with URL at canonical landing page; rss_feed adapter dispatches to extract_web_page so paywalled HTML may yield partial extraction (headlines/preview). Manual recheck on next sweep \u2014 note AFR is paywalled, full-text claims may require email/account. Confidence pre-rating: Low."
+    },
+    {
+      "id": "src-100",
+      "url": "https://www.accc.gov.au/news-centre",
+      "title": "ACCC \u2014 News Centre",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "Australian Competition and Consumer Commission",
+      "added": "2026-05-05",
+      "tags": [
+        "regulator",
+        "australia",
+        "ha-differentiator",
+        "wq-085",
+        "phase-1.3"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "weekly",
+      "next_check": "2026-05-05",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.3",
+      "routing": "vault-inbox",
+      "coverage": "cross-cutting",
+      "notes": "wq-085 Phase 1.3 Tier B \u2014 Australian regulator / HA differentiator (brief \u00a73c #31). Skip-and-log B applied: tried /rss/news.xml, /about-us/news/rss-feeds, /news-centre/rss, /feed \u2014 all 404. ACCC has historically had RSS at /news/rss.xml-style endpoints; URL pattern may have changed in a 2024+ site refresh. Registered with URL at canonical News Centre landing page; rss_feed adapter dispatches to extract_web_page so HTML scraping works for the press-release listings. Manual recheck on next sweep. Confidence pre-rating: Low."
     }
   ]
 }
