@@ -1707,6 +1707,31 @@
       "phase": "1.1",
       "routing": "telemetry-feed",
       "notes": "wq-081 Phase 1.1 Tier C \u2014 STRICTLY TELEMETRY-ONLY per stop-gate A. Source type 'package_index' is in _telemetry_router.TELEMETRY_SOURCE_TYPES, so all emitted records auto-route to telemetry-feed.json (NOT vault-inbox). v1 fetches top-5 models by downloads for 6 frontier-lab orgs (meta-llama, mistralai, deepseek-ai, google, openai-community, Anthropic). Public read endpoint, no auth. New-model release announcements are picked up via Week 2 newsroom RSS / lab newsrooms, NOT here."
+    },
+    {
+      "id": "src-081",
+      "url": "https://www.anthropic.com/news",
+      "title": "Anthropic News",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "Anthropic",
+      "added": "2026-05-04",
+      "tags": [
+        "anthropic",
+        "lab-newsroom",
+        "wq-083",
+        "phase-1.2"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.2",
+      "routing": "vault-inbox",
+      "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #9). RSS endpoint not yet located after 2 attempts (/news/feed \u2192 404, /rss.xml \u2192 404); URL points at canonical news landing page. extract_web_page fallback works for HTML scraping. Verify direct RSS URL on next manual check. News page only \u2014 DO NOT include the technical blog (spec \u00a78 #3). Confidence pre-rating: Low (tertiary editorial source per data-sourcing-policy)."
     }
   ]
 }
