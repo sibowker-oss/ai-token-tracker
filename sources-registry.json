@@ -2186,6 +2186,33 @@
       "phase": "1.3",
       "routing": "vault-inbox",
       "notes": "wq-085 Phase 1.3 Tier B \u2014 events / roadmap commitments (brief \u00a73c #29). Working RSS confirmed at blogs.nvidia.com/feed/ (HTTP 200, latest 'Nemotron Labs' post). Covers GTC, Computex, and other NVIDIA dev-event announcements as a single feed. Maps to entity: nvidia. Brief \u00a73c #29 mentions 'GTC + hyperscaler dev events' as 'rss_feed per event' \u2014 single NVIDIA blog feed is the practical unified source; per-event RSS fragmentation deferred (would need a separate src-XXX per event with maintenance overhead). Hyperscaler dev events (re:Invent, Build, Cloud Next) are already partly covered by src-085/086/087 (Microsoft AI Blog, AWS What's New, Google Cloud AI Blog) from wq-083. Confidence pre-rating: Low."
+    },
+    {
+      "id": "src-099",
+      "url": "https://www.afr.com/",
+      "title": "AFR \u2014 Australian Financial Review",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "Australian Financial Review",
+      "added": "2026-05-05",
+      "tags": [
+        "press",
+        "australia",
+        "ha-differentiator",
+        "wq-085",
+        "phase-1.3"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "daily",
+      "next_check": "2026-05-05",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.3",
+      "routing": "vault-inbox",
+      "coverage": "cross-cutting",
+      "notes": "wq-085 Phase 1.3 Tier B \u2014 Australian press / HA differentiator (brief \u00a73c #30). Skip-and-log B applied: afr.com/rss/feed.xml and afr.com/rss both inaccessible from Claude Code harness (domain-blocked, not necessarily 404). AFR may have public RSS but couldn't verify. Registered with URL at canonical landing page; rss_feed adapter dispatches to extract_web_page so paywalled HTML may yield partial extraction (headlines/preview). Manual recheck on next sweep \u2014 note AFR is paywalled, full-text claims may require email/account. Confidence pre-rating: Low."
     }
   ]
 }
