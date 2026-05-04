@@ -2133,6 +2133,33 @@
       "routing": "vault-inbox",
       "coverage": "cross-cutting",
       "notes": "wq-085 Phase 1.3 Tier B \u2014 press/funding (brief \u00a73c #26). Working RSS confirmed at techcrunch.com/feed/ (HTTP 200). Funding announcements + early-stage AI startup coverage. High-volume daily feed \u2014 confidence Low until review filter applied. Cross-cutting (covers many companies)."
+    },
+    {
+      "id": "src-097",
+      "url": "https://www.datacenterfrontier.com/",
+      "title": "Data Center Frontier",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "Data Center Frontier",
+      "added": "2026-05-05",
+      "tags": [
+        "press",
+        "datacenter-buildout",
+        "infra-coverage",
+        "wq-085",
+        "phase-1.3"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "daily",
+      "next_check": "2026-05-05",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.3",
+      "routing": "vault-inbox",
+      "coverage": "denominator",
+      "notes": "wq-085 Phase 1.3 Tier B \u2014 DC build announcements (brief \u00a73c #27). Skip-and-log B applied: RSS endpoint not located after 4 attempts (/rss.xml, /feed, /rss, /?format=rss all 404 or HTML). URL points at canonical landing page; rss_feed adapter dispatches to extract_web_page so HTML scraping works in the interim. Manual recheck: site is on a custom CMS, may need to inspect <head> for actual feed URL. Coverage explicit=denominator (DC infra, not entity). Confidence pre-rating: Low."
     }
   ]
 }
