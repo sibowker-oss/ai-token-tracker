@@ -1947,6 +1947,32 @@
       "phase": "1.2",
       "routing": "vault-inbox",
       "notes": "wq-083 Phase 1.2 Tier B \u2014 commentary (brief \u00a73b #19). Working Substack RSS confirmed (HTTP 200, 'Marcus on AI'). Cross-cutting source \u2014 no rendered entity mapping; tagged sceptic_anchor per cohort spec. Counter-balance to lab-newsroom triumphalism in the cohort. Confidence pre-rating: Low (commentary)."
+    },
+    {
+      "id": "src-090",
+      "url": "https://importai.substack.com/feed",
+      "title": "Import AI (Jack Clark)",
+      "type": "rss_feed",
+      "author": "Jack Clark",
+      "organization": "Import AI",
+      "added": "2026-05-04",
+      "tags": [
+        "anthropic",
+        "commentary",
+        "substack",
+        "wq-083",
+        "phase-1.2"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.2",
+      "routing": "vault-inbox",
+      "notes": "wq-083 Phase 1.2 Tier B \u2014 commentary / weekly capability digest (brief \u00a73b #20). Working Substack RSS confirmed (HTTP 200, 'Import AI', most recent 2026-05-04). Author is Jack Clark (Anthropic policy lead) \u2014 tagged entity:anthropic per cohort spec. Note: dual-role disclosure means his framing of policy/capability is informed by Anthropic strategy; treat as commentary, not primary Anthropic source. Confidence pre-rating: Low (commentary)."
     }
   ]
 }
