@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-04-24",
+    "lastUpdated": "2026-05-04",
     "description": "Registry of all data sources \u00e2\u0080\u0094 auto-classified with extraction method and check frequency"
   },
   "sources": [
@@ -1256,8 +1256,8 @@
       ],
       "extraction_method": "eia_api",
       "frequency": "daily",
-      "next_check": "2026-04-25",
-      "last_checked": "2026-04-24",
+      "next_check": "2026-05-05",
+      "last_checked": "2026-05-04",
       "last_claims_count": 0,
       "status": "active",
       "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time."
@@ -1279,8 +1279,8 @@
       ],
       "extraction_method": "neso_tec",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-11",
+      "last_checked": "2026-05-04",
       "last_claims_count": 0,
       "status": "active",
       "notes": "Best-in-class cadence (twice-weekly Tue/Fri upstream; weekly at Ledger level) per wq-012 \u00a71. CSV, OGL licence. Gate 1 / Gate 2 classifier from Nov 2025."
@@ -1418,8 +1418,8 @@
       ],
       "extraction_method": "greenhouse_board",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-11",
+      "last_checked": "2026-05-04",
       "last_claims_count": 5,
       "status": "active",
       "notes": "Public JSON, no auth. Per-company board via token from data/company-alias-map.json[<slug>].ats.token. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
@@ -1440,8 +1440,8 @@
       ],
       "extraction_method": "lever_postings",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-11",
+      "last_checked": "2026-05-04",
       "last_claims_count": 1,
       "status": "active",
       "notes": "Public JSON, no auth. Per-company slug via data/company-alias-map.json. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
@@ -1462,8 +1462,8 @@
       ],
       "extraction_method": "ashby_public",
       "frequency": "weekly",
-      "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
+      "next_check": "2026-05-11",
+      "last_checked": "2026-05-04",
       "last_claims_count": 10,
       "status": "active",
       "notes": "Public JSON per-company-token. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
@@ -1485,9 +1485,9 @@
       "extraction_method": "workable_jobs",
       "frequency": "weekly",
       "next_check": "2026-04-30",
-      "last_checked": "2026-04-23",
+      "last_checked": "2026-05-04",
       "last_claims_count": 0,
-      "status": "active",
+      "status": "error",
       "notes": "Public widget JSON per-account. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
     }
   ]
