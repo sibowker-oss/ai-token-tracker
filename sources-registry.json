@@ -1489,6 +1489,34 @@
       "last_claims_count": 0,
       "status": "error",
       "notes": "Public widget JSON per-account. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
+    },
+    {
+      "id": "src-073",
+      "url": "https://www.caiso.com/planning/transmission-onshore/queue-management",
+      "title": "CAISO \u2014 Generator Interconnection Queue",
+      "type": "iso_queue",
+      "author": "",
+      "organization": "California Independent System Operator",
+      "added": "2026-05-04",
+      "tags": [
+        "power",
+        "iso-queue",
+        "datacenter",
+        "us",
+        "west-coast",
+        "primary",
+        "wq-081"
+      ],
+      "extraction_method": "iso_queue_caiso",
+      "frequency": "monthly",
+      "next_check": "2026-05-04",
+      "last_checked": "2026-05-04",
+      "last_claims_count": 0,
+      "status": "error",
+      "tier": 2,
+      "phase": "1.1",
+      "routing": "telemetry-feed",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 closes Stream 2 west-coast gap per source-collation-phase1-brief.md \u00a73a item 5. Clones iso_queue_ercot/pjm v1 posture: snapshot landing HTML, surface XLSX download links, defer row-parse to v2 (gated on openpyxl). Power-side denominator coverage \u2014 not entity coverage. Routing decision: structured power_project claims (when v2 lands) \u2192 telemetry-feed.json per _telemetry_router.TELEMETRY_STRUCTURED_TYPES."
     }
   ]
 }

@@ -753,6 +753,43 @@ def extract_iso_queue_pjm(source):
     return []
 
 
+def extract_iso_queue_caiso(source):
+    """CAISO Generator Interconnection Queue (src-073, wq-081 Phase 1.1 Tier B).
+
+    Closes the Stream 2 west-coast gap noted in `source-collation-phase1-brief.md`
+    §3a item 5. CAISO publishes the Queue Cluster Study queue as XLSX through
+    the public planning portal. Same v1 posture as ERCOT/PJM: save the
+    landing-page snapshot and surface XLSX download URLs. Row-level
+    `power_project` extraction is a follow-up gated on openpyxl.
+
+    Routing: structured `power_project` claims emitted in v2 will route to
+    telemetry-feed.json via _telemetry_router (TELEMETRY_STRUCTURED_TYPES)."""
+    attr_map = _load_attribution_map()
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+
+    xlsx_urls = re.findall(r'https?://[^\s"\']+\.(xlsx|xls)', html or '', re.IGNORECASE)
+    if xlsx_urls:
+        log(f"  Found {len(xlsx_urls)} XLSX/XLS link(s) on CAISO queue page")
+        for u in xlsx_urls[:5]:
+            log(f"    {u[0] if isinstance(u, tuple) else u}")
+
+    try:
+        import openpyxl  # noqa: F401
+    except ImportError:
+        log("  openpyxl not installed — CAISO queue XLSX parse skipped for v1.")
+        return []
+
+    log("  openpyxl present but CAISO XLSX row-parsing not yet implemented; returning [].")
+    return []
+
+
 def extract_eia_api(source):
     """EIA Open Data API (src-062). v1 fetches STEO datacenter-load commentary
     when EIA_API_KEY is set. Output is free-text claims, not power_project —
@@ -1249,6 +1286,7 @@ NON_WEB_METHODS = {
     'sec_edgar_scan',
     'iso_queue_ercot',
     'iso_queue_pjm',
+    'iso_queue_caiso',
     'eia_api',
     'neso_tec',
     'epoch_frontier',
@@ -1274,6 +1312,7 @@ ADAPTERS = {
     # Stream 2 (wq-012) power adapters:
     'iso_queue_ercot': extract_iso_queue_ercot,
     'iso_queue_pjm': extract_iso_queue_pjm,
+    'iso_queue_caiso': extract_iso_queue_caiso,
     'eia_api': extract_eia_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
