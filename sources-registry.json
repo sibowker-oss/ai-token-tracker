@@ -1834,6 +1834,33 @@
       "phase": "1.2",
       "routing": "vault-inbox",
       "notes": "wq-083 Phase 1.2 Tier A \u2014 hyperscaler product velocity (brief \u00a73b #13). Working RSS confirmed (HTTP 200, valid RSS 2.0). Maps to entity: openai (Copilot/Azure-AI angle covers OpenAI consolidation per cohort spec). Confidence pre-rating: Low until human review."
+    },
+    {
+      "id": "src-086",
+      "url": "https://aws.amazon.com/about-aws/whats-new/recent/feed/",
+      "title": "AWS What's New + ML Blog",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "Amazon Web Services",
+      "added": "2026-05-04",
+      "tags": [
+        "aws",
+        "hyperscaler",
+        "infra-coverage",
+        "denominator",
+        "wq-083",
+        "phase-1.2"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "daily",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.2",
+      "routing": "vault-inbox",
+      "notes": "wq-083 Phase 1.2 Tier A \u2014 hyperscaler product velocity (brief \u00a73b #14). Working RSS confirmed (HTTP 200, 'Recent Announcements'). NO rendered entity \u2014 covers infrastructure/denominator side per cohort spec ('note as denominator/infra coverage'). Note: cohort_metrics classify_coverage will misclassify this as 'entity' default since rss_feed isn't in DENOMINATOR_METHODS \u2014 known artefact, manual override needed in PR snapshot. AWS daily feed cadence is high-volume; confidence Low until human review filters."
     }
   ]
 }
