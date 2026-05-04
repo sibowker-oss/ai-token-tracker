@@ -2107,6 +2107,32 @@
       "routing": "vault-inbox",
       "coverage": "cross-cutting",
       "notes": "wq-085 Phase 1.3 Tier B \u2014 wire breaking news (brief \u00a73c #25). Skip-and-log B applied: Reuters retired public RSS in 2020 (verify-2026 item per Phase 1 brief slack); attempted feeds.reuters.com/reuters/technologyNews \u2192 harness-blocked, and Reuters Connect requires paid auth. Registered with URL at canonical Technology landing page; rss_feed adapter dispatches to extract_web_page so HTML scraping fallback works in the interim. Manual recheck: try Reuters Connect demo / Atom feed if exposed. Confidence pre-rating: Low."
+    },
+    {
+      "id": "src-096",
+      "url": "https://techcrunch.com/feed/",
+      "title": "TechCrunch",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "TechCrunch",
+      "added": "2026-05-05",
+      "tags": [
+        "press",
+        "funding-announcements",
+        "wq-085",
+        "phase-1.3"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "daily",
+      "next_check": "2026-05-05",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.3",
+      "routing": "vault-inbox",
+      "coverage": "cross-cutting",
+      "notes": "wq-085 Phase 1.3 Tier B \u2014 press/funding (brief \u00a73c #26). Working RSS confirmed at techcrunch.com/feed/ (HTTP 200). Funding announcements + early-stage AI startup coverage. High-volume daily feed \u2014 confidence Low until review filter applied. Cross-cutting (covers many companies)."
     }
   ]
 }
