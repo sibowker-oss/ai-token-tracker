@@ -864,6 +864,58 @@ def extract_fred_api(source):
     return []
 
 
+def extract_worldbank_api(source):
+    """World Bank Indicators API — global macro denominators (src-075, wq-081).
+
+    Public REST, no auth. v1 pulls a single canonical indicator (NY.GDP.MKTP.CD —
+    nominal GDP, current US$) for a small country basket to validate the
+    plumbing end-to-end. Snapshot saved per data-sourcing-policy §6.4.
+
+    Coverage classification: **denominator coverage** (macro, not entity)."""
+    indicator = 'NY.GDP.MKTP.CD'
+    countries = ['WLD', 'USA', 'CHN']
+    claims = []
+    for iso in countries:
+        endpoint = f'https://api.worldbank.org/v2/country/{iso}/indicator/{indicator}?format=json&per_page=5'
+        try:
+            req = Request(endpoint, headers={'User-Agent': 'Mozilla/5.0'})
+            with urlopen(req, timeout=30) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{iso}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {iso}: {e}")
+            parsed = json.loads(payload)
+        except Exception as e:
+            log(f"  World Bank fetch failed for {iso}: {e}")
+            continue
+        if not isinstance(parsed, list) or len(parsed) < 2:
+            continue
+        rows = parsed[1] or []
+        latest = next((r for r in rows if r.get('value') is not None), None)
+        if not latest:
+            log(f"  {iso}: no non-null observation in latest 5 years")
+            continue
+        claims.append({
+            'claim': f"World Bank: {iso} nominal GDP {latest.get('value'):.0f} USD for {latest.get('date')}.",
+            'category': 'macro_denominator',
+            'entity': iso,
+            'metric': indicator,
+            'value': latest.get('value'),
+            'unit': 'USD',
+            'value_display': f"${latest.get('value'):,.0f}",
+            'time_period': latest.get('date'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],
+            'source_url': endpoint,
+            'source_title': f"World Bank — {iso} {indicator} ({latest.get('date')})",
+            'extracted_at': datetime.now().isoformat(),
+        })
+        log(f"  {iso}: {indicator} {latest.get('date')} = {latest.get('value'):,.0f}")
+    return claims
+
+
 def extract_neso_tec(source):
     """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
     CSV download under OGL licence; produces power_project claims with
@@ -1311,6 +1363,7 @@ NON_WEB_METHODS = {
     'iso_queue_caiso',
     'eia_api',
     'fred_api',
+    'worldbank_api',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1338,6 +1391,7 @@ ADAPTERS = {
     'iso_queue_caiso': extract_iso_queue_caiso,
     'eia_api': extract_eia_api,
     'fred_api': extract_fred_api,
+    'worldbank_api': extract_worldbank_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:

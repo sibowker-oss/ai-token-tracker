@@ -1544,6 +1544,33 @@
       "phase": "1.1",
       "routing": "vault-inbox",
       "notes": "wq-081 Phase 1.1 Tier B \u2014 STUB pending FRED_API_KEY (per stop-gate B; mirrors src-066 google_patents_bq pattern). Free registration at https://fred.stlouisfed.org/docs/api/api_key.html. When key added to repo secrets, flip status pending_credentials \u2192 active and run --force src-074. Coverage classification: **denominator coverage** (US macro: GDP, GDPC1, CPIAUCSL, etc.) \u2014 NOT entity coverage. Replaces wb-imf-weo manual copy per brief \u00a73a item 3."
+    },
+    {
+      "id": "src-075",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD",
+      "title": "World Bank Indicators API",
+      "type": "gov_api",
+      "author": "",
+      "organization": "World Bank",
+      "added": "2026-05-04",
+      "tags": [
+        "macro",
+        "denominators",
+        "global",
+        "primary",
+        "api",
+        "wq-081"
+      ],
+      "extraction_method": "worldbank_api",
+      "frequency": "quarterly",
+      "next_check": "2026-05-04",
+      "last_checked": "2026-05-04",
+      "last_claims_count": 0,
+      "status": "error",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "vault-inbox",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 public REST, no auth. v1 fetches NY.GDP.MKTP.CD (nominal GDP) for {WLD, USA, CHN} as a smoke test; v2 expands to per-country basket + indicator set. Coverage classification: **denominator coverage** (global macro) \u2014 NOT entity coverage. Replaces wb-national-accounts manual copy per brief \u00a73a item 4."
     }
   ]
 }
