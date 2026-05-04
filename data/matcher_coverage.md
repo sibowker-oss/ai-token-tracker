@@ -1,10 +1,10 @@
 # Matcher coverage report
 
-_Generated 2026-05-02T03:32:51Z — wq-039_
+_Generated 2026-05-04T23:13:00Z — wq-039_
 
 ## Summary
 
-- **Entities**: 92/92 = 100.0%
+- **Entities**: 103/103 = 100.0%
 - **Fields**:   56/56 = 100.0%
 
 ## How to add coverage
