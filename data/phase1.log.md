@@ -227,3 +227,48 @@ Append-only per GUIDELINES §5.4. Each snapshot is one block.
 
 ---
 
+## Cohort `wq-085` snapshot — 2026-05-04T23:40:44Z
+
+- Cohort size: **10**
+- Activation rate: **0%** (0/10 active)
+- Pending: **10**, error: **0**
+- Total claims on first run (`last_claims_count` sum): **0**
+
+### Coverage split
+
+| Coverage axis | Count | Notes |
+|---|---:|---|
+| **entity_coverage** | 1 | Sources whose claims attach to rendered entities (entityDirectory.qualifies = true) |
+| **denominator_coverage** | 1 | Macro / grid / sector / infra — not entity-targeted |
+| **cross_cutting_coverage** | 8 | Commentary / framing without a single entity target (adoption_signal, sceptic_anchor, capex_finance, etc.) |
+
+### Routing decisions
+
+| Routing | Count |
+|---|---:|
+| `vault-inbox` | 10 |
+
+### Sources in cohort
+
+| id | title | tier | method | type | routing | coverage | status | first-run claims |
+|---|---|---:|---|---|---|---|---|---:|
+| `src-091` | Hard Fork (NYT) | 2 | `podcast_scraper` | `podcast_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-092` | Acquired | 2 | `podcast_scraper` | `podcast_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-093` | Dwarkesh Podcast | 2 | `podcast_scraper` | `podcast_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-094` | ChinaTalk | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-095` | Reuters Technology | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-096` | TechCrunch | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-097` | Data Center Frontier | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | denominator | `pending_first_extraction` | 0 |
+| `src-098` | NVIDIA Blog (incl. GTC + dev events) | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `pending_first_extraction` | 0 |
+| `src-099` | AFR — Australian Financial Review | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-100` | ACCC — News Centre | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+
+### Phase 1 → Phase 2 gate (brief §5a)
+
+- Activation rate ≥ 80%? **NO** (current: 0%)
+- Stale rate ≤ 20%? **YES** (current: 0%)
+- Other gate criteria (4-week observation, named gaps, review-queue throughput) require post-Week-1 data and are not evaluated here.
+
+
+---
+
