@@ -2028,6 +2028,32 @@
       "routing": "vault-inbox",
       "coverage": "cross-cutting",
       "notes": "wq-085 Phase 1.3 Tier A \u2014 podcast (brief \u00a73c #22). Working RSS confirmed at feeds.transistor.fm/acquired (HTTP 200, 'Acquired'). Canonical company-history references; cross-cutting coverage (covers many companies). Note: episode cadence is irregular (multi-hour deep-dives, often >1 month gap) \u2014 frequency=weekly is upper bound for cron, scrape_podcasts.py dedupes on episode GUID. Confidence pre-rating: Low until human review."
+    },
+    {
+      "id": "src-093",
+      "url": "https://dwarkesh.com/feed",
+      "title": "Dwarkesh Podcast",
+      "type": "podcast_feed",
+      "author": "Dwarkesh Patel",
+      "organization": "Dwarkesh Patel",
+      "added": "2026-05-05",
+      "tags": [
+        "podcast",
+        "high-claim-density",
+        "wq-085",
+        "phase-1.3"
+      ],
+      "extraction_method": "podcast_scraper",
+      "frequency": "weekly",
+      "next_check": "2026-05-05",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.3",
+      "routing": "vault-inbox",
+      "coverage": "cross-cutting",
+      "notes": "wq-085 Phase 1.3 Tier A \u2014 podcast (brief \u00a73c #23). Working RSS confirmed at dwarkesh.com/feed after redirect from www.dwarkeshpatel.com/feed (HTTP 200, 'Reiner Pope \u2013 The math behind how LLMs are trained and served'). Highest claim-density per brief \u2014 long-form interviews with frontier-lab researchers. Cross-cutting (interviews span Anthropic, OpenAI, DeepMind, etc.). Confidence pre-rating: Low until human review."
     }
   ]
 }
