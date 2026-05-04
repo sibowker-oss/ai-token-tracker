@@ -1808,6 +1808,32 @@
       "phase": "1.2",
       "routing": "vault-inbox",
       "notes": "wq-083 Phase 1.2 Tier A \u2014 lab newsroom (brief \u00a73b #12). RSS endpoint not located after 2 attempts (/feed.xml \u2192 404, /rss.xml \u2192 404); URL points at canonical news landing page. extract_web_page fallback works for HTML. Maps to entity: mistral. Verify direct RSS URL on next manual check. Confidence pre-rating: Low until human review."
+    },
+    {
+      "id": "src-085",
+      "url": "https://blogs.microsoft.com/ai/feed/",
+      "title": "Microsoft AI Blog",
+      "type": "rss_feed",
+      "author": "",
+      "organization": "Microsoft",
+      "added": "2026-05-04",
+      "tags": [
+        "openai",
+        "lab-newsroom",
+        "hyperscaler",
+        "wq-083",
+        "phase-1.2"
+      ],
+      "extraction_method": "rss_feed",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 2,
+      "phase": "1.2",
+      "routing": "vault-inbox",
+      "notes": "wq-083 Phase 1.2 Tier A \u2014 hyperscaler product velocity (brief \u00a73b #13). Working RSS confirmed (HTTP 200, valid RSS 2.0). Maps to entity: openai (Copilot/Azure-AI angle covers OpenAI consolidation per cohort spec). Confidence pre-rating: Low until human review."
     }
   ]
 }
