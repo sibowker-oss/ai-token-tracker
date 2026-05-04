@@ -845,23 +845,72 @@ def extract_eia_api(source):
 def extract_fred_api(source):
     """FRED API — St Louis Fed macro denominators (src-074, wq-081 Phase 1.1).
 
-    STUBBED pending FRED_API_KEY per stop-gate B in the wq-081 handoff. Adapter
-    activates the moment the key is added to repo secrets — no other code change
-    required. Mirrors the env-gated stub pattern used by src-066 (Google Patents
-    BigQuery) and src-067 (EPO OPS).
+    Build-as-planned per the 2026-05-04 wq-081 follow-up: FRED_API_KEY is now
+    in repo secrets, so the previous stub-pending-credentials posture is
+    superseded. Adapter fetches a starter macro-denominator basket and emits
+    one free-text claim per latest observation per series. Snapshot saved per
+    data-sourcing-policy §6.4.
 
-    Coverage classification: **denominator coverage** (macro, not entity).
-    Initial v2 series target: GDP, GDPC1, CPIAUCSL — feeds Capital Sankey
-    + macro-denominator panels in the Markets page. Routing: free-text claims
-    flow to vault-inbox by default (no telemetry detection match) — these are
-    human-reviewable macro updates."""
+    Coverage classification: **denominator coverage** (macro, not entity) —
+    feeds Capital Sankey + macro-denominator panels in the Markets page.
+    Routing: free-text claims flow to vault-inbox (no telemetry detection
+    match) — these are human-reviewable macro updates."""
     api_key = os.environ.get('FRED_API_KEY')
     if not api_key:
-        log("  FRED_API_KEY env var not set — fred_api is stubbed pending credentials.")
-        log("  Register free at https://fred.stlouisfed.org/docs/api/api_key.html, set FRED_API_KEY in repo secrets, flip src-074 status from pending_credentials → active, then --force src-074.")
+        log("  FRED_API_KEY env var not set — fred_api requires the key.")
+        log("  Register free at https://fred.stlouisfed.org/docs/api/api_key.html, then add FRED_API_KEY to repo secrets and re-run.")
         return []
-    log("  FRED_API_KEY present but series fetch not yet implemented (v2); returning [].")
-    return []
+    # v1 starter basket — replaces the wb-imf-weo manual copy line per brief §3a item 3.
+    series = [
+        ('GDP', 'US Nominal GDP', 'USD billions (SA, annualised)'),
+        ('GDPC1', 'US Real GDP (chained 2017 USD)', 'USD billions (SA, annualised)'),
+        ('CPIAUCSL', 'US CPI — All Urban Consumers, all items, SA', 'index 1982-84=100'),
+    ]
+    claims = []
+    for sid, label, unit in series:
+        endpoint = (f'https://api.stlouisfed.org/fred/series/observations'
+                    f'?series_id={sid}&api_key={api_key}&file_type=json'
+                    f'&sort_order=desc&limit=4')
+        try:
+            req = Request(endpoint, headers={'User-Agent': 'TheAILedger-wq081/0.1'})
+            with urlopen(req, timeout=30) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{sid}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {sid}: {e}")
+            parsed = json.loads(payload)
+        except Exception as e:
+            log(f"  FRED fetch failed for {sid}: {e}")
+            continue
+        observations = parsed.get('observations') or []
+        latest = next((o for o in observations if o.get('value') not in (None, '.', '')), None)
+        if not latest:
+            log(f"  {sid}: no non-null observation in latest 4 entries")
+            continue
+        try:
+            val = float(latest['value'])
+        except (TypeError, ValueError):
+            log(f"  {sid}: non-numeric value {latest.get('value')!r}; skipping")
+            continue
+        claims.append({
+            'claim': f"FRED {sid} ({label}) latest: {val:,.2f} {unit} as of {latest.get('date')}.",
+            'category': 'macro_denominator',
+            'entity': 'United States',
+            'metric': sid,
+            'value': val,
+            'unit': unit,
+            'value_display': f"{val:,.2f}",
+            'time_period': latest.get('date'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],
+            'source_url': endpoint.replace(api_key, 'REDACTED'),
+            'source_title': f"FRED — {sid} {latest.get('date')}",
+            'extracted_at': datetime.now().isoformat(),
+        })
+        log(f"  {sid} ({label}): {latest.get('date')} = {val:,.2f}")
+    return claims
 
 
 def extract_worldbank_api(source):

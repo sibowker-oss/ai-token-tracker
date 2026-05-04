@@ -1264,7 +1264,7 @@
       "last_checked": "2026-05-04",
       "last_claims_count": 0,
       "status": "active",
-      "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time."
+      "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time. Audit 2026-05-04 (wq-081): no snapshots ever created since wq-012 registration; EIA_API_KEY now in repo secrets \u2014 verify on next cron."
     },
     {
       "id": "src-063",
@@ -1378,8 +1378,8 @@
       "next_check": "2026-05-23",
       "last_checked": "2026-04-23",
       "last_claims_count": 0,
-      "status": "active",
-      "notes": "Free up to 250 req/week per wq-013 \u00a73.1. Requires OAuth registration at EPO OPS. Env gate: EPO_OPS_CLIENT_ID / EPO_OPS_CLIENT_SECRET."
+      "status": "pending_credentials",
+      "notes": "STUBBED pending EPO_OPS_KEY \u2014 discovered 2026-05-04 during wq-081: src-067 was set status=active in wq-013 but EPO_OPS_CLIENT_ID / EPO_OPS_CLIENT_SECRET were never added to repo secrets, so the daily cron has been silently env-gating to []. Flipping to pending_credentials per src-066 google_patents_bq stub pattern. Activate after EPO_OPS_KEY (Simon: pending ~this week). Original wq-013 \u00a73.1 routing/cadence preserved: free up to 250 req/week, OAuth registration at https://developers.epo.org/."
     },
     {
       "id": "src-068",
@@ -1543,11 +1543,11 @@
       "next_check": "2026-05-04",
       "last_checked": null,
       "last_claims_count": 0,
-      "status": "pending_credentials",
+      "status": "pending_first_extraction",
       "tier": 1,
       "phase": "1.1",
       "routing": "vault-inbox",
-      "notes": "wq-081 Phase 1.1 Tier B \u2014 STUB pending FRED_API_KEY (per stop-gate B; mirrors src-066 google_patents_bq pattern). Free registration at https://fred.stlouisfed.org/docs/api/api_key.html. When key added to repo secrets, flip status pending_credentials \u2192 active and run --force src-074. Coverage classification: **denominator coverage** (US macro: GDP, GDPC1, CPIAUCSL, etc.) \u2014 NOT entity coverage. Replaces wb-imf-weo manual copy per brief \u00a73a item 3."
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 FRED_API_KEY now in repo secrets (added 2026-05-04). Adapter is real (not stub) and fetches a 3-series macro denominator basket: GDP, GDPC1, CPIAUCSL. Status will flip to active on first successful cron extraction. Coverage classification: **denominator coverage** (US macro) \u2014 NOT entity coverage. Replaces wb-imf-weo manual copy per brief \u00a73a item 3."
     },
     {
       "id": "src-075",
