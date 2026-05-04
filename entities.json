@@ -14106,6 +14106,145 @@
           ]
         }
       }
+    },
+    {
+      "slug": "databricks",
+      "name": "Databricks",
+      "displayName": "Databricks",
+      "roles": [
+        "traditional_saas",
+        "ai_app"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#ff3621",
+      "website": "https://www.databricks.com",
+      "products": [
+        "Mosaic AI",
+        "Unity Catalog",
+        "Lakehouse"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Data + AI platform; growing AI-specific revenue stream"
+        }
+      }
+    },
+    {
+      "slug": "scale",
+      "name": "Scale AI",
+      "displayName": "Scale AI",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#1a1a1a",
+      "website": "https://scale.com",
+      "products": [
+        "Data Engine",
+        "RLHF",
+        "Government"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Data labelling for AI training"
+        }
+      }
+    },
+    {
+      "slug": "modal",
+      "name": "Modal Labs",
+      "displayName": "Modal Labs",
+      "roles": [
+        "iaas_provider"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#7fee64",
+      "website": "https://modal.com",
+      "products": [
+        "Modal Cloud",
+        "Serverless GPU"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Serverless GPU infrastructure for AI"
+        }
+      }
+    },
+    {
+      "slug": "cohere",
+      "name": "Cohere",
+      "displayName": "Cohere",
+      "roles": [
+        "model_provider"
+      ],
+      "region": "Canada",
+      "model_type": "both",
+      "color": "#39594d",
+      "website": "https://cohere.com",
+      "products": [
+        "Command",
+        "Embed",
+        "Rerank"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Frontier model provider; open + commercial"
+        }
+      }
+    },
+    {
+      "slug": "super_com",
+      "name": "Super.com",
+      "displayName": "Super.com",
+      "roles": [
+        "ai_app"
+      ],
+      "region": "US",
+      "model_type": "proprietary",
+      "color": "#ff5e8a",
+      "website": "https://www.super.com",
+      "products": [
+        "Super App",
+        "Travel + Finance"
+      ],
+      "current": {},
+      "financials": {},
+      "provenance": {
+        "_entity_creation": {
+          "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
+          "source": "wq-046 brief",
+          "origin": "editorial_audit_doc_addition",
+          "date": "2026-05-03",
+          "_doc": "Consumer AI travel/finance"
+        }
+      }
     }
   ],
   "market_aggregates": {

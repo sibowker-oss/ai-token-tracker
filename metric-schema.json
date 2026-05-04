@@ -1275,10 +1275,6 @@
       "slug": "portkey"
     },
     {
-      "pattern": "cursor|anysphere",
-      "slug": "cursor"
-    },
-    {
       "pattern": "perplexity",
       "slug": "perplexity"
     },
@@ -1305,6 +1301,30 @@
     {
       "pattern": "cohere|ai21|samsung.*gauss|apple.*intelligence",
       "slug": "_other_closed"
+    },
+    {
+      "pattern": "databricks",
+      "slug": "databricks"
+    },
+    {
+      "pattern": "\\bscale\\.?ai\\b|scale\\sai\\b",
+      "slug": "scale"
+    },
+    {
+      "pattern": "modal\\.com|modal\\s+labs|modal\\s+inc",
+      "slug": "modal"
+    },
+    {
+      "pattern": "cohere",
+      "slug": "cohere"
+    },
+    {
+      "pattern": "super\\.com|super\\s+app",
+      "slug": "super_com"
+    },
+    {
+      "pattern": "harvey\\.ai|harvey\\s+legal|\\bharvey\\b",
+      "slug": "harvey-ai"
     }
   ],
   "field_match_rules": [
