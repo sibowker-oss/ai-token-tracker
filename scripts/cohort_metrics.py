@@ -94,19 +94,33 @@ def filter_cohort(sources, tag):
     return [s for s in sources if tag in (s.get("tags") or [])]
 
 
-def classify_coverage(source, rendered_slugs):
-    """Return 'entity' or 'denominator'.
+COVERAGE_VALUES = ("entity", "denominator", "cross-cutting")
 
-    Heuristic: if extraction_method is in DENOMINATOR_METHODS, it's
-    denominator coverage by design. Otherwise check whether any tag
-    matches a rendered entity slug (loose entity link)."""
+
+def classify_coverage(source, rendered_slugs):
+    """Return 'entity', 'denominator', or 'cross-cutting'.
+
+    Resolution order (wq-084):
+      1. Explicit `coverage` field on the source (operator override).
+      2. extraction_method in DENOMINATOR_METHODS → 'denominator'.
+      3. Any tag matches a rendered entity slug → 'entity'.
+      4. Default: 'entity' (most non-macro sources target entities).
+
+    The explicit-override path was added in wq-084 because the wq-083
+    Phase 1.2 cohort surfaced 3 cross-cutting / infra sources (AWS
+    What's New, One Useful Thing, Marcus on AI) that the heuristic
+    misclassifies as 'entity'. The new 'cross-cutting' bucket
+    distinguishes commentary-without-entity-target from macro/grid
+    denominators (per Phase 1 brief vocabulary)."""
+    explicit = source.get("coverage")
+    if explicit in COVERAGE_VALUES:
+        return explicit
     if source.get("extraction_method") in DENOMINATOR_METHODS:
         return "denominator"
     tags = source.get("tags") or []
     for t in tags:
         if t in rendered_slugs:
             return "entity"
-    # Default: entity coverage (most non-macro sources target entities)
     return "entity"
 
 
@@ -128,7 +142,7 @@ def render_summary(cohort, rendered_slugs, tag):
 
     by_status = {}
     by_routing = {}
-    by_coverage = {"entity": [], "denominator": []}
+    by_coverage = {"entity": [], "denominator": [], "cross-cutting": []}
     by_tier = {1: [], 2: [], 3: []}
     total_claims_first = sum(s.get("last_claims_count") or 0 for s in cohort)
 
@@ -157,7 +171,8 @@ def render_summary(cohort, rendered_slugs, tag):
     out.append("| Coverage axis | Count | Notes |")
     out.append("|---|---:|---|")
     out.append(f"| **entity_coverage** | {len(by_coverage['entity'])} | Sources whose claims attach to rendered entities (entityDirectory.qualifies = true) |")
-    out.append(f"| **denominator_coverage** | {len(by_coverage['denominator'])} | Macro / grid / sector — not entity-targeted |")
+    out.append(f"| **denominator_coverage** | {len(by_coverage['denominator'])} | Macro / grid / sector / infra — not entity-targeted |")
+    out.append(f"| **cross_cutting_coverage** | {len(by_coverage['cross-cutting'])} | Commentary / framing without a single entity target (adoption_signal, sceptic_anchor, capex_finance, etc.) |")
     out.append("")
 
     out.append("### Routing decisions")

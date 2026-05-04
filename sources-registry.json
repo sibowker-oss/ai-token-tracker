@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-05-04",
+    "lastUpdated": "2026-05-05",
     "description": "Registry of all data sources \u00e2\u0080\u0094 auto-classified with extraction method and check frequency"
   },
   "sources": [
@@ -1868,7 +1868,8 @@
       "tier": 2,
       "phase": "1.2",
       "routing": "vault-inbox",
-      "notes": "wq-083 Phase 1.2 Tier A \u2014 hyperscaler product velocity (brief \u00a73b #14). Working RSS confirmed (HTTP 200, 'Recent Announcements'). NO rendered entity \u2014 covers infrastructure/denominator side per cohort spec ('note as denominator/infra coverage'). Note: cohort_metrics classify_coverage will misclassify this as 'entity' default since rss_feed isn't in DENOMINATOR_METHODS \u2014 known artefact, manual override needed in PR snapshot. AWS daily feed cadence is high-volume; confidence Low until human review filters."
+      "notes": "wq-083 Phase 1.2 Tier A \u2014 hyperscaler product velocity (brief \u00a73b #14). Working RSS confirmed (HTTP 200, 'Recent Announcements'). NO rendered entity \u2014 covers infrastructure/denominator side per cohort spec ('note as denominator/infra coverage'). Note: cohort_metrics classify_coverage will misclassify this as 'entity' default since rss_feed isn't in DENOMINATOR_METHODS \u2014 known artefact, manual override needed in PR snapshot. AWS daily feed cadence is high-volume; confidence Low until human review filters. wq-084: explicit coverage=\"denominator\" \u2014 AWS What's New is hyperscaler infra/product velocity \u2014 no rendered-entity target. Set per wq-084 explicit-override path.",
+      "coverage": "denominator"
     },
     {
       "id": "src-087",
@@ -1920,7 +1921,8 @@
       "tier": 2,
       "phase": "1.2",
       "routing": "vault-inbox",
-      "notes": "wq-083 Phase 1.2 Tier B \u2014 commentary (brief \u00a73b #18). Working Substack RSS confirmed (HTTP 200, 'One Useful Thing'). Cross-cutting source \u2014 no rendered entity mapping; tagged adoption_signal per cohort spec. Wharton prof writing on AI adoption in knowledge work. Confidence pre-rating: Low (commentary, not primary)."
+      "notes": "wq-083 Phase 1.2 Tier B \u2014 commentary (brief \u00a73b #18). Working Substack RSS confirmed (HTTP 200, 'One Useful Thing'). Cross-cutting source \u2014 no rendered entity mapping; tagged adoption_signal per cohort spec. Wharton prof writing on AI adoption in knowledge work. Confidence pre-rating: Low (commentary, not primary). wq-084: explicit coverage=\"cross-cutting\" \u2014 One Useful Thing (Mollick) is adoption commentary \u2014 no single entity target. Set per wq-084 explicit-override path.",
+      "coverage": "cross-cutting"
     },
     {
       "id": "src-089",
@@ -1946,7 +1948,8 @@
       "tier": 2,
       "phase": "1.2",
       "routing": "vault-inbox",
-      "notes": "wq-083 Phase 1.2 Tier B \u2014 commentary (brief \u00a73b #19). Working Substack RSS confirmed (HTTP 200, 'Marcus on AI'). Cross-cutting source \u2014 no rendered entity mapping; tagged sceptic_anchor per cohort spec. Counter-balance to lab-newsroom triumphalism in the cohort. Confidence pre-rating: Low (commentary)."
+      "notes": "wq-083 Phase 1.2 Tier B \u2014 commentary (brief \u00a73b #19). Working Substack RSS confirmed (HTTP 200, 'Marcus on AI'). Cross-cutting source \u2014 no rendered entity mapping; tagged sceptic_anchor per cohort spec. Counter-balance to lab-newsroom triumphalism in the cohort. Confidence pre-rating: Low (commentary). wq-084: explicit coverage=\"cross-cutting\" \u2014 Marcus on AI is sceptic-anchor commentary \u2014 no single entity target. Set per wq-084 explicit-override path.",
+      "coverage": "cross-cutting"
     },
     {
       "id": "src-090",
