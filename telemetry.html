@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telemetry feed — Admin</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; --gray:#64748b; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1200px; margin:0 auto; padding:24px; }
+  .nav { display:flex; gap:16px; align-items:center; margin-bottom:24px; padding-bottom:12px; border-bottom:1px solid var(--card-border); }
+  .nav a { color:var(--accent); text-decoration:none; font-size:13px; }
+  .nav .nav-brand { font-size:14px; font-weight:600; color:var(--text); margin-right:12px; }
+  h1 { font-size:22px; font-weight:600; margin-bottom:4px; }
+  .subtitle { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
+
+  .summary-row { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+  .stat { background:var(--card); border:1px solid var(--card-border); border-radius:8px; padding:12px 16px; flex:1; min-width:160px; }
+  .stat-label { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .stat-value { font-size:20px; font-weight:600; color:var(--text); }
+  .stat-sub { font-size:11px; color:var(--text-dim); margin-top:2px; }
+
+  .filters { display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; align-items:center; }
+  .filters label { font-size:11px; color:var(--text-dim); display:flex; flex-direction:column; gap:4px; }
+  .filters select, .filters input { background:var(--card); border:1px solid var(--card-border); color:var(--text); padding:6px 10px; border-radius:4px; font-size:12px; min-width:140px; }
+  .refresh-btn { font-size:11px; background:var(--card); border:1px solid var(--card-border); color:var(--text-dim); padding:6px 12px; border-radius:4px; cursor:pointer; align-self:end; }
+  .refresh-btn:hover { color:var(--text); border-color:var(--text-dim); }
+
+  .feed { background:var(--card); border:1px solid var(--card-border); border-radius:8px; overflow:hidden; }
+  .feed-header { display:grid; grid-template-columns: 200px 130px 130px 130px 1fr; gap:12px; padding:10px 14px; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-dim); border-bottom:1px solid var(--card-border); background:rgba(255,255,255,0.02); font-weight:600; }
+  .feed-row { display:grid; grid-template-columns: 200px 130px 130px 130px 1fr; gap:12px; padding:10px 14px; font-size:12px; border-bottom:1px solid var(--card-border); cursor:pointer; }
+  .feed-row:last-child { border-bottom:none; }
+  .feed-row:hover { background:rgba(255,255,255,0.02); }
+  .feed-row.expanded { background:rgba(59,130,246,0.05); }
+  .id-cell { font-family:ui-monospace,'SF Mono',monospace; font-size:11px; color:var(--text-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .type-pill { display:inline-block; padding:2px 8px; border-radius:3px; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; background:rgba(139,92,246,0.15); color:var(--purple); }
+  .type-hiring { background:rgba(16,185,129,0.15); color:var(--green); }
+  .type-package { background:rgba(6,182,212,0.15); color:var(--cyan); }
+  .type-github { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .type-sec { background:rgba(239,68,68,0.15); color:var(--red); }
+  .feed-row .entity { color:var(--text); font-weight:500; }
+  .feed-row .source { color:var(--text-dim); font-family:ui-monospace,'SF Mono',monospace; font-size:11px; }
+  .feed-row .when { color:var(--text-dim); font-size:11px; }
+  .feed-row .data-preview { color:var(--text-dim); font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  .detail { display:none; padding:14px 18px; background:rgba(0,0,0,0.25); border-bottom:1px solid var(--card-border); font-family:ui-monospace,'SF Mono',monospace; font-size:11px; color:var(--text-dim); white-space:pre-wrap; line-height:1.6; }
+  .feed-row.expanded + .detail { display:block; }
+  .detail a { color:var(--accent); text-decoration:none; }
+
+  .empty { text-align:center; padding:48px 24px; color:var(--text-dim); font-size:13px; }
+  .footer-meta { margin-top:16px; font-size:11px; color:var(--text-dim); text-align:center; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="nav">
+    <span class="nav-brand">Telemetry feed</span>
+    <a href="admin.html">← Command Centre</a>
+    <a href="review.html">Review →</a>
+    <a href="status.html">Status →</a>
+    <a href="dashboard.html">Dashboard →</a>
+  </div>
+
+  <h1>Operational telemetry</h1>
+  <p class="subtitle" id="loaded-meta">Loading…</p>
+
+  <div class="summary-row" id="summary"></div>
+
+  <div class="filters">
+    <label>Entity
+      <select id="filter-entity"><option value="">All</option></select>
+    </label>
+    <label>Type
+      <select id="filter-type"><option value="">All</option></select>
+    </label>
+    <label>Since
+      <input type="date" id="filter-since">
+    </label>
+    <label>Search
+      <input type="search" id="filter-search" placeholder="id, source, payload…">
+    </label>
+    <button class="refresh-btn" onclick="loadAndRender()">↻ Refresh</button>
+  </div>
+
+  <div class="feed">
+    <div class="feed-header">
+      <div>ID</div>
+      <div>Type</div>
+      <div>Entity</div>
+      <div>When</div>
+      <div>Data</div>
+    </div>
+    <div id="rows"></div>
+  </div>
+
+  <div class="footer-meta" id="footer"></div>
+</div>
+
+<script>
+let _items = [];
+let _expanded = new Set();
+
+async function loadAndRender() {
+  const meta = document.getElementById('loaded-meta');
+  meta.textContent = 'Loading data/telemetry-feed.json…';
+  try {
+    const res = await fetch('data/telemetry-feed.json?_=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const feed = await res.json();
+    _items = (feed.items || []).slice().reverse(); // newest first
+    const lw = feed.lastWritten ? new Date(feed.lastWritten).toLocaleString() : '—';
+    meta.textContent = `${_items.length} record(s) loaded · last write ${lw}`;
+    populateFilters();
+    render();
+  } catch (e) {
+    meta.textContent = `Failed to load data/telemetry-feed.json: ${e.message}`;
+  }
+}
+
+function populateFilters() {
+  const entitySel = document.getElementById('filter-entity');
+  const typeSel = document.getElementById('filter-type');
+  const entities = new Set(), types = new Set();
+  for (const it of _items) {
+    if (it.entity) entities.add(it.entity);
+    if (it.type) types.add(it.type);
+  }
+  entitySel.innerHTML = '<option value="">All</option>' +
+    [...entities].sort().map(e => `<option value="${escapeHtml(e)}">${escapeHtml(e)}</option>`).join('');
+  typeSel.innerHTML = '<option value="">All</option>' +
+    [...types].sort().map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+}
+
+function applyFilters(items) {
+  const entity = document.getElementById('filter-entity').value;
+  const type = document.getElementById('filter-type').value;
+  const since = document.getElementById('filter-since').value;
+  const q = document.getElementById('filter-search').value.toLowerCase().trim();
+  return items.filter(it => {
+    if (entity && it.entity !== entity) return false;
+    if (type && it.type !== type) return false;
+    if (since && (it.scraped_at || '').slice(0, 10) < since) return false;
+    if (q) {
+      const blob = JSON.stringify(it).toLowerCase();
+      if (!blob.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function render() {
+  const filtered = applyFilters(_items);
+  renderSummary(filtered);
+  renderRows(filtered);
+  document.getElementById('footer').textContent =
+    `Showing ${filtered.length} of ${_items.length} record(s). Append-only — no review actions. Schema: data/telemetry-schema.md`;
+}
+
+function renderSummary(items) {
+  const root = document.getElementById('summary');
+  const byType = {};
+  const entities = new Set();
+  let last7 = 0;
+  const cutoff = new Date(Date.now() - 7 * 86400000).toISOString();
+  for (const it of items) {
+    byType[it.type] = (byType[it.type] || 0) + 1;
+    if (it.entity) entities.add(it.entity);
+    if ((it.scraped_at || '') >= cutoff) last7++;
+  }
+  const cards = [
+    { label: 'Total items', value: items.length, sub: 'in current view' },
+    { label: 'Entities', value: entities.size, sub: 'distinct' },
+    { label: 'Types', value: Object.keys(byType).length, sub: Object.keys(byType).slice(0, 3).join(', ') || '—' },
+    { label: 'Last 7 days', value: last7, sub: 'new arrivals' },
+  ];
+  root.innerHTML = cards.map(c =>
+    `<div class="stat"><div class="stat-label">${escapeHtml(c.label)}</div>` +
+    `<div class="stat-value">${c.value}</div>` +
+    `<div class="stat-sub">${escapeHtml(c.sub)}</div></div>`
+  ).join('');
+}
+
+function typeClass(t) {
+  if (!t) return '';
+  if (t.includes('hiring')) return 'type-hiring';
+  if (t.includes('package') || t.includes('download')) return 'type-package';
+  if (t.includes('github') || t.includes('star')) return 'type-github';
+  if (t.includes('filing') || t.includes('sec')) return 'type-sec';
+  return '';
+}
+
+function dataPreview(data) {
+  if (!data || typeof data !== 'object') return String(data || '');
+  const keys = Object.keys(data).slice(0, 3);
+  return keys.map(k => `${k}=${JSON.stringify(data[k])}`).join(' · ');
+}
+
+function renderRows(items) {
+  const root = document.getElementById('rows');
+  if (items.length === 0) {
+    root.innerHTML = '<div class="empty">No telemetry items match the current filters.</div>';
+    return;
+  }
+  root.innerHTML = items.map(it => {
+    const isExpanded = _expanded.has(it.id);
+    const tcls = typeClass(it.type);
+    const when = it.scraped_at ? new Date(it.scraped_at).toLocaleString() : '—';
+    return `
+      <div class="feed-row ${isExpanded ? 'expanded' : ''}" data-id="${escapeHtml(it.id)}" onclick="toggleRow('${escapeJs(it.id)}')">
+        <div class="id-cell" title="${escapeHtml(it.id)}">${escapeHtml(it.id)}</div>
+        <div><span class="type-pill ${tcls}">${escapeHtml(it.type || '?')}</span></div>
+        <div class="entity">${escapeHtml(it.entity || '—')}</div>
+        <div class="when">${escapeHtml(when)}</div>
+        <div class="data-preview" title="${escapeHtml(dataPreview(it.data))}">${escapeHtml(dataPreview(it.data))}</div>
+      </div>
+      <div class="detail">${escapeHtml(JSON.stringify(it, null, 2))}
+${it.source_url ? `\nSource → <a href="${escapeHtml(it.source_url)}" target="_blank" rel="noopener">${escapeHtml(it.source_url)}</a>` : ''}</div>
+    `;
+  }).join('');
+}
+
+function toggleRow(id) {
+  if (_expanded.has(id)) _expanded.delete(id);
+  else _expanded.add(id);
+  render();
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeJs(s) {
+  return String(s ?? '').replace(/['\\]/g, c => '\\' + c);
+}
+
+document.getElementById('filter-entity').addEventListener('change', render);
+document.getElementById('filter-type').addEventListener('change', render);
+document.getElementById('filter-since').addEventListener('change', render);
+document.getElementById('filter-search').addEventListener('input', render);
+
+loadAndRender();
+</script>
+</body>
+</html>

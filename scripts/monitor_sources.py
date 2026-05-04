@@ -26,6 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from coerce_date import coerce_or_keep  # noqa: E402
 from log_run import logged_run  # noqa: E402
 from score_materiality import score as score_materiality  # noqa: E402  (wq-040)
+from _telemetry_router import is_telemetry, append_to_telemetry_feed  # noqa: E402  (wq-047)
 REGISTRY_PATH = os.path.join(BASE_DIR, 'sources-registry.json')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'data-updates')
 LOG_FILE = os.path.join(BASE_DIR, 'data', 'monitor_sources.log')
@@ -1477,14 +1478,25 @@ def _append_to_vault_inbox(claims, source, today):
         _entities, _schema = {"companies": []}, {}
 
     added = 0
+    routed_telemetry = 0
     for i, claim in enumerate(claims):
         item = _claim_to_vault_item(claim, source, today, i)
+        # wq-047 — route operational telemetry (hiring scrapes, package
+        # downloads, GitHub stats, SEC filings monitoring) to a separate
+        # bucket so the human review queue stays focused on decisions.
+        if is_telemetry(item, source):
+            append_to_telemetry_feed(item, source, today)
+            routed_telemetry += 1
+            continue
         try:
             item["materiality"] = score_materiality(item, _entities, _schema)
         except Exception:
             pass
         inbox['items'].append(item)
         added += 1
+
+    if routed_telemetry:
+        log(f"   Routed {routed_telemetry} item(s) to data/telemetry-feed.json (wq-047)")
 
     inbox['lastProcessed'] = today
     with open(VAULT_INBOX_PATH, 'w') as f:

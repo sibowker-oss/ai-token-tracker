@@ -110,18 +110,27 @@ const narrativeStatus = run('node', ['scripts/validate-narrative-hydration.mjs']
 // exit-snapshot/monthly-peak) without explanation. Catches regression where
 // an extractor or manual edit silently writes a sub-period claim into an
 // annual field path.
-console.log('\n→ 10/12  Period-attribution (wq-054 §3 #6)');
+console.log('\n→ 10/13  Period-attribution (wq-054 §3 #6)');
 const periodAttrJson = join(reportDir, 'period-attribution.json');
 const periodAttrStatus = run('node', ['scripts/validate-period-attribution.mjs'], {
   RELEASE_CHECK_PERIOD_ATTRIBUTION_JSON_OUT: periodAttrJson,
 });
 
-// Step 11: Playwright suite
-console.log('\n→ 11/12  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 11 (wq-047 §3 #7): telemetry-routing — assert vault-inbox.json contains
+// no operational-telemetry items (hiring scrapes, package downloads, etc).
+// Transitional → strict on 2026-06-01: failures advisory before then.
+console.log('\n→ 11/13  Telemetry-routing (wq-047 §3 #7)');
+const telemetryRoutingJson = join(reportDir, 'telemetry-routing.json');
+const telemetryRoutingStatus = run('node', ['scripts/validate-telemetry-routing.mjs'], {
+  RELEASE_CHECK_TELEMETRY_ROUTING_JSON_OUT: telemetryRoutingJson,
+});
+
+// Step 12: Playwright suite
+console.log('\n→ 12/13  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 12: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 12/12  Editorial read-through (§11.5)');
+// Step 13: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 13/13  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -157,6 +166,10 @@ const periodAttrFindings = existsSync(periodAttrJson) ? JSON.parse(readFileSync(
 const periodAttrFails = periodAttrFindings.filter(f => f.severity === 'fail');
 const periodAttrAdvisories = periodAttrFindings.filter(f => f.severity === 'advisory');
 
+const telemetryRoutingFindings = existsSync(telemetryRoutingJson) ? JSON.parse(readFileSync(telemetryRoutingJson, 'utf8')) : [];
+const telemetryRoutingFails = telemetryRoutingFindings.filter(f => f.severity === 'fail');
+const telemetryRoutingAdvisories = telemetryRoutingFindings.filter(f => f.severity === 'advisory');
+
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
 if (existsSync(pwResultsPath)) {
@@ -188,12 +201,13 @@ const report = `# Release-check report
 | Currency-format (wq-076) | ${currencyFormatFindings.length === 0 ? '✓' : ''} | 0 | ${currencyFormatFails.length} |
 | Narrative-hydration (wq-077) | ${narrativeFindings.length === 0 ? '✓' : ''} | 0 | ${narrativeFails.length} |
 | Period-attribution (wq-054) | ${periodAttrFindings.length === 0 ? '✓' : ''} | ${periodAttrAdvisories.length} | ${periodAttrFails.length} |
+| Telemetry-routing (wq-047) | ${telemetryRoutingFindings.length === 0 ? '✓' : ''} | ${telemetryRoutingAdvisories.length} | ${telemetryRoutingFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + periodAttrFails.length + pwSummary.failures, provAdvisories.length + periodAttrAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + periodAttrFails.length + telemetryRoutingFails.length + pwSummary.failures, provAdvisories.length + periodAttrAdvisories.length + telemetryRoutingAdvisories.length)}
 
 ## Provenance findings
 
@@ -235,6 +249,10 @@ ${renderFindings(narrativeFindings)}
 
 ${renderFindings(periodAttrFindings)}
 
+## Telemetry-routing findings (wq-047 §3 #7)
+
+${renderFindings(telemetryRoutingFindings)}
+
 ## Playwright suite
 
 See \`${join('tests', 'reports', 'html', 'index.html')}\` for the full Playwright HTML report.
@@ -272,6 +290,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   currency_format: currencyFormatFindings,
   narrative_hydration: narrativeFindings,
   period_attribution: periodAttrFindings,
+  telemetry_routing: telemetryRoutingFindings,
   playwright: pwSummary,
 }, null, 2));
 
