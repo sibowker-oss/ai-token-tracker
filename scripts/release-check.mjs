@@ -105,12 +105,23 @@ const narrativeStatus = run('node', ['scripts/validate-narrative-hydration.mjs']
   RELEASE_CHECK_NARRATIVE_JSON_OUT: narrativeJson,
 });
 
-// Step 10: Playwright suite
-console.log('\n→ 10/11  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
+// Step 10 (wq-054 §3 #6): period-attribution — assert no provenance entry on
+// an annual field has claim text containing a sub-period qualifier (H1/Q3/
+// exit-snapshot/monthly-peak) without explanation. Catches regression where
+// an extractor or manual edit silently writes a sub-period claim into an
+// annual field path.
+console.log('\n→ 10/12  Period-attribution (wq-054 §3 #6)');
+const periodAttrJson = join(reportDir, 'period-attribution.json');
+const periodAttrStatus = run('node', ['scripts/validate-period-attribution.mjs'], {
+  RELEASE_CHECK_PERIOD_ATTRIBUTION_JSON_OUT: periodAttrJson,
+});
+
+// Step 11: Playwright suite
+console.log('\n→ 11/12  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
 
-// Step 11: editorial (human / subagent — no-op from CLI)
-console.log('\n→ 11/11  Editorial read-through (§11.5)');
+// Step 12: editorial (human / subagent — no-op from CLI)
+console.log('\n→ 12/12  Editorial read-through (§11.5)');
 console.log('  CLI cannot perform editorial review. Run `/release-check` in Claude Code for §11.5.');
 
 // Build report.md
@@ -142,6 +153,10 @@ const currencyFormatFails = currencyFormatFindings.filter(f => f.severity === 'f
 const narrativeFindings = existsSync(narrativeJson) ? JSON.parse(readFileSync(narrativeJson, 'utf8')) : [];
 const narrativeFails = narrativeFindings.filter(f => f.severity === 'fail');
 
+const periodAttrFindings = existsSync(periodAttrJson) ? JSON.parse(readFileSync(periodAttrJson, 'utf8')) : [];
+const periodAttrFails = periodAttrFindings.filter(f => f.severity === 'fail');
+const periodAttrAdvisories = periodAttrFindings.filter(f => f.severity === 'advisory');
+
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
 if (existsSync(pwResultsPath)) {
@@ -172,12 +187,13 @@ const report = `# Release-check report
 | Capital-sankey conservation (wq-074) | ${capitalSankeyFindings.length === 0 ? '✓' : ''} | 0 | ${capitalSankeyFails.length} |
 | Currency-format (wq-076) | ${currencyFormatFindings.length === 0 ? '✓' : ''} | 0 | ${currencyFormatFails.length} |
 | Narrative-hydration (wq-077) | ${narrativeFindings.length === 0 ? '✓' : ''} | 0 | ${narrativeFails.length} |
+| Period-attribution (wq-054) | ${periodAttrFindings.length === 0 ? '✓' : ''} | ${periodAttrAdvisories.length} | ${periodAttrFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pwSummary.failures, provAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + periodAttrFails.length + pwSummary.failures, provAdvisories.length + periodAttrAdvisories.length)}
 
 ## Provenance findings
 
@@ -215,6 +231,10 @@ ${renderFindings(currencyFormatFindings)}
 
 ${renderFindings(narrativeFindings)}
 
+## Period-attribution findings (wq-054 §3 #6)
+
+${renderFindings(periodAttrFindings)}
+
 ## Playwright suite
 
 See \`${join('tests', 'reports', 'html', 'index.html')}\` for the full Playwright HTML report.
@@ -251,6 +271,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   capital_sankey: capitalSankeyFindings,
   currency_format: currencyFormatFindings,
   narrative_hydration: narrativeFindings,
+  period_attribution: periodAttrFindings,
   playwright: pwSummary,
 }, null, 2));
 
