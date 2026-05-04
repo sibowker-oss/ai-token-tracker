@@ -450,3 +450,33 @@
 [2026-05-01 13:52:52]   Registry: 72 sources
 [2026-05-01 13:52:52]   Due for extraction: 0
 [2026-05-01 13:52:52]   Nothing due today
+[2026-05-04 13:44:45] 
+============================================================
+[2026-05-04 13:44:45] 📡 Source Monitor — 2026-05-04
+[2026-05-04 13:44:45]   Registry: 73 sources
+[2026-05-04 13:44:45]   Due for extraction: 1
+[2026-05-04 13:44:45] 
+📄 CAISO — Generator Interconnection Queue (iso_queue)
+[2026-05-04 13:44:45]    Method: iso_queue_caiso, URL: https://www.caiso.com/planning/transmission-onshore/queue-management
+[2026-05-04 13:44:45]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1081)>
+[2026-05-04 13:44:45]    Extracted 0 claim(s)
+[2026-05-04 13:44:45]    ⚠ Fetch failures with 0 claims — next_check unchanged for retry
+[2026-05-04 13:44:45] 
+============================================================
+[2026-05-04 13:44:45] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-04 13:52:26] 
+============================================================
+[2026-05-04 13:52:26] 📡 Source Monitor — 2026-05-04
+[2026-05-04 13:52:26]   Registry: 75 sources
+[2026-05-04 13:52:26]   Due for extraction: 1
+[2026-05-04 13:52:26] 
+📄 World Bank Indicators API (gov_api)
+[2026-05-04 13:52:26]    Method: worldbank_api, URL: https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD
+[2026-05-04 13:52:26]   World Bank fetch failed for WLD: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-04 13:52:26]   World Bank fetch failed for USA: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-04 13:52:26]   World Bank fetch failed for CHN: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-04 13:52:26]    Extracted 0 claim(s)
+[2026-05-04 13:52:26]    ⚠ Fetch failures with 0 claims — next_check unchanged for retry
+[2026-05-04 13:52:26] 
+============================================================
+[2026-05-04 13:52:26] ✅ Done — 1 sources processed, 0 total claims extracted

@@ -753,6 +753,43 @@ def extract_iso_queue_pjm(source):
     return []
 
 
+def extract_iso_queue_caiso(source):
+    """CAISO Generator Interconnection Queue (src-073, wq-081 Phase 1.1 Tier B).
+
+    Closes the Stream 2 west-coast gap noted in `source-collation-phase1-brief.md`
+    §3a item 5. CAISO publishes the Queue Cluster Study queue as XLSX through
+    the public planning portal. Same v1 posture as ERCOT/PJM: save the
+    landing-page snapshot and surface XLSX download URLs. Row-level
+    `power_project` extraction is a follow-up gated on openpyxl.
+
+    Routing: structured `power_project` claims emitted in v2 will route to
+    telemetry-feed.json via _telemetry_router (TELEMETRY_STRUCTURED_TYPES)."""
+    attr_map = _load_attribution_map()
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+
+    xlsx_urls = re.findall(r'https?://[^\s"\']+\.(xlsx|xls)', html or '', re.IGNORECASE)
+    if xlsx_urls:
+        log(f"  Found {len(xlsx_urls)} XLSX/XLS link(s) on CAISO queue page")
+        for u in xlsx_urls[:5]:
+            log(f"    {u[0] if isinstance(u, tuple) else u}")
+
+    try:
+        import openpyxl  # noqa: F401
+    except ImportError:
+        log("  openpyxl not installed — CAISO queue XLSX parse skipped for v1.")
+        return []
+
+    log("  openpyxl present but CAISO XLSX row-parsing not yet implemented; returning [].")
+    return []
+
+
 def extract_eia_api(source):
     """EIA Open Data API (src-062). v1 fetches STEO datacenter-load commentary
     when EIA_API_KEY is set. Output is free-text claims, not power_project —
@@ -802,6 +839,363 @@ def extract_eia_api(source):
             'source_title': source['title'],
             'extracted_at': datetime.now().isoformat(),
         })
+    return claims
+
+
+def extract_fred_api(source):
+    """FRED API — St Louis Fed macro denominators (src-074, wq-081 Phase 1.1).
+
+    Build-as-planned per the 2026-05-04 wq-081 follow-up: FRED_API_KEY is now
+    in repo secrets, so the previous stub-pending-credentials posture is
+    superseded. Adapter fetches a starter macro-denominator basket and emits
+    one free-text claim per latest observation per series. Snapshot saved per
+    data-sourcing-policy §6.4.
+
+    Coverage classification: **denominator coverage** (macro, not entity) —
+    feeds Capital Sankey + macro-denominator panels in the Markets page.
+    Routing: free-text claims flow to vault-inbox (no telemetry detection
+    match) — these are human-reviewable macro updates."""
+    api_key = os.environ.get('FRED_API_KEY')
+    if not api_key:
+        log("  FRED_API_KEY env var not set — fred_api requires the key.")
+        log("  Register free at https://fred.stlouisfed.org/docs/api/api_key.html, then add FRED_API_KEY to repo secrets and re-run.")
+        return []
+    # v1 starter basket — replaces the wb-imf-weo manual copy line per brief §3a item 3.
+    series = [
+        ('GDP', 'US Nominal GDP', 'USD billions (SA, annualised)'),
+        ('GDPC1', 'US Real GDP (chained 2017 USD)', 'USD billions (SA, annualised)'),
+        ('CPIAUCSL', 'US CPI — All Urban Consumers, all items, SA', 'index 1982-84=100'),
+    ]
+    claims = []
+    for sid, label, unit in series:
+        endpoint = (f'https://api.stlouisfed.org/fred/series/observations'
+                    f'?series_id={sid}&api_key={api_key}&file_type=json'
+                    f'&sort_order=desc&limit=4')
+        try:
+            req = Request(endpoint, headers={'User-Agent': 'TheAILedger-wq081/0.1'})
+            with urlopen(req, timeout=30) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{sid}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {sid}: {e}")
+            parsed = json.loads(payload)
+        except Exception as e:
+            log(f"  FRED fetch failed for {sid}: {e}")
+            continue
+        observations = parsed.get('observations') or []
+        latest = next((o for o in observations if o.get('value') not in (None, '.', '')), None)
+        if not latest:
+            log(f"  {sid}: no non-null observation in latest 4 entries")
+            continue
+        try:
+            val = float(latest['value'])
+        except (TypeError, ValueError):
+            log(f"  {sid}: non-numeric value {latest.get('value')!r}; skipping")
+            continue
+        claims.append({
+            'claim': f"FRED {sid} ({label}) latest: {val:,.2f} {unit} as of {latest.get('date')}.",
+            'category': 'macro_denominator',
+            'entity': 'United States',
+            'metric': sid,
+            'value': val,
+            'unit': unit,
+            'value_display': f"{val:,.2f}",
+            'time_period': latest.get('date'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],
+            'source_url': endpoint.replace(api_key, 'REDACTED'),
+            'source_title': f"FRED — {sid} {latest.get('date')}",
+            'extracted_at': datetime.now().isoformat(),
+        })
+        log(f"  {sid} ({label}): {latest.get('date')} = {val:,.2f}")
+    return claims
+
+
+def extract_worldbank_api(source):
+    """World Bank Indicators API — global macro denominators (src-075, wq-081).
+
+    Public REST, no auth. v1 pulls a single canonical indicator (NY.GDP.MKTP.CD —
+    nominal GDP, current US$) for a small country basket to validate the
+    plumbing end-to-end. Snapshot saved per data-sourcing-policy §6.4.
+
+    Coverage classification: **denominator coverage** (macro, not entity)."""
+    indicator = 'NY.GDP.MKTP.CD'
+    countries = ['WLD', 'USA', 'CHN']
+    claims = []
+    for iso in countries:
+        endpoint = f'https://api.worldbank.org/v2/country/{iso}/indicator/{indicator}?format=json&per_page=5'
+        try:
+            req = Request(endpoint, headers={'User-Agent': 'Mozilla/5.0'})
+            with urlopen(req, timeout=30) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{iso}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {iso}: {e}")
+            parsed = json.loads(payload)
+        except Exception as e:
+            log(f"  World Bank fetch failed for {iso}: {e}")
+            continue
+        if not isinstance(parsed, list) or len(parsed) < 2:
+            continue
+        rows = parsed[1] or []
+        latest = next((r for r in rows if r.get('value') is not None), None)
+        if not latest:
+            log(f"  {iso}: no non-null observation in latest 5 years")
+            continue
+        claims.append({
+            'claim': f"World Bank: {iso} nominal GDP {latest.get('value'):.0f} USD for {latest.get('date')}.",
+            'category': 'macro_denominator',
+            'entity': iso,
+            'metric': indicator,
+            'value': latest.get('value'),
+            'unit': 'USD',
+            'value_display': f"${latest.get('value'):,.0f}",
+            'time_period': latest.get('date'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],
+            'source_url': endpoint,
+            'source_title': f"World Bank — {iso} {indicator} ({latest.get('date')})",
+            'extracted_at': datetime.now().isoformat(),
+        })
+        log(f"  {iso}: {indicator} {latest.get('date')} = {latest.get('value'):,.0f}")
+    return claims
+
+
+def extract_abs_api(source):
+    """ABS SDMX-JSON API — Australian Bureau of Statistics (src-076, wq-081).
+
+    Public REST, no auth. v1 pulls quarterly nominal GDP from the National
+    Accounts dataflow (ABS_GDPE_H) as a smoke-test. Output: free-text claim per
+    observation, routes to vault-inbox.
+
+    Coverage classification: **denominator coverage** (AU macro, HA differentiator)."""
+    endpoint = ('https://data.api.abs.gov.au/rest/data/ABS,GDPE_H,1.0.0/all'
+                '?startPeriod=2024-Q1&format=jsondata&detail=dataonly&dimensionAtObservation=AllDimensions')
+    try:
+        req = Request(endpoint, headers={'User-Agent': 'Mozilla/5.0', 'Accept': 'application/vnd.sdmx.data+json;version=1.0.0'})
+        with urlopen(req, timeout=30) as resp:
+            payload = resp.read().decode('utf-8', errors='replace')
+        try:
+            save_snapshot(source, payload, ext='json')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+        parsed = json.loads(payload)
+    except Exception as e:
+        log(f"  ABS API fetch failed: {e}")
+        return []
+
+    obs = parsed.get('data', {}).get('dataSets', [{}])[0].get('observations', {})
+    if not obs:
+        log("  ABS SDMX returned no observations for ABS_GDPE_H")
+        return []
+    sample_key = next(iter(obs.keys()))
+    sample_val = obs[sample_key][0] if obs[sample_key] else None
+    log(f"  ABS GDPE: {len(obs)} observations fetched; first={sample_val}")
+    return [{
+        'claim': f"ABS National Accounts (GDPE_H) returned {len(obs)} observations from 2024-Q1 onward; sample value {sample_val}.",
+        'category': 'macro_denominator',
+        'entity': 'Australia',
+        'metric': 'ABS_GDPE_H',
+        'value': sample_val,
+        'unit': 'AUD millions (current prices, SA)',
+        'value_display': f"{sample_val}" if sample_val is not None else 'n/a',
+        'time_period': 'multi-quarter',
+        'confidence': 'high',
+        'weight': 'authoritative',
+        'source_type': source['type'],
+        'source_url': endpoint,
+        'source_title': source['title'],
+        'extracted_at': datetime.now().isoformat(),
+    }]
+
+
+def extract_rba_api(source):
+    """RBA — Reserve Bank of Australia statistical tables (src-077, wq-081).
+
+    RBA publishes statistical tables as CSV/XLSX under stable URLs. v1 fetches
+    Table A1 (Liabilities and Assets — Reserve Bank) as a smoke-test, saves
+    snapshot, emits a single summary claim.
+
+    Coverage classification: **denominator coverage** (AU monetary aggregates,
+    HA differentiator)."""
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+    csv_urls = re.findall(r'https?://[^\s"\']+\.(csv|xlsx?)', html or '', re.IGNORECASE)
+    if csv_urls:
+        log(f"  Found {len(csv_urls)} CSV/XLSX link(s) on RBA stats page")
+        for u in csv_urls[:5]:
+            log(f"    {u[0] if isinstance(u, tuple) else u}")
+    log("  RBA row-level CSV/XLSX parse is v2 work; v1 returns [].")
+    return []
+
+
+def extract_aemo_nem(source):
+    """AEMO NEM Data Dashboard — Australian National Electricity Market
+    (src-078, wq-081).
+
+    AEMO publishes NEM dispatch + interconnector data as CSV through its NEMWeb
+    portal. v1 captures the landing-page snapshot and surfaces CSV download
+    URLs. Row-level demand/dispatch parse is v2 work, mirroring the ISO queue
+    adapters' v1 posture.
+
+    Coverage classification: **denominator coverage** (AU grid + DC build-out
+    HA differentiator). Routing: structured `power_project` claims (v2) →
+    telemetry-feed.json."""
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+    csv_urls = re.findall(r'https?://[^\s"\']+\.csv', html or '', re.IGNORECASE)
+    if csv_urls:
+        log(f"  Found {len(csv_urls)} CSV link(s) on AEMO NEM dashboard")
+        for u in csv_urls[:5]:
+            log(f"    {u}")
+    log("  AEMO row-level CSV parse is v2 work; v1 returns [].")
+    return []
+
+
+def extract_github_api(source):
+    """GitHub REST/GraphQL API — repo-level telemetry (src-079, wq-081 Tier C).
+
+    STRICTLY TELEMETRY-ONLY per stop-gate A: emits download/star/fork/release
+    counts that route to telemetry-feed.json via _telemetry_router
+    (TELEMETRY_SOURCE_TYPES contains 'github_repo'). Lab release announcements
+    are picked up via Week 2 newsroom RSS sources, not here, to avoid dedup
+    overhead.
+
+    v1 fetches the repos endpoint for a starter set of frontier-lab orgs and
+    emits a `github_stars` telemetry record per repo. GITHUB_TOKEN env var
+    optional — without it the rate limit is 60 req/hr (still enough for v1's
+    starter set of ~6 repos)."""
+    repos = [
+        'anthropics/anthropic-sdk-python',
+        'openai/openai-python',
+        'meta-llama/llama-models',
+        'mistralai/mistral-inference',
+        'deepseek-ai/DeepSeek-V3',
+        'huggingface/transformers',
+    ]
+    token = os.environ.get('GITHUB_TOKEN')
+    headers = {'Accept': 'application/vnd.github+json', 'User-Agent': 'TheAILedger-wq081/0.1'}
+    if token:
+        headers['Authorization'] = f'Bearer {token}'
+    claims = []
+    for repo in repos:
+        endpoint = f'https://api.github.com/repos/{repo}'
+        try:
+            req = Request(endpoint, headers=headers)
+            with urlopen(req, timeout=15) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{repo.replace('/', '__')}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {repo}: {e}")
+            data = json.loads(payload)
+        except Exception as e:
+            log(f"  GitHub fetch failed for {repo}: {e}")
+            continue
+        claims.append({
+            'claim': f"GitHub {repo}: {data.get('stargazers_count')} stars, {data.get('forks_count')} forks (telemetry).",
+            'category': 'oss_telemetry',
+            'entity': repo.split('/')[0],
+            'metric': 'github_stars',
+            'metric_key': 'github_stars',
+            'value': data.get('stargazers_count'),
+            'unit': 'stars',
+            'value_display': f"{data.get('stargazers_count'):,} stars" if data.get('stargazers_count') is not None else 'n/a',
+            'time_period': datetime.now().strftime('%Y-%m-%d'),
+            'confidence': 'high',
+            'weight': 'authoritative',
+            'source_type': source['type'],   # 'github_repo' triggers telemetry routing
+            'source_url': endpoint,
+            'source_title': f"GitHub — {repo}",
+            'extracted_at': datetime.now().isoformat(),
+            'structured_payload': {
+                'repo': repo,
+                'stars': data.get('stargazers_count'),
+                'forks': data.get('forks_count'),
+                'open_issues': data.get('open_issues_count'),
+                'pushed_at': data.get('pushed_at'),
+                'subscribers': data.get('subscribers_count'),
+            },
+        })
+        log(f"  {repo}: ★{data.get('stargazers_count')} forks={data.get('forks_count')}")
+    return claims
+
+
+def extract_huggingface_api(source):
+    """Hugging Face Hub API — model-registry telemetry (src-080, wq-081 Tier C).
+
+    STRICTLY TELEMETRY-ONLY per stop-gate A: emits download counts and likes
+    per model, routed to telemetry-feed.json via _telemetry_router (source_type
+    'package_index' matches TELEMETRY_SOURCE_TYPES). New-model release
+    announcements are picked up via Week 2 lab newsroom RSS.
+
+    v1 fetches the public /api/models endpoint for a starter set of
+    frontier-lab orgs (Anthropic, Meta-Llama, DeepSeek, Mistral, Google,
+    OpenAI). No auth required for read access."""
+    orgs = ['meta-llama', 'mistralai', 'deepseek-ai', 'google', 'openai-community', 'Anthropic']
+    claims = []
+    for org in orgs:
+        endpoint = f'https://huggingface.co/api/models?author={org}&limit=10&sort=downloads&direction=-1'
+        try:
+            req = Request(endpoint, headers={'User-Agent': 'TheAILedger-wq081/0.1', 'Accept': 'application/json'})
+            with urlopen(req, timeout=15) as resp:
+                payload = resp.read().decode('utf-8', errors='replace')
+            try:
+                save_snapshot({**source, 'id': f"{source['id']}-{org}"}, payload, ext='json')
+            except Exception as e:
+                log(f"  Snapshot failed for {org}: {e}")
+            models = json.loads(payload)
+        except Exception as e:
+            log(f"  HF Hub fetch failed for {org}: {e}")
+            continue
+        if not isinstance(models, list):
+            continue
+        for m in models[:5]:   # top-5 by downloads per org for v1
+            mid = m.get('modelId') or m.get('id')
+            dl = m.get('downloads', 0)
+            likes = m.get('likes', 0)
+            claims.append({
+                'claim': f"HF Hub {mid}: {dl:,} downloads, {likes} likes (telemetry).",
+                'category': 'oss_telemetry',
+                'entity': org,
+                'metric': 'hf_downloads',
+                'metric_key': 'hf_downloads',
+                'value': dl,
+                'unit': 'downloads',
+                'value_display': f"{dl:,} downloads",
+                'time_period': datetime.now().strftime('%Y-%m-%d'),
+                'confidence': 'high',
+                'weight': 'authoritative',
+                'source_type': source['type'],   # 'package_index' triggers telemetry routing
+                'source_url': endpoint,
+                'source_title': f"HF Hub — {mid}",
+                'extracted_at': datetime.now().isoformat(),
+                'structured_payload': {
+                    'model_id': mid,
+                    'org': org,
+                    'downloads': dl,
+                    'likes': likes,
+                    'last_modified': m.get('lastModified'),
+                    'pipeline_tag': m.get('pipeline_tag'),
+                },
+            })
+        log(f"  {org}: top-{min(5, len(models))} models cached")
     return claims
 
 
@@ -1249,7 +1643,15 @@ NON_WEB_METHODS = {
     'sec_edgar_scan',
     'iso_queue_ercot',
     'iso_queue_pjm',
+    'iso_queue_caiso',
     'eia_api',
+    'fred_api',
+    'worldbank_api',
+    'abs_api',
+    'rba_api',
+    'aemo_nem',
+    'github_api',
+    'huggingface_api',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1274,7 +1676,15 @@ ADAPTERS = {
     # Stream 2 (wq-012) power adapters:
     'iso_queue_ercot': extract_iso_queue_ercot,
     'iso_queue_pjm': extract_iso_queue_pjm,
+    'iso_queue_caiso': extract_iso_queue_caiso,
     'eia_api': extract_eia_api,
+    'fred_api': extract_fred_api,
+    'worldbank_api': extract_worldbank_api,
+    'abs_api': extract_abs_api,
+    'rba_api': extract_rba_api,
+    'aemo_nem': extract_aemo_nem,
+    'github_api': extract_github_api,
+    'huggingface_api': extract_huggingface_api,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:
@@ -1292,7 +1702,8 @@ ADAPTERS = {
     'rss_feed': extract_web_page,      # fetch latest item
     'youtube_captions': lambda s: [],  # scrape_podcasts.py handles this
     'thread_extract': extract_web_page,
-    'github_api': lambda s: [],        # enrich.py handles this
+    # 'github_api' was a no-op lambda routing to enrich.py; replaced by the
+    # real extract_github_api adapter under wq-081 Phase 1.1 (src-079).
     'sec_extract': extract_web_page,   # legacy single-ticker path; sec_edgar_scan is the multi-ticker replacement
     'api_fetch': lambda s: [],         # scrape_signals.py handles this
 }

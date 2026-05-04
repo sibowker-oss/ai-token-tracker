@@ -484,7 +484,8 @@
         "sec",
         "financials",
         "official",
-        "multi-ticker"
+        "multi-ticker",
+        "wq-081"
       ],
       "extraction_method": "sec_edgar_scan",
       "frequency": "quarterly",
@@ -492,7 +493,10 @@
       "last_checked": "2026-04-23",
       "last_claims_count": 16,
       "status": "active",
-      "notes": "Scans tickers listed in data/edgar-tickers.json (seed 15 AI-relevant). Per wq-015 \u00a72.2 \u2014 broadened from OpenAI-only."
+      "notes": "Scans tickers listed in data/edgar-tickers.json. Per wq-015 \u00a72.2 \u2014 broadened from OpenAI-only. Per wq-081 (2026-05-04) \u2014 seed expanded 16 \u2192 38 (hyperscalers/semis/DC-power/compute-pureplays/SaaS). Five foreign ADRs proposed in brief (TCEHY, SKHYY, SSNLF, SBGSY, SMNEY) deferred per data/edgar-tickers-deferred.md \u2014 not SEC filers. Routing: telemetry-feed (sec_filing source type).",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "telemetry-feed"
     },
     {
       "id": "src-026",
@@ -1260,7 +1264,7 @@
       "last_checked": "2026-05-04",
       "last_claims_count": 0,
       "status": "active",
-      "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time."
+      "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time. Audit 2026-05-04 (wq-081): no snapshots ever created since wq-012 registration; EIA_API_KEY now in repo secrets \u2014 verify on next cron."
     },
     {
       "id": "src-063",
@@ -1374,8 +1378,8 @@
       "next_check": "2026-05-23",
       "last_checked": "2026-04-23",
       "last_claims_count": 0,
-      "status": "active",
-      "notes": "Free up to 250 req/week per wq-013 \u00a73.1. Requires OAuth registration at EPO OPS. Env gate: EPO_OPS_CLIENT_ID / EPO_OPS_CLIENT_SECRET."
+      "status": "pending_credentials",
+      "notes": "STUBBED pending EPO_OPS_KEY \u2014 discovered 2026-05-04 during wq-081: src-067 was set status=active in wq-013 but EPO_OPS_CLIENT_ID / EPO_OPS_CLIENT_SECRET were never added to repo secrets, so the daily cron has been silently env-gating to []. Flipping to pending_credentials per src-066 google_patents_bq stub pattern. Activate after EPO_OPS_KEY (Simon: pending ~this week). Original wq-013 \u00a73.1 routing/cadence preserved: free up to 250 req/week, OAuth registration at https://developers.epo.org/."
     },
     {
       "id": "src-068",
@@ -1489,6 +1493,220 @@
       "last_claims_count": 0,
       "status": "error",
       "notes": "Public widget JSON per-account. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
+    },
+    {
+      "id": "src-073",
+      "url": "https://www.caiso.com/planning/transmission-onshore/queue-management",
+      "title": "CAISO \u2014 Generator Interconnection Queue",
+      "type": "iso_queue",
+      "author": "",
+      "organization": "California Independent System Operator",
+      "added": "2026-05-04",
+      "tags": [
+        "power",
+        "iso-queue",
+        "datacenter",
+        "us",
+        "west-coast",
+        "primary",
+        "wq-081"
+      ],
+      "extraction_method": "iso_queue_caiso",
+      "frequency": "monthly",
+      "next_check": "2026-05-04",
+      "last_checked": "2026-05-04",
+      "last_claims_count": 0,
+      "status": "error",
+      "tier": 2,
+      "phase": "1.1",
+      "routing": "telemetry-feed",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 closes Stream 2 west-coast gap per source-collation-phase1-brief.md \u00a73a item 5. Clones iso_queue_ercot/pjm v1 posture: snapshot landing HTML, surface XLSX download links, defer row-parse to v2 (gated on openpyxl). Power-side denominator coverage \u2014 not entity coverage. Routing decision: structured power_project claims (when v2 lands) \u2192 telemetry-feed.json per _telemetry_router.TELEMETRY_STRUCTURED_TYPES."
+    },
+    {
+      "id": "src-074",
+      "url": "https://api.stlouisfed.org/fred/series/observations",
+      "title": "FRED API \u2014 St Louis Fed macro denominators",
+      "type": "gov_api",
+      "author": "",
+      "organization": "Federal Reserve Bank of St Louis",
+      "added": "2026-05-04",
+      "tags": [
+        "macro",
+        "denominators",
+        "us",
+        "primary",
+        "api",
+        "wq-081"
+      ],
+      "extraction_method": "fred_api",
+      "frequency": "daily",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "vault-inbox",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 FRED_API_KEY now in repo secrets (added 2026-05-04). Adapter is real (not stub) and fetches a 3-series macro denominator basket: GDP, GDPC1, CPIAUCSL. Status will flip to active on first successful cron extraction. Coverage classification: **denominator coverage** (US macro) \u2014 NOT entity coverage. Replaces wb-imf-weo manual copy per brief \u00a73a item 3."
+    },
+    {
+      "id": "src-075",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD",
+      "title": "World Bank Indicators API",
+      "type": "gov_api",
+      "author": "",
+      "organization": "World Bank",
+      "added": "2026-05-04",
+      "tags": [
+        "macro",
+        "denominators",
+        "global",
+        "primary",
+        "api",
+        "wq-081"
+      ],
+      "extraction_method": "worldbank_api",
+      "frequency": "quarterly",
+      "next_check": "2026-05-04",
+      "last_checked": "2026-05-04",
+      "last_claims_count": 0,
+      "status": "error",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "vault-inbox",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 public REST, no auth. v1 fetches NY.GDP.MKTP.CD (nominal GDP) for {WLD, USA, CHN} as a smoke test; v2 expands to per-country basket + indicator set. Coverage classification: **denominator coverage** (global macro) \u2014 NOT entity coverage. Replaces wb-national-accounts manual copy per brief \u00a73a item 4."
+    },
+    {
+      "id": "src-076",
+      "url": "https://data.api.abs.gov.au/rest/data/ABS,GDPE_H,1.0.0/all",
+      "title": "ABS \u2014 Australian Bureau of Statistics SDMX API",
+      "type": "gov_api",
+      "author": "",
+      "organization": "Australian Bureau of Statistics",
+      "added": "2026-05-04",
+      "tags": [
+        "macro",
+        "denominators",
+        "au",
+        "primary",
+        "sdmx",
+        "ha-differentiator",
+        "wq-081"
+      ],
+      "extraction_method": "abs_api",
+      "frequency": "quarterly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "vault-inbox",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 SDMX-JSON, public, no auth. v1 fetches ABS_GDPE_H (National Accounts expenditure) from 2024-Q1; v2 expands to series catalogue. Coverage classification: **denominator coverage** (AU macro, HA differentiator) \u2014 NOT entity coverage. Split from RBA per stop-gate D \u2014 operationally separate (SDMX vs CSV)."
+    },
+    {
+      "id": "src-077",
+      "url": "https://www.rba.gov.au/statistics/tables/",
+      "title": "RBA \u2014 Reserve Bank of Australia Statistical Tables",
+      "type": "gov_api",
+      "author": "",
+      "organization": "Reserve Bank of Australia",
+      "added": "2026-05-04",
+      "tags": [
+        "macro",
+        "denominators",
+        "au",
+        "primary",
+        "ha-differentiator",
+        "wq-081"
+      ],
+      "extraction_method": "rba_api",
+      "frequency": "monthly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "vault-inbox",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 CSV/XLSX statistical tables, public, no auth. v1 captures landing page snapshot + surfaces CSV download URLs (Table A1 baseline); v2 row-parse follow-up. Coverage classification: **denominator coverage** (AU monetary aggregates, HA differentiator) \u2014 NOT entity coverage. Split from ABS per stop-gate D."
+    },
+    {
+      "id": "src-078",
+      "url": "https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/data-nem",
+      "title": "AEMO NEM Data Dashboard",
+      "type": "iso_queue",
+      "author": "",
+      "organization": "Australian Energy Market Operator",
+      "added": "2026-05-04",
+      "tags": [
+        "power",
+        "iso-queue",
+        "au",
+        "primary",
+        "ha-differentiator",
+        "wq-081"
+      ],
+      "extraction_method": "aemo_nem",
+      "frequency": "daily",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "telemetry-feed",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 public CSV, no auth. v1 captures landing page snapshot + surfaces CSV download URLs; v2 row-parse follow-up. Coverage classification: **denominator coverage** (AU grid + DC build-out, HA differentiator) \u2014 NOT entity coverage. Routing: structured power_project claims (v2) \u2192 telemetry-feed.json per _telemetry_router.TELEMETRY_STRUCTURED_TYPES."
+    },
+    {
+      "id": "src-079",
+      "url": "https://api.github.com/repos",
+      "title": "GitHub REST API \u2014 repo telemetry",
+      "type": "github_repo",
+      "author": "",
+      "organization": "GitHub",
+      "added": "2026-05-04",
+      "tags": [
+        "telemetry",
+        "oss",
+        "model-frontier",
+        "wq-081"
+      ],
+      "extraction_method": "github_api",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "telemetry-feed",
+      "notes": "wq-081 Phase 1.1 Tier C \u2014 STRICTLY TELEMETRY-ONLY per stop-gate A. Source type 'github_repo' is in _telemetry_router.TELEMETRY_SOURCE_TYPES, so all emitted records auto-route to telemetry-feed.json (NOT vault-inbox). v1 fetches stargazers/forks for 6 frontier-lab repos; v2 expands repo list + adds release-tag tracking. Lab release announcements are picked up via Week 2 newsroom RSS, NOT here, to avoid dedup overhead. GITHUB_TOKEN env var optional (raises rate limit 60\u21925000 req/hr); v1's 6-repo list works without it."
+    },
+    {
+      "id": "src-080",
+      "url": "https://huggingface.co/api/models",
+      "title": "Hugging Face Hub API \u2014 model registry telemetry",
+      "type": "package_index",
+      "author": "",
+      "organization": "Hugging Face",
+      "added": "2026-05-04",
+      "tags": [
+        "telemetry",
+        "oss",
+        "model-frontier",
+        "wq-081"
+      ],
+      "extraction_method": "huggingface_api",
+      "frequency": "weekly",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "telemetry-feed",
+      "notes": "wq-081 Phase 1.1 Tier C \u2014 STRICTLY TELEMETRY-ONLY per stop-gate A. Source type 'package_index' is in _telemetry_router.TELEMETRY_SOURCE_TYPES, so all emitted records auto-route to telemetry-feed.json (NOT vault-inbox). v1 fetches top-5 models by downloads for 6 frontier-lab orgs (meta-llama, mistralai, deepseek-ai, google, openai-community, Anthropic). Public read endpoint, no auth. New-model release announcements are picked up via Week 2 newsroom RSS / lab newsrooms, NOT here."
     }
   ]
 }
