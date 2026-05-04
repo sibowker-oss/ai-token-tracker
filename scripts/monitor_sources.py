@@ -221,8 +221,21 @@ For each data point, return a JSON object with:
 - "unit": USD, CNY, tokens, percent, etc
 - "value_display": human-readable (e.g. "¥10B" or "$1.4B")
 - "time_period": when this applies
+- "time_period_scope": annual | h1 | h2 | q1 | q2 | q3 | q4 | exit_snapshot | monthly_peak | point_in_time (see scope rules below)
+- "period_qualifier_detected": short string quoting the qualifier (e.g. "H1 2025", "best 4-week × 12"), or null when scope is "annual"
 - "confidence": high | medium | low
 - "weight": authoritative | corroborating | indicative
+
+Scope rules (wq-054):
+- "H1 2025" / "first half" / "上半年" → h1
+- "H2 2025" / "second half" / "下半年" → h2
+- "Q3 2024" / "第三季度" → q3 (same shape for q1/q2/q4)
+- "as of December" / "year-end" / "best 4-week × 12" / "exit ARR" → exit_snapshot
+- "$X per month" / "monthly peak" / "single month" → monthly_peak
+- "current" / "as of today" / "now" → point_in_time
+- otherwise (no qualifier OR explicit "full year" / "FY") → annual
+
+CRITICAL: a sub-period claim ("H1 2025 revenue $4.3B") must NOT be tagged annual — downstream routing depends on this.
 
 Return a JSON array. Return [] if no relevant data points found.
 Return ONLY the JSON array."""
@@ -244,8 +257,21 @@ For each data point, return a JSON object with:
 - "unit": USD, tokens, percent, etc
 - "value_display": human-readable (e.g. "$14B")
 - "time_period": when this applies
+- "time_period_scope": annual | h1 | h2 | q1 | q2 | q3 | q4 | exit_snapshot | monthly_peak | point_in_time (see scope rules below)
+- "period_qualifier_detected": short string quoting the qualifier (e.g. "H1 2025", "best 4-week × 12"), or null when scope is "annual"
 - "confidence": high | medium | low
 - "weight": authoritative | corroborating | indicative
+
+Scope rules (wq-054):
+- "H1 2025" / "first half" / "January through June" → h1
+- "H2 2025" / "second half" / "July through December" → h2
+- "Q3 2024" / "third quarter" / "Jul-Sep" → q3 (same shape for q1/q2/q4)
+- "as of December" / "year-end" / "best 4-week × 12" / "exit ARR" → exit_snapshot
+- "$X per month" / "monthly peak" / "Feb 2026 hit $6B" / "single month" → monthly_peak
+- "current" / "as of today" / "now" / "this week" → point_in_time
+- otherwise (no qualifier OR explicit "full year" / "FY") → annual
+
+CRITICAL: a sub-period claim ("H1 2025 revenue $4.3B") must NOT be tagged annual — downstream routing depends on this.
 
 Return a JSON array. Return [] if no relevant data points found.
 Return ONLY the JSON array."""
@@ -1309,6 +1335,10 @@ def _freetext_claim_to_vault(claim, source, claim_id, today):
         'sourceExcerpt': claim.get('source_excerpt') or claim.get('source_excerpt_original'),
         'isPrimarySource': claim.get('is_primary_source'),
         'originalSourceCited': claim.get('original_source_cited'),
+        # wq-054 — sub-period attribution. Default to annual when extractor
+        # didn't set the scope; apply_decisions.py routes per scope.
+        'timePeriodScope': claim.get('time_period_scope') or 'annual',
+        'periodQualifier': claim.get('period_qualifier_detected'),
     }
 
 
@@ -1374,6 +1404,11 @@ def _structured_claim_to_vault(claim, source, claim_id, today):
         # Preserve the typed payload verbatim for renderers that support it
         'type': t,
         'structured_payload': claim,
+        # wq-054 — structured scrapes are always point-in-time snapshots
+        # (hiring counts as of today, patent total trailing-12m, etc.).
+        # Override here to keep the audit validator happy.
+        'timePeriodScope': 'point_in_time',
+        'periodQualifier': claim.get('window'),
     }
 
 

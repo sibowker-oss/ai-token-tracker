@@ -157,6 +157,102 @@ def match_year(text):
     matches = re.findall(r'\b(20[2-3]\d)\b', text)
     return matches[-1] if matches else None
 
+
+# wq-054 — sub-period attribution. Extractors emit time_period_scope on every
+# claim; we use it to decide which sub-field to write to instead of the annual
+# default. Schema documented in metric-schema.json:field_patterns.
+SUB_PERIOD_SCOPES = {"h1", "h2", "q1", "q2", "q3", "q4"}
+EXIT_SCOPES = {"exit_snapshot"}
+PEAK_SCOPES = {"monthly_peak"}
+POINT_IN_TIME_SCOPES = {"point_in_time"}
+ANNUAL_SCOPES = {"annual", "", None}
+
+# Heuristic fallback when extractor didn't tag scope but the claim text
+# contains an obvious period qualifier. Conservative — only fires for clear
+# cases. Used in legacy claims via audit_period_attribution.py.
+_PERIOD_QUALIFIER_PATTERNS = {
+    "h1": [r"\bH1\b", r"first\s+half", r"jan(?:uary)?\s*[-–to]+\s*jun", r"上半年"],
+    "h2": [r"\bH2\b", r"second\s+half", r"jul(?:y)?\s*[-–to]+\s*dec", r"下半年"],
+    "q1": [r"\bQ1\b", r"first\s+quarter", r"jan-?mar"],
+    "q2": [r"\bQ2\b", r"second\s+quarter", r"apr-?jun"],
+    "q3": [r"\bQ3\b", r"third\s+quarter", r"jul-?sep"],
+    "q4": [r"\bQ4\b", r"fourth\s+quarter", r"oct-?dec"],
+    "exit_snapshot": [
+        r"exit\s+arr", r"year[\-\s]?end\s+(?:run[\-\s]?rate|arr)",
+        r"as\s+of\s+(?:dec|december)", r"best[\-\s]?(?:4|four)[\-\s]?week",
+        r"december\s+annualis(?:ed|zed)",
+    ],
+    "monthly_peak": [
+        r"monthly\s+peak", r"per\s+month\b", r"single\s+month\s+(?:peak|run[\-\s]?rate)",
+        r"\$\d+(?:\.\d+)?[MB]?\s*\/\s*month",
+    ],
+    "point_in_time": [r"\bcurrent\b", r"as\s+of\s+today", r"as\s+of\s+now", r"this\s+week"],
+}
+
+_QUALIFIER_REGEXES = {
+    scope: re.compile("|".join(patterns), re.IGNORECASE)
+    for scope, patterns in _PERIOD_QUALIFIER_PATTERNS.items()
+}
+
+
+def detect_period_scope(text):
+    """Best-effort scope detection from raw claim text.
+
+    Returns (scope, qualifier_substring). Used as a fallback when an extractor
+    didn't set time_period_scope, and by the audit backfill (wq-054 §4.4) to
+    flag legacy claims that were silently routed to annual fields.
+
+    Order of precedence: exit_snapshot / monthly_peak / quarterly / half-year
+    / point_in_time. Matches more-specific qualifiers first.
+    """
+    if not text:
+        return None, None
+    # Order matters — match more specific scopes before generic ones
+    for scope in ("exit_snapshot", "monthly_peak", "q1", "q2", "q3", "q4", "h1", "h2", "point_in_time"):
+        m = _QUALIFIER_REGEXES[scope].search(text)
+        if m:
+            return scope, m.group(0)
+    return None, None
+
+
+def resolve_field_path(entity_slug, year, field_id, scope):
+    """Pick the right entity-record path for a value, given the scope.
+
+    Returns the dotted path components (financial_year_key, field_key) suitable
+    for writing to entity['financials'][financial_year_key][field_key], OR
+    ('current', field_key) for point-in-time scopes.
+
+    Returns (None, None) when scope is unknown — caller should refuse routing.
+
+    Examples (wq-054 §4.3):
+      ('annual',        2025, 'collected_revenue') → ('2025', 'collected_revenue')
+      ('h1',            2025, 'collected_revenue') → ('2025_h1', 'collected_revenue')
+      ('q3',            2025, 'arr')               → ('2025_q3', 'arr')
+      ('exit_snapshot', 2024, 'arr')               → ('2024', 'exit_arr')
+      ('monthly_peak',  2026, 'arr')               → ('2026', 'monthly_peak_arr')
+      ('point_in_time', None, 'employees')         → ('current', 'employees')
+    """
+    s = (scope or "").lower()
+    if s in ANNUAL_SCOPES:
+        if year:
+            return str(year), field_id
+        return "current", field_id
+    if s in SUB_PERIOD_SCOPES:
+        if not year:
+            return None, None  # sub-period without a year is unroutable
+        return f"{year}_{s}", field_id
+    if s in EXIT_SCOPES:
+        if not year:
+            return None, None
+        return str(year), f"exit_{field_id}"
+    if s in PEAK_SCOPES:
+        if not year:
+            return None, None
+        return str(year), f"monthly_peak_{field_id}"
+    if s in POINT_IN_TIME_SCOPES:
+        return "current", field_id
+    return None, None  # unknown scope — refuse
+
 def infer_weight(claim):
     st = (claim.get("sourceType") or "").lower()
     if st in ("sworn-affidavit", "official", "leaked-internal"):
@@ -278,13 +374,30 @@ def apply_accepted(claim, vault_data, entities, schema):
     year = match_year(search_text) or match_year(claim.get("dateOfClaim", ""))
 
     if entity_slug and field_id and claim.get("value") is not None:
-        # Annualise monthly/quarterly values before storing
+        # wq-054 — pick scope from extractor; fall back to text heuristic, then
+        # to "annual" so legacy callers without scope still route somewhere.
+        scope = (claim.get("timePeriodScope") or claim.get("time_period_scope") or "").lower()
+        period_qualifier = claim.get("periodQualifier") or claim.get("period_qualifier_detected")
+        if not scope:
+            inferred_scope, inferred_qual = detect_period_scope(
+                (claim.get("claim") or "") + " " + (claim.get("notes") or "")
+            )
+            if inferred_scope:
+                scope = inferred_scope
+                period_qualifier = period_qualifier or inferred_qual
+                log(f"  PERIOD: inferred scope={scope} from text qualifier '{inferred_qual}' (extractor didn't tag)")
+            else:
+                scope = "annual"
+
+        # Annualise monthly/quarterly values before storing — but ONLY when the
+        # claim is meant to represent an annual figure. Sub-period claims keep
+        # their raw value (H1 stays half-year, monthly_peak stays one month).
         value = claim["value"]
         unit = (claim.get("unit") or "").lower()
         claim_text = (claim.get("claim") or "").lower()
 
         annualised = False
-        if isinstance(value, (int, float)):
+        if scope == "annual" and isinstance(value, (int, float)):
             if "/month" in unit or "per month" in unit or "per month" in claim_text or "/month" in claim_text:
                 value = value * 12
                 annualised = True
@@ -302,31 +415,43 @@ def apply_accepted(claim, vault_data, entities, schema):
                 break
 
         if entity:
+            # wq-054 — resolve final field path per scope. If unroutable
+            # (sub-period claim with no year), refuse and log so audit can
+            # surface it instead of silently dropping.
+            year_key, field_key = resolve_field_path(entity_slug, year, field_id, scope)
+            if year_key is None:
+                log(f"  REFUSE: {entity['name']} → cannot route scope={scope} field={field_id} (year missing or scope unknown). Vault entry kept but entity not updated.")
+                # Vault entry was already added above — return that id; entity record stays unchanged.
+                return dp_id
+            prov_key = f"{year_key}.{field_key}" if year_key != "current" else f"current.{field_key}"
+
             # 3. Update entity financials — with provenance guard
             new_weight = infer_weight(claim)
-            prov_key = f"{year}.{field_id}" if year else f"current.{field_id}"
             allowed, guard_reason = check_provenance_guard(entity, prov_key, new_weight)
 
             if allowed:
-                if year:
-                    if "financials" not in entity:
-                        entity["financials"] = {}
-                    if year not in entity["financials"]:
-                        entity["financials"][year] = {}
-                    entity["financials"][year][field_id] = value
-                    log(f"  ENTITY: {entity['name']} → {year}.{field_id} = {value}" + (" (annualised)" if annualised else ""))
-                else:
+                if year_key == "current":
                     if "current" not in entity:
                         entity["current"] = {}
-                    entity["current"][field_id] = value
-                    log(f"  ENTITY: {entity['name']} → current.{field_id} = {claim['value']}")
+                    entity["current"][field_key] = value
+                    log(f"  ENTITY: {entity['name']} → current.{field_key} = {claim['value']} (scope={scope})")
+                else:
+                    if "financials" not in entity:
+                        entity["financials"] = {}
+                    if year_key not in entity["financials"]:
+                        entity["financials"][year_key] = {}
+                    entity["financials"][year_key][field_key] = value
+                    log(f"  ENTITY: {entity['name']} → {year_key}.{field_key} = {value}"
+                        + (" (annualised)" if annualised else "")
+                        + f" (scope={scope}"
+                        + (f", qual='{period_qualifier}'" if period_qualifier else "")
+                        + ")")
             else:
                 log(f"  GUARD: {entity['name']} → {prov_key}: {guard_reason}")
 
             # 4. Add provenance
             if "provenance" not in entity:
                 entity["provenance"] = {}
-            prov_key = f"{year}.{field_id}" if year else f"current.{field_id}"
             if prov_key not in entity["provenance"]:
                 entity["provenance"][prov_key] = {"confidence": "medium", "claim_count": 0, "claims": []}
 
@@ -342,7 +467,11 @@ def apply_accepted(claim, vault_data, entities, schema):
                 "source_url": claim.get("sourceUrl", ""),
                 "date": claim.get("dateOfClaim", ""),
                 "origin": "accepted",
-                "role": "supports"
+                "role": "supports",
+                # wq-054 — period scope on the trail so audit and downstream
+                # consumers can tell H1 from full-year. Defaults to "annual".
+                "time_period_scope": scope,
+                "period_qualifier": period_qualifier,
             })
             prov["claim_count"] = len(prov["claims"])
             prov["needs_source"] = False

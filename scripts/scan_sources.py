@@ -45,8 +45,21 @@ For each claim, return a JSON array. Each item:
   "unit": "unit — e.g. $B, $B ARR, %, count, T tokens/day",
   "confidence": "verified|estimated|speculative",
   "dateOfClaim": "YYYY-MM-DD or best guess",
+  "time_period_scope": "annual | h1 | h2 | q1 | q2 | q3 | q4 | exit_snapshot | monthly_peak | point_in_time",
+  "period_qualifier_detected": "short string quoting the period qualifier in the source text (e.g. 'H1 2025', 'best 4-week × 12'), or null when scope is annual",
   "tags": ["relevant", "tags"]
 }}
+
+Scope rules (wq-054 — pick the correct scope per claim):
+- "H1 2025" / "first half" / "Jan-Jun" → h1
+- "H2 2025" / "second half" / "Jul-Dec" → h2
+- "Q3 2024" / "third quarter" → q3 (same shape for q1/q2/q4)
+- "as of December" / "year-end" / "best 4-week × 12" / "exit ARR" → exit_snapshot
+- "$X per month" / "monthly peak" / "single month" → monthly_peak
+- "current" / "as of today" / "now" → point_in_time
+- otherwise (no qualifier OR explicit "full year" / "FY") → annual
+
+CRITICAL: a sub-period claim ("OpenAI H1 2025 revenue $4.3B") must NOT be tagged annual — H1 covers half the year only and downstream routing depends on this.
 
 Return ONLY a valid JSON array. No markdown, no explanation. If no claims found, return [].
 
@@ -323,6 +336,11 @@ def _main_impl(outputs):
                 "source_id": sid,
                 "metricKey": None,
                 "entity": claim.get("entity", ""),
+                # wq-054 — sub-period attribution. apply_decisions.py reads
+                # these fields to route to <year>_h1 / _q3 / .exit_<field> /
+                # .monthly_peak_<field> instead of the annual default.
+                "timePeriodScope": claim.get("time_period_scope") or "annual",
+                "periodQualifier": claim.get("period_qualifier_detected"),
             }
             # wq-040 — score materiality before write so review.html lanes work
             try:

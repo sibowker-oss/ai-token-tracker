@@ -66,6 +66,17 @@ For each concrete claim found, output a JSON object with these fields:
 - "unit": unit of value (e.g. "USD", "tokens", "seats", "GPUs")
 - "value_display": human-readable value string (e.g. "$16.8B", "15M seats")
 - "time_period": when this applies (e.g. "Q1 2026", "2025", "as of March 2026")
+- "time_period_scope": one of: "annual" | "h1" | "h2" | "q1" | "q2" | "q3" | "q4" | "exit_snapshot" | "monthly_peak" | "point_in_time"
+    Detect the period qualifier in the source text and pick the matching scope:
+      "H1 2025" / "first half" / "January through June" → h1
+      "H2 2025" / "second half" / "July through December" → h2
+      "Q3 2024" / "third quarter" / "Jul-Sep" → q3 (same shape for q1/q2/q4)
+      "as of December" / "year-end" / "best 4-week × 12" / "exit ARR" → exit_snapshot
+      "$X per month" / "monthly peak" / "Feb 2026 hit $6B" / "single month" → monthly_peak
+      "current" / "as of today" / "now" / "this week" → point_in_time
+      otherwise (no qualifier OR explicit "full year" / "FY") → annual
+    CRITICAL: a claim saying "OpenAI H1 2025 revenue was $4.3B" must NOT be tagged annual — the H1 qualifier means it covers half the year only and downstream routing depends on this field.
+- "period_qualifier_detected": short string quoting the qualifier you matched (e.g. "H1 2025", "best 4-week × 12", "Feb 2026 monthly peak"), or null when scope is "annual" with no qualifier
 - "confidence": "high" | "medium" | "low"
 - "speaker": name of speaker making the claim, or null
 - "is_primary_source": true if the speaker has direct first-hand knowledge (e.g. a founder discussing their own company), false if they are citing or repeating something heard elsewhere
@@ -665,6 +676,10 @@ def _main_impl(outputs):
             "sourceExcerpt": claim.get("source_excerpt"),
             "isPrimarySource": claim.get("is_primary_source"),
             "originalSourceCited": claim.get("original_source_cited"),
+            # wq-054 — sub-period attribution. apply_decisions.py routes per
+            # scope so H1/Q3/exit-snapshot/monthly-peak don't pollute annual.
+            "timePeriodScope": claim.get("time_period_scope") or "annual",
+            "periodQualifier": claim.get("period_qualifier_detected"),
         }
         # wq-040: score materiality at write time so review.html lane filter works.
         try:
