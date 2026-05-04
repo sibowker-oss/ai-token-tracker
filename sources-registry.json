@@ -1626,6 +1626,33 @@
       "phase": "1.1",
       "routing": "vault-inbox",
       "notes": "wq-081 Phase 1.1 Tier B \u2014 CSV/XLSX statistical tables, public, no auth. v1 captures landing page snapshot + surfaces CSV download URLs (Table A1 baseline); v2 row-parse follow-up. Coverage classification: **denominator coverage** (AU monetary aggregates, HA differentiator) \u2014 NOT entity coverage. Split from ABS per stop-gate D."
+    },
+    {
+      "id": "src-078",
+      "url": "https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-nem/data-nem",
+      "title": "AEMO NEM Data Dashboard",
+      "type": "iso_queue",
+      "author": "",
+      "organization": "Australian Energy Market Operator",
+      "added": "2026-05-04",
+      "tags": [
+        "power",
+        "iso-queue",
+        "au",
+        "primary",
+        "ha-differentiator",
+        "wq-081"
+      ],
+      "extraction_method": "aemo_nem",
+      "frequency": "daily",
+      "next_check": "2026-05-04",
+      "last_checked": null,
+      "last_claims_count": 0,
+      "status": "pending_first_extraction",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "telemetry-feed",
+      "notes": "wq-081 Phase 1.1 Tier B \u2014 public CSV, no auth. v1 captures landing page snapshot + surfaces CSV download URLs; v2 row-parse follow-up. Coverage classification: **denominator coverage** (AU grid + DC build-out, HA differentiator) \u2014 NOT entity coverage. Routing: structured power_project claims (v2) \u2192 telemetry-feed.json per _telemetry_router.TELEMETRY_STRUCTURED_TYPES."
     }
   ]
 }

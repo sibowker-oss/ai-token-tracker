@@ -990,6 +990,35 @@ def extract_rba_api(source):
     return []
 
 
+def extract_aemo_nem(source):
+    """AEMO NEM Data Dashboard — Australian National Electricity Market
+    (src-078, wq-081).
+
+    AEMO publishes NEM dispatch + interconnector data as CSV through its NEMWeb
+    portal. v1 captures the landing-page snapshot and surfaces CSV download
+    URLs. Row-level demand/dispatch parse is v2 work, mirroring the ISO queue
+    adapters' v1 posture.
+
+    Coverage classification: **denominator coverage** (AU grid + DC build-out
+    HA differentiator). Routing: structured `power_project` claims (v2) →
+    telemetry-feed.json."""
+    text, html = fetch_page(source['url'])
+    if html:
+        try:
+            save_snapshot(source, html, ext='html')
+        except Exception as e:
+            log(f"  Snapshot failed: {e}")
+    if not text:
+        return []
+    csv_urls = re.findall(r'https?://[^\s"\']+\.csv', html or '', re.IGNORECASE)
+    if csv_urls:
+        log(f"  Found {len(csv_urls)} CSV link(s) on AEMO NEM dashboard")
+        for u in csv_urls[:5]:
+            log(f"    {u}")
+    log("  AEMO row-level CSV parse is v2 work; v1 returns [].")
+    return []
+
+
 def extract_neso_tec(source):
     """NESO TEC Register (src-063). UK grid transmission-entry-capacity queue.
     CSV download under OGL licence; produces power_project claims with
@@ -1440,6 +1469,7 @@ NON_WEB_METHODS = {
     'worldbank_api',
     'abs_api',
     'rba_api',
+    'aemo_nem',
     'neso_tec',
     'epoch_frontier',
     'greenhouse_board',
@@ -1470,6 +1500,7 @@ ADAPTERS = {
     'worldbank_api': extract_worldbank_api,
     'abs_api': extract_abs_api,
     'rba_api': extract_rba_api,
+    'aemo_nem': extract_aemo_nem,
     'neso_tec': extract_neso_tec,
     'epoch_frontier': extract_epoch_frontier,
     # Stream 3 (wq-013) discovery adapters:
