@@ -1,0 +1,50 @@
+# Phase 1 cohort log
+
+Append-only per GUIDELINES §5.4. Each snapshot is one block.
+
+---
+
+## Cohort `wq-081` snapshot — 2026-05-04T03:59:11Z
+
+- Cohort size: **9**
+- Activation rate: **11%** (1/9 active)
+- Pending: **6**, error: **2**
+- Total claims on first run (`last_claims_count` sum): **16**
+
+### Coverage split
+
+| Coverage axis | Count | Notes |
+|---|---:|---|
+| **entity_coverage** | 3 | Sources whose claims attach to rendered entities (entityDirectory.qualifies = true) |
+| **denominator_coverage** | 6 | Macro / grid / sector — not entity-targeted |
+
+### Routing decisions
+
+| Routing | Count |
+|---|---:|
+| `telemetry-feed` | 5 |
+| `vault-inbox` | 4 |
+
+### Sources in cohort
+
+| id | title | tier | method | type | routing | coverage | status | first-run claims |
+|---|---|---:|---|---|---|---|---|---:|
+| `src-025` | SEC EDGAR — AI company 10-K/10-Q/8-K scan | 1 | `sec_edgar_scan` | `sec_filing` | `telemetry-feed` | entity | `active` | 16 |
+| `src-073` | CAISO — Generator Interconnection Queue | 2 | `iso_queue_caiso` | `iso_queue` | `telemetry-feed` | denominator | `error` | 0 |
+| `src-074` | FRED API — St Louis Fed macro denominators | 1 | `fred_api` | `gov_api` | `vault-inbox` | denominator | `pending_credentials` | 0 |
+| `src-075` | World Bank Indicators API | 1 | `worldbank_api` | `gov_api` | `vault-inbox` | denominator | `error` | 0 |
+| `src-076` | ABS — Australian Bureau of Statistics SDMX API | 1 | `abs_api` | `gov_api` | `vault-inbox` | denominator | `pending_first_extraction` | 0 |
+| `src-077` | RBA — Reserve Bank of Australia Statistical Tables | 1 | `rba_api` | `gov_api` | `vault-inbox` | denominator | `pending_first_extraction` | 0 |
+| `src-078` | AEMO NEM Data Dashboard | 1 | `aemo_nem` | `iso_queue` | `telemetry-feed` | denominator | `pending_first_extraction` | 0 |
+| `src-079` | GitHub REST API — repo telemetry | 1 | `github_api` | `github_repo` | `telemetry-feed` | entity | `pending_first_extraction` | 0 |
+| `src-080` | Hugging Face Hub API — model registry telemetry | 1 | `huggingface_api` | `package_index` | `telemetry-feed` | entity | `pending_first_extraction` | 0 |
+
+### Phase 1 → Phase 2 gate (brief §5a)
+
+- Activation rate ≥ 80%? **NO** (current: 11%)
+- Stale rate ≤ 20%? **NO** (current: 22%)
+- Other gate criteria (4-week observation, named gaps, review-queue throughput) require post-Week-1 data and are not evaluated here.
+
+
+---
+

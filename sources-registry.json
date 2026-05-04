@@ -484,7 +484,8 @@
         "sec",
         "financials",
         "official",
-        "multi-ticker"
+        "multi-ticker",
+        "wq-081"
       ],
       "extraction_method": "sec_edgar_scan",
       "frequency": "quarterly",
@@ -492,7 +493,10 @@
       "last_checked": "2026-04-23",
       "last_claims_count": 16,
       "status": "active",
-      "notes": "Scans tickers listed in data/edgar-tickers.json. Per wq-015 \u00a72.2 \u2014 broadened from OpenAI-only. Per wq-081 (2026-05-04) \u2014 seed expanded 16 \u2192 38 (hyperscalers/semis/DC-power/compute-pureplays/SaaS). Five foreign ADRs proposed in brief (TCEHY, SKHYY, SSNLF, SBGSY, SMNEY) deferred per data/edgar-tickers-deferred.md \u2014 not SEC filers. Routing: telemetry-feed (sec_filing source type)."
+      "notes": "Scans tickers listed in data/edgar-tickers.json. Per wq-015 \u00a72.2 \u2014 broadened from OpenAI-only. Per wq-081 (2026-05-04) \u2014 seed expanded 16 \u2192 38 (hyperscalers/semis/DC-power/compute-pureplays/SaaS). Five foreign ADRs proposed in brief (TCEHY, SKHYY, SSNLF, SBGSY, SMNEY) deferred per data/edgar-tickers-deferred.md \u2014 not SEC filers. Routing: telemetry-feed (sec_filing source type).",
+      "tier": 1,
+      "phase": "1.1",
+      "routing": "telemetry-feed"
     },
     {
       "id": "src-026",
