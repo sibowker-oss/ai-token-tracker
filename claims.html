@@ -55,6 +55,11 @@
   .badge-new { background:rgba(6,182,212,0.12); color:var(--cyan); }
   .badge-confirms { background:rgba(16,185,129,0.12); color:var(--green); }
   .badge-conflicts { background:rgba(239,68,68,0.15); color:var(--red); }
+  /* wq-083 v2 — triangulation: indirect arithmetic against ledger nodes */
+  .badge-triangulates { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .claim-triangulation { font-size:11px; color:var(--text-dim); margin-top:6px; padding:8px 10px; background:rgba(139,92,246,0.06); border-left:2px solid var(--purple); border-radius:4px; line-height:1.5; }
+  .claim-triangulation strong { color:var(--purple); font-weight:600; }
+  .claim-triangulation code { background:var(--bg); padding:1px 5px; border-radius:3px; font-size:10px; color:var(--text); }
   .badge-high { background:rgba(16,185,129,0.1); color:var(--green); }
   .badge-medium { background:rgba(245,158,11,0.1); color:var(--orange); }
   .badge-low { background:rgba(148,163,184,0.1); color:var(--text-dim); }
@@ -486,9 +491,10 @@ function renderClaims() {
     return;
   }
 
-  // Sort: conflicts first, then by weight
+  // Sort: conflicts first, then triangulations (need human eyeball on the
+  // derivation), then new, then confirms. wq-083 v2 added triangulates.
   const weightOrder = { authoritative: 0, corroborating: 1, indicative: 2 };
-  const statusOrder = { conflicts: 0, new: 1, confirms: 2, stale: 3 };
+  const statusOrder = { conflicts: 0, triangulates: 1, new: 2, confirms: 3, stale: 4 };
   filtered.sort((a, b) => {
     const sa = statusOrder[a.dedup_status] ?? 9;
     const sb = statusOrder[b.dedup_status] ?? 9;
@@ -535,6 +541,29 @@ function renderClaims() {
     // Conflict note
     if (c.dedup_note) {
       html += '<div class="claim-conflict">' + c.dedup_note + '</div>';
+    }
+
+    // wq-083 v2 — triangulation derivation. Surfaces the arithmetic so the
+    // reviewer can audit the connection without round-tripping through the
+    // source text.
+    if (c.triangulation && c.triangulation.derivation) {
+      const tri = c.triangulation;
+      let triHtml = '<div class="claim-triangulation">';
+      triHtml += '<strong>Triangulation:</strong> ' + escapeHtml(tri.derivation);
+      if (Array.isArray(tri.target_nodes) && tri.target_nodes.length) {
+        triHtml += '<br><strong>Targets:</strong> ' +
+          tri.target_nodes.map(n => '<code>' + escapeHtml(n) + '</code>').join(', ');
+      }
+      const bits = [];
+      if (tri.implied_value !== null && tri.implied_value !== undefined) {
+        bits.push('implied: ' + escapeHtml(String(tri.implied_value)));
+      }
+      if (tri.confidence_impact) {
+        bits.push('impact: ' + escapeHtml(tri.confidence_impact));
+      }
+      if (bits.length) triHtml += ' &nbsp; <em>' + bits.join(' · ') + '</em>';
+      triHtml += '</div>';
+      html += triHtml;
     }
 
     // Action buttons

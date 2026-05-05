@@ -171,17 +171,30 @@ Vault Quick Add → paste URL → auto-classify → Add Source → monitor_sourc
 ### Path 3: Curated intake (editorial source, on-demand — wq-083)
 ```
 curated_intake.py --url ... --slug ...   (or pipe text)
-  → loads ledger position (entities + schema + providers)
-  → Opus compares source against ledger
+  → builds FLOW MODEL context (revenue flow + capex flow + entity
+    positions w/ provenance confidence + composition rules) — ~5k tokens
+  → Opus reasons about source against the flow model, including
+    arithmetic-derived triangulations against named ledger nodes
   → writes data-updates/<date>-curated-<slug>.json + curated-index.json
-  → claims.html merges into review queue
+  → claims.html merges into review queue (with derivation surfaced inline)
   → Accept → site-data.json updated
 ```
 Use this for newsletters (Zitron etc.), earnings releases, analyst reports —
 where the value is "what does this source change about what we know?" rather
 than blind extraction. Output classifies each claim as
-`matches | updates | conflicts | new | context`. Slow path: bulk pipeline is
-broad and noisy; curated is focused and fast.
+`matches | updates | conflicts | new | triangulates | context`.
+
+The **flow model** distinguishes this path from bulk extraction. Instead of
+matching claims to fields by lookup, the model receives the structural shape
+of the ledger (Sankey trees + composition rules like
+"Customer Revenue (gross) = Consumer + SME + Enterprise") and reasons about
+where a novel claim fits. Claims that use a different framework than our
+schema (e.g. "Enterprise GenAI market = $37B" vs our segment splits) are
+connected through arithmetic — `triangulates` claims must include a
+`derivation` equation referencing specific named nodes
+(e.g. `sankey.buyers.Enterprise + sankey.buyers.SME + market.2025.enterprise_capex`)
+or they get reclassified to `context`. Slow path: bulk pipeline is broad and
+noisy; curated is focused and fast.
 
 ### Path 4: Manual (direct edit — for corrections)
 ```
