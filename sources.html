@@ -18,6 +18,9 @@
   });
 })();
 </script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -98,15 +101,9 @@
   footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
 </style>
 </head>
-<body>
+<body class="surface-dark" data-active-tab="sources">
 
-<div class="standalone-bar" id="standalone-bar" style="display:none;padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:11px;">
-  <a href="admin.html" style="color:#3b82f6;text-decoration:none;">Open in Command Centre</a>
-</div>
-<script>
-// Show standalone bar if NOT in an iframe
-if (window === window.top) document.getElementById('standalone-bar').style.display = 'block';
-</script>
+<div id="admin-nav-mount"></div>
 
 <div class="container">
   <h1>Source Ledger <span class="tag">Admin</span></h1>

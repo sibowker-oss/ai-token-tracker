@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-05T22:38:37Z",
+  "active_count": 17,
+  "completed_count": 1,
+  "entries": [
+    {
+      "id": "wq-088",
+      "filename": "2026-05-06-wq-088-command-centre-nav-cleanup.md",
+      "path": "briefs/completed/2026-05-06-wq-088-command-centre-nav-cleanup.md",
+      "title": "Command Centre / Admin nav cleanup",
+      "status": "completed",
+      "date": "2026-05-06",
+      "shipped": "2026-05-06",
+      "shipped_commit": null,
+      "frontmatter": {
+        "id": "wq-088",
+        "title": "Command Centre / Admin nav cleanup",
+        "stage": "Scoped",
+        "priority": "M",
+        "owner": "Simon (impl: Claude Code in VS Code)",
+        "created": "2026-05-06",
+        "status": "ready_for_handoff",
+        "parent_context": "/Users/simonbowker/Documents/Claude/Projects/The AI Ledger/ (Cowork session 2026-05-06)"
+      }
+    },
+    {
+      "id": "wq-082",
+      "filename": "2026-05-04-wq-082-period-attribution-cleanup.md",
+      "path": "briefs/active/2026-05-04-wq-082-period-attribution-cleanup.md",
+      "title": "Brief: wq-082 — period-attribution claim cleanup (entities.json migration residue from wq-054)",
+      "status": "active",
+      "date": "2026-05-04",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-05-04-in-dev-deindex.md",
+      "path": "briefs/active/2026-05-04-in-dev-deindex.md",
+      "title": "Brief: take In-Dev page off the public surface (footer + indexing)",
+      "status": "active",
+      "date": "2026-05-04",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": "wq-034",
+      "filename": "2026-04-27-subscription-ha-contact.md",
+      "path": "briefs/active/2026-04-27-subscription-ha-contact.md",
+      "title": "wq-034 — Subscription page → HA Contact integration",
+      "status": "active",
+      "date": "2026-04-27",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-27-js-write-path-encoding.md",
+      "path": "briefs/active/2026-04-27-js-write-path-encoding.md",
+      "title": "Brief: fix the JS write-path encoding bug that mojibakes vault-inbox.json on every hosted-admin commit",
+      "status": "active",
+      "date": "2026-04-27",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": "wq-033",
+      "filename": "2026-04-27-ha-references-design.md",
+      "path": "briefs/active/2026-04-27-ha-references-design.md",
+      "title": "wq-033 — HA references + design system alignment",
+      "status": "active",
+      "date": "2026-04-27",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": "wq-028",
+      "filename": "2026-04-27-free-form-metrickey.md",
+      "path": "briefs/active/2026-04-27-free-form-metrickey.md",
+      "title": "Brief: wq-028 — Free-form metricKey doesn't match field_match_rules",
+      "status": "active",
+      "date": "2026-04-27",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": "wq-035",
+      "filename": "2026-04-27-cross-launch-spec.md",
+      "path": "briefs/active/2026-04-27-cross-launch-spec.md",
+      "title": "wq-035 — Cross-launch coordination spec (HA + AI Ledger)",
+      "status": "active",
+      "date": "2026-04-27",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-26-page-lifecycle-registry.md",
+      "path": "briefs/active/2026-04-26-page-lifecycle-registry.md",
+      "title": "Brief: page lifecycle registry — gate audits & lint on page status",
+      "status": "active",
+      "date": "2026-04-26",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-26-mojibake-roundtrip-fix.md",
+      "path": "briefs/active/2026-04-26-mojibake-roundtrip-fix.md",
+      "title": "Brief: fix mojibake re-introduction in apply_decisions.py + clean vault-data.json",
+      "status": "active",
+      "date": "2026-04-26",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-25-vault-inbox-cleanup.md",
+      "path": "briefs/active/2026-04-25-vault-inbox-cleanup.md",
+      "title": "Brief: vault-inbox cleanup + first-batch review prep",
+      "status": "active",
+      "date": "2026-04-25",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-25-raw-pool-status.md",
+      "path": "briefs/active/2026-04-25-raw-pool-status.md",
+      "title": "Brief: Raw pool status — three-state Accept",
+      "status": "active",
+      "date": "2026-04-25",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-23-testing-runbook.md",
+      "path": "briefs/active/2026-04-23-testing-runbook.md",
+      "title": "Brief — `TESTING.md` + `release-check` agent",
+      "status": "active",
+      "date": "2026-04-23",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-23-structured-claim-schema.md",
+      "path": "briefs/active/2026-04-23-structured-claim-schema.md",
+      "title": "Brief: Structured claim schema extension",
+      "status": "active",
+      "date": "2026-04-23",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-23-stream-3-hiring-patents.md",
+      "path": "briefs/active/2026-04-23-stream-3-hiring-patents.md",
+      "title": "Brief: Stream 3 — AI-native company discovery engine",
+      "status": "active",
+      "date": "2026-04-23",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-23-stream-2-energy.md",
+      "path": "briefs/active/2026-04-23-stream-2-energy.md",
+      "title": "Brief: Stream 2 — Energy/power sourcing",
+      "status": "active",
+      "date": "2026-04-23",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-23-stream-1-activation.md",
+      "path": "briefs/active/2026-04-23-stream-1-activation.md",
+      "title": "Brief: Stream 1 — Activation sprint (free-sources)",
+      "status": "active",
+      "date": "2026-04-23",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    },
+    {
+      "id": null,
+      "filename": "2026-04-22-follow-the-trillion.md",
+      "path": "briefs/active/2026-04-22-follow-the-trillion.md",
+      "title": "Claims Ledger — In-Dev Page Spec",
+      "status": "active",
+      "date": "2026-04-22",
+      "shipped": null,
+      "shipped_commit": null,
+      "frontmatter": {}
+    }
+  ]
+}

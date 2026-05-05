@@ -4,11 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Settings — AI Ledger</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:24px; }
-  .container { max-width:500px; margin:0 auto; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:500px; margin:0 auto; padding:24px; }
   h2 { font-size:16px; font-weight:700; margin-bottom:16px; }
 
   .section { background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:24px; margin-bottom:20px; }
@@ -31,7 +48,10 @@
   .stat-value { color:var(--text); font-weight:600; }
 </style>
 </head>
-<body>
+<body class="surface-dark" data-active-tab="settings">
+
+<div id="admin-nav-mount"></div>
+
 <div class="container">
 
   <div class="section">

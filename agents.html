@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agents — Admin</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1200px; margin:0 auto; padding:24px; }
+  h1 { font-size:22px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  h1 span.tag { background:var(--cyan); color:#0a0e1a; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; font-weight:700; }
+  .intro { font-size:13px; color:var(--text-dim); margin-bottom:20px; line-height:1.6; max-width:780px; }
+  .intro code { background:var(--card); padding:2px 6px; border-radius:4px; font-size:11px; color:var(--text); }
+
+  h2 { font-size:14px; font-weight:700; margin:28px 0 12px; padding-bottom:6px; border-bottom:1px solid var(--card-border); display:flex; align-items:baseline; gap:10px; }
+  h2 .count { font-size:11px; color:var(--text-dim); font-weight:500; }
+
+  .stat-pill { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:12px; }
+  .stat-pill strong { color:var(--text); }
+  .meta-row { display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+
+  table.registry { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--card-border); border-radius:10px; overflow:hidden; font-size:12px; }
+  table.registry th, table.registry td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--card-border); vertical-align:top; }
+  table.registry th { font-size:10px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; font-weight:600; background:rgba(15,23,42,0.6); }
+  table.registry tr:last-child td { border-bottom:none; }
+  table.registry .name { font-weight:600; color:var(--text); white-space:nowrap; }
+  table.registry .version { font-family:ui-monospace,'SF Mono',monospace; color:var(--accent); font-size:11px; white-space:nowrap; }
+  table.registry .status { font-size:10px; padding:2px 8px; border-radius:4px; text-transform:uppercase; font-weight:700; letter-spacing:0.4px; display:inline-block; }
+  table.registry .status-active { background:rgba(16,185,129,0.15); color:var(--green); }
+  table.registry .status-paused { background:rgba(245,158,11,0.15); color:var(--orange); }
+  table.registry .status-retired { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  table.registry td.purpose { line-height:1.5; max-width:420px; color:var(--text-dim); }
+  table.registry code { background:rgba(15,23,42,0.6); padding:1px 5px; border-radius:3px; font-size:10px; color:var(--text); }
+
+  .group-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+  .group-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 16px; }
+  .group-card h3 { font-size:11px; text-transform:uppercase; letter-spacing:0.6px; color:var(--text-dim); font-weight:700; margin-bottom:10px; }
+  .group-card h3 .gcount { font-weight:500; color:var(--text-dim); margin-left:6px; }
+  .group-card ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .group-card li { font-size:12px; line-height:1.4; }
+  .group-card .script-name { color:var(--accent); font-family:ui-monospace,'SF Mono',monospace; font-size:11px; font-weight:600; word-break:break-all; }
+  .group-card .script-purpose { color:var(--text-dim); font-size:11px; margin-top:2px; line-height:1.5; }
+
+  .empty { text-align:center; padding:32px; color:var(--text-dim); font-size:13px; background:var(--card); border:1px dashed var(--card-border); border-radius:12px; }
+  .err { padding:16px; color:var(--red); font-size:12px; background:rgba(239,68,68,0.05); border:1px solid rgba(239,68,68,0.2); border-radius:8px; margin-bottom:14px; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+
+  @media (max-width:768px) {
+    .container { padding:16px 12px; }
+    table.registry, table.registry tbody, table.registry tr, table.registry td, table.registry th { display:block; }
+    table.registry tr { border-bottom:1px solid var(--card-border); padding:8px 0; }
+    table.registry th { display:none; }
+    table.registry td { padding:4px 12px; border-bottom:none; }
+    table.registry td.purpose { max-width:none; }
+  }
+</style>
+</head>
+<body class="surface-dark" data-active-tab="agents">
+
+<div id="admin-nav-mount"></div>
+
+<div class="container">
+  <h1>Agents <span class="tag">Pipeline</span></h1>
+  <p class="intro">
+    Every agent that writes to <code>site-data.json</code> (per GUIDELINES §6.3) plus an inventory of every Python script in <code>scripts/</code>. Source of truth is <code>data/agents.registry.md</code> and the script docstrings; this page renders <code>data/agents-index.json</code>, regenerated by <code>scripts/build_agents_index.py</code>.
+  </p>
+
+  <div id="meta-row" class="meta-row"></div>
+
+  <h2>Registered agents <span class="count" id="reg-count"></span></h2>
+  <div id="registry-section"><div class="empty">Loading…</div></div>
+
+  <h2>Scripts inventory <span class="count" id="scripts-count"></span></h2>
+  <div id="scripts-section"><div class="empty">Loading…</div></div>
+</div>
+
+<footer>The AI Ledger · Agents (wq-088)</footer>
+
+<script>
+async function init() {
+  const res = await fetch('/data/agents-index.json?_=' + Date.now(), { cache: 'no-store' });
+  if (!res.ok) {
+    if (res.status === 404) {
+      document.getElementById('registry-section').innerHTML = emptyState(
+        `<strong>No <code>data/agents-index.json</code> yet.</strong><br>` +
+        `Run <code>python3 scripts/build_agents_index.py</code> to generate it.`
+      );
+      document.getElementById('scripts-section').innerHTML = '';
+      return;
+    }
+    document.getElementById('registry-section').innerHTML = `<div class="err">Failed to load agents-index.json: HTTP ${res.status}</div>`;
+    return;
+  }
+  const data = await res.json();
+  renderMeta(data);
+  renderRegistry(data.registry || []);
+  renderScripts(data.scripts || []);
+}
+
+function renderMeta(data) {
+  const row = document.getElementById('meta-row');
+  const generated = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
+  row.innerHTML =
+    `<span class="stat-pill"><strong>${data.registry_count ?? 0}</strong> registered agents</span>` +
+    `<span class="stat-pill"><strong>${data.script_count ?? 0}</strong> Python scripts</span>` +
+    `<span class="stat-pill" title="data/agents-index.json generated_at">Last regen <strong>${generated}</strong></span>`;
+}
+
+function renderRegistry(rows) {
+  document.getElementById('reg-count').textContent = rows.length === 0 ? '' : `(${rows.length})`;
+  const sec = document.getElementById('registry-section');
+  if (rows.length === 0) {
+    sec.innerHTML = emptyState(`No registered agents found in <code>data/agents.registry.md</code>.`);
+    return;
+  }
+  const headers = Object.keys(rows[0]);
+  // Project a tighter header set for the UI; keep extras hidden but accessible by clicking the row.
+  const VISIBLE = ['name', 'version', 'purpose', 'cadence', 'owner', 'status'];
+  const visibleHeaders = VISIBLE.filter(h => headers.includes(h));
+  let html = '<table class="registry"><thead><tr>';
+  for (const h of visibleHeaders) html += `<th>${escapeHtml(h)}</th>`;
+  html += '</tr></thead><tbody>';
+  for (const r of rows) {
+    html += '<tr>';
+    for (const h of visibleHeaders) {
+      let cell = r[h] || '';
+      if (h === 'name')        html += `<td class="name">${escapeHtml(cell)}</td>`;
+      else if (h === 'version') html += `<td class="version">${escapeHtml(cell)}</td>`;
+      else if (h === 'status')  {
+        const cls = (cell || '').toLowerCase().split(/\s/)[0] || 'unknown';
+        html += `<td><span class="status status-${escapeHtml(cls)}">${escapeHtml(cell)}</span></td>`;
+      }
+      else if (h === 'purpose') html += `<td class="purpose">${renderInlineMd(cell)}</td>`;
+      else                      html += `<td>${renderInlineMd(cell)}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table>';
+  sec.innerHTML = html;
+}
+
+function renderScripts(scripts) {
+  document.getElementById('scripts-count').textContent = scripts.length === 0 ? '' : `(${scripts.length})`;
+  const sec = document.getElementById('scripts-section');
+  if (scripts.length === 0) {
+    sec.innerHTML = emptyState(`No Python scripts found under <code>scripts/</code>.`);
+    return;
+  }
+  const groups = {};
+  for (const s of scripts) {
+    const g = s.group || 'other';
+    (groups[g] = groups[g] || []).push(s);
+  }
+  const order = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length || a.localeCompare(b));
+  sec.innerHTML = `<div class="group-grid">${order.map(g => renderGroup(g, groups[g])).join('')}</div>`;
+}
+
+function renderGroup(group, items) {
+  const lis = items.map(s =>
+    `<li>
+       <div class="script-name">${escapeHtml(s.name)}</div>
+       ${s.purpose ? `<div class="script-purpose">${escapeHtml(s.purpose)}</div>` : ''}
+     </li>`
+  ).join('');
+  return `<div class="group-card">
+    <h3>${escapeHtml(group)} <span class="gcount">(${items.length})</span></h3>
+    <ul>${lis}</ul>
+  </div>`;
+}
+
+function renderInlineMd(s) {
+  // Tiny markdown for table cells: backticks → <code>, links [t](u) → <a>.
+  return escapeHtml(String(s || ''))
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+}
+
+function emptyState(html) { return `<div class="empty">${html}</div>`; }
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+init().catch(err => {
+  document.getElementById('registry-section').innerHTML = `<div class="err">Init error: ${escapeHtml(err.message)}</div>`;
+});
+</script>
+</body>
+</html>

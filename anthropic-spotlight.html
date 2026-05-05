@@ -18,6 +18,9 @@
   });
 })();
 </script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; --gray:#64748b; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -66,14 +69,13 @@
   .pill-gray { background:rgba(100,116,139,0.15); color:var(--gray); }
 </style>
 </head>
-<body>
+<body class="surface-dark" data-active-tab="anthropic">
+
+<div id="admin-nav-mount"></div>
+
 <div class="container">
   <div class="nav">
     <span class="nav-brand">Anthropic spotlight</span>
-    <a href="admin.html">← Command Centre</a>
-    <a href="review.html">Review →</a>
-    <a href="status.html">Status →</a>
-    <a href="dashboard.html">Dashboard →</a>
   </div>
 
   <h1>Anthropic monthly review</h1>

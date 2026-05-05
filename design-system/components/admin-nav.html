@@ -1,0 +1,61 @@
+<!-- design-system/components/admin-nav.html
+     wq-088 — shared admin nav partial. Contains the full ds-header (mirrors
+     index.html) plus the secondary nav grouped per the brief. Loaded into
+     admin pages via design-system/components/admin-nav.js into the
+     <div id="admin-nav-mount"></div> placeholder.
+     The script highlights items via body[data-active-tab] -> [data-tab]. -->
+<header class="ds-header">
+  <a href="/index.html" class="ds-header__brand" aria-label="The AI Ledger — home">
+    <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+    <span class="ds-header__brand-text">
+      <span class="ds-header__brand-name">AI Ledger</span>
+      <span class="ds-header__brand-sub">Hepburn Advisory</span>
+    </span>
+  </a>
+  <nav class="ds-header__nav" aria-label="Primary">
+    <a class="ds-header__nav-link" href="/capital.html">Capital</a>
+    <a class="ds-header__nav-link" href="/revenue.html">Revenue</a>
+    <a class="ds-header__nav-link" href="/compute.html">Compute</a>
+    <a class="ds-header__nav-link" href="/usage.html">Usage</a>
+    <a class="ds-header__nav-link" href="/power.html">Power</a>
+    <a class="ds-header__nav-link" href="/methodology.html">Methodology</a>
+    <a class="ds-header__nav-link" href="/about.html">About</a>
+  </nav>
+  <a class="ds-header__cta" href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=header-cta" target="_blank" rel="noopener">
+    Hepburn Advisory <span aria-hidden="true">↗</span>
+  </a>
+</header>
+
+<nav class="admin-secondary-nav" aria-label="Admin sections">
+  <div class="admin-secondary-nav__inner">
+    <div class="admin-nav-group" data-group="inbox">
+      <span class="admin-nav-group__label">Inbox &amp; Review</span>
+      <a class="admin-nav-link" data-tab="review"  href="/review.html">Inbox<span class="admin-nav-pill" data-role="pending-pill" hidden></span></a>
+      <a class="admin-nav-link" data-tab="claims"  href="/claims.html">Claims</a>
+      <a class="admin-nav-link" data-tab="add"     href="/add.html">Add</a>
+      <a class="admin-nav-link" data-tab="ask"     href="/ask.html">Ask</a>
+    </div>
+    <div class="admin-nav-group" data-group="sources">
+      <span class="admin-nav-group__label">Sources &amp; Data</span>
+      <a class="admin-nav-link" data-tab="sources"    href="/sources.html">Sources</a>
+      <a class="admin-nav-link" data-tab="confidence" href="/confidence.html">Confidence</a>
+      <a class="admin-nav-link" data-tab="vault"      href="/vault.html">Vault</a>
+      <a class="admin-nav-link" data-tab="anthropic"  href="/anthropic-spotlight.html">Anthropic</a>
+    </div>
+    <div class="admin-nav-group" data-group="ops">
+      <span class="admin-nav-group__label">Ops &amp; Telemetry</span>
+      <a class="admin-nav-link" data-tab="status"    href="/status.html">Status</a>
+      <a class="admin-nav-link" data-tab="telemetry" href="/telemetry.html">Telemetry</a>
+      <a class="admin-nav-link" data-tab="agents"    href="/agents.html">Agents</a>
+    </div>
+    <div class="admin-nav-group" data-group="pipeline">
+      <span class="admin-nav-group__label">Pipeline</span>
+      <a class="admin-nav-link" data-tab="briefs"   href="/briefs.html">Briefs</a>
+      <a class="admin-nav-link" data-tab="dev"      href="/in-development.html">In Dev</a>
+      <a class="admin-nav-link" data-tab="archive"  href="/archive.html">Page Archive</a>
+    </div>
+    <div class="admin-nav-group admin-nav-group--end" data-group="settings">
+      <a class="admin-nav-link" data-tab="settings" href="/settings.html">Settings</a>
+    </div>
+  </div>
+</nav>

@@ -6,191 +6,40 @@
 <title>Command Centre — AI Ledger</title>
 <script>
 (function() {
-  const AUTH_KEY = 'ai-ledger-admin-auth';
-  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
-  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
-  const pw = prompt('Admin access required. Enter password:');
-  if (!pw) { document.location = 'dashboard.html'; return; }
-  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
-    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
-    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
-  });
+  // wq-088 OQ-1 — /admin.html redirects to /review.html. If the user lands here
+  // with a hash like #telemetry from an old bookmark, forward to that admin tab.
+  // The HASH_MAP must stay in sync with the data-tab values in
+  // design-system/components/admin-nav.html.
+  const HASH_MAP = {
+    review: '/review.html',
+    claims: '/claims.html',
+    add: '/add.html',
+    ask: '/ask.html',
+    sources: '/sources.html',
+    confidence: '/confidence.html',
+    vault: '/vault.html',
+    anthropic: '/anthropic-spotlight.html',
+    status: '/status.html',
+    telemetry: '/telemetry.html',
+    agents: '/agents.html',
+    briefs: '/briefs.html',
+    dev: '/in-development.html',
+    archive: '/archive.html',
+    settings: '/settings.html'
+  };
+  const hash = (window.location.hash || '').replace(/^#/, '').toLowerCase();
+  const target = HASH_MAP[hash] || '/review.html';
+  window.location.replace(target);
 })();
 </script>
+<meta http-equiv="refresh" content="0; url=/review.html">
+<link rel="canonical" href="/review.html">
 <style>
-  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { height:100%; overflow:hidden; }
-  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; }
-
-  /* Header */
-  .header { display:flex; align-items:center; padding:10px 20px; background:#0f172a; border-bottom:2px solid var(--card-border); flex-shrink:0; }
-  .header-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:16px; letter-spacing:-0.3px; }
-  .header-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .header-title { font-size:12px; color:var(--text-dim); margin-right:auto; padding-left:16px; border-left:1px solid var(--card-border); }
-  .header-back { padding:6px 14px; border-radius:6px; background:var(--card); border:1px solid var(--card-border); color:var(--text-dim); text-decoration:none; font-size:11px; transition:all 0.15s; }
-  .header-back:hover { background:#1e293b; color:var(--text); }
-
-  /* Tabs */
-  .tabs { display:flex; gap:2px; padding:0 20px; background:#0f172a; border-bottom:1px solid var(--card-border); flex-shrink:0; overflow-x:auto; }
-  .tab { padding:10px 18px; border:none; background:transparent; color:var(--text-dim); font-size:12px; font-weight:500; cursor:pointer; transition:all 0.15s; position:relative; white-space:nowrap; border-bottom:2px solid transparent; }
-  .tab:hover { color:var(--text); background:rgba(255,255,255,0.03); }
-  .tab.active { color:white; font-weight:600; border-bottom-color:var(--accent); }
-  .tab .tab-badge { position:absolute; top:4px; right:4px; background:var(--red); color:white; font-size:8px; font-weight:700; padding:1px 5px; border-radius:8px; min-width:14px; text-align:center; }
-  .tab-icon { margin-right:6px; font-size:13px; }
-
-  /* Content */
-  .content { flex:1; position:relative; overflow:hidden; }
-  .content iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; display:none; background:var(--bg); }
-  .content iframe.active { display:block; }
-
-  @media (max-width:768px) {
-    .tabs { padding:0 8px; gap:0; }
-    .tab { padding:8px 12px; font-size:11px; }
-    .header { padding:8px 12px; }
-    .header-title { display:none; }
-  }
+  body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; background:#0a0e1a; color:#cbd5e1; padding:48px 24px; }
+  a { color:#3b82f6; }
 </style>
 </head>
 <body>
-
-<div class="header">
-  <a href="dashboard.html" class="header-brand"><span>AI Ledger</span></a>
-  <span class="header-title">Command Centre</span>
-  <a href="dashboard.html" class="header-back">Back to Dashboard</a>
-</div>
-
-<div class="tabs" id="tabs">
-  <button class="tab active" onclick="switchTab('review')" data-tab="review">
-    <span class="tab-icon">&#9776;</span>Inbox
-  </button>
-  <button class="tab" onclick="switchTab('sources')" data-tab="sources">
-    <span class="tab-icon">&#128279;</span>Sources
-  </button>
-  <button class="tab" onclick="switchTab('confidence')" data-tab="confidence">
-    <span class="tab-icon">&#9679;</span>Confidence
-  </button>
-  <button class="tab" onclick="switchTab('archive')" data-tab="archive">
-    <span class="tab-icon">&#128451;</span>Archive
-  </button>
-  <button class="tab" onclick="switchTab('ask')" data-tab="ask">
-    <span class="tab-icon">&#63;</span>Ask
-  </button>
-  <button class="tab" onclick="switchTab('add')" data-tab="add">
-    <span class="tab-icon">&#43;</span>Add
-  </button>
-  <button class="tab" onclick="switchTab('dev')" data-tab="dev" style="margin-left:auto;">
-    <span class="tab-icon">&#128736;</span>In Dev
-  </button>
-  <button class="tab" onclick="switchTab('status')" data-tab="status">
-    <span class="tab-icon">&#128202;</span>Status
-  </button>
-  <button class="tab" onclick="switchTab('telemetry')" data-tab="telemetry">
-    <span class="tab-icon">&#128225;</span>Telemetry
-  </button>
-  <button class="tab" onclick="switchTab('anthropic')" data-tab="anthropic">
-    <span class="tab-icon">&#128302;</span>Anthropic
-  </button>
-  <button class="tab" onclick="switchTab('pages')" data-tab="pages">
-    <span class="tab-icon">&#128194;</span>Page Archive
-  </button>
-  <button class="tab" onclick="switchTab('settings')" data-tab="settings">
-    <span class="tab-icon">&#9881;</span>Settings
-  </button>
-</div>
-
-<div class="content" id="content">
-  <iframe id="frame-review" class="active" src="review.html"></iframe>
-  <iframe id="frame-sources" src="about:blank"></iframe>
-  <iframe id="frame-confidence" src="about:blank"></iframe>
-  <iframe id="frame-archive" src="about:blank"></iframe>
-  <iframe id="frame-ask" src="about:blank"></iframe>
-  <iframe id="frame-add" src="about:blank"></iframe>
-  <iframe id="frame-dev" src="about:blank"></iframe>
-  <iframe id="frame-status" src="about:blank"></iframe>
-  <iframe id="frame-telemetry" src="about:blank"></iframe>
-  <iframe id="frame-anthropic" src="about:blank"></iframe>
-  <iframe id="frame-pages" src="about:blank"></iframe>
-  <iframe id="frame-settings" src="about:blank"></iframe>
-</div>
-
-<script>
-const TAB_PAGES = {
-  review: 'review.html',
-  sources: 'sources.html',
-  confidence: 'confidence.html',
-  archive: 'archive.html',
-  ask: 'ask.html',
-  add: 'add.html',
-  dev: 'in-development.html',
-  status: 'status.html',
-  telemetry: 'telemetry.html',
-  anthropic: 'anthropic-spotlight.html',
-  pages: 'page-archive.html',
-  settings: 'settings.html'
-};
-
-const loaded = new Set(['review']);
-let activeTab = 'review';
-
-function switchTab(name) {
-  // Update tab buttons
-  document.querySelectorAll('.tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.tab === name);
-  });
-
-  // Load iframe if not yet loaded
-  if (!loaded.has(name)) {
-    const frame = document.getElementById('frame-' + name);
-    frame.src = TAB_PAGES[name];
-    loaded.add(name);
-  }
-
-  // Show/hide frames
-  document.querySelectorAll('.content iframe').forEach(f => {
-    f.classList.toggle('active', f.id === 'frame-' + name);
-  });
-
-  activeTab = name;
-
-  // Update URL hash
-  window.location.hash = name;
-}
-
-// Load pending count for review badge
-async function loadReviewBadge() {
-  try {
-    const r = await fetch('vault-inbox.json?v=' + Date.now());
-    if (r.ok) {
-      const inbox = await r.json();
-      const pending = (inbox.items || []).filter(i => i.status === 'pending').length;
-      if (pending > 0) {
-        const tab = document.querySelector('[data-tab="review"]');
-        let badge = tab.querySelector('.tab-badge');
-        if (!badge) {
-          badge = document.createElement('span');
-          badge.className = 'tab-badge';
-          tab.style.position = 'relative';
-          tab.appendChild(badge);
-        }
-        badge.textContent = pending;
-      }
-    }
-  } catch(e) {}
-}
-
-// Handle hash navigation
-function handleHash() {
-  const hash = window.location.hash.replace('#', '');
-  if (hash && TAB_PAGES[hash]) {
-    switchTab(hash);
-  }
-}
-
-window.addEventListener('hashchange', handleHash);
-handleHash();
-loadReviewBadge();
-</script>
+<p>The Command Centre lives at the admin pages now. Redirecting to <a href="/review.html">the Inbox</a>…</p>
 </body>
 </html>

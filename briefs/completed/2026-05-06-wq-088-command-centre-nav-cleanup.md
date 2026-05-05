@@ -205,3 +205,7 @@ Per [feedback memory](../../memory/feedback_validate_rendered_output.md): the §
 - 2026-05-06 — drafted in Cowork; D1–D5 confirmed; ready for repo handoff.
 - 2026-05-06 — D6 added (in-development.html → admin-only; strip from 11 public-page footers).
 - 2026-05-06 — Grouping revision: Agents moved to Ops & Telemetry; "Briefs & Agents" renamed "Pipeline" and absorbed In Dev + Page Archive. OQ-1/2/3 resolved (redirect / keep gate / repo-only). Status flipped to ready_for_handoff.
+
+---
+
+Shipped: 2026-05-06, commit PENDING-FIRST-COMMIT

@@ -190,11 +190,26 @@
       <p>Entity-by-entity rollup sourced from earnings calls, SEC filings, and investor presentations. Revenue uses collected-revenue methodology — never run-rated or exit-ARR. Consumer vs. enterprise split informed by The Information reporting and company segment disclosures. Each entity carries its own provenance tier; current quarterly aggregate is on the <a href="/revenue.html">Revenue Ledger</a>.</p>
     </div>
     <div class="card">
+      <div class="card-tag" style="background:rgba(6,182,212,0.15);color:#06b6d4;">Compute</div>
+      <h3>Compute Ledger</h3>
+      <p>Hyperscaler AI cloud + neocloud + Oracle OCI revenue, published <strong>both gross-disclosed and net of model-lab pass-through</strong> per the principal/agent verification gate (D6). Direct frontier-API revenue (OpenAI / Anthropic API direct) stays on the Revenue Ledger; only the cloud-margin leg is in Compute. Aggregator: <code>scripts/derive_compute_revenue.py</code>. Disclosures file: <code>data/compute_disclosures.json</code>. Current quarterly aggregate is on the <a href="/compute.html">Compute Ledger</a>.</p>
+    </div>
+    <div class="card">
       <div class="card-tag usage">Usage</div>
       <h3>Usage Ledger</h3>
       <p>Multi-model consensus methodology tracking 14 providers. Primary anchors: OpenRouter public throughput statistics and NVIDIA inference throughput disclosures. China accounts for approximately 50% of global volume. No single provider discloses full usage data, so all figures are Med or Low confidence. Current daily-volume range is published on the <a href="/usage.html">Usage Ledger</a>.</p>
     </div>
   </div>
+
+  <!-- Compute Ledger methodology — §3 (wq-087) -->
+  <h2 id="compute-revenue">Compute Revenue — gross vs net &amp; principal/agent gate</h2>
+  <p>The Compute Ledger publishes <strong>two numbers side-by-side</strong> for AI compute revenue, because the right one to use depends on the question. The gap between them is itself a publishable insight.</p>
+  <ul>
+    <li><strong>Compute Revenue (gross-disclosed)</strong> — the sum of AI revenue lines as filed by each compute provider (Mag3 + Oracle + neoclouds). This is the number directly cite-able to 10-Qs / earnings releases. Tier 1A for hyperscaler AI lines that are explicitly disclosed; Tier 2A where the AI-attributable share is editorially derived from total Cloud (e.g., AWS, GCP).</li>
+    <li><strong>Compute Revenue (net of model-lab pass-through)</strong> — gross minus the editorial estimate of pass-through to model labs (Bedrock → Anthropic, Azure OpenAI Service → OpenAI, Vertex partners → Anthropic/Mistral). Tier 2A. The economically meaningful number for layer value-capture analysis.</li>
+  </ul>
+  <p><strong>Principal/agent verification gate (D6).</strong> Before publication, the revenue recognition policy notes from the most recent 10-K are read for AWS, MSFT (Azure), GOOGL (Cloud), and ORCL (OCI). For each, principal (gross) vs. agent (net) treatment under ASC 606 is confirmed. <strong>All four reviewed entities use principal treatment</strong> for AI reseller arrangements (verified 2026-05-06; documented in <code>data/methodology_constants.json:compute_revenue.principal_agent_treatment</code>). Treatment is re-verified each cycle as 10-Ks are refiled.</p>
+  <p><strong>Direct frontier-API revenue is OUT of Compute</strong> (D3). When Bedrock resells Claude, AWS keeps the cloud margin (that's Compute Revenue); Anthropic gets the rest (that's Model revenue, paid by AWS to Anthropic). When a customer calls Anthropic directly, 100% is Model revenue with the underlying compute showing on AWS/GCP P&amp;Ls separately as part of their AI cloud line. This avoids ecosystem-level double-counting between Compute and Apps/Model Revenue.</p>
 
   <!-- Section 2b: ARR vs collected revenue (wq-032 P1B closes wq-035 F2) -->
   <h2 id="arr-vs-collected">ARR vs collected revenue — what each surface shows</h2>
@@ -343,6 +358,7 @@ document.querySelectorAll('.cite-btn').forEach(btn => {
       <ul>
         <li><a href="/capital.html">Capital</a></li>
         <li><a href="/revenue.html">Revenue</a></li>
+        <li><a href="/compute.html">Compute</a></li>
         <li><a href="/usage.html">Usage</a></li>
         <li><a href="/power.html">Power</a></li>
       </ul>
@@ -359,7 +375,6 @@ document.querySelectorAll('.cite-btn').forEach(btn => {
       <ul>
         <li><a href="/timeline.html">Timeline</a></li>
         <li><a href="/openrouter.html">Live pricing</a></li>
-        <li><a href="/in-development.html">In development</a></li>
         <li><a href="/changelog.html">Changelog</a></li>
       </ul>
     </div>
