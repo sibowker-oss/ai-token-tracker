@@ -41,6 +41,7 @@ ENTITIES = os.path.join(SITE_DIR, "entities.json")
 SCHEMA = os.path.join(SITE_DIR, "metric-schema.json")
 ARCHIVE_DIR = os.path.join(SITE_DIR, "data-updates", "archive")
 LOG_FILE = os.path.join(ROOT_DIR, "data", "apply_decisions.log")
+TRIANGULATIONS_PENDING = os.path.join(ROOT_DIR, "data", "triangulations-pending.json")
 
 def load_json(path):
     with open(path, encoding="utf-8") as f:
@@ -560,6 +561,59 @@ def apply_accepted(claim, vault_data, entities, schema):
     return dp_id
 
 
+def is_triangulation(claim):
+    """Detect triangulation claims by comparison_type or dedup_status.
+
+    Per dec-2026-05-05-triangulation-apply-semantics.md §3 and wq-086 §3.1,
+    these route to the parallel apply_triangulation branch (target_nodes
+    paths, not entity_match_rules) instead of falling through to apply_accepted.
+    """
+    return (
+        claim.get("comparison_type") == "triangulates"
+        or claim.get("dedup_status") == "triangulates"
+    )
+
+
+def apply_triangulation_softpark(claim, decision_id):
+    """Park a triangulation accept until the full apply path lands.
+
+    wq-086 commit 1. Writes the full claim payload + decision metadata to
+    data/triangulations-pending.json so the full apply branch (commits 2-7)
+    can drain and replay it with no signal loss. See resolution doc §4.
+    """
+    pending = []
+    if os.path.exists(TRIANGULATIONS_PENDING):
+        try:
+            with open(TRIANGULATIONS_PENDING, encoding="utf-8") as f:
+                pending = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pending = []
+    if not isinstance(pending, list):
+        pending = []
+
+    target_nodes = (claim.get("triangulation") or {}).get("target_nodes", []) or []
+    confidence_impact = (claim.get("triangulation") or {}).get("confidence_impact")
+    accepted_impact = claim.get("accepted_confidence_impact") or confidence_impact
+
+    pending.append({
+        "decision_id": decision_id,
+        "soft_parked_at": datetime.now().isoformat(),
+        "claim": claim,
+        "target_nodes": target_nodes,
+        "confidence_impact": confidence_impact,
+        "accepted_confidence_impact": accepted_impact,
+    })
+
+    os.makedirs(os.path.dirname(TRIANGULATIONS_PENDING), exist_ok=True)
+    with open(TRIANGULATIONS_PENDING, "w", encoding="utf-8") as f:
+        json.dump(pending, f, indent=2)
+
+    log(
+        f"  TRIANGULATION-SOFTPARK: parked decision={decision_id} "
+        f"target_nodes={target_nodes} impact={accepted_impact}"
+    )
+
+
 def apply_declined(claim, vault_inbox):
     """Mark claim as declined in vault-inbox."""
     for item in vault_inbox.get("items", []):
@@ -843,7 +897,22 @@ def _main_impl(decisions_path, outputs):
     log(f"  Accepted: {len(accepted)}, Declined: {len(declined)}, Parked: {len(parked)}, New fields: {len(new_fields)}")
 
     # Apply accepted
+    softparked = 0
     for claim in accepted:
+        # wq-086 commit 1 — triangulations route to a separate pending file.
+        # The existing entity_match_rules pipeline silently drops them
+        # (entity = "Enterprise Generative AI Market" never matches a slug),
+        # so we intercept BEFORE apply_accepted to preserve the accept signal.
+        if is_triangulation(claim):
+            apply_triangulation_softpark(claim, claim.get("id"))
+            softparked += 1
+            for item in vault_inbox.get("items", []):
+                if item.get("id") == claim.get("id"):
+                    item["status"] = "triangulation_pending"
+                    item["soft_parked_at"] = datetime.now().strftime("%Y-%m-%d")
+                    break
+            continue
+
         dp_id = apply_accepted(claim, vault_data, entities, schema)
         # Also mark as accepted in inbox
         for item in vault_inbox.get("items", []):
@@ -890,12 +959,18 @@ def _main_impl(decisions_path, outputs):
     from generate_site_data import generate
     generate(ENTITIES, os.path.join(SITE_DIR, "site-data.json"), os.path.join(SITE_DIR, "site-data.json"))
 
-    log(f"  Done. {len(accepted)} accepted, {len(declined)} declined, {len(parked)} parked, {len(new_fields)} new fields.")
+    log(
+        f"  Done. {len(accepted) - softparked} accepted "
+        f"({softparked} softparked as triangulations), "
+        f"{len(declined)} declined, {len(parked)} parked, "
+        f"{len(new_fields)} new fields."
+    )
 
-    outputs["items_accepted"] = len(accepted)
+    outputs["items_accepted"] = len(accepted) - softparked
     outputs["items_declined"] = len(declined)
     outputs["items_parked"] = len(parked)
     outputs["new_fields_approved"] = len(new_fields)
+    outputs["triangulations_softparked"] = softparked
     outputs["decisions_file"] = os.path.basename(decisions_path)
 
 
