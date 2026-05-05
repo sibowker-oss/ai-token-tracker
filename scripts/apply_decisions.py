@@ -561,6 +561,130 @@ def apply_accepted(claim, vault_data, entities, schema):
     return dp_id
 
 
+# ─────────────────────────── triangulation routing ─────────────────────────
+#
+# Triangulations are claims that don't move a published number but contribute
+# indirect evidence to one or more nodes in the flow model. Per
+# dec-2026-05-05-triangulation-apply-semantics.md and wq-086 §3, they route
+# via target_nodes paths (NOT entity_match_rules). The path strings follow the
+# flow-model conventions emitted by curated_intake.py (build_revenue_flow /
+# build_capex_flow):
+#
+#   market.<year>.<field>        → entities.market_aggregates[year][field]
+#   sankey.buyers.<Segment>      → entities.market_aggregates[year].total_segment_<seg>
+#   sankey.providers.<slug>      → entities.companies[slug].financials[year].arr
+#   <slug>.<year>.<field>        → entities.companies[slug].financials[year][field]
+#   <slug>.current.<field>       → entities.companies[slug].current[field]
+#   capex.<bucket>.<key>         → entities.market_aggregates[year].<bucket>_capex
+#
+# Unknown paths (e.g. sankey.channels.*, sankey.outcomes.*) skip cleanly with
+# a logged counter so audit can surface coverage gaps.
+
+_BUYER_SEGMENT_NORMALISE = {
+    "enterprise": "enterprise",
+    "sme": "sme",
+    "consumer": "consumer",
+    "smb": "sme",  # tolerated alias
+}
+
+_CAPEX_BUCKET_TO_FIELD = {
+    "mag7": "mag7_capex",
+    "neocloud": "neocloud_capex",
+    "neoclouds": "neocloud_capex",
+    "sovereign": "sovereign_capex",
+    "enterprise": "enterprise_capex",
+}
+
+
+def _claim_primary_year(claim):
+    """Best-effort year for a triangulation claim.
+
+    Reads claim.time_period first ("2025" or "2024-2025" → "2025"); falls
+    back to dateOfClaim. Returns None if neither yields a 4-digit year. Used
+    to fill the year slot for sankey.* paths that don't encode year directly.
+    """
+    for key in ("time_period", "timePeriod", "dateOfClaim"):
+        v = claim.get(key)
+        if not v:
+            continue
+        m = re.findall(r"\b(20[2-3]\d)\b", str(v))
+        if m:
+            return m[-1]
+    return None
+
+
+def resolve_target_node(path, claim_year=None):
+    """Map a flow-model path to a (kind, slug, year, field) target.
+
+    Returns a dict {kind, slug, year, field} or None if the path doesn't
+    match a known shape. `kind` is "market" (entities.market_aggregates) or
+    "entity" (entities.companies[slug]). Caller is responsible for the actual
+    write — this helper only parses paths.
+    """
+    if not path or not isinstance(path, str):
+        return None
+
+    parts = path.split(".")
+
+    # Bare slug — non-canonical path the LLM sometimes emits in place of
+    # "<slug>.<year>.arr". Tolerated because the slug alone is unambiguous
+    # and dropping these would lose ~half the Menlo 8 target attachments.
+    if len(parts) == 1:
+        slug = parts[0].lower()
+        if not claim_year or not slug:
+            return None
+        return {"kind": "entity", "slug": slug, "year": claim_year, "field": "arr"}
+
+    head = parts[0].lower()
+
+    # market.<year>.<field>
+    if head == "market" and len(parts) >= 3:
+        year = parts[1]
+        field = ".".join(parts[2:])
+        return {"kind": "market", "slug": None, "year": year, "field": field}
+
+    # sankey.buyers.<Segment>
+    if head == "sankey" and len(parts) >= 3 and parts[1].lower() == "buyers":
+        raw = ".".join(parts[2:]).strip()
+        seg = _BUYER_SEGMENT_NORMALISE.get(raw.lower())
+        if not seg or not claim_year:
+            return None
+        return {"kind": "market", "slug": None, "year": claim_year,
+                "field": f"total_segment_{seg}"}
+
+    # sankey.providers.<slug>
+    if head == "sankey" and len(parts) >= 3 and parts[1].lower() == "providers":
+        slug = ".".join(parts[2:]).lower()
+        if not claim_year:
+            return None
+        return {"kind": "entity", "slug": slug, "year": claim_year, "field": "arr"}
+
+    # sankey.channels.<label>, sankey.outcomes.<label>, sankey.totalVCSubsidy
+    # are aggregate computed values without a stable provenance home.
+    if head == "sankey":
+        return None
+
+    # capex.<bucket>.<key>
+    if head == "capex" and len(parts) >= 2:
+        bucket = parts[1].lower()
+        field = _CAPEX_BUCKET_TO_FIELD.get(bucket)
+        if not field or not claim_year:
+            return None
+        return {"kind": "market", "slug": None, "year": claim_year, "field": field}
+
+    # <slug>.current.<field>
+    if len(parts) >= 3 and parts[1].lower() == "current":
+        return {"kind": "entity", "slug": parts[0].lower(), "year": "current",
+                "field": ".".join(parts[2:])}
+
+    # <slug>.<year>.<field>
+    if len(parts) >= 3 and re.match(r"^\d{4}$", parts[1]):
+        return {"kind": "entity", "slug": parts[0].lower(), "year": parts[1],
+                "field": ".".join(parts[2:])}
+
+    return None
+
+
 def is_triangulation(claim):
     """Detect triangulation claims by comparison_type or dedup_status.
 
