@@ -81,6 +81,10 @@ AI industry data is fragmented across earnings calls, podcast discussions, API o
 │  Impact preview: shows what changes in site-data.json        │
 │  Safety gate: changes >15% require explicit confirmation     │
 │  Downloads approved-claims.json → picked up by next cron     │
+│                                                              │
+│  Triangulations (wq-086): claims with comparison_type=       │
+│  "triangulates" follow a parallel apply path —               │
+│  see §Apply: Triangulation path below.                       │
 └──────────────────────────────┬───────────────────────────────┘
                                │
                                ▼
@@ -249,3 +253,73 @@ Edit site-data.json directly → git commit → live
 | Vault URL enrichment | Per URL | $0.02-0.05 |
 | Source monitor extractions | Per source | $0.02-0.10 |
 | **Total** | **Monthly** | **~$8-15** |
+
+---
+
+## Apply: Triangulation path (wq-086)
+
+Curated intake (`curated_intake.py`, wq-083 v2) emits `triangulates` claims —
+indirect arithmetic against ledger nodes (e.g. "Menlo says Enterprise GenAI =
+$37B; our buyer-segment + capex sum is $28.9B"). These don't fit the direct
+`entity_match_rules` matcher because the source `entity` is a market segment
+("Enterprise Generative AI Market"), not a real ledger entity. They route via
+a parallel apply branch keyed on `target_nodes` paths.
+
+```
+claims.html [Accept]                     data/triangulations-pending.json
+       │                                              ▲
+       ▼                                              │ soft-park (commit 1)
+review-decisions-{date}.json   ──►  apply_decisions.py
+                                              │
+                     ┌────────────────────────┼────────────────────────┐
+                     ▼                        ▼                        ▼
+            (existing direct path)   (NEW triangulation path)   (existing decline/park)
+                     │                        │
+                     ▼                        ▼
+            entities.json (entity-keyed)   entities.json (target_node-keyed)
+            provenance: role=supports     provenance: role=triangulates
+                                          + confidence_impact, derivation
+```
+
+**Apply semantics** (per
+`docs/decisions/resolved/dec-2026-05-05-triangulation-apply-semantics.md`):
+
+- **Option B**: triangulations append provenance entries to every field named
+  in `target_nodes` but never mutate values. Numbers stay direct-claim-only.
+- **Confidence weights**: `strengthens=+0.5`, `widens_range=+0.25`,
+  `weakens=-0.25`. Triangulations alone can lift `low → medium`; they cannot
+  lift `medium → high` (cap reserved for direct evidence).
+- **`needs_review` flag**: ≥2 weakens against the same field (does not
+  downgrade tier on its own — flagged in vault.html for editorial review).
+- **Reviewer override**: claims.html lets the reviewer flip
+  `confidence_impact` at accept time. The accepted value is what gets
+  written to provenance; the model's classification is preserved as
+  `model_classified_as` when overridden.
+
+**Routing** — `resolve_target_node(path, claim_year)` maps flow-model paths
+to concrete (entities.market_aggregates | entities.companies[slug]) targets:
+
+| path                           | resolves to                                              |
+|--------------------------------|----------------------------------------------------------|
+| `market.<year>.<field>`        | `market_aggregates[year][field]`                          |
+| `sankey.buyers.<Segment>`      | `market_aggregates[year].total_segment_<seg>`             |
+| `sankey.providers.<slug>`      | `companies[slug].financials[year].arr`                    |
+| `capex.<bucket>.<key>`         | `market_aggregates[year].<bucket>_capex`                  |
+| `<slug>.<year>.<field>`        | `companies[slug].financials[year][field]`                 |
+| `<slug>.current.<field>`       | `companies[slug].current[field]`                          |
+| `<slug>` (bare)                | `companies[slug].financials[year].arr` (fallback)         |
+
+`sankey.channels.*` and `sankey.outcomes.*` are computed aggregates with no
+stable provenance home — the resolver returns `None` and the entry is
+skipped with a logged counter.
+
+**Drain cycle** — every `apply_decisions.py` invocation (with or without a
+fresh decisions file) runs `replay_triangulations_pending(entities)`. Soft-
+parked entries get applied; on a clean drain the pending file moves to
+`data/triangulations-pending.json.replayed-<ts>.bak`. Entries with
+unresolvable target_nodes stay in a residual pending file for retry.
+
+**Surfaces** — `vault.html` has a Triangulations tab listing every
+role=triangulates entry by (entity, prov_key) with violet accent and
+`needs_review` banner. `source-ledger.html` shows pending + applied
+triangulations as a panel above the per-source ledger.
