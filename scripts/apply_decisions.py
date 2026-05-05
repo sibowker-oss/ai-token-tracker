@@ -477,16 +477,16 @@ def apply_accepted(claim, vault_data, entities, schema):
             prov["claim_count"] = len(prov["claims"])
             prov["needs_source"] = False
 
-            # Recalculate confidence
-            weights = [c["weight"] for c in prov["claims"]]
-            if "authoritative" in weights:
-                prov["confidence"] = "high"
-            elif weights.count("corroborating") >= 2:
-                prov["confidence"] = "high"
-            elif "corroborating" in weights:
-                prov["confidence"] = "medium"
-            else:
-                prov["confidence"] = "low"
+            # Recalculate confidence (wq-086 commit 4 — shared helper now
+            # accounts for triangulation entries with fractional weights and
+            # enforces the medium-tier cap on triangulation-only promotions).
+            prov["confidence"] = compute_provenance_tier(prov["claims"])
+            if compute_needs_review(prov["claims"]):
+                prov["needs_review"] = True
+            elif prov.get("needs_review") and not compute_needs_review(prov["claims"]):
+                # Direct claim accepted on a previously needs_review field —
+                # leave the flag (a reviewer should clear it intentionally).
+                pass
 
             log(f"  PROVENANCE: {entity['name']} → {prov_key}: {prov['confidence']} ({prov['claim_count']} sources)")
 
@@ -748,6 +748,91 @@ TRIANGULATION_WEIGHTS = {
     "weakens": -0.25,
 }
 
+# Triangulation-only tier promotion cap (resolution doc §2). Indirect
+# evidence may lift low → medium but never medium → high.
+TRIANGULATION_TIER_CAP = "medium"
+
+# At least this many weakening triangulations against the same field set
+# the needs_review flag (resolution doc §2 — does not downgrade tier).
+WEAKENS_NEEDS_REVIEW_THRESHOLD = 2
+
+# Triangulation contributions ≥ this score promote low → medium. 0.5 = one
+# strengthens, two widens_range, or any equivalent combination.
+TRIANGULATION_PROMOTION_THRESHOLD = 0.5
+
+
+def compute_provenance_tier(claims):
+    """Compute the confidence tier for a list of provenance entries.
+
+    Direct (role == "supports") claims set the base tier:
+      - any "authoritative" or ≥2 "corroborating" → "high"
+      - 1 "corroborating" or ≥2 entries → "medium"
+      - 1 "indicative"                  → "low"
+      - none                            → "unsourced"
+
+    Triangulation (role == "triangulates") claims contribute fractional
+    weights (resolution doc §2):
+      strengthens=+0.5, widens_range=+0.25, weakens=-0.25.
+    A triangulation_score >= TRIANGULATION_PROMOTION_THRESHOLD on a "low"
+    base tier promotes to "medium". Triangulations alone NEVER promote
+    past TRIANGULATION_TIER_CAP — direct evidence is required for "high".
+
+    Mirrored in scripts/curated_intake.py:_provenance_confidence so the
+    flow-model context the curated intake builds reflects the same tiers
+    apply_decisions.py writes.
+    """
+    if not claims:
+        return "unsourced"
+
+    direct_weights = [
+        (c.get("weight") or "indicative")
+        for c in claims if c.get("role") in (None, "supports")
+    ]
+    n_direct = len(direct_weights)
+    n_strong = sum(1 for w in direct_weights if w in ("authoritative", "corroborating"))
+    has_authoritative = any(w == "authoritative" for w in direct_weights)
+
+    if has_authoritative or n_strong >= 2:
+        base = "high"
+    elif n_strong == 1 or n_direct >= 2:
+        base = "medium"
+    elif n_direct == 1:
+        base = "low"
+    else:
+        base = "unsourced"
+
+    triangulation_score = 0.0
+    for c in claims:
+        if c.get("role") != "triangulates":
+            continue
+        impact = c.get("confidence_impact")
+        triangulation_score += TRIANGULATION_WEIGHTS.get(impact, 0.0)
+
+    # Promotion via triangulations — capped at "medium".
+    if base == "unsourced" and triangulation_score >= TRIANGULATION_PROMOTION_THRESHOLD:
+        return TRIANGULATION_TIER_CAP
+    if base == "low" and triangulation_score >= TRIANGULATION_PROMOTION_THRESHOLD:
+        return TRIANGULATION_TIER_CAP
+
+    return base
+
+
+def compute_needs_review(claims):
+    """≥2 weakening triangulations against the same field flag for review.
+
+    Per resolution doc §2: weakening triangulations don't move tier on
+    their own (asymmetric weights), but a *pattern* of weakens against
+    the same field is editorially meaningful and should be surfaced in
+    vault.html. This helper returns just the boolean — caller writes it
+    onto the prov block as needs_review.
+    """
+    weakens = sum(
+        1 for c in claims
+        if c.get("role") == "triangulates"
+        and c.get("confidence_impact") == "weakens"
+    )
+    return weakens >= WEAKENS_NEEDS_REVIEW_THRESHOLD
+
 
 def _triangulation_prov_id(decision_id, target_node):
     """Idempotency key for a triangulation provenance entry.
@@ -909,6 +994,18 @@ def apply_triangulation(claim, entities, decision_id=None):
             entry["model_classified_as"] = model_impact
         prov_block["claims"].append(entry)
         prov_block["claim_count"] = len(prov_block["claims"])
+
+        # Recalculate tier + needs_review with the shared helper. Per
+        # resolution doc §2 — single weakens never moves tier on its own,
+        # but ≥2 weakens against the same field flag for review.
+        prior_tier = prov_block.get("confidence")
+        new_tier = compute_provenance_tier(prov_block["claims"])
+        prov_block["confidence"] = new_tier
+        if compute_needs_review(prov_block["claims"]):
+            prov_block["needs_review"] = True
+        if prior_tier and prior_tier != new_tier:
+            log(f"  TIER-MOVE: {entity_label} {prov_key} {prior_tier} → {new_tier}")
+
         if not existed:
             created_fields += 1
             log(f"  TRIANGULATION-CREATED-EMPTY-FIELD: {entity_label} {prov_key} (was absent)")
@@ -1115,15 +1212,9 @@ def replay_accepted(vault_inbox, vault_data, entities, schema, dry_run=False, on
                 "role": "supports",
             })
             prov["claim_count"] = len(prov["claims"])
-            weights = [c["weight"] for c in prov["claims"]]
-            if "authoritative" in weights:
-                prov["confidence"] = "high"
-            elif weights.count("corroborating") >= 2:
-                prov["confidence"] = "high"
-            elif "corroborating" in weights:
-                prov["confidence"] = "medium"
-            else:
-                prov["confidence"] = "low"
+            prov["confidence"] = compute_provenance_tier(prov["claims"])
+            if compute_needs_review(prov["claims"]):
+                prov["needs_review"] = True
             log(f"  REPLAY: {entity['name']} → {target_path} = {value}{' (annualised)' if annualised else ''} [from inbox.{item['id']}]")
 
         rescued += 1

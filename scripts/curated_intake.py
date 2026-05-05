@@ -312,21 +312,21 @@ def _fmt_dollars(v, suffix="B") -> str:
 def _provenance_confidence(entity: dict, prov_key: str) -> str:
     """Return 'high' | 'medium' | 'low' | 'unsourced' for a given prov key.
 
-    Used to flag low-confidence positions to the model — these are the
-    triangulation targets where indirect evidence helps most. Tier follows
-    apply_decisions.WEIGHT_RANK and claim count: ≥2 corroborating/authoritative
-    claims = high; 1 corroborating/authoritative or ≥2 indicative = medium;
-    1 indicative = low; nothing = unsourced.
+    Delegates to apply_decisions.compute_provenance_tier so the tier the
+    flow-model context shows is the same tier apply_decisions.py writes.
+    Includes triangulation entries with fractional weights (resolution doc
+    §2): strengthens=+0.5, widens_range=+0.25, weakens=-0.25; cap at
+    "medium" for triangulation-only promotions.
 
-    For 'current.X' keys with no direct provenance, fall back to the most
-    recent year's provenance for the same field — current values are usually
-    propagated from a year's data without a separate provenance record.
+    For 'current.X' keys with no direct provenance, falls back to the most
+    recent year's provenance for the same field — current values are
+    usually propagated from a year's data without a separate provenance
+    record.
     """
+    from apply_decisions import compute_provenance_tier  # noqa: WPS433
     prov_block = entity.get("provenance") or {}
     prov = prov_block.get(prov_key)
     if not prov or not prov.get("claims"):
-        # Fall back: for current.X, look at the most recent year's
-        # provenance for the same field (X).
         if prov_key.startswith("current."):
             field = prov_key.split(".", 1)[1]
             year_keys = [k for k in prov_block.keys()
@@ -336,14 +336,7 @@ def _provenance_confidence(entity: dict, prov_key: str) -> str:
                 prov = prov_block.get(year_keys[0])
         if not prov or not prov.get("claims"):
             return "unsourced"
-    weights = [(c.get("weight") or "indicative") for c in prov["claims"]]
-    n = len(weights)
-    strong = sum(1 for w in weights if w in ("authoritative", "corroborating"))
-    if strong >= 2:
-        return "high"
-    if strong == 1 or n >= 2:
-        return "medium"
-    return "low"
+    return compute_provenance_tier(prov["claims"])
 
 
 def build_revenue_flow(sankey: dict) -> str:
