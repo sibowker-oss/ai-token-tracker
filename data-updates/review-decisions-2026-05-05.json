@@ -1,0 +1,335 @@
+{
+  "submitted_at": "2026-05-05T01:29:30.447Z",
+  "accepted": [
+    {
+      "id": "podcast-20260502-4",
+      "origin": "inbox",
+      "inboxStatus": "pending",
+      "entity": "Openai",
+      "claim": "OpenAI plans to nearly double headcount to 8,000 by end of year, having previously said they would keep headcount flat.",
+      "value": 8000,
+      "unit": "employees",
+      "value_display": "8000 employees",
+      "weight": "indicative",
+      "confidence": "estimated",
+      "dedup_status": "new",
+      "dedup_note": null,
+      "sourceUrl": "https://thetwentyminutevc.libsyn.com/20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthropic-who-wins-enterprise-spacex-at-2trn-and-data-centers-in-space-the-20bn-groq-deal-broken-down-jeff-bezos-100bn-new-fund",
+      "sourceAuthor": "Harry Stebbings",
+      "sourceType": "podcast_discussion",
+      "source_id": null,
+      "tags": [
+        "enterprise_adoption"
+      ],
+      "notes": "Podcast: 20VC \u2014 20VC: Why You Need a $1BN Fund To Do Series A Today | OpenAI",
+      "dateOfClaim": "2026-03-26",
+      "dateAdded": "2026-05-02",
+      "usedOn": [],
+      "replaces": null,
+      "metricKey": "headcount target",
+      "metric": "other",
+      "sourceExcerpt": "oritized and they're really kind of trying to consolidate efforts to stop having such a diverse product set. And then that also to your point on headcount, they now plan to nearly double headcount to **8000** by the end of the year, having said before that they were actually going to keep it flat. You know what it feels like to me in all seriousness, it felt like when we started this podcast quite a while",
+      "isPrimarySource": false,
+      "originalSourceCited": null,
+      "materiality": {
+        "lane": "material",
+        "sublane": "would_change",
+        "reason": "new_value_for_known_field",
+        "current_value": null,
+        "proposed_value": 8000,
+        "pct_delta": null,
+        "weight_vs_existing": "no_existing",
+        "age_days": 0,
+        "scored_at": "2026-05-02T04:17:59Z"
+      },
+      "review_decision": "accepted",
+      "review_note": "",
+      "reviewed_at": "2026-05-05T01:29:30.441Z",
+      "major_change": false,
+      "confirmed": false,
+      "impact": null
+    }
+  ],
+  "declined": [
+    {
+      "id": "podcast-20260502-9",
+      "claim": "Groq's last funding round was at a $6.9 billion valuation, and the $20 billion acquisition represents roughly a 3x on the last round.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260502-10",
+      "claim": "Groq founder Jonathan will make approximately $950 million after double taxation from the Nvidia acquisition.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260502-11",
+      "claim": "Chamath reportedly made $950 million from the Groq deal, though he claims on Twitter he made much more.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-081-9",
+      "claim": "Nearly 81,000 people participated in Anthropic's qualitative study of Claude.ai users, described as the largest and most multilingual study of its kind.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-099-2",
+      "claim": "Anthropic's valuation has doubled in 10 weeks following its societal capital strategy, which included declining Pentagon contracts.",
+      "note": ""
+    }
+  ],
+  "parked": [],
+  "raw_pool": [
+    {
+      "id": "podcast-20260502-3",
+      "claim": "Anthropic may now be at a $2 billion run rate in revenue, which is consistent with the spending shift data from Ramp.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260502-8",
+      "claim": "Groq was acquired by Nvidia in a deal valued at $20 billion, with Groq having less than $100 million in ARR at time of deal.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260502-16",
+      "claim": "When Anthropic's doing 22 billion in the blink of an eye, when people are lining up out the door to buy agentic legal products and healthcare products.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260502-17",
+      "claim": "Notion has effectively doubled ARPU from AI integration, with their AI product priced at $20/month versus $10 for basic.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260502-18",
+      "claim": "Salesforce has 44 billion of ARR which represents the greatest opportunity to sell agent products into.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-1",
+      "claim": "SWE-Bench launched in late 2023 with Claude 2 achieving an overall success rate of ~2%.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-2",
+      "claim": "Claude Mythos Preview achieves 93.9% on SWE-Bench, effectively saturating the benchmark.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-3",
+      "claim": "GPT-3.5 in 2022 could reliably complete tasks that might take a person about ~30 seconds, per METR time horizons plot.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-4",
+      "claim": "GPT-4 in 2023 could reliably complete tasks that take a person about 4 minutes, per METR time horizons plot.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-6",
+      "claim": "GPT-5.2 (High) in 2025 could reliably complete tasks that take a person about 6 hours, per METR time horizons plot.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-8",
+      "claim": "CORE-Bench was introduced in September 2024; a GPT-4o model in CORE-Agent scaffold scored ~21.5% on the hardest task set.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-11",
+      "claim": "As of February 2026, the best scoring system on MLE-Bench (Gemini3 in an agent harness with search) scores 64.4%.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-12",
+      "claim": "Claude Opus 4 achieved a 2.9\u00d7 mean speedup in May 2025 on Anthropic's LLM training optimization task (CPU-only small LM).",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-13",
+      "claim": "Opus 4.5 achieved a 16.5\u00d7 mean speedup in November 2025 on Anthropic's LLM training optimization task.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-14",
+      "claim": "Opus 4.6 achieved a 30\u00d7 mean speedup in February 2026 on Anthropic's LLM training optimization task.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-15",
+      "claim": "Claude Mythos Preview achieved a 52\u00d7 mean speedup in April 2026 on Anthropic's LLM training optimization task.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-17",
+      "claim": "As of April 2026, GPT-5.4 scores 25-28% on PostTrainBench versus a human baseline of 51%.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-090-27",
+      "claim": "A Gemini model directed at ~700 Erd\u0151s problems produced 13 solutions, with 1 deemed to be a non-trivial open problem solution of mild broader mathematical interest.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-081-2",
+      "claim": "Anthropic and Amazon are expanding their collaboration for up to 5 gigawatts of new compute.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-1",
+      "claim": "Google Cloud has counted more than 1,300 real-world generative AI use cases from industry leaders.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-2",
+      "claim": "TPU 8t scales up to 9,600 TPUs and 2 PB of shared, high-bandwidth memory in a single superpod, achieving 3x the processing power of Ironwood.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-3",
+      "claim": "TPU 8t superpod provides 2 PB of shared high-bandwidth memory and delivers up to 2x more performance per Watt compared to previous generation.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-4",
+      "claim": "TPU 8t delivers up to 2x more performance per Watt compared to the prior generation (Ironwood).",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-5",
+      "claim": "TPU 8t achieves 3x the processing power of Ironwood (previous generation TPU).",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-6",
+      "claim": "TPU 8i connects 1,152 TPUs in a single pod using the new Boardfly topology.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-7",
+      "claim": "TPU 8i features 3x more on-chip SRAM compared to previous versions to host larger KV caches entirely on-silicon.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-8",
+      "claim": "TPU 8i delivers 80% better performance per dollar for inference than the prior generation.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-9",
+      "claim": "Veo 3.1 Lite costs less than 50% of the cost of Veo 3.1 Fast while maintaining the same speed.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-10",
+      "claim": "Gemini 3.1 Flash Live achieved a score of 90.8% on ComplexFuncBench Audio, a benchmark for multi-step function calling, leading compared to the previous model.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-11",
+      "claim": "Google Cloud offers $300 in free credit to try Google Cloud AI and ML services.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-087-12",
+      "claim": "Gemini 3.1 Flash TTS allows steering of audio delivery using more than 200 audio tags.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-088-1",
+      "claim": "GPT-5.5 Pro completed a complex coding task in 20 minutes, compared to 33 minutes for GPT-5.4 Pro \u2014 a ~39% speed improvement.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-088-5",
+      "claim": "On the Google-Proof Q&A benchmark, graduate students using Google score 34% outside their field and ~70% inside, while the best AIs now score 94%.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-089-1",
+      "claim": "OpenAI president stated that AI is now writing 80% of the company's code.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-089-6",
+      "claim": "A large fraction of the population has begun turning to chatbots for medical advice, with a BMJ peer-reviewed study finding nearly half of chatbot responses to medical questions were highly problematic.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-097-6",
+      "claim": "Gigawatt-scale AI data center projects and billion-dollar deals are accelerating, with the buildout increasingly defined by power constraints and structured capital.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-1",
+      "claim": "OpenClaw GitHub star count crossed 100,000 in January 2026 as developer interest surged.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-2",
+      "claim": "OpenClaw community dashboards showed more than 2 million visitors in a single week.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-3",
+      "claim": "By March 2026, OpenClaw topped 250,000 stars, overtaking React to become the most-starred software project on GitHub in just 60 days.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-6",
+      "claim": "ServiceNow AI specialists leveraging Apriel and NVIDIA Nemotron models can resolve 90% of tickets autonomously.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-7",
+      "claim": "Nemotron 3 Nano Omni achieves 9x higher throughput than other open omni models with the same interactivity.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-8",
+      "claim": "Nemotron 3 Nano Omni tops six leaderboards for complex document intelligence, and video and audio understanding.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-9",
+      "claim": "The Nemotron family of models has seen over 50 million downloads in the past year.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-10",
+      "claim": "Nemotron 3 Nano Omni is available via Hugging Face, OpenRouter, build.nvidia.com and 25+ partner platforms as of April 28, 2026.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-13",
+      "claim": "ABB Robotics reported up to 80% reduction in commissioning time and 30-40% reduction in total equipment lifecycle cost using NVIDIA Omniverse-based simulation.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-14",
+      "claim": "JLR trained neural surrogate models on more than 20,000 wind-tunnel-correlated CFD simulations, with 95% of aero-thermal workloads now running on NVIDIA GPUs.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-17",
+      "claim": "Terex is a global industrial equipment manufacturer with over 40 plants deploying Tulip's Factory Playback platform powered by NVIDIA Metropolis VSS Blueprint.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-19",
+      "claim": "GeForce NOW is adding 16 games to the cloud gaming library in May 2026, including launch-day titles from Steam, Xbox, PC Game Pass and GOG.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-098-20",
+      "claim": "Nemotron 3 Nano Omni uses a 30B-A3B hybrid mixture-of-experts architecture with 256K context window.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260505-src-099-1",
+      "claim": "Databricks is spending $416 million on Australian expansion, having picked up some of Australia's biggest companies as clients.",
+      "note": ""
+    }
+  ],
+  "new_fields_approved": [],
+  "new_fields_rejected": []
+}
