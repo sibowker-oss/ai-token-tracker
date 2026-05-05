@@ -272,3 +272,139 @@ Append-only per GUIDELINES §5.4. Each snapshot is one block.
 
 ---
 
+## Cohort `wq-081` snapshot — 2026-05-05T00:08:39Z
+
+- Cohort size: **9**
+- Activation rate: **67%** (6/9 active)
+- Pending: **1**, error: **2**
+- Total claims on first run (`last_claims_count` sum): **50**
+
+### Coverage split
+
+| Coverage axis | Count | Notes |
+|---|---:|---|
+| **entity_coverage** | 3 | Sources whose claims attach to rendered entities (entityDirectory.qualifies = true) |
+| **denominator_coverage** | 6 | Macro / grid / sector / infra — not entity-targeted |
+| **cross_cutting_coverage** | 0 | Commentary / framing without a single entity target (adoption_signal, sceptic_anchor, capex_finance, etc.) |
+
+### Routing decisions
+
+| Routing | Count |
+|---|---:|
+| `telemetry-feed` | 5 |
+| `vault-inbox` | 4 |
+
+### Sources in cohort
+
+| id | title | tier | method | type | routing | coverage | status | first-run claims |
+|---|---|---:|---|---|---|---|---|---:|
+| `src-025` | SEC EDGAR — AI company 10-K/10-Q/8-K scan | 1 | `sec_edgar_scan` | `sec_filing` | `telemetry-feed` | entity | `active` | 16 |
+| `src-073` | CAISO — Generator Interconnection Queue | 2 | `iso_queue_caiso` | `iso_queue` | `telemetry-feed` | denominator | `error` | 0 |
+| `src-074` | FRED API — St Louis Fed macro denominators | 1 | `fred_api` | `gov_api` | `vault-inbox` | denominator | `pending_first_extraction` | 0 |
+| `src-075` | World Bank Indicators API | 1 | `worldbank_api` | `gov_api` | `vault-inbox` | denominator | `active` | 3 |
+| `src-076` | ABS — Australian Bureau of Statistics SDMX API | 1 | `abs_api` | `gov_api` | `vault-inbox` | denominator | `error` | 0 |
+| `src-077` | RBA — Reserve Bank of Australia Statistical Tables | 1 | `rba_api` | `gov_api` | `vault-inbox` | denominator | `active` | 0 |
+| `src-078` | AEMO NEM Data Dashboard | 1 | `aemo_nem` | `iso_queue` | `telemetry-feed` | denominator | `active` | 0 |
+| `src-079` | GitHub REST API — repo telemetry | 1 | `github_api` | `github_repo` | `telemetry-feed` | entity | `active` | 6 |
+| `src-080` | Hugging Face Hub API — model registry telemetry | 1 | `huggingface_api` | `package_index` | `telemetry-feed` | entity | `active` | 25 |
+
+### Phase 1 → Phase 2 gate (brief §5a)
+
+- Activation rate ≥ 80%? **NO** (current: 67%)
+- Stale rate ≤ 20%? **NO** (current: 22%)
+- Other gate criteria (4-week observation, named gaps, review-queue throughput) require post-Week-1 data and are not evaluated here.
+
+
+---
+
+## Cohort `wq-083` snapshot — 2026-05-05T00:08:39Z
+
+- Cohort size: **11**
+- Activation rate: **100%** (11/11 active)
+- Pending: **0**, error: **0**
+- Total claims on first run (`last_claims_count` sum): **130**
+
+### Coverage split
+
+| Coverage axis | Count | Notes |
+|---|---:|---|
+| **entity_coverage** | 8 | Sources whose claims attach to rendered entities (entityDirectory.qualifies = true) |
+| **denominator_coverage** | 1 | Macro / grid / sector / infra — not entity-targeted |
+| **cross_cutting_coverage** | 2 | Commentary / framing without a single entity target (adoption_signal, sceptic_anchor, capex_finance, etc.) |
+
+### Routing decisions
+
+| Routing | Count |
+|---|---:|
+| `vault-inbox` | 11 |
+
+### Sources in cohort
+
+| id | title | tier | method | type | routing | coverage | status | first-run claims |
+|---|---|---:|---|---|---|---|---|---:|
+| `src-016` | OpenAI Newsroom | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `active` | 55 |
+| `src-081` | Anthropic News | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `active` | 10 |
+| `src-082` | Google DeepMind Blog | 2 | `web_extract` | `web_page` | `vault-inbox` | entity | `active` | 0 |
+| `src-083` | Meta AI Blog | 2 | `web_extract` | `web_page` | `vault-inbox` | entity | `active` | 0 |
+| `src-084` | Mistral AI News | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `active` | 0 |
+| `src-085` | Microsoft AI Blog | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `active` | 0 |
+| `src-086` | AWS What's New + ML Blog | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | denominator | `active` | 0 |
+| `src-087` | Google Cloud AI Blog | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `active` | 13 |
+| `src-088` | One Useful Thing (Ethan Mollick) | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `active` | 13 |
+| `src-089` | Marcus on AI (Gary Marcus) | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `active` | 12 |
+| `src-090` | Import AI (Jack Clark) | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `active` | 27 |
+
+### Phase 1 → Phase 2 gate (brief §5a)
+
+- Activation rate ≥ 80%? **YES** (current: 100%)
+- Stale rate ≤ 20%? **YES** (current: 0%)
+- Other gate criteria (4-week observation, named gaps, review-queue throughput) require post-Week-1 data and are not evaluated here.
+
+
+---
+
+## Cohort `wq-085` snapshot — 2026-05-05T00:08:39Z
+
+- Cohort size: **10**
+- Activation rate: **60%** (6/10 active)
+- Pending: **3**, error: **1**
+- Total claims on first run (`last_claims_count` sum): **81**
+
+### Coverage split
+
+| Coverage axis | Count | Notes |
+|---|---:|---|
+| **entity_coverage** | 1 | Sources whose claims attach to rendered entities (entityDirectory.qualifies = true) |
+| **denominator_coverage** | 1 | Macro / grid / sector / infra — not entity-targeted |
+| **cross_cutting_coverage** | 8 | Commentary / framing without a single entity target (adoption_signal, sceptic_anchor, capex_finance, etc.) |
+
+### Routing decisions
+
+| Routing | Count |
+|---|---:|
+| `vault-inbox` | 10 |
+
+### Sources in cohort
+
+| id | title | tier | method | type | routing | coverage | status | first-run claims |
+|---|---|---:|---|---|---|---|---|---:|
+| `src-091` | Hard Fork (NYT) | 2 | `podcast_scraper` | `podcast_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-092` | Acquired | 2 | `podcast_scraper` | `podcast_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-093` | Dwarkesh Podcast | 2 | `podcast_scraper` | `podcast_feed` | `vault-inbox` | cross-cutting | `pending_first_extraction` | 0 |
+| `src-094` | ChinaTalk | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `active` | 27 |
+| `src-095` | Reuters Technology | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `error` | 0 |
+| `src-096` | TechCrunch | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `active` | 9 |
+| `src-097` | Data Center Frontier | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | denominator | `active` | 15 |
+| `src-098` | NVIDIA Blog (incl. GTC + dev events) | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | entity | `active` | 21 |
+| `src-099` | AFR — Australian Financial Review | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `active` | 9 |
+| `src-100` | ACCC — News Centre | 2 | `rss_feed` | `rss_feed` | `vault-inbox` | cross-cutting | `active` | 0 |
+
+### Phase 1 → Phase 2 gate (brief §5a)
+
+- Activation rate ≥ 80%? **NO** (current: 60%)
+- Stale rate ≤ 20%? **YES** (current: 10%)
+- Other gate criteria (4-week observation, named gaps, review-queue throughput) require post-Week-1 data and are not evaluated here.
+
+
+---
+

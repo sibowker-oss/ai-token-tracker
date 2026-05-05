@@ -480,3 +480,376 @@
 [2026-05-04 13:52:26] 
 ============================================================
 [2026-05-04 13:52:26] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 09:57:27] 
+============================================================
+[2026-05-05 09:57:27] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:57:27]   Registry: 100 sources
+[2026-05-05 09:57:27]   Due for extraction: 1
+[2026-05-05 09:57:27] 
+📄 Import AI (Jack Clark) (rss_feed)
+[2026-05-05 09:57:27]    Method: rss_feed, URL: https://importai.substack.com/feed
+[2026-05-05 09:57:27]   Fetch failed: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>
+[2026-05-05 09:57:27]   Page content too short (0 chars)
+[2026-05-05 09:57:27]    Extracted 0 claim(s)
+[2026-05-05 09:57:27]    ⚠ Fetch failures with 0 claims — next_check unchanged for retry
+[2026-05-05 09:57:27] 
+============================================================
+[2026-05-05 09:57:27] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 09:58:01] 
+============================================================
+[2026-05-05 09:58:01] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:58:01]   Registry: 100 sources
+[2026-05-05 09:58:01]   Due for extraction: 1
+[2026-05-05 09:58:01] 
+📄 Import AI (Jack Clark) (rss_feed)
+[2026-05-05 09:58:01]    Method: rss_feed, URL: https://importai.substack.com/feed
+[2026-05-05 09:58:01]   Fetched 394,109 chars
+[2026-05-05 09:58:47]    Extracted 27 claim(s)
+[2026-05-05 09:58:47]    Appended 27 pending item(s) to vault-inbox.json
+[2026-05-05 09:58:47] 
+============================================================
+[2026-05-05 09:58:47] ✅ Done — 1 sources processed, 27 total claims extracted
+[2026-05-05 09:59:03] 
+============================================================
+[2026-05-05 09:59:03] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:03]   Registry: 100 sources
+[2026-05-05 09:59:03]   Due for extraction: 1
+[2026-05-05 09:59:03] 
+📄 CAISO — Generator Interconnection Queue (iso_queue)
+[2026-05-05 09:59:03]    Method: iso_queue_caiso, URL: https://www.caiso.com/planning/transmission-onshore/queue-management
+[2026-05-05 09:59:05]   Fetch failed: HTTP Error 404: Not Found
+[2026-05-05 09:59:05]    Extracted 0 claim(s)
+[2026-05-05 09:59:05]    ⚠ Fetch failures with 0 claims — next_check unchanged for retry
+[2026-05-05 09:59:05] 
+============================================================
+[2026-05-05 09:59:05] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 09:59:05] 
+============================================================
+[2026-05-05 09:59:05] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:05]   Registry: 100 sources
+[2026-05-05 09:59:05]   Due for extraction: 1
+[2026-05-05 09:59:05] 
+📄 World Bank Indicators API (gov_api)
+[2026-05-05 09:59:05]    Method: worldbank_api, URL: https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD
+[2026-05-05 09:59:06]   WLD: NY.GDP.MKTP.CD 2024 = 110,982,661,180,013
+[2026-05-05 09:59:07]   USA: NY.GDP.MKTP.CD 2024 = 28,750,956,130,731
+[2026-05-05 09:59:07]   CHN: NY.GDP.MKTP.CD 2024 = 18,743,803,170,827
+[2026-05-05 09:59:07]    Extracted 3 claim(s)
+[2026-05-05 09:59:07]    Appended 3 pending item(s) to vault-inbox.json
+[2026-05-05 09:59:07] 
+============================================================
+[2026-05-05 09:59:07] ✅ Done — 1 sources processed, 3 total claims extracted
+[2026-05-05 09:59:07] 
+============================================================
+[2026-05-05 09:59:07] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:07]   Registry: 100 sources
+[2026-05-05 09:59:07]   Due for extraction: 1
+[2026-05-05 09:59:07] 
+📄 ABS — Australian Bureau of Statistics SDMX API (gov_api)
+[2026-05-05 09:59:07]    Method: abs_api, URL: https://data.api.abs.gov.au/rest/data/ABS,GDPE_H,1.0.0/all
+[2026-05-05 09:59:08]   ABS API fetch failed: HTTP Error 404: Not Found
+[2026-05-05 09:59:08]    Extracted 0 claim(s)
+[2026-05-05 09:59:08]    ⚠ Fetch failures with 0 claims — next_check unchanged for retry
+[2026-05-05 09:59:08] 
+============================================================
+[2026-05-05 09:59:08] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 09:59:08] 
+============================================================
+[2026-05-05 09:59:08] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:08]   Registry: 100 sources
+[2026-05-05 09:59:08]   Due for extraction: 1
+[2026-05-05 09:59:08] 
+📄 RBA — Reserve Bank of Australia Statistical Tables (gov_api)
+[2026-05-05 09:59:08]    Method: rba_api, URL: https://www.rba.gov.au/statistics/tables/
+[2026-05-05 09:59:08]   RBA row-level CSV/XLSX parse is v2 work; v1 returns [].
+[2026-05-05 09:59:08]    Extracted 0 claim(s)
+[2026-05-05 09:59:08] 
+============================================================
+[2026-05-05 09:59:08] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 09:59:08] 
+============================================================
+[2026-05-05 09:59:08] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:08]   Registry: 100 sources
+[2026-05-05 09:59:08]   Due for extraction: 1
+[2026-05-05 09:59:08] 
+📄 AEMO NEM Data Dashboard (iso_queue)
+[2026-05-05 09:59:08]    Method: aemo_nem, URL: https://aemo.com.au/en/energy-systems/electricity/national-electricity-market-ne
+[2026-05-05 09:59:10]   AEMO row-level CSV parse is v2 work; v1 returns [].
+[2026-05-05 09:59:10]    Extracted 0 claim(s)
+[2026-05-05 09:59:10] 
+============================================================
+[2026-05-05 09:59:10] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 09:59:10] 
+============================================================
+[2026-05-05 09:59:10] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:10]   Registry: 100 sources
+[2026-05-05 09:59:10]   Due for extraction: 1
+[2026-05-05 09:59:10] 
+📄 GitHub REST API — repo telemetry (github_repo)
+[2026-05-05 09:59:10]    Method: github_api, URL: https://api.github.com/repos
+[2026-05-05 09:59:10]   anthropics/anthropic-sdk-python: ★3361 forks=642
+[2026-05-05 09:59:11]   openai/openai-python: ★30679 forks=4766
+[2026-05-05 09:59:11]   meta-llama/llama-models: ★7584 forks=1367
+[2026-05-05 09:59:12]   mistralai/mistral-inference: ★10793 forks=1044
+[2026-05-05 09:59:12]   deepseek-ai/DeepSeek-V3: ★103379 forks=16734
+[2026-05-05 09:59:12]   huggingface/transformers: ★160241 forks=33103
+[2026-05-05 09:59:12]    Extracted 6 claim(s)
+[2026-05-05 09:59:13]    Routed 6 item(s) to data/telemetry-feed.json (wq-047)
+[2026-05-05 09:59:13]    Appended 0 pending item(s) to vault-inbox.json
+[2026-05-05 09:59:13] 
+============================================================
+[2026-05-05 09:59:13] ✅ Done — 1 sources processed, 6 total claims extracted
+[2026-05-05 09:59:13] 
+============================================================
+[2026-05-05 09:59:13] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:13]   Registry: 100 sources
+[2026-05-05 09:59:13]   Due for extraction: 1
+[2026-05-05 09:59:13] 
+📄 Hugging Face Hub API — model registry telemetry (package_index)
+[2026-05-05 09:59:13]    Method: huggingface_api, URL: https://huggingface.co/api/models
+[2026-05-05 09:59:13]   meta-llama: top-5 models cached
+[2026-05-05 09:59:14]   mistralai: top-5 models cached
+[2026-05-05 09:59:14]   deepseek-ai: top-5 models cached
+[2026-05-05 09:59:14]   google: top-5 models cached
+[2026-05-05 09:59:14]   openai-community: top-5 models cached
+[2026-05-05 09:59:15]   Anthropic: top-0 models cached
+[2026-05-05 09:59:15]    Extracted 25 claim(s)
+[2026-05-05 09:59:15]    Routed 25 item(s) to data/telemetry-feed.json (wq-047)
+[2026-05-05 09:59:15]    Appended 0 pending item(s) to vault-inbox.json
+[2026-05-05 09:59:15] 
+============================================================
+[2026-05-05 09:59:15] ✅ Done — 1 sources processed, 25 total claims extracted
+[2026-05-05 09:59:26] 
+============================================================
+[2026-05-05 09:59:26] 📡 Source Monitor — 2026-05-05
+[2026-05-05 09:59:26]   Registry: 100 sources
+[2026-05-05 09:59:26]   Due for extraction: 1
+[2026-05-05 09:59:26] 
+📄 OpenAI Newsroom (rss_feed)
+[2026-05-05 09:59:26]    Method: rss_feed, URL: https://openai.com/news/rss.xml
+[2026-05-05 09:59:27]   Fetched 127,904 chars
+[2026-05-05 10:01:01]   Claude JSON parse recovered (truncate-close) — salvaged 55 claim(s).
+[2026-05-05 10:01:01]    Extracted 55 claim(s)
+[2026-05-05 10:01:02]    Appended 55 pending item(s) to vault-inbox.json
+[2026-05-05 10:01:02] 
+============================================================
+[2026-05-05 10:01:02] ✅ Done — 1 sources processed, 55 total claims extracted
+[2026-05-05 10:01:02] 
+============================================================
+[2026-05-05 10:01:02] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:01:02]   Registry: 100 sources
+[2026-05-05 10:01:02]   Due for extraction: 1
+[2026-05-05 10:01:02] 
+📄 Anthropic News (rss_feed)
+[2026-05-05 10:01:02]    Method: rss_feed, URL: https://www.anthropic.com/news
+[2026-05-05 10:01:05]   Fetched 3,778 chars
+[2026-05-05 10:01:26]    Extracted 10 claim(s)
+[2026-05-05 10:01:26]    Appended 10 pending item(s) to vault-inbox.json
+[2026-05-05 10:01:26] 
+============================================================
+[2026-05-05 10:01:26] ✅ Done — 1 sources processed, 10 total claims extracted
+[2026-05-05 10:01:26] 
+============================================================
+[2026-05-05 10:01:26] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:01:26]   Registry: 100 sources
+[2026-05-05 10:01:26]   Due for extraction: 1
+[2026-05-05 10:01:26] 
+📄 Google DeepMind Blog (web_page)
+[2026-05-05 10:01:26]    Method: web_extract, URL: https://deepmind.google/discover/blog/
+[2026-05-05 10:01:28]   Fetched 7,738 chars
+[2026-05-05 10:01:29]    Extracted 0 claim(s)
+[2026-05-05 10:01:29] 
+============================================================
+[2026-05-05 10:01:29] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 10:01:29] 
+============================================================
+[2026-05-05 10:01:29] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:01:29]   Registry: 100 sources
+[2026-05-05 10:01:29]   Due for extraction: 1
+[2026-05-05 10:01:29] 
+📄 Meta AI Blog (web_page)
+[2026-05-05 10:01:29]    Method: web_extract, URL: https://ai.meta.com/blog/
+[2026-05-05 10:01:31]   Fetched 4,172 chars
+[2026-05-05 10:01:32]    Extracted 0 claim(s)
+[2026-05-05 10:01:32] 
+============================================================
+[2026-05-05 10:01:32] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 10:01:32] 
+============================================================
+[2026-05-05 10:01:32] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:01:32]   Registry: 100 sources
+[2026-05-05 10:01:32]   Due for extraction: 1
+[2026-05-05 10:01:32] 
+📄 Mistral AI News (rss_feed)
+[2026-05-05 10:01:32]    Method: rss_feed, URL: https://mistral.ai/news
+[2026-05-05 10:01:33]   Fetched 709 chars
+[2026-05-05 10:01:34]    Extracted 0 claim(s)
+[2026-05-05 10:01:34] 
+============================================================
+[2026-05-05 10:01:34] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 10:01:34] 
+============================================================
+[2026-05-05 10:01:34] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:01:34]   Registry: 100 sources
+[2026-05-05 10:01:34]   Due for extraction: 1
+[2026-05-05 10:01:34] 
+📄 Microsoft AI Blog (rss_feed)
+[2026-05-05 10:01:34]    Method: rss_feed, URL: https://blogs.microsoft.com/ai/feed/
+[2026-05-05 10:01:34]   Fetched 7,814 chars
+[2026-05-05 10:01:36]    Extracted 0 claim(s)
+[2026-05-05 10:01:36] 
+============================================================
+[2026-05-05 10:01:36] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 10:01:36] 
+============================================================
+[2026-05-05 10:01:36] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:01:36]   Registry: 100 sources
+[2026-05-05 10:01:36]   Due for extraction: 1
+[2026-05-05 10:01:36] 
+📄 AWS What's New + ML Blog (rss_feed)
+[2026-05-05 10:01:36]    Method: rss_feed, URL: https://aws.amazon.com/about-aws/whats-new/recent/feed/
+[2026-05-05 10:01:36]   Fetched 201,735 chars
+[2026-05-05 10:01:38]    Extracted 0 claim(s)
+[2026-05-05 10:01:38] 
+============================================================
+[2026-05-05 10:01:38] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 10:01:38] 
+============================================================
+[2026-05-05 10:01:38] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:01:38]   Registry: 100 sources
+[2026-05-05 10:01:38]   Due for extraction: 1
+[2026-05-05 10:01:38] 
+📄 Google Cloud AI Blog (rss_feed)
+[2026-05-05 10:01:38]    Method: rss_feed, URL: https://cloudblog.withgoogle.com/products/ai-machine-learning/rss/
+[2026-05-05 10:01:40]   Fetched 479,962 chars
+[2026-05-05 10:02:09]    Extracted 13 claim(s)
+[2026-05-05 10:02:09]    Appended 13 pending item(s) to vault-inbox.json
+[2026-05-05 10:02:09] 
+============================================================
+[2026-05-05 10:02:09] ✅ Done — 1 sources processed, 13 total claims extracted
+[2026-05-05 10:02:09] 
+============================================================
+[2026-05-05 10:02:09] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:02:09]   Registry: 100 sources
+[2026-05-05 10:02:09]   Due for extraction: 1
+[2026-05-05 10:02:09] 
+📄 One Useful Thing (Ethan Mollick) (rss_feed)
+[2026-05-05 10:02:09]    Method: rss_feed, URL: https://www.oneusefulthing.org/feed
+[2026-05-05 10:02:10]   Fetched 247,510 chars
+[2026-05-05 10:02:43]    Extracted 13 claim(s)
+[2026-05-05 10:02:44]    Appended 13 pending item(s) to vault-inbox.json
+[2026-05-05 10:02:44] 
+============================================================
+[2026-05-05 10:02:44] ✅ Done — 1 sources processed, 13 total claims extracted
+[2026-05-05 10:02:44] 
+============================================================
+[2026-05-05 10:02:44] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:02:44]   Registry: 100 sources
+[2026-05-05 10:02:44]   Due for extraction: 1
+[2026-05-05 10:02:44] 
+📄 Marcus on AI (Gary Marcus) (rss_feed)
+[2026-05-05 10:02:44]    Method: rss_feed, URL: https://garymarcus.substack.com/feed
+[2026-05-05 10:02:44]   Fetched 56,103 chars
+[2026-05-05 10:03:16]    Extracted 12 claim(s)
+[2026-05-05 10:03:16]    Appended 12 pending item(s) to vault-inbox.json
+[2026-05-05 10:03:16] 
+============================================================
+[2026-05-05 10:03:16] ✅ Done — 1 sources processed, 12 total claims extracted
+[2026-05-05 10:03:29] 
+============================================================
+[2026-05-05 10:03:29] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:03:29]   Registry: 100 sources
+[2026-05-05 10:03:29]   Due for extraction: 1
+[2026-05-05 10:03:29] 
+📄 ChinaTalk (rss_feed)
+[2026-05-05 10:03:29]    Method: rss_feed, URL: https://www.chinatalk.media/feed
+[2026-05-05 10:03:29]   Fetched 573,441 chars
+[2026-05-05 10:04:29]    Extracted 27 claim(s)
+[2026-05-05 10:04:29]    Appended 27 pending item(s) to vault-inbox.json
+[2026-05-05 10:04:29] 
+============================================================
+[2026-05-05 10:04:29] ✅ Done — 1 sources processed, 27 total claims extracted
+[2026-05-05 10:04:29] 
+============================================================
+[2026-05-05 10:04:29] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:04:29]   Registry: 100 sources
+[2026-05-05 10:04:29]   Due for extraction: 1
+[2026-05-05 10:04:29] 
+📄 Reuters Technology (rss_feed)
+[2026-05-05 10:04:29]    Method: rss_feed, URL: https://www.reuters.com/technology/
+[2026-05-05 10:04:30]   Fetch failed: HTTP Error 401: HTTP Forbidden
+[2026-05-05 10:04:30]   Page content too short (0 chars)
+[2026-05-05 10:04:30]    Extracted 0 claim(s)
+[2026-05-05 10:04:30]    ⚠ Fetch failures with 0 claims — next_check unchanged for retry
+[2026-05-05 10:04:30] 
+============================================================
+[2026-05-05 10:04:30] ✅ Done — 1 sources processed, 0 total claims extracted
+[2026-05-05 10:04:30] 
+============================================================
+[2026-05-05 10:04:30] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:04:30]   Registry: 100 sources
+[2026-05-05 10:04:30]   Due for extraction: 1
+[2026-05-05 10:04:30] 
+📄 TechCrunch (rss_feed)
+[2026-05-05 10:04:30]    Method: rss_feed, URL: https://techcrunch.com/feed/
+[2026-05-05 10:04:30]   Fetched 5,282 chars
+[2026-05-05 10:04:49]    Extracted 9 claim(s)
+[2026-05-05 10:04:49]    Appended 9 pending item(s) to vault-inbox.json
+[2026-05-05 10:04:49] 
+============================================================
+[2026-05-05 10:04:49] ✅ Done — 1 sources processed, 9 total claims extracted
+[2026-05-05 10:04:49] 
+============================================================
+[2026-05-05 10:04:49] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:04:49]   Registry: 100 sources
+[2026-05-05 10:04:49]   Due for extraction: 1
+[2026-05-05 10:04:49] 
+📄 Data Center Frontier (rss_feed)
+[2026-05-05 10:04:49]    Method: rss_feed, URL: https://www.datacenterfrontier.com/
+[2026-05-05 10:04:51]   Fetched 12,360 chars
+[2026-05-05 10:05:24]    Extracted 15 claim(s)
+[2026-05-05 10:05:24]    Appended 15 pending item(s) to vault-inbox.json
+[2026-05-05 10:05:24] 
+============================================================
+[2026-05-05 10:05:24] ✅ Done — 1 sources processed, 15 total claims extracted
+[2026-05-05 10:05:24] 
+============================================================
+[2026-05-05 10:05:24] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:05:24]   Registry: 100 sources
+[2026-05-05 10:05:24]   Due for extraction: 1
+[2026-05-05 10:05:24] 
+📄 NVIDIA Blog (incl. GTC + dev events) (rss_feed)
+[2026-05-05 10:05:24]    Method: rss_feed, URL: https://blogs.nvidia.com/feed/
+[2026-05-05 10:05:24]   Fetched 108,393 chars
+[2026-05-05 10:06:12]    Extracted 21 claim(s)
+[2026-05-05 10:06:12]    Appended 21 pending item(s) to vault-inbox.json
+[2026-05-05 10:06:12] 
+============================================================
+[2026-05-05 10:06:12] ✅ Done — 1 sources processed, 21 total claims extracted
+[2026-05-05 10:06:12] 
+============================================================
+[2026-05-05 10:06:12] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:06:12]   Registry: 100 sources
+[2026-05-05 10:06:12]   Due for extraction: 1
+[2026-05-05 10:06:12] 
+📄 AFR — Australian Financial Review (rss_feed)
+[2026-05-05 10:06:12]    Method: rss_feed, URL: https://www.afr.com/
+[2026-05-05 10:06:12]   Fetched 18,175 chars
+[2026-05-05 10:06:27]    Extracted 9 claim(s)
+[2026-05-05 10:06:28]    Appended 9 pending item(s) to vault-inbox.json
+[2026-05-05 10:06:28] 
+============================================================
+[2026-05-05 10:06:28] ✅ Done — 1 sources processed, 9 total claims extracted
+[2026-05-05 10:06:28] 
+============================================================
+[2026-05-05 10:06:28] 📡 Source Monitor — 2026-05-05
+[2026-05-05 10:06:28]   Registry: 100 sources
+[2026-05-05 10:06:28]   Due for extraction: 1
+[2026-05-05 10:06:28] 
+📄 ACCC — News Centre (rss_feed)
+[2026-05-05 10:06:28]    Method: rss_feed, URL: https://www.accc.gov.au/news-centre
+[2026-05-05 10:06:28]   Fetched 11,835 chars
+[2026-05-05 10:06:29]    Extracted 0 claim(s)
+[2026-05-05 10:06:29] 
+============================================================
+[2026-05-05 10:06:29] ✅ Done — 1 sources processed, 0 total claims extracted
