@@ -963,7 +963,7 @@ def apply_triangulation(claim, entities, decision_id=None):
         )
         prov_block = prov_root["provenance"].setdefault(
             prov_key,
-            {"confidence": "low", "claim_count": 0, "claims": []},
+            {"confidence": "unsourced", "claim_count": 0, "claims": []},
         )
 
         prov_id = _triangulation_prov_id(decision_id, target_node)
@@ -1015,6 +1015,83 @@ def apply_triangulation(claim, entities, decision_id=None):
         written += 1
 
     return written, skipped_unresolvable, 1 if not target_nodes else 0, skipped_duplicate, created_fields
+
+
+def replay_triangulations_pending(entities):
+    """Drain data/triangulations-pending.json through apply_triangulation.
+
+    Called on every apply_decisions.py run so that any soft-parked entry
+    (commit 1) gets applied as soon as the apply path is available. After a
+    successful drain (zero failures) the pending file is renamed to
+    .replayed-<ts>.bak. If any entries fail (e.g. unresolvable target_node),
+    those entries remain in a residual data/triangulations-pending.json so
+    the next run can retry them — successful entries are still removed from
+    the residual file.
+
+    Returns (drained, residual_kept, total_provs_written) for the run summary.
+    """
+    if not os.path.exists(TRIANGULATIONS_PENDING):
+        return 0, 0, 0
+
+    try:
+        with open(TRIANGULATIONS_PENDING, encoding="utf-8") as f:
+            pending = json.load(f)
+    except (json.JSONDecodeError, OSError) as exc:
+        log(f"  TRIANGULATION-REPLAY: cannot read {TRIANGULATIONS_PENDING}: {exc}")
+        return 0, 0, 0
+
+    if not isinstance(pending, list) or not pending:
+        # Empty list or wrong shape — clean up the empty file.
+        try:
+            os.remove(TRIANGULATIONS_PENDING)
+        except OSError:
+            pass
+        return 0, 0, 0
+
+    log(f"  TRIANGULATION-REPLAY: draining {len(pending)} pending entr(ies) "
+        f"from {os.path.basename(TRIANGULATIONS_PENDING)}")
+
+    drained = 0
+    residual = []
+    total_written = 0
+    for entry in pending:
+        claim = entry.get("claim") or {}
+        decision_id = entry.get("decision_id") or claim.get("id") or "unknown"
+        # Carry the reviewer's accepted impact (if recorded at soft-park time)
+        # back into the claim payload so apply_triangulation reads it first.
+        if entry.get("accepted_confidence_impact") and not claim.get("accepted_confidence_impact"):
+            claim["accepted_confidence_impact"] = entry["accepted_confidence_impact"]
+        written, skip_unres, skip_no_t, skip_dup, _created = apply_triangulation(
+            claim, entities, decision_id=decision_id
+        )
+        total_written += written
+        # Drain rule: if every target_node either wrote or was a duplicate
+        # (i.e. nothing unresolvable AND there were targets), the entry is
+        # complete. Unresolvable targets should be retried on the next run
+        # — they may correspond to new entity slugs added since soft-park.
+        if skip_no_t == 0 and skip_unres == 0:
+            drained += 1
+        else:
+            residual.append(entry)
+
+    if residual:
+        # Some entries had unresolvable paths — keep them for next run.
+        with open(TRIANGULATIONS_PENDING, "w", encoding="utf-8") as f:
+            json.dump(residual, f, indent=2)
+        log(f"  TRIANGULATION-REPLAY: {drained} drained, {len(residual)} kept "
+            f"in residual pending file (unresolvable target_nodes)")
+    else:
+        ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+        bak_path = f"{TRIANGULATIONS_PENDING}.replayed-{ts}.bak"
+        try:
+            shutil.move(TRIANGULATIONS_PENDING, bak_path)
+            log(f"  TRIANGULATION-REPLAY: drained all {drained} entr(ies); "
+                f"moved pending file → {os.path.basename(bak_path)}")
+        except OSError as exc:
+            log(f"  TRIANGULATION-REPLAY: drained {drained} but failed to "
+                f"archive pending file: {exc}")
+
+    return drained, len(residual), total_written
 
 
 def apply_declined(claim, vault_inbox):
@@ -1269,7 +1346,30 @@ def _main_impl(decisions_path, outputs):
             if files:
                 decisions_path = os.path.join(updates_dir, files[0])
 
+    # wq-086 commit 7 — even with no decisions file, drain any soft-parked
+    # triangulations. This makes scripts/apply_decisions.py the single drain
+    # point for triangulations-pending.json regardless of whether there's a
+    # fresh review batch.
     if not decisions_path or not os.path.exists(decisions_path):
+        if os.path.exists(TRIANGULATIONS_PENDING):
+            log("apply_decisions.py — no decisions file; draining triangulations-pending only")
+            entities_only = load_json(ENTITIES)
+            drained, residual, prov_writes = replay_triangulations_pending(entities_only)
+            if drained > 0 or prov_writes > 0:
+                save_json(ENTITIES, entities_only)
+                log(f"  Saved entities.json ({drained} triangulations drained, "
+                    f"{prov_writes} provenance entries written)")
+                from generate_site_data import generate
+                generate(ENTITIES, os.path.join(SITE_DIR, "site-data.json"),
+                         os.path.join(SITE_DIR, "site-data.json"))
+                log("  Regenerated: site-data.json")
+            outputs["items_accepted"] = 0
+            outputs["items_declined"] = 0
+            outputs["items_parked"] = 0
+            outputs["triangulations_drained"] = drained
+            outputs["triangulation_prov_entries"] = prov_writes
+            return
+
         print("No decisions file found. Save review-decisions-*.json to beta/data-updates/")
         outputs["items_accepted"] = 0
         outputs["items_declined"] = 0
@@ -1338,6 +1438,12 @@ def _main_impl(decisions_path, outputs):
         ]
         log(f"  Removed {len(rejected_fields)} rejected field proposal(s)")
 
+    # wq-086 commit 7 — drain triangulations-pending.json. Includes any
+    # entries soft-parked above in this same run, plus any older pending
+    # entries from prior runs. Successful drains move the file to a .bak;
+    # entries with unresolvable target_nodes stay in residual for retry.
+    drained, residual, prov_writes = replay_triangulations_pending(entities)
+
     # Save everything
     save_json(VAULT_DATA, vault_data)
     save_json(VAULT_INBOX, vault_inbox)
@@ -1358,7 +1464,8 @@ def _main_impl(decisions_path, outputs):
 
     log(
         f"  Done. {len(accepted) - softparked} accepted "
-        f"({softparked} softparked as triangulations), "
+        f"({softparked} softparked as triangulations, "
+        f"{drained} drained → {prov_writes} prov entries), "
         f"{len(declined)} declined, {len(parked)} parked, "
         f"{len(new_fields)} new fields."
     )
@@ -1368,6 +1475,8 @@ def _main_impl(decisions_path, outputs):
     outputs["items_parked"] = len(parked)
     outputs["new_fields_approved"] = len(new_fields)
     outputs["triangulations_softparked"] = softparked
+    outputs["triangulations_drained"] = drained
+    outputs["triangulation_prov_entries"] = prov_writes
     outputs["decisions_file"] = os.path.basename(decisions_path)
 
 
