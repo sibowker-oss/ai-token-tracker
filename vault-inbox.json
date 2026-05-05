@@ -92195,10 +92195,11 @@
         "earnings"
       ],
       "notes": "Most recent earnings. TAIL previously held $13B from Jan 2026 \u2014 that was Q2 FY2026. This is the updated Q3 FY2026 figure. Author estimates 70%+ is OpenAI Azure spend (~$24B annualised).",
-      "status": "pending",
+      "status": "accepted",
       "source_id": "src-101",
       "metricKey": "microsoft-ai-arr-2026",
-      "replaces": "microsoft-ai-arr-jan-2026"
+      "replaces": "microsoft-ai-arr-jan-2026",
+      "accepted_as": "dp-239"
     },
     {
       "id": "extract-20260505-src-022-20",
@@ -92219,10 +92220,11 @@
         "2026"
       ],
       "notes": "Updated from 15M (Jan 2026). At max $30/month = ~$600M/month = $7.2B annualised \u2014 still a fraction of the $37B AI run rate.",
-      "status": "pending",
+      "status": "accepted",
       "source_id": "src-101",
       "metricKey": "microsoft-copilot-seats-2026",
-      "replaces": "microsoft-copilot-seats-jan-2026"
+      "replaces": "microsoft-copilot-seats-jan-2026",
+      "accepted_as": "dp-240"
     },
     {
       "id": "extract-20260505-src-022-21",
@@ -92390,10 +92392,11 @@
         "earnings"
       ],
       "notes": "Doubled quarter-over-quarter. Previously TAIL held $240B (heading into 2026). The surge is driven by Anthropic TPU deals and Meta Google Cloud deal. ~50% recognisable in next 24 months.",
-      "status": "pending",
+      "status": "accepted",
       "source_id": "src-101",
       "metricKey": "google-cloud-rpo-2026",
-      "replaces": "google-cloud-backlog-2025"
+      "replaces": "google-cloud-backlog-2025",
+      "accepted_as": "dp-241"
     },
     {
       "id": "extract-20260505-src-022-28",
@@ -92488,10 +92491,11 @@
         "IPO"
       ],
       "notes": "IPO-filed / reported figure. TAIL previously held $1.9B ARR estimate from pre-IPO period \u2014 significant undercount. Update required.",
-      "status": "pending",
+      "status": "accepted",
       "source_id": "src-101",
       "metricKey": "coreweave-revenue-2025",
-      "replaces": "coreweave-arr-2025-estimate"
+      "replaces": "coreweave-arr-2025-estimate",
+      "accepted_as": "dp-242"
     },
     {
       "id": "extract-20260505-src-022-32",

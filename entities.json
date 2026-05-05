@@ -5831,7 +5831,7 @@
         },
         "2025.collected_revenue": {
           "confidence": "medium",
-          "claim_count": 1,
+          "claim_count": 2,
           "claims": [
             {
               "id": "derived-2025-collected_revenue",
@@ -5867,8 +5867,24 @@
                   ]
                 }
               }
+            },
+            {
+              "id": "dp-242",
+              "claim": "CoreWeave 2025 actual reported revenue: $5.15B",
+              "value": 5.15,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Ed Zitron",
+              "source_url": "https://www.wheresyoured.at",
+              "date": "2026-05",
+              "origin": "accepted",
+              "role": "supports",
+              "time_period_scope": "annual",
+              "period_qualifier": null
             }
-          ]
+          ],
+          "needs_source": false
         }
       }
     },
@@ -6904,9 +6920,36 @@
           ]
         }
       ],
-      "financials": {},
+      "financials": {
+        "2026_q2": {
+          "total_revenue": 37
+        }
+      },
       "current": {},
-      "provenance": {}
+      "provenance": {
+        "2026_q2.total_revenue": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-239",
+              "claim": "Microsoft AI annual revenue run rate: $37B (latest earnings)",
+              "value": 37,
+              "unit": "$B ARR",
+              "weight": "indicative",
+              "confidence": "verified",
+              "source": "Ed Zitron",
+              "source_url": "https://www.wheresyoured.at",
+              "date": "2026-04",
+              "origin": "accepted",
+              "role": "supports",
+              "time_period_scope": "q2",
+              "period_qualifier": "Q2"
+            }
+          ],
+          "needs_source": false
+        }
+      }
     },
     {
       "slug": "salesforce-ai",

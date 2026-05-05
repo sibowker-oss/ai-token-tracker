@@ -5185,6 +5185,101 @@
       "metricKey": "headcount target",
       "status": "accepted",
       "source_id": null
+    },
+    {
+      "id": "dp-239",
+      "claim": "Microsoft AI annual revenue run rate: $37B (latest earnings)",
+      "value": 37,
+      "unit": "$B ARR",
+      "sourceUrl": "https://www.wheresyoured.at",
+      "sourceType": "newsletter",
+      "sourceAuthor": "Ed Zitron",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04",
+      "dateAdded": "2026-05-05",
+      "usedOn": [],
+      "notes": "Most recent earnings. TAIL previously held $13B from Jan 2026 \u2014 that was Q2 FY2026. This is the updated Q3 FY2026 figure. Author estimates 70%+ is OpenAI Azure spend (~$24B annualised).",
+      "tags": [
+        "microsoft",
+        "revenue",
+        "ARR",
+        "2026",
+        "earnings"
+      ],
+      "metricKey": "microsoft-ai-arr-2026",
+      "status": "accepted",
+      "source_id": "src-101"
+    },
+    {
+      "id": "dp-240",
+      "claim": "Microsoft paying Copilot seats: 20M (latest earnings)",
+      "value": 20,
+      "unit": "M seats",
+      "sourceUrl": "https://www.wheresyoured.at",
+      "sourceType": "newsletter",
+      "sourceAuthor": "Ed Zitron",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04",
+      "dateAdded": "2026-05-05",
+      "usedOn": [],
+      "notes": "Updated from 15M (Jan 2026). At max $30/month = ~$600M/month = $7.2B annualised \u2014 still a fraction of the $37B AI run rate.",
+      "tags": [
+        "microsoft",
+        "copilot",
+        "seats",
+        "2026"
+      ],
+      "metricKey": "microsoft-copilot-seats-2026",
+      "status": "accepted",
+      "source_id": "src-101"
+    },
+    {
+      "id": "dp-241",
+      "claim": "Google Cloud remaining performance obligations: $462.3B (latest earnings)",
+      "value": 462.3,
+      "unit": "$B",
+      "sourceUrl": "https://www.wheresyoured.at",
+      "sourceType": "newsletter",
+      "sourceAuthor": "Ed Zitron",
+      "confidence": "verified",
+      "dateOfClaim": "2026-04",
+      "dateAdded": "2026-05-05",
+      "usedOn": [],
+      "notes": "Doubled quarter-over-quarter. Previously TAIL held $240B (heading into 2026). The surge is driven by Anthropic TPU deals and Meta Google Cloud deal. ~50% recognisable in next 24 months.",
+      "tags": [
+        "google",
+        "cloud",
+        "RPO",
+        "backlog",
+        "2026",
+        "earnings"
+      ],
+      "metricKey": "google-cloud-rpo-2026",
+      "status": "accepted",
+      "source_id": "src-101"
+    },
+    {
+      "id": "dp-242",
+      "claim": "CoreWeave 2025 actual reported revenue: $5.15B",
+      "value": 5.15,
+      "unit": "$B",
+      "sourceUrl": "https://www.wheresyoured.at",
+      "sourceType": "newsletter",
+      "sourceAuthor": "Ed Zitron",
+      "confidence": "verified",
+      "dateOfClaim": "2026-05",
+      "dateAdded": "2026-05-05",
+      "usedOn": [],
+      "notes": "IPO-filed / reported figure. TAIL previously held $1.9B ARR estimate from pre-IPO period \u2014 significant undercount. Update required.",
+      "tags": [
+        "coreweave",
+        "revenue",
+        "2025",
+        "IPO"
+      ],
+      "metricKey": "coreweave-revenue-2025",
+      "status": "accepted",
+      "source_id": "src-101"
     }
   ]
 }
