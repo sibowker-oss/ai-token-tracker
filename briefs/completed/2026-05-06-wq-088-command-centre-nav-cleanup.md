@@ -208,4 +208,4 @@ Per [feedback memory](../../memory/feedback_validate_rendered_output.md): the §
 
 ---
 
-Shipped: 2026-05-06, commit e8e1b9b
+Shipped: 2026-05-06, commit f5784d8

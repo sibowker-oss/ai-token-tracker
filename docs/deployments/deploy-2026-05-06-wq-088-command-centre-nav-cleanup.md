@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-06
 **WQ:** wq-088
-**Branch/Commit:** main / e8e1b9b (Shipped marker added in follow-up commit)
+**Branch/Commit:** main / f5784d8 (Shipped marker added in follow-up commit; SHA updated post-rebase on origin/main)
 
 ## What shipped
 
