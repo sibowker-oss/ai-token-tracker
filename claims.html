@@ -238,13 +238,47 @@ async function loadClaims() {
     } catch(e) {}
   }
 
+  // wq-083 — also load curated_intake.py output. Discovered via
+  // data-updates/curated-index.json (a manifest the script keeps current);
+  // a static page can't enumerate the directory itself. Each curated file
+  // is a wrapper { source, slug, claims: [...] }. We extract claims and
+  // merge them onto the same review queue so the human gate stays consistent.
+  const curatedFiles = [];
+  try {
+    const idxResp = await fetch('data-updates/curated-index.json?v=' + Date.now());
+    if (idxResp.ok) {
+      const idx = await idxResp.json();
+      for (const entry of (idx.files || [])) {
+        // Only show curated files from the same lookback window as candidates.
+        if (dates.indexOf(entry.date) >= 0) {
+          try {
+            const fResp = await fetch('data-updates/' + entry.file + '?v=' + Date.now());
+            if (fResp.ok) {
+              const payload = await fResp.json();
+              const items = Array.isArray(payload) ? payload : (payload.claims || []);
+              items.forEach(c => { c._curated_slug = entry.slug; });
+              curatedFiles.push({ entry, items });
+            }
+          } catch(e) {}
+        }
+      }
+    }
+  } catch(e) {}
+
+  let combined = raw.slice();
+  curatedFiles.forEach(cf => combined = combined.concat(cf.items));
+
   // Normalise structured claims on load so weight/confidence/dedup_status/category
   // come from the nested source block and the existing card/sort/filter machinery
   // keeps working without a parallel code path.
-  allClaims = raw.map(c => STRUCTURED_TYPES.indexOf(c.type) !== -1
+  allClaims = combined.map(c => STRUCTURED_TYPES.indexOf(c.type) !== -1
     ? normaliseStructuredClaim(c) : c);
-  sourceFile = loadedDate ? (loadedDate + '-candidates.json') : '';
-  console.log('Loaded ' + allClaims.length + ' claims from ' + (loadedDate || '(none)'));
+
+  const parts = [];
+  if (loadedDate) parts.push(loadedDate + '-candidates.json');
+  curatedFiles.forEach(cf => parts.push(cf.entry.file));
+  sourceFile = parts.join(' + ');
+  console.log('Loaded ' + allClaims.length + ' claims from ' + (sourceFile || '(none)'));
 
   if (allClaims.length === 0) {
     document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run <code>python3 scripts/monitor_sources.py</code> to generate candidates, or wait for the daily 11:30am cron.</div>';

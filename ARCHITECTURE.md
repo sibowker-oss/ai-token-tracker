@@ -42,12 +42,15 @@ AI industry data is fragmented across earnings calls, podcast discussions, API o
 ┌──────────────┐    ┌──────────────────────────────────────────┐
 │auto_update.py│    │           CLAIM EXTRACTION               │
 │              │    │                                          │
-│Daily 7am     │    │  extract_claims.py (Claude API)          │
-│Updates:      │    │  Wed 10:45am                             │
-│- dashboard   │    │  enrich_vault.py (Claude API)            │
-│- site-data   │    │  Daily 11am                              │
-│- apply_claims│    │  monitor_sources.py (Claude API)         │
-└──────┬───────┘    │  Daily 11:30am                           │
+│Daily 7am     │    │  Bulk pipeline (cron, broad coverage):   │
+│Updates:      │    │  extract_claims.py    Wed 10:45am        │
+│- dashboard   │    │  enrich_vault.py      Daily 11am         │
+│- site-data   │    │  monitor_sources.py   Daily 11:30am      │
+│- apply_claims│    │                                          │
+└──────┬───────┘    │  Curated intake (manual, focused):       │
+       │            │  curated_intake.py    on-demand (wq-083) │
+       │            │  → URL or stdin → Opus comparison →      │
+       │            │    matches/updates/conflicts/new/context │
        │            └──────────────┬───────────────────────────┘
        │                           │
        ▼                           ▼
@@ -153,9 +156,9 @@ AI industry data is fragmented across earnings calls, podcast discussions, API o
 
 ---
 
-## Adding a New Data Point (3 paths)
+## Adding a New Data Point (4 paths)
 
-### Path 1: Automated (podcast/signal — zero effort)
+### Path 1: Automated bulk (podcast/signal — zero effort)
 ```
 Cron scrapes podcast → Claude extracts claims → claims.html review → Accept → site-data.json updated
 ```
@@ -165,7 +168,22 @@ Cron scrapes podcast → Claude extracts claims → claims.html review → Accep
 Vault Quick Add → paste URL → auto-classify → Add Source → monitor_sources.py extracts → claims pipeline
 ```
 
-### Path 3: Manual (direct edit — for corrections)
+### Path 3: Curated intake (editorial source, on-demand — wq-083)
+```
+curated_intake.py --url ... --slug ...   (or pipe text)
+  → loads ledger position (entities + schema + providers)
+  → Opus compares source against ledger
+  → writes data-updates/<date>-curated-<slug>.json + curated-index.json
+  → claims.html merges into review queue
+  → Accept → site-data.json updated
+```
+Use this for newsletters (Zitron etc.), earnings releases, analyst reports —
+where the value is "what does this source change about what we know?" rather
+than blind extraction. Output classifies each claim as
+`matches | updates | conflicts | new | context`. Slow path: bulk pipeline is
+broad and noisy; curated is focused and fast.
+
+### Path 4: Manual (direct edit — for corrections)
 ```
 Edit site-data.json directly → git commit → live
 ```
