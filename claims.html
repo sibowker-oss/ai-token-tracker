@@ -60,6 +60,11 @@
   .claim-triangulation { font-size:11px; color:var(--text-dim); margin-top:6px; padding:8px 10px; background:rgba(139,92,246,0.06); border-left:2px solid var(--purple); border-radius:4px; line-height:1.5; }
   .claim-triangulation strong { color:var(--purple); font-weight:600; }
   .claim-triangulation code { background:var(--bg); padding:1px 5px; border-radius:3px; font-size:10px; color:var(--text); }
+  /* wq-086 commit 5 — reviewer override on confidence_impact at accept time */
+  .impact-override { display:inline-flex; align-items:center; gap:6px; margin-top:6px; font-size:11px; }
+  .impact-override label { color:var(--text-dim); }
+  .impact-override select { background:var(--bg); border:1px solid var(--card-border); color:var(--text); border-radius:4px; padding:2px 6px; font-size:11px; cursor:pointer; }
+  .impact-override .override-flag { color:var(--orange); font-size:10px; font-style:italic; }
   .badge-high { background:rgba(16,185,129,0.1); color:var(--green); }
   .badge-medium { background:rgba(245,158,11,0.1); color:var(--orange); }
   .badge-low { background:rgba(148,163,184,0.1); color:var(--text-dim); }
@@ -357,6 +362,19 @@ function setNote(idx, note) {
   saveDecisions();
 }
 
+// wq-086 commit 5 — reviewer override on confidence_impact for triangulations.
+// The model's classification is a guide, not a verdict (resolution doc §2).
+// Override is recorded on decisions[idx] and flowed into the submitted payload
+// as `accepted_confidence_impact`. apply_decisions.apply_triangulation reads
+// this first and falls back to triangulation.confidence_impact when absent
+// (preserves backwards compatibility for older decision files).
+function setImpactOverride(idx, value) {
+  if (!decisions[idx]) decisions[idx] = { decision: '', note: '' };
+  decisions[idx].accepted_confidence_impact = value;
+  saveDecisions();
+  // No re-render needed — the select control owns its visual state.
+}
+
 function escapeHtml(s) {
   return (s == null ? '' : String(s))
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -559,9 +577,29 @@ function renderClaims() {
         bits.push('implied: ' + escapeHtml(String(tri.implied_value)));
       }
       if (tri.confidence_impact) {
-        bits.push('impact: ' + escapeHtml(tri.confidence_impact));
+        bits.push('model says: ' + escapeHtml(tri.confidence_impact));
       }
       if (bits.length) triHtml += ' &nbsp; <em>' + bits.join(' · ') + '</em>';
+
+      // wq-086 commit 5 — reviewer override on confidence_impact. Default
+      // is the model's classification; reviewer can promote / downgrade
+      // before accepting. Submitted in the decision payload as
+      // accepted_confidence_impact and read by apply_decisions.apply_triangulation.
+      const modelImpact = tri.confidence_impact || 'widens_range';
+      const accepted = d.accepted_confidence_impact || modelImpact;
+      const overrideFlag = accepted !== modelImpact
+        ? '<span class="override-flag">(reviewer override)</span>'
+        : '';
+      triHtml += '<div class="impact-override">';
+      triHtml += '<label for="impact-' + idx + '">Accepted impact:</label>';
+      triHtml += '<select id="impact-' + idx + '" onchange="setImpactOverride(' + idx + ', this.value)">';
+      ['strengthens', 'widens_range', 'weakens'].forEach(opt => {
+        const sel = (opt === accepted) ? ' selected' : '';
+        triHtml += '<option value="' + opt + '"' + sel + '>' + opt + '</option>';
+      });
+      triHtml += '</select>';
+      triHtml += overrideFlag;
+      triHtml += '</div>';
       triHtml += '</div>';
       html += triHtml;
     }
@@ -679,6 +717,9 @@ function submitDecisions() {
         major_change: impact?.isMajor || false,
         confirmed: false,  // major changes need confirm step
         impact: impact,
+        // wq-086 commit 5 — reviewer's accepted confidence_impact (may differ
+        // from triangulation.confidence_impact if they overrode in the UI).
+        accepted_confidence_impact: d.accepted_confidence_impact || null,
       });
     }
   });
