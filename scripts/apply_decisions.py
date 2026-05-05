@@ -738,6 +738,188 @@ def apply_triangulation_softpark(claim, decision_id):
     )
 
 
+# Per resolution doc §2 — fractional weights for triangulation contributions
+# to the confidence-tier calc. Exposed at module scope so commit 4 (which
+# updates _provenance_confidence in both apply_decisions.py AND
+# curated_intake.py) can import the same constants and they stay in sync.
+TRIANGULATION_WEIGHTS = {
+    "strengthens": 0.5,
+    "widens_range": 0.25,
+    "weakens": -0.25,
+}
+
+
+def _triangulation_prov_id(decision_id, target_node):
+    """Idempotency key for a triangulation provenance entry.
+
+    decision_id + target_node uniquely identifies one (claim, target) pair.
+    Used by apply_triangulation to dedupe replays (soft-park then full
+    apply, or duplicate decision file submissions). See edge cases §5.
+    """
+    safe_target = re.sub(r"[^A-Za-z0-9_.-]", "_", target_node)
+    return f"tri:{decision_id}:{safe_target}"
+
+
+def _ensure_market_field(entities, year, field):
+    """Make sure entities.market_aggregates[year][field] exists.
+
+    Per edge cases §5: if a target_node resolves to a field that doesn't
+    exist yet, create it with null so the field exists for future direct
+    claims to land on. Returns the prior value (or None if newly created).
+    """
+    market = entities.setdefault("market_aggregates", {})
+    year_block = market.setdefault(year, {})
+    existed = field in year_block
+    if not existed:
+        year_block[field] = None
+    return existed
+
+
+def _ensure_entity_field(entity, year, field):
+    """Same as _ensure_market_field but for a company entity.
+
+    For year == "current", writes to entity.current[field]. Otherwise
+    entity.financials[year][field]. Returns whether the field already existed.
+    """
+    if year == "current":
+        cur = entity.setdefault("current", {})
+        existed = field in cur
+        if not existed:
+            cur[field] = None
+        return existed
+    fin = entity.setdefault("financials", {}).setdefault(year, {})
+    existed = field in fin
+    if not existed:
+        fin[field] = None
+    return existed
+
+
+def apply_triangulation(claim, entities, decision_id=None):
+    """Write triangulation provenance entries to entities.json.
+
+    For each target_node in claim.triangulation.target_nodes:
+      1. Resolve to (kind, slug, year, field) via resolve_target_node
+      2. Ensure the field exists (create with null if missing — edge case §5)
+      3. Append a role="triangulates" provenance entry
+      4. Idempotent on (decision_id, target_node) — replays are safe
+
+    Numbers are NEVER updated from triangulations (Option B per resolution
+    doc §1). implied_value is preserved on the entry for future Option C
+    work but ignored at apply time.
+
+    Returns (written, skipped_unresolvable, skipped_no_target, skipped_duplicate,
+             created_empty_fields).
+    """
+    decision_id = decision_id or claim.get("id") or "unknown"
+    tri = claim.get("triangulation") or {}
+    target_nodes = tri.get("target_nodes") or []
+    if not target_nodes:
+        log(f"  TRIANGULATION: decision={decision_id} has empty target_nodes — skipped")
+        return 0, 0, 1, 0, 0
+
+    # Reviewer override > model classification (per resolution doc §2 / brief §3.5)
+    model_impact = tri.get("confidence_impact")
+    accepted_impact = claim.get("accepted_confidence_impact") or model_impact
+    if accepted_impact and accepted_impact not in TRIANGULATION_WEIGHTS:
+        log(f"  TRIANGULATION: decision={decision_id} unknown confidence_impact "
+            f"{accepted_impact!r} — defaulting to widens_range")
+        accepted_impact = "widens_range"
+    overrode = (
+        model_impact is not None
+        and accepted_impact is not None
+        and accepted_impact != model_impact
+    )
+
+    derivation = tri.get("derivation", "")
+    implied_value = tri.get("implied_value")
+    claim_year = _claim_primary_year(claim)
+
+    written = 0
+    skipped_unresolvable = 0
+    skipped_duplicate = 0
+    created_fields = 0
+
+    for target_node in target_nodes:
+        resolved = resolve_target_node(target_node, claim_year=claim_year)
+        if not resolved:
+            log(f"  TRIANGULATION-SKIP: decision={decision_id} target={target_node!r} "
+                f"(unresolved path — see resolve_target_node)")
+            skipped_unresolvable += 1
+            continue
+
+        kind = resolved["kind"]
+        year = resolved["year"]
+        field = resolved["field"]
+        slug = resolved.get("slug")
+
+        if kind == "market":
+            existed = _ensure_market_field(entities, year, field)
+            entity_label = "market_aggregates"
+            host = entities.setdefault("market_aggregates", {}).setdefault(year, {})
+            prov_root = entities["market_aggregates"]
+        else:
+            entity = next(
+                (c for c in entities.get("companies", []) if c.get("slug") == slug),
+                None,
+            )
+            if not entity:
+                log(f"  TRIANGULATION-SKIP: decision={decision_id} target={target_node!r} "
+                    f"slug={slug!r} not in entities.companies")
+                skipped_unresolvable += 1
+                continue
+            existed = _ensure_entity_field(entity, year, field)
+            entity_label = entity.get("name") or slug
+            host = entity
+            prov_root = entity
+
+        prov_root.setdefault("provenance", {})
+        prov_key = (
+            f"current.{field}" if year == "current" else f"{year}.{field}"
+        )
+        prov_block = prov_root["provenance"].setdefault(
+            prov_key,
+            {"confidence": "low", "claim_count": 0, "claims": []},
+        )
+
+        prov_id = _triangulation_prov_id(decision_id, target_node)
+        if any(c.get("id") == prov_id for c in prov_block["claims"]):
+            log(f"  TRIANGULATION-DUP: {entity_label} {prov_key} already has {prov_id}")
+            skipped_duplicate += 1
+            continue
+
+        entry = {
+            "id": prov_id,
+            "claim": safe_str(claim.get("claim", ""))[:160],
+            "value": None,  # triangulations don't move numbers
+            "unit": claim.get("unit", ""),
+            "weight": "indicative",
+            "confidence": claim.get("confidence", "estimated"),
+            "source": safe_str(claim.get("speaker") or claim.get("sourceAuthor") or ""),
+            "source_url": claim.get("source_url") or claim.get("sourceUrl", ""),
+            "date": claim.get("dateOfClaim") or claim.get("extracted_at", ""),
+            "origin": "triangulation",
+            "role": "triangulates",
+            "confidence_impact": accepted_impact,
+            "derivation": safe_str(derivation),
+            "target_node": target_node,
+            "implied_value": implied_value,
+            "decision_id": decision_id,
+        }
+        if overrode:
+            entry["model_classified_as"] = model_impact
+        prov_block["claims"].append(entry)
+        prov_block["claim_count"] = len(prov_block["claims"])
+        if not existed:
+            created_fields += 1
+            log(f"  TRIANGULATION-CREATED-EMPTY-FIELD: {entity_label} {prov_key} (was absent)")
+        log(f"  TRIANGULATION: {entity_label} → {prov_key} role=triangulates "
+            f"impact={accepted_impact}{' (overrode model='+model_impact+')' if overrode else ''}"
+            f" target={target_node}")
+        written += 1
+
+    return written, skipped_unresolvable, 1 if not target_nodes else 0, skipped_duplicate, created_fields
+
+
 def apply_declined(claim, vault_inbox):
     """Mark claim as declined in vault-inbox."""
     for item in vault_inbox.get("items", []):
