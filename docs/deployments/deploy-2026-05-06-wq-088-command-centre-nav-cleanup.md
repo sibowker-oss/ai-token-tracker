@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-06
 **WQ:** wq-088
-**Branch/Commit:** main / TBD (filled in after first commit)
+**Branch/Commit:** main / e8e1b9b (Shipped marker added in follow-up commit)
 
 ## What shipped
 
