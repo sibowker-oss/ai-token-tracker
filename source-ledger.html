@@ -132,6 +132,8 @@
 
   <div class="stats" id="stats"></div>
   <div class="filters" id="filters"></div>
+  <!-- wq-086: triangulation replay record (pending soft-park + applied) -->
+  <div id="triangulationsPanel" style="margin-bottom:24px;"></div>
   <div id="ledger"><div style="text-align:center;padding:40px;color:var(--text-dim);">Loading sources...</div></div>
 </div>
 
@@ -382,6 +384,94 @@ function render() {
 }
 
 loadData();
+renderTriangulationsPanel();
+
+// wq-086 commit 6 — surface pending soft-park + applied triangulations.
+// Pending: data/triangulations-pending.json (claims accepted but not yet
+// drained by apply_decisions.py). Applied: every role=triangulates entry
+// in entities.json provenance. This is the audit trail for indirect evidence.
+async function renderTriangulationsPanel() {
+  const panel = document.getElementById('triangulationsPanel');
+  if (!panel) return;
+
+  // Load both in parallel — silent failures land cleanly as empty lists.
+  const [pendingRes, entitiesRes] = await Promise.all([
+    fetch('data/triangulations-pending.json?v=' + Date.now()).then(r => r.ok ? r.json() : []).catch(() => []),
+    fetch('entities.json?v=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null),
+  ]);
+
+  const pending = Array.isArray(pendingRes) ? pendingRes : [];
+
+  // Walk applied triangulations from entities.json provenance.
+  const applied = [];
+  if (entitiesRes) {
+    function walk(label, provBlock) {
+      Object.entries(provBlock || {}).forEach(([provKey, prov]) => {
+        (prov.claims || []).forEach(c => {
+          if (c.role !== 'triangulates') return;
+          applied.push({
+            entityLabel: label,
+            provKey,
+            target_node: c.target_node,
+            confidence_impact: c.confidence_impact,
+            derivation: c.derivation || '',
+            source: c.source,
+            date: c.date,
+            decision_id: c.decision_id,
+            model_classified_as: c.model_classified_as || null,
+          });
+        });
+      });
+    }
+    (entitiesRes.companies || []).forEach(c => walk(c.name || c.slug, c.provenance || {}));
+    walk('market_aggregates', (entitiesRes.market_aggregates || {}).provenance || {});
+  }
+
+  if (pending.length === 0 && applied.length === 0) {
+    panel.innerHTML = '';
+    return;
+  }
+
+  const impactColor = { strengthens:'#22c55e', widens_range:'#a78bfa', weakens:'#ef4444' };
+
+  function row(rec, isPending) {
+    const targets = isPending
+      ? (rec.target_nodes || []).join(', ')
+      : (rec.target_node || '');
+    const impact = isPending
+      ? (rec.accepted_confidence_impact || rec.confidence_impact || '')
+      : (rec.confidence_impact || '');
+    const date = isPending ? (rec.soft_parked_at || '').slice(0, 10) : (rec.date || '');
+    const source = isPending
+      ? (rec.claim?.speaker || rec.claim?.sourceAuthor || rec.claim?.source_slug || '')
+      : (rec.source || '');
+    const derivation = isPending
+      ? (rec.claim?.triangulation?.derivation || '')
+      : (rec.derivation || '');
+    const ic = impactColor[impact] || '#a78bfa';
+    return '<div style="padding:10px 12px;border-left:2px solid ' + ic + ';background:rgba(139,92,246,0.04);border-radius:4px;margin-bottom:6px;">' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:11px;">' +
+        '<span style="font-weight:700;color:' + ic + ';letter-spacing:0.5px;">[' + (impact || '?') + ']</span>' +
+        (source ? '<span style="color:var(--text-dim);">' + source + '</span>' : '') +
+        (date ? '<span style="color:var(--text-dim);">' + date + '</span>' : '') +
+        (rec.entityLabel ? '<span style="color:var(--text-dim);">→ ' + rec.entityLabel + ' · ' + rec.provKey + '</span>' : '') +
+      '</div>' +
+      (targets ? '<div style="font-size:10px;color:var(--text-dim);margin-top:4px;">targets: <code>' + targets + '</code></div>' : '') +
+      (derivation ? '<div style="font-size:11px;color:var(--text-dim);margin-top:4px;line-height:1.5;">' + derivation.slice(0, 240) + (derivation.length > 240 ? '…' : '') + '</div>' : '') +
+    '</div>';
+  }
+
+  let html = '<h3 style="font-size:14px;font-weight:700;color:#a78bfa;margin-bottom:8px;">Triangulations</h3>';
+  if (pending.length > 0) {
+    html += '<div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Pending (' + pending.length + ') — soft-parked, awaiting apply_decisions.py drain:</div>';
+    html += pending.map(p => row(p, true)).join('');
+  }
+  if (applied.length > 0) {
+    html += '<div style="font-size:11px;color:var(--text-dim);margin:14px 0 6px;">Applied (' + applied.length + ') — written to entities.json provenance:</div>';
+    html += applied.map(a => row(a, false)).join('');
+  }
+  panel.innerHTML = html;
+}
 </script>
 </body>
 </html>

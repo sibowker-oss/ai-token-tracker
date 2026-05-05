@@ -320,6 +320,7 @@
     <button class="tab" onclick="switchTab('submit')">Full Add</button>
     <button class="tab" onclick="switchTab('consensus')">Consensus</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
+    <button class="tab" onclick="switchTab('triangulations')">Triangulations</button>
     <button class="tab" onclick="switchTab('settings')" style="margin-left:auto;font-size:11px;">Settings</button>
   </div>
 
@@ -585,6 +586,18 @@
   <div id="view-audit" class="view-section" style="display:none;">
     <div id="auditContent"></div>
   </div>
+
+  <!-- TRIANGULATIONS VIEW (wq-086) -->
+  <div id="view-triangulations" class="view-section" style="display:none;">
+    <div style="margin-bottom:16px;">
+      <p style="font-size:13px; color:var(--text-dim); line-height:1.6;">
+        Indirect evidence (<strong style="color:#a78bfa;">triangulations</strong>) appended to ledger fields via <code>target_nodes</code>.
+        These don't move published numbers — they shift confidence tier (capped at <strong>medium</strong>) and surface validation patterns.
+        Per <a href="docs/decisions/resolved/dec-2026-05-05-triangulation-apply-semantics.md" style="color:var(--cyan);">resolution doc</a>.
+      </p>
+    </div>
+    <div id="triangulationsContent"><div class="empty-state"><p>Loading…</p></div></div>
+  </div>
 </div>
 
 <!-- Toast -->
@@ -595,7 +608,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','quickadd','addcompany','submit','consensus','audit','settings'];
+const TABS = ['search','quickadd','addcompany','submit','consensus','audit','triangulations','settings'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -2455,6 +2468,120 @@ function switchTab(name) {
   if (name === 'review') renderReview();
   if (name === 'consensus') renderConsensus();
   if (name === 'submit') populateReplacesDropdown();
+  if (name === 'triangulations') renderTriangulations();
+}
+
+// ============================================================
+// TRIANGULATIONS VIEW (wq-086)
+// ============================================================
+//
+// Reads entities.json provenance and lists every claim with
+// role: "triangulates". Direct claims are not shown here — vault search/browse
+// covers those. Fields with needs_review:true (≥2 weakens against the same
+// field, per resolution doc §2) get a prominent banner. Fields tagged
+// scope_uncertain by a reviewer get a smaller tag.
+//
+async function renderTriangulations() {
+  const container = document.getElementById('triangulationsContent');
+  container.innerHTML = '<div class="empty-state"><p>Loading entities.json…</p></div>';
+
+  let entities = null;
+  try {
+    const r = await fetch('entities.json?v=' + Date.now());
+    entities = await r.json();
+  } catch (e) {
+    container.innerHTML = '<div class="empty-state"><p style="color:var(--red)">Failed to load entities.json: ' + (e.message || e) + '</p></div>';
+    return;
+  }
+
+  // Collect role=triangulates entries by (entity_label, prov_key)
+  const buckets = []; // { entityLabel, provKey, needsReview, scopeUncertain, confidenceTier, claims:[] }
+
+  function pushFromProvBlock(entityLabel, provBlock) {
+    if (!provBlock) return;
+    Object.entries(provBlock).forEach(([provKey, prov]) => {
+      const tris = (prov.claims || []).filter(c => c && c.role === 'triangulates');
+      if (tris.length === 0) return;
+      buckets.push({
+        entityLabel,
+        provKey,
+        needsReview: !!prov.needs_review,
+        scopeUncertain: !!prov.scope_uncertain,
+        confidenceTier: prov.confidence || 'unsourced',
+        claims: tris,
+      });
+    });
+  }
+
+  (entities.companies || []).forEach(c => {
+    pushFromProvBlock(c.name || c.slug || '?', c.provenance || {});
+  });
+  pushFromProvBlock('market_aggregates', (entities.market_aggregates || {}).provenance || {});
+
+  if (buckets.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">&#x1F50D;</div><p>No triangulation provenance entries found in entities.json yet.</p><p class="hint">After accepting a triangulation in claims.html, run scripts/apply_decisions.py to drain the pending file and write provenance.</p></div>';
+    return;
+  }
+
+  buckets.sort((a, b) => {
+    if (a.needsReview !== b.needsReview) return a.needsReview ? -1 : 1;
+    return (a.entityLabel + a.provKey).localeCompare(b.entityLabel + b.provKey);
+  });
+
+  const impactColor = {
+    strengthens: '#22c55e',
+    widens_range: '#a78bfa',
+    weakens:      '#ef4444',
+  };
+
+  const html = buckets.map(b => {
+    const banner = b.needsReview
+      ? '<div style="padding:8px 12px;background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.3);border-radius:6px;font-size:12px;color:#fca5a5;margin-bottom:8px;">&#x26A0; Review needed — multiple weakening triangulations against this field</div>'
+      : '';
+    const scopeTag = b.scopeUncertain
+      ? '<span style="font-size:10px;padding:2px 6px;border-radius:3px;background:rgba(251,191,36,0.12);color:#fbbf24;margin-left:8px;">scope uncertain</span>'
+      : '';
+    const tierColor = { high:'#22c55e', medium:'#fbbf24', low:'#f97316', unsourced:'#71717a' }[b.confidenceTier] || '#71717a';
+    const claimRows = b.claims.map(c => {
+      const imp = c.confidence_impact || 'widens_range';
+      const overrideTag = c.model_classified_as
+        ? '<span style="font-size:9px;color:#fb923c;margin-left:6px;">(reviewer overrode model: ' + c.model_classified_as + ')</span>'
+        : '';
+      const target = c.target_node ? '<code style="background:rgba(255,255,255,0.05);padding:1px 4px;border-radius:3px;font-size:10px;color:var(--text);">' + c.target_node + '</code>' : '';
+      const derivation = c.derivation
+        ? '<div style="font-size:11px;color:var(--text-dim);margin-top:4px;line-height:1.5;">' + escapeHtmlSafe(c.derivation) + '</div>'
+        : '';
+      return '<div style="padding:10px 12px;border-left:2px solid #a78bfa;background:rgba(139,92,246,0.04);border-radius:4px;margin-bottom:6px;">' +
+        '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
+          '<span style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:' + (impactColor[imp] || '#a78bfa') + ';">[triangulates: ' + imp + ']</span>' +
+          target +
+          overrideTag +
+          (c.source ? '<span style="font-size:10px;color:var(--text-dim);">' + escapeHtmlSafe(c.source) + '</span>' : '') +
+          (c.date ? '<span style="font-size:10px;color:var(--text-dim);">' + escapeHtmlSafe(c.date) + '</span>' : '') +
+        '</div>' +
+        derivation +
+      '</div>';
+    }).join('');
+
+    return '<div class="dp-card" style="border-left:3px solid #a78bfa;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +
+        '<div style="font-size:14px;font-weight:600;">' + escapeHtmlSafe(b.entityLabel) + ' · <span style="color:var(--text-dim);font-weight:400;">' + escapeHtmlSafe(b.provKey) + '</span>' + scopeTag + '</div>' +
+        '<span style="font-size:11px;color:' + tierColor + ';font-weight:600;">' + b.confidenceTier + '</span>' +
+      '</div>' +
+      banner +
+      claimRows +
+    '</div>';
+  }).join('');
+
+  container.innerHTML = html;
+}
+
+function escapeHtmlSafe(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 // ============================================================
