@@ -66,7 +66,8 @@
           "subscription_revenue": 50,
           "user_count": 910,
           "inference_cost": 14.1,
-          "collected_revenue": 18.9389
+          "collected_revenue": 18.9389,
+          "employee_count": 8000
         },
         "2027_projected": {
           "arr": 50.0
@@ -1819,6 +1820,28 @@
               }
             }
           ]
+        },
+        "2026.employee_count": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-238",
+              "claim": "OpenAI plans to nearly double headcount to 8,000 by end of year, having previously said they would keep headcount flat.",
+              "value": 8000,
+              "unit": "employees",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Harry Stebbings",
+              "source_url": "https://thetwentyminutevc.libsyn.com/20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthropic-who-wins-enterprise-spacex-at-2trn-and-data-centers-in-space-the-20bn-groq-deal-broken-down-jeff-bezos-100bn-new-fund",
+              "date": "2026-03-26",
+              "origin": "accepted",
+              "role": "supports",
+              "time_period_scope": "annual",
+              "period_qualifier": null
+            }
+          ],
+          "needs_source": false
         }
       }
     },
