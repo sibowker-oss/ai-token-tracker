@@ -224,3 +224,7 @@ The headline restatement is small (~$2B downward); the editorial fix is large (c
 ## Change log
 
 - 2026-05-06 — drafted in Cowork after wq-091 shipped trajectory with Q4→Q1 drops on MSFT (-12%), AWS (flat), GOOGL (-32%). D1–D5 confirmed in same session. Single-PR follow-up.
+
+---
+
+Shipped: 2026-05-06, commit 5170a59
