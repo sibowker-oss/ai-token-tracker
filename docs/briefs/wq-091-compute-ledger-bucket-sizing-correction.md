@@ -283,3 +283,7 @@ All decisions resolved in the 2026-05-06 Cowork review session.
 ## Change log
 
 - 2026-05-06 — drafted in Cowork following segment-by-segment walk-through against published economics and Andy Jassy's $15B disclosure. D1–D7 confirmed in same session. D8 (plain-English naming everywhere) added on 2026-05-06 after Simon flagged that "Bucket 1/2/3" should not appear in any artefact, internal or external. Derivation memo at `docs/decisions/resolved/dec-2026-05-06-compute-ledger-bucket-sizing.md` is the load-bearing record. Ready for repo handoff.
+
+---
+
+Shipped: 2026-05-06, commit d091964
