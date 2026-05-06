@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // scripts/validate-compute-revenue.mjs
-// wq-091 — Compute Ledger validator (v3: plain-English segment schema).
+// wq-092 — Compute Ledger validator (v4: + no-Q-o-Q-drop assertion for major providers).
 //
 // Asserts (advisory by default):
 //   1. site-data.json:compute exists with the headline aggregate fields under
-//      the renamed schema (frontier_lab_compute_*, ai_workload_compute_*,
+//      the plain-English segment schema (frontier_lab_compute_*, ai_workload_compute_*,
 //      hosted_model_apis_gross_*, etc).
 //   2. Every component has the full segment-schema provenance block:
 //      frontier_lab_compute / ai_workload_compute / hosted_model_apis amounts
@@ -16,15 +16,18 @@
 //      records principal treatment for all four entities (MSFT, AMZN, GOOGL, ORCL)
 //      with filing_url, filing_date, verified_at.
 //   5. Aggregation reconciles: sum of components.compute_gross_2025_usd_b
-//      == compute.compute_revenue_2025_gross_usd_b within 2% (wq-091 tightened
-//      from 0.5% to ±2% to match brief acceptance criteria); same for net.
+//      == compute.compute_revenue_2025_gross_usd_b within 2%; same for net.
 //   6. Per-component segment_basis non-empty.
 //   7. Segment sums reconcile: frontier_lab + ai_workload + hosted_model_apis_gross
 //      == compute_gross (post-Copilot) within 2%.
 //   8. Per-component AI line tie-out: segment sum + copilot_excluded must match
-//      the per-provider AI line within ±2% (the bottom-up segment sizing should
-//      reconcile tightly to disclosed/anchored AI line totals).
+//      the per-provider 2025 calendar value (sum-of-quarterlies basis under wq-092)
+//      within ±2%.
 //   9. No legacy bucket_* keys remain in site-data.json:compute or in components.
+//  10. (wq-092 D2) No Q-o-Q drops in Q4 2025 → Q1 2026 for any MAJOR provider
+//      (MSFT, AMZN, GOOGL). Reads quarterly array from compute_disclosures.json.
+//      Smaller providers (ORCL, individual neoclouds) emit advisory rather than fail
+//      because quarterly noise on a small base is editorially acceptable.
 
 import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -41,17 +44,34 @@ function pctDelta(a, b) {
   return denom === 0 ? 0 : (Math.abs(a - b) / denom);
 }
 
-// AI line targets per Final Locked Table in dec-2026-05-06-compute-ledger-bucket-sizing.md.
-// segment sum + copilot_excluded must match these within ±2%.
+// AI line targets per Final Locked Trajectory in wq-092 brief — sum-of-quarterlies basis
+// (NOT the wq-091 annualised run-rate basis). Switch documented in wq-092 D1.
+// Per-provider segment sum + copilot_excluded must match within ±2%.
 const AI_LINE_TARGETS_2025 = {
-  msft_ai: 28.0,
-  amzn_aws_ai: 10.0,
-  googl_cloud_ai: 7.0,
-  oracle_cloud_ai: 3.0,
-  coreweave: 4.5,
-  nebius: 0.95,
-  lambda: 0.60,
-  crusoe: 0.40,
+  msft_ai: 25.25,        // sum-of-Q ($28B annualised retained as context per provider)
+  amzn_aws_ai: 10.00,    // sum-of-Q = annualised (Jassy run-rate basis)
+  googl_cloud_ai: 7.00,  // sum-of-Q = annualised (bottom-up)
+  oracle_cloud_ai: 2.95, // sum-of-Q ($3B annualised retained)
+  coreweave: 4.23,       // sum-of-Q ($4.5B annualised retained)
+  nebius: 0.89,          // sum-of-Q ($0.95B retained)
+  lambda: 0.56,          // sum-of-Q ($0.60B retained)
+  crusoe: 0.37,          // sum-of-Q ($0.40B retained)
+};
+
+// wq-092 D2 — every MAJOR provider must show Q1 26 > Q4 25 on the trajectory chart.
+// "Major" = the three Mag3 hyperscalers by 2025 calendar value (MSFT, AMZN, GOOGL).
+// ORCL and individual neoclouds are smaller and may exhibit quarterly noise; they emit
+// advisory rather than fail.
+const MAJOR_PROVIDERS = ['msft_ai', 'amzn_aws_ai', 'googl_cloud_ai'];
+const QUARTERLY_KEY_BY_SLUG = {
+  msft_ai: 'msft_ai_gross',
+  amzn_aws_ai: 'amzn_aws_ai_gross',
+  googl_cloud_ai: 'googl_cloud_ai_gross',
+  oracle_cloud_ai: 'oracle_cloud_ai_gross',
+  coreweave: 'coreweave_gross',
+  nebius: 'nebius_gross',
+  lambda: 'lambda_gross',
+  crusoe: 'crusoe_gross',
 };
 
 if (!existsSync(sitePath)) {
@@ -231,6 +251,29 @@ if (!existsSync(sitePath)) {
         ref: 'compute.segment_sum',
         msg: `headline frontier_lab + ai_workload + hosted_model_apis_gross (${headlineSegmentSum.toFixed(2)}) does not match compute_revenue_2025_gross_usd_b (${c.compute_revenue_2025_gross_usd_b})`,
       });
+    }
+
+    // Check 10 (wq-092 D2) — no Q-o-Q drops Q4 25 → Q1 26 for major providers
+    const quarterly = c.quarterly ?? [];
+    const q4_2025 = quarterly.find(q => q.quarter === '2025Q4');
+    const q1_2026 = quarterly.find(q => q.quarter === '2026Q1');
+    if (q4_2025 && q1_2026) {
+      for (const slug of Object.keys(QUARTERLY_KEY_BY_SLUG)) {
+        const key = QUARTERLY_KEY_BY_SLUG[slug];
+        const q4 = q4_2025[key];
+        const q1 = q1_2026[key];
+        if (q4 == null || q1 == null) continue;
+        if (q1 < q4) {
+          const pctDrop = ((q4 - q1) / q4 * 100).toFixed(1);
+          const isMajor = MAJOR_PROVIDERS.includes(slug);
+          findings.push({
+            severity: isMajor ? 'fail' : 'advisory',
+            section: 'no-qoq-drop',
+            ref: `compute.quarterly[${slug}]`,
+            msg: `Q4 2025 ($${q4}B) → Q1 2026 ($${q1}B) is a ${pctDrop}% Q-o-Q drop. ${isMajor ? 'wq-092 D2 forbids Q-o-Q drops on major providers (MSFT/AMZN/GOOGL) — fix the quarterly array.' : 'Smaller provider quarterly noise; informational only.'}`,
+          });
+        }
+      }
     }
   }
 }
