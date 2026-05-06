@@ -227,4 +227,13 @@ The headline restatement is small (~$2B downward); the editorial fix is large (c
 
 ---
 
-Shipped: 2026-05-06, commit 5170a59
+Shipped: 2026-05-06, deployed to main same day.
+Final post-rebase commit SHAs on origin/main:
+- 327610d — switch 2025 calendar to sum-of-quarterlies basis (Final Locked Trajectory; no Q-o-Q drops on major providers)
+- a7f38ad — deployment record
+- 9a01d1c — editorial neutrality polish (hero strip reorder; D6/principal jargon removed; circular-financing language reworded throughout)
+- b930950 — replace decision-memo filename with public-facing methodology link
+- e64f6f1 — inline bar viz on Frontier lab compute attribution table
+- f490fee — bar visibility tweak (slate hue + higher opacity for small-provider rows)
+- ffb6b91 — final docs (memo addendum + wq-089 brief D9 supersede note + runs.jsonl)
+Pre-rebase local branch SHAs: 5170a59 / 77a65d9 / 2d74df7 / 1c9650a / 11ea116 / 372fc40 / 149ae68.

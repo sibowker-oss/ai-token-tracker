@@ -296,4 +296,10 @@ All decisions resolved in the 2026-05-06 Cowork review session.
 
 ---
 
-Shipped: 2026-05-06, commits d091964 (segment sizing + schema rename) + b9ebf00 (deployment record) + 2f14e95 (D9 quarterly back-cast + AWS Q4 25 ≈ Q1 26 caption)
+Shipped: 2026-05-06, deployed to main same day.
+Final post-rebase commit SHAs on origin/main:
+- b642287 — segment sizing + schema rename (bucket_*→plain English)
+- dd4e1ac — deployment record
+- 0503963 — D9 quarterly back-cast + caption
+- 95101a2 — D9 addendum docs
+Pre-rebase SHAs (local branch history): d091964 / b9ebf00 / 2f14e95 / 7b997c2.

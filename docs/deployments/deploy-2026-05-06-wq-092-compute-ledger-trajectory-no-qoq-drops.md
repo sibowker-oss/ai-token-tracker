@@ -1,10 +1,88 @@
 # Deployment: wq-092 — Compute Ledger trajectory no-Q-o-Q drops
 
-**Date:** 2026-05-06
+**Date:** 2026-05-06 — pushed to `origin/main` and live on `ai-index.hepburnadvisory.com.au/compute`.
 **WQ:** wq-092 (deploy correction to wq-091)
-**Branch/Commit:** wq-092-compute-ledger-trajectory-no-qoq-drops · 5170a59
+**Branch:** `wq-092-compute-ledger-trajectory-no-qoq-drops` (rebased onto `origin/main` and fast-forwarded; range `fd65c78..ffb6b91` on main)
 **Parent deployment:** `docs/deployments/deploy-2026-05-06-wq-091-compute-ledger-segment-sizing-correction.md`
-**Derivation memo:** `docs/decisions/resolved/dec-2026-05-06-compute-ledger-bucket-sizing.md` (addendum + Q4 25 → Q1 26 transition handling section already updated by Cowork mid-session before code handoff)
+**Derivation memo:** `docs/decisions/resolved/dec-2026-05-06-compute-ledger-bucket-sizing.md`
+
+## Final shipped summary (wq-091 + wq-092 + page polish)
+
+The Compute Ledger ship lands as a chain of two work-items plus an
+editorial-polish series, all implemented on the same branch and pushed
+to `origin/main` as a single 13-commit fast-forward on 2026-05-06.
+
+### Final commit chain on `origin/main` (this ship)
+
+| SHA | Subject |
+|---|---|
+| 31f4d59 | feat(wq-089): Compute Ledger v2 — bucket decomposition + Copilot scope-out + pass-through correction |
+| 832b14a | docs(wq-089): record Shipped |
+| b642287 | feat(wq-091): segment sizing correction — AMZN $18B→$10B per Jassy; GCP $18B→$7B bottom-up; rename `bucket_*`→plain English |
+| dd4e1ac | docs(wq-091): deployment record |
+| 0503963 | feat(wq-091): D9 quarterly back-cast + AWS Q4 25 ≈ Q1 26 caption |
+| 95101a2 | docs(wq-091): D9 addendum |
+| 327610d | feat(wq-092): switch 2025 calendar to sum-of-quarterlies basis to eliminate Q4→Q1 trajectory drops |
+| a7f38ad | docs(wq-092): deployment record |
+| 9a01d1c | polish(compute): editorial neutrality + remove site jargon |
+| b930950 | polish(compute, methodology): replace decision-memo filename with public-facing language |
+| e64f6f1 | feat(compute): inline bar viz on Frontier lab compute attribution table |
+| f490fee | polish(compute): make Frontier-share bar's secondary segment more visible on small entries |
+| ffb6b91 | docs: append derivation-memo trajectory addendum + wq-089 D9 supersede note + runs.jsonl |
+
+### What is live on `/compute.html` and `/methodology.html` after this ship
+
+- **Headline numbers (sum-of-quarterlies basis, post-Copilot):**
+  Compute gross 2025 = **$43.07B**; Compute net 2025 = **$42.08B**; Frontier
+  lab compute 2025 = **$33.82B** (79% of gross); AI workload compute = **$5.10B**;
+  Hosted model APIs gross = **$4.50B**; Total Model Pass-through Revenue 2025
+  = **~$1.0B**; Copilot excluded = **$8.17B**; YoY 2025 vs 2024 = **+153%**.
+- **Quarterly trajectory:** every major provider (MSFT, AMZN, GOOGL) grows
+  monotonically Q4 25 → Q1 26 (+10% / +4% / +7%). No Q-o-Q drops on the chart.
+- **Hero strip (4 boxes):** Compute Net · Total Model Pass-through Revenue
+  2025 · Apps→Compute ratio · YoY growth. (Replaces the gross-leading box.)
+- **Frontier lab compute card:** retitled from "Bucket 1 — Frontier-lab
+  compute spend" → "Frontier lab compute". Per-provider attribution table
+  now has an inline bar showing each provider's compute scale (bar width)
+  and frontier share (filled portion in accent blue, rest in slate). Below
+  each bar a small label reads e.g. "87% of $18.6B compute".
+- **Editorial copy:** stripped all "circular-financing" / "principal-everywhere"
+  / "D6 verification gate" / `bucket_*` / decision-memo-filename references
+  from rendered DOM. Replaced with neutral, observable framing — no bull/bear
+  take, no internal jargon visible to readers.
+- **Methodology page:** new sub-sections "Segment sizing methodology" and
+  "Calendar basis: sum-of-quarterlies, not annualised run-rate" with full
+  per-provider derivation; "three-bucket model" → "three-segment model".
+
+### Permanent guards now in place
+
+- **`scripts/validate-compute-revenue.mjs`:**
+  - Plain-English segment schema enforced — no `bucket_*` keys allowed in
+    `data/compute_disclosures.json`, `methodology_constants.json`, or any
+    site-data field.
+  - ±2% per-provider AI-line tie-out vs the Final Locked Trajectory.
+  - **Check 10 (no-Q-o-Q-drop):** Q4 25 → Q1 26 must be non-negative for
+    MAJOR providers (MSFT/AMZN/GOOGL = fail); ORCL and individual neoclouds
+    emit advisory only (small-base quarterly noise acceptable).
+- **`tests/release-check/compute.spec.ts`** — 7 Playwright assertions all
+  passing: hero-strip schema, Frontier lab compute card structure, Layer
+  Stack basis, headline-value/data agreement, WWHBT signal presence, and
+  rendered-DOM contains no "Bucket 1/2/3" or "B1/B2/B3" strings.
+
+### Open follow-ups (not shipped in this branch)
+
+- Visual snapshot baselines need a rebaseline pass (compute.html numbers
+  shifted; trajectory line shapes changed; new bar visualisation).
+- Notion wq-091 + wq-092 cards need manual move to Done (repo cannot
+  mutate Notion directly).
+- wq-090 (Revenue Ledger Hyperscaler & Who Pays) remains independent of
+  this ship; pass-through target ~$1B is unchanged.
+- Future Apps Ledger build will use the MS-declared vs TAIL-derived
+  Copilot gap captured in the derivation memo.
+- Capital Ledger circular-financing cross-build is a separate future
+  brief; the segment-sized Frontier lab compute line is the input.
+
+---
 
 ## Why this corrects wq-091
 
