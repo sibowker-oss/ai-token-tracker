@@ -112,17 +112,24 @@
 
 <div class="container">
   <h1>Compute Ledger</h1>
-  <p style="font-size:14px;color:var(--text-dim);margin-bottom:6px;font-style:italic;">Hyperscaler AI cloud, neocloud GPU rental, frontier-API hosting — what compute providers are earning from AI.</p>
+  <p style="font-size:14px;color:var(--text-dim);margin-bottom:6px;font-style:italic;">Hyperscaler AI cloud, neocloud GPU rental, frontier-API hosting — what compute providers are earning from AI. Bucket-decomposed: frontier-lab compute (the circular-financing line), non-frontier workload, token-API resale.</p>
   <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:14px;font-weight:600;">Data refreshed: <time id="last-refreshed" datetime="2026-05-06">2026-05-06</time> · last quarter: <span id="last-quarter">2026Q1</span></p>
 
-  <!-- ── §4.1 Concentration headline (D2 lead) ── -->
+  <!-- ── §4.1 Editorial spine — bucket 1 / circular financing (D5 lede) ── -->
   <div class="concentration-headline">
-    <div class="lede" id="concentration-lede">Loading concentration…</div>
-    <div class="meta" id="concentration-meta">Q1 2026 disclosure cycle · gross-disclosed basis · cite-able to 10-Qs</div>
+    <div class="lede" id="concentration-lede">Loading bucket-1 framing…</div>
+    <div class="meta" id="concentration-meta">2025 lookback · post-Copilot · ecosystem-wide compute revenue · cite-able to 10-Qs</div>
   </div>
 
-  <!-- ── §4.1 Hero strip — gross + net side-by-side per D6 ── -->
+  <!-- ── §4.1 Hero strip — gross / net / Apps→Compute / YoY growth ── -->
   <div class="hero-grid" id="hero-stats"></div>
+
+  <!-- ── Bucket 1 card — frontier-lab compute spend on hyperscalers (D5 spine) ── -->
+  <div class="card" id="bucket-1-card" data-section="bucket-1">
+    <h2>Bucket 1 — Frontier-lab compute spend on hyperscalers</h2>
+    <p class="h2-sub">The circular-financing line: how much frontier model labs (OpenAI, Anthropic, Mistral, others) paid to compute providers in 2025 — money that surfaces as hyperscaler "AI revenue", funded partly by hyperscaler equity in the same labs.</p>
+    <div id="bucket-1-body"></div>
+  </div>
 
   <!-- ── §4.2 Distribution chart (primary visual per D2) ── -->
   <div class="card">
@@ -155,7 +162,7 @@
     </div>
     <div class="methodology-callout">
       <span style="color:var(--accent);font-weight:700;">i</span>
-      <span>All Mag3 + Oracle figures are <strong>gross-disclosed</strong> (principal treatment, confirmed against 10-K accounting policy notes per D6 verification gate). Pure-play neoclouds (CoreWeave, Nebius, Lambda, Crusoe) report total revenue at the cloud layer — gross == net, no model-lab pass-through.</span>
+      <span>All Mag3 + Oracle figures are <strong>gross-disclosed</strong>, principal treatment per D6 verification gate. Quarterly numbers are pre-Copilot for trajectory continuity; the post-Copilot total is what flows to the headline. Pure-play neoclouds (CoreWeave, Nebius, Lambda, Crusoe) have no Copilot exposure and no token-API pass-through.</span>
     </div>
   </div>
 
@@ -164,13 +171,13 @@
     <h2>The Layer-Stack Multiplier</h2>
     <p class="h2-sub">For every $1 of customer Apps Revenue, how many dollars flow down the stack to Compute, Silicon, and Power. The recycling chart nobody else publishes.</p>
     <div class="layer-stack">
-      <div class="layer-stack-title" id="lsm-title">2025 annualised flows (USD billions)</div>
+      <div class="layer-stack-title" id="lsm-title">2025 lookback flows · sum-of-quarterlies basis (USD billions)</div>
       <div style="position:relative;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">
         <span class="chart-watermark" style="right:14px;top:10px;">AI Ledger · Hepburn Advisory</span>
         <canvas id="layerstack-chart" height="320"></canvas>
       </div>
       <div style="font-size:11px;color:var(--text-dim);line-height:1.55;margin-top:14px;">
-        <strong style="color:var(--text-bright);">Read this chart this way:</strong> Apps Revenue is what end customers pay (model-lab APIs, Apps SaaS, AI-app subscriptions). Compute is what cloud providers earn — net of model-lab pass-through (per D6). Silicon is what NVIDIA + AMD + custom ASIC vendors earn from compute providers' capex. Power is what utilities + DC infra vendors earn. The asymmetry between Compute and Silicon (silicon revenue exceeds compute revenue on a single-year basis) is the &ldquo;circular financing&rdquo; story — silicon spend is funded by capex, not revenue passes-through.
+        <strong style="color:var(--text-bright);">Read this chart this way:</strong> all four layers on lookback 2025 actuals on the same time-basis (sum-of-quarterlies). Apps Revenue is the <strong>measured cohort total</strong> from the Revenue Ledger — not editorially extended to ecosystem scale; the cohort-vs-ecosystem gap is flagged on /methodology. Compute is sum-of-quarterlies post-Copilot, net of bucket-3 pass-through. Silicon is NVIDIA Data Center FY26 (calendar 2025) + AMD + custom ASIC. The asymmetry between cohort Apps and Compute (Compute is several multiples larger) is the visible <em>circular-financing geometry</em> — frontier-lab compute spend (bucket 1) inflates the Compute layer relative to what cohort customers actually pay.
       </div>
     </div>
   </div>
@@ -267,6 +274,7 @@ async function init() {
   }
   renderConcentrationHeadline();
   renderHero();
+  renderBucket1();
   renderDistribution();
   renderTrajectory();
   renderLayerStack();
@@ -275,51 +283,112 @@ async function init() {
 }
 
 function renderConcentrationHeadline() {
-  const c = computeData.concentration;
+  const c = computeData;
+  const b1 = c.bucket_1_2025_usd_b;
+  const grossSoQ = (c.layer_stack_ratios && c.layer_stack_ratios.compute_revenue_2025_gross_usd_b) || c.compute_revenue_2025_gross_usd_b;
+  const b1Share = grossSoQ > 0 ? (b1 / grossSoQ * 100) : 0;
   const lede =
-    'Microsoft, Google, and Amazon capture <span class="pct">'+fmtPct(c.mag3_share_pct,0)+'</span> of all AI compute revenue. ' +
-    'Public neoclouds <span class="pct neo">'+fmtPct(c.public_neocloud_share_pct,0)+'</span>, ' +
-    'Oracle <span class="pct oracle">'+fmtPct(c.oracle_share_pct,0)+'</span>, ' +
-    'private neoclouds '+fmtPct(c.private_neocloud_share_pct,0)+'.';
+    'Frontier model labs paid an estimated <span class="pct">'+fmt$B(b1)+'</span> to compute providers in 2025 — ' +
+    '<span class="pct">'+b1Share.toFixed(0)+'%</span> of all AI compute revenue. ' +
+    'Hyperscalers report it as AI revenue; the labs are funded partly by hyperscaler equity. ' +
+    'The same dollar surfaces twice.';
   document.getElementById('concentration-lede').innerHTML = lede;
   document.getElementById('concentration-meta').innerHTML =
-    'Q1 2026 disclosure cycle · gross-disclosed basis (Tier 1A for filers; 1B/2A for narrative-disclosed AI lines) · ' +
-    fmt$B(computeData.q1_2026_gross_usd_b) + ' total Q1 2026 (' + fmt$B(computeData.annualised_revenue_2025_gross_usd_b) + ' 2025 annualised) ' +
-    '· principal/agent verified per D6 gate';
+    '2025 lookback (sum-of-quarterlies, post-Copilot) · ecosystem-wide gross-disclosed basis · ' +
+    fmt$B(grossSoQ) + ' total compute revenue 2025 · ' +
+    'Mag3 share ' + fmtPct(c.concentration.mag3_share_pct, 0) + ' Q1 2026 · ' +
+    'principal/agent verified per D6 gate';
 }
 
 function renderHero() {
   const c = computeData;
   const ls = c.layer_stack_ratios;
+  const grossAnnualised = c.compute_revenue_2025_gross_usd_b;
+  const netAnnualised = c.compute_revenue_2025_net_usd_b;
+  const passThrough = c.model_pass_through_2025_usd_b;
+  const yoyPct = c.yoy_growth_pct;
   let h = '';
-  // Stat 1: Gross 2025
+  // Stat 1: Gross 2025 (post-Copilot)
   h += '<div class="hero-stat"><div class="label">Compute Revenue 2025 · gross</div>' +
-       '<div class="value" style="color:var(--accent);">'+fmt$B(c.annualised_revenue_2025_gross_usd_b)+'</div>' +
-       '<div class="detail">Annualised, as-filed '+tierPill('1A')+'</div>' +
-       '<div class="secondary">Q1 2026: '+fmt$B(c.q1_2026_gross_usd_b)+'</div></div>';
-  // Stat 2: Net 2025
+       '<div class="value" style="color:var(--accent);">'+fmt$B(grossAnnualised)+'</div>' +
+       '<div class="detail">Annualised, post-Copilot '+tierPill('2A')+'</div>' +
+       '<div class="secondary">Q1 2026: '+fmt$B(c.compute_revenue_q1_2026_gross_usd_b)+' · Copilot scoped to Apps Ledger ('+fmt$B(c.copilot_excluded_2025_usd_b)+')</div></div>';
+  // Stat 2: Net 2025 — pass-through scoped to bucket 3 only per D1
   h += '<div class="hero-stat"><div class="label">Compute Revenue 2025 · net</div>' +
-       '<div class="value" style="color:var(--green);">'+fmt$B(c.annualised_revenue_2025_net_usd_b)+'</div>' +
-       '<div class="detail">After model-lab pass-through '+tierPill('2A')+'</div>' +
-       '<div class="secondary">Pass-through: '+fmt$B(c.model_pass_through_2025_usd_b)+'</div></div>';
-  // Stat 3: Per $1 Apps → Compute
+       '<div class="value" style="color:var(--green);">'+fmt$B(netAnnualised)+'</div>' +
+       '<div class="detail">Bucket-3 pass-through only '+tierPill('2A')+'</div>' +
+       '<div class="secondary">Pass-through: '+fmt$B(passThrough)+' (' + ((passThrough/grossAnnualised)*100).toFixed(1) + '% of gross)</div></div>';
+  // Stat 3: Per $1 Apps → Compute (cohort apps basis per D3)
   h += '<div class="hero-stat"><div class="label">Per $1 Apps Revenue → Compute</div>' +
-       '<div class="value" style="color:var(--purple);">$'+(ls.apps_to_compute_2025).toFixed(2)+'</div>' +
-       '<div class="detail">Layer-stack ratio (net) '+tierPill('2A')+'</div>' +
-       '<div class="secondary">Apps: '+fmt$B(ls.apps_revenue_2025_usd_b)+'</div></div>';
-  // Stat 4: Quarter-on-quarter share shift
-  const shift = c.share_shift_q4_25_to_q1_26 || {};
-  let topShifter = null, topMag = 0;
-  for (const k in shift) {
-    if (Math.abs(shift[k].delta_pp) > Math.abs(topMag)) { topMag = shift[k].delta_pp; topShifter = k; }
-  }
-  const sign = topMag >= 0 ? '+' : '';
-  const shifterLabel = topShifter ? LABELS[topShifter.replace('_gross','')] : '—';
-  h += '<div class="hero-stat"><div class="label">Q1 2026 share shift</div>' +
-       '<div class="value" style="color:var(--orange);">'+sign+topMag.toFixed(2)+' pp</div>' +
-       '<div class="detail">'+shifterLabel+' '+tierPill('2A')+'</div>' +
-       '<div class="secondary">Q4 25 → Q1 26 (gross-share, biggest mover)</div></div>';
+       '<div class="value" style="color:var(--purple);">$'+(ls.apps_to_compute_2025 ? ls.apps_to_compute_2025.toFixed(2) : '—')+'</div>' +
+       '<div class="detail">Cohort Apps basis '+tierPill('1A')+'</div>' +
+       '<div class="secondary">Apps (cohort): '+fmt$B(ls.apps_revenue_2025_usd_b)+' · Compute (sum-of-Q net): '+fmt$B(ls.compute_revenue_2025_net_usd_b)+'</div></div>';
+  // Stat 4: YoY growth headline (per D4 — replaces share-shift)
+  const yoyDisplay = yoyPct == null ? '—' : (yoyPct >= 0 ? '+' : '') + yoyPct.toFixed(0) + '%';
+  h += '<div class="hero-stat"><div class="label">YoY growth · 2025 vs 2024</div>' +
+       '<div class="value" style="color:var(--orange);">'+yoyDisplay+'</div>' +
+       '<div class="detail">Sum-of-quarterlies basis '+tierPill('2A')+'</div>' +
+       '<div class="secondary">2024 ref: '+fmt$B(c.compute_revenue_2024_gross_usd_b)+' → 2025 ('+fmt$B(c.compute_revenue_2025_gross_sum_of_quarterlies_usd_b)+', post-Copilot)</div></div>';
   document.getElementById('hero-stats').innerHTML = h;
+}
+
+// ─── Bucket 1 card — D5 spine: per-lab attribution where defensible ───
+function renderBucket1() {
+  const c = computeData;
+  const b1Total = c.bucket_1_2025_usd_b;
+  const b1Q1 = c.bucket_1_q1_2026_usd_b;
+  const grossSoQ = (c.layer_stack_ratios && c.layer_stack_ratios.compute_revenue_2025_gross_usd_b) || c.compute_revenue_2025_gross_usd_b;
+  const b1Share = grossSoQ > 0 ? (b1Total / grossSoQ * 100) : 0;
+  const components = c.components;
+
+  // Attribution rows — per-component bucket 1 with a primary-lab label.
+  const attribution = [
+    { slug: 'msft_ai',         primaryLab: 'OpenAI (~85% Azure-resident)' },
+    { slug: 'amzn_aws_ai',     primaryLab: 'Anthropic + minor labs (~70% Anthropic on AWS)' },
+    { slug: 'googl_cloud_ai',  primaryLab: 'Anthropic on GCP + Mistral + Gemini equity-cycle' },
+    { slug: 'oracle_cloud_ai', primaryLab: 'OpenAI Stargate ramp (partial 2025)' },
+    { slug: 'coreweave',       primaryLab: 'OpenAI via Microsoft sub-rent (~85% of CoreWeave)' },
+    { slug: 'nebius',          primaryLab: 'Mistral + smaller frontier labs' },
+    { slug: 'lambda',          primaryLab: 'Frontier + research customers' },
+    { slug: 'crusoe',          primaryLab: 'Frontier + applied research' }
+  ];
+
+  let h = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px;">';
+  h += '<div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:8px;padding:14px;">';
+  h += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);font-weight:700;">Bucket 1 · 2025 (annualised)</div>';
+  h += '<div style="font-size:32px;font-weight:800;color:var(--text-bright);margin:4px 0;">'+fmt$B(b1Total)+'</div>';
+  h += '<div style="font-size:11px;color:var(--text-dim);">'+b1Share.toFixed(0)+'% of compute revenue (post-Copilot, sum-of-Q)</div>';
+  h += '</div>';
+  h += '<div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:8px;padding:14px;">';
+  h += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--purple);font-weight:700;">Bucket 1 · Q1 2026</div>';
+  h += '<div style="font-size:32px;font-weight:800;color:var(--text-bright);margin:4px 0;">'+fmt$B(b1Q1)+'</div>';
+  h += '<div style="font-size:11px;color:var(--text-dim);">~$'+(b1Q1*4).toFixed(0)+'B annualised run-rate</div>';
+  h += '</div>';
+  h += '</div>';
+
+  // Per-component attribution table
+  h += '<div style="border:1px solid var(--card-border);border-radius:8px;overflow:hidden;">';
+  h += '<div style="display:grid;grid-template-columns:1.4fr 2.2fr 0.8fr 0.5fr;gap:0;background:rgba(15,23,42,0.6);padding:8px 12px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);font-weight:700;">';
+  h += '<div>Provider</div><div>Primary frontier-lab attribution</div><div style="text-align:right;">2025 ($B)</div><div style="text-align:right;">Tier</div>';
+  h += '</div>';
+  attribution.forEach(row => {
+    const c2 = components[row.slug];
+    if (!c2) return;
+    h += '<div data-bucket-1-row="'+row.slug+'" style="display:grid;grid-template-columns:1.4fr 2.2fr 0.8fr 0.5fr;gap:0;padding:8px 12px;border-top:1px solid var(--card-border);font-size:12px;align-items:center;">';
+    h += '<div style="color:var(--text-bright);font-weight:600;">'+c2.label+'</div>';
+    h += '<div style="color:var(--text-dim);font-size:11px;line-height:1.5;">'+row.primaryLab+'</div>';
+    h += '<div style="text-align:right;color:var(--text-bright);font-weight:600;">'+c2.bucket_1_2025_usd_b.toFixed(2)+'</div>';
+    h += '<div style="text-align:right;">'+tierPill(c2.tier_bucket_1)+'</div>';
+    h += '</div>';
+  });
+  h += '</div>';
+
+  h += '<div class="methodology-callout" style="margin-top:14px;">';
+  h += '<span style="color:var(--accent);font-weight:700;">i</span>';
+  h += '<span><strong>Read this card this way:</strong> Bucket 1 is gross of equity-funded inflows. A portion of frontier-lab compute spend is re-routed VC + hyperscaler equity money — the Capital Ledger is where that nets out. Surfacing bucket 1 here makes the circular-financing geometry visible without trying to net it out at the Compute layer. Per-lab figures are Tier 2A editorial except CoreWeave (1A — S-1 / 10-Q customer-concentration disclosure).</span>';
+  h += '</div>';
+
+  document.getElementById('bucket-1-body').innerHTML = h;
 }
 
 // ─── Distribution chart ───
@@ -351,10 +420,10 @@ function renderDistribution() {
 }
 
 function drawSnapshot(ctx, m, plotW, plotH) {
-  // Single horizontal stacked bar: Q1 2026 share
+  // Single horizontal stacked bar: Q1 2026 share (post-Copilot compute gross)
   const components = computeData.components;
   const order = ['msft_ai','googl_cloud_ai','amzn_aws_ai','oracle_cloud_ai','coreweave','nebius','lambda','crusoe'];
-  const total = order.reduce((s,k) => s + (components[k] ? components[k].value_gross_q1_2026_usd_b : 0), 0);
+  const total = order.reduce((s,k) => s + (components[k] ? components[k].compute_gross_q1_2026_usd_b : 0), 0);
   const barY = m.top + plotH/2 - 40;
   const barH = 80;
   let x = m.left;
@@ -366,11 +435,11 @@ function drawSnapshot(ctx, m, plotW, plotH) {
   order.forEach(k => {
     const c = components[k];
     if (!c) return;
-    const w = (c.value_gross_q1_2026_usd_b / total) * plotW;
+    const w = (c.compute_gross_q1_2026_usd_b / total) * plotW;
     ctx.fillStyle = COLORS[k];
     ctx.fillRect(x, barY, w, barH);
     // Label inside if wide enough
-    const sharePct = (c.value_gross_q1_2026_usd_b / total * 100);
+    const sharePct = (c.compute_gross_q1_2026_usd_b / total * 100);
     if (w > 80) {
       ctx.fillStyle = '#0a0e1a';
       ctx.font = 'bold 11px -apple-system,sans-serif';
@@ -379,7 +448,7 @@ function drawSnapshot(ctx, m, plotW, plotH) {
       ctx.font = 'bold 16px -apple-system,sans-serif';
       ctx.fillText(sharePct.toFixed(1)+'%', x + w/2, barY + 50);
       ctx.font = '10px -apple-system,sans-serif';
-      ctx.fillText(fmt$B(c.value_gross_q1_2026_usd_b), x + w/2, barY + 65);
+      ctx.fillText(fmt$B(c.compute_gross_q1_2026_usd_b), x + w/2, barY + 65);
     } else if (w > 30) {
       ctx.fillStyle = '#0a0e1a';
       ctx.font = 'bold 10px -apple-system,sans-serif';
@@ -399,7 +468,7 @@ function drawSnapshot(ctx, m, plotW, plotH) {
     ctx.fillStyle = COLORS[k];
     ctx.fillRect(lx, ly - 9, 10, 10);
     ctx.fillStyle = '#cbd5e1';
-    const txt = c.label + ' ('+(c.value_gross_q1_2026_usd_b / total * 100).toFixed(1)+'%)';
+    const txt = c.label + ' ('+(c.compute_gross_q1_2026_usd_b / total * 100).toFixed(1)+'%)';
     ctx.fillText(txt, lx + 14, ly);
     lx += ctx.measureText(txt).width + 30;
     if (lx > plotW - 100) { lx = m.left; ly += 18; }
@@ -591,10 +660,10 @@ function renderLayerStack() {
 
   const ls = computeData.layer_stack_ratios;
   const layers = [
-    { label: 'Apps Revenue', value: ls.apps_revenue_2025_usd_b, color: '#10b981', desc: 'End-customer dollars to model labs + AI apps + traditional SaaS AI' },
-    { label: 'Compute Revenue', value: ls.compute_revenue_2025_net_usd_b, color: '#3b82f6', desc: 'What cloud providers earn (net of model-lab pass-through)' },
-    { label: 'Silicon Revenue', value: ls.silicon_revenue_2025_usd_b, color: '#f97316', desc: 'NVIDIA + AMD + custom ASIC AI revenue' },
-    { label: 'Power + DC infra', value: ls.power_revenue_2025_usd_b, color: '#ef4444', desc: 'Utilities + DC cooling/power revenue (placeholder — Power Ledger v3)' }
+    { label: 'Apps Revenue', value: ls.apps_revenue_2025_usd_b, color: '#10b981', desc: 'Measured cohort — Revenue Ledger basis' },
+    { label: 'Compute Revenue', value: ls.compute_revenue_2025_net_usd_b, color: '#3b82f6', desc: 'Sum-of-quarterlies, post-Copilot, net of bucket-3 pass-through' },
+    { label: 'Silicon Revenue', value: ls.silicon_revenue_2025_usd_b, color: '#f97316', desc: 'NVIDIA Data Center FY26 calendar 2025 + AMD + custom ASIC' },
+    { label: 'Power + DC infra', value: ls.power_revenue_2025_usd_b, color: '#ef4444', desc: 'Utilities + DC cooling/power (placeholder — Power Ledger v3)' }
   ];
 
   const max = Math.max(...layers.map(l => l.value));
@@ -607,7 +676,7 @@ function renderLayerStack() {
   ctx.font = 'bold 13px -apple-system,sans-serif';
   ctx.fillStyle = '#cbd5e1';
   ctx.textAlign = 'left';
-  ctx.fillText('2025 annualised flows ($B) — the recycling diagram', margin.left, margin.top - 4);
+  ctx.fillText('2025 lookback flows ($B) — sum-of-quarterlies, all four layers same time-basis', margin.left, margin.top - 4);
 
   layers.forEach((l, i) => {
     const y = margin.top + 14 + i * (barH + gap);
@@ -650,10 +719,11 @@ function renderLayerStack() {
 // ─── WWHBT panel ───
 function renderWWHBT() {
   const c = computeData;
-  const totalGross = c.annualised_revenue_2025_gross_usd_b;
-  const totalNet = c.annualised_revenue_2025_net_usd_b;
-  const grossQ1 = c.q1_2026_gross_usd_b;
-  const annualisedQ1 = grossQ1 * 4;
+  const totalGross = c.compute_revenue_2025_gross_usd_b;
+  const totalNet = c.compute_revenue_2025_net_usd_b;
+  const passThrough = c.model_pass_through_2025_usd_b;
+  const bucket1 = c.bucket_1_2025_usd_b;
+  const bucket1Share = (bucket1 / totalGross);
 
   // Mag7 AI capex — pull from elsewhere when available; for now Tier 3A reference value.
   const mag7AICapex2025 = 320; // ~$B; aligned with $260B industry investment per methodology constants
@@ -662,24 +732,24 @@ function renderWWHBT() {
   const signals = [
     {
       title: 'Compute Revenue covers Mag7 AI capex',
-      threshold: '$300B+ capex covered ≥ 30%',
+      threshold: '$300B+ capex covered ≥ 20%',
       observed: fmt$B(totalGross) + ' / ' + fmt$B(mag7AICapex2025) + ' = ' + (capexCoverRatio*100).toFixed(0) + '%',
-      status: capexCoverRatio >= 0.30 ? 'tracking' : 'below',
-      note: 'Compute Revenue (gross-disclosed, all sellers) as a fraction of Mag7 AI capex. Below 30% means capex is funded primarily by parent-co cashflow, not compute customer dollars — the circular-financing thread.'
+      status: capexCoverRatio >= 0.20 ? 'tracking' : 'below',
+      note: 'Compute Revenue (post-Copilot, gross) as a fraction of Mag7 AI capex. Below 20% means capex is funded primarily by parent-co cashflow, not compute customer dollars — the circular-financing thread. Threshold lowered from 30% (wq-087) to 20% (wq-089) because Copilot scope-out reduced the numerator — comparison anchored against the corrected denominator.'
     },
     {
-      title: 'Concentration easing',
-      threshold: 'Mag3 share < 80%',
-      observed: fmtPct(c.concentration.mag3_share_pct,1) + ' Q1 2026',
-      status: c.concentration.mag3_share_pct < 80 ? 'met' : 'tracking',
-      note: 'Investor / procurement question: is the layer concentrated enough to be a duopoly+1 risk? Below 80% means meaningful neocloud/Oracle counterweight.'
+      title: 'Bucket 1 share — frontier-lab self-loop',
+      threshold: 'Bucket 1 < 60% of compute gross',
+      observed: fmt$B(bucket1) + ' / ' + fmt$B(totalGross) + ' = ' + (bucket1Share*100).toFixed(0) + '% (2025 lookback)',
+      status: bucket1Share < 0.60 ? 'tracking' : 'below',
+      note: 'How much of compute revenue is the frontier-lab-compute self-loop (bucket 1) vs external customer dollars (buckets 2+3). Above 60% means the layer is dominated by lab-to-cloud spending — much of which is funded by hyperscaler equity in the same labs. New signal added wq-089 per D5.'
     },
     {
-      title: 'Pass-through gap (gross − net)',
-      threshold: 'Pass-through > 15% of gross',
-      observed: fmt$B(c.model_pass_through_2025_usd_b) + ' (' + ((c.model_pass_through_2025_usd_b/totalGross)*100).toFixed(1) + '%)',
-      status: (c.model_pass_through_2025_usd_b/totalGross) > 0.15 ? 'tracking' : 'below',
-      note: 'How much of hyperscaler AI revenue is actually a pass-through to model labs vs. real layer capture. The bigger the gap, the less of the headline number is theirs to keep.'
+      title: 'Pass-through gap (bucket 3 only)',
+      threshold: 'Pass-through < 5% of gross (corrected scope)',
+      observed: fmt$B(passThrough) + ' (' + ((passThrough/totalGross)*100).toFixed(1) + '%)',
+      status: (passThrough/totalGross) < 0.05 ? 'met' : 'tracking',
+      note: 'Recalibrated wq-089: pass-through applies to bucket 3 (token-API resale) only, not total AI revenue. Was 22% under wq-087 (overstated ~10×). Corrected ~1% reflects that token-API is a small slice of compute revenue and most of the layer is direct lab/enterprise compute spend, not pass-through resale.'
     }
   ];
 
@@ -710,7 +780,7 @@ function renderWWHBT() {
   html += '</div>';
   html += '<div style="background:rgba(239,68,68,0.04);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px;">';
   html += '<div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Downside factors</div>';
-  html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Mag3 share is '+fmtPct(c.concentration.mag3_share_pct,0)+' — extreme vendor concentration. CoreWeave revenue ~85% concentrated to Microsoft (which is Microsoft sub-renting compute it sells onward to OpenAI). The "sellers" and "buyers" of AI compute are largely the same balance sheets. ASC 606 principal-treatment means hyperscaler AI gross numbers are double-countable against model-lab revenue at the ecosystem level.</div>';
+  html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.6;">Mag3 share is '+fmtPct(c.concentration.mag3_share_pct,0)+' — extreme vendor concentration. Bucket 1 is '+(bucket1Share*100).toFixed(0)+'% of compute revenue: the frontier-lab self-loop dominates. CoreWeave revenue ~85% concentrated to Microsoft (which is Microsoft sub-renting compute it sells onward to OpenAI). The "sellers" and "buyers" of AI compute are largely the same balance sheets, with VC + hyperscaler equity routing through frontier labs. ASC 606 principal-treatment means hyperscaler AI gross numbers are double-countable against model-lab revenue at the ecosystem level.</div>';
   html += '</div>';
   html += '</div>';
 
@@ -736,12 +806,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const m = { left: 60, right: 30 };
     const plotW = W - m.left - m.right;
     const order = ['msft_ai','googl_cloud_ai','amzn_aws_ai','oracle_cloud_ai','coreweave','nebius','lambda','crusoe'];
-    const total = order.reduce((s,k) => s + (computeData.components[k] ? computeData.components[k].value_gross_q1_2026_usd_b : 0), 0);
+    const total = order.reduce((s,k) => s + (computeData.components[k] ? computeData.components[k].compute_gross_q1_2026_usd_b : 0), 0);
     let x = m.left;
     for (const k of order) {
       const c = computeData.components[k];
       if (!c) continue;
-      const w = (c.value_gross_q1_2026_usd_b / total) * plotW;
+      const w = (c.compute_gross_q1_2026_usd_b / total) * plotW;
       if (mx >= x && mx <= x + w) {
         renderSidePanel(c);
         break;
@@ -755,10 +825,14 @@ function renderSidePanel(c) {
   const dr = c.ai_run_rate_disclosure || {};
   const us = c.underlying_segment || {};
   let h = '<div class="side-title">'+c.label+'</div>';
-  h += '<div class="side-stat"><span>Gross (Q1 26)</span><strong>'+fmt$B(c.value_gross_q1_2026_usd_b)+'</strong></div>';
-  h += '<div class="side-stat"><span>Net (Q1 26)</span><strong>'+fmt$B(c.value_net_q1_2026_usd_b)+'</strong></div>';
-  h += '<div class="side-stat"><span>Pass-through</span><strong>'+fmt$B(c.pass_through_q1_2026_usd_b)+'</strong></div>';
-  h += '<div class="side-stat"><span>Tier (gross/net)</span><strong>'+c.tier_gross+' / '+c.tier_net+'</strong></div>';
+  h += '<div class="side-stat"><span>Compute gross (Q1 26)</span><strong>'+fmt$B(c.compute_gross_q1_2026_usd_b)+'</strong></div>';
+  h += '<div class="side-stat"><span>Compute net (Q1 26)</span><strong>'+fmt$B(c.compute_net_q1_2026_usd_b)+'</strong></div>';
+  h += '<div class="side-stat"><span>Bucket 1 (frontier)</span><strong>'+fmt$B(c.bucket_1_q1_2026_usd_b)+'</strong></div>';
+  h += '<div class="side-stat"><span>Bucket 2 (workload)</span><strong>'+fmt$B(c.bucket_2_q1_2026_usd_b)+'</strong></div>';
+  h += '<div class="side-stat"><span>Bucket 3 gross (token API)</span><strong>'+fmt$B(c.bucket_3_gross_q1_2026_usd_b)+'</strong></div>';
+  h += '<div class="side-stat"><span>Bucket 3 pass-through</span><strong>'+fmt$B(c.bucket_3_pass_through_q1_2026_usd_b)+'</strong></div>';
+  h += '<div class="side-stat"><span>Copilot excluded</span><strong>'+fmt$B(c.copilot_excluded_q1_2026_usd_b)+'</strong></div>';
+  h += '<div class="side-stat"><span>Tier (B1/B2/B3)</span><strong>'+(c.tier_bucket_1||'—')+' / '+(c.tier_bucket_2||'—')+' / '+(c.tier_bucket_3||'—')+'</strong></div>';
   h += '<div class="side-stat"><span>Treatment</span><strong>principal ✓</strong></div>';
   if (us.yoy_growth_pct != null) {
     h += '<div class="side-stat"><span>Underlying YoY</span><strong>+'+us.yoy_growth_pct+'%</strong></div>';
@@ -769,8 +843,8 @@ function renderSidePanel(c) {
   if (dr.filing_url) {
     h += '<div style="margin-top:8px;"><a href="'+dr.filing_url+'" target="_blank" rel="noopener" style="font-size:10px;color:var(--accent);text-decoration:none;">View 10-Q ↗</a></div>';
   }
-  if (c.pass_through_basis) {
-    h += '<div style="font-size:10px;color:var(--text-dim);margin-top:10px;line-height:1.5;"><strong style="color:#cbd5e1;">Pass-through basis:</strong> '+c.pass_through_basis+'</div>';
+  if (c.bucket_basis) {
+    h += '<div style="font-size:10px;color:var(--text-dim);margin-top:10px;line-height:1.5;"><strong style="color:#cbd5e1;">Bucket basis:</strong> '+c.bucket_basis+'</div>';
   }
   document.getElementById('dist-side').innerHTML = h;
 }

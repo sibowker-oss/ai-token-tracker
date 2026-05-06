@@ -110,6 +110,18 @@ Card stages: Idea → Scoped → In Progress → Done
 - If the brief includes acceptance criteria, verify each one against actual rendered state
 - Run the site build and check the output before declaring done
 
+### Cross-Ledger Reconciliation (added 2026-05-06 per wq-089/wq-090 review)
+
+Before defining or changing any aggregate that gets published on the site (totals on Capital, Revenue, Compute, Usage, Power Ledgers; any hero-strip number; any layer-stack figure), check whether another Ledger or page already publishes a number describing overlapping reality. If so, the brief's `§11 Reconciliation` section must:
+
+1. Name the matching figure and where it lives.
+2. State the expected relationship (equal / subset / superset / disjoint).
+3. Provide the bridge math — explicit numerical reconciliation, or a documented reason the gap exists (cohort scoping, ecosystem vs measured, time basis).
+
+If a new aggregate contradicts an existing higher-tier published number with no bridge, the new aggregate is blocked from shipping. Tier of the new number is capped at one below the conflicting existing number until reconciled. Do not silently re-tune to hit a target — write a `docs/decisions/open/` decision file and stop that branch.
+
+This rule exists because the Compute Ledger and Revenue Ledger shipped in late April / early May 2026 with materially different views of the same hyperscaler-AI flow (Compute pass-through ~$11.5B vs Revenue Hyperscalers channel ~$3.6B for what is essentially overlapping economic reality). The Cowork review session 2026-05-06 caught the gap; wq-089 and wq-090 fix it; this rule prevents recurrence.
+
 ---
 
 ## File structure reference
