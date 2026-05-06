@@ -384,7 +384,7 @@ function renderFrontierLabCompute() {
 
   h += '<div class="methodology-callout" style="margin-top:14px;">';
   h += '<span style="color:var(--accent);font-weight:700;">i</span>';
-  h += '<span><strong>How to read this card:</strong> Frontier lab compute counts only external transactions where a model lab pays a separate hyperscaler or neocloud — internal compute (e.g. Google running Gemini training on Google Cloud) is excluded. Per-lab attribution is editorial and provenance-tiered: AWS lines are anchored on Andy Jassy\'s 2026 shareholder-letter run-rate disclosure; CoreWeave lines come directly from S-1 / 10-Q customer-concentration disclosures; the others are bottom-up estimates. Full methodology in <code>dec-2026-05-06-compute-ledger-bucket-sizing.md</code>.</span>';
+  h += '<span><strong>How to read this card:</strong> Frontier lab compute counts only external transactions where a model lab pays a separate hyperscaler or neocloud — internal compute (e.g. Google running Gemini training on Google Cloud) is excluded. Per-lab attribution is editorial and provenance-tiered: AWS lines are anchored on Andy Jassy\'s 2026 shareholder-letter run-rate disclosure; CoreWeave lines come directly from S-1 / 10-Q customer-concentration disclosures; the others are bottom-up estimates. Full methodology on the <a href="/methodology.html#compute-revenue" style="color:var(--accent);">Methodology page</a>.</span>';
   h += '</div>';
 
   document.getElementById('frontier-lab-compute-body').innerHTML = h;
