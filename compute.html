@@ -365,21 +365,55 @@ function renderFrontierLabCompute() {
   h += '</div>';
   h += '</div>';
 
-  // Per-component attribution table
+  // Per-component attribution table — inline bar shows
+  //   - bar width      = this provider's total compute revenue (relative to MSFT, the largest)
+  //   - filled portion = frontier-lab compute (in accent colour)
+  //   - faded portion  = AI workload + Hosted model APIs (the non-frontier remainder)
+  // The eye reads provider scale + frontier share at a glance.
+  const maxCompute = Math.max.apply(null, attribution.map(function (row) {
+    var c2 = components[row.slug];
+    return c2 ? c2.compute_gross_2025_usd_b : 0;
+  }));
+
   h += '<div style="border:1px solid var(--card-border);border-radius:8px;overflow:hidden;">';
-  h += '<div style="display:grid;grid-template-columns:1.4fr 2.2fr 0.8fr 0.5fr;gap:0;background:rgba(15,23,42,0.6);padding:8px 12px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);font-weight:700;">';
-  h += '<div>Provider</div><div>Primary frontier-lab attribution</div><div style="text-align:right;">2025 ($B)</div><div style="text-align:right;">Tier</div>';
+  h += '<div style="display:grid;grid-template-columns:1.3fr 2.0fr 1.5fr 0.7fr 0.5fr;gap:0;background:rgba(15,23,42,0.6);padding:8px 12px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);font-weight:700;">';
+  h += '<div>Provider</div><div>Primary frontier-lab attribution</div><div>Frontier share of provider\'s compute</div><div style="text-align:right;">2025 ($B)</div><div style="text-align:right;">Tier</div>';
   h += '</div>';
-  attribution.forEach(row => {
+  attribution.forEach(function (row) {
     const c2 = components[row.slug];
     if (!c2) return;
-    h += '<div data-frontier-lab-compute-row="'+row.slug+'" style="display:grid;grid-template-columns:1.4fr 2.2fr 0.8fr 0.5fr;gap:0;padding:8px 12px;border-top:1px solid var(--card-border);font-size:12px;align-items:center;">';
+    const computeTotal = c2.compute_gross_2025_usd_b || 0;
+    const frontier = c2.frontier_lab_compute_2025_usd_b || 0;
+    const totalScale = maxCompute > 0 ? (computeTotal / maxCompute) * 100 : 0;
+    const frontierScale = maxCompute > 0 ? (frontier / maxCompute) * 100 : 0;
+    const frontierShare = computeTotal > 0 ? (frontier / computeTotal) * 100 : 0;
+
+    h += '<div data-frontier-lab-compute-row="'+row.slug+'" style="display:grid;grid-template-columns:1.3fr 2.0fr 1.5fr 0.7fr 0.5fr;gap:0;padding:8px 12px;border-top:1px solid var(--card-border);font-size:12px;align-items:center;">';
     h += '<div style="color:var(--text-bright);font-weight:600;">'+c2.label+'</div>';
     h += '<div style="color:var(--text-dim);font-size:11px;line-height:1.5;">'+row.primaryLab+'</div>';
-    h += '<div style="text-align:right;color:var(--text-bright);font-weight:600;">'+c2.frontier_lab_compute_2025_usd_b.toFixed(2)+'</div>';
+
+    // Inline bar
+    h += '<div style="padding-right:12px;">';
+    h += '<div style="position:relative;height:14px;background:rgba(255,255,255,0.04);border-radius:3px;overflow:hidden;">';
+    // Faded "rest of compute" segment — total provider compute relative to max
+    h += '<div style="position:absolute;left:0;top:0;height:100%;width:'+totalScale.toFixed(2)+'%;background:rgba(59,130,246,0.18);"></div>';
+    // Solid frontier-lab segment overlay
+    h += '<div style="position:absolute;left:0;top:0;height:100%;width:'+frontierScale.toFixed(2)+'%;background:var(--accent);"></div>';
+    h += '</div>';
+    h += '<div style="font-size:10px;color:var(--text-dim);margin-top:3px;">'+frontierShare.toFixed(0)+'% of '+fmt$B(computeTotal)+' compute</div>';
+    h += '</div>';
+
+    h += '<div style="text-align:right;color:var(--text-bright);font-weight:600;">'+frontier.toFixed(2)+'</div>';
     h += '<div style="text-align:right;">'+tierPill(c2.tier_frontier_lab_compute)+'</div>';
     h += '</div>';
   });
+  h += '</div>';
+
+  // Bar legend
+  h += '<div style="display:flex;gap:18px;align-items:center;margin-top:10px;font-size:10px;color:var(--text-dim);">';
+  h += '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:8px;background:var(--accent);border-radius:2px;"></span>Frontier lab compute</span>';
+  h += '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:8px;background:rgba(59,130,246,0.18);border-radius:2px;"></span>Other compute (AI workload + Hosted model APIs)</span>';
+  h += '<span style="margin-left:auto;">Bar width scaled to largest provider total</span>';
   h += '</div>';
 
   h += '<div class="methodology-callout" style="margin-top:14px;">';
