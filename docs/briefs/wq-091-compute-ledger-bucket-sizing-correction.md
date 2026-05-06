@@ -59,6 +59,7 @@ This is the right answer; the editorial AI-share weights baked into the original
 | D6 | **2024 reference for YoY proportionally restated.** With 2025 calendar dropping $73B → $54B, 2024 should also restate down (the editorial weights that were wrong for 2025 were wrong for 2024 too). Restate 2024 from $30B to ~$15–18B; YoY 2025 vs 2024 ≈ +150–200%. | 2026-05-06 |
 | D7 | **Stale entity record cleanup.** `entities.json:microsoft-copilot[m365-copilot].ai_arr=$13B` is mislabelled; it's a stale Jan 2026 Microsoft total AI ARR, not M365 Copilot specifically. Drop the $13B label; replace with seat-math derivation ($5.4B list billings) plus a parent-AI-line provenance link. | 2026-05-06 |
 | D8 | **Plain-English segment names everywhere.** Drop "Bucket 1/2/3" from all writing — page copy, methodology, briefs, deployment records, AND JSON schema fields. Rename JSON keys: `bucket_1_2025_usd_b` → `frontier_lab_compute_2025_usd_b`; `bucket_2_*` → `ai_workload_compute_*`; `bucket_3_gross_*` → `hosted_model_apis_gross_*`; `bucket_3_pass_through_*` → `hosted_model_apis_pass_through_*`; `bucket_3_net_*` → `hosted_model_apis_net_*`; `bucket_basis` → `segment_basis`; `bucket_model_doc` → `segment_model_doc`. Aggregator and validator follow. | 2026-05-06 |
+| D9 | **Quarterly trajectory back-cast.** All five quarters (Q1 2025 through Q1 2026) per provider get re-derived using a three-anchor method: (a) **Q1 2026** = disclosed run-rate ÷ 4 where available (MSFT $9.25B = $37B/4; AWS $3.75B = $15B/4 per Jassy; ORCL $0.9B holds; neoclouds hold). (b) **Q1 2025** = derived from disclosed YoY growth where available (MSFT +123% YoY → Q1 25 holds at $4.15B; AWS Anthropic-pattern back-cast → Q1 25 ~$0.75B; GOOGL +800% YoY narrative → Q1 25 ~$0.5B). Q1 25 anchors for AMZN/GOOGL are Tier 2A editorial — accepted. (c) **2025 calendar sum** = wq-091 corrected total ($28B MSFT, $10B AMZN, $7B GOOGL, $3B ORCL, $6.45B neoclouds). Interior quarters (Q2-Q4 2025) smoothed via exponential ramp constrained so the four 2025 quarters sum to (c). Each per-provider trajectory documented in `segment_basis`. Where Q4 25 ≈ Q1 26 (e.g., AWS, possibly GOOGL), surface the seasonality + run-rate-vs-quarterly-sum nuance on the page via caption/footnote — accepted as honest data, not a chart artefact. | 2026-05-06 |
 
 ## Open decisions — none
 
@@ -160,6 +161,14 @@ All decisions resolved in the 2026-05-06 Cowork review session.
    - Update Q1 2026 mirrors proportionally to maintain quarterly consistency
    - Commit per provider for cleanest review.
 5. **Phase 4 — restate `yoy_reference.compute_revenue_2024_gross_usd_b`** from $30B to ~$15–18B central. Add `segment_basis` text explaining the proportional restatement.
+5a. **Phase 4a — quarterly trajectory back-cast (per D9).** For each provider, re-derive the five-quarter array using the three-anchor method: (a) Q1 2026 = disclosed run-rate ÷ 4; (b) Q1 2025 = disclosed YoY growth back-cast; (c) interior quarters (Q2-Q4 2025) smoothed via exponential ramp constrained so the four 2025 quarters sum to corrected 2025 calendar total. Concretely:
+   - **MSFT trajectory:** Q1 25 $4.15B (holds, +123% YoY) → smooth ramp → Q4 25 ~$8.4B → Q1 26 $9.25B ($37B/4). Sum 2025 = ~$28B.
+   - **AMZN trajectory:** Q1 25 ~$0.75B (Anthropic-pattern back-cast from $3.75B Q1 26 with ~5× annual ramp) → smooth ramp → Q4 25 ~$3.8B → Q1 26 $3.75B ($15B/4 Jassy). Sum 2025 = $10B. **Q4 25 ≈ Q1 26 — surface caveat caption per D9.**
+   - **GOOGL trajectory:** Q1 25 ~$0.5B (+800% YoY narrative back-cast) → steep ramp → Q4 25 ~$3B → Q1 26 ~$3.5B (run-rate-implied). Sum 2025 = $7B.
+   - **ORCL trajectory:** holds at current quarterly values (proportional to $3B 2025).
+   - **Neoclouds:** quarterlies hold (CRWV+NBIS+LMBD+CRSE were already disclosed-anchored at the entity level, per wq-087 sourcing).
+   - Document each per-provider trajectory shape in `segment_basis`. Tier 2A for AMZN/GOOGL Q1 25 anchors (accepted).
+   - Tie-out: each provider's 4 × 2025 quarter values must sum to corrected 2025 calendar total within ±2%.
 6. **Phase 5 — restate `layer_stack_inputs.compute_revenue_2025_net_usd_b`** to ~$44.5B; update source/tier text.
 7. **Phase 6 — clean up entity record.** `entities.json:microsoft-copilot[m365-copilot]`: drop `ai_arr: 13.0`; replace with seat-math derivation field (e.g., `derived_arr_2025_usd_b: 5.4` with provenance pointing at seat × price × 12). Add `notes` field linking to derivation memo.
 8. **Phase 7 — aggregator rewrite for renamed fields.** `scripts/derive_compute_revenue.py` reads renamed JSON keys, writes plain-English first-class output keys (`frontier_lab_compute_2025_usd_b`, etc.), `--print-summary` uses plain English. Commit.
@@ -185,7 +194,8 @@ All decisions resolved in the 2026-05-06 Cowork review session.
 - [ ] **No "bucket_1" / "bucket_2" / "bucket_3" / "bucket_basis" / "bucket_model_doc" keys remain anywhere** in `data/compute_disclosures.json`, `data/methodology_constants.json`, or any other data file. Replaced with plain-English schema names.
 - [ ] `segment_basis` field for every component contains new provenance text per derivation memo's Issue 4/5/6 sections.
 - [ ] Tier annotations updated: AMZN Frontier lab compute / Hosted model APIs → 1B; GOOGL bottom-up annotations refreshed.
-- [ ] Q1 2026 mirrors per provider remain consistent with annual numbers (proportional).
+- [ ] Quarterly trajectory back-cast applied per D9: each provider's 5-quarter array (Q1 25 through Q1 26) re-derived via three-anchor method; per-provider 4 × 2025 quarter values sum to corrected 2025 calendar total within ±2%; per-provider Q1 26 matches disclosed run-rate ÷ 4 where available (AMZN $3.75B, MSFT $9.25B). Quarterly trajectory documented in `segment_basis` per provider.
+- [ ] **Quarterly trajectory chart on `/compute.html`** renders new quarter values; AWS Q4 25 ≈ Q1 26 flatness has a caption/footnote explaining the seasonality + run-rate basis (per D9).
 - [ ] `yoy_reference.compute_revenue_2024_gross_usd_b` restated to ~$15–18B with `segment_basis` text.
 - [ ] `derive_compute_revenue.py --print-summary` matches Final Locked Table within 2%, **using plain-English labels in output** (no "Bucket"):
   - Compute gross post-Copilot 2025: ~$45.55B
@@ -286,4 +296,4 @@ All decisions resolved in the 2026-05-06 Cowork review session.
 
 ---
 
-Shipped: 2026-05-06, commit d091964
+Shipped: 2026-05-06, commits d091964 (segment sizing + schema rename) + b9ebf00 (deployment record) + 2f14e95 (D9 quarterly back-cast + AWS Q4 25 ≈ Q1 26 caption)

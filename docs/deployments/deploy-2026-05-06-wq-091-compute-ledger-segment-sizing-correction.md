@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-06
 **WQ:** wq-091 (deploy correction to wq-089)
-**Branch/Commit:** wq-091-compute-ledger-segment-sizing-correction · d091964
+**Branch/Commits:** wq-091-compute-ledger-segment-sizing-correction · d091964 (segment sizing + schema rename) + b9ebf00 (deployment record) + 2f14e95 (D9 quarterly back-cast + AWS Q4 25 ≈ Q1 26 caption)
 **Derivation memo:** `docs/decisions/resolved/dec-2026-05-06-compute-ledger-bucket-sizing.md`
 
 ## What shipped
@@ -109,6 +109,48 @@ Replaced engineering-shorthand keys throughout `data/compute_disclosures.json`, 
 - [x] `npm run build-lint` passes (0 fail, 1 advisory unchanged from baseline)
 - [ ] `npm run release-check` — wq-091 compute.spec.ts assertions pass; visual snapshot baselines need rebaseline pass (separate follow-up — pre-existing labels.spec.ts failures unrelated to wq-091)
 - [x] Deployment record documents per-provider segment changes, schema rename, and tactical decisions (this file)
+
+## Addendum (2026-05-06, commit 2f14e95) — D9 quarterly trajectory back-cast
+
+Brief was updated mid-session to add **D9** — quarterly trajectory back-cast methodology. Three-anchor method:
+- (a) **Q1 2026** anchor = disclosed run-rate ÷ 4 where available (MSFT $9.25B = $37B/4; AWS $3.75B = $15B/4 per Andy Jassy 2026 shareholder letter; ORCL $0.9B holds; neoclouds hold).
+- (b) **Q1 2025** anchor = disclosed YoY growth back-cast where available (MSFT +123% YoY → Q1 25 holds at $4.15B; AWS Anthropic-pattern → Q1 25 ~$0.75B; GOOGL +800% AI-products YoY narrative → Q1 25 ~$0.50B). AMZN/GOOGL Q1 25 anchors are Tier 2A editorial.
+- (c) **Sum 2025** = wq-091 corrected calendar total per provider; interior quarters (Q2-Q4) smoothed via exponential ramp constrained to sum.
+
+### Restated quarterly array
+
+| Provider | Q1 25 | Q2 25 | Q3 25 | Q4 25 | Q1 26 | Sum 2025 |
+|---|---|---|---|---|---|---|
+| MSFT | 4.15 | 5.65 | 7.70 | 10.50 | 9.25 | $28.00B |
+| AMZN | 0.75 | 1.75 | 3.75 | 3.75 | 3.75 | $10.00B |
+| GOOGL | 0.50 | 0.97 | 1.88 | 3.65 | 2.50 | $7.00B |
+| ORCL | 0.50 | 0.65 | 0.85 | 1.00 | 0.90 | $3.00B |
+| CRWV | 0.98 | 1.05 | 1.18 | 1.30 | 1.50 | $4.51B |
+| NBIS | 0.10 | 0.20 | 0.27 | 0.38 | 0.34 | $0.95B |
+| LMBD | 0.10 | 0.13 | 0.16 | 0.21 | 0.18 | $0.60B |
+| CRSE | 0.07 | 0.10 | 0.11 | 0.12 | 0.12 | $0.40B |
+| **Total** | 7.15 | 10.50 | 19.50 | 20.91 | 18.54 | **$54.46B** |
+
+Sum-of-Q 2025 pre-Copilot = $54.46B ≈ wq-091 corrected annualised pre-Copilot $54.45B ✓
+
+### AWS Q4 25 ≈ Q1 26 callout (per D9)
+
+AWS quarterly trajectory shows Q3 25 = Q4 25 = Q1 26 = $3.75B/quarter — flat exit run-rate sustained across the year-end. This is honest data, not a chart artefact: Andy Jassy's "$15B annualised AI run rate" Q1 2026 disclosure IS the late-2025 exit run-rate (= $15B ÷ 4 = $3.75B/quarter), sustained into Q1 26 rather than continuing exponential growth. Anthropic-on-AWS scaled fast through Q1-Q3 2025 then plateaued. GOOGL shows similar but less pronounced behaviour (Q4 25 ramp peak; Q1 26 modest dip from $3.65B → $2.50B as backlog conversion timing normalises).
+
+A new orange-flagged caption was added beneath the **Quarterly Trajectory** chart on `/compute.html` to surface this nuance — the brief explicitly required this NOT be smoothed away.
+
+### Tactical decisions during D9 implementation
+
+- **Back-cast Q1 25 anchors prevailed over memo Issue 4.** D9 (newer) specifies AWS Q1 25 ~$0.75B; memo Issue 4 (older) implies ~$1.5B. Used D9's $0.75B since the brief is the more recent source of truth and the back-cast is explicitly grounded in the Anthropic Q1 2025 ramp shape (Anthropic's own Q1 25 was very small relative to its Q4 25 run-rate).
+- **AWS interior quarters non-exponential.** Pure exponential ramp from Q1 25 = $0.75B with sum = $10B and Q4 25 = Q1 26 = $3.75B is mathematically inconsistent (interior quarters can't be both exponential AND flat at exit). Used a smoothed monotonic ramp (Q2 $1.75B → Q3 $3.75B → Q4 $3.75B) that respects all anchors. Documented in `segment_basis`.
+- **GCP interior pure exponential.** GCP Q1 25 = $0.50B → Q4 25 = $3.65B with sum = $7B works cleanly under exponential ramp r ≈ 1.95. Q1 26 = $2.50B reflects normalisation from Q4 25 backlog spike.
+- **New `_quarterly_back_cast` block** added to `data/compute_disclosures.json` documenting the method + the Q4 25 ≈ Q1 26 caveat + which providers fall in that pattern. Provides anchor for future quarterly refreshes.
+
+### Validation
+
+- `validate-compute-revenue.mjs` ✓ — segment sums tied within ±2%; AI-line tie-outs all match Final Locked Table; no legacy bucket_* keys remain.
+- `derive_compute_revenue.py --print-summary` ✓ — headline values unchanged ($45.55B gross / $44.53B net / $35.95B frontier lab compute / +168% YoY).
+- `compute.spec.ts` Playwright suite ✓ — all 7 wq-091 DOM assertions pass including `no "Bucket 1/2/3" or "B1/B2/B3"` rendered DOM check.
 
 ## Notion
 
