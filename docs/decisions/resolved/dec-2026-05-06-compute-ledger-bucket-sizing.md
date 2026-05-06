@@ -260,6 +260,75 @@ Microsoft is **not** a Model Provider (MAI is too small to be material). Microso
 
 > Page copy / methodology / chart labels / brief content / decision memos all use plain English: **Frontier lab compute / AI workload compute / Hosted model APIs**. Engineering shorthand ("Bucket 1/2/3") is dropped from all writing — past and future. JSON schema field names get renamed in wq-091 to match (`frontier_lab_compute_2025_usd_b`, etc.).
 
+### Quarterly trajectory back-cast methodology (added 2026-05-06 mid-session)
+
+The wq-089 shipped quarterly array (Q1 25 through Q1 26 per provider) was anchored on the same editorial AI-share weights that wq-091 corrects for the annualised numbers — they were never re-derived. Result: in the trajectory chart, with the corrected calendar 2025 totals applied as a sum-tie, the implied per-quarter shape becomes inconsistent with disclosed run-rates. Specifically, AWS Q4 2025 ≈ Q1 2026 (because Jassy's "$15B annualized" is exit-quarter run-rate ÷ 4 = $3.75B/quarter, against a back-cast Q4 25 of similar size when 2025 calendar is $10B).
+
+Three-anchor method for re-deriving quarterlies per provider:
+
+1. **Q1 2026 anchor:** disclosed run-rate ÷ 4 where available
+   - MSFT: $9.25B (= $37B/4 from MSFT Q3 FY26 self-disclosure; holds from existing data)
+   - AMZN: $3.75B (= $15B/4 from Andy Jassy 2026 shareholder letter; restated DOWN from $5.60B)
+   - GOOGL: ~$3.5B (run-rate-implied from "products built on gen AI grew nearly 800% YoY" + Q1 25 anchor)
+   - ORCL: $0.9B (holds)
+   - Neoclouds: hold (well-disclosed at entity level per wq-087)
+
+2. **Q1 2025 anchor:** disclosed YoY growth back-cast where available
+   - MSFT: $4.15B (holds; ties to Q1 26 $9.25B at +123% YoY per Microsoft commentary)
+   - AMZN: ~$0.75B (Tier 2A back-cast from Anthropic's ~5× annual growth pattern, since Anthropic-on-AWS is the dominant share of AWS AI)
+   - GOOGL: ~$0.5B (Tier 2A back-cast from "+800% YoY on gen AI products" narrative)
+   - ORCL: $0.5B (holds)
+   - Neoclouds: hold
+
+3. **2025 calendar sum-tie:** corrected wq-091 totals
+   - MSFT $28B, AMZN $10B, GOOGL $7B, ORCL $3B, neoclouds $6.45B
+
+4. **Interior quarters (Q2-Q4 2025):** smoothed via exponential ramp constrained so the four 2025 quarters sum to the corrected calendar total.
+
+Per-provider trajectory shapes (post-back-cast, illustrative):
+
+| Provider | Q1 25 | Q2 25 | Q3 25 | Q4 25 | Q1 26 |
+|---|---|---|---|---|---|
+| MSFT | $4.15 | ~$5.5 | ~$7.2 | ~$8.4 | $9.25 |
+| AMZN | ~$0.75 | ~$1.5 | ~$2.7 | ~$3.8 | $3.75 |
+| GOOGL | ~$0.5 | ~$1.0 | ~$2.0 | ~$3.0 | ~$3.5 |
+| ORCL | $0.5 | $0.65 | $0.85 | $0.95 | $0.9 |
+| Neoclouds (sum) | $1.20 | $1.37 | $1.62 | $1.86 | $2.14 |
+
+**Q4 25 → Q1 26 transition handling — UPDATED 2026-05-06 (wq-092):**
+
+The wq-091 deployed quarterly trajectory anchored 2025 calendar to **annualised run-rate basis** (~$28B MSFT, $10B AMZN, $7B GOOGL — derived from CEO disclosures of full-year run-rate × 4) AND Q1 26 to **literal quarterly basis** ($37B/4, $15B/4). When growth accelerates through a year, sum-of-quarterlies < annualised, so forcing the quarterly array to sum to the annualised number balloons Q4 25 above Q1 26.
+
+Result on the deployed chart:
+- MSFT: Q4 25 $10.50B → Q1 26 $9.25B (–12%)
+- AMZN: Q4 25 $3.75B → Q1 26 $3.75B (flat)
+- GOOGL: Q4 25 $3.65B → Q1 26 $2.50B (–32%)
+
+**This visibly contradicted the AI growth narrative.** Simon called it: "we can't have a chart that showing a drop q over q on AI revs - that's dumb."
+
+**wq-092 corrects** by switching the 2025 calendar tie-out to **sum-of-quarterlies basis** (the lower of the two interpretations). This lets each provider's quarterly array grow monotonically into Q1 26 while preserving Q1 26 anchors at literal disclosed run-rates ÷ 4.
+
+Final locked trajectory (per wq-092):
+
+| Provider | Q1 25 | Q2 25 | Q3 25 | Q4 25 | Q1 26 | 2025 sum | Q4→Q1 |
+|---|---|---|---|---|---|---|---|
+| MSFT | $4.15 | $5.50 | $7.20 | $8.40 | $9.25 | $25.25B | +10% |
+| AMZN | $1.50 | $2.20 | $2.70 | $3.60 | $3.75 | $10.00B | +4% |
+| GOOGL | $0.70 | $1.40 | $2.10 | $2.80 | $3.00 | $7.00B | +7% |
+| ORCL | $0.50 | $0.65 | $0.85 | $0.95 | $0.90 | $2.95B | -5% (Stargate timing) |
+| Neoclouds (sum) | $1.20 | $1.37 | $1.62 | $1.86 | $2.14 | $6.05B | +15% |
+
+The annualised run-rate numbers ($28B MSFT, $10B AMZN, $7B GOOGL) are preserved as separate context fields in `data/compute_disclosures.json` (`value_2025_annualised_run_rate_basis_usd_b`) but no longer constrain the trajectory.
+
+Headline numbers shift slightly downward as a result: Compute gross post-Copilot ~$43.5B (was $45.55B), Compute net ~$42.5B (was $44.5B). Editorial trade is small dollar amount in exchange for a chart that visibly tells the AI growth story.
+
+**Methodological lesson:** "Annualised run-rate" disclosures and "calendar sum-of-quarterlies" are different numbers when growth is non-linear. The Compute Ledger uses sum-of-quarterlies for trajectory + Layer Stack lookback because that's what calendar accounting reflects. The annualised run-rate is preserved as context but doesn't constrain the year-end calendar number.
+
+Tier annotations:
+- Q1 26 anchors: 1B for MSFT/AMZN (CEO/run-rate disclosures); 2A for GOOGL (run-rate-implied from narrative)
+- Q1 25 anchors: 1A for MSFT (ties to current data); 2A for AMZN/GOOGL (back-cast from growth narrative — accepted)
+- Interior quarters: 2A (smoothed)
+
 ## Final locked table (2026-05-06)
 
 | Provider | AI line 2025 | Copilot | Frontier lab compute | Hosted model APIs | AI workload compute |
