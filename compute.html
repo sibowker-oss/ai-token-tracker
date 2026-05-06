@@ -155,7 +155,7 @@
   <!-- ── §4.3 Quarterly trajectory chart (screenshot-first) ── -->
   <div class="card">
     <h2>Quarterly Trajectory</h2>
-    <p class="h2-sub">Q1 2025 → Q1 2026, one line per major seller. Designed for screenshot quotation — legible at 800×400, brand watermark in-chart.</p>
+    <p class="h2-sub">Q1 2025 → Q1 2026, one line per major seller. Quarterly back-cast (wq-091 D9): Q1 2026 anchors on disclosed run-rate ÷ 4 (MSFT $9.25B, AWS $3.75B per Jassy); 2025 quarters smoothed to sum to the corrected 2025 calendar total per provider.</p>
     <div style="position:relative;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">
       <span class="chart-watermark" style="right:14px;top:10px;">ai-index.hepburnadvisory.com.au</span>
       <canvas id="trajectory-chart" height="400"></canvas>
@@ -163,6 +163,10 @@
     <div class="methodology-callout">
       <span style="color:var(--accent);font-weight:700;">i</span>
       <span>All Mag3 + Oracle figures are <strong>gross-disclosed</strong>, principal treatment per D6 verification gate. Quarterly numbers are pre-Copilot for trajectory continuity; the post-Copilot total is what flows to the headline. Pure-play neoclouds (CoreWeave, Nebius, Lambda, Crusoe) have no Copilot exposure and no token-API pass-through.</span>
+    </div>
+    <div class="methodology-callout" style="margin-top:8px;background:rgba(245,158,11,0.06);border-color:rgba(245,158,11,0.2);">
+      <span style="color:var(--orange);font-weight:700;">!</span>
+      <span><strong>Read this trajectory carefully:</strong> AWS Q4 2025 ≈ Q1 2026 ≈ $3.75B/quarter — the AWS line is flat across the year-end. This is honest data, not a chart artefact. Andy Jassy's "$15B annualised AI run rate" Q1 2026 disclosure IS the late-2025 exit run-rate ($15B ÷ 4 = $3.75B/quarter), sustained into Q1 2026 rather than continuing to grow exponentially. Anthropic-on-AWS scaled fast through 2025 (Q1 ~$0.75B → Q3 ~$3.75B) then plateaued at the exit run-rate. GCP shows similar but less pronounced behaviour (Q4 25 ramp peak; Q1 26 modest dip as backlog conversion timing normalises). Microsoft and the neoclouds continue smooth growth into Q1 2026.</span>
     </div>
   </div>
 

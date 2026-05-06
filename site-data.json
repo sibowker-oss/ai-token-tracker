@@ -7048,8 +7048,8 @@
       {
         "quarter": "2025Q1",
         "msft_ai_gross": 4.15,
-        "googl_cloud_ai_gross": 1.2,
-        "amzn_aws_ai_gross": 1.5,
+        "googl_cloud_ai_gross": 0.5,
+        "amzn_aws_ai_gross": 0.75,
         "oracle_cloud_ai_gross": 0.5,
         "coreweave_gross": 0.98,
         "nebius_gross": 0.1,
@@ -7058,9 +7058,9 @@
       },
       {
         "quarter": "2025Q2",
-        "msft_ai_gross": 5.5,
-        "googl_cloud_ai_gross": 1.55,
-        "amzn_aws_ai_gross": 2.0,
+        "msft_ai_gross": 5.65,
+        "googl_cloud_ai_gross": 0.97,
+        "amzn_aws_ai_gross": 1.75,
         "oracle_cloud_ai_gross": 0.65,
         "coreweave_gross": 1.05,
         "nebius_gross": 0.2,
@@ -7069,9 +7069,9 @@
       },
       {
         "quarter": "2025Q3",
-        "msft_ai_gross": 7.2,
-        "googl_cloud_ai_gross": 1.95,
-        "amzn_aws_ai_gross": 2.75,
+        "msft_ai_gross": 7.7,
+        "googl_cloud_ai_gross": 1.88,
+        "amzn_aws_ai_gross": 3.75,
         "oracle_cloud_ai_gross": 0.85,
         "coreweave_gross": 1.18,
         "nebius_gross": 0.27,
@@ -7080,8 +7080,8 @@
       },
       {
         "quarter": "2025Q4",
-        "msft_ai_gross": 11.15,
-        "googl_cloud_ai_gross": 2.3,
+        "msft_ai_gross": 10.5,
+        "googl_cloud_ai_gross": 3.65,
         "amzn_aws_ai_gross": 3.75,
         "oracle_cloud_ai_gross": 1.0,
         "coreweave_gross": 1.3,
@@ -7169,7 +7169,7 @@
         "tier_frontier_lab_compute": "2A",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "2A",
-        "segment_basis": "GCP 2025 AI line restated to $7B central (was $18B under wq-089) per bottom-up derivation in dec-2026-05-06-compute-ledger-bucket-sizing.md \u00a7Issue 5. Anchored on '13 product lines >$1B run-rate' commentary (Q2 2025): if 4\u20135 are predominantly AI-driven (Vertex AI Platform, Gemini API, AI Hypercomputer, AI agent/search products, AI-driven analytics) at $1.0\u20131.5B mid-2025 run-rate each = ~$5\u20137B; calendar 2025 averaging Q1\u2013Q4 lands $6\u20138B central $7B. The $36.9B Q1 2026 Anthropic equity gain is investment income, NOT Cloud operating revenue (Fortune 2026-04-30) \u2014 does not inflate this line. Frontier lab compute ($3.5B 2025): Anthropic on TPUs $1.5\u20132B (deep partnership, April 2026 expanded multi-GW agreement from 2027); OpenAI on GCP $0.5\u20131B (CNBC 2025-07-16 partial-year diversification); Mistral + Cohere + AI21 + others ~$1B. Per D5, internal-recursion (Google's own Gemini compute on GCP) contributes $0 \u2014 the strict frontier-lab definition holds. Hosted model APIs ($0.5B): Vertex partner-served (smaller than Bedrock \u2014 Anthropic-on-Vertex newer, lower volume). Pass-through 20%. AI workload compute ($1.5B): non-frontier enterprise + AI-Native on GCP. Copilot excluded $1.5B (MS-declared analogue per D4): Gemini-in-Workspace external Apps revenue. The $1.5B reduction from prior $3B reclassifies to Frontier lab compute (Anthropic + OpenAI on GCP were under-sized) per Issue 6. Tie-out: 3.5+1.5+0.5+1.5 = $7.0B.",
+        "segment_basis": "GCP 2025 AI line restated to $7B central (was $18B under wq-089) per bottom-up derivation in dec-2026-05-06-compute-ledger-bucket-sizing.md \u00a7Issue 5. Anchored on '13 product lines >$1B run-rate' commentary (Q2 2025): if 4\u20135 are predominantly AI-driven (Vertex AI Platform, Gemini API, AI Hypercomputer, AI agent/search products, AI-driven analytics) at $1.0\u20131.5B mid-2025 run-rate each = ~$5\u20137B; calendar 2025 averaging Q1\u2013Q4 lands $6\u20138B central $7B. Quarterly trajectory back-cast per D9: Q1 25 ~$0.50B (back-cast from +800% YoY 'AI products' narrative; Tier 2A editorial), exponentially ramping Q2 ~$0.97B \u2192 Q3 ~$1.88B \u2192 Q4 ~$3.65B (sum 25 = $7.0B), Q1 26 ~$2.50B (Q1 normalisation from Q4 backlog spike \u2014 editorial 2A; possibly Q4 25 \u2248 Q1 26 case if conversion timing holds). The $36.9B Q1 2026 Anthropic equity gain is investment income, NOT Cloud operating revenue (Fortune 2026-04-30) \u2014 does not inflate this line. Frontier lab compute ($3.5B 2025): Anthropic on TPUs $1.5\u20132B (deep partnership, April 2026 expanded multi-GW agreement from 2027); OpenAI on GCP $0.5\u20131B (CNBC 2025-07-16 partial-year diversification); Mistral + Cohere + AI21 + others ~$1B. Per D5, internal-recursion (Google's own Gemini compute on GCP) contributes $0 \u2014 the strict frontier-lab definition holds. Hosted model APIs ($0.5B): Vertex partner-served (smaller than Bedrock \u2014 Anthropic-on-Vertex newer, lower volume). Pass-through 20%. AI workload compute ($1.5B): non-frontier enterprise + AI-Native on GCP. Copilot excluded $1.5B (MS-declared analogue per D4): Gemini-in-Workspace external Apps revenue. The $1.5B reduction from prior $3B reclassifies to Frontier lab compute (Anthropic + OpenAI on GCP were under-sized) per Issue 6. Tie-out: 3.5+1.5+0.5+1.5 = $7.0B.",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": {
@@ -7219,7 +7219,7 @@
         "tier_frontier_lab_compute": "1B",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "1B",
-        "segment_basis": "AWS 2025 AI line restated to $10B (was $18B under wq-089) per D1, anchored on Andy Jassy's CEO disclosure of '$15B annualised AI run rate' Q1 2026 (Tier 1B). Working backward via AI/Anthropic growth pattern (steep ramp through 2025: Anthropic itself $1B Q1 \u2192 $5\u20136B Q4 run-rate): Q1 ~$1.5B, Q2 ~$2B, Q3 ~$2.75B, Q4 ~$3.5B \u2192 2025 calendar central ~$10B; range $9\u201311B. Frontier lab compute ($7.0B 2025): Anthropic 2025 revenue $4.71B with compute spend exceeding revenue (subsidised by raised capital) \u2014 Anthropic on AWS infra ~60% (training + inference) ~$5\u20136B. Plus minor labs (Mistral via Bedrock partner, Cohere on AWS, AI21, smaller labs) ~$1\u20132B. Hosted model APIs ($2.5B 2025): Bedrock customer-paid resale of frontier models (Anthropic primarily, plus Llama/Mistral). Pass-through 25% blended (Anthropic-on-Bedrock terms differ from AOAI). AI workload compute ($0.5B): non-frontier enterprise + AI-Native residual; tighter than under wq-089 because Frontier lab compute is now sized correctly. Copilot excluded $0: AWS does not have a Copilot-equivalent named productivity line. Tie-out: 7.0+0.5+2.5+0 = $10.0B. CoreWeave double-count note: ~$3.8B of CoreWeave's $4.5B AI line is Microsoft-sub-rent for OpenAI compute \u2014 captured separately under msft_ai Frontier lab compute and under coreweave Frontier lab compute (same flow, different legs of ASC 606 principal treatment on each entity's P&L).",
+        "segment_basis": "AWS 2025 AI line restated to $10B (was $18B under wq-089) per D1, anchored on Andy Jassy's CEO disclosure of '$15B annualised AI run rate' Q1 2026 (Tier 1B). Quarterly trajectory back-cast per D9: Q1 25 ~$0.75B (Anthropic-pattern back-cast, Tier 2A editorial \u2014 Anthropic Q1 25 was very early in AWS-resident scale-up), Q2 ~$1.75B, Q3 ~$3.75B, Q4 ~$3.75B (exit run-rate per Jassy), Q1 26 = $3.75B (Jassy \u00f7 4). 2025 calendar sum ties to $10B exactly. Q4 25 \u2248 Q1 26 is honest data \u2014 Jassy's $15B Q1 2026 annualised IS the late-2025 exit run-rate sustained into Q1 26. Frontier lab compute ($7.0B 2025): Anthropic 2025 revenue $4.71B with compute spend exceeding revenue (subsidised by raised capital) \u2014 Anthropic on AWS infra ~60% (training + inference) ~$5\u20136B. Plus minor labs (Mistral via Bedrock partner, Cohere on AWS, AI21, smaller labs) ~$1\u20132B. Hosted model APIs ($2.5B 2025): Bedrock customer-paid resale of frontier models (Anthropic primarily, plus Llama/Mistral). Pass-through 25% blended (Anthropic-on-Bedrock terms differ from AOAI). AI workload compute ($0.5B): non-frontier enterprise + AI-Native residual; tighter than under wq-089 because Frontier lab compute is now sized correctly. Copilot excluded $0: AWS does not have a Copilot-equivalent named productivity line. Tie-out: 7.0+0.5+2.5+0 = $10.0B. CoreWeave double-count note: ~$3.8B of CoreWeave's $4.5B AI line is Microsoft-sub-rent for OpenAI compute \u2014 captured separately under msft_ai Frontier lab compute and under coreweave Frontier lab compute (same flow, different legs of ASC 606 principal treatment on each entity's P&L).",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": {
@@ -7432,7 +7432,7 @@
     },
     "_d6_gate": "PASS \u2014 principal-everywhere confirmed per data/methodology_constants.json:compute_revenue.principal_agent_treatment; Copilot scope-out applied; pass-through scoped to Hosted model APIs only.",
     "_engine": "scripts/derive_compute_revenue.py (wq-091 v3 \u2014 plain-English segment schema)",
-    "_generatedAt": "2026-05-06T04:13:32.693327+00:00",
+    "_generatedAt": "2026-05-06T05:06:57.532308+00:00",
     "_notes": "Three-segment model: Frontier lab compute (the circular-financing line \u2014 Model Providers paying external hyperscalers/neoclouds), AI workload compute (AI Natives + enterprises + sovereign workloads), Hosted model APIs (packaged token APIs). Pass-through applies to Hosted model APIs only. Copilot scoped OUT \u2014 tracked separately under copilot_excluded_*. See /methodology.html \u00a7Compute Revenue \u2014 three-segment model."
   }
 }
