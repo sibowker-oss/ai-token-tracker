@@ -570,6 +570,8 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE) -> list[str]:
             if boundary > start + chunk_size // 2:
                 end = boundary
         out.append(text[start:end])
+        if end >= len(text):
+            break
         start = end - 500  # overlap to catch cross-chunk claims
     return out
 
