@@ -6910,14 +6910,15 @@
           "slug": "m365-copilot",
           "name": "M365 Copilot",
           "role": "traditional_saas",
-          "ai_arr": 13.0,
+          "derived_arr_2025_usd_b": 5.4,
           "paid_seats": 15000000,
           "active_rate": 0.358,
           "seat_price": 30,
           "pricing_model": "per_seat",
           "providers": [
             "openai"
-          ]
+          ],
+          "notes": "M365 Copilot derived ARR via seat-math: 15M paid seats × $30/mo × 12 = $5.4B list billings 2025. Net of bundling discount (40–60% under E5+Copilot bundles) the real incremental is $2.5–3.5B. Replaces stale 'ai_arr: 13.0' (which was a misattributed Microsoft total AI ARR figure from Jan 2026, not M365 Copilot specifically — flagged by wheresyouredat-claims-vs-tail.html audit). See dec-2026-05-06-compute-ledger-bucket-sizing.md §Issue 3 for MS-declared vs TAIL-derived Copilot derivation."
         }
       ],
       "financials": {

@@ -19,8 +19,8 @@
     "_doc": "Tier 1B 'Corroborated' source-credibility threshold: independent reporting sources agreeing within ~15% per methodology.html §3.1 / source credibility scoring. See model-assumptions.md §3."
   },
   "compute_revenue": {
-    "_doc": "wq-087 D6 verification gate, retained under wq-089. Records principal/agent treatment for the four hyperscaler AI reseller arrangements. The aggregator (scripts/derive_compute_revenue.py) refuses to run if any treatment shifts to 'agent'. Re-verify each cycle when 10-Ks refile.",
-    "bucket_model_doc": "wq-089 introduced three-bucket decomposition (frontier-lab compute / non-frontier workload / token-API resale). Pass-through applies to bucket 3 only. Copilot scoped OUT. See data/compute_disclosures.json:_schema and methodology.html §three-bucket-model.",
+    "_doc": "wq-087 D6 verification gate, retained under wq-089 / wq-091. Records principal/agent treatment for the four hyperscaler AI reseller arrangements. The aggregator (scripts/derive_compute_revenue.py) refuses to run if any treatment shifts to 'agent'. Re-verify each cycle when 10-Ks refile.",
+    "segment_model_doc": "wq-089 introduced three-segment decomposition; wq-091 renamed segments to plain English (Frontier lab compute / AI workload compute / Hosted model APIs) and restated per-provider sizing per Andy Jassy's $15B AWS AI run-rate disclosure plus GCP bottom-up build. Pass-through applies to Hosted model APIs only. Copilot scoped OUT. See data/compute_disclosures.json:_schema and methodology.html §three-segment-model.",
     "principal_agent_treatment": {
       "msft_azure_openai_service": {
         "treatment": "principal",

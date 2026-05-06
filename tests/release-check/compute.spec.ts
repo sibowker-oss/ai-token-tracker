@@ -1,14 +1,15 @@
 // tests/release-check/compute.spec.ts
-// wq-089 — DOM-level assertions on /compute.html.
+// wq-091 — DOM-level assertions on /compute.html.
 // Per CLAUDE.md "Validate rendered output, not just engine reports": this spec
 // visits the page in a browser, lets the canvas + JSON-driven JS render, and
 // asserts on the rendered DOM (not just on site-data.json:compute internals).
 //
-// Acceptance ties to wq-089 brief §"Acceptance criteria":
+// Acceptance ties to wq-091 brief §"Acceptance criteria":
 //   - Hero strip has gross / net / Apps→Compute / YoY (no share-shift box)
-//   - Bucket 1 card present, with per-lab attribution rows
-//   - Concentration headline leads on bucket-1 framing (D5 lede)
+//   - Frontier lab compute card present, with per-lab attribution rows
+//   - Concentration headline leads on circular-financing framing
 //   - Layer Stack visual present and labelled "lookback / sum-of-quarterlies"
+//   - No "Bucket 1/2/3" or "B1/B2/B3" anywhere in rendered DOM (D8)
 
 import { test, expect } from '@playwright/test';
 import { loadSiteData } from './helpers';
@@ -19,7 +20,7 @@ test.beforeEach(({}, testInfo) => {
   test.skip(!testInfo.project.name.startsWith('desktop'), 'compute DOM checks run desktop only');
 });
 
-test.describe('compute.html — wq-089 DOM assertions', () => {
+test.describe('compute.html — wq-091 DOM assertions', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/compute.html', { waitUntil: 'networkidle' });
     // Allow chart-init and async fetch('site-data.json') to settle.
@@ -29,7 +30,7 @@ test.describe('compute.html — wq-089 DOM assertions', () => {
     }, undefined, { timeout: 10_000 });
   });
 
-  test('concentration headline leads on bucket-1 / circular-financing framing (D5)', async ({ page }) => {
+  test('concentration headline leads on Frontier lab compute / circular-financing framing', async ({ page }) => {
     const lede = await page.locator('#concentration-lede').innerText();
     expect(lede.toLowerCase()).toContain('frontier model labs');
     expect(lede.toLowerCase()).toMatch(/compute providers?/);
@@ -42,7 +43,6 @@ test.describe('compute.html — wq-089 DOM assertions', () => {
     await expect(heroStats).toHaveCount(4);
 
     const labels = await heroStats.locator('.label').allInnerTexts();
-    // Every box must be present.
     expect(labels.some(l => /Compute Revenue 2025 · gross/i.test(l))).toBe(true);
     expect(labels.some(l => /Compute Revenue 2025 · net/i.test(l))).toBe(true);
     expect(labels.some(l => /Apps Revenue → Compute/i.test(l))).toBe(true);
@@ -51,16 +51,17 @@ test.describe('compute.html — wq-089 DOM assertions', () => {
     expect(labels.some(l => /share shift/i.test(l))).toBe(false);
   });
 
-  test('Bucket 1 card is present with per-lab attribution rows', async ({ page }) => {
-    const card = page.locator('#bucket-1-card');
+  test('Frontier lab compute card is present with per-provider attribution rows', async ({ page }) => {
+    const card = page.locator('#frontier-lab-compute-card');
     await expect(card).toBeVisible();
 
     const heading = card.locator('h2').first();
-    await expect(heading).toContainText(/Bucket 1/i);
-    await expect(heading).toContainText(/Frontier-lab compute/i);
+    await expect(heading).toContainText(/Frontier lab compute/i);
+    // The wq-089 "Bucket 1" prefix must NOT appear in this heading.
+    await expect(heading).not.toContainText(/Bucket 1/i);
 
     // Must show per-component attribution rows (Mag3 + Oracle + neoclouds).
-    const rows = card.locator('[data-bucket-1-row]');
+    const rows = card.locator('[data-frontier-lab-compute-row]');
     expect(await rows.count()).toBeGreaterThanOrEqual(6);
 
     // OpenAI / Anthropic must appear somewhere in the attribution copy.
@@ -69,7 +70,7 @@ test.describe('compute.html — wq-089 DOM assertions', () => {
     expect(body).toMatch(/Anthropic/);
   });
 
-  test('Layer Stack visual is on lookback 2025 sum-of-quarterlies basis (D3)', async ({ page }) => {
+  test('Layer Stack visual is on lookback 2025 sum-of-quarterlies basis', async ({ page }) => {
     const ls = page.locator('.layer-stack');
     await expect(ls).toBeVisible();
     const title = await ls.locator('.layer-stack-title').innerText();
@@ -86,8 +87,6 @@ test.describe('compute.html — wq-089 DOM assertions', () => {
     // The renderer formats $XYZ.YB; sanity-check that the gross box contains
     // the 2025 gross figure as displayed.
     const grossText = await page.locator('#hero-stats .hero-stat').nth(0).locator('.value').innerText();
-    // grossText looks like "$65.5B" — extract the number and confirm within
-    // 0.1 (rounding) of compute_revenue_2025_gross_usd_b.
     const m = grossText.match(/\$([\d.]+)B/);
     expect(m).not.toBeNull();
     if (m) {
@@ -96,12 +95,31 @@ test.describe('compute.html — wq-089 DOM assertions', () => {
     }
   });
 
-  test('WWHBT panel exposes Bucket-1-share signal (new in wq-089)', async ({ page }) => {
+  test('WWHBT panel exposes Frontier lab compute share signal', async ({ page }) => {
     const wwhbt = page.locator('#wwhbt-grid');
     await expect(wwhbt).toBeVisible();
     const text = await wwhbt.innerText();
-    expect(text).toMatch(/Bucket 1 share/i);
-    // The wq-087 pass-through threshold of >15% is gone (was overstated).
-    expect(text).toMatch(/Pass-through gap.*bucket 3/i);
+    expect(text).toMatch(/Frontier lab compute share/i);
+    // Pass-through is now scoped to Hosted model APIs only.
+    expect(text).toMatch(/Hosted model APIs/i);
+  });
+
+  // wq-091 D8 — plain-English naming everywhere; rendered DOM must contain
+  // no "Bucket 1/2/3" or "B1/B2/B3" strings anywhere.
+  test('rendered DOM contains no legacy "Bucket 1/2/3" or "B1/B2/B3" strings', async ({ page }) => {
+    const bodyText = await page.locator('body').innerText();
+    // Filename references in code blocks (e.g. dec-2026-05-06-compute-ledger-bucket-sizing.md)
+    // are historical artifacts and intentionally retained; the spec checks for
+    // the engineering shorthand strings used in copy, not filename substrings.
+    expect(bodyText).not.toMatch(/\bBucket 1\b/);
+    expect(bodyText).not.toMatch(/\bBucket 2\b/);
+    expect(bodyText).not.toMatch(/\bBucket 3\b/);
+    expect(bodyText).not.toMatch(/\bbucket-1\b/);
+    expect(bodyText).not.toMatch(/\bbucket-2\b/);
+    expect(bodyText).not.toMatch(/\bbucket-3\b/);
+    expect(bodyText).not.toMatch(/\bB1\/B2\/B3\b/);
+    expect(bodyText).not.toMatch(/\bB1\b/);
+    expect(bodyText).not.toMatch(/\bB2\b/);
+    expect(bodyText).not.toMatch(/\bB3\b/);
   });
 });
