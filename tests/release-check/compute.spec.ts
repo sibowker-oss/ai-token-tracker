@@ -38,16 +38,17 @@ test.describe('compute.html — wq-091 DOM assertions', () => {
     expect(lede.startsWith('Microsoft, Google, and Amazon capture')).toBe(false);
   });
 
-  test('hero strip has 4 stats — gross / net / Apps→Compute / YoY (NOT share-shift)', async ({ page }) => {
+  test('hero strip has 4 stats — net / pass-through / Apps→Compute / YoY (NOT share-shift)', async ({ page }) => {
     const heroStats = page.locator('#hero-stats .hero-stat');
     await expect(heroStats).toHaveCount(4);
 
     const labels = await heroStats.locator('.label').allInnerTexts();
-    expect(labels.some(l => /Compute Revenue 2025 · gross/i.test(l))).toBe(true);
+    // Box 1 = Compute Revenue 2025 · net (post-edit: net leads instead of gross)
     expect(labels.some(l => /Compute Revenue 2025 · net/i.test(l))).toBe(true);
+    // Box 2 = Total Model Pass-through Revenue 2025 (replaces gross box)
+    expect(labels.some(l => /Total Model Pass-through Revenue/i.test(l))).toBe(true);
     expect(labels.some(l => /Apps Revenue → Compute/i.test(l))).toBe(true);
     expect(labels.some(l => /YoY growth/i.test(l))).toBe(true);
-    // The wq-087 share-shift box is gone (D4).
     expect(labels.some(l => /share shift/i.test(l))).toBe(false);
   });
 
@@ -84,14 +85,13 @@ test.describe('compute.html — wq-091 DOM assertions', () => {
     const data = loadSiteData();
     const c = data.compute;
     expect(c).toBeDefined();
-    // The renderer formats $XYZ.YB; sanity-check that the gross box contains
-    // the 2025 gross figure as displayed.
-    const grossText = await page.locator('#hero-stats .hero-stat').nth(0).locator('.value').innerText();
-    const m = grossText.match(/\$([\d.]+)B/);
+    // Box 1 is now Compute Revenue 2025 · net (post-edit, replaces previous gross-leading box).
+    const netText = await page.locator('#hero-stats .hero-stat').nth(0).locator('.value').innerText();
+    const m = netText.match(/\$([\d.]+)B/);
     expect(m).not.toBeNull();
     if (m) {
       const rendered = parseFloat(m[1]);
-      expect(Math.abs(rendered - (c.compute_revenue_2025_gross_usd_b ?? 0))).toBeLessThan(0.2);
+      expect(Math.abs(rendered - (c.compute_revenue_2025_net_usd_b ?? 0))).toBeLessThan(0.2);
     }
   });
 
@@ -100,7 +100,7 @@ test.describe('compute.html — wq-091 DOM assertions', () => {
     await expect(wwhbt).toBeVisible();
     const text = await wwhbt.innerText();
     expect(text).toMatch(/Frontier lab compute share/i);
-    // Pass-through is now scoped to Hosted model APIs only.
+    // Pass-through is scoped to Hosted model APIs only.
     expect(text).toMatch(/Hosted model APIs/i);
   });
 
