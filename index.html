@@ -6,9 +6,9 @@
 <title>The AI Ledger — Hepburn Advisory</title>
 <link rel="stylesheet" href="/design-system/colors_and_type.css">
 <link rel="stylesheet" href="/design-system/ledger-overlays.css">
-<meta name="description" content="The AI economy, triangulated. Capital in. Tokens out. Revenue back. Three ledgers, one system.">
+<meta name="description" content="The AI economy, layer by layer. Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system.">
 <meta property="og:title" content="The AI Ledger — Hepburn Advisory">
-<meta property="og:description" content="$745B of infrastructure investment. $22B of AI revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.">
+<meta property="og:description" content="$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,8 @@
     --text:#e2e8f0; --text-dim:#94a3b8; --text-bright:#f8fafc;
     --accent:#3b82f6; --purple:#8b5cf6; --cyan:#06b6d4;
     --green:#10b981; --orange:#f59e0b; --red:#ef4444;
-    --capital:#3b82f6; --revenue:#10b981; --usage:#8b5cf6; --power:#f59e0b;
+    --capital:#3b82f6; --revenue:#10b981; --compute:#06b6d4; --usage:#8b5cf6; --power:#f59e0b;
+    --apps:#a855f7; --silicon:#fb7185;
     --sourced:#10b981; --derived:#f59e0b; --modeled:#8b5cf6;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -62,6 +63,30 @@
   .hero-hook .hook-number{font-size:48px;font-weight:700;color:var(--text-bright);letter-spacing:-1px;font-variant-numeric:tabular-nums;}
   .hero-hook .hook-text{font-size:20px;color:var(--text-dim);margin-top:4px;}
 
+  /* ── Layer Stack pyramid hero (wq-093) ── */
+  .layer-stack-hero{padding:48px 24px 24px;border-bottom:1px solid var(--card-border);}
+  .layer-stack-hero .ls-stack{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:32px;justify-content:center;}
+  .layer-stack-hero .ls-pyramid{width:100%;max-width:480px;height:auto;flex:1 1 auto;}
+  .layer-stack-hero .ls-pyramid polygon,
+  .layer-stack-hero .ls-pyramid rect{transition:filter 0.15s, transform 0.15s;cursor:pointer;}
+  .layer-stack-hero .ls-pyramid a:hover polygon,
+  .layer-stack-hero .ls-pyramid a:hover rect,
+  .layer-stack-hero .ls-pyramid a:focus-visible polygon,
+  .layer-stack-hero .ls-pyramid a:focus-visible rect{filter:brightness(1.15);}
+  .layer-stack-hero .ls-pyramid a:focus-visible polygon,
+  .layer-stack-hero .ls-pyramid a:focus-visible rect{outline:2px solid var(--text-bright);outline-offset:2px;}
+  .layer-stack-hero .ls-legend{flex:0 0 220px;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;}
+  .layer-stack-hero .ls-legend-row{display:flex;align-items:center;gap:10px;font-size:13px;}
+  .layer-stack-hero .ls-legend-row a{color:var(--text);text-decoration:none;font-weight:500;display:flex;align-items:baseline;gap:6px;}
+  .layer-stack-hero .ls-legend-row a:hover{color:var(--text-bright);text-decoration:underline;}
+  .layer-stack-hero .ls-legend-row .ls-swatch{width:14px;height:14px;border-radius:3px;flex:0 0 auto;display:inline-block;}
+  .layer-stack-hero .ls-legend-row .ls-name{font-weight:600;}
+  .layer-stack-hero .ls-legend-row .ls-value{color:var(--text-dim);font-variant-numeric:tabular-nums;}
+  .layer-stack-hero .ls-caption{max-width:760px;margin:24px auto 0;font-size:14px;line-height:1.6;color:var(--text-dim);text-align:left;}
+  .layer-stack-hero .ls-caption strong{color:var(--text);font-weight:600;}
+  .layer-stack-hero .ls-caption em{display:block;margin-top:8px;font-style:italic;font-size:12px;color:var(--text-dim);opacity:0.85;}
+  .layer-stack-hero .ls-headline{text-align:center;font-size:18px;font-weight:600;color:var(--text-bright);margin-bottom:24px;letter-spacing:-0.3px;}
+
   /* ── Hero Reconciliation Strip ── */
   .hero{text-align:center;padding:60px 24px 48px;border-bottom:1px solid var(--card-border);}
   .hero-numbers{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
@@ -94,8 +119,11 @@
   .lt-badge.stale{background:rgba(245,158,11,0.15);color:#f59e0b;}
   .lt-badge.old{background:rgba(239,68,68,0.15);color:#ef4444;}
 
-  /* ── Ledger Entry Cards ── */
+  /* ── Ledger Entry Cards (5 — wq-093) ── */
   .ledger-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:32px 0;}
+  @media(min-width:1100px){
+    .ledger-cards{grid-template-columns:repeat(5,1fr);}
+  }
   .ledger-card{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:28px 24px;transition:all 0.2s;}
   .ledger-card:hover{border-color:var(--accent);transform:translateY(-2px);}
   .ledger-card .lc-title{font-size:16px;font-weight:700;margin-bottom:4px;}
@@ -157,6 +185,11 @@
     .ledger-cards{grid-template-columns:1fr;}
     .supporting{flex-direction:column;align-items:center;}
     .footer-grid{grid-template-columns:1fr;gap:16px;}
+    .layer-stack-hero{padding:32px 12px 16px;}
+    .layer-stack-hero .ls-stack{flex-direction:column;gap:20px;}
+    .layer-stack-hero .ls-legend{flex:0 0 auto;width:100%;max-width:320px;}
+    .layer-stack-hero .ls-headline{font-size:16px;margin-bottom:16px;}
+    .layer-stack-hero .ls-caption{font-size:13px;}
   }
 </style>
 <script src="data/format-helpers.js"></script>
@@ -196,12 +229,72 @@
 
 <!-- ── MASTHEAD ── -->
 <section class="masthead">
-  <h2>The AI economy, triangulated.</h2>
-  <div class="tagline">Capital in. Tokens out. Revenue back. Three ledgers, one system.</div>
+  <h2>The AI economy, layer by layer.</h2>
+  <div class="tagline">Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system.</div>
   <div class="attribution">&mdash; Hepburn Advisory</div>
 </section>
 
-<!-- ── HERO RECONCILIATION STRIP ── -->
+<!-- ── LAYER STACK PYRAMID HERO (wq-093 D1 Option B) ── -->
+<section class="layer-stack-hero" id="layer-stack-hero" data-section="layer-stack">
+  <div class="ls-headline">Apps Revenue → Compute → Silicon · Power as foundation</div>
+  <div class="ls-stack">
+    <!--
+      Layer widths scaled vs Silicon ($165B = 100% base).
+      Apps 17/165 ≈ 10%, Compute 43/165 ≈ 26%, Silicon 100%, Power 25/165 ≈ 15%.
+      Each pyramid trapezoid: top = layer's own width, bottom = layer-below's width.
+      Power slab is a separate rectangle (not part of the pyramid) — see brief §5.
+    -->
+    <svg class="ls-pyramid" id="ls-pyramid-svg"
+         viewBox="0 0 200 220" preserveAspectRatio="xMidYMid meet"
+         role="img" aria-label="AI economy layer stack — Apps Revenue $17B, Compute $43B, Silicon $165B, Power $25B foundation slab"
+         xmlns="http://www.w3.org/2000/svg">
+      <!-- Apps Revenue: 10% top → 26% bottom -->
+      <a href="revenue.html" aria-label="Apps Revenue $17B — open Revenue Ledger">
+        <polygon data-layer="apps" points="90,4 110,4 113,40 87,40" fill="#a855f7"/>
+        <title>Apps Revenue · $17B (2025 cohort) — open Revenue Ledger</title>
+      </a>
+      <!-- Compute: 26% top → 100% bottom -->
+      <a href="compute.html" aria-label="Compute $43B — open Compute Ledger">
+        <polygon data-layer="compute" points="87,42 113,42 200,108 0,108" fill="#06b6d4"/>
+        <title>Compute · $43B (2025) — open Compute Ledger</title>
+      </a>
+      <!-- Silicon: 100% top → 100% bottom (flat base of pyramid) -->
+      <a href="capital.html" aria-label="Silicon $165B — open Capital Ledger">
+        <polygon data-layer="silicon" points="0,110 200,110 200,170 0,170" fill="#fb7185"/>
+        <title>Silicon · $165B (2025) — open Capital Ledger</title>
+      </a>
+      <!-- Power: separate rectangle below pyramid, 15% wide, ~6px gap -->
+      <a href="power.html" aria-label="Power $25B foundation — open Power Ledger">
+        <rect data-layer="power" x="85" y="178" width="30" height="28" fill="#f59e0b"/>
+        <title>Power · $25B foundation — open Power Ledger (v3 in progress)</title>
+      </a>
+    </svg>
+    <ul class="ls-legend" aria-label="Layer Stack legend">
+      <li class="ls-legend-row" data-layer="apps">
+        <span class="ls-swatch" style="background:#a855f7;" aria-hidden="true"></span>
+        <a href="revenue.html"><span class="ls-name">Apps Revenue</span> <span class="ls-value">· $17B</span></a>
+      </li>
+      <li class="ls-legend-row" data-layer="compute">
+        <span class="ls-swatch" style="background:#06b6d4;" aria-hidden="true"></span>
+        <a href="compute.html"><span class="ls-name">Compute</span> <span class="ls-value">· $43B</span></a>
+      </li>
+      <li class="ls-legend-row" data-layer="silicon">
+        <span class="ls-swatch" style="background:#fb7185;" aria-hidden="true"></span>
+        <a href="capital.html"><span class="ls-name">Silicon</span> <span class="ls-value">· $165B</span></a>
+      </li>
+      <li class="ls-legend-row" data-layer="power">
+        <span class="ls-swatch" style="background:#f59e0b;" aria-hidden="true"></span>
+        <a href="power.html"><span class="ls-name">Power</span> <span class="ls-value">· $25B (v3 in progress)</span></a>
+      </li>
+    </ul>
+  </div>
+  <p class="ls-caption">
+    <strong>Read this pyramid this way:</strong> every $1 of customer-paid Apps Revenue draws ~$2.50 of compute spend, ~$9.70 of silicon, ~$1.40 of power. The stack doesn't reconcile — that's the story. The gap between Apps Revenue and the layers below is funded by hyperscaler equity in the same labs that pay the compute bills.
+    <em>2025 lookback · sum-of-quarterlies basis · cohort Apps Revenue from the Revenue Ledger · click each layer for its ledger.</em>
+  </p>
+</section>
+
+<!-- ── HERO RECONCILIATION STRIP (5 tiles — wq-093) ── -->
 <section class="hero">
   <div class="hero-numbers" id="hero-numbers">
     <a href="capital.html" class="hero-tile" id="tile-capital">
@@ -210,17 +303,26 @@
       <div class="tier tier-pill tier-2" title="Mix: ~40% Tier 1, ~35% Tier 2, ~25% Tier 3">Tier mix: 1A/2A/3C</div>
     </a>
     <a href="revenue.html" class="hero-tile" id="tile-revenue">
-      <div class="value" style="color:var(--revenue);" id="hero-revenue">$22B</div>
-      <div class="label">of AI revenue earned (CY23–25)</div>
+      <div class="value" style="color:var(--revenue);" id="hero-revenue">$17B</div>
+      <div class="label">of customer-paid AI revenue earned (2025 cohort)</div>
       <div class="tier tier-pill tier-1" title="~65% Tier 1 sourced from filings">Tier mix: 1B/2A</div>
+    </a>
+    <a href="compute.html" class="hero-tile" id="tile-compute">
+      <div class="value" style="color:var(--compute);" id="hero-compute">$43B</div>
+      <div class="label">of AI compute revenue earned (2025)</div>
+      <div class="tier tier-pill tier-1" title="~60% Tier 1 sourced from 10-Q filings">Tier mix: 1B/2A</div>
     </a>
     <a href="usage.html" class="hero-tile" id="tile-usage">
       <div class="value" style="color:var(--usage);" id="hero-tokens">~360T</div>
       <div class="label">tokens served per day (current run-rate)</div>
       <div class="tier tier-pill tier-3" title="Multi-model consensus estimate">Tier mix: 2A/3A</div>
     </a>
+    <a href="power.html" class="hero-tile" id="tile-power">
+      <div class="value" style="color:var(--power);font-size:32px;">Power Ledger</div>
+      <div class="label">infrastructure underpinning AI compute — v3 in progress</div>
+    </a>
   </div>
-  <div class="hero-sub">The full AI economy, triangulated from primary sources.</div>
+  <div class="hero-sub">Five ledgers, triangulated from primary sources.</div>
 </section>
 
 <!-- ── SCENARIO WHAT-IF STRIP ── -->
@@ -231,55 +333,56 @@
 <!-- ── ONE-SCROLL NARRATIVE ── -->
 <div class="container">
   <section class="narrative">
-    <h2>Capital in &rarr; Assets built &rarr; Tokens out &rarr; Revenue back</h2>
+    <h2>Apps Revenue &rarr; Compute &rarr; Silicon &rarr; Power</h2>
     <div class="flow-steps">
       <div class="flow-step">
         <div class="step-icon" style="color:var(--accent);">&#9651;</div>
-        <div class="step-num" style="color:var(--accent);" id="nar-capex">$745B</div>
-        <div class="step-label">Capital In</div>
-        <div class="step-detail">Cumulative 2023–25 AI-attributable capital expenditure across hyperscalers, neoclouds, labs, sovereign, and enterprise.</div>
+        <div class="step-num" style="color:var(--accent);" id="nar-revenue">$17B</div>
+        <div class="step-label">Apps Revenue</div>
+        <div class="step-detail">Customer-paid AI revenue collected by providers in the measured 2025 cohort. The top of the stack — the real demand signal.</div>
+      </div>
+      <div class="flow-step">
+        <div class="step-icon" style="color:var(--cyan);">&#9650;</div>
+        <div class="step-num" style="color:var(--cyan);" id="nar-compute">$43B</div>
+        <div class="step-label">Compute Earned</div>
+        <div class="step-detail">What hyperscalers and neoclouds earned from AI compute in 2025. Frontier model labs paid 79% of it.</div>
       </div>
       <div class="flow-step">
         <div class="step-icon" style="color:var(--orange);">&#9632;</div>
-        <div class="step-num" style="color:var(--orange);">$370B</div>
-        <div class="step-label">Assets Built</div>
-        <div class="step-detail">Silicon (NVIDIA, AMD, custom ASICs), networking, data centres, and power infrastructure. $240B still in build or transit.</div>
-      </div>
-      <div class="flow-step">
-        <div class="step-icon" style="color:var(--purple);">&#11044;</div>
-        <div class="step-num" style="color:var(--purple);" id="nar-tokens">~360T/day</div>
-        <div class="step-label">Tokens Out</div>
-        <div class="step-detail">Daily inference volume across all providers. Consumer, enterprise, API, and embedded AI agent workloads.</div>
+        <div class="step-num" style="color:var(--orange);">$165B</div>
+        <div class="step-label">Silicon</div>
+        <div class="step-detail">NVIDIA Data Center FY26 calendar 2025 + AMD + custom ASIC. The biggest line in the stack.</div>
       </div>
       <div class="flow-step">
         <div class="step-icon" style="color:var(--green);">&#8635;</div>
-        <div class="step-num" style="color:var(--green);" id="nar-revenue">$22B</div>
-        <div class="step-label">Revenue Back</div>
-        <div class="step-detail">Annual AI-specific revenue collected by providers. Funds next wave of capital expenditure.</div>
+        <div class="step-num" style="color:var(--green);">$25B</div>
+        <div class="step-label">Power</div>
+        <div class="step-detail">Power infrastructure underpinning the workload. v3 hardening in progress.</div>
       </div>
     </div>
   </section>
 
-  <!-- ── HERO HOOK ONE-LINER ── -->
+  <!-- ── HERO HOOK ONE-LINER (Compute-anchored — wq-093 D7) ── -->
   <section class="hero-hook">
-    <div class="hook-number"><span id="hook-ratio">$34</span> of infrastructure stands behind every $1 of current AI revenue.</div>
+    <div class="hook-number"><span id="hook-ratio">$2.50</span> of compute spend stands behind every $1 of customer-paid AI Apps Revenue today.</div>
+    <div class="hook-text">The gap is funded by hyperscaler equity in the same labs.</div>
   </section>
 
-  <!-- ── LIVE TILE ── -->
+  <!-- ── LIVE TILE — Compute-derived signal (wq-093 D5) ── -->
   <section class="live-tile-wrap">
     <div class="live-tile">
       <div class="lt-label">Key convergence signal</div>
-      <div class="lt-value" style="color:var(--green);" id="lt-value">$3.2B</div>
-      <div style="font-size:13px;color:var(--text);margin-bottom:8px;">Microsoft Copilot + Salesforce Agentforce combined ARR</div>
+      <div class="lt-value" style="color:var(--compute);" id="lt-value">$43B</div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:8px;">AI compute revenue earned in 2025 — +153% YoY. Frontier labs paid 79% of it.</div>
       <div class="lt-meta">
-        <span class="lt-badge fresh" id="lt-age">Updated Apr 2026</span>
-        <a href="https://microsoft.com/investor" target="_blank" style="color:var(--accent);text-decoration:none;font-size:11px;">Source: Earnings calls &rarr;</a>
+        <span class="lt-badge fresh" id="lt-age">Updated May 2026</span>
+        <a href="methodology.html#compute-revenue-three-segment-model" style="color:var(--accent);text-decoration:none;font-size:11px;">Source: 10-Q filings &rarr;</a>
       </div>
-      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;">We track this quarterly as the leading indicator.</div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;">We track this quarterly as the leading indicator of supply-side AI economics.</div>
     </div>
   </section>
 
-  <!-- ── LEDGER ENTRY CARDS ── -->
+  <!-- ── LEDGER ENTRY CARDS (5 — wq-093) ── -->
   <section class="ledger-cards">
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--accent);">Capital Ledger</div>
@@ -294,14 +397,25 @@
     </div>
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--green);">Revenue Ledger</div>
-      <div class="lc-value" style="color:var(--green);" id="card-revenue">$22B</div>
-      <div class="lc-desc">Annual AI-specific revenue by buyer segment, channel, provider, and cost outcome. Tracks who pays, how, and where it goes.</div>
+      <div class="lc-value" style="color:var(--green);" id="card-revenue">$17B</div>
+      <div class="lc-desc">Customer-paid AI revenue collected by providers in the 2025 measured cohort. Tracks who pays, how, and where it goes.</div>
       <div class="lc-tier">
         <span class="tier-pill tier-1">65% Sourced</span>
         <span class="tier-pill tier-2">25% Derived</span>
         <span class="tier-pill tier-3">10% Modeled</span>
       </div>
       <a href="revenue.html" class="lc-link">Open Revenue Ledger &rarr;</a>
+    </div>
+    <div class="ledger-card">
+      <div class="lc-title" style="color:var(--compute);">Compute Ledger</div>
+      <div class="lc-value" style="color:var(--compute);" id="card-compute">$43B</div>
+      <div class="lc-desc">What hyperscalers and neoclouds earned from AI compute in 2025. Three segments — frontier-lab compute (79%), AI workload compute, hosted model APIs. Most of it goes to the labs hyperscalers also fund.</div>
+      <div class="lc-tier">
+        <span class="tier-pill tier-1">60% Sourced</span>
+        <span class="tier-pill tier-2">30% Derived</span>
+        <span class="tier-pill tier-3">10% Modeled</span>
+      </div>
+      <a href="compute.html" class="lc-link">Open Compute Ledger &rarr;</a>
     </div>
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--purple);">Usage Ledger</div>
@@ -312,6 +426,12 @@
         <span class="tier-pill tier-3">50% Modeled</span>
       </div>
       <a href="usage.html" class="lc-link">Open Usage Ledger &rarr;</a>
+    </div>
+    <div class="ledger-card">
+      <div class="lc-title" style="color:var(--power);">Power Ledger</div>
+      <div class="lc-value" style="color:var(--power);font-size:18px;font-weight:700;">v3 in progress</div>
+      <div class="lc-desc">Power infrastructure underpinning AI compute. v3 hardening in progress — see the Power Ledger for current methodology.</div>
+      <a href="power.html" class="lc-link">Open Power Ledger &rarr;</a>
     </div>
   </section>
 
@@ -341,46 +461,69 @@
 </div>
 
 <script>
-// ── wq-063: data-driven SCENARIOS ──
-// Loaded from site-data.json:cumulative on init. Bear/bull derive as ±15%
-// sensitivity bands around the engine value (per brief §2). Falls back to
-// the prior hardcoded literals when site-data.json is unavailable so the
-// page still renders if the fetch fails (graceful degradation per §3 #7).
-const FALLBACK_BASE = { capex: 745, revenue: 22, tokens: 360, ratio: 34 };
+// ── wq-063 + wq-093: data-driven SCENARIOS (five-ledger basis) ──
+// Loaded from site-data.json:cumulative + sankey + compute on init.
+// Bear/bull derive as ±15% sensitivity bands on revenue + tokens (per
+// brief wq-093 §7.1: Compute and Apps held constant in v1 — the
+// Compute-anchored hook ratio is a "today" statement, not scenario-
+// dependent; future scope per docs/decisions/open if scenario coupling
+// is needed).
+//
+// Apps Revenue base = sankey.totalCustomerRevenue (2025 cohort,
+// $17.36B per wq-092 derivation), NOT cumulative gross — wq-093 D8.
+// Compute Revenue base = compute.compute_revenue_2025_gross_usd_b
+// ($43.07B). Hook ratio = compute / apps ≈ 2.48 → "$2.50".
+const FALLBACK_BASE = { capex: 745, revenue: 17.36, compute: 43.07, tokens: 360, ratio: 2.50 };
 const SENSITIVITY_BAND = 0.15;
 let SCENARIOS = _buildScenarios(FALLBACK_BASE);
 
 function _buildScenarios(base) {
-  const r = base.revenue, c = base.capex, t = base.tokens;
+  const r = base.revenue, c = base.capex, t = base.tokens, k = base.compute;
   // wq-076: fmt$ uses formatCurrency for magnitude-aware rounding (loaded
   // from data/format-helpers.js). Falls back to inline format if helper
   // hasn't loaded yet (e.g. fetch-failure path).
   const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
   const fmtT = v => '~' + Math.round(v) + 'T';
-  const fmtRatio = v => '$' + Math.round(v);
+  // Compute-anchored ratio (Compute / Apps Revenue). Rounded to the nearest
+  // tenth then formatted as "$X.XX" so live values like 2.481 → "$2.50"
+  // (matches brief §6.4 lock copy).
+  const fmtRatio = v => '$' + (Math.round(v * 10) / 10).toFixed(2);
+  const ratioFor = (rev) => rev > 0 ? (k / rev) : base.ratio;
   return {
-    bear: { capex: fmt$(c), revenue: fmt$(r * (1 - SENSITIVITY_BAND)), tokens: fmtT(t * (1 - SENSITIVITY_BAND)), ratio: fmtRatio(c / (r * (1 - SENSITIVITY_BAND))), label: 'Bear case' },
-    base: { capex: fmt$(c), revenue: fmt$(r), tokens: fmtT(t), ratio: fmtRatio(c / r), label: 'Base case' },
-    bull: { capex: fmt$(c), revenue: fmt$(r * (1 + SENSITIVITY_BAND)), tokens: fmtT(t * (1 + SENSITIVITY_BAND)), ratio: fmtRatio(c / (r * (1 + SENSITIVITY_BAND))), label: 'Bull case' },
+    bear: { capex: fmt$(c), revenue: fmt$(r * (1 - SENSITIVITY_BAND)), compute: fmt$(k), tokens: fmtT(t * (1 - SENSITIVITY_BAND)), ratio: fmtRatio(ratioFor(r * (1 - SENSITIVITY_BAND))), label: 'Bear case' },
+    base: { capex: fmt$(c), revenue: fmt$(r), compute: fmt$(k), tokens: fmtT(t), ratio: fmtRatio(ratioFor(r)), label: 'Base case' },
+    bull: { capex: fmt$(c), revenue: fmt$(r * (1 + SENSITIVITY_BAND)), compute: fmt$(k), tokens: fmtT(t * (1 + SENSITIVITY_BAND)), ratio: fmtRatio(ratioFor(r * (1 + SENSITIVITY_BAND))), label: 'Bull case' },
   };
 }
 
-function _initScenariosFromData(cumulative) {
-  if (!cumulative) return; // fallback already set
+function _initScenariosFromData(d) {
+  if (!d) return; // fallback already set
+  const cumulative = d.cumulative ?? {};
+  const sankey = d.sankey ?? {};
+  const compute = d.compute ?? {};
+  // Apps Revenue: prefer sankey cohort total (matches Compute Ledger Layer
+  // Stack apps node — wq-093 §10 reconciliation rule, "Equal").
+  const appsRevenue = (typeof sankey.totalCustomerRevenue === 'number' && sankey.totalCustomerRevenue > 0)
+    ? sankey.totalCustomerRevenue
+    : FALLBACK_BASE.revenue;
+  const computeGross = (typeof compute.compute_revenue_2025_gross_usd_b === 'number' && compute.compute_revenue_2025_gross_usd_b > 0)
+    ? compute.compute_revenue_2025_gross_usd_b
+    : FALLBACK_BASE.compute;
   const base = {
     capex: cumulative.capex_total || FALLBACK_BASE.capex,
-    revenue: cumulative.customer_revenue_gross || FALLBACK_BASE.revenue,
+    revenue: appsRevenue,
+    compute: computeGross,
     tokens: cumulative.tokens_2025_annualized || FALLBACK_BASE.tokens,
-    ratio: cumulative.infra_to_revenue_ratio_2025 || FALLBACK_BASE.ratio,
+    ratio: computeGross / appsRevenue,
   };
   SCENARIOS = _buildScenarios(base);
   applyScenario(getScenario());
 }
 
-// Load cumulative aggregates and rebuild scenarios when ready.
+// Load cumulative + sankey + compute aggregates and rebuild scenarios when ready.
 fetch('site-data.json?v=' + Date.now())
   .then(r => r.json())
-  .then(d => { window.cumulativeData = d.cumulative; _initScenariosFromData(d.cumulative); })
+  .then(d => { window.cumulativeData = d.cumulative; _initScenariosFromData(d); })
   .catch(() => { /* fallback SCENARIOS already in place */ });
 
 function getScenario() {
@@ -399,26 +542,27 @@ function setScenario(s) {
 
 function applyScenario(s) {
   const d = SCENARIOS[s];
+  const set = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
   // Update toggle
   document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === s));
-  // Update hero
-  document.getElementById('hero-capex').textContent = d.capex;
-  document.getElementById('hero-revenue').textContent = d.revenue;
-  document.getElementById('hero-tokens').textContent = d.tokens;
-  // Update narrative
-  document.getElementById('nar-capex').textContent = d.capex;
-  document.getElementById('nar-tokens').textContent = d.tokens + '/day';
-  document.getElementById('nar-revenue').textContent = d.revenue;
-  // Update cards
-  document.getElementById('card-capex').textContent = d.capex;
-  document.getElementById('card-revenue').textContent = d.revenue;
-  document.getElementById('card-tokens').textContent = d.tokens + '/day';
-  // Update hero hook ratio
-  document.getElementById('hook-ratio').textContent = d.ratio;
+  // Update hero tiles (5 — wq-093)
+  set('hero-capex', d.capex);
+  set('hero-revenue', d.revenue);
+  set('hero-compute', d.compute);
+  set('hero-tokens', d.tokens);
+  // Update narrative flow (4 step-cards — wq-093)
+  set('nar-revenue', d.revenue);
+  set('nar-compute', d.compute);
+  // Update ledger cards
+  set('card-capex', d.capex);
+  set('card-revenue', d.revenue);
+  set('card-compute', d.compute);
+  set('card-tokens', d.tokens + '/day');
+  // Update Compute-anchored hero hook ratio (wq-093 D7)
+  set('hook-ratio', d.ratio);
   // Update scenario strip
   const strip = document.getElementById('strip-label');
   if (strip) strip.textContent = d.label;
-  // Update strip links
   const stripEl = document.getElementById('scenario-strip');
   if (stripEl) {
     const others = Object.keys(SCENARIOS).filter(k => k !== s);
