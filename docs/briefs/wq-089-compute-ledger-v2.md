@@ -210,3 +210,7 @@ Every aggregate published on the corrected Compute Ledger must list any other Le
 ## Change log
 
 - 2026-05-06 — drafted in Cowork following two-hour stress-test of the Compute Ledger against Revenue Ledger and against published hyperscaler economics. D1–D7 confirmed in same session. Ready for repo handoff.
+
+---
+
+**Shipped: 2026-05-06, commit a43a9fb** — bucket decomposition, Copilot scope-out, and pass-through correction landed on /compute.html. Layer Stack switched to lookback 2025 actuals with live cohort apps. Methodology page documents the three-bucket model + Copilot rule + cohort-vs-ecosystem gap. Deploy record at `docs/deployments/deploy-2026-05-06-wq-089-compute-ledger-v2.md`. wq-090 unblocked.
