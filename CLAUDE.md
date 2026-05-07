@@ -90,6 +90,29 @@ Card stages: Idea → Scoped → In Progress → Done
 
 ---
 
+## Publishing Gate — Live Site (HARD STOP)
+
+The live public site is **`ai-index.hepburnadvisory.com.au`**. Any change that becomes visible to the public there — new pages, page edits, navigation changes, copy edits, data refreshes that surface on rendered pages, or any action that promotes content from staging/preview to production — is gated by Simon's explicit approval.
+
+This rule is non-negotiable. It applies regardless of how small, confident, or reversible the change appears. It applies even if the brief says "ship it when done" — the brief authorises the **work**, not the **publish step**.
+
+### Required sequence before anything reaches the live site
+
+1. **Build to staging/preview first.** Deploy the change to a preview URL (Vercel/Netlify preview, branch deploy, or local + tunnelled staging). Never run a production publish/deploy command first.
+2. **Share the staging URL in chat.** State exactly what changed, which pages to check, and what to verify.
+3. **Wait for explicit approval from Simon.** A clear affirmative in chat is required (e.g. "approved", "ship it", "promote", "go live"). Silence is not approval. "Looks good" on something else is not approval. An approval given in a previous session does not carry forward.
+4. **Only then run the production publish.** Log the approval timestamp in the deployment record.
+
+### If the staging-first sequence is impossible
+
+If the only way to render the change is in production (e.g. infra change with no preview path), STOP. Write a `docs/decisions/open/dec-YYYY-MM-DD-publish-gate-exception.md` describing why staging is not feasible and what mitigations are proposed. Do not improvise around the gate.
+
+### Why this rule exists
+
+Two separate incidents up to 2026-05-06 saw draft pages reach the live site without approval. Both required corrective work. A 5-minute approval round-trip is cheaper than unwinding a bad publish.
+
+---
+
 ## Coding Conventions
 
 ### General
@@ -143,6 +166,7 @@ data/                    ← Vault, inbox, entities
 
 ## What NOT to do
 
+- **Never publish to the live site without Simon's explicit approval** (see Publishing Gate above). No production deploys, no Webflow publish, no `main` push if `main` auto-deploys, no rendering action that surfaces unseen pages on `ai-index.hepburnadvisory.com.au`.
 - Don't ask Simon to copy information to Cowork — write a file
 - Don't make sessions longer than necessary — one brief per session where possible
 - Don't skip the deployment record — it's how Cowork knows what happened
