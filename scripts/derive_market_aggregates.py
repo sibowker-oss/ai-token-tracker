@@ -6,7 +6,7 @@ per-provider Sankey engine (wq-055/062) doesn't produce on its own:
 
   - Per-source capex (mag7 / neocloud / sovereign / enterprise / total)
   - Annual token volumes (inference + training where derivable)
-  - Segment composition (consumer / SME / enterprise) per year
+  - Segment composition (consumer / ai_natives / ents_govs) per year (per-archetype, wq-090)
   - Per-channel totals (Subs / API / Hyperscalers / etc. as standalone metrics)
   - Derived ratios (infra_to_revenue, capex_per_token, revenue_per_token)
   - YoY deltas (revenue / capex / tokens)
@@ -267,18 +267,26 @@ def derive_tokens_annual(entities_doc: dict, year: str, cs_year: dict) -> dict:
 # ──────────────────────────────────────────────────────────────────────────
 
 def derive_segment_totals(entities_doc: dict, year: str, cs_year: dict) -> dict:
-    """Returns {total_segment_consumer, total_segment_sme, total_segment_enterprise,
-    _provenance}."""
+    """wq-090 — per-archetype Who-Pays segment rollup.
+
+    Returns {total_segment_consumer, total_segment_ai_natives,
+    total_segment_ents_govs, _provenance}, replacing the wq-067
+    consumer/sme/enterprise buckets. Reads `segment_composition_by_archetype`
+    from the cost-structure file; falls back to `_default` for entities
+    without an `entity_archetype` field.
+    """
     companies = entities_doc.get("companies") or []
     cs_market = cs_year.get("market_aggregates_estimation") or {}
-    seg_cfg = cs_market.get("segment_composition") or {}
-    sub_to_consumer = seg_cfg.get("subscription_to_consumer", 1.0)
-    api_to_sme = seg_cfg.get("api_to_sme", 0.4)
-    api_to_enterprise = seg_cfg.get("api_to_enterprise", 0.6)
-    ent_to_enterprise = seg_cfg.get("enterprise_to_enterprise", 1.0)
-    default_split = seg_cfg.get("_default_split") or {"consumer": 0.4, "sme": 0.16, "enterprise": 0.44}
+    seg_cfg = cs_market.get("segment_composition_by_archetype") or {}
+    default_row = seg_cfg.get("_default") or {
+        "subscription_to_consumer": 1.0,
+        "api_to_ai_natives": 0.40,
+        "api_to_ents_govs": 0.60,
+        "enterprise_to_ents_govs": 1.0,
+    }
+    default_split = seg_cfg.get("_default_split") or {"consumer": 0.40, "ai_natives": 0.20, "ents_govs": 0.40}
 
-    consumer = sme = enterprise = 0.0
+    consumer = ai_natives = ents_govs = 0.0
     sourced_count = fallback_count = 0
 
     for entity in companies:
@@ -287,27 +295,28 @@ def derive_segment_totals(entities_doc: dict, year: str, cs_year: dict) -> dict:
         if not cr:
             continue
         rbc = fin.get("revenue_by_channel") or {}
+        archetype = entity.get("entity_archetype")
+        seg = seg_cfg.get(archetype) or default_row
         if rbc:
             sourced_count += 1
-            consumer += cr * (rbc.get("subscription_pct", 0) / 100.0) * sub_to_consumer
-            sme += cr * (rbc.get("api_pct", 0) / 100.0) * api_to_sme
-            enterprise += (
-                cr * (rbc.get("api_pct", 0) / 100.0) * api_to_enterprise
-                + cr * (rbc.get("enterprise_pct", 0) / 100.0) * ent_to_enterprise
-            )
+            consumer += cr * (rbc.get("subscription_pct", 0) / 100.0) * seg.get("subscription_to_consumer", 1.0)
+            api_value = cr * (rbc.get("api_pct", 0) / 100.0)
+            ai_natives += api_value * seg.get("api_to_ai_natives", 0.40)
+            ents_govs += api_value * seg.get("api_to_ents_govs", 0.60)
+            ents_govs += cr * (rbc.get("enterprise_pct", 0) / 100.0) * seg.get("enterprise_to_ents_govs", 1.0)
         else:
             fallback_count += 1
-            consumer += cr * default_split["consumer"]
-            sme += cr * default_split["sme"]
-            enterprise += cr * default_split["enterprise"]
+            consumer += cr * default_split.get("consumer", 0.40)
+            ai_natives += cr * default_split.get("ai_natives", 0.20)
+            ents_govs += cr * default_split.get("ents_govs", 0.40)
 
     return {
         "total_segment_consumer": round(consumer, 4),
-        "total_segment_sme": round(sme, 4),
-        "total_segment_enterprise": round(enterprise, 4),
+        "total_segment_ai_natives": round(ai_natives, 4),
+        "total_segment_ents_govs": round(ents_govs, 4),
         "_provenance": {
             "segments": {
-                "origin": "derived_per_entity_rollup",
+                "origin": "derived_per_entity_rollup_by_archetype",
                 "sourced_via_rbc": sourced_count,
                 "fallback_via_default_split": fallback_count,
             },
@@ -411,10 +420,10 @@ def derive_market_aggregates_for_year(entities_doc: dict, year: str, cs: dict) -
         "tokens_per_day_total": tokens["tokens_per_day_total"],
         "tokens_annual_inference": tokens["tokens_annual_inference"],
         "tokens_annual_training": tokens["tokens_annual_training"],
-        # segments
+        # segments (wq-090 per-archetype buckets replace wq-067 consumer/sme/enterprise)
         "total_segment_consumer": segments["total_segment_consumer"],
-        "total_segment_sme": segments["total_segment_sme"],
-        "total_segment_enterprise": segments["total_segment_enterprise"],
+        "total_segment_ai_natives": segments["total_segment_ai_natives"],
+        "total_segment_ents_govs": segments["total_segment_ents_govs"],
         # channels
         "total_per_channel": channels["total_per_channel"],
         # ratios
@@ -469,7 +478,7 @@ def internal_consistency_checks(out: dict, year: str) -> list[str]:
         failures.append(f"{year}: sum(per_source_capex)={per_source:.4f} vs total_capex={total:.4f}")
     # sum(per_segment) == total_customer_revenue (within tolerance — segments
     # are based on collected_revenue rollup, not gross)
-    seg_total = sum(out.get(k) or 0 for k in ("total_segment_consumer", "total_segment_sme", "total_segment_enterprise"))
+    seg_total = sum(out.get(k) or 0 for k in ("total_segment_consumer", "total_segment_ai_natives", "total_segment_ents_govs"))
     # Segments derive from per-entity collected_revenue; should sum to roughly the
     # provider customer revenue total (with some entities missing rbc → fallback).
     # Skip as gate; record as info.
@@ -501,7 +510,7 @@ def main() -> int:
         for k in (
             "mag7_capex", "neocloud_capex", "sovereign_capex", "enterprise_capex", "total_capex",
             "tokens_per_day_total", "tokens_annual_inference", "tokens_annual_training",
-            "total_segment_consumer", "total_segment_sme", "total_segment_enterprise",
+            "total_segment_consumer", "total_segment_ai_natives", "total_segment_ents_govs",
             "infra_to_revenue_ratio", "capex_per_token_usd", "revenue_per_token_usd",
         ):
             v = out.get(k)

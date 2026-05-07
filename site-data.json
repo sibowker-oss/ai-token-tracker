@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-05T02:01:52Z",
+    "generatedAt": "2026-05-07T03:25:48Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -57,7 +57,7 @@
     "title": "2025 Actual Revenue Collected",
     "totalCustomerRevenue": 17.3608,
     "totalVCSubsidy": 8.4479,
-    "totalSystem": 28.1135,
+    "totalSystem": 27.7269,
     "colLabels": [
       "Who Pays",
       "Channel",
@@ -67,17 +67,17 @@
     "buyers": [
       {
         "label": "Consumer",
-        "value": 5.8085,
+        "value": 7.0698,
         "color": "#f59e0b"
       },
       {
-        "label": "SME",
-        "value": 3.7936,
+        "label": "AI Natives",
+        "value": 5.0513,
         "color": "#8b5cf6"
       },
       {
-        "label": "Enterprise",
-        "value": 10.0635,
+        "label": "Enterprises & Govs",
+        "value": 7.1578,
         "color": "#3b82f6"
       },
       {
@@ -94,12 +94,12 @@
       },
       {
         "label": "Model API",
-        "value": 5.6643,
+        "value": 7.2107,
         "color": "#3b82f6"
       },
       {
         "label": "Hyperscalers",
-        "value": 3.6344,
+        "value": 1.7014,
         "color": "#06b6d4"
       },
       {
@@ -158,7 +158,7 @@
       },
       {
         "label": "Op. Cash Flow",
-        "value": 2.3048,
+        "value": 1.9182,
         "color": "#94a3b8"
       }
     ],
@@ -543,14 +543,14 @@
     "routing": {
       "openai": {
         "Model Subs": 5.1231,
-        "Model API": 1.9561,
-        "Hyperscalers": 1.5369,
+        "Model API": 2.6547,
+        "Hyperscalers": 0.8383,
         "Trad. SaaS": 0.6986
       },
       "anthropic": {
         "Model Subs": 0.6123,
-        "Model API": 2.3738,
-        "Hyperscalers": 1.3706,
+        "Model API": 3.2216,
+        "Hyperscalers": 0.5228,
         "Trad. SaaS": 0.3533
       },
       "google": {
@@ -582,7 +582,53 @@
         "Trad. SaaS": 0.6
       }
     },
-    "totalCustomerRevenue_gross": 19.6656
+    "totalCustomerRevenue_gross": 19.279,
+    "buyerChannelMatrix": {
+      "Consumer": {
+        "Model Subs": 7.0698,
+        "AI Native Apps": 0.2669
+      },
+      "AI Natives": {
+        "Model API": 4.7807,
+        "Hyperscalers": 0.2706,
+        "AI Native Apps": 0.2002
+      },
+      "Enterprises & Govs": {
+        "Model API": 2.4301,
+        "Hyperscalers": 1.4308,
+        "Trad. SaaS": 2.6296,
+        "AI Native Apps": 0.2002
+      }
+    },
+    "buyerProviderRouting": {
+      "Consumer": {
+        "openai": 5.3165,
+        "anthropic": 0.6354,
+        "google": 0.9346,
+        "deepseek": 0.067,
+        "mistral": 0.0894,
+        "xai": 0.1117,
+        "minimax": 0.0335,
+        "moonshot": 0.0223,
+        "iaas": 0.1261
+      },
+      "AI Natives": {
+        "openai": 2.3388,
+        "anthropic": 2.3388,
+        "google": 0.5197
+      },
+      "Enterprises & Govs": {
+        "openai": 1.6594,
+        "anthropic": 1.7358,
+        "google": 0.7972,
+        "deepseek": 0.0945,
+        "mistral": 0.126,
+        "xai": 0.1575,
+        "minimax": 0.0473,
+        "moonshot": 0.0315,
+        "iaas": 0.1777
+      }
+    }
   },
   "dashboard": {
     "providers": {
@@ -4556,8 +4602,8 @@
       "enterprise_capex": 4,
       "total_capex": 167,
       "total_segment_consumer": 0.0,
-      "total_segment_sme": 0.0,
-      "total_segment_enterprise": 0.0,
+      "total_segment_ai_natives": 0.0,
+      "total_segment_ents_govs": 0.0,
       "total_per_channel": {}
     },
     "2024": {
@@ -4569,8 +4615,8 @@
       "tokens_per_day_total": 96.5,
       "tokens_annual_inference": 3.52225e+16,
       "total_segment_consumer": 2.36,
-      "total_segment_sme": 0.944,
-      "total_segment_enterprise": 2.596,
+      "total_segment_ai_natives": 1.18,
+      "total_segment_ents_govs": 2.36,
       "total_per_channel": {},
       "yoy_total_capex_growth_pct": 61.08
     },
@@ -4583,22 +4629,22 @@
       "tokens_per_day_total": 310.0,
       "tokens_annual_inference": 1.1315e+17,
       "total_segment_consumer": 9.0843,
-      "total_segment_sme": 3.8138,
-      "total_segment_enterprise": 9.4989,
+      "total_segment_ai_natives": 6.0044,
+      "total_segment_ents_govs": 7.3083,
       "total_per_channel": {
         "Model Subs": 7.0698,
-        "Model API": 5.6643,
-        "Hyperscalers": 3.6344,
+        "Model API": 7.2107,
+        "Hyperscalers": 1.7014,
         "AI Native Apps": 0.6673,
         "Trad. SaaS": 2.6298
       },
-      "infra_to_revenue_ratio": 16.78,
+      "infra_to_revenue_ratio": 17.12,
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
       "yoy_total_capex_growth_pct": 22.68,
       "yoy_tokens_annual_inference_growth_pct": 221.24,
       "total_customer_revenue": 17.3608,
-      "total_customer_revenue_gross": 19.6656,
+      "total_customer_revenue_gross": 19.279,
       "total_vc_subsidy": 8.4479
     }
   },

@@ -159,25 +159,57 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
                 new_channels.append(nc)
             sankey["channels"] = new_channels
 
-    # ── Buyers (non-VC = sum(channel.value); VC = engine sum) ──
-    # wq-062: with grossed channels, non-VC buyer total = sum(channels gross)
-    # to preserve buyer↔channel conservation. Without channels_grossed, fall
-    # back to proportional rescale to total_cr (wq-055 behaviour).
-    new_channel_total = sum(c.get("value", 0) for c in (sankey.get("channels") or []))
-    old_buyers = sankey.get("buyers") or []
-    old_non_vc_total = sum(b.get("value", 0) for b in old_buyers if b.get("label") != "VC/Investors")
-    target_non_vc = new_channel_total if channels_grossed else total_cr
-    if old_buyers and old_non_vc_total > 0:
-        scale = target_non_vc / old_non_vc_total
+    # ── Buyers ──
+    # wq-090: with the per-archetype segment table populated, the engine emits
+    # Consumer / AI Natives / Enterprises & Govs buyer-gross totals directly
+    # (`buyer_segments_gross`). VC = total_vc_subsidy. Falls back to wq-062
+    # proportional rescale of any pre-existing buyer list when the engine
+    # doesn't supply per-archetype segments — preserves backward compat with
+    # data files written before wq-090 shipped.
+    BUYER_COLORS = {
+        "Consumer": "#f59e0b",
+        "AI Natives": "#8b5cf6",
+        "Enterprises & Govs": "#3b82f6",
+        "VC/Investors": "#dc2626",
+    }
+    seg_gross = market.get("buyer_segments_gross") or {}
+    if seg_gross:
+        # Scale segment totals so non-VC sum exactly matches sum(channels gross),
+        # then write the four-bucket buyer list (Consumer / AI Natives /
+        # Enterprises & Govs / VC). Preserves conservation regardless of small
+        # numerical drift between channels_grossed and buyer_segments_gross.
+        new_channel_total = sum(c.get("value", 0) for c in (sankey.get("channels") or []))
+        seg_sum = sum((seg_gross.get(k) or 0) for k in ("Consumer", "AI Natives", "Enterprises & Govs"))
+        scale = (new_channel_total / seg_sum) if seg_sum > 0 else 1.0
         new_buyers = []
-        for b in old_buyers:
-            nb = dict(b)
-            if b.get("label") == "VC/Investors":
-                nb["value"] = round(total_vc, 4)
-            else:
-                nb["value"] = round(b["value"] * scale, 4)
-            new_buyers.append(nb)
+        for label in ("Consumer", "AI Natives", "Enterprises & Govs"):
+            new_buyers.append({
+                "label": label,
+                "value": round((seg_gross.get(label) or 0) * scale, 4),
+                "color": BUYER_COLORS[label],
+            })
+        new_buyers.append({
+            "label": "VC/Investors",
+            "value": round(total_vc, 4),
+            "color": BUYER_COLORS["VC/Investors"],
+        })
         sankey["buyers"] = new_buyers
+    else:
+        new_channel_total = sum(c.get("value", 0) for c in (sankey.get("channels") or []))
+        old_buyers = sankey.get("buyers") or []
+        old_non_vc_total = sum(b.get("value", 0) for b in old_buyers if b.get("label") != "VC/Investors")
+        target_non_vc = new_channel_total if channels_grossed else total_cr
+        if old_buyers and old_non_vc_total > 0:
+            scale = target_non_vc / old_non_vc_total
+            new_buyers = []
+            for b in old_buyers:
+                nb = dict(b)
+                if b.get("label") == "VC/Investors":
+                    nb["value"] = round(total_vc, 4)
+                else:
+                    nb["value"] = round(b["value"] * scale, 4)
+                new_buyers.append(nb)
+            sankey["buyers"] = new_buyers
 
     # ── Outcomes ──
     # Inference = sum(provider inference_cost)
@@ -228,6 +260,26 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
         gross = round(sum((c.get("value") or 0) for c in channels_grossed), 4)
     if gross is not None:
         sankey["totalCustomerRevenue_gross"] = round(gross, 4)
+
+    # ── wq-090: per-(buyer, channel) gross-value matrix ──
+    # Renderer reads this to attribute buyer→channel ribbons engine-side
+    # rather than via proportional rescale (which mis-allocated AI Natives'
+    # spend to Model Subs). Falls back to proportional in buildSankey() if
+    # absent (backward compat with pre-wq-090 data files).
+    bc_matrix = market.get("buyer_channel_matrix") or {}
+    if bc_matrix:
+        sankey["buyerChannelMatrix"] = bc_matrix
+
+    # ── wq-090: per-(buyer, provider) net-revenue routing ──
+    # Editorial: AI Natives split 45/45/10 to OpenAI/Anthropic/Google per
+    # buyer_provider_split in cost_structure.json. Consumer split derives
+    # from per-provider subscription_pct rollup; Ents & Govs back-solves
+    # to satisfy each provider's customer_revenue total. Surfaced here so
+    # the Sankey page can render an explicit "where each buyer's money
+    # ends up" panel without re-deriving from raw routing.
+    bp_routing = market.get("buyer_provider_routing") or {}
+    if bp_routing:
+        sankey["buyerProviderRouting"] = bp_routing
 
     # ── wq-062: per-provider routing block ──
     # Renderer reads this to assemble channel→provider flows directly
@@ -456,7 +508,7 @@ def generate(entities_path, existing_site_data_path, output_path):
         public_fields = (
             "mag7_capex", "neocloud_capex", "sovereign_capex", "enterprise_capex", "total_capex",
             "tokens_per_day_total", "tokens_annual_inference", "tokens_annual_training",
-            "total_segment_consumer", "total_segment_sme", "total_segment_enterprise",
+            "total_segment_consumer", "total_segment_ai_natives", "total_segment_ents_govs",
             "total_per_channel",
             "infra_to_revenue_ratio", "capex_per_token_usd", "revenue_per_token_usd",
             "yoy_total_customer_revenue_growth_pct", "yoy_total_capex_growth_pct",

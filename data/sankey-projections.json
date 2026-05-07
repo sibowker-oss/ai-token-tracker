@@ -17,7 +17,7 @@
     "label": "2025",
     "totalCustomerRevenue": 17.3608,
     "totalVCSubsidy": 8.4479,
-    "totalSystem": 28.1135,
+    "totalSystem": 27.7269,
     "infrastructureCapex": {
       "value": 250,
       "tier": "1B",
@@ -57,31 +57,23 @@
     "buyers": [
       {
         "label": "Consumer",
-        "value": 5.8085,
-        "color": "#f59e0b",
-        "tier": "1B",
-        "src": "AI Ledger rollup; consumer split per The Information"
+        "value": 7.0698,
+        "color": "#f59e0b"
       },
       {
-        "label": "SME",
-        "value": 3.7936,
-        "color": "#8b5cf6",
-        "tier": "1B",
-        "src": "AI Ledger rollup from entity filings"
+        "label": "AI Natives",
+        "value": 5.0513,
+        "color": "#8b5cf6"
       },
       {
-        "label": "Enterprise",
-        "value": 10.0635,
-        "color": "#3b82f6",
-        "tier": "1B",
-        "src": "OpenAI press release Mar 2026; >40% enterprise share corroborated by The Information"
+        "label": "Enterprises & Govs",
+        "value": 7.1578,
+        "color": "#3b82f6"
       },
       {
         "label": "VC/Investors",
         "value": 8.4479,
-        "color": "#dc2626",
-        "tier": "1B",
-        "src": "Sum of published 2025 operating losses (OpenAI ~$6B, Anthropic ~$3B, Google ~$0.5B). Routing rounds to 9.39."
+        "color": "#dc2626"
       }
     ],
     "channels": [
@@ -94,14 +86,14 @@
       },
       {
         "label": "Model API",
-        "value": 5.6643,
+        "value": 7.2107,
         "color": "#3b82f6",
         "tier": "1B",
         "src": "AI Ledger rollup from entity filings"
       },
       {
         "label": "Hyperscalers",
-        "value": 3.6344,
+        "value": 1.7014,
         "color": "#06b6d4",
         "tier": "1B",
         "src": "AI Ledger rollup (Azure OpenAI + Bedrock + Vertex resold)"
@@ -180,7 +172,7 @@
       },
       {
         "label": "Generated Cashflow",
-        "value": 2.3048,
+        "value": 1.9182,
         "color": "#94a3b8",
         "tier": "2A",
         "src": "= channel margins (Hyperscaler 0.20\u00d7$2.15B + Trad SaaS 0.60\u00d7$2.94B). Cross-checks AI Ledger rollup $2.15B."
@@ -232,14 +224,14 @@
     "routing": {
       "openai": {
         "Model Subs": 5.1231,
-        "Model API": 1.9561,
-        "Hyperscalers": 1.5369,
+        "Model API": 2.6547,
+        "Hyperscalers": 0.8383,
         "Trad. SaaS": 0.6986
       },
       "anthropic": {
         "Model Subs": 0.6123,
-        "Model API": 2.3738,
-        "Hyperscalers": 1.3706,
+        "Model API": 3.2216,
+        "Hyperscalers": 0.5228,
         "Trad. SaaS": 0.3533
       },
       "google": {
@@ -258,7 +250,53 @@
         "AI Native Apps": 0.1562
       }
     },
-    "totalCustomerRevenue_gross": 19.6656
+    "totalCustomerRevenue_gross": 19.279,
+    "buyerChannelMatrix": {
+      "Consumer": {
+        "Model Subs": 7.0698,
+        "AI Native Apps": 0.2669
+      },
+      "AI Natives": {
+        "Model API": 4.7807,
+        "Hyperscalers": 0.2706,
+        "AI Native Apps": 0.2002
+      },
+      "Enterprises & Govs": {
+        "Model API": 2.4301,
+        "Hyperscalers": 1.4308,
+        "Trad. SaaS": 2.6296,
+        "AI Native Apps": 0.2002
+      }
+    },
+    "buyerProviderRouting": {
+      "Consumer": {
+        "openai": 5.3165,
+        "anthropic": 0.6354,
+        "google": 0.9346,
+        "deepseek": 0.067,
+        "mistral": 0.0894,
+        "xai": 0.1117,
+        "minimax": 0.0335,
+        "moonshot": 0.0223,
+        "iaas": 0.1261
+      },
+      "AI Natives": {
+        "openai": 2.3388,
+        "anthropic": 2.3388,
+        "google": 0.5197
+      },
+      "Enterprises & Govs": {
+        "openai": 1.6594,
+        "anthropic": 1.7358,
+        "google": 0.7972,
+        "deepseek": 0.0945,
+        "mistral": 0.126,
+        "xai": 0.1575,
+        "minimax": 0.0473,
+        "moonshot": 0.0315,
+        "iaas": 0.1777
+      }
+    }
   },
   "2026E": {
     "label": "2026",
@@ -311,18 +349,18 @@
         "src": "Scenario: ChatGPT 50M paid subs \u00d7 $20/mo \u00d7 12 \u2248 $12B (OpenAI press release Mar 2026, Authoritative) + Gemini Advanced + Claude Pro + Perplexity Pro + X Premium. Anchor = 50M paid subscriber count."
       },
       {
-        "label": "SME",
+        "label": "AI Natives",
         "value": 11.9,
         "color": "#8b5cf6",
         "tier": "3C",
-        "src": "Scenario: Cursor $2B ARR (AI Ledger source scan 2026-04-09, Corroborated) + Claude Code $2.5B ARR (AI Ledger DP-058, Corroborated) + small-business tier of major apps. Majority SME usage."
+        "src": "wq-090 relabel (SME \u2192 AI Natives): Scenario: Cursor $2B ARR (AI Ledger source scan 2026-04-09, Corroborated) + Claude Code $2.5B ARR (AI Ledger DP-058, Corroborated) + small-business tier of major apps. Majority SME usage."
       },
       {
-        "label": "Enterprise",
+        "label": "Enterprises & Govs",
         "value": 37.5,
         "color": "#3b82f6",
         "tier": "3C",
-        "src": "Scenario: $35B core AI spend (Ramp $530K avg AI contract \u00d7 ~60K paying enterprises, AI Ledger source scan 2026-04-03) + $2.5B advertising spend on OpenAI's ad pilot (Axios / AI Ledger source scan 2026-04-11). OpenAI Mar 2026 press: >40% enterprise share (Authoritative). Companies, not consumers, fund ad inventory."
+        "src": "wq-090 relabel (Enterprise \u2192 Enterprises & Govs): Scenario: $35B core AI spend (Ramp $530K avg AI contract \u00d7 ~60K paying enterprises, AI Ledger source scan 2026-04-03) + $2.5B advertising spend on OpenAI's ad pilot (Axios / AI Ledger source scan 2026-04-11). OpenAI Mar 2026 press: >40% enterprise share (Authoritative). Companies, not consumers, fund ad inventory."
       },
       {
         "label": "VC/Investors",
@@ -333,7 +371,7 @@
       }
     ],
     "adsRouting": {
-      "Enterprise": 2.5
+      "Enterprises & Govs": 2.5
     },
     "channels": [
       {
@@ -542,18 +580,18 @@
         "src": "Scenario: 80-100M paid consumer subs across OpenAI/Anthropic/Google at blended $20/mo. Extrapolated from 2026E anchor."
       },
       {
-        "label": "SME",
+        "label": "AI Natives",
         "value": 21.0,
         "color": "#8b5cf6",
         "tier": "3C",
-        "src": "Scenario: $19.5B core SME AI spend (Cursor/Claude Code/Cline + AI SaaS) + $1.5B SME advertising on AI-native ad surfaces. SME share of ad spend grows as ads productise beyond enterprise."
+        "src": "wq-090 relabel (SME \u2192 AI Natives): Scenario: $19.5B core SME AI spend (Cursor/Claude Code/Cline + AI SaaS) + $1.5B SME advertising on AI-native ad surfaces. SME share of ad spend grows as ads productise beyond enterprise."
       },
       {
-        "label": "Enterprise",
+        "label": "Enterprises & Govs",
         "value": 68.5,
         "color": "#3b82f6",
         "tier": "3C",
-        "src": "Scenario: $63B core enterprise AI spend (Ramp trend extrapolated) + $5.5B enterprise advertising. Enterprise still ~79% of total ad spend, consistent with broader digital ad market mix."
+        "src": "wq-090 relabel (Enterprise \u2192 Enterprises & Govs): Scenario: $63B core enterprise AI spend (Ramp trend extrapolated) + $5.5B enterprise advertising. Enterprise still ~79% of total ad spend, consistent with broader digital ad market mix."
       },
       {
         "label": "VC/Investors",
@@ -564,8 +602,8 @@
       }
     ],
     "adsRouting": {
-      "Enterprise": 5.5,
-      "SME": 1.5
+      "Enterprises & Govs": 5.5,
+      "AI Natives": 1.5
     },
     "channels": [
       {

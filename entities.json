@@ -1843,7 +1843,8 @@
           ],
           "needs_source": false
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "anthropic",
@@ -3172,7 +3173,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "google",
@@ -3631,7 +3633,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "meta",
@@ -3978,7 +3981,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "deepseek",
@@ -4285,7 +4289,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "mistral",
@@ -4632,7 +4637,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "xai",
@@ -4959,7 +4965,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "minimax",
@@ -5297,7 +5304,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "moonshot",
@@ -5584,7 +5592,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "aws",
@@ -5630,7 +5639,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "azure",
@@ -5679,7 +5689,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "gcp",
@@ -5725,7 +5736,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "coreweave",
@@ -5886,7 +5898,8 @@
           ],
           "needs_source": false
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "nebius",
@@ -5898,7 +5911,8 @@
       "products": [],
       "financials": {},
       "current": {},
-      "provenance": {}
+      "provenance": {},
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "lambda",
@@ -6001,7 +6015,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "crusoe",
@@ -6040,7 +6055,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "together",
@@ -6165,7 +6181,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "fireworks",
@@ -6221,7 +6238,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "replicate",
@@ -6277,7 +6295,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "anyscale",
@@ -6313,7 +6332,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "openrouter",
@@ -6461,7 +6481,8 @@
           ],
           "needs_source": false
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "portkey",
@@ -6547,7 +6568,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "nvidia",
@@ -6816,7 +6838,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "amd",
@@ -6896,7 +6919,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "hyperscaler"
     },
     {
       "slug": "microsoft-copilot",
@@ -6918,7 +6942,7 @@
           "providers": [
             "openai"
           ],
-          "notes": "M365 Copilot derived ARR via seat-math: 15M paid seats × $30/mo × 12 = $5.4B list billings 2025. Net of bundling discount (40–60% under E5+Copilot bundles) the real incremental is $2.5–3.5B. Replaces stale 'ai_arr: 13.0' (which was a misattributed Microsoft total AI ARR figure from Jan 2026, not M365 Copilot specifically — flagged by wheresyouredat-claims-vs-tail.html audit). See dec-2026-05-06-compute-ledger-bucket-sizing.md §Issue 3 for MS-declared vs TAIL-derived Copilot derivation."
+          "notes": "M365 Copilot derived ARR via seat-math: 15M paid seats \u00d7 $30/mo \u00d7 12 = $5.4B list billings 2025. Net of bundling discount (40\u201360% under E5+Copilot bundles) the real incremental is $2.5\u20133.5B. Replaces stale 'ai_arr: 13.0' (which was a misattributed Microsoft total AI ARR figure from Jan 2026, not M365 Copilot specifically \u2014 flagged by wheresyouredat-claims-vs-tail.html audit). See dec-2026-05-06-compute-ledger-bucket-sizing.md \u00a7Issue 3 for MS-declared vs TAIL-derived Copilot derivation."
         }
       ],
       "financials": {
@@ -6950,7 +6974,8 @@
           ],
           "needs_source": false
         }
-      }
+      },
+      "entity_archetype": "enterprise_saas"
     },
     {
       "slug": "salesforce-ai",
@@ -6975,7 +7000,8 @@
       ],
       "financials": {},
       "current": {},
-      "provenance": {}
+      "provenance": {},
+      "entity_archetype": "enterprise_saas"
     },
     {
       "slug": "servicenow-ai",
@@ -6999,7 +7025,8 @@
       ],
       "financials": {},
       "current": {},
-      "provenance": {}
+      "provenance": {},
+      "entity_archetype": "enterprise_saas"
     },
     {
       "slug": "canva-ai",
@@ -7018,7 +7045,8 @@
       ],
       "financials": {},
       "current": {},
-      "provenance": {}
+      "provenance": {},
+      "entity_archetype": "enterprise_saas"
     },
     {
       "slug": "adobe-ai",
@@ -7037,7 +7065,8 @@
       ],
       "financials": {},
       "current": {},
-      "provenance": {}
+      "provenance": {},
+      "entity_archetype": "enterprise_saas"
     },
     {
       "slug": "notion-ai",
@@ -7061,7 +7090,8 @@
       ],
       "financials": {},
       "current": {},
-      "provenance": {}
+      "provenance": {},
+      "entity_archetype": "enterprise_saas"
     },
     {
       "slug": "portkeyai",
@@ -7135,7 +7165,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "github-copilot",
@@ -7252,7 +7283,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "openclaw",
@@ -7302,7 +7334,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "cursor-(anysphere)",
@@ -7463,7 +7496,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "kilo-code",
@@ -7514,7 +7548,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "perplexity",
@@ -7789,7 +7824,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "replit",
@@ -7951,7 +7987,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "cognition-(devin)",
@@ -8112,7 +8149,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "duolingo",
@@ -8161,7 +8199,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "together-ai",
@@ -8323,7 +8362,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "lovable",
@@ -8440,7 +8480,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "canva",
@@ -8511,7 +8552,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "cline",
@@ -8562,7 +8604,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "characterai",
@@ -8722,7 +8765,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "fireworks-ai",
@@ -8817,7 +8861,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "elevenlabs",
@@ -8977,7 +9022,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "wrtn-technologies",
@@ -9116,7 +9162,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "micro1",
@@ -9232,7 +9279,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "midjourney",
@@ -9392,7 +9440,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "harvey-ai",
@@ -9552,7 +9601,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "monica-ai",
@@ -9670,7 +9720,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "groq",
@@ -9794,7 +9845,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "jasper",
@@ -9955,7 +10007,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "glean",
@@ -10117,7 +10170,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "janitor-ai",
@@ -10167,7 +10221,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "descript",
@@ -10305,7 +10360,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "yellowai",
@@ -10466,7 +10522,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "intercom-fin",
@@ -10627,7 +10684,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "writer",
@@ -10788,7 +10846,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "blackboxai",
@@ -10906,7 +10965,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "klarna",
@@ -10955,7 +11015,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "grab",
@@ -11004,7 +11065,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "sea/shopee",
@@ -11054,7 +11116,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "kakao",
@@ -11103,7 +11166,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "sierra-ai",
@@ -11197,7 +11261,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "deepl",
@@ -11335,7 +11400,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "falai",
@@ -11451,7 +11517,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "salesforce-agentforce",
@@ -11567,7 +11634,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "hebbia",
@@ -11661,7 +11729,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "clay",
@@ -11800,7 +11869,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "gamma",
@@ -11916,7 +11986,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "roo-code",
@@ -11967,7 +12038,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "captions",
@@ -12038,7 +12110,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "decagon",
@@ -12110,7 +12183,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "luminance",
@@ -12182,7 +12256,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "mercor",
@@ -12321,7 +12396,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "speak",
@@ -12414,7 +12490,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "synthesia",
@@ -12553,7 +12630,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "genspark",
@@ -12670,7 +12748,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "chai-research",
@@ -12786,7 +12865,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "openart",
@@ -12902,7 +12982,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "sillytavern",
@@ -12953,7 +13034,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "abridge",
@@ -13091,7 +13173,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "photoroom",
@@ -13229,7 +13312,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "runway",
@@ -13367,7 +13451,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "agent-zero",
@@ -13417,7 +13502,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "fathom",
@@ -13556,7 +13642,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "pika",
@@ -13627,7 +13714,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "suno",
@@ -13698,7 +13786,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "retell-ai",
@@ -13814,7 +13903,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "openhands",
@@ -13864,7 +13954,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "cal-ai",
@@ -13980,7 +14071,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "bytedance",
@@ -14026,7 +14118,8 @@
           ]
         }
       },
-      "website": "https://www.bytedance.com"
+      "website": "https://www.bytedance.com",
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "alibaba",
@@ -14071,7 +14164,8 @@
           ]
         }
       },
-      "website": "https://www.alibabacloud.com"
+      "website": "https://www.alibabacloud.com",
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "tencent",
@@ -14116,7 +14210,8 @@
           ]
         }
       },
-      "website": "https://hunyuan.tencent.com"
+      "website": "https://hunyuan.tencent.com",
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "baidu",
@@ -14161,7 +14256,8 @@
           ]
         }
       },
-      "website": "https://yiyan.baidu.com"
+      "website": "https://yiyan.baidu.com",
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "_self_hosted",
@@ -14204,7 +14300,8 @@
         }
       },
       "_synthetic": true,
-      "_aggregates": "Open-weight model deployments (Llama, DeepSeek-open, Mistral-open, Qwen, etc.) running on customer infrastructure"
+      "_aggregates": "Open-weight model deployments (Llama, DeepSeek-open, Mistral-open, Qwen, etc.) running on customer infrastructure",
+      "entity_archetype": "iaas"
     },
     {
       "slug": "_other_closed",
@@ -14240,7 +14337,8 @@
             }
           ]
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "databricks",
@@ -14269,7 +14367,8 @@
           "date": "2026-05-03",
           "_doc": "Data + AI platform; growing AI-specific revenue stream"
         }
-      }
+      },
+      "entity_archetype": "enterprise_saas"
     },
     {
       "slug": "scale",
@@ -14297,7 +14396,8 @@
           "date": "2026-05-03",
           "_doc": "Data labelling for AI training"
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     },
     {
       "slug": "modal",
@@ -14324,7 +14424,8 @@
           "date": "2026-05-03",
           "_doc": "Serverless GPU infrastructure for AI"
         }
-      }
+      },
+      "entity_archetype": "iaas"
     },
     {
       "slug": "cohere",
@@ -14352,7 +14453,8 @@
           "date": "2026-05-03",
           "_doc": "Frontier model provider; open + commercial"
         }
-      }
+      },
+      "entity_archetype": "frontier_lab"
     },
     {
       "slug": "super_com",
@@ -14379,7 +14481,8 @@
           "date": "2026-05-03",
           "_doc": "Consumer AI travel/finance"
         }
-      }
+      },
+      "entity_archetype": "ai_native"
     }
   ],
   "market_aggregates": {
@@ -14420,7 +14523,8 @@
             "subscription_pct": 55,
             "api_pct": 30,
             "enterprise_pct": 15
-          }
+          },
+          "entity_archetype": "frontier_lab"
         },
         "anthropic": {
           "slug": "anthropic",
@@ -14445,7 +14549,8 @@
             "api_pct": 72,
             "subscription_pct": 13,
             "enterprise_pct": 15
-          }
+          },
+          "entity_archetype": "frontier_lab"
         },
         "google": {
           "slug": "google",
@@ -14466,7 +14571,8 @@
           "vc_origin": "balancing_plug_derived",
           "value": 2.9271,
           "override_discrepancy": null,
-          "revenue_by_channel": null
+          "revenue_by_channel": null,
+          "entity_archetype": "frontier_lab"
         },
         "deepseek": {
           "slug": "deepseek",
@@ -14487,7 +14593,8 @@
           "vc_origin": "balancing_plug_derived",
           "value": 0.2746,
           "override_discrepancy": null,
-          "revenue_by_channel": null
+          "revenue_by_channel": null,
+          "entity_archetype": "frontier_lab"
         },
         "mistral": {
           "slug": "mistral",
@@ -14508,7 +14615,8 @@
           "vc_origin": "balancing_plug_derived",
           "value": 0.3662,
           "override_discrepancy": null,
-          "revenue_by_channel": null
+          "revenue_by_channel": null,
+          "entity_archetype": "frontier_lab"
         },
         "xai": {
           "slug": "xai",
@@ -14529,7 +14637,8 @@
           "vc_origin": "balancing_plug_derived",
           "value": 0.4576,
           "override_discrepancy": null,
-          "revenue_by_channel": null
+          "revenue_by_channel": null,
+          "entity_archetype": "frontier_lab"
         },
         "minimax": {
           "slug": "minimax",
@@ -14550,7 +14659,8 @@
           "vc_origin": "balancing_plug_derived",
           "value": 0.1374,
           "override_discrepancy": null,
-          "revenue_by_channel": null
+          "revenue_by_channel": null,
+          "entity_archetype": "frontier_lab"
         },
         "moonshot": {
           "slug": "moonshot",
@@ -14571,7 +14681,8 @@
           "vc_origin": "balancing_plug_derived",
           "value": 0.0915,
           "override_discrepancy": null,
-          "revenue_by_channel": null
+          "revenue_by_channel": null,
+          "entity_archetype": "frontier_lab"
         },
         "iaas": {
           "slug": "iaas",
@@ -14644,19 +14755,19 @@
         "moonshot: opex ESTIMATED (no source/op_loss path)"
       ],
       "_residual_doc": "Engine writes per-provider customer_revenue derived from entities.json:financials.<year>.collected_revenue (wq-048). Channel/buyer totals computed by generate_site_data.py from this block + the existing editorial channel structure (proportional rescale to total_customer_revenue). Non-provider revenue (e.g. Microsoft Copilot via Trad SaaS channel) handled in the channel structure, not in providers.",
-      "_engine_run_at": "2026-05-03T23:48:23Z",
+      "_engine_run_at": "2026-05-07T03:25:48Z",
       "_engine": "scripts/derive_sankey.py (wq-055)",
       "routing": {
         "openai": {
           "Model Subs": 5.1231,
-          "Model API": 1.9561,
-          "Hyperscalers": 1.5369,
+          "Model API": 2.6547,
+          "Hyperscalers": 0.8383,
           "Trad. SaaS": 0.6986
         },
         "anthropic": {
           "Model Subs": 0.6123,
-          "Model API": 2.3738,
-          "Hyperscalers": 1.3706,
+          "Model API": 3.2216,
+          "Hyperscalers": 0.5228,
           "Trad. SaaS": 0.3533
         },
         "google": {
@@ -14685,15 +14796,15 @@
         },
         {
           "label": "Model API",
-          "value": 5.6643,
-          "chPass": 5.6643,
+          "value": 7.2107,
+          "chPass": 7.2107,
           "margin": 0,
           "gross_up_factor": 1.0
         },
         {
           "label": "Hyperscalers",
-          "value": 3.6344,
-          "chPass": 2.9075,
+          "value": 1.7014,
+          "chPass": 1.3611,
           "margin": 0.2,
           "gross_up_factor": 1.25
         },
@@ -14712,7 +14823,7 @@
           "gross_up_factor": 2.5
         }
       ],
-      "total_customer_revenue_gross": 19.6656,
+      "total_customer_revenue_gross": 19.279,
       "neocloud_capex": 45,
       "sovereign_capex": 20,
       "enterprise_capex": 15,
@@ -14721,16 +14832,14 @@
       "tokens_annual_inference": 1.1315e+17,
       "tokens_annual_training": null,
       "total_segment_consumer": 9.0843,
-      "total_segment_sme": 3.8138,
-      "total_segment_enterprise": 9.4989,
       "total_per_channel": {
         "Model Subs": 7.0698,
-        "Model API": 5.6643,
-        "Hyperscalers": 3.6344,
+        "Model API": 7.2107,
+        "Hyperscalers": 1.7014,
         "AI Native Apps": 0.6673,
         "Trad. SaaS": 2.6298
       },
-      "infra_to_revenue_ratio": 16.78,
+      "infra_to_revenue_ratio": 17.12,
       "capex_per_token_usd": 0.0,
       "revenue_per_token_usd": 0.0,
       "yoy_total_customer_revenue_growth_pct": null,
@@ -14788,7 +14897,7 @@
           ]
         },
         "segments": {
-          "origin": "derived_per_entity_rollup",
+          "origin": "derived_per_entity_rollup_by_archetype",
           "sourced_via_rbc": 2,
           "fallback_via_default_split": 49
         },
@@ -14806,13 +14915,66 @@
             "tokens_annual_inference"
           ]
         },
-        "_market_engine_run_at": "2026-05-04T03:01:27Z",
+        "_market_engine_run_at": "2026-05-07T02:48:31Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
         "sourced": 0,
         "derived_daily_x365": 15,
         "estimated_revenue_rate": 0
+      },
+      "buyer_segments_gross": {
+        "Consumer": 7.0698,
+        "AI Natives": 5.0513,
+        "Enterprises & Govs": 7.1578
+      },
+      "total_segment_ai_natives": 6.0044,
+      "total_segment_ents_govs": 7.3083,
+      "buyer_channel_matrix": {
+        "Consumer": {
+          "Model Subs": 7.0698,
+          "AI Native Apps": 0.2669
+        },
+        "AI Natives": {
+          "Model API": 4.7807,
+          "Hyperscalers": 0.2706,
+          "AI Native Apps": 0.2002
+        },
+        "Enterprises & Govs": {
+          "Model API": 2.4301,
+          "Hyperscalers": 1.4308,
+          "Trad. SaaS": 2.6296,
+          "AI Native Apps": 0.2002
+        }
+      },
+      "buyer_provider_routing": {
+        "Consumer": {
+          "openai": 5.3165,
+          "anthropic": 0.6354,
+          "google": 0.9346,
+          "deepseek": 0.067,
+          "mistral": 0.0894,
+          "xai": 0.1117,
+          "minimax": 0.0335,
+          "moonshot": 0.0223,
+          "iaas": 0.1261
+        },
+        "AI Natives": {
+          "openai": 2.3388,
+          "anthropic": 2.3388,
+          "google": 0.5197
+        },
+        "Enterprises & Govs": {
+          "openai": 1.6594,
+          "anthropic": 1.7358,
+          "google": 0.7972,
+          "deepseek": 0.0945,
+          "mistral": 0.126,
+          "xai": 0.1575,
+          "minimax": 0.0473,
+          "moonshot": 0.0315,
+          "iaas": 0.1777
+        }
       }
     },
     "_cumulative_2023_2025": {
@@ -14868,8 +15030,6 @@
       "tokens_annual_inference": null,
       "tokens_annual_training": null,
       "total_segment_consumer": 0.0,
-      "total_segment_sme": 0.0,
-      "total_segment_enterprise": 0.0,
       "total_per_channel": {},
       "infra_to_revenue_ratio": null,
       "capex_per_token_usd": null,
@@ -14929,7 +15089,7 @@
           ]
         },
         "segments": {
-          "origin": "derived_per_entity_rollup",
+          "origin": "derived_per_entity_rollup_by_archetype",
           "sourced_via_rbc": 0,
           "fallback_via_default_split": 0
         },
@@ -14941,14 +15101,16 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-04T03:01:27Z",
+        "_market_engine_run_at": "2026-05-07T02:48:31Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
         "sourced": 0,
         "derived_daily_x365": 0,
         "estimated_revenue_rate": 0
-      }
+      },
+      "total_segment_ai_natives": 0.0,
+      "total_segment_ents_govs": 0.0
     },
     "2024": {
       "mag7_capex": 226,
@@ -14960,8 +15122,6 @@
       "tokens_annual_inference": 3.52225e+16,
       "tokens_annual_training": null,
       "total_segment_consumer": 2.36,
-      "total_segment_sme": 0.944,
-      "total_segment_enterprise": 2.596,
       "total_per_channel": {},
       "infra_to_revenue_ratio": null,
       "capex_per_token_usd": null,
@@ -15021,7 +15181,7 @@
           ]
         },
         "segments": {
-          "origin": "derived_per_entity_rollup",
+          "origin": "derived_per_entity_rollup_by_archetype",
           "sourced_via_rbc": 0,
           "fallback_via_default_split": 3
         },
@@ -15033,14 +15193,16 @@
           "origin": "missing",
           "reason": "no customer revenue"
         },
-        "_market_engine_run_at": "2026-05-04T03:01:27Z",
+        "_market_engine_run_at": "2026-05-07T02:48:31Z",
         "_market_engine": "scripts/derive_market_aggregates.py (wq-067)"
       },
       "_market_token_sources_count": {
         "sourced": 0,
         "derived_daily_x365": 4,
         "estimated_revenue_rate": 0
-      }
+      },
+      "total_segment_ai_natives": 1.18,
+      "total_segment_ents_govs": 2.36
     },
     "_capital_sankey": {
       "total": 766.0,
