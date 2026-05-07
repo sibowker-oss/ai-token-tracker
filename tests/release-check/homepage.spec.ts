@@ -35,10 +35,11 @@ test.describe('index.html — wq-093 five-ledger reframe (Option I)', () => {
     expect(body).not.toContain('three ledgers');
   });
 
-  test('AC3 — AI Infrastructure Stack renders 5 pill bars (Capex → Usage → Compute → Power → Revenue) with correct hrefs', async ({ page }) => {
+  test('AC3 — The AI "$" Stack renders 5 pill bars (Capex → Usage → Compute → Power → Revenue) with correct hrefs', async ({ page }) => {
     const section = page.locator('section.ai-infra-stack');
     await expect(section).toBeVisible();
-    await expect(section.locator('.ais-title')).toHaveText('AI Infrastructure Stack');
+    // Heading text uses curly quotes around the dollar sign (renamed 2026-05-07).
+    await expect(section.locator('.ais-title')).toHaveText('The AI “$” Stack');
 
     const bars = page.locator('.ais-bars .ais-bar');
     await expect(bars).toHaveCount(5);
