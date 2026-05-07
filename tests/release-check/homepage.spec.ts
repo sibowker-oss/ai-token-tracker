@@ -3,6 +3,11 @@
 // Per CLAUDE.md "Validate rendered output, not just engine reports": this spec
 // visits the homepage in a browser, lets the SCENARIOS init + site-data fetch
 // settle, and asserts on the rendered DOM. Acceptance ties to brief §3 and §11.
+//
+// Layout reference: D1 Option I — five horizontal pill bars (AI Infrastructure
+// Stack) replaces the prior Option F type-led editorial layout, AND the 5-tile
+// hero reconciliation strip (D3: dropped), AND the 4-step narrative-flow loop
+// (D4: dropped). The bars carry all three jobs in a single hero section.
 
 import { test, expect } from '@playwright/test';
 import { loadSiteData } from './helpers';
@@ -12,14 +17,14 @@ test.beforeEach(({}, testInfo) => {
   test.skip(!testInfo.project.name.startsWith('desktop'), 'homepage DOM checks run desktop only');
 });
 
-test.describe('index.html — wq-093 five-ledger reframe', () => {
+test.describe('index.html — wq-093 five-ledger reframe (Option I)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/index.html', { waitUntil: 'networkidle' });
-    // Allow the SCENARIOS init + site-data.json fetch to settle so dynamic
-    // figures (Layer Stack Apps/Compute, hook ratio) reflect engine values.
+    // Allow the SCENARIOS init + site-data.json fetch to settle so the dynamically
+    // computed hook ratio reflects engine values.
     await page.waitForFunction(() => {
-      const apps = document.getElementById('ls-apps');
-      return apps && /\$\d/.test(apps.textContent || '');
+      const ratio = document.getElementById('hook-ratio');
+      return ratio && /\$\d+\.\d{2}/.test(ratio.textContent || '');
     }, undefined, { timeout: 10_000 });
   });
 
@@ -30,52 +35,76 @@ test.describe('index.html — wq-093 five-ledger reframe', () => {
     expect(body).not.toContain('three ledgers');
   });
 
-  test('AC3 — Layer Stack hero renders 4 type-led rows with sparkbars (no SVG, no pyramid)', async ({ page }) => {
-    const rows = page.locator('.layerstack-row');
-    await expect(rows).toHaveCount(4);
+  test('AC3 — AI Infrastructure Stack renders 5 pill bars (Capex → Usage → Compute → Power → Revenue) with correct hrefs', async ({ page }) => {
+    const section = page.locator('section.ai-infra-stack');
+    await expect(section).toBeVisible();
+    await expect(section.locator('.ais-title')).toHaveText('AI Infrastructure Stack');
 
-    // Each row has eyebrow + figure + sparkbar.
-    for (const layer of ['apps', 'compute', 'silicon', 'power']) {
-      const row = page.locator(`.layerstack-row[data-layer="${layer}"]`);
-      await expect(row).toBeVisible();
-      await expect(row.locator('.ls-eyebrow')).toBeVisible();
-      await expect(row.locator('.ls-figure')).toBeVisible();
-      await expect(row.locator('.ls-bar')).toBeVisible();
+    const bars = page.locator('.ais-bars .ais-bar');
+    await expect(bars).toHaveCount(5);
+
+    // Click-through hrefs match the brief's per-bar links (§5 Interactivity).
+    const expectations: Array<[string, string]> = [
+      ['capex',   'capital.html'],
+      ['usage',   'usage.html'],
+      ['compute', 'compute.html'],
+      ['power',   'power.html'],
+      ['revenue', 'revenue.html'],
+    ];
+    for (const [ledger, href] of expectations) {
+      const bar = page.locator(`.ais-bar[data-ledger="${ledger}"]`);
+      await expect(bar).toBeVisible();
+      expect(await bar.getAttribute('href')).toBe(href);
+      await expect(bar.locator('.ais-icon')).toBeVisible();
+      await expect(bar.locator('.ais-label')).toBeVisible();
     }
 
-    // Click-throughs land on the right pages.
-    expect(await page.locator('.layerstack-row[data-layer="apps"]').getAttribute('href')).toBe('revenue.html');
-    expect(await page.locator('.layerstack-row[data-layer="compute"]').getAttribute('href')).toBe('compute.html');
-    expect(await page.locator('.layerstack-row[data-layer="silicon"]').getAttribute('href')).toBe('capital.html');
-    expect(await page.locator('.layerstack-row[data-layer="power"]').getAttribute('href')).toBe('power.html');
-
-    // Editorial form: no SVG inside the layerstack hero, no pyramid term.
-    const heroSvg = await page.locator('.layerstack-hero svg').count();
-    expect(heroSvg).toBe(0);
-    const heroText = (await page.locator('.layerstack-hero').innerText()).toLowerCase();
-    expect(heroText).not.toContain('pyramid');
+    // Native HTML+CSS — no SVG, no canvas inside the section.
+    expect(await section.locator('svg').count()).toBe(0);
+    expect(await section.locator('canvas').count()).toBe(0);
   });
 
-  test('AC4 — hero strip has 5 tiles (Capital · Revenue · Compute · Usage · Power); Power is link-only', async ({ page }) => {
-    const tiles = page.locator('#hero-numbers .hero-tile');
-    await expect(tiles).toHaveCount(5);
-
-    // Click-through hrefs.
-    expect(await page.locator('#tile-capital').getAttribute('href')).toBe('capital.html');
-    expect(await page.locator('#tile-revenue').getAttribute('href')).toBe('revenue.html');
-    expect(await page.locator('#tile-compute').getAttribute('href')).toBe('compute.html');
-    expect(await page.locator('#tile-usage').getAttribute('href')).toBe('usage.html');
-    expect(await page.locator('#tile-power').getAttribute('href')).toBe('power.html');
-
-    // Power tile is link-only: no .tier pill inside it.
-    const powerTier = await page.locator('#tile-power .tier').count();
-    expect(powerTier).toBe(0);
-
-    // Hero sub-line copy.
-    await expect(page.locator('.hero-sub')).toContainText('Five ledgers, triangulated from primary sources.');
+  test('AC3 — bar widths follow the locked descending profile (100/50/30/22/17 %)', async ({ page }) => {
+    const widthOf = async (ledger: string) =>
+      page.locator(`.ais-bar[data-ledger="${ledger}"]`).evaluate((el: HTMLElement) =>
+        el.style.getPropertyValue('--bar-w').trim()
+      );
+    expect(await widthOf('capex')).toBe('100%');
+    expect(await widthOf('usage')).toBe('50%');
+    expect(await widthOf('compute')).toBe('30%');
+    expect(await widthOf('power')).toBe('22%');
+    expect(await widthOf('revenue')).toBe('17%');
   });
 
-  test('AC4-data — Compute hero tile reads $43B; Revenue hero tile reads $17B (matches site-data.json)', async ({ page }) => {
+  test('AC3 — Power bar carries an inline tier-3 pill (TIER 3 · v3 PENDING) per brief §5 Tier disclosure', async ({ page }) => {
+    const powerBar = page.locator('.ais-bar[data-ledger="power"]');
+    const pill = powerBar.locator('.pill-mini.tier-3');
+    await expect(pill).toBeVisible();
+    expect((await pill.innerText()).toUpperCase()).toContain('TIER 3');
+    expect((await pill.innerText()).toUpperCase()).toContain('v3 PENDING'.toUpperCase());
+  });
+
+  test('AC3 — three footer stat cards beneath the bars (Investment-to-revenue · Tokens served · Largest ledger)', async ({ page }) => {
+    const statCards = page.locator('.ais-footer-stats .ais-stat-card');
+    await expect(statCards).toHaveCount(3);
+    const labels = (await statCards.locator('.ais-stat-label').allInnerTexts()).map(s => s.toLowerCase());
+    expect(labels).toEqual(['investment-to-revenue', 'tokens served', 'largest ledger']);
+    await expect(page.locator('#ais-stat-capex-ratio')).toHaveText('19×');
+    await expect(statCards.nth(2).locator('.ais-stat-value')).toHaveText('Capital');
+  });
+
+  test('AC3 — caption carries the §6.2 lock copy ("Read this stack this way")', async ({ page }) => {
+    const cap = (await page.locator('.ais-caption').innerText()).toLowerCase();
+    expect(cap).toContain('read this stack this way');
+    expect(cap).toContain('every $1');
+    expect(cap).toContain('hyperscaler equity');
+    // Per-ratio anchors in the editorial sentence:
+    expect(cap).toContain('$19');
+    expect(cap).toContain('$2.50');
+    expect(cap).toContain('$1.40');
+  });
+
+  test('AC3-data — Compute and Revenue bar figures match site-data.json (within the engine band)', async ({ page }) => {
     const data = loadSiteData();
     const apps = data.sankey?.totalCustomerRevenue;
     const compute = data.compute?.compute_revenue_2025_gross_usd_b;
@@ -83,21 +112,20 @@ test.describe('index.html — wq-093 five-ledger reframe', () => {
     expect(apps).toBeLessThan(20);
     expect(compute).toBeGreaterThan(40);
     expect(compute).toBeLessThan(50);
-    // Format we use: round to nearest $B with format-helpers.formatCurrency.
-    await expect(page.locator('#hero-revenue')).toHaveText(/^\$1[67]B$/);
-    await expect(page.locator('#hero-compute')).toHaveText(/^\$4[23]B$/);
+    // Revenue bar reads the cohort total ($17.x B → "$17B"); Compute bar reads
+    // the gross sum-of-Q ($43.x B → keep as "$43.1B" literal per brief §5).
+    await expect(page.locator('#ais-revenue-figure')).toContainText(/\$1[67]/);
+    await expect(page.locator('#ais-compute-figure')).toContainText(/\$4[23]/);
   });
 
-  test('AC5 — narrative flow is Apps → Compute → Silicon → Power (no Capital In / Assets Built)', async ({ page }) => {
-    const h2 = await page.locator('.narrative h2').innerText();
-    expect(h2).toContain('Apps Revenue');
-    expect(h2).toContain('Compute');
-    expect(h2).toContain('Silicon');
-    expect(h2).toContain('Power');
+  test('AC4 — hero reconciliation tile strip is removed (no .hero-numbers anywhere on the page)', async ({ page }) => {
+    expect(await page.locator('.hero-numbers').count()).toBe(0);
+    expect(await page.locator('.hero-tile').count()).toBe(0);
+  });
 
-    // .step-label has text-transform:uppercase via CSS; compare case-insensitive.
-    const labels = (await page.locator('.flow-step .step-label').allInnerTexts()).map(s => s.toLowerCase());
-    expect(labels).toEqual(['apps revenue', 'compute earned', 'silicon', 'power']);
+  test('AC5 — narrative-flow section is removed (no .flow-steps anywhere on the page)', async ({ page }) => {
+    expect(await page.locator('.flow-steps').count()).toBe(0);
+    expect(await page.locator('.flow-step').count()).toBe(0);
   });
 
   test('AC6 — hook one-liner is Compute-anchored ($X.XX of compute spend / $1 Apps Revenue)', async ({ page }) => {

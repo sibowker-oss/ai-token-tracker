@@ -3,7 +3,8 @@
 **Date:** 2026-05-07
 **WQ:** wq-093
 **Branch:** `wq-093-homepage-compute-ledger-refresh-v2` (this work, awaiting Simon's approval before merge)
-**Replaces (by intent):** the reverted attempt on `1c81e59` (commit subject `feat(wq-093): homepage refresh — Compute Ledger integration & "five ledgers" reframe`, reverted by `3e9ef65` on 2026-05-06). The reverted commit shipped the Layer Stack as a D1 Option B inline-SVG **pyramid**; the resolved brief calls for the type-led editorial **Option F** layout (no SVG, no pyramid).
+**Supersedes (on this same branch):** the prior commit `0fdec64` which shipped D1 Option F (type-led editorial Layer Stack). The brief was updated 2026-05-06 — Option F is "superseded when Simon mocked up the 5-bar form in Figma 2026-05-06" — and now mandates D1 Option I (the AI Infrastructure Stack: five horizontal pill bars). This deployment replays wq-093 against the resolved Option I spec.
+**Replaces (by intent):** the further-back reverted attempt on `1c81e59` (Option B — inline-SVG pyramid; reverted by `3e9ef65` 2026-05-06).
 **Parent context:**
 - `docs/deployments/deploy-2026-05-06-wq-087-compute-ledger.md`
 - `docs/deployments/deploy-2026-05-06-wq-092-compute-ledger-trajectory-no-qoq-drops.md`
@@ -19,39 +20,33 @@
 
 ### Modified files
 
-- **`index.html`** — primary file. Five-ledger reframe per brief D1–D8.
-  - `<meta description>` and `og:description` rewritten to enumerate all five ledgers and lead on the new $43B Compute number.
-  - **Masthead** H2 → `The AI economy, layer by layer.` Tagline → `Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system.` Attribution unchanged.
-  - **NEW Layer Stack hero (D1 Option F — type-led editorial).** Replaces the reverted pyramid. A vertical sequence of four rows (`.layerstack-row`), each with three stacked elements: small uppercase eyebrow (`01 — APPS REVENUE` …), large editorial dollar figure (~36px desktop, ~26px mobile), and a 3px-tall sparkbar div scaled to % width against Silicon $165B = 100% (Apps 10.5%, Compute 26%, Silicon 100%, Power 15%). No SVG, no pyramid, no card wrappers. Each row is a single clickable `<a>` linking to the layer's ledger (Apps→/revenue, Compute→/compute, Silicon→/capital, Power→/power). Caption beneath uses the brief §6.2 lock copy.
-  - **Hero reconciliation strip** expanded from 3 → 5 tiles per §6.3: Capital ($745B, live read) · Revenue ($17B cohort) · **Compute ($43B — new)** · Usage (~360T) · **Power link-only** ("Power Ledger →" / "Power infrastructure — v3 in progress", no big-number, no tier pill). Sub-line: `Five ledgers, triangulated from primary sources.`
-  - **Narrative flow** replaced. Old `Capital in → Assets Built → Tokens Out → Revenue Back` swapped for `Apps Revenue → Compute → Silicon → Power` per §6.5. Step labels and locked copy from brief; icon colours pulled from new `--apps` / `--compute` / `--silicon` / `--power` accents.
-  - **Hero hook** swapped to Compute-anchored (D7): `$2.50 of compute spend stands behind every $1 of customer-paid AI Apps Revenue today.` Sub-line: `The gap is funded by hyperscaler equity in the same labs.` Ratio is computed live as `compute / apps` rounded to nearest tenth and formatted `$X.XX`.
-  - **Live tile** (D5) swapped from MSFT Copilot + Salesforce Agentforce ARR ($3.2B) → Compute Revenue 2025 signal ($43B / +153% YoY / 79% frontier-lab). Source link → `methodology.html#compute-revenue-three-segment-model`.
-  - **Ledger entry cards** expanded from 3 → 5 with full §6.7 copy. Power card uses `.is-link-only` modifier — value renders as `v3 in progress` (muted), no tier pills. Card grid: 3-up by default, **5-up at ≥1100px** (CSS media query addition). Card colours mapped to the layer accents (`--capital` / `--revenue` / `--compute` / `--usage` / `--power`).
-  - **`SCENARIOS` block** rewired (`_buildScenarios`, `_initScenariosFromData`, `applyScenario`):
-    - Apps Revenue base now reads `sankey.totalCustomerRevenue` (cohort, ~$17.36B per wq-092) instead of `cumulative.customer_revenue_gross`.
-    - Compute base added (`compute.compute_revenue_2025_gross_usd_b`).
-    - Bear/Bull apply ±15% sensitivity to Apps and Tokens; **Compute is held constant in v1** per brief §7.1 — coupling Compute to Apps under the band implies a methodology call (does Compute drop with Apps, or absorb the gap as more pass-through?) deferred to a follow-up. The hook ratio still moves under Bear/Bull because it's `Compute / band-shifted Apps` (Bear ≈ $2.92, Base $2.50, Bull ≈ $2.16).
-    - `applyScenario` updated for new DOM IDs (`hero-revenue` → Apps cohort, new `hero-compute`, `ls-apps`, `ls-compute`, `nar-apps`, `nar-compute`, `card-compute`).
-  - CSS additions: `--apps`, `--compute`, `--silicon` design tokens; `.layerstack-hero` + `.layerstack-row` block (eyebrow / figure / sparkbar styles + hover); `.ledger-cards` 5-up media query at ≥1100px; `.ledger-card.is-link-only` modifier; mobile rules add a Layer Stack shrink (figure 26px, container padding 40/16/32).
+- **`index.html`** — primary file. D1 Option I AI Infrastructure Stack hero per brief §5; tile strip + narrative-flow deleted per D3 and D4.
+  - **CSS** — replaced the prior Option F `.layerstack-*` block, the `.hero` reconciliation strip styles, and the `.narrative` + `.flow-*` styles with a single `.ai-infra-stack` block. New section uses Hepburn Advisory design tokens canonical to `/design-system/colors_and_type.css`: `--blue / --violet / --cyan / --amber / --green` for the per-bar gradients (NOT the Figma red/pink/purple palette); `--radius-pill` for bar shape; `--type-h2 / --type-meta / --type-eyebrow` for type slots; `--text-md / --text-xs / --text-2xl / --text-xl` for size slots; `--space-3 / --space-4 / --space-7` for spacing; `--shadow-focus` for keyboard focus ring; `--duration-fast / --ease-out` for hover transition. Each bar's gradient endpoint follows the brief's "10–15% lighter stop" suggestion (`#60A5FA / #A78BFA / #22D3EE / #FBBF24 / #34D399`).
+  - **HTML** — the masthead now flows directly into `<section class="ai-infra-stack">`. Structure: `.ais-head` (h2 "AI Infrastructure Stack" + subtitle "2025 · Five ledgers, one stack"), `.ais-bars` (5 anchor-tag pill bars), `.ais-caption` (the §6.2 "Read this stack this way" lock copy + the italic source-meta line), `.ais-footer-stats` (3 cards: Investment-to-revenue 19×, Tokens served ~360T/day, Largest ledger Capital). The Power bar carries an inline `.pill-mini.tier-3` chip with text "TIER 3 · v3 PENDING" placed beside its outside-figure $25B per brief §5 Tier disclosure.
+  - **Bar widths (locked per brief §5):** Capex `--bar-w:100%;` · Usage `--bar-w:50%;` · Compute `--bar-w:30%;` · Power `--bar-w:22%;` · Revenue `--bar-w:17%;`. Each is set as an inline custom property so a quarterly refresh only edits the 5 inline values, not selectors.
+  - **Figure placement:** inside the pill (right-aligned, white) for Capex (100%) and Usage (50%); outside the pill (right of pill via absolute positioning, `--fg-dark-1` colour) for Compute, Power, Revenue per brief §5 "for very small bars where the dollar figure can't fit inside the pill".
+  - **Removed sections (per D3/D4):** the prior 5-tile hero reconciliation strip (`<section class="hero">…</section>` with `#hero-numbers`, 5 `.hero-tile` anchors, `.hero-sub` copy "Five ledgers, triangulated from primary sources.") and the prior 4-step narrative-flow loop (`<section class="narrative">…</section>` with `.flow-steps` + 4 `.flow-step` cards: Apps Revenue → Compute → Silicon → Power) are deleted, not replaced. The bars carry both jobs.
+  - **Sections kept (unchanged copy):** masthead H2 + tagline + meta description + `og:description` (already on five-ledger framing); scenario what-if strip (Bear/Base/Bull live recompute); hero hook one-liner ($2.50 of compute / $1 Apps, Compute-anchored, ratio computed from `compute / sankey.totalCustomerRevenue`); live tile ($43B Compute Revenue 2025 signal); 5 ledger entry cards (Capital, Revenue, Compute, Usage, Power link-only); footer "Ledger pages" group with all five.
+  - **`SCENARIOS` block** — write list trimmed to match the new structure. `applyScenario` now writes only to: `#ais-revenue-figure` (Apps cohort, ±15% band), `#ais-usage-sub` (multiplier + tokens/day sub-line), `#ais-stat-tokens` (footer stat card), `#card-capex / #card-revenue / #card-compute / #card-tokens` (ledger card values), `#hook-ratio` (Compute-anchored hook), `#strip-label` + scenario strip body. Compute, Capex, Power held constant in v1 per brief §7.1 (Bear/Bull coupling deferred). Writes to deleted IDs (`#hero-*`, `#ls-*`, `#nar-*`) removed.
 
-- **`methodology.html`** — Section 5 "Data Sources" lede string-fix: `the three ledgers` → `the ledgers`. One line, no other changes.
+- **`tests/release-check/homepage.spec.ts`** — rewritten to match Option I. 21 desktop-chrome assertions across two `test.describe` groups:
+  - Group 1 — `index.html — wq-093 five-ledger reframe (Option I)`: AC1 masthead H2 + tagline + "three ledgers" absent; AC3 (×5 sub-tests) AI Infrastructure Stack renders 5 pill bars with correct hrefs / locked widths / Power tier-3 pill / 3 footer stat cards / §6.2 caption lock copy; AC3-data Compute and Revenue bar figures match `site-data.json` cohort fields; AC4 hero reconciliation tile strip absent (no `.hero-numbers`, no `.hero-tile`); AC5 narrative-flow section absent (no `.flow-steps`, no `.flow-step`); AC6 hook is Compute-anchored `$X.XX` / "compute spend" / "apps revenue"; AC7 live tile = $43B + +153% + 79% + no Copilot/Agentforce; AC8 ledger cards = 5 + Power link-only; AC9 footer Ledger group lists all five.
+  - Group 2 — public-page sweep across `/index.html`, `/capital.html`, `/revenue.html`, `/compute.html`, `/usage.html`, `/power.html`, `/methodology.html`, `/about.html`: rendered DOM contains no case-insensitive "three ledgers" substring.
 
-- **`beta/index.html`** — `<meta description>` + `og:description` + masthead H2 + masthead tagline string-swept to the five-ledger framing. Beta is hand-edited / frozen v1 staging; no public links into `/beta/` from any production page (verified). Did the brief's required minimum string sweep; did NOT mirror the new Layer Stack hero / 5-tile strip / 5 cards into beta (per §7.2).
-
-- **`beta/methodology.html`** — same one-line `the three ledgers` → `the ledgers` parity fix.
+- **(prior cross-page sweep retained from `0fdec64`)** — `methodology.html`, `beta/index.html`, `beta/methodology.html` had their "three ledgers" → five-ledger string fixes done in the prior Option F commit and remain valid (the sweep is layout-independent).
 
 ### New files
 
-- **`tests/release-check/homepage.spec.ts`** — 17 desktop-chrome assertions across two `test.describe` groups:
-  - Group 1 — `index.html — wq-093 five-ledger reframe`: AC1 masthead H2 + tagline + "three ledgers" absent; AC3 Layer Stack hero is 4 type-led rows with sparkbars (no SVG, no pyramid term, click-throughs land on the right pages); AC4 hero strip = 5 tiles + Power tile is link-only (no `.tier`); AC4-data Compute hero tile reads `$4XB` and Revenue hero tile reads `$1XB` (matched against `site-data.json`); AC5 narrative flow `Apps → Compute → Silicon → Power` (case-insensitive, since CSS uppercases the labels); AC6 hook is Compute-anchored `$X.XX` and contains "compute spend" + "apps revenue"; AC7 live tile = $43B Compute signal + +153% + 79%, no Copilot/Agentforce; AC8 ledger cards = 5 with the right titles and Power card link-only; AC9 footer Ledger group includes all five.
-  - Group 2 — `Public-page sweep — wq-093 §3.2 "three ledgers" absent`: rendered DOM of `/index.html`, `/capital.html`, `/revenue.html`, `/compute.html`, `/usage.html`, `/power.html`, `/methodology.html`, `/about.html` contains no case-insensitive "three ledgers" substring.
+- (none new in this commit — `homepage.spec.ts` was added in the prior Option F commit and is rewritten here.)
 
-### Test results (local, on the running preview at :4173)
+### Test results (local, on the running preview at `:4173`)
 
 - `npm run build-lint` → **0 fail, 1 advisory** (pre-existing `dataReferences map absent`, unchanged).
-- `npx playwright test tests/release-check/homepage.spec.ts --project desktop-chrome` → **17/17 passed**.
-- Regression: `compute.spec.ts + admin-nav.spec.ts + structure.spec.ts + smoke.spec.ts --project desktop-chrome` → **46 passed, 11 skipped, 0 failed** (the 11 skips are the existing `chips`/`about`-without-collapsible pattern).
+- `npx playwright test tests/release-check/homepage.spec.ts --project desktop-chrome` → **21/21 passed**.
+- Regression: `compute.spec.ts + admin-nav.spec.ts + structure.spec.ts + smoke.spec.ts --project desktop-chrome` → **46 passed, 11 skipped, 0 failed** (the 11 skips are the existing `chips`/`about`-without-collapsible pattern; same baseline as the prior Option F run).
+- Manual eyeball:
+  - Desktop 1440×900 (Chrome): all 5 bars render in descending size with correct gradient accents; Capex and Usage show figures inside the pill, Compute / Power / Revenue show figures outside-right; Power tier-3 pill renders inline beside `$25B`; 3 footer stat cards in a 3-column grid below the caption. Screenshot at `/tmp/wq093-option-i-desktop.png`.
+  - Mobile 375×812 (iPhone 14): bars collapse to full-container width with figures right-aligned inside (Power tier-3 pill remains inline); footer stats stack to 1 column; caption legible. Screenshot at `/tmp/wq093-mobile-clipped.png`.
 
 ## Decisions made during implementation
 
@@ -60,39 +55,40 @@ None — all eight Cowork decisions (D1–D8) resolved 2026-05-06. No `docs/deci
 
 ### Tactical
 
-1. **Branch named `…-v2`.** The first wq-093 attempt landed on `1c81e59` and was reverted on `3e9ef65` for shipping Option B (pyramid) instead of the Cowork-resolved Option F. Naming the new branch `…-v2` keeps the reverted-and-replayed history readable.
-2. **Layer Stack built inline in `index.html`.** Brief §5 explicitly calls for inline HTML+CSS, not a shared component or SVG. Total cost: ~16 lines of CSS + ~30 lines of HTML for the four rows + caption.
-3. **Sparkbar widths as inline `style="width:X%"`.** Keeps the % values literally next to the figure they scale, so a future Apps revision (e.g. $30B) only needs the figure changed in two places (`#ls-apps` text + the inline `width`). No JS-driven width recompute — over-engineering for a quarterly editorial number.
-4. **Power sparkbar at 15% / Apps at 10.5%.** Brief gives Apps "~10%" and Power "~15%". Apps actual ratio = 17.36/165 = 10.52%; Power actual ratio = 25/165 = 15.15%. Rounded to 10.5% and 15% for clean inline values.
-5. **`--apps` / `--compute` / `--silicon` added as new CSS variables.** The existing `--purple` (8b5cf6) collides with `--usage`, which would muddle the Layer Stack vs Usage tile colour story. Added explicit accent tokens (purple #a855f7 / teal #06b6d4 / coral #fb7185 / amber existing `--power`). Power re-uses `--power`.
-6. **5-up ledger card grid kicks in at ≥1100px.** At 1320px container width, 5 × ~220px + gaps fits comfortably; below 1100px, falls back to 3-up which also accommodates 5 cards as 3-then-2 visually. This is the cleanest break in the existing CSS without a wider refactor.
-7. **Power hero tile uses inline `font-size:22px` and a "Power Ledger →" arrow.** No big-number; the value box becomes a CTA. Brief allows either omitting the tile or making it link-only — link-only preserves the 5-tile parity with the ledger cards and footer.
-8. **Hero hook ratio rounding policy.** `formatRatio(v) = '$' + (Math.round((compute / v) * 10) / 10).toFixed(2)`. Live computation 43.07 / 17.36 = 2.481 → 2.5 → "$2.50" (matches the brief §6.4 lock copy). Nearest-tenth-then-format-as-2-decimals keeps the displayed ratio stable when the underlying numbers shift by a few percent quarter-on-quarter.
-9. **`SCENARIOS` keep the existing ±15% pattern; Compute held constant.** Per §7.1. The Bear/Bull bands move Apps + Tokens; the hook ratio recomputes against the band-shifted Apps (Compute steady), which is methodologically defensible because the band IS Apps uncertainty under the same Compute observation.
-10. **Beta left as a frozen v1 archive.** Did the brief-required string sweep only; no new Layer Stack hero / 5-tile / 5 cards mirrored over. Treating `/beta/` as a deprecated v1 snapshot per brief §7.2.
-11. **Visual baselines NOT regenerated yet.** The previous wq-093 attempt regenerated 6 `index-*-darwin.png` baselines and was then reverted, taking the baselines with it. Decision: defer rebaselining until Simon approves the staging build, so we don't ship more dead snapshots if Option F needs visual revision. Rebaseline immediately after approval, before the merge.
+1. **Visibility-boost function — locked discrete steps per brief §5.** Bar widths are 100/50/30/22/17 % per the brief's locked sizing table. This is logically a piecewise function: linear above 50% (Capex passes through unchanged at 100%, Usage's 49.7% rounds to 50%), then a 17% floor with stepped values for the three smallest bars (30/22/17) so labels remain legible at desktop. Implemented as inline `style="--bar-w:X%;"` on each bar so a quarterly refresh only needs the 5 inline values updated, not selectors. Equivalent to `width_pct = max(linear_pct, 17%)` + a single 30% snap for Compute.
+2. **Figure placement — inside-vs-outside split at 50%.** Capex (100%) and Usage (50%) carry their dollar figures inside the pill, right-aligned, in white. Compute (30%), Power (22%), Revenue (17%) carry their figures outside the pill via absolute positioning at `left:calc(100% + 12px)` with colour `--fg-dark-1` so the figure reads against the dark surface rather than the gradient fill. This honours the brief §5 "for very small bars where the dollar figure can't fit inside the pill" rule with a clean, deterministic threshold.
+3. **`.ais-bars { padding-right: 120px }` desktop reservation.** The bar container reserves 120px of right-padding so the absolute-positioned outside figures (which extend `100% + 12px` to the right of each bar's right edge) never overflow the section's 1320px container. On mobile this reservation drops to 0 since bars collapse to full width.
+4. **Mobile bars collapse to full width — divergence from a literal reading of brief §5 mobile.** Brief §5 says "visibility-boosted widths preserved as percentages, but the smallest bars may now extend almost to the right edge". That description is mathematically inconsistent: 17% of a 351px container = 60px (not "almost to the right edge"), and at 60px the bar can't fit even the icon disc. Tactical call: at ≤768px, all bars stretch to 100% container width; the multiplier sublines ("19×", "9.4×", "2.5×", "1.4×", "1×") carry the descending-ratio story numerically while the visual stack stays legible. Power's tier-3 pill stays inline beside its dollar figure on mobile too. The desktop descending-ratio visual is the canonical Option I form; mobile is a graceful degradation of it.
+5. **Italic "notional @ $1.25/M output rate" line dropped on mobile.** Brief §5 "Mobile" section doesn't speak to the `.ais-note` italic line; at 375px it costs an extra wrapped line on the Usage bar without adding new information beyond the §6.2 caption. Hidden via `.ais-note { display: none }` at the mobile breakpoint.
+6. **Power tier-3 pill uses canonical `.pill-mini.tier-3` from `ledger-overlays.css`.** Brief §5 explicitly references this token. The class resolves to `var(--violet-tint)` background + `var(--violet)` text, which is the canonical TAIL tier-3 colour even when placed beside an amber Power bar. Visually contrasting on purpose — tier convention beats per-bar accent.
+7. **Usage figure locked to brief lock copy ($164B at $1.25/M output rate) despite the latest signals file reading $1.20/M.** The brief's §5 derivation references `data/signals_<latest>.json:openrouter.median_output_price_per_m` and notes the value is "$1.25/M as of `signals_2026-04-25.json`". The most recent signals file actually present in the working tree is `signals_2026-04-03.json` with `median_output_price_per_m: 1.20`; `signals_2026-04-25.json` does not yet exist. Recomputing at $1.20/M would yield ~$157.7B, but the brief's locked editorial copy in §5 and §6.2 explicitly cites $164B and "$1.25/M output rate". Followed the brief's lock copy; flag for follow-up: when the next OpenRouter sweep lands, reconcile the rate and refresh both the visible figure and the §6.2 caption together.
+8. **`#ais-stat-capex-ratio = "19×"` is a static value.** Computed as Capex / Apps = 330 / 17.36 = 19.01 → "19×". Static rather than scenario-react because brief §7.1 holds Capex constant in Bear/Bull v1; if a future revision moves Capex under the scenario band, the stat card can be wired through the same `_setText('ais-stat-capex-ratio', …)` pattern.
+9. **`.ais-footer-stats` is a 3-column grid with `--space-4` gap on desktop.** Brief §5 calls for an "equal-width grid (`grid-template-columns: repeat(3, 1fr)`, gap `--space-4`)" — implemented exactly. Mobile collapses to `grid-template-columns: 1fr` with `gap: 12px`.
+10. **Mobile bar height uses `min-height:56px` with `height:auto`.** Brief §5 mobile says 56px. Implementation uses `min-height` so multi-line labels (Capex's "19× Apps Revenue · 2025 calendar" sub-line is the longest at small widths) don't clip; bars without multi-line content render at exactly 56px. Trade-off: bars are not all uniform-height on mobile, but the editorial story survives wrap.
+11. **Visual baselines NOT regenerated.** Same call as the Option F attempt — defer rebaselining until Simon approves the staging build, so we don't ship dead snapshots if Option I needs further visual revision. Rebaseline immediately after approval, before the merge.
 
 ## Open items
 
 1. **Visual snapshot rebaseline for `index.html`** (6 viewports) — pending approval. Will run `playwright test tests/release-check/visual.spec.ts --update-snapshots --project <each>` after Simon green-lights the layout.
-2. **Bear/Bull Compute coupling** (§7.1 deferral) — v1 holds Compute constant. If editorial review later wants the band to move Compute too, build a `data/scenarios.json` block defining per-metric sensitivities. Filed as a follow-up; no decision file written; the brief explicitly authorised this deferral.
-3. **`beta/` archival** — long-term plan should be either to delete or to fully mirror — not both. No regression today.
-4. **Notion wq-093 card** to be moved In Progress → Done with the post-merge SHA (repo cannot mutate Notion directly).
+2. **Bear/Bull Compute coupling** (§7.1 deferral, carried over from Option F) — v1 holds Compute constant. If editorial review later wants the band to move Compute, Capex, and Power too, build a `data/scenarios.json` block defining per-metric sensitivities. Filed as a follow-up; no decision file written; the brief explicitly authorised this deferral.
+3. **OpenRouter rate refresh.** Visible Usage figure is locked at $164B at $1.25/M per brief lock copy. Latest signals file reads $1.20/M. When the next signals sweep brings the rate forward, refresh `#ais-usage-figure` (`$164B`) AND the `.ais-caption-meta` line (`$1.25/M`) AND the multiplier sub on the Usage bar (`9.4×`) together. Flagged as a tactical follow-up, not a blocker.
+4. **`beta/` archival** — long-term plan should be either delete or fully mirror — not both. The Option F string-sweep changes to `beta/index.html` and `beta/methodology.html` from `0fdec64` remain valid; `/beta/` was not re-mirrored to Option I (out of scope — the brief's §7.2 treats beta as a frozen v1 archive).
+5. **Notion wq-093 card** to be moved In Progress → Done with the post-merge SHA (repo cannot mutate Notion directly).
 
 ## Acceptance criteria status (brief §3)
 
 - [x] **1. Headline framing replaced.** Masthead H2 + tagline + meta description + og:description updated. `grep -in "three ledgers" index.html` → 0 hits.
-- [x] **2. Public-page sweep clean.** `grep -rli "three ledgers" *.html beta/*.html` → 0 hits across all 4 affected files (`index.html`, `methodology.html`, `beta/index.html`, `beta/methodology.html`). Asserted via Playwright Group 2 across 8 public pages.
-- [x] **3. Layer Stack hero renders as a type-led editorial layout (D1 Option F).** Inline HTML+CSS; 4 rows of (eyebrow + figure + 3px sparkbar). Sparkbar widths Apps 10.5%, Compute 26%, Silicon 100%, Power 15%. No SVG, no pyramid. Click-through asserted in `homepage.spec.ts` AC3.
-- [x] **4. Hero tiles updated.** 5 tiles per §6.3. Power tile link-only with "v3 in progress" caveat. Click-throughs asserted.
-- [x] **5. Narrative flow replaced.** Apps→Compute→Silicon→Power; 4 step-cards with locked copy.
+- [x] **2. Public-page sweep clean.** `grep -rli "three ledgers" *.html beta/*.html` → 0 hits across the public set; asserted via Playwright Group 2 across 8 public pages.
+- [x] **3. AI Infrastructure Stack hero renders (D1 Option I).** New `<section class="ai-infra-stack">` between masthead and the rest of the page; 5 horizontal pill bars on a dark surface with the locked widths (100/50/30/22/17 %); Hepburn Advisory canonical accents (--blue/--violet/--cyan/--amber/--green); each bar a single clickable target landing on its ledger; footer stat cards beneath; §6.2 caption lock copy in place. Asserted by `homepage.spec.ts` AC3 sub-tests.
+- [x] **4. Tile strip removed.** No `.hero-numbers` / `.hero-tile` anywhere on the page; asserted by `homepage.spec.ts` AC4.
+- [x] **5. Narrative-flow section removed.** No `.flow-steps` / `.flow-step` anywhere on the page; asserted by `homepage.spec.ts` AC5.
 - [x] **6. Hook one-liner replaced.** Compute-anchored, ratio computed dynamically from `compute.compute_revenue_2025_gross_usd_b / sankey.totalCustomerRevenue`. Falls back to `$2.50` literal if fetch fails.
 - [x] **7. Live tile swapped.** $43B + +153% YoY + 79% frontier; source attribution updated.
 - [x] **8. Ledger cards = 5.** All five rendered with locked §6.7 copy; Power card link-only.
 - [x] **9. Footer "The Ledger" group lists all five.** Unchanged from wq-088 — already in place.
-- [/] **10. Mobile sanity.** CSS media query in place (Layer Stack figure shrinks to 26px at ≤768px; sparkbar % preserved; hero tiles already stack via existing rule). **Visual screenshot pass deferred** until rebaselining (see Open items #1).
+- [/] **10. Mobile sanity.** Renders cleanly at 375px (manual eyeball pass). **Visual screenshot pass deferred** until rebaselining (see Open items #1). Tactical divergence from a literal reading of brief §5 mobile documented in Tactical #4.
 - [x] **11. No regressions.** `npm run build-lint` → 0 fail (1 pre-existing advisory). `compute.spec.ts + admin-nav.spec.ts + structure.spec.ts + smoke.spec.ts` → 46 passed, 11 skipped, 0 failed on desktop-chrome.
-- [x] **12. Validator extension passes.** New `homepage.spec.ts` 17/17 on desktop-chrome.
+- [x] **12. Validator extension passes.** Updated `homepage.spec.ts` 21/21 on desktop-chrome.
 - [/] **13. Visual baseline rebaselined.** Deferred to post-approval per Tactical #11.
 - [x] **14. Deployment record written** (this file).
 
@@ -100,13 +96,15 @@ None — all eight Cowork decisions (D1–D8) resolved 2026-05-06. No `docs/deci
 
 | Homepage figure | Source path | Existing publication | Relation |
 |---|---|---|---|
-| Capital $745B (CY23–25 cumulative) | `cumulative.capex_total` (live read; current value $766B) | `capital.html` headline | Equal (live read) |
-| Revenue $17B (2025 cohort) | `sankey.totalCustomerRevenue` (~$17.36B) | `revenue.html` cohort total + `compute.html` Layer Stack Apps node | Equal |
-| Compute $43B (2025 sum-of-Q post-Copilot) | `compute.compute_revenue_2025_gross_usd_b` ($43.07B) | `compute.html` hero | Equal |
-| Tokens ~360T/day | `cumulative.tokens_2025_annualized` (live read; current 310) | `usage.html` hero | Equal (live read) |
-| Layer Stack Silicon $165B + Power $25B | hard-coded constants in the homepage Layer Stack figures | `compute.html` Layer Stack constants | Equal — same numerical values; not yet wired through `site-data.json`, so the homepage and compute page would silently diverge if the Layer Stack constants change. Filed as a follow-up, not a blocker today (matches the prior wq-093 attempt's reconciliation note). |
+| Capex 2025 $330B (AIS Capex bar) | `market.2025.total_capex` (live read; current value 330) | `capital.html` 2025 capex headline | Equal (live read) |
+| Usage notional $164B (AIS Usage bar) | derived: `tokens_per_day × 365 / 1e6 × $1.25` (locked per brief; latest signals reads $1.20/M — see Tactical #7) | new on this page; not yet published elsewhere | Documented derivation; brief lock copy honoured |
+| Compute $43.1B (AIS Compute bar) | `compute.compute_revenue_2025_gross_usd_b` (~$43.07B per wq-092) | `compute.html` hero | Equal |
+| Power $25B (AIS Power bar — Tier 3 placeholder) | hard-coded constant | `compute.html` Layer Stack constant | Equal — same numerical value; not yet wired through `site-data.json` |
+| Revenue $17.4B (AIS Revenue bar) | `sankey.totalCustomerRevenue` (~$17.36B) | `revenue.html` cohort total + `compute.html` Layer Stack Apps node | Equal |
+| Capital $766B (Capital ledger card; live read) | `cumulative.capex_total` | `capital.html` cumulative headline | Equal (live read) |
+| Tokens ~360T/day (AIS Usage sub + footer stat + Usage card) | hard-coded display constant; engine reads `cumulative.tokens_2025_annualized = 310.0` | `usage.html` hero | Documented divergence: site-data carries 310 but the front-end keeps the ~360T display per the engine's `_doc` note (`derive_cumulative_aggregates.py` falls back to a hardcoded ~360T display where annual aggregation isn't yet wired). Inherited from prior `index.html`; not new in this brief. |
 
-No silent divergences from already-published numbers.
+No silent divergences from already-published numbers. The Usage notional figure is new editorial material with documented derivation per brief §5.
 
 ## Publishing Gate
 
@@ -119,3 +117,15 @@ No silent divergences from already-published numbers.
 5. n/a — staging-first is feasible; no exception decision file required.
 
 **Approval timestamp:** _TBD — to be filled in immediately on receipt of approval, alongside the merge SHA._
+
+### What to verify on staging
+
+1. **Masthead** — H2 reads "The AI economy, layer by layer."; tagline reads "Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system."
+2. **AI Infrastructure Stack** (the 5-bar hero) — bars descend Capex → Usage → Compute → Power → Revenue with widths 100% / 50% / 30% / 22% / 17%; Hepburn Advisory canonical colours (Capex blue, Usage violet, Compute cyan, Power amber, Revenue green); Capex and Usage carry figures inside the pill; Compute, Power, Revenue carry figures outside-right.
+3. **Power bar** — the "TIER 3 · v3 PENDING" pill renders inline beside `$25B`.
+4. **Footer stat cards** — three cards beneath the bars: "Investment-to-revenue 19×" · "Tokens served ~360T/day" · "Largest ledger Capital".
+5. **Caption** — "Read this stack this way…" lock copy in place; the italic source-meta line ("2025 lookback · capex from Capital Ledger · …") below it.
+6. **No "three ledgers" string** anywhere on the homepage or any of the 8 swept public pages (case-insensitive).
+7. **Ledger card grid** — 5 cards (Capital, Revenue, Compute, Usage, Power) with Power link-only ("v3 in progress", no big number, no tier pills).
+8. **No regression on the rest of the page** — hook one-liner ("$2.50 of compute spend stands behind every $1 of customer-paid AI Apps Revenue today."), live tile ($43B Compute Revenue 2025 signal), Bear/Base/Bull scenario toggle, footer.
+9. **Mobile (375px)** — bars stack legibly; tier-3 pill stays inline beside $25B; footer stats single-column.

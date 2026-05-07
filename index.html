@@ -64,41 +64,45 @@
   .hero-hook .hook-number{font-size:48px;font-weight:700;color:var(--text-bright);letter-spacing:-1px;font-variant-numeric:tabular-nums;}
   .hero-hook .hook-text{font-size:20px;color:var(--text-dim);margin-top:4px;}
 
-  /* ── wq-093: Layer Stack hero (D1 Option F — type-led editorial) ── */
-  .layerstack-hero{padding:64px 24px 48px;border-bottom:1px solid var(--card-border);}
-  .layerstack{max-width:720px;margin:0 auto;}
-  .layerstack-row{display:block;text-decoration:none;color:inherit;padding:0 0 32px;margin:0 0 32px;border:0;border-bottom:1px solid rgba(148,163,184,0.08);}
-  .layerstack-row:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0;}
-  .layerstack-row .ls-eyebrow{display:block;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-dim);font-weight:600;margin-bottom:8px;}
-  .layerstack-row .ls-figure{display:block;font-size:36px;font-weight:600;letter-spacing:-1px;line-height:1;font-variant-numeric:tabular-nums;}
-  .layerstack-row .ls-bar{display:block;height:3px;margin-top:14px;border-radius:2px;transition:width 0.18s ease, opacity 0.18s ease;max-width:100%;}
-  .layerstack-row:hover .ls-figure{filter:brightness(1.15);}
-  .layerstack-row:hover .ls-bar{opacity:0.85;}
-  .layerstack-row:focus-visible{outline:2px solid var(--accent);outline-offset:6px;border-radius:4px;}
-  .layerstack-caption{max-width:720px;margin:32px auto 0;font-size:13px;line-height:1.65;color:var(--text-dim);}
-  .layerstack-caption strong{color:var(--text);}
-  .layerstack-caption .ls-meta{display:block;margin-top:10px;font-size:11px;font-style:italic;color:var(--text-dim);opacity:0.8;}
+  /* ── wq-093: AI Infrastructure Stack hero (D1 Option I — 5 horizontal pill bars) ──
+     Tactical: visibility-boosted widths locked per brief §5 (100/50/30/22/17).
+     Equivalent to a piecewise function with linear above 50% and a 17% floor,
+     stepped between for the three smallest bars so labels read at desktop and mobile.
+     Figure placement: inside the pill for Capex + Usage (≥50% width); outside the pill
+     (right edge, --fg-dark-1) for Compute, Power, Revenue (<50% width) per brief §5. */
+  .ai-infra-stack{padding:32px 24px 56px;border-bottom:1px solid var(--card-border);background:var(--bg-dark);}
+  .ais-wrap{max-width:1320px;margin:0 auto;}
+  .ais-head{margin:0 0 24px;}
+  .ais-title{font:var(--type-h2);letter-spacing:var(--tracking-head);color:var(--fg-dark-1);margin:0;}
+  .ais-subtitle{display:block;font:var(--type-meta);color:var(--fg-dark-3);margin-top:6px;}
 
-  /* ── Hero Reconciliation Strip ── */
-  .hero{text-align:center;padding:60px 24px 48px;border-bottom:1px solid var(--card-border);}
-  .hero-numbers{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
-  .hero-tile{text-decoration:none;padding:24px 32px;border-radius:16px;background:var(--card);border:1px solid var(--card-border);transition:all 0.2s;cursor:pointer;min-width:220px;}
-  .hero-tile:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3);}
-  .hero-tile .value{font-size:42px;font-weight:800;letter-spacing:-1px;line-height:1.1;}
-  .hero-tile .label{font-size:13px;color:var(--text-dim);margin-top:6px;font-weight:500;}
-  .hero-tile .tier{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700;margin-top:8px;}
-  .hero-sub{font-size:16px;color:var(--text-dim);margin-top:8px;font-style:italic;}
+  .ais-bars{display:flex;flex-direction:column;gap:12px;margin:0;padding-right:120px;/* leave room for outside figures */}
+  .ais-bar{position:relative;display:flex;align-items:center;text-decoration:none;color:#fff;height:64px;border-radius:var(--radius-pill);padding:0 16px;width:var(--bar-w,100%);max-width:100%;transition:filter var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);}
+  .ais-bar:hover{filter:brightness(1.06);}
+  .ais-bar:focus-visible{outline:none;box-shadow:var(--shadow-focus);}
+  .ais-bar--capex   {background:linear-gradient(90deg,var(--blue) 0%,#60A5FA 100%);}
+  .ais-bar--usage   {background:linear-gradient(90deg,var(--violet) 0%,#A78BFA 100%);}
+  .ais-bar--compute {background:linear-gradient(90deg,var(--cyan) 0%,#22D3EE 100%);}
+  .ais-bar--power   {background:linear-gradient(90deg,var(--amber) 0%,#FBBF24 100%);}
+  .ais-bar--revenue {background:linear-gradient(90deg,var(--green) 0%,#34D399 100%);}
 
-  /* ── Narrative Flow ── */
-  .narrative{padding:48px 0;}
-  .narrative h2{font-size:20px;font-weight:700;text-align:center;margin-bottom:32px;color:var(--text-bright);}
-  .flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;align-items:stretch;}
-  .flow-step{background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px 20px;text-align:center;position:relative;}
-  .flow-step .step-icon{font-size:32px;margin-bottom:12px;}
-  .flow-step .step-num{font-size:28px;font-weight:800;margin-bottom:4px;}
-  .flow-step .step-label{font-size:12px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;}
-  .flow-step .step-detail{font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.5;}
-  .flow-arrow{display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:24px;}
+  .ais-icon{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:var(--weight-semi);font-size:16px;font-family:var(--font-sans);}
+  .ais-text{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;margin-left:12px;min-width:0;overflow:hidden;}
+  .ais-label{font-weight:var(--weight-semi);font-size:var(--text-md);color:#fff;line-height:1.2;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ais-sub{font-weight:var(--weight-medium);font-size:var(--text-xs);color:rgba(255,255,255,0.75);line-height:1.3;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ais-note{font-weight:var(--weight-regular);font-style:italic;font-size:10px;color:rgba(255,255,255,0.85);line-height:1.3;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ais-figure{flex:0 0 auto;font-weight:var(--weight-bold);font-size:var(--text-2xl);color:#fff;font-family:var(--font-sans);font-variant-numeric:tabular-nums;letter-spacing:-0.3px;margin-left:16px;white-space:nowrap;}
+  .ais-figure-out{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);font-weight:var(--weight-bold);font-size:var(--text-2xl);color:var(--fg-dark-1);font-family:var(--font-sans);font-variant-numeric:tabular-nums;letter-spacing:-0.3px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
+  .ais-figure-out .pill-mini{font-weight:var(--weight-semi);}
+
+  .ais-caption{max-width:840px;margin:32px 0 0;font-size:13px;line-height:1.65;color:var(--fg-dark-3);}
+  .ais-caption strong{color:var(--fg-dark-2);}
+  .ais-caption-meta{display:block;margin-top:10px;font-size:11px;font-style:italic;color:var(--fg-dark-3);opacity:0.85;}
+
+  .ais-footer-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;}
+  .ais-stat-card{background:var(--surface-dark);border:1px solid var(--border-dark);border-radius:var(--radius-lg);padding:20px;}
+  .ais-stat-label{display:block;font:var(--type-eyebrow);text-transform:uppercase;letter-spacing:var(--tracking-eyebrow);color:var(--fg-dark-3);}
+  .ais-stat-value{display:block;font-weight:var(--weight-bold);font-size:var(--text-xl);color:var(--fg-dark-1);font-variant-numeric:tabular-nums;letter-spacing:-0.01em;margin-top:6px;}
 
   /* ── Live Tile ── */
   .live-tile-wrap{padding:32px 0;display:flex;justify-content:center;}
@@ -169,20 +173,24 @@
     .masthead .tagline{font-size:15px;}
     .hero-hook .hook-number{font-size:32px;}
     .hero-hook .hook-text{font-size:15px;}
-    .hero{padding:32px 12px 28px;}
-    .hero-numbers{flex-direction:column;align-items:center;}
-    .hero-tile{min-width:0;width:100%;max-width:320px;}
-    .hero-tile .value{font-size:32px;}
-    .flow-steps{grid-template-columns:1fr;gap:8px;}
-    .flow-arrow{transform:rotate(90deg);padding:4px 0;}
     .ledger-cards{grid-template-columns:1fr;}
     .supporting{flex-direction:column;align-items:center;}
     .footer-grid{grid-template-columns:1fr;gap:16px;}
-    /* wq-093: Layer Stack hero — figures shrink, sparkbar % preserved */
-    .layerstack-hero{padding:40px 16px 32px;}
-    .layerstack-row{padding-bottom:24px;margin-bottom:24px;}
-    .layerstack-row .ls-figure{font-size:26px;}
-    .layerstack-caption{font-size:12px;margin-top:24px;}
+    /* wq-093 — AI Infrastructure Stack mobile rules.
+       Tactical divergence from brief §5 mobile: brief asks for proportional
+       percentages preserved on mobile, but 17% of 375px = 60px, which can't
+       fit the icon disc + label. Collapse all bars to full width on mobile;
+       the multiplier sublines ("19×", "9.4×", "2.5×") carry the descending-
+       ratio story numerically while the visual stack stays legible. */
+    .ai-infra-stack{padding:24px 12px 40px;}
+    .ais-bars{padding-right:0;}
+    .ais-bar{height:auto;min-height:56px;padding:10px 12px;width:100%;}
+    .ais-icon{flex:0 0 32px;width:32px;height:32px;font-size:14px;}
+    .ais-figure, .ais-figure-out{font-size:var(--text-xl);}
+    .ais-figure-out{position:static;transform:none;left:auto;top:auto;margin-left:auto;color:#fff;flex-shrink:0;}
+    .ais-note{display:none;/* drop italic notional caveat to save a line on small screens */}
+    .ais-footer-stats{grid-template-columns:1fr;gap:12px;margin-top:24px;}
+    .ais-caption{font-size:12px;margin-top:24px;}
   }
 </style>
 <script src="data/format-helpers.js"></script>
@@ -227,65 +235,89 @@
   <div class="attribution">&mdash; Hepburn Advisory</div>
 </section>
 
-<!-- ── LAYER STACK HERO (wq-093 D1 Option F — type-led editorial) ── -->
-<section class="layerstack-hero" aria-label="Layer Stack — Apps Revenue, Compute, Silicon, Power">
-  <div class="layerstack" id="layerstack">
-    <a class="layerstack-row" href="revenue.html" data-layer="apps" aria-label="Apps Revenue — open Revenue Ledger">
-      <span class="ls-eyebrow">01 — Apps Revenue</span>
-      <span class="ls-figure" id="ls-apps" style="color:var(--apps);">$17B</span>
-      <span class="ls-bar" style="width:10.5%;background:var(--apps);"></span>
-    </a>
-    <a class="layerstack-row" href="compute.html" data-layer="compute" aria-label="Compute — open Compute Ledger">
-      <span class="ls-eyebrow">02 — Compute</span>
-      <span class="ls-figure" id="ls-compute" style="color:var(--compute);">$43B</span>
-      <span class="ls-bar" style="width:26%;background:var(--compute);"></span>
-    </a>
-    <a class="layerstack-row" href="capital.html" data-layer="silicon" aria-label="Silicon — open Capital Ledger">
-      <span class="ls-eyebrow">03 — Silicon</span>
-      <span class="ls-figure" id="ls-silicon" style="color:var(--silicon);">$165B</span>
-      <span class="ls-bar" style="width:100%;background:var(--silicon);"></span>
-    </a>
-    <a class="layerstack-row" href="power.html" data-layer="power" aria-label="Power — open Power Ledger">
-      <span class="ls-eyebrow">04 — Power</span>
-      <span class="ls-figure" id="ls-power" style="color:var(--power);">$25B</span>
-      <span class="ls-bar" style="width:15%;background:var(--power);"></span>
-    </a>
-  </div>
-  <div class="layerstack-caption">
-    <strong>Read this stack this way:</strong> every $1 of customer-paid Apps Revenue draws ~$2.50 of compute spend, ~$9.70 of silicon, ~$1.40 of power. The stack doesn't reconcile — that's the story. The gap between Apps Revenue and the layers below is funded by hyperscaler equity in the same labs that pay the compute bills.
-    <span class="ls-meta">2025 lookback · sum-of-quarterlies basis · cohort Apps Revenue from the Revenue Ledger · click each layer for its ledger.</span>
-  </div>
-</section>
+<!-- ── AI INFRASTRUCTURE STACK HERO (wq-093 D1 Option I — 5 horizontal pill bars) ──
+     Replaces: the prior Option F type-led editorial Layer Stack, the 5-tile hero
+     reconciliation strip (D3: dropped), and the 4-step narrative-flow loop (D4: dropped).
+     The bars carry all three jobs — proportional sizing, per-ledger figures, and
+     causal narrative — in a single hero section. -->
+<section class="ai-infra-stack" aria-label="AI Infrastructure Stack — five ledgers, descending by 2025 figure">
+  <div class="ais-wrap">
+    <header class="ais-head">
+      <h2 class="ais-title">AI Infrastructure Stack</h2>
+      <span class="ais-subtitle">2025 · Five ledgers, one stack</span>
+    </header>
 
-<!-- ── HERO RECONCILIATION STRIP (wq-093: 5 tiles per §6.3; Power link-only) ── -->
-<section class="hero">
-  <div class="hero-numbers" id="hero-numbers">
-    <a href="capital.html" class="hero-tile" id="tile-capital">
-      <div class="value" style="color:var(--capital);" id="hero-capex">$745B</div>
-      <div class="label">of infrastructure investment (CY23–25)</div>
-      <div class="tier tier-pill tier-2" title="Mix: ~40% Tier 1, ~35% Tier 2, ~25% Tier 3">Tier mix: 1A/2A/3C</div>
-    </a>
-    <a href="revenue.html" class="hero-tile" id="tile-revenue">
-      <div class="value" style="color:var(--revenue);" id="hero-revenue">$17B</div>
-      <div class="label">of customer-paid AI revenue earned (2025 cohort)</div>
-      <div class="tier tier-pill tier-1" title="~65% Tier 1 sourced from filings">Tier mix: 1B/2A</div>
-    </a>
-    <a href="compute.html" class="hero-tile" id="tile-compute">
-      <div class="value" style="color:var(--compute);" id="hero-compute">$43B</div>
-      <div class="label">of AI compute revenue earned (2025)</div>
-      <div class="tier tier-pill tier-1" title="~60% Tier 1 sourced from 10-Q filings">Tier mix: 1B/2A</div>
-    </a>
-    <a href="usage.html" class="hero-tile" id="tile-usage">
-      <div class="value" style="color:var(--usage);" id="hero-tokens">~360T</div>
-      <div class="label">tokens served per day (current run-rate)</div>
-      <div class="tier tier-pill tier-3" title="Multi-model consensus estimate">Tier mix: 2A/3A</div>
-    </a>
-    <a href="power.html" class="hero-tile" id="tile-power">
-      <div class="value" style="color:var(--power);font-size:22px;" id="hero-power">Power Ledger &rarr;</div>
-      <div class="label">Power infrastructure — v3 in progress</div>
-    </a>
+    <div class="ais-bars" id="ais-bars">
+      <a class="ais-bar ais-bar--capex" href="capital.html" data-ledger="capex" style="--bar-w:100%;" aria-label="Capex — $330B — open Capital Ledger">
+        <span class="ais-icon" aria-hidden="true">$</span>
+        <span class="ais-text">
+          <span class="ais-label">Capex</span>
+          <span class="ais-sub" id="ais-capex-sub">19× Apps Revenue · 2025 calendar</span>
+        </span>
+        <span class="ais-figure" id="ais-capex-figure">$330B</span>
+      </a>
+
+      <a class="ais-bar ais-bar--usage" href="usage.html" data-ledger="usage" style="--bar-w:50%;" aria-label="Usage — $164B notional — open Usage Ledger">
+        <span class="ais-icon" aria-hidden="true">$</span>
+        <span class="ais-text">
+          <span class="ais-label">Usage</span>
+          <span class="ais-sub" id="ais-usage-sub">9.4× Apps Revenue · ~360T/day</span>
+          <span class="ais-note">notional @ $1.25/M output rate</span>
+        </span>
+        <span class="ais-figure" id="ais-usage-figure">$164B</span>
+      </a>
+
+      <a class="ais-bar ais-bar--compute" href="compute.html" data-ledger="compute" style="--bar-w:30%;" aria-label="Compute — $43.1B — open Compute Ledger">
+        <span class="ais-icon" aria-hidden="true">$</span>
+        <span class="ais-text">
+          <span class="ais-label">Compute</span>
+          <span class="ais-sub">2.5× Apps Revenue</span>
+        </span>
+        <span class="ais-figure-out" id="ais-compute-figure">$43.1B</span>
+      </a>
+
+      <a class="ais-bar ais-bar--power" href="power.html" data-ledger="power" style="--bar-w:22%;" aria-label="Power — $25B Tier 3 placeholder — open Power Ledger">
+        <span class="ais-icon" aria-hidden="true">$</span>
+        <span class="ais-text">
+          <span class="ais-label">Power</span>
+          <span class="ais-sub">1.4× Apps Revenue</span>
+        </span>
+        <span class="ais-figure-out">
+          <span id="ais-power-figure">$25B</span>
+          <span class="pill-mini tier-3" title="Power v3 hardening in progress — figure is a Tier 3C placeholder">TIER 3 · v3 PENDING</span>
+        </span>
+      </a>
+
+      <a class="ais-bar ais-bar--revenue" href="revenue.html" data-ledger="revenue" style="--bar-w:17%;" aria-label="Apps Revenue — $17.4B — open Revenue Ledger">
+        <span class="ais-icon" aria-hidden="true">$</span>
+        <span class="ais-text">
+          <span class="ais-label">Revenue</span>
+          <span class="ais-sub">1× baseline · 2025 cohort</span>
+        </span>
+        <span class="ais-figure-out" id="ais-revenue-figure">$17.4B</span>
+      </a>
+    </div>
+
+    <p class="ais-caption">
+      <strong>Read this stack this way:</strong> every $1 of customer-paid Apps Revenue is supported by $19 of capital invested, $9.40 of token throughput at retail rates, $2.50 of compute revenue earned by hyperscalers and neoclouds, and $1.40 of power. The stack doesn't reconcile — that's the story. The gap between what's invested and what comes back as revenue is funded by hyperscaler equity in the labs that drive compute demand.
+      <span class="ais-caption-meta">2025 lookback · capex from Capital Ledger · compute &amp; revenue sum-of-quarterlies post-Copilot · usage notional at OpenRouter median output rate ($1.25/M) · power placeholder pending v3 · click each bar for its ledger.</span>
+    </p>
+
+    <div class="ais-footer-stats">
+      <div class="ais-stat-card">
+        <span class="ais-stat-label">Investment-to-revenue</span>
+        <span class="ais-stat-value" id="ais-stat-capex-ratio">19×</span>
+      </div>
+      <div class="ais-stat-card">
+        <span class="ais-stat-label">Tokens served</span>
+        <span class="ais-stat-value" id="ais-stat-tokens">~360T/day</span>
+      </div>
+      <div class="ais-stat-card">
+        <span class="ais-stat-label">Largest ledger</span>
+        <span class="ais-stat-value">Capital</span>
+      </div>
+    </div>
   </div>
-  <div class="hero-sub">Five ledgers, triangulated from primary sources.</div>
 </section>
 
 <!-- ── SCENARIO WHAT-IF STRIP ── -->
@@ -293,37 +325,7 @@
   Viewing: <strong id="strip-label">Base case</strong> &middot; <a href="#" onclick="setScenario('bear');return false;">See Bear</a> <a href="#" onclick="setScenario('bull');return false;">See Bull</a>
 </div>
 
-<!-- ── ONE-SCROLL NARRATIVE ── -->
 <div class="container">
-  <section class="narrative">
-    <h2>Apps Revenue &rarr; Compute &rarr; Silicon &rarr; Power</h2>
-    <div class="flow-steps">
-      <div class="flow-step">
-        <div class="step-icon" style="color:var(--apps);">&#9651;</div>
-        <div class="step-num" style="color:var(--apps);" id="nar-apps">$17B</div>
-        <div class="step-label">Apps Revenue</div>
-        <div class="step-detail">Customer-paid AI revenue collected by providers in the measured 2025 cohort. The top of the stack — the real demand signal.</div>
-      </div>
-      <div class="flow-step">
-        <div class="step-icon" style="color:var(--compute);">&#9632;</div>
-        <div class="step-num" style="color:var(--compute);" id="nar-compute">$43B</div>
-        <div class="step-label">Compute Earned</div>
-        <div class="step-detail">What hyperscalers and neoclouds earned from AI compute in 2025. Frontier model labs paid 79% of it.</div>
-      </div>
-      <div class="flow-step">
-        <div class="step-icon" style="color:var(--silicon);">&#11044;</div>
-        <div class="step-num" style="color:var(--silicon);">$165B</div>
-        <div class="step-label">Silicon</div>
-        <div class="step-detail">NVIDIA Data Center FY26 calendar 2025 + AMD + custom ASIC. The biggest line in the stack.</div>
-      </div>
-      <div class="flow-step">
-        <div class="step-icon" style="color:var(--power);">&#8635;</div>
-        <div class="step-num" style="color:var(--power);">$25B</div>
-        <div class="step-label">Power</div>
-        <div class="step-detail">Power infrastructure underpinning the workload. v3 hardening in progress.</div>
-      </div>
-    </div>
-  </section>
 
   <!-- ── HERO HOOK ONE-LINER (wq-093 D7: Compute-anchored) ── -->
   <section class="hero-hook">
@@ -487,17 +489,13 @@ function applyScenario(s) {
   const d = SCENARIOS[s];
   // Update toggle
   document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === s));
-  // Hero strip
-  _setText('hero-capex', d.capex);
-  _setText('hero-revenue', d.apps);
-  _setText('hero-compute', d.compute);
-  _setText('hero-tokens', d.tokens);
-  // Layer Stack figures (Apps + Compute scenario-react; Silicon + Power constant)
-  _setText('ls-apps', d.apps);
-  _setText('ls-compute', d.compute);
-  // Narrative
-  _setText('nar-apps', d.apps);
-  _setText('nar-compute', d.compute);
+  // AI Infrastructure Stack — Revenue figure scenario-reacts (Apps cohort × ±15% band).
+  // Compute, Capex, Power held constant in v1 per brief §7.1 (Bear/Bull coupling deferred);
+  // Usage sub-line updates with band-shifted tokens, but the dollar figure stays the
+  // notional $164B at $1.25/M output rate per brief §5 lock copy.
+  _setText('ais-revenue-figure', d.apps);
+  _setText('ais-usage-sub', '9.4× Apps Revenue · ' + d.tokens + '/day');
+  _setText('ais-stat-tokens', d.tokens + '/day');
   // Ledger cards
   _setText('card-capex', d.capex);
   _setText('card-revenue', d.apps);
