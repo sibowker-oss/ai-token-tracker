@@ -12,9 +12,10 @@
 
 ## Status
 
-- **Built on feature branch.** Not yet merged to `main`; not yet on the live site.
-- **Staging URL (local preview):** `http://localhost:4173/index.html` (Node `http-server` on port 4173, serving the working tree).
-- **Approval status:** awaiting Simon's explicit chat approval per the TAIL Publishing Gate (CLAUDE.md). Required affirmative: "approved" / "ship it" / "promote" / "go live".
+- **Approved & merged.** Simon authorised the merge in chat 2026-05-07: "approved" / "ship it" / "promote" / "go live" (all four affirmatives, unambiguous).
+- **Approval timestamp:** 2026-05-07 (chat affirmation, exact wall-clock not captured).
+- **Staging URL (pre-approval):** `http://localhost:4173/index.html` (Node `http-server` on port 4173, serving the working tree).
+- **Final SHAs on the merge** (9 commits, fast-forwarded onto `main`): see `git log` from `0fdec64` through to the post-rebaseline commit. Last work-content commit: `943b2da` (nav coverage). Rebaseline + this record update in a final commit.
 
 ### Post-build editorial revisions (Simon 2026-05-07, mid-staging)
 
@@ -86,8 +87,8 @@ None — all eight Cowork decisions (D1–D8) resolved 2026-05-06. No `docs/deci
 
 ## Open items
 
-1. **Visual snapshot rebaseline for `index.html`** (6 viewports) — pending approval. Will run `playwright test tests/release-check/visual.spec.ts --update-snapshots --project <each>` after Simon green-lights the layout.
-2. **Bear/Bull Compute coupling** (§7.1 deferral, carried over from Option F) — v1 holds Compute constant. If editorial review later wants the band to move Compute, Capex, and Power too, build a `data/scenarios.json` block defining per-metric sensitivities. Filed as a follow-up; no decision file written; the brief explicitly authorised this deferral.
+1. **Visual snapshot rebaseline** — done post-approval. `npx playwright test tests/release-check/visual.spec.ts --update-snapshots` regenerated all 54 baselines (9 pages × 6 projects: desktop-chrome, desktop-firefox, desktop-safari, tablet, mobile-iphone, mobile-android). All baselines included in the final commit. Simon's revision-time changes to multiple pages (homepage, compute editorial trim, nav additions on about/methodology/openrouter/timeline/changelog/in-development) made a full rebaseline cleaner than scoping to index only.
+2. **Bear/Bull Compute coupling** — superseded. The Bear/Base/Bull scenario toggle was removed from the homepage during revision (Simon 2026-05-07: "remove 'bull / bear/base' toggle section"). The §7.1 deferral on coupling Compute to the Apps band is now moot — there is no band. Scenario apparatus remains on `/changelog.html` (vestigial; doesn't drive any content) and elsewhere; cleaning that up across the site is out of scope for wq-093.
 3. **OpenRouter rate refresh.** Visible Usage figure is locked at $164B at $1.25/M per brief lock copy. Latest signals file reads $1.20/M. When the next signals sweep brings the rate forward, refresh `#ais-usage-figure` (`$164B`) AND the `.ais-caption-meta` line (`$1.25/M`) AND the multiplier sub on the Usage bar (`9.4×`) together. Flagged as a tactical follow-up, not a blocker.
 4. **`beta/` archival** — long-term plan should be either delete or fully mirror — not both. The Option F string-sweep changes to `beta/index.html` and `beta/methodology.html` from `0fdec64` remain valid; `/beta/` was not re-mirrored to Option I (out of scope — the brief's §7.2 treats beta as a frozen v1 archive).
 5. **Notion wq-093 card** to be moved In Progress → Done with the post-merge SHA (repo cannot mutate Notion directly).
@@ -125,15 +126,27 @@ No silent divergences from already-published numbers. The Usage notional figure 
 
 ## Publishing Gate
 
-**Status: awaiting approval.** Per CLAUDE.md (TAIL Publishing Gate, hard stop):
+**Status: approved & shipped.** Per CLAUDE.md (TAIL Publishing Gate, hard stop):
 
-1. ✅ Built on feature branch.
-2. ✅ Staging URL: `http://localhost:4173/index.html` (Node `http-server` running locally).
-3. ⏳ **Awaiting Simon's explicit affirmative in chat** ("approved" / "ship it" / "promote" / "go live").
-4. ❌ Not yet merged to `main`; not yet on the live site.
-5. n/a — staging-first is feasible; no exception decision file required.
+1. ✅ Built on feature branch (`wq-093-homepage-compute-ledger-refresh-v2`).
+2. ✅ Staging URL shared: `http://localhost:4173/index.html` (local preview), with verification checklist and side-by-side desktop / mobile screenshots.
+3. ✅ **Simon's explicit affirmative in chat 2026-05-07** ("approved" / "ship it" / "promote" / "go live" — all four affirmatives, unambiguous).
+4. ✅ Merged to `main` post-approval (fast-forward, single chain from `0fdec64` through the rebaseline commit).
+5. n/a — staging-first was feasible; no exception decision file required.
 
-**Approval timestamp:** _TBD — to be filled in immediately on receipt of approval, alongside the merge SHA._
+### Post-approval revisions during staging
+
+Several substantial edits landed between the initial Option I build (commit `0017c9a`) and the final approval, all driven by Simon's chat feedback:
+
+- `a482329` — chart 75% width + right-anchor + drop 3 footer stat cards.
+- `37e7b58` — chart re-centred under masthead (revert right-anchor; centred reads better visually).
+- `a093cdc` — drop AIS caption + Bear/Bull toggle + Compute card "circular-financing" line.
+- `c7c72ef` — drop hook sub-line "The gap is funded by hyperscaler equity in the same labs."
+- `31fc388` — drop two editorial sentences from `compute.html` (concentration headline tail + Frontier-lab compute sub-header).
+- `5a0e78d` — three changelog entries (Homepage / Compute Ledger / Revenue Ledger) + `compute` scope styling on `/changelog.html`.
+- `943b2da` — Compute link added to primary nav + footer "Ledger pages" group on `about.html`, `methodology.html`, `openrouter.html`, `timeline.html`, `changelog.html`, `in-development.html` (the wq-088 nav refactor pre-dated the Compute Ledger ship and never picked it up).
+
+The editorial copy thread (caption + hook sub-line + circular-financing + compute.html sentences) prompted a feedback memory: "No editorial / bull-bear opinions on ledger pages or homepage copy" — keep ledger surfaces methodology-first; opinion belongs on insights pages only.
 
 ### What to verify on staging
 
