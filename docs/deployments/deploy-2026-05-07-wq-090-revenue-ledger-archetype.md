@@ -3,7 +3,8 @@
 **Date:** 2026-05-07
 **WQ:** wq-090
 **Branch:** `wq-090-revenue-ledger-hyperscaler-archetype`
-**Commit:** `edad551`
+**Commit:** `edad551` + `5c38b4b` (merged via PR #5 as `dffcaff`)
+**Live publish approval:** Simon — chat affirmative "merge to Live please" 2026-05-07. Merged to `main` 2026-05-07T03:42:11Z; GitHub Pages auto-deploys to `ai-index.hepburnadvisory.com.au`.
 
 ## What shipped
 
