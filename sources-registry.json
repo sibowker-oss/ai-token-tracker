@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-05-06",
+    "lastUpdated": "2026-05-07",
     "description": "Registry of all data sources \u00e2\u0080\u0094 auto-classified with extraction method and check frequency"
   },
   "sources": [
@@ -1268,8 +1268,8 @@
       ],
       "extraction_method": "eia_api",
       "frequency": "daily",
-      "next_check": "2026-05-07",
-      "last_checked": "2026-05-06",
+      "next_check": "2026-05-08",
+      "last_checked": "2026-05-07",
       "last_claims_count": 0,
       "status": "active",
       "notes": "860M + 930 + STEO endpoints per wq-012 \u00a71. Free API key, 5000 rows/req. STEO now explicitly attributes datacenter load. Requires EIA_API_KEY env var at extraction time. Audit 2026-05-04 (wq-081): no snapshots ever created since wq-012 registration; EIA_API_KEY now in repo secrets \u2014 verify on next cron."
@@ -1497,7 +1497,7 @@
       "extraction_method": "workable_jobs",
       "frequency": "weekly",
       "next_check": "2026-04-30",
-      "last_checked": "2026-05-06",
+      "last_checked": "2026-05-07",
       "last_claims_count": 0,
       "status": "error",
       "notes": "Public widget JSON per-account. Emits hiring_snapshot claims. Per wq-013 \u00a73.6 / \u00a77."
@@ -1522,7 +1522,7 @@
       "extraction_method": "iso_queue_caiso",
       "frequency": "monthly",
       "next_check": "2026-05-04",
-      "last_checked": "2026-05-06",
+      "last_checked": "2026-05-07",
       "last_claims_count": 0,
       "status": "error",
       "tier": 2,
@@ -1548,8 +1548,8 @@
       ],
       "extraction_method": "fred_api",
       "frequency": "daily",
-      "next_check": "2026-05-07",
-      "last_checked": "2026-05-06",
+      "next_check": "2026-05-08",
+      "last_checked": "2026-05-07",
       "last_claims_count": 0,
       "status": "active",
       "tier": 1,
@@ -1604,7 +1604,7 @@
       "extraction_method": "abs_api",
       "frequency": "quarterly",
       "next_check": "2026-05-04",
-      "last_checked": "2026-05-06",
+      "last_checked": "2026-05-07",
       "last_claims_count": 0,
       "status": "error",
       "tier": 1,
@@ -1657,8 +1657,8 @@
       ],
       "extraction_method": "aemo_nem",
       "frequency": "daily",
-      "next_check": "2026-05-07",
-      "last_checked": "2026-05-06",
+      "next_check": "2026-05-08",
+      "last_checked": "2026-05-07",
       "last_claims_count": 0,
       "status": "active",
       "tier": 1,
