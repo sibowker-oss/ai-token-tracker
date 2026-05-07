@@ -46,15 +46,17 @@
   .entry::before{content:'';position:absolute;left:-20px;top:8px;width:10px;height:10px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);}
   .entry[data-scope="capital"]::before{border-color:var(--accent);}
   .entry[data-scope="revenue"]::before{border-color:var(--green);}
+  .entry[data-scope="compute"]::before{border-color:var(--cyan);}
   .entry[data-scope="usage"]::before{border-color:var(--purple);}
-  .entry[data-scope="methodology"]::before{border-color:var(--cyan);}
+  .entry[data-scope="methodology"]::before{border-color:var(--orange);}
   .entry-meta{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
   .entry-date{font-size:13px;font-weight:700;color:var(--text-bright);}
   .entry-scope{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;}
   .entry-scope.capital{background:rgba(59,130,246,0.15);color:var(--accent);}
   .entry-scope.revenue{background:rgba(16,185,129,0.15);color:var(--green);}
+  .entry-scope.compute{background:rgba(6,182,212,0.15);color:var(--cyan);}
   .entry-scope.usage{background:rgba(139,92,246,0.15);color:var(--purple);}
-  .entry-scope.methodology{background:rgba(6,182,212,0.15);color:var(--cyan);}
+  .entry-scope.methodology{background:rgba(245,158,11,0.15);color:var(--orange);}
   .entry-text{font-size:14px;line-height:1.6;color:var(--text);}
   .entry.hidden{display:none;}
 
@@ -92,6 +94,7 @@
   <nav class="ds-header__nav" aria-label="Primary">
     <a class="ds-header__nav-link" href="/capital.html">Capital</a>
     <a class="ds-header__nav-link" href="/revenue.html">Revenue</a>
+    <a class="ds-header__nav-link" href="/compute.html">Compute</a>
     <a class="ds-header__nav-link" href="/usage.html">Usage</a>
     <a class="ds-header__nav-link" href="/power.html">Power</a>
     <a class="ds-header__nav-link" href="/methodology.html">Methodology</a>
@@ -120,11 +123,36 @@
     <button class="filter-btn active" data-filter="all" onclick="filterEntries('all')">All</button>
     <button class="filter-btn" data-filter="capital" onclick="filterEntries('capital')">Capital</button>
     <button class="filter-btn" data-filter="revenue" onclick="filterEntries('revenue')">Revenue</button>
+    <button class="filter-btn" data-filter="compute" onclick="filterEntries('compute')">Compute</button>
     <button class="filter-btn" data-filter="usage" onclick="filterEntries('usage')">Usage</button>
     <button class="filter-btn" data-filter="methodology" onclick="filterEntries('methodology')">Methodology</button>
   </div>
 
   <div class="timeline">
+
+    <div class="entry" data-scope="methodology">
+      <div class="entry-meta">
+        <span class="entry-date">7 May 2026</span>
+        <span class="entry-scope methodology">Homepage</span>
+      </div>
+      <div class="entry-text">The homepage is refreshed to reflect the five-ledger architecture. The masthead reads "The AI economy, layer by layer." with a tagline that names every ledger in causal order ("Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system."), replacing the prior three-ledger framing.<br><br>A new hero visual — the <strong>AI Infrastructure Stack</strong> — replaces the previous tile strip and the four-step narrative-flow loop. Five horizontal pill bars descend in size by 2025 figure: Capex $330B → Usage $164B (notional at OpenRouter median output rate) → Compute $43B → Power $25B → Apps Revenue $17B. Each bar links through to its ledger; Power carries an explicit Tier 3 placeholder pill until v3 hardens.<br><br>The Apps Revenue figure published on the homepage is restated to the 2025 cohort sum-of-quarterlies basis ($17B), aligning with the Revenue Ledger and the Compute Ledger's Layer Stack. The hook one-liner is now Compute-anchored — $2.50 of compute spend stands behind every $1 of customer-paid AI Apps Revenue. Several editorial sentences (homepage card commentary, hero hook sub-line, sub-headers on the Compute Ledger page) were trimmed at the same time so ledger surfaces stay methodology-first.<br><br>The Bear / Base / Bull scenario toggle is retired from the homepage. wq-093.</div>
+    </div>
+
+    <div class="entry" data-scope="compute">
+      <div class="entry-meta">
+        <span class="entry-date">6 May 2026</span>
+        <span class="entry-scope compute">Compute Ledger</span>
+      </div>
+      <div class="entry-text">The <strong>Compute Ledger</strong> goes live as the fourth Ledger surface, answering "what hyperscalers and neoclouds earned from AI compute in 2025." Built around a three-segment model: <em>frontier-lab compute</em> — what model labs (OpenAI, Anthropic, Mistral and others) paid external compute providers — at ~79% of the dollar; <em>AI workload compute</em> — the rest of business AI demand running on hyperscaler and neocloud infrastructure; and <em>hosted model APIs</em> — Bedrock, Vertex, Foundry and the equivalents.<br><br>The methodology iterated through four refinements before ship: (1) bucket decomposition with a Copilot scope-out and a pass-through correction to avoid double-counting flow that hyperscalers recognise from labs they themselves fund; (2) segment sizing correction following Andy Jassy's Q1 2026 commentary, taking AMZN AI compute from a top-down $18B to a bottom-up $10B and GCP from $18B to $7B; (3) a quarterly trajectory back-cast that uses Q4 2025 ≈ Q1 2026 run-rate where issuers haven't yet published; (4) a switch to the sum-of-quarterlies basis for the 2025 calendar so the year doesn't drop on Q4 → Q1 methodology changes.<br><br>Published 2025 total: <strong>$43.07B</strong>. The page also introduces the <em>Layer Stack</em> — a four-row proportional bar showing Apps Revenue ↔ Compute ↔ Silicon ↔ Power at canonical 2025 dollars. wq-087 / wq-089 / wq-091 / wq-092.</div>
+    </div>
+
+    <div class="entry" data-scope="revenue">
+      <div class="entry-meta">
+        <span class="entry-date">6 May 2026</span>
+        <span class="entry-scope revenue">Revenue Ledger</span>
+      </div>
+      <div class="entry-text">The Revenue Ledger's published headline figure is now the <strong>2025 cohort sum-of-quarterlies total ($17.36B)</strong>. This is the same cohort that flows through to the homepage Apps Revenue card, the AI Infrastructure Stack hero, and the Compute Ledger's Layer Stack — so the figure quoted on every public surface lines up.<br><br>The cumulative-since-2023 framing ($22B) that previously appeared in the homepage hero and meta tags is retired; the Revenue Sankey continues to publish per-provider quarterly flows on the same cohort scope (rebalanced 3 May, see entry below). The change is a framing alignment — provider-level data and the Sankey methodology are unchanged.</div>
+    </div>
 
     <div class="entry" data-scope="revenue">
       <div class="entry-meta">
