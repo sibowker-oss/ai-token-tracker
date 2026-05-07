@@ -237,3 +237,5 @@ Final post-rebase commit SHAs on origin/main:
 - f490fee — bar visibility tweak (slate hue + higher opacity for small-provider rows)
 - ffb6b91 — final docs (memo addendum + wq-089 brief D9 supersede note + runs.jsonl)
 Pre-rebase local branch SHAs: 5170a59 / 77a65d9 / 2d74df7 / 1c9650a / 11ea116 / 372fc40 / 149ae68.
+
+**Companion note (2026-05-07):** wq-090 shipped (commit `edad551`, PR #5 → `dffcaff`). Hosted-model-APIs total under wq-092's sum-of-quarterlies basis ($4.35B gross / $0.995B pass-through) is unchanged from this brief's ship; wq-090's reconciliation target was unaffected as predicted. Cross-Ledger end-to-end.

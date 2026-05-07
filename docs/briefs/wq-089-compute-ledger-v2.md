@@ -216,3 +216,5 @@ Every aggregate published on the corrected Compute Ledger must list any other Le
 ---
 
 **Shipped: 2026-05-06, commit a43a9fb** — bucket decomposition, Copilot scope-out, and pass-through correction landed on /compute.html. Layer Stack switched to lookback 2025 actuals with live cohort apps. Methodology page documents the three-bucket model + Copilot rule + cohort-vs-ecosystem gap. Deploy record at `docs/deployments/deploy-2026-05-06-wq-089-compute-ledger-v2.md`. wq-090 unblocked.
+
+**Companion shipped: 2026-05-07, commit edad551 (PR #5 merged as dffcaff)** — wq-090 (Revenue Ledger Hyperscaler & Who Pays) landed on `/revenue.html`. Hyperscalers channel corrected $3.63B → $1.70B; Who Pays relabeled to Consumer / AI Natives / Enterprises & Govs / VC-Investors; AI Natives buyer-provider split (45/45/10 to OpenAI/Anthropic/Google) surfaced in a new panel below the Sankey. §11 reconciliation now end-to-end: Compute Hosted-model-APIs pass-through ~$1.0B reconciles with Revenue Hyperscalers chPass ~$1.36B within Tier-2A noise. Deploy record at `docs/deployments/deploy-2026-05-07-wq-090-revenue-ledger-archetype.md`.

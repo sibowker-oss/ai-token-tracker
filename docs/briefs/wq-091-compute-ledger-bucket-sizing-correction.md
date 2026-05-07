@@ -303,3 +303,5 @@ Final post-rebase commit SHAs on origin/main:
 - 0503963 — D9 quarterly back-cast + caption
 - 95101a2 — D9 addendum docs
 Pre-rebase SHAs (local branch history): d091964 / b9ebf00 / 2f14e95 / 7b997c2.
+
+**Companion note (2026-05-07):** wq-090 (Revenue Ledger Hyperscaler & Who Pays) shipped at commit `edad551` (PR #5 merged as `dffcaff`). Hyperscalers channel landed at $1.70B; corrected chPass ~$1.36B reconciles with this brief's pass-through estimate (~$1.05B, unchanged) within Tier-2A noise. Cross-Ledger reconciliation now end-to-end on rendered `/compute.html` ↔ `/revenue.html`.
