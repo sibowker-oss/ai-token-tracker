@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-07
 **WQ:** wq-094
-**Branch/Commit:** main / d4fdafa
+**Branch/Commit:** main / 43d0514
 **Author:** Cowork (data write only — no HTML / build / publish)
 
 ## What shipped
