@@ -3,7 +3,7 @@
 **Date:** 2026-05-07
 **WQ:** wq-090
 **Branch:** `wq-090-revenue-ledger-hyperscaler-archetype`
-**Commit:** _to be filled at PR merge_
+**Commit:** `edad551`
 
 ## What shipped
 

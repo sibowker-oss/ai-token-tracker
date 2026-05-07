@@ -235,4 +235,4 @@ All decisions resolved in 2026-05-06 Cowork session.
 
 ---
 
-**Shipped:** 2026-05-07 — branch `wq-090-revenue-ledger-hyperscaler-archetype`. Hyperscalers channel landed at $1.70B (within D4 $1.5–2B band). Deployment record: `docs/deployments/deploy-2026-05-07-wq-090-revenue-ledger-archetype.md`. Commit sha to be filled at PR merge.
+**Shipped:** 2026-05-07 — branch `wq-090-revenue-ledger-hyperscaler-archetype`, commit `edad551`. Hyperscalers channel landed at $1.70B (within D4 $1.5–2B band). Deployment record: `docs/deployments/deploy-2026-05-07-wq-090-revenue-ledger-archetype.md`.
