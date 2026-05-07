@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-07
 **WQ:** wq-094
-**Branch/Commit:** main / TBD (commit SHA backfilled in follow-up commit per repo convention)
+**Branch/Commit:** main / d4fdafa
 **Author:** Claude Code (VS Code)
 **Publishing Gate approval:** Granted by Simon in chat 2026-05-07 ("Excellent - Approved to push to live pages") after staging review at `http://localhost:4173/`. Production publish via push to `main` (GitHub Pages serves from `main` root per `gh api repos/sibowker-oss/ai-token-tracker/pages`).
 

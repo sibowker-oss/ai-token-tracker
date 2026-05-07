@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-07
 **WQ:** wq-094
-**Branch/Commit:** TBD (Cowork session — no git commit yet; user to commit after VS Code build verification)
+**Branch/Commit:** main / d4fdafa
 **Author:** Cowork (data write only — no HTML / build / publish)
 
 ## What shipped
