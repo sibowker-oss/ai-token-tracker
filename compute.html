@@ -127,7 +127,7 @@
   <!-- ── Frontier lab compute card ── -->
   <div class="card" id="frontier-lab-compute-card" data-section="frontier-lab-compute">
     <h2>Frontier lab compute</h2>
-    <p class="h2-sub">How much frontier model labs (OpenAI, Anthropic, Mistral, others) paid external compute providers in 2025. A meaningful portion of these flows is funded by equity investments hyperscalers hold in the same labs; the Capital Ledger tracks that flow separately.</p>
+    <p class="h2-sub">How much frontier model labs (OpenAI, Anthropic, Mistral, others) paid external compute providers in 2025.</p>
     <div id="frontier-lab-compute-body"></div>
   </div>
 
@@ -289,9 +289,7 @@ function renderConcentrationHeadline() {
   const flcShare = grossSoQ > 0 ? (flc / grossSoQ * 100) : 0;
   const lede =
     'Frontier model labs paid an estimated <span class="pct">'+fmt$B(flc)+'</span> to compute providers in 2025 — ' +
-    '<span class="pct">'+flcShare.toFixed(0)+'%</span> of all AI compute revenue. ' +
-    'Hyperscalers report this as AI revenue while holding equity stakes in some of the same labs; ' +
-    'a meaningful share of the dollar is recognised on more than one balance sheet.';
+    '<span class="pct">'+flcShare.toFixed(0)+'%</span> of all AI compute revenue.';
   document.getElementById('concentration-lede').innerHTML = lede;
   document.getElementById('concentration-meta').innerHTML =
     '2025 lookback (sum-of-quarterlies, post-Copilot) · ' +
