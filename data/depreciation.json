@@ -1,0 +1,22 @@
+{
+  "_doc": "wq-094 — depreciation watch. Quarterly hyperscaler depreciation + WSJ 2030 % of net income projection. Renders on /capital.html below the existing time-bomb section.",
+  "lastUpdated": "2026-05-07",
+  "set_by": "scripts/migrate_wq094.py (wq-094)",
+  "quarterly": {
+    "2026Q1": {
+      "msft_usd_b": 10.1,
+      "googl_usd_b": 6.48,
+      "amzn_usd_b": 18.94,
+      "meta_usd_b": 5.9,
+      "tier": "1A",
+      "source": "Q1 2026 10-Qs"
+    }
+  },
+  "wsj_2030_projection_pct_net_income": {
+    "meta": 58,
+    "msft": 40,
+    "googl": 38,
+    "tier": "2B",
+    "source": "WSJ 2026 projection cited Zitron 2026-05-06"
+  }
+}

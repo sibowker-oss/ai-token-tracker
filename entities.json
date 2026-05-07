@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "description": "Entity-first data model. All companies and market data. site-data.json is derived from this.",
-    "lastUpdated": "2026-04-02",
+    "lastUpdated": "2026-05-07",
     "roles": [
       "model_provider",
       "ai_app",
@@ -67,7 +67,10 @@
           "user_count": 910,
           "inference_cost": 14.1,
           "collected_revenue": 18.9389,
-          "employee_count": 8000
+          "employee_count": 8000,
+          "total_compute_commitment_usd_b": 50,
+          "total_compute_commitment_source": "Zitron 2026-05-06 (\"OpenAI plans to burn $50 billion on compute in 2026 alone\")",
+          "total_compute_commitment_basis": "all-in: training + capacity-prepay + inference. NOT to be confused with inference_cost ($14.1B) which is a narrower line."
         },
         "2027_projected": {
           "arr": 50.0
@@ -107,7 +110,7 @@
           "claims": [
             {
               "id": "scan-20260401-b2c",
-              "claim": "LLM inference cost collapsed ~1,000x: GPT-4-class model $20/M tokens (late 2022) \u2192 ~$0.40/M tokens (early 2026)",
+              "claim": "LLM inference cost collapsed ~1,000x: GPT-4-class model $20/M tokens (late 2022) → ~$0.40/M tokens (early 2026)",
               "value": 0.4,
               "unit": "$/M tokens (2026 equivalent)",
               "weight": "corroborating",
@@ -120,7 +123,7 @@
             },
             {
               "id": "dp-079",
-              "claim": "LLM inference cost collapsed ~1,000x: GPT-4-class model $20/M tokens (late 2022) \u2192 ~$0.40/M tokens (early 2026)",
+              "claim": "LLM inference cost collapsed ~1,000x: GPT-4-class model $20/M tokens (late 2022) → ~$0.40/M tokens (early 2026)",
               "value": 0.4,
               "unit": "$/M tokens (2026 equivalent)",
               "weight": "corroborating",
@@ -140,12 +143,12 @@
           "claims": [
             {
               "id": "audit-20260503-openai-2024-revenue",
-              "claim": "openai 2024 collected_revenue = $3.6B per Zitron / Microsoft leaked documents (audit \u00a71.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
+              "claim": "openai 2024 collected_revenue = $3.6B per Zitron / Microsoft leaked documents (audit §1.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
               "value": 3.6,
               "unit": "$B",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Zitron / Microsoft leaked documents (audit \u00a71.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
+              "source": "Zitron / Microsoft leaked documents (audit §1.1: $493.8M H1 rev share / 0.20 = $2.27B H1, doubled to ~$3.6B annualized)",
               "origin": "editorial_override",
               "date": "2026-05-03",
               "previous_value": 2.5826,
@@ -191,7 +194,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "February 2026",
               "origin": "accepted",
@@ -351,7 +354,7 @@
               "origin": "accepted",
               "role": "supports",
               "reference_revenue": 7.65,
-              "reference_revenue_source": "AI Ledger \u00a77.2 weighted-consensus (audit \u00a74.4) \u2014 published cr at time of dp-005 claim 2025-09-01",
+              "reference_revenue_source": "AI Ledger §7.2 weighted-consensus (audit §4.4) — published cr at time of dp-005 claim 2025-09-01",
               "reference_revenue_set_at": "2026-05-03"
             }
           ]
@@ -375,7 +378,7 @@
             },
             {
               "id": "zitron-20260328-f6",
-              "claim": "OpenAI $25B ARR uses best 4-week period \u00d7 12 (not monthly \u00d7 12)",
+              "claim": "OpenAI $25B ARR uses best 4-week period × 12 (not monthly × 12)",
               "value": 25,
               "unit": "$B ARR (peak-4wk)",
               "weight": "corroborating",
@@ -414,7 +417,7 @@
             },
             {
               "id": "dp-064",
-              "claim": "OpenAI $25B ARR uses best 4-week period \u00d7 12 (not monthly \u00d7 12)",
+              "claim": "OpenAI $25B ARR uses best 4-week period × 12 (not monthly × 12)",
               "value": 25,
               "unit": "$B ARR (peak-4wk)",
               "weight": "corroborating",
@@ -445,7 +448,7 @@
               "unit": "USD_billions",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "2025-2026",
               "origin": "accepted",
@@ -491,7 +494,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "2026",
               "origin": "accepted",
@@ -655,7 +658,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "April 2026",
               "origin": "accepted",
@@ -705,7 +708,7 @@
           "claims": [
             {
               "id": "wq-048-phase-a-reconciliation",
-              "claim": "OpenAI 2024 year-end ARR reconciled to ~$5B. The prior $24B value (annualised from a Dec 2024 $2B/month snapshot using best-period-x12) is methodologically inconsistent with the $20B 2025 year-end ARR (standard run-rate). Both can be true ARR snapshots under different methodologies, but the consensus engine treats startingARR/endingARR as a growth pair on a comparable basis. Per assumptions-audit.md \u00a71.1 trajectory ($2B Jan-2024 \u2192 $20B Dec-2025) and the supporting claim citing $3.4B Q1 \u2192 $7B Q4 2024, the comparable-basis end-2024 ARR sits in $5\u20137B; setting to $5B (low end) keeps the engine conservative.",
+              "claim": "OpenAI 2024 year-end ARR reconciled to ~$5B. The prior $24B value (annualised from a Dec 2024 $2B/month snapshot using best-period-x12) is methodologically inconsistent with the $20B 2025 year-end ARR (standard run-rate). Both can be true ARR snapshots under different methodologies, but the consensus engine treats startingARR/endingARR as a growth pair on a comparable basis. Per assumptions-audit.md §1.1 trajectory ($2B Jan-2024 → $20B Dec-2025) and the supporting claim citing $3.4B Q1 → $7B Q4 2024, the comparable-basis end-2024 ARR sits in $5–7B; setting to $5B (low end) keeps the engine conservative.",
               "value": 5,
               "unit": "$B",
               "weight": "authoritative",
@@ -718,12 +721,12 @@
             },
             {
               "id": "conv-openai-2024-arr",
-              "claim": "Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 \u2192",
+              "claim": "Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 →",
               "value": null,
               "unit": "",
               "weight": "corroborating",
               "confidence": "estimated",
-              "source": "Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 \u2192 $7B Q4.",
+              "source": "Extrapolated from The Information reporting H1 2024 $4.3B revenue + growth trajectory. Multiple reports cited $3.4B Q1 → $7B Q4.",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -877,16 +880,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "openai v3 consensus tokens_per_day midpoint = 30T/day (range 25-35T) per model-assumptions.md \u00a72.4",
+          "claim": "openai v3 consensus tokens_per_day midpoint = 30T/day (range 25-35T) per model-assumptions.md §2.4",
           "value": 30,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 30,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -896,12 +899,12 @@
           "claims": [
             {
               "id": "conv-openai-current-growth_rate",
-              "claim": "Calculated: $7B ARR Q4 2024 \u2192 $20B ARR Q4 2025 = +186%, rounded to +150% YoY for conservative presentation.",
+              "claim": "Calculated: $7B ARR Q4 2024 → $20B ARR Q4 2025 = +186%, rounded to +150% YoY for conservative presentation.",
               "value": null,
               "unit": "",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Calculated: $7B ARR Q4 2024 \u2192 $20B ARR Q4 2025 = +186%, rounded to +150% YoY for conservative presentation.",
+              "source": "Calculated: $7B ARR Q4 2024 → $20B ARR Q4 2025 = +186%, rounded to +150% YoY for conservative presentation.",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -1061,7 +1064,7 @@
               "unit": "$B",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Interpolated. The Information reported $4.3B H1 revenue (zitron-b2) \u2192 ~$11B exit ARR.",
+              "source": "Interpolated. The Information reported $4.3B H1 revenue (zitron-b2) → ~$11B exit ARR.",
               "date": "",
               "origin": "interpolated",
               "role": "interpolated"
@@ -1591,7 +1594,7 @@
               "unit": "users",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "2025-2026",
               "origin": "accepted",
@@ -1604,7 +1607,7 @@
               "unit": "millions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "February 2026",
               "origin": "accepted",
@@ -1697,7 +1700,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "2025",
               "origin": "accepted",
@@ -1710,7 +1713,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "2026",
               "origin": "accepted",
@@ -1730,7 +1733,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "2025",
               "origin": "accepted",
@@ -1844,7 +1847,12 @@
           "needs_source": false
         }
       },
-      "entity_archetype": "frontier_lab"
+      "entity_archetype": "frontier_lab",
+      "compute_access_gw": {
+        "end_2025": 1.9,
+        "tier": "1B",
+        "source": "OpenAI CFO disclosure end-2025; cited Zitron 2026-05-06"
+      }
     },
     {
       "slug": "anthropic",
@@ -1892,19 +1900,52 @@
           "exit_arr": 9.5
         },
         "2026": {
-          "arr": 18,
+          "arr": 30,
           "valuation": 380,
           "subscription_revenue": 72.5,
           "inference_cost": -10,
           "employees": 2500,
           "monthly_revenue_peak": 6,
           "market_share_pct": 73,
-          "collected_revenue": 10.5446
-        }
+          "collected_revenue": 10.5446,
+          "projected_loss_2026_usd_b": 11,
+          "projected_loss_2027_usd_b": 11,
+          "projected_loss_source": "The Information 2026-04 (leak of Anthropic internal projection)"
+        },
+        "funding_history": [
+          {
+            "date": "2025-09",
+            "round": "Series F",
+            "amount_usd_b": 13
+          },
+          {
+            "date": "2026-02",
+            "round": "Series G",
+            "amount_usd_b": 30,
+            "valuation_usd_b": 380
+          },
+          {
+            "date": "2026-04",
+            "round": "AWS strategic",
+            "amount_usd_b": 5
+          },
+          {
+            "date": "2026-04",
+            "round": "Google strategic",
+            "amount_usd_b": 10
+          },
+          {
+            "date": "2026-Q2",
+            "round": "in_talks",
+            "amount_usd_b": 50,
+            "status": "rumoured"
+          }
+        ],
+        "total_raised_through_2026_04_usd_b": 58
       },
       "current": {
-        "arr": 19.0,
-        "arr_date": "2026-03",
+        "arr": 30.0,
+        "arr_date": "2026-04",
         "tokens_per_day": 6,
         "growth_rate": "14x in 14mo",
         "consumer_pct": 35,
@@ -1914,7 +1955,15 @@
         "total_funding": 30,
         "latest_round": "Series G at $380B (Feb 2026)",
         "customer_count": 300000,
-        "tokens_per_day_date": "2026-05-03"
+        "tokens_per_day_date": "2026-05-03",
+        "arr_source": "Anthropic disclosure 2026-04-06",
+        "arr_external_estimate": {
+          "value_usd_b": 44,
+          "confidence": "low",
+          "as_of": "2026-04-30",
+          "source": "SemiAnalysis estimate",
+          "methodology_note": "Anthropic calculates annualised revenue as last 4 weeks of API revenue × 13 + monthly chatbot subscription revenue (single-day active subs anchor) × 12 (per The Information). Selecting a single-day anchor and 4-week-window can inflate vs steady-state. Published number on TAIL = $30B (Anthropic-disclosed); $44B carried as external estimate only."
+        }
       },
       "provenance": {
         "2024.arr": {
@@ -1923,7 +1972,7 @@
           "claims": [
             {
               "id": "wq-048-phase-c-anthropic-2024-arr",
-              "claim": "Anthropic 2024 year-end ARR set to $2.0B per audit \u00a71.2 trajectory ($1.5B 2024 collected revenue + 1167% YoY growth claim implies year-end ARR ~$2B). Populated to enable consensus engine log_mean growth method instead of the over-conservative ending_x_0.60 fallback. Even with this populated, engine still bottoms out below hand-curated $4.71B (per \u00a77.2 weighted consensus across 3 independent sources) \u2014 see consensus override on 2025.collected_revenue.",
+              "claim": "Anthropic 2024 year-end ARR set to $2.0B per audit §1.2 trajectory ($1.5B 2024 collected revenue + 1167% YoY growth claim implies year-end ARR ~$2B). Populated to enable consensus engine log_mean growth method instead of the over-conservative ending_x_0.60 fallback. Even with this populated, engine still bottoms out below hand-curated $4.71B (per §7.2 weighted consensus across 3 independent sources) — see consensus override on 2025.collected_revenue.",
               "value": 2.0,
               "unit": "$B",
               "weight": "authoritative",
@@ -1979,7 +2028,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "Early 2026",
               "origin": "accepted",
@@ -1992,7 +2041,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 OpenAI Deep Dive",
+              "source": "Sacra — OpenAI Deep Dive",
               "source_url": "https://sacra.com/research/openai/",
               "date": "Mid-2025",
               "origin": "accepted",
@@ -2007,7 +2056,7 @@
           "claims": [
             {
               "id": "override-2026-05-02",
-              "claim": "Editorial override (engine output: $3.3382B): Hand-curated via \u00a77.2 weighted consensus across 3 independent sources (court affidavit + Sacra + The Information). Engine \u00a72 method bottoms out at $2.92B due to fallback haircut even with 2024 ARR populated; full reconciliation to engine pending more H2 2025 data.",
+              "claim": "Editorial override (engine output: $3.3382B): Hand-curated via §7.2 weighted consensus across 3 independent sources (court affidavit + Sacra + The Information). Engine §2 method bottoms out at $2.92B due to fallback haircut even with 2024 ARR populated; full reconciliation to engine pending more H2 2025 data.",
               "value": 4.71,
               "unit": "$B",
               "weight": "authoritative",
@@ -2113,7 +2162,7 @@
               "unit": "customers",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "October 2025",
               "origin": "accepted",
@@ -2139,7 +2188,7 @@
               "origin": "accepted",
               "role": "supports",
               "reference_revenue": 4.71,
-              "reference_revenue_source": "AI Ledger \u00a77.2 weighted-consensus (audit \u00a74.4) \u2014 published cr at time of dp-006 claim 2026-03-28",
+              "reference_revenue_source": "AI Ledger §7.2 weighted-consensus (audit §4.4) — published cr at time of dp-006 claim 2026-03-28",
               "reference_revenue_set_at": "2026-05-03"
             }
           ]
@@ -2246,7 +2295,7 @@
               "unit": "USD_billions",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "March 2026",
               "origin": "accepted",
@@ -2429,7 +2478,7 @@
               "unit": "USD_billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "February 2026",
               "origin": "accepted",
@@ -2442,7 +2491,7 @@
               "unit": "USD_billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "February 2026",
               "origin": "accepted",
@@ -2483,7 +2532,7 @@
               "unit": "",
               "weight": "corroborating",
               "confidence": "estimated",
-              "source": "Sacra (email-20260328-e5v): Anthropic burned ~$3B in 2025, down from $5.6B prior year. Conflicts with dp-006 $5.2B operating loss \u2014 different metric (cash vs accrual).",
+              "source": "Sacra (email-20260328-e5v): Anthropic burned ~$3B in 2025, down from $5.6B prior year. Conflicts with dp-006 $5.2B operating loss — different metric (cash vs accrual).",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -2495,7 +2544,7 @@
               "unit": "USD_billions",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "2024",
               "origin": "accepted",
@@ -2564,16 +2613,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "anthropic v3 consensus tokens_per_day midpoint = 6T/day (range 4-8T) per model-assumptions.md \u00a72.4",
+          "claim": "anthropic v3 consensus tokens_per_day midpoint = 6T/day (range 4-8T) per model-assumptions.md §2.4",
           "value": 6,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 6,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "medium",
@@ -3056,7 +3105,7 @@
             },
             {
               "id": "wq-048-phase-c-anthropic-2026-unit-fix",
-              "claim": "Unit correction: anthropic.financials.2026.collected_revenue normalised from raw dollars (6000000000) to $B (6) per the schema convention used elsewhere in financials. The underlying claim \u2014 Anthropic generating $6B in a single month (Feb 2026) \u2014 is preserved in the supporting Brad Gerstner claims below; only the storage representation changed. NOTE: the field nominally represents annual collected revenue; storing a single-month peak here is itself a methodology question, but unit normalisation is the immediate fix per wq-048 Phase B finding.",
+              "claim": "Unit correction: anthropic.financials.2026.collected_revenue normalised from raw dollars (6000000000) to $B (6) per the schema convention used elsewhere in financials. The underlying claim — Anthropic generating $6B in a single month (Feb 2026) — is preserved in the supporting Brad Gerstner claims below; only the storage representation changed. NOTE: the field nominally represents annual collected revenue; storing a single-month peak here is itself a methodology question, but unit normalisation is the immediate fix per wq-048 Phase B finding.",
               "value": 6,
               "unit": "$B",
               "weight": "authoritative",
@@ -3174,7 +3223,18 @@
           ]
         }
       },
-      "entity_archetype": "frontier_lab"
+      "entity_archetype": "frontier_lab",
+      "notes": {
+        "github_copilot_concentration": "GitHub Copilot is 2nd largest customer of Anthropic models (Zitron 2026-05-06)",
+        "projected_loss_2026_27": "$11B/yr both 2026 and 2027 per The Information leak of Anthropic internal projection"
+      },
+      "compute_access_commitment_gw": {
+        "aws_up_to": 5.0,
+        "google_2026_at_least": 1.0,
+        "google_2027_plus": "multiple",
+        "tier": "1B",
+        "source": "Anthropic + Amazon + Google announcements 2025-2026"
+      }
     },
     {
       "slug": "google",
@@ -3281,16 +3341,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "google v3 consensus tokens_per_day midpoint = 49T/day (range 43-55T) per model-assumptions.md \u00a72.4",
+          "claim": "google v3 consensus tokens_per_day midpoint = 49T/day (range 43-55T) per model-assumptions.md §2.4",
           "value": 49,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 49,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "high",
@@ -3563,7 +3623,7 @@
               "unit": "users",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source": "Sacra — Anthropic Deep Dive",
               "source_url": "https://sacra.com/research/anthropic/",
               "date": "2025",
               "origin": "accepted",
@@ -3619,12 +3679,12 @@
           "claims": [
             {
               "id": "audit-20260503-google-2024-revenue",
-              "claim": "google 2024 collected_revenue = $0.8B per Editorial estimate per brief \u00a73.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
+              "claim": "google 2024 collected_revenue = $0.8B per Editorial estimate per brief §3.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
               "value": 0.8,
               "unit": "$B",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Editorial estimate per brief \u00a73.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
+              "source": "Editorial estimate per brief §3.2 (Gemini revenue ramp; not separately disclosed in Alphabet 10-K)",
               "origin": "editorial_override",
               "date": "2026-05-03",
               "previous_value": null,
@@ -3655,10 +3715,16 @@
       ],
       "financials": {
         "2026": {
-          "capex": 125
+          "capex": 145,
+          "capex_source": "Meta Q1 2026 guidance refresh; range $145B–$170B per multiple sources",
+          "reality_labs_q1_loss_usd_b": 4
         },
         "2024": {
           "collected_revenue": 0.0
+        },
+        "cumulative": {
+          "reality_labs_loss_usd_b": 86,
+          "reality_labs_loss_period": "all-time through Q1 2026"
         }
       },
       "current": {
@@ -3697,12 +3763,12 @@
           "claims": [
             {
               "id": "conv-meta-current-arr",
-              "claim": "Meta does not charge for Llama. $0 direct model revenue \u2014 monetization is indirect via cloud hosting and open ecosystem.",
+              "claim": "Meta does not charge for Llama. $0 direct model revenue — monetization is indirect via cloud hosting and open ecosystem.",
               "value": null,
               "unit": "",
               "weight": "authoritative",
               "confidence": "verified",
-              "source": "Meta does not charge for Llama. $0 direct model revenue \u2014 monetization is indirect via cloud hosting and open ecosystem.",
+              "source": "Meta does not charge for Llama. $0 direct model revenue — monetization is indirect via cloud hosting and open ecosystem.",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -3710,16 +3776,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "meta v3 consensus tokens_per_day midpoint = 11.5T/day (range 8-15T) per model-assumptions.md \u00a72.4",
+          "claim": "meta v3 consensus tokens_per_day midpoint = 11.5T/day (range 8-15T) per model-assumptions.md §2.4",
           "value": 11.5,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 11.5,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -3749,12 +3815,12 @@
           "claims": [
             {
               "id": "conv-meta-current-consumer_pct",
-              "claim": "$0 revenue \u2014 consumer/biz split is N/A. Set to 0/0.",
+              "claim": "$0 revenue — consumer/biz split is N/A. Set to 0/0.",
               "value": null,
               "unit": "",
               "weight": "authoritative",
               "confidence": "verified",
-              "source": "$0 revenue \u2014 consumer/biz split is N/A. Set to 0/0.",
+              "source": "$0 revenue — consumer/biz split is N/A. Set to 0/0.",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -3769,12 +3835,12 @@
           "claims": [
             {
               "id": "conv-meta-current-biz_pct",
-              "claim": "$0 revenue \u2014 consumer/biz split is N/A. Set to 0/0.",
+              "claim": "$0 revenue — consumer/biz split is N/A. Set to 0/0.",
               "value": null,
               "unit": "",
               "weight": "authoritative",
               "confidence": "verified",
-              "source": "$0 revenue \u2014 consumer/biz split is N/A. Set to 0/0.",
+              "source": "$0 revenue — consumer/biz split is N/A. Set to 0/0.",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -3982,7 +4048,12 @@
           ]
         }
       },
-      "entity_archetype": "frontier_lab"
+      "entity_archetype": "frontier_lab",
+      "notes": {
+        "gem_token_burn": "60T tokens / 30 days, ~$330M cost (The Information / Zitron 2026-05-06); 80% of that was cache reads per Meta-spend sources",
+        "gem_lift_q2_2025": "5% IG conv lift, 3% FB conv lift (Meta Q2 2025 disclosure)",
+        "gem_lift_q4_2025": "3.5% FB click lift, >1% IG conv lift (Meta Q4 2025 disclosure) — different metric basis vs Q2; conversion lift declined ~4 percentage points"
+      }
     },
     {
       "slug": "deepseek",
@@ -4024,12 +4095,12 @@
           "claims": [
             {
               "id": "conv-deepseek-2025-arr",
-              "claim": "Estimated from DeepSeek API pricing ($0.55 in / $2.19 out for R1) \u00d7 estimated volume. Limited public data.",
+              "claim": "Estimated from DeepSeek API pricing ($0.55 in / $2.19 out for R1) × estimated volume. Limited public data.",
               "value": null,
               "unit": "",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Estimated from DeepSeek API pricing ($0.55 in / $2.19 out for R1) \u00d7 estimated volume. Limited public data.",
+              "source": "Estimated from DeepSeek API pricing ($0.55 in / $2.19 out for R1) × estimated volume. Limited public data.",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -4037,16 +4108,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "deepseek v3 consensus tokens_per_day midpoint = 8.5T/day (range 5-12T) per model-assumptions.md \u00a72.4",
+          "claim": "deepseek v3 consensus tokens_per_day midpoint = 8.5T/day (range 5-12T) per model-assumptions.md §2.4",
           "value": 8.5,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 8.5,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -4345,16 +4416,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "mistral v3 consensus tokens_per_day midpoint = 2T/day (range 1-3T) per model-assumptions.md \u00a72.4",
+          "claim": "mistral v3 consensus tokens_per_day midpoint = 2T/day (range 1-3T) per model-assumptions.md §2.4",
           "value": 2,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 2,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -4680,12 +4751,12 @@
           "claims": [
             {
               "id": "conv-xai-2025-arr",
-              "claim": "Estimated from Grok subscription pricing ($8-16/mo via X Premium) \u00d7 X Premium subscriber base. Limited public data.",
+              "claim": "Estimated from Grok subscription pricing ($8-16/mo via X Premium) × X Premium subscriber base. Limited public data.",
               "value": null,
               "unit": "",
               "weight": "indicative",
               "confidence": "speculative",
-              "source": "Estimated from Grok subscription pricing ($8-16/mo via X Premium) \u00d7 X Premium subscriber base. Limited public data.",
+              "source": "Estimated from Grok subscription pricing ($8-16/mo via X Premium) × X Premium subscriber base. Limited public data.",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
               "role": "supports"
@@ -4693,16 +4764,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "xai v3 consensus tokens_per_day midpoint = 2.5T/day (range 1-4T) per model-assumptions.md \u00a72.4",
+          "claim": "xai v3 consensus tokens_per_day midpoint = 2.5T/day (range 1-4T) per model-assumptions.md §2.4",
           "value": 2.5,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 2.5,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -5052,16 +5123,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "minimax v3 consensus tokens_per_day midpoint = 4.5T/day (range 3-6T) per model-assumptions.md \u00a72.4",
+          "claim": "minimax v3 consensus tokens_per_day midpoint = 4.5T/day (range 3-6T) per model-assumptions.md §2.4",
           "value": 4.5,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 4.5,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -5360,16 +5431,16 @@
           ]
         },
         "current.tokens_per_day": {
-          "claim": "moonshot v3 consensus tokens_per_day midpoint = 3T/day (range 2-4T) per model-assumptions.md \u00a72.4",
+          "claim": "moonshot v3 consensus tokens_per_day midpoint = 3T/day (range 2-4T) per model-assumptions.md §2.4",
           "value": 3,
           "unit": "T/day",
-          "source": "model-assumptions.md \u00a72.4 v3 consensus",
+          "source": "model-assumptions.md §2.4 v3 consensus",
           "weight": "indicative",
           "confidence": "estimated",
           "origin": "editorial_audit_doc_refresh",
           "date": "2026-05-03",
           "previous_value": 3,
-          "_doc": "wq-068 refresh \u2014 v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
+          "_doc": "wq-068 refresh — v3 consensus is LOWER than v1; net delta across 9 providers is -47T. Published global headline 330T comes from v3 GLOBAL (280-370T midpoint), which includes Chinese providers + self-hosted not yet in entities.json."
         },
         "current.growth_rate": {
           "confidence": "low",
@@ -5640,7 +5711,15 @@
           ]
         }
       },
-      "entity_archetype": "hyperscaler"
+      "entity_archetype": "hyperscaler",
+      "compute_capacity_gw": {
+        "end_2025": 1.67,
+        "tier": "2A",
+        "source": "Editorial estimate; cited Zitron 2026-05-06"
+      },
+      "notes": {
+        "history_2003_2017": "$52B capex 2003–2017 (inflation-adjusted); profitable in ~10 years. Editorial control point for AI-era capex/payback comparison."
+      }
     },
     {
       "slug": "azure",
@@ -5690,7 +5769,12 @@
           ]
         }
       },
-      "entity_archetype": "hyperscaler"
+      "entity_archetype": "hyperscaler",
+      "compute_capacity_gw": {
+        "end_2025": 2.0,
+        "tier": "2A",
+        "source": "Epoch AI estimate; cited Zitron 2026-05-06"
+      }
     },
     {
       "slug": "gcp",
@@ -5737,7 +5821,12 @@
           ]
         }
       },
-      "entity_archetype": "hyperscaler"
+      "entity_archetype": "hyperscaler",
+      "compute_capacity_gw": {
+        "end_2025": 2.95,
+        "tier": "2A",
+        "source": "Editorial estimate; cited Zitron 2026-05-06"
+      }
     },
     {
       "slug": "coreweave",
@@ -5748,36 +5837,58 @@
       "region": "US",
       "products": [],
       "financials": {
+        "2024": {
+          "arr": 1.92,
+          "collected_revenue": 1.92
+        },
         "2025": {
-          "arr": 1.9,
+          "arr": 5.10,
           "valuation": 35,
-          "collected_revenue": 1.023
+          "collected_revenue": 5.10,
+          "microsoft_concentration_pct": 67,
+          "microsoft_backlog_share_at_2025_start_pct": 85,
+          "source": "CoreWeave Form 10-K FY2025; Form 10-Q for Q3 2025 (revenue 9M YTD $3.56B + Q3 quarterly $1.36B); per dec-2026-05-07-coreweave-reconciliation"
         },
         "2026": {
           "customer_count": 24
         }
       },
       "current": {
-        "total_funding": 12.0
+        "total_funding": 12.0,
+        "backlog_q3_2025_usd_b": 55.6,
+        "backlog_source": "CoreWeave Form 10-Q for quarter ended 2025-09-30"
       },
       "provenance": {
         "2025.arr": {
           "confidence": "high",
-          "claim_count": 1,
+          "claim_count": 2,
           "needs_source": false,
-          "recovered_from": "original_conversation",
           "claims": [
             {
-              "id": "conv-coreweave-2025-arr",
-              "claim": "CoreWeave S-1 filing (Mar 2026): $1.9B revenue 2025, up from $693M in 2024. IPO filing.",
-              "value": null,
-              "unit": "",
+              "id": "filed-coreweave-fy2025-revenue-10k",
+              "claim": "CoreWeave Form 10-K FY2025: full-year 2025 revenue $5.10B; Microsoft customer concentration 67% of FY2025 revenue. Replaces prior $1.9B figure which was mis-attributed (S-1 disclosed FY2024 = $1.92B, not 2025).",
+              "value": 5.10,
+              "unit": "$B",
               "weight": "authoritative",
               "confidence": "verified",
-              "source": "CoreWeave S-1 filing (Mar 2026): $1.9B revenue 2025, up from $693M in 2024. IPO filing.",
+              "source": "CoreWeave Form 10-K FY2025 (SEC filing)",
+              "source_url": "https://investors.coreweave.com/financials/sec-filings/default.aspx",
+              "date": "2026-02",
+              "origin": "filed_disclosure",
+              "role": "supports",
+              "applied_via": "docs/decisions/resolved/dec-2026-05-07-coreweave-reconciliation.md"
+            },
+            {
+              "id": "conv-coreweave-2025-arr-superseded",
+              "claim": "Pre-wq-094: CoreWeave S-1 filing (Mar 2026) cited as $1.9B revenue 2025 — superseded by 10-K FY2025 actual which shows $5.10B (the $1.92B figure was FY2024, not 2025). See dec-2026-05-07-coreweave-reconciliation.",
+              "value": 1.92,
+              "unit": "$B",
+              "weight": "superseded",
+              "confidence": "verified",
+              "source": "CoreWeave S-1 (Mar 2025) FY2024 disclosure",
               "date": "2026-03-26",
               "origin": "conversation_recovery",
-              "role": "supports"
+              "role": "context"
             }
           ]
         },
@@ -5899,7 +6010,12 @@
           "needs_source": false
         }
       },
-      "entity_archetype": "hyperscaler"
+      "entity_archetype": "hyperscaler",
+      "compute_capacity_gw": {
+        "end_2025": 0.48,
+        "tier": "2A",
+        "source": "Editorial; cited Zitron 2026-05-06"
+      }
     },
     {
       "slug": "nebius",
@@ -6228,11 +6344,11 @@
           "claims": [
             {
               "id": "audit-20260503-fireworks-2025-rev",
-              "claim": "fireworks 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "claim": "fireworks 2025 customer revenue per editorial estimate (wq-053 §3)",
               "value": 0.1,
               "unit": "$B",
               "weight": "indicative",
-              "source": "Editorial estimate per brief \u00a73 #3 (~$0.10B 2025; combined IaaS ~$0.50B per audit \u00a74.4)",
+              "source": "Editorial estimate per brief §3 #3 (~$0.10B 2025; combined IaaS ~$0.50B per audit §4.4)",
               "origin": "editorial_override",
               "date": "2026-05-03"
             }
@@ -6285,11 +6401,11 @@
           "claims": [
             {
               "id": "audit-20260503-replicate-2025-rev",
-              "claim": "replicate 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "claim": "replicate 2025 customer revenue per editorial estimate (wq-053 §3)",
               "value": 0.05,
               "unit": "$B",
               "weight": "indicative",
-              "source": "Editorial estimate per brief \u00a73 #3 (inference + open model hosting; ~$0.05B 2025)",
+              "source": "Editorial estimate per brief §3 #3 (inference + open model hosting; ~$0.05B 2025)",
               "origin": "editorial_override",
               "date": "2026-05-03"
             }
@@ -6629,7 +6745,7 @@
               "id": "scan-20260401-i9j",
               "claim": "Nvidia AI inference market share projected to fall from 90%+ today to 20-30% by 2028 as TPUs/ASICs capture 70-75% of pro",
               "value": 90,
-              "unit": "% current \u2192 20-30% by 2028",
+              "unit": "% current → 20-30% by 2028",
               "weight": "corroborating",
               "confidence": "unverified",
               "source": "ByteIota",
@@ -6935,14 +7051,29 @@
           "name": "M365 Copilot",
           "role": "traditional_saas",
           "derived_arr_2025_usd_b": 5.4,
-          "paid_seats": 15000000,
+          "paid_seats": 20000000,
           "active_rate": 0.358,
           "seat_price": 30,
           "pricing_model": "per_seat",
           "providers": [
             "openai"
           ],
-          "notes": "M365 Copilot derived ARR via seat-math: 15M paid seats \u00d7 $30/mo \u00d7 12 = $5.4B list billings 2025. Net of bundling discount (40\u201360% under E5+Copilot bundles) the real incremental is $2.5\u20133.5B. Replaces stale 'ai_arr: 13.0' (which was a misattributed Microsoft total AI ARR figure from Jan 2026, not M365 Copilot specifically \u2014 flagged by wheresyouredat-claims-vs-tail.html audit). See dec-2026-05-06-compute-ledger-bucket-sizing.md \u00a7Issue 3 for MS-declared vs TAIL-derived Copilot derivation."
+          "notes": "wq-094 (2026-05-07) — published value restated from $5.4B list-billings to $1.35B (midpoint of leaked-actual band $1.2–1.5B per Zitron 2026-05-06 Azure billing leak). Three bands now stored: list ($7.2B at 20M × $30 × 12), bundling-adjusted incremental ($2.5–3.5B), leaked actual ($1.2–1.5B). Published basis = leaked actual. Legacy 'derived_arr_2025_usd_b: 5.4' retained as reference but no longer the published number. MS-declared Compute Ledger scope-out remains $6.67B per wq-091 D4 — different basis (what MSFT excludes) describing overlapping reality. See compute_disclosures.json:msft_ai.copilot_excluded_basis_note for the bridge. Stale ai_arr: 13.0 was misattributed (full MSFT AI ARR, not M365 Copilot specifically) — flagged by wq-091 audit.",
+          "seat_count_source": "MSFT Q1 FY26 disclosure (Apr 2026); cited Zitron 2026-05-06",
+          "list_billings_2025_usd_b": 7.2,
+          "incremental_real_2025_usd_b_low": 2.5,
+          "incremental_real_2025_usd_b_high": 3.5,
+          "actual_leaked_2025_usd_b_low": 1.2,
+          "actual_leaked_2025_usd_b_high": 1.5,
+          "published_2025_usd_b": 1.35,
+          "published_basis": "leaked_actual_midpoint",
+          "leaked_actual_quarterly_usd_b": {
+            "2025Q1_calendar": 0.367,
+            "2025Q2_calendar": 0.3,
+            "tier": "1B-leaked",
+            "source": "Zitron 2026-05-06 — leaked Azure billing"
+          },
+          "confidence": "Med"
         }
       ],
       "financials": {
@@ -7191,13 +7322,24 @@
         }
       },
       "current": {
-        "tokens_per_day": 1000.0,
+        "tokens_per_day": 1.0,
         "providers": [
           "openai",
           "anthropic"
         ],
         "founded": 2021,
-        "confidence": "Med"
+        "confidence": "Med",
+        "tokens_per_day_basis": "editorial_estimate",
+        "tokens_per_day_methodology": "Editorial estimate: ~4.7M paid seats (MSFT Q4 FY25 earnings) × ~50–70% active × ~50–200 requests/day × ~1–5K tokens/req → ~0.5–1.5 T/day; central 1.0 T/day. Cross-check: GitHub Copilot reported as 2nd largest customer of Anthropic models (Zitron 2026-05-06). Anthropic total ~6 T/day → if GitHub is ~10–20% of Anthropic volume that's 0.6–1.2 T/day from Anthropic alone, plus residual OpenAI portion. Replaces unsourced 1000.0 T/day legacy value — wq-094 cleanup.",
+        "tokens_per_day_confidence": "low",
+        "tokens_per_day_date": "2026-05-07",
+        "paid_seats": 4700000,
+        "paid_seats_source": "MSFT Q4 FY25 earnings (cited assumptions-audit.md row 12)",
+        "anthropic_customer_rank": 2,
+        "anthropic_customer_rank_source": "Zitron 2026-05-06",
+        "compute_subsidy_relationship": true,
+        "compute_subsidy_note": "Microsoft subsidises customer compute spend on GitHub Copilot — published ARR overstates economic margin. June 2026 token-based billing transition will alter both revenue trajectory and margin disclosure. Watch Q3 2026 earnings.",
+        "june_2026_token_billing_transition": true
       },
       "provenance": {
         "2025.arr": {
@@ -7599,7 +7741,7 @@
           "claims": [
             {
               "id": "wq-048-phase-c-perplexity-2025-unit-fix",
-              "claim": "Unit correction: perplexity.financials.2025.arr normalised from 148 to 0.148. The underlying dp-196 claim correctly stated '$148M in annualized revenue' with unit 'USD millions', but the apply-pipeline serialised the value as raw 148 into a field whose schema convention is $B (e.g. anthropic 2025.arr=4.5 means $4.5B). Engine output was producing $79.68B for Perplexity 2025 collected_revenue as a downstream effect \u2014 clearly wrong. Fix: set field value to 0.148 ($B) per the schema convention. Underlying claim preserved below.",
+              "claim": "Unit correction: perplexity.financials.2025.arr normalised from 148 to 0.148. The underlying dp-196 claim correctly stated '$148M in annualized revenue' with unit 'USD millions', but the apply-pipeline serialised the value as raw 148 into a field whose schema convention is $B (e.g. anthropic 2025.arr=4.5 means $4.5B). Engine output was producing $79.68B for Perplexity 2025 collected_revenue as a downstream effect — clearly wrong. Fix: set field value to 0.148 ($B) per the schema convention. Underlying claim preserved below.",
               "value": 0.148,
               "unit": "$B",
               "weight": "authoritative",
@@ -7631,7 +7773,7 @@
               "unit": "USD millions",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Perplexity Deep Dive",
+              "source": "Sacra — Perplexity Deep Dive",
               "source_url": "https://sacra.com/research/perplexity/",
               "date": "June 2025",
               "origin": "accepted",
@@ -7713,7 +7855,7 @@
               "unit": "USD millions",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "Sacra \u2014 Perplexity Deep Dive",
+              "source": "Sacra — Perplexity Deep Dive",
               "source_url": "https://sacra.com/research/perplexity/",
               "date": "April 2026",
               "origin": "accepted",
@@ -7733,7 +7875,7 @@
               "unit": "USD billions",
               "weight": "indicative",
               "confidence": "verified",
-              "source": "Sacra \u2014 Perplexity Deep Dive",
+              "source": "Sacra — Perplexity Deep Dive",
               "source_url": "https://sacra.com/research/perplexity/",
               "date": "September 2025",
               "origin": "accepted",
@@ -9822,7 +9964,7 @@
           ]
         },
         "_role_fix_wq053": {
-          "claim": "Role corrected ['ai_app'] \u2192 ['iaas_provider'] per wq-053 \u00a73 #2 \u2014 Groq is LPU-based inference platform; classified as iaas_provider",
+          "claim": "Role corrected ['ai_app'] → ['iaas_provider'] per wq-053 §3 #2 — Groq is LPU-based inference platform; classified as iaas_provider",
           "origin": "editorial_classification_fix",
           "date": "2026-05-03",
           "previous_roles": [
@@ -9835,11 +9977,11 @@
           "claims": [
             {
               "id": "audit-20260503-groq-2025-rev",
-              "claim": "groq 2025 customer revenue per editorial estimate (wq-053 \u00a73)",
+              "claim": "groq 2025 customer revenue per editorial estimate (wq-053 §3)",
               "value": 0.1,
               "unit": "$B",
               "weight": "indicative",
-              "source": "Editorial estimate per brief \u00a73 #2 (LPU-based inference; ~$0.10B 2025)",
+              "source": "Editorial estimate per brief §3 #2 (LPU-based inference; ~$0.10B 2025)",
               "origin": "editorial_override",
               "date": "2026-05-03"
             }
@@ -14105,12 +14247,12 @@
           "claims": [
             {
               "id": "audit-20260503-bytedance-tokens",
-              "claim": "ByteDance/Doubao token volume v3 consensus ~110T/day per model-assumptions.md \u00a72.4 (Volcano Engine 120T disclosure, confirmed by 4/7 models)",
+              "claim": "ByteDance/Doubao token volume v3 consensus ~110T/day per model-assumptions.md §2.4 (Volcano Engine 120T disclosure, confirmed by 4/7 models)",
               "value": 110,
               "unit": "T/day",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 100-120T)",
+              "source": "model-assumptions.md §2.4 v3 consensus (range 100-120T)",
               "origin": "editorial_audit_doc_addition",
               "date": "2026-05-03",
               "role": "supports"
@@ -14151,12 +14293,12 @@
           "claims": [
             {
               "id": "audit-20260503-alibaba-tokens",
-              "claim": "Alibaba/Qwen token volume v3 consensus ~25T/day per model-assumptions.md \u00a72.4 (5T external + 16-17T internal company statements)",
+              "claim": "Alibaba/Qwen token volume v3 consensus ~25T/day per model-assumptions.md §2.4 (5T external + 16-17T internal company statements)",
               "value": 25,
               "unit": "T/day",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 20-30T)",
+              "source": "model-assumptions.md §2.4 v3 consensus (range 20-30T)",
               "origin": "editorial_audit_doc_addition",
               "date": "2026-05-03",
               "role": "supports"
@@ -14197,12 +14339,12 @@
           "claims": [
             {
               "id": "audit-20260503-tencent-tokens",
-              "claim": "Tencent/Hunyuan token volume v3 consensus ~10T/day per model-assumptions.md \u00a72.4 (market share inference from China 140T total)",
+              "claim": "Tencent/Hunyuan token volume v3 consensus ~10T/day per model-assumptions.md §2.4 (market share inference from China 140T total)",
               "value": 10,
               "unit": "T/day",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 8-12T)",
+              "source": "model-assumptions.md §2.4 v3 consensus (range 8-12T)",
               "origin": "editorial_audit_doc_addition",
               "date": "2026-05-03",
               "role": "supports"
@@ -14243,12 +14385,12 @@
           "claims": [
             {
               "id": "audit-20260503-baidu-tokens",
-              "claim": "Baidu/Ernie token volume v3 consensus ~8T/day per model-assumptions.md \u00a72.4 (1T/day Aug 2024 + 33x annual growth extrapolation)",
+              "claim": "Baidu/Ernie token volume v3 consensus ~8T/day per model-assumptions.md §2.4 (1T/day Aug 2024 + 33x annual growth extrapolation)",
               "value": 8,
               "unit": "T/day",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 6-10T)",
+              "source": "model-assumptions.md §2.4 v3 consensus (range 6-10T)",
               "origin": "editorial_audit_doc_addition",
               "date": "2026-05-03",
               "role": "supports"
@@ -14286,12 +14428,12 @@
           "claims": [
             {
               "id": "audit-20260503-selfhosted-tokens",
-              "claim": "Self-hosted open models token volume v3 consensus ~30T/day per model-assumptions.md \u00a72.4 (Llama/Qwen/Mistral on vLLM/Ollama/enterprise GPU)",
+              "claim": "Self-hosted open models token volume v3 consensus ~30T/day per model-assumptions.md §2.4 (Llama/Qwen/Mistral on vLLM/Ollama/enterprise GPU)",
               "value": 30,
               "unit": "T/day",
               "weight": "indicative",
               "confidence": "estimated",
-              "source": "model-assumptions.md \u00a72.4 v3 consensus (range 20-40T)",
+              "source": "model-assumptions.md §2.4 v3 consensus (range 20-40T)",
               "origin": "editorial_audit_doc_addition",
               "date": "2026-05-03",
               "role": "supports"
@@ -14330,7 +14472,7 @@
               "unit": "T/day",
               "weight": "indicative",
               "confidence": "speculative",
-              "source": "model-assumptions.md \u00a72.4 v3 'Other closed' aggregate estimate",
+              "source": "model-assumptions.md §2.4 v3 'Other closed' aggregate estimate",
               "origin": "editorial_audit_doc_addition",
               "date": "2026-05-03",
               "role": "supports"
@@ -14534,12 +14676,12 @@
           "inference_cost": 2.5905,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "customer_revenue \u00d7 0.55 (provider rate from cost_structure)"
+            "customer_revenue × 0.55 (provider rate from cost_structure)"
           ],
           "opex": 4.71,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+            "customer_revenue × 1.0 (opex rate from size band)"
           ],
           "vc_subsidy": 2.5905,
           "vc_origin": "balancing_plug_derived",
@@ -14560,12 +14702,12 @@
           "inference_cost": 0.6755,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "customer_revenue \u00d7 0.3 (provider rate from cost_structure)"
+            "customer_revenue × 0.3 (provider rate from cost_structure)"
           ],
           "opex": 2.2516,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+            "customer_revenue × 1.0 (opex rate from size band)"
           ],
           "vc_subsidy": 0.6755,
           "vc_origin": "balancing_plug_derived",
@@ -14582,12 +14724,12 @@
           "inference_cost": 0.0808,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+            "customer_revenue × 0.5 (provider rate from cost_structure)"
           ],
           "opex": 0.1938,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+            "customer_revenue × 1.2 (opex rate from size band)"
           ],
           "vc_subsidy": 0.1131,
           "vc_origin": "balancing_plug_derived",
@@ -14604,12 +14746,12 @@
           "inference_cost": 0.1077,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+            "customer_revenue × 0.5 (provider rate from cost_structure)"
           ],
           "opex": 0.2585,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+            "customer_revenue × 1.2 (opex rate from size band)"
           ],
           "vc_subsidy": 0.1508,
           "vc_origin": "balancing_plug_derived",
@@ -14626,12 +14768,12 @@
           "inference_cost": 0.1346,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+            "customer_revenue × 0.5 (provider rate from cost_structure)"
           ],
           "opex": 0.323,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+            "customer_revenue × 1.2 (opex rate from size band)"
           ],
           "vc_subsidy": 0.1884,
           "vc_origin": "balancing_plug_derived",
@@ -14648,12 +14790,12 @@
           "inference_cost": 0.0404,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+            "customer_revenue × 0.5 (provider rate from cost_structure)"
           ],
           "opex": 0.097,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+            "customer_revenue × 1.2 (opex rate from size band)"
           ],
           "vc_subsidy": 0.0566,
           "vc_origin": "balancing_plug_derived",
@@ -14670,12 +14812,12 @@
           "inference_cost": 0.0269,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
+            "customer_revenue × 0.5 (provider rate from cost_structure)"
           ],
           "opex": 0.0646,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+            "customer_revenue × 1.2 (opex rate from size band)"
           ],
           "vc_subsidy": 0.0377,
           "vc_origin": "balancing_plug_derived",
@@ -14693,16 +14835,16 @@
           "vc_origin": "preserved_hand_curated",
           "value": 0.6038,
           "tier": "2A",
-          "src": "wq-053 engine \u2014 rolled up from 6 iaas_provider entities (together, fireworks, replicate, anyscale, groq, modal); customer_revenue=$0.30B + vc_subsidy=$0.30B (hand-curated)",
+          "src": "wq-053 engine — rolled up from 6 iaas_provider entities (together, fireworks, replicate, anyscale, groq, modal); customer_revenue=$0.30B + vc_subsidy=$0.30B (hand-curated)",
           "inference_cost": 0.3019,
           "inference_cost_origin": "estimated",
           "inference_cost_derived_from": [
-            "iaas rollup \u00d7 0.50 (inference rate)"
+            "iaas rollup × 0.50 (inference rate)"
           ],
           "opex": 0.3019,
           "opex_origin": "estimated",
           "opex_derived_from": [
-            "iaas rollup \u00d7 0.50"
+            "iaas rollup × 0.50"
           ],
           "override_discrepancy": null,
           "_iaas_members": [
@@ -14893,7 +15035,7 @@
           "origin": "derived_pure_function",
           "derived_from": [
             "tokens_per_day_total",
-            "\u00d7 365"
+            "× 365"
           ]
         },
         "segments": {
@@ -15018,7 +15160,7 @@
         "2024: gross=5.9 (per_entity_collected_revenue), net=None, capex=269",
         "2025: gross=19.6656 (engine_gross_field), net=17.3608, capex=330"
       ],
-      "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
+      "_doc": "Cumulative 2023–2025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
     },
     "2023": {
       "mag7_capex": 152,
@@ -15085,7 +15227,7 @@
           "origin": "derived_pure_function",
           "derived_from": [
             "tokens_per_day_total",
-            "\u00d7 365"
+            "× 365"
           ]
         },
         "segments": {
@@ -15177,7 +15319,7 @@
           "origin": "derived_pure_function",
           "derived_from": [
             "tokens_per_day_total",
-            "\u00d7 365"
+            "× 365"
           ]
         },
         "segments": {
@@ -15643,7 +15785,20 @@
       ],
       "_engine": "scripts/derive_capital_sankey.py (wq-074)",
       "_engine_run_at": "2026-05-04T03:01:33Z",
-      "_doc": "Capital sankey engine output. Column 0 sources derived from market_aggregates bucket totals \u00d7 structure.column0_sub_allocation. Columns 1+2 = pure editorial ratios applied to total. FLOWS guaranteed to satisfy per-node conservation by construction (proportional cross-product). capital.html reads via site-data.json."
+      "_doc": "Capital sankey engine output. Column 0 sources derived from market_aggregates bucket totals × structure.column0_sub_allocation. Columns 1+2 = pure editorial ratios applied to total. FLOWS guaranteed to satisfy per-node conservation by construction (proportional cross-product). capital.html reads via site-data.json."
+    },
+    "quarterly_capex": {
+      "_doc": "Per-hyperscaler quarterly capex. Currently sparse — populate from 10-Qs each cycle.",
+      "2025Q3": {
+        "msft_usd_b": 21.4,
+        "tier": "1A",
+        "source": "MSFT Q1 FY26 10-Q (Q3 calendar 2025)"
+      },
+      "2025Q4": {
+        "msft_usd_b": 37.5,
+        "tier": "1A",
+        "source": "MSFT Q2 FY26 10-Q (Q4 calendar 2025); cited Zitron 2026-05-06"
+      }
     }
   }
 }

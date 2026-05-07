@@ -38,7 +38,9 @@
         "https://www.aboutamazon.com/news/aws/aws-project-rainier-ai-trainium-chips-compute-cluster"
       ],
       "epoch_project": "Project Rainier #confident",
-      "last_verified": "2026-04-23"
+      "last_verified": "2026-04-23",
+      "power_mw_energised_2026": null,
+      "power_mw_energised_note": "Nameplate capacity = 1092 MW (TAIL Tier 1A, sourced from AWS press release + Cat generator filings + Anthropic property docs). Zitron 2026-05-06 cites 500 MW for Project Rainier — likely the energised-today figure vs full nameplate. wq-094: field added (null) for future population once a verifiable energised-MW datapoint is available. Do not downgrade the 1092 nameplate."
     },
     "Microsoft Fairwater Wisconsin": {
       "owners": [

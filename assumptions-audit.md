@@ -79,7 +79,7 @@
 
 | Company | Metric | Value | Source | Notes |
 |---------|--------|-------|--------|-------|
-| Microsoft Copilot | Q2 FY2026 ARR | $13B (full AI business) | Microsoft / Tech-Insider | 15M paid seats = 3.3% of 450M commercial M365 base |
+| M365 Copilot | 2025 published (leaked-actual basis) | $1.35B (band $1.2–1.5B) | Zitron 2026-05-06 leaked Azure billing — Q2 FY25 $367M / Q3 FY25 $300M | wq-094 (2026-05-07) restated from $5.4B list-billings (15M × $30 × 12) to leaked-actual midpoint. Three bands stored in entities.json. Stale '$13B (full AI business)' row removed — that was misattributed MSFT total AI ARR, not M365 Copilot specifically. |
 | Salesforce Agentforce | Q4 FY2026 ARR | $800M standalone | Salesforce earnings (official) | Combined AI + Data 360: $2.9B. ~50% deals free |
 | ServiceNow Now Assist | Q4 2025 ACV | $600M+ | ServiceNow earnings (official) | Doubled YoY. AI = ~4% of total sub base |
 | GitHub Copilot | Subscribers | 4.7M | MSFT earnings | |

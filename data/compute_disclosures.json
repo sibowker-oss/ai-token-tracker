@@ -2,7 +2,7 @@
   "_schema": {
     "version": "3.0",
     "purpose": "wq-091 — disclosures feeding the Compute Ledger. Each component decomposes its AI revenue into three plain-English segments: (1) Frontier lab compute (Model Providers paying external hyperscalers/neoclouds for compute to train and serve their own foundation models — the circular-financing line), (2) AI workload compute (AI Natives, enterprises, model-serving infra cos, sovereign workloads buying raw cloud capacity), (3) Hosted model APIs (packaged token APIs — AWS Bedrock, Azure OpenAI Service, Google Vertex partner-served). Pass-through to model labs only exists in segment 3. Copilot-class revenue (M365 Copilot, GitHub Copilot, Copilot Studio, Gemini-in-Workspace) is scoped OUT and tracked separately. derive_compute_revenue.py reads this file and writes site-data.json:compute.* . Refresh quarterly within ~48h of each major hyperscaler earnings.",
-    "tiers": "1A = direct quotation from filed 10-K/10-Q. 1B = press release / earnings call narrative (own-mouth, including CEO disclosure such as Andy Jassy 2026 shareholder letter). 2A = editorial estimate with documented methodology (e.g., bottom-up segment sizing, AI portion of total Cloud). 2B = inferred from analyst consensus.",
+    "tiers": "1A = direct quotation from filed 10-K/10-Q. 1B = press release / earnings call narrative (own-mouth, including CEO disclosure such as Andy Jassy 2026 shareholder letter). 2A = editorial estimate with documented methodology (e.g., bottom-up segment sizing, AI portion of total Cloud). 2B = inferred from analyst consensus. 1B-leaked = own-mouth via insider (e.g. Azure billing source); higher than 2A editorial but not externally verifiable; treat as anchor candidate cross-checked at next earnings cycle (introduced wq-094).",
     "principal_agent_status": "ALL FOUR (MSFT/AMZN/GOOGL/ORCL) confirmed PRINCIPAL (gross) treatment per data/methodology_constants.json:compute_revenue.principal_agent_treatment, verified 2026-05-06 from 10-K accounting policy notes. The 'principal-everywhere' assumption holds — gross sums are valid; Hosted model APIs net requires editorial pass-through estimation.",
     "segment_model": "Frontier lab compute: per-lab revenue × cloud-mix; the circular-financing line. AI workload compute: AI-native customers + enterprise model-serving cos + sovereign/regulated workloads buying raw cloud GPU/instance capacity. Hosted model APIs: hyperscaler resale of frontier models via Bedrock / Azure OpenAI Service / Vertex partner-served; pass-through % to labs applies here only. See methodology.html §Compute Revenue — three-segment model.",
     "copilot_scope_out": "Copilot-class revenue (M365 Copilot, GitHub Copilot, Copilot Studio for MSFT; Gemini-in-Workspace for GOOGL; equivalent embedded-AI productivity lines for AMZN/ORCL where identifiable) is per-seat productivity SaaS, not Compute. Scoped OUT of every aggregate published on /compute.html. Tracked-but-excluded; flows to a future Apps Ledger when that is built. Per-component figure surfaces in copilot_excluded_*_usd_b for transparency. Scope-out uses MS-declared values (not TAIL-derived) per dec-2026-05-06-compute-ledger-bucket-sizing.md §Issue 3.",
@@ -28,9 +28,9 @@
       "copilot_excluded_2025_usd_b": 6.67,
       "frontier_lab_compute_q1_2026_usd_b": 5.95,
       "ai_workload_compute_q1_2026_usd_b": 0.36,
-      "hosted_model_apis_gross_q1_2026_usd_b": 0.50,
-      "hosted_model_apis_pass_through_q1_2026_usd_b": 0.10,
-      "hosted_model_apis_net_q1_2026_usd_b": 0.40,
+      "hosted_model_apis_gross_q1_2026_usd_b": 0.5,
+      "hosted_model_apis_pass_through_q1_2026_usd_b": 0.1,
+      "hosted_model_apis_net_q1_2026_usd_b": 0.4,
       "copilot_excluded_q1_2026_usd_b": 2.44,
       "tier_frontier_lab_compute": "2A",
       "tier_ai_workload_compute": "2A",
@@ -49,7 +49,18 @@
       "retrievedAt": "2026-05-06",
       "nextReview": "2026-07-30",
       "confidence": "medium",
-      "notes": "Segment-decomposed per wq-091; calendar basis switched to sum-of-quarterlies under wq-092 D1 (was annualised run-rate basis under wq-091, which produced Q4 25 ≥ Q1 26 trajectory). Sum-of-Q $25.25B ($28B annualised retained as context field). Frontier lab compute dominates — OpenAI's compute spend on Azure is the central circular-financing line on the page. Copilot scope-out is MS-declared per wq-091 D4. See dec-2026-05-06-compute-ledger-bucket-sizing.md §Issue 3 for full Copilot derivation."
+      "notes": "Segment-decomposed per wq-091; calendar basis switched to sum-of-quarterlies under wq-092 D1 (was annualised run-rate basis under wq-091, which produced Q4 25 ≥ Q1 26 trajectory). Sum-of-Q $25.25B ($28B annualised retained as context field). Frontier lab compute dominates — OpenAI's compute spend on Azure is the central circular-financing line on the page. Copilot scope-out is MS-declared per wq-091 D4. See dec-2026-05-06-compute-ledger-bucket-sizing.md §Issue 3 for full Copilot derivation.",
+      "openai_inference_quarterly": {
+        "2025Q1": 1.467,
+        "2025Q2": 2.075,
+        "2025Q3": 3.648,
+        "2025Q4_estimate": 4.625,
+        "tier": "1B-leaked",
+        "source": "Zitron 2026-05-06 — sources with direct knowledge of Azure revenue",
+        "caveat": "Ed cites $2.075B in one paragraph and $2.947B in another for Q3 FY25 (= 2025Q1 calendar in TAIL labelling); $2.075B used here as the consistent quarterly figure. 2025Q4 estimate from Ed's narrative 'annualised hit over $18.5B by year-end'. Treat as anchor candidates; cross-check at Q2 2026 earnings.",
+        "calendar_note": "Quarter labels are CALENDAR quarters per TAIL convention. Ed's 'Q2 FY25' = MSFT fiscal = calendar Q4 2024 (pre-dates this array)."
+      },
+      "copilot_excluded_basis_note": "wq-094: copilot_excluded_2025_usd_b = MS-declared scope-out from MSFT AI line ($6.67B). This is NOT the same basis as entities.json:microsoft-copilot.products[m365-copilot] published value (which is leaked-actual basis post-wq-094, ~$1.35B midpoint). The two describe overlapping reality on different bases: Compute Ledger uses what MSFT reports excluded; Trad SaaS uses leaked Azure billing actuals. Bridge: MSFT scopes out list-billings ($6.67B = M365 Copilot list ~$5.4B-$7.2B + GitHub Copilot ~$1.65B + Studio/Sales/Service residual); actual collected revenue is materially lower per Zitron 2026-05-06 leak."
     },
     "googl_cloud_ai": {
       "label": "Google Cloud AI",
@@ -58,15 +69,15 @@
       "principal_agent_confirmed": true,
       "treatment": "principal",
       "value_2025_calendar_basis": "sum_of_quarterlies",
-      "value_2025_calendar_usd_b": 7.00,
+      "value_2025_calendar_usd_b": 7.0,
       "value_2025_annualised_run_rate_basis_usd_b": 7.0,
       "frontier_lab_compute_2025_usd_b": 3.5,
       "ai_workload_compute_2025_usd_b": 1.5,
       "hosted_model_apis_gross_2025_usd_b": 0.5,
-      "hosted_model_apis_pass_through_2025_usd_b": 0.10,
-      "hosted_model_apis_net_2025_usd_b": 0.40,
+      "hosted_model_apis_pass_through_2025_usd_b": 0.1,
+      "hosted_model_apis_net_2025_usd_b": 0.4,
       "copilot_excluded_2025_usd_b": 1.5,
-      "frontier_lab_compute_q1_2026_usd_b": 1.50,
+      "frontier_lab_compute_q1_2026_usd_b": 1.5,
       "ai_workload_compute_q1_2026_usd_b": 0.65,
       "hosted_model_apis_gross_q1_2026_usd_b": 0.21,
       "hosted_model_apis_pass_through_q1_2026_usd_b": 0.04,
@@ -90,7 +101,7 @@
       },
       "underlying_segment": {
         "google_cloud_q1_2026_revenue_usd_b": 20.028,
-        "google_cloud_q1_2025_revenue_usd_b": 12.260,
+        "google_cloud_q1_2025_revenue_usd_b": 12.26,
         "yoy_growth_pct": 63,
         "tier": "1A"
       },
@@ -106,7 +117,7 @@
       "principal_agent_confirmed": true,
       "treatment": "principal",
       "value_2025_calendar_basis": "sum_of_quarterlies",
-      "value_2025_calendar_usd_b": 10.00,
+      "value_2025_calendar_usd_b": 10.0,
       "value_2025_annualised_run_rate_basis_usd_b": 10.0,
       "frontier_lab_compute_2025_usd_b": 7.0,
       "ai_workload_compute_2025_usd_b": 0.5,
@@ -160,8 +171,8 @@
       "hosted_model_apis_pass_through_2025_usd_b": 0.0,
       "hosted_model_apis_net_2025_usd_b": 0.0,
       "copilot_excluded_2025_usd_b": 0.0,
-      "frontier_lab_compute_q1_2026_usd_b": 0.60,
-      "ai_workload_compute_q1_2026_usd_b": 0.30,
+      "frontier_lab_compute_q1_2026_usd_b": 0.6,
+      "ai_workload_compute_q1_2026_usd_b": 0.3,
       "hosted_model_apis_gross_q1_2026_usd_b": 0.0,
       "hosted_model_apis_pass_through_q1_2026_usd_b": 0.0,
       "hosted_model_apis_net_q1_2026_usd_b": 0.0,
@@ -179,7 +190,7 @@
       },
       "underlying_segment": {
         "cloud_q3_fy26_revenue_usd_b": 8.914,
-        "cloud_q3_fy25_revenue_usd_b": 6.210,
+        "cloud_q3_fy25_revenue_usd_b": 6.21,
         "yoy_growth_pct": 43.5,
         "note": "Cloud revenue includes both OCI and SaaS (Fusion + NetSuite). OCI is the AI-relevant subset; AI portion of OCI is editorial.",
         "tier": "1A"
@@ -262,7 +273,7 @@
       "treatment": "principal",
       "value_2025_calendar_basis": "sum_of_quarterlies",
       "value_2025_calendar_usd_b": 0.56,
-      "value_2025_annualised_run_rate_basis_usd_b": 0.60,
+      "value_2025_annualised_run_rate_basis_usd_b": 0.6,
       "frontier_lab_compute_2025_usd_b": 0.47,
       "ai_workload_compute_2025_usd_b": 0.09,
       "hosted_model_apis_gross_2025_usd_b": 0.0,
@@ -292,7 +303,7 @@
       "treatment": "principal",
       "value_2025_calendar_basis": "sum_of_quarterlies",
       "value_2025_calendar_usd_b": 0.37,
-      "value_2025_annualised_run_rate_basis_usd_b": 0.40,
+      "value_2025_annualised_run_rate_basis_usd_b": 0.4,
       "frontier_lab_compute_2025_usd_b": 0.28,
       "ai_workload_compute_2025_usd_b": 0.09,
       "hosted_model_apis_gross_2025_usd_b": 0.0,
@@ -319,9 +330,9 @@
     {
       "quarter": "2025Q1",
       "msft_ai_gross": 4.15,
-      "googl_cloud_ai_gross": 0.70,
-      "amzn_aws_ai_gross": 1.50,
-      "oracle_cloud_ai_gross": 0.50,
+      "googl_cloud_ai_gross": 0.7,
+      "amzn_aws_ai_gross": 1.5,
+      "oracle_cloud_ai_gross": 0.5,
       "coreweave_gross": 0.92,
       "nebius_gross": 0.09,
       "lambda_gross": 0.09,
@@ -329,9 +340,9 @@
     },
     {
       "quarter": "2025Q2",
-      "msft_ai_gross": 5.50,
-      "googl_cloud_ai_gross": 1.40,
-      "amzn_aws_ai_gross": 2.20,
+      "msft_ai_gross": 5.5,
+      "googl_cloud_ai_gross": 1.4,
+      "amzn_aws_ai_gross": 2.2,
       "oracle_cloud_ai_gross": 0.65,
       "coreweave_gross": 0.98,
       "nebius_gross": 0.19,
@@ -340,33 +351,33 @@
     },
     {
       "quarter": "2025Q3",
-      "msft_ai_gross": 7.20,
-      "googl_cloud_ai_gross": 2.10,
-      "amzn_aws_ai_gross": 2.70,
+      "msft_ai_gross": 7.2,
+      "googl_cloud_ai_gross": 2.1,
+      "amzn_aws_ai_gross": 2.7,
       "oracle_cloud_ai_gross": 0.85,
       "coreweave_gross": 1.11,
       "nebius_gross": 0.25,
       "lambda_gross": 0.15,
-      "crusoe_gross": 0.10
+      "crusoe_gross": 0.1
     },
     {
       "quarter": "2025Q4",
-      "msft_ai_gross": 8.40,
-      "googl_cloud_ai_gross": 2.80,
-      "amzn_aws_ai_gross": 3.60,
+      "msft_ai_gross": 8.4,
+      "googl_cloud_ai_gross": 2.8,
+      "amzn_aws_ai_gross": 3.6,
       "oracle_cloud_ai_gross": 0.95,
       "coreweave_gross": 1.22,
       "nebius_gross": 0.36,
-      "lambda_gross": 0.20,
+      "lambda_gross": 0.2,
       "crusoe_gross": 0.11
     },
     {
       "quarter": "2026Q1",
       "msft_ai_gross": 9.25,
-      "googl_cloud_ai_gross": 3.00,
+      "googl_cloud_ai_gross": 3.0,
       "amzn_aws_ai_gross": 3.75,
-      "oracle_cloud_ai_gross": 0.90,
-      "coreweave_gross": 1.50,
+      "oracle_cloud_ai_gross": 0.9,
+      "coreweave_gross": 1.5,
       "nebius_gross": 0.34,
       "lambda_gross": 0.18,
       "crusoe_gross": 0.12
@@ -419,5 +430,115 @@
       "wq-091 (2026-05-06): per-provider segment sizing corrected; AMZN $18B→$10B; GCP $18B→$7B; bucket_*→plain English schema rename",
       "wq-092 (2026-05-06): calendar basis switched from annualised run-rate to sum-of-quarterlies; quarterly trajectory restated to eliminate Q4 25 ≥ Q1 26 drops; GOOGL Q1 26 raised $2.50B→$3.00B"
     ]
+  },
+  "forward_commitments": {
+    "_doc": "wq-094 ingest of Zitron 2026-05-06 piece + The Information Anthropic-Google deal disclosure. Forward commitments are reported GROSS, separately from realised revenue. Per Cross-Ledger Reconciliation rule (CLAUDE.md 2026-05-06), these dollars are NOT rolled into the Compute Ledger 2025 sum-of-Q calendar totals or Q1 26 quarterly bars.",
+    "lab_to_hyperscaler": {
+      "anthropic_google_5yr": {
+        "commitment_usd_b": 200,
+        "duration_years": 5,
+        "commitment_period_start": "2026",
+        "tier": "1B",
+        "source": "The Information 2026-04-30; Anthropic + Google joint statement",
+        "share_of_google_rpo_q1_2026_pct": 42.7
+      },
+      "anthropic_broadcom_tpu_2026": {
+        "commitment_usd_b": 21,
+        "year": 2026,
+        "tier": "1B",
+        "source": "CNBC 2026-04 / Anthropic-Broadcom announcement",
+        "destination_note": "Broadcom-built TPUs deployed in Google data centres; Anthropic pays Google to rent."
+      },
+      "anthropic_broadcom_tpu_2027": {
+        "commitment_usd_b": 42,
+        "year": 2027,
+        "tier": "1B",
+        "source": "CNBC 2026-04"
+      },
+      "aws_openai_2026": {
+        "commitment_usd_b": 38,
+        "duration_years": 1,
+        "tier": "1B",
+        "source": "AWS-OpenAI announcement Q1 2026"
+      },
+      "aws_openai_8yr_expansion": {
+        "commitment_usd_b": 100,
+        "duration_years": 8,
+        "tier": "1B",
+        "source": "AWS-OpenAI announcement Q1 2026"
+      },
+      "oracle_openai_stargate": {
+        "commitment_usd_b": 300,
+        "tier": "1B",
+        "source": "Oracle Q3 FY26 RPO disclosure",
+        "already_in_oracle_notes": true
+      }
+    },
+    "hyperscaler_to_lab_investment": {
+      "google_anthropic_cumulative": {
+        "invested_usd_b": 43,
+        "tier": "1B",
+        "breakdown": {
+          "prior_rounds_through_2025": 33,
+          "feb_2026_round_share": null,
+          "apr_2026_round": 10
+        },
+        "source": "Google + Anthropic disclosures; The Information 2026-04"
+      },
+      "amazon_anthropic_cumulative": {
+        "invested_usd_b": 33,
+        "tier": "1B",
+        "breakdown": {
+          "prior_through_2025": 13,
+          "apr_2026_round": 5,
+          "contingent_additional": 15
+        },
+        "source": "Amazon + Anthropic disclosures; Reuters 2026-04"
+      },
+      "aws_openai_feb_2026": {
+        "invested_usd_b": 13,
+        "contingent_additional_usd_b": 20,
+        "tier": "1B",
+        "source": "Amazon Q4 2025 announcement; The Information 2026-02"
+      }
+    },
+    "hyperscaler_dc_backstops": {
+      "google_fluidstack_cipher": {
+        "backstop_usd_b": 1.4,
+        "tier": "1B",
+        "operator_serving": "Anthropic",
+        "source": "The Information / Zitron 2026-05-06"
+      },
+      "google_terawulf": {
+        "backstop_usd_b": 1.8,
+        "tier": "1B",
+        "operator_serving": "Anthropic",
+        "source": "The Information / Zitron 2026-05-06"
+      },
+      "google_hut8": {
+        "backstop_usd_b": null,
+        "tier": "2A",
+        "operator_serving": "Anthropic",
+        "source": "Zitron 2026-05-06"
+      }
+    },
+    "hyperscaler_backlog": {
+      "google_rpo": {
+        "q4_2025_usd_b": 242.8,
+        "q1_2026_usd_b": 467.8,
+        "qoq_jump_usd_b": 225.0,
+        "tier": "1A",
+        "source": "Alphabet Q1 2026 10-Q"
+      },
+      "mag3_ai_lab_share_of_backlog_pct": 50,
+      "anthropic_plus_openai_committed_to_mag3_usd_b": 718,
+      "tier_aggregate": "2A",
+      "source_aggregate": "The Information chart 2026-04-30"
+    },
+    "_provenance": {
+      "set_by": "scripts/migrate_wq094.py (wq-094)",
+      "set_at": "2026-05-07",
+      "supersedes": null
+    }
   }
 }

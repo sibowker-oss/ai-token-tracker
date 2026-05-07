@@ -82,6 +82,10 @@
   .status-gap { background:rgba(245,158,11,0.15); color:#fbbf24; }
   .status-covered { background:rgba(16,185,129,0.15); color:#6ee7b7; }
   .status-growing { background:rgba(239,68,68,0.15); color:#fca5a5; }
+  .tier-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;}
+  .tier-1{background:rgba(16,185,129,0.15);color:#10b981;}
+  .tier-2{background:rgba(59,130,246,0.15);color:#3b82f6;}
+  .tier-3{background:rgba(245,158,11,0.15);color:#f59e0b;}
   .notes { font-size:12px; color:var(--text-dim); line-height:1.6; }
   .notes ul { padding-left:18px; margin-top:6px; }
   .notes li { margin-bottom:4px; }
@@ -272,6 +276,18 @@
       <div style="font-size:11px;margin-top:10px;color:var(--text-dim);line-height:1.6;">
         <strong>The gap between depreciation and revenue</strong> represents the difference between annual P&amp;L cost and annual AI revenue. Revenue is compounding but the depreciation wave has not yet crested. Convergence requires CapEx growth to flatten and revenue to keep compounding &mdash; projected around 2030 if current growth rates hold.
       </div>
+    </div>
+  </div>
+
+  <!-- ── Depreciation watch (wq-094) ── -->
+  <div class="card" id="depreciation-watch-card">
+    <h2>Depreciation watch</h2>
+    <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.55;">
+      Quarterly hyperscaler depreciation already exceeds AI customer revenue by an order of magnitude. WSJ's 2030 model — using each company's own capex guidance and useful-life policy — projects depreciation eats a material share of net income at the largest hyperscalers if revenue does not compound through.
+    </div>
+    <div id="depreciation-watch-body">Loading depreciation data…</div>
+    <div class="bridge bridge-amber" style="margin-top:16px;">
+      <strong>Why this sits below the Three-Stage Lag.</strong> The lag chart is annual aggregate flow; this block is quarterly per-name detail and a forward 2030 framing. Q1 2026 hyperscaler depreciation alone is approximately the same magnitude as the entire 2025 AI customer revenue line — that is the timing problem the lag chart compresses into yearly bars. Source: <code>data/depreciation.json</code>.
     </div>
   </div>
 
@@ -810,8 +826,12 @@ const LAG_RAW = [
   { year:'2023',  nvidia: 48, totalCapex:160, nvDep:  0, totalDep:   0, revenue:  1  },
   { year:'2024',  nvidia:115, totalCapex:280, nvDep: 12, totalDep:  22, revenue:  4  },
   { year:'2025',  nvidia:194, totalCapex:380, nvDep: 41, totalDep:  74, revenue: 17  },
-  { year:'2026E', nvidia:311, totalCapex:550, nvDep: 89, totalDep: 160, revenue: 64  },
-  { year:'2027E', nvidia:400, totalCapex:700, nvDep:167, totalDep: 300, revenue:115  },
+  // wq-094 — 2026E refreshed from $550B to $850B (4-hyperscaler aggregate
+  // capex guidance, MAG3 + Meta, post Q1 2026 earnings cycle); 2027E refreshed
+  // from $700B to $1.1T per same source. Out-years (2028E–2030E) left at the
+  // wq-087 trajectory pending a separate forward-projection refresh.
+  { year:'2026E', nvidia:311, totalCapex:850, nvDep: 89, totalDep: 160, revenue: 64  },
+  { year:'2027E', nvidia:400, totalCapex:1100, nvDep:167, totalDep: 300, revenue:115  },
   { year:'2028E', nvidia:470, totalCapex:750, nvDep:255, totalDep: 460, revenue:200  },
   { year:'2029E', nvidia:500, totalCapex:750, nvDep:344, totalDep: 620, revenue:300  },
   { year:'2030E', nvidia:480, totalCapex:700, nvDep:415, totalDep: 747, revenue:420  },
@@ -945,6 +965,58 @@ fetch('site-data.json?v=' + Date.now())
 render();
 renderLagChart();
 updateSensitivity();
+
+// ── wq-094 — Depreciation watch ───────────────────────────────────
+// Q1 2026 hyperscaler depreciation + WSJ 2030 % net income projection.
+fetch('data/depreciation.json?v=' + Date.now())
+  .then(r => r.ok ? r.json() : null)
+  .then(dep => {
+    const target = document.getElementById('depreciation-watch-body');
+    if (!target) return;
+    if (!dep || !dep.quarterly) {
+      target.innerHTML = '<div style="color:var(--text-dim);font-size:12px;">Depreciation data unavailable.</div>';
+      return;
+    }
+    const q = dep.quarterly['2026Q1'] || {};
+    const wsj = dep.wsj_2030_projection_pct_net_income || {};
+    const fmt$B = v => v == null ? '—' : '$'+(+v).toFixed(1)+'B';
+    const totalQ1 = ['msft_usd_b','googl_usd_b','amzn_usd_b','meta_usd_b']
+      .reduce((s,k) => s + (q[k] || 0), 0);
+    const annualised = totalQ1 * 4;
+    const tierPill = t => {
+      if (!t) return '';
+      const cls = String(t).startsWith('1') ? 'tier-1' : (String(t).startsWith('2') ? 'tier-2' : 'tier-3');
+      return ' <span class="tier-pill '+cls+'">'+t+'</span>';
+    };
+    const rows = [
+      { co: 'Microsoft',    q1: q.msft_usd_b,  wsj: wsj.msft },
+      { co: 'Google',       q1: q.googl_usd_b, wsj: wsj.googl },
+      { co: 'Amazon',       q1: q.amzn_usd_b,  wsj: wsj.amzn_2030_pct ?? null },
+      { co: 'Meta',         q1: q.meta_usd_b,  wsj: wsj.meta }
+    ];
+    let html = '<table class="convergence-table">';
+    html += '<tr><th>Hyperscaler</th><th class="num">Q1 2026 depreciation</th><th class="num">Annualised (×4)</th><th class="num">WSJ 2030 dep / net income</th></tr>';
+    for (const r of rows) {
+      html += '<tr><td><strong style="color:var(--text-bright);">'+r.co+'</strong></td>';
+      html += '<td class="num">'+fmt$B(r.q1)+'</td>';
+      html += '<td class="num">'+fmt$B(r.q1 != null ? r.q1 * 4 : null)+'</td>';
+      html += '<td class="num">'+(r.wsj != null ? r.wsj + '%' : '—')+'</td></tr>';
+    }
+    html += '<tr style="background:rgba(239,68,68,0.06);"><td><strong>4-hyperscaler aggregate</strong></td>';
+    html += '<td class="num"><strong>'+fmt$B(totalQ1)+'</strong></td>';
+    html += '<td class="num"><strong>'+fmt$B(annualised)+'</strong></td>';
+    html += '<td class="num" style="color:var(--text-dim);font-style:italic;">comparator: ~$17.5B/yr customer rev</td></tr>';
+    html += '</table>';
+    html += '<div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--text-dim);flex-wrap:wrap;">';
+    html += '<span><strong style="color:var(--text-bright);">Q1 2026 source:</strong> '+(q.source || '—')+tierPill(q.tier)+'</span>';
+    html += '<span><strong style="color:var(--text-bright);">2030 source:</strong> '+(wsj.source || '—')+tierPill(wsj.tier)+'</span>';
+    html += '</div>';
+    target.innerHTML = html;
+  })
+  .catch(() => {
+    const target = document.getElementById('depreciation-watch-body');
+    if (target) target.innerHTML = '<div style="color:var(--text-dim);font-size:12px;">Depreciation data fetch failed.</div>';
+  });
 </script>
 <script>
 document.querySelectorAll('.cite-btn').forEach(btn => {

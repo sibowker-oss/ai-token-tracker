@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-07T03:25:48Z",
+    "generatedAt": "2026-05-07T04:25:54Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -674,7 +674,7 @@
       },
       "Anthropic": {
         "tokens": 6,
-        "rev": 19.0,
+        "rev": 30.0,
         "color": "#d97706",
         "growth": "14x in 14mo",
         "consumerPct": 35,
@@ -1566,7 +1566,7 @@
           "openai",
           "anthropic"
         ],
-        "tokensNumeric": 1000000000000,
+        "tokensNumeric": 1000000000,
         "arr": "$1-2.3B",
         "arrNumeric": 1650000000,
         "valuation": null,
@@ -3864,7 +3864,7 @@
       ],
       [
         25.0,
-        19.0,
+        30.0,
         4.2,
         0.3,
         0.4,
@@ -5119,8 +5119,8 @@
       ],
       "region": "US",
       "current": {
-        "arr": 19.0,
-        "arr_date": "2026-03",
+        "arr": 30.0,
+        "arr_date": "2026-04",
         "tokens_per_day": 6,
         "growth_rate": "14x in 14mo",
         "consumer_pct": 35,
@@ -5130,7 +5130,15 @@
         "total_funding": 30,
         "latest_round": "Series G at $380B (Feb 2026)",
         "customer_count": 300000,
-        "tokens_per_day_date": "2026-05-03"
+        "tokens_per_day_date": "2026-05-03",
+        "arr_source": "Anthropic disclosure 2026-04-06",
+        "arr_external_estimate": {
+          "value_usd_b": 44,
+          "confidence": "low",
+          "as_of": "2026-04-30",
+          "source": "SemiAnalysis estimate",
+          "methodology_note": "Anthropic calculates annualised revenue as last 4 weeks of API revenue \u00d7 13 + monthly chatbot subscription revenue (single-day active subs anchor) \u00d7 12 (per The Information). Selecting a single-day anchor and 4-week-window can inflate vs steady-state. Published number on TAIL = $30B (Anthropic-disclosed); $44B carried as external estimate only."
+        }
       },
       "best_confidence": "high",
       "provenance_entry_count": 42,
@@ -5335,7 +5343,9 @@
       ],
       "region": "US",
       "current": {
-        "total_funding": 12.0
+        "total_funding": 12.0,
+        "backlog_q3_2025_usd_b": 55.6,
+        "backlog_source": "CoreWeave Form 10-Q for quarter ended 2025-09-30"
       },
       "best_confidence": "high",
       "provenance_entry_count": 5,
@@ -5636,13 +5646,24 @@
       ],
       "region": "US",
       "current": {
-        "tokens_per_day": 1000.0,
+        "tokens_per_day": 1.0,
         "providers": [
           "openai",
           "anthropic"
         ],
         "founded": 2021,
-        "confidence": "Med"
+        "confidence": "Med",
+        "tokens_per_day_basis": "editorial_estimate",
+        "tokens_per_day_methodology": "Editorial estimate: ~4.7M paid seats (MSFT Q4 FY25 earnings) \u00d7 ~50\u201370% active \u00d7 ~50\u2013200 requests/day \u00d7 ~1\u20135K tokens/req \u2192 ~0.5\u20131.5 T/day; central 1.0 T/day. Cross-check: GitHub Copilot reported as 2nd largest customer of Anthropic models (Zitron 2026-05-06). Anthropic total ~6 T/day \u2192 if GitHub is ~10\u201320% of Anthropic volume that's 0.6\u20131.2 T/day from Anthropic alone, plus residual OpenAI portion. Replaces unsourced 1000.0 T/day legacy value \u2014 wq-094 cleanup.",
+        "tokens_per_day_confidence": "low",
+        "tokens_per_day_date": "2026-05-07",
+        "paid_seats": 4700000,
+        "paid_seats_source": "MSFT Q4 FY25 earnings (cited assumptions-audit.md row 12)",
+        "anthropic_customer_rank": 2,
+        "anthropic_customer_rank_source": "Zitron 2026-05-06",
+        "compute_subsidy_relationship": true,
+        "compute_subsidy_note": "Microsoft subsidises customer compute spend on GitHub Copilot \u2014 published ARR overstates economic margin. June 2026 token-based billing transition will alter both revenue trajectory and margin disclosure. Watch Q3 2026 earnings.",
+        "june_2026_token_billing_transition": true
       },
       "best_confidence": "medium",
       "provenance_entry_count": 3,

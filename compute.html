@@ -75,12 +75,16 @@
   footer a{color:var(--accent);text-decoration:none;}
   footer a:hover{text-decoration:underline;}
 
+  /* Forward commitments grid (wq-094) */
+  .fc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+
   /* Mobile */
   @media(max-width:768px) {
     .container{padding:16px 12px;}
     .hero-grid { grid-template-columns:repeat(2,1fr); }
     .wwhbt-grid { grid-template-columns:1fr; }
     .chart-row { grid-template-columns:1fr; }
+    .fc-grid { grid-template-columns:1fr; }
     .concentration-headline .lede { font-size:16px; }
   }
 </style>
@@ -166,6 +170,17 @@
     </div>
   </div>
 
+  <!-- ── §4.3b Forward commitments (wq-094) ── -->
+  <div class="card" id="forward-commitments-card" data-section="forward-commitments">
+    <h2>Forward commitments</h2>
+    <p class="h2-sub">Multi-year contractual commitments reported <strong>gross</strong>, separately from realised compute revenue. Per the Cross-Ledger Reconciliation rule, these dollars are not rolled into the trajectory chart above — they are forward obligations that flow through over years.</p>
+    <div id="forward-commitments-body">Loading…</div>
+    <div class="methodology-callout" style="margin-top:14px;">
+      <span style="color:var(--accent);font-weight:700;">i</span>
+      <span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google $200B and Anthropic+OpenAI $718B are forward commitments to MAG3 hyperscalers — they convert into compute revenue over a 5–8 year window, not at signing. Mixing them into a quarterly trajectory would double-count: the contracted dollars already drive the realised quarterly bars over time. Source: <code>data/compute_disclosures.json:forward_commitments</code>.</span>
+    </div>
+  </div>
+
   <!-- ── §4.4 Layer-Stack Multiplier (signature visual per D4) ── -->
   <div class="card">
     <h2>The Layer-Stack Multiplier</h2>
@@ -210,6 +225,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 let computeData = null;
+let forwardCommitments = null;
 let distView = 'snapshot';
 
 const COLORS = {
@@ -263,10 +279,17 @@ function fmtPct(v, dp) {
 
 async function init() {
   try {
-    const r = await fetch('site-data.json?v=' + Date.now());
-    const d = await r.json();
+    const [r1, r2] = await Promise.all([
+      fetch('site-data.json?v=' + Date.now()),
+      fetch('data/compute_disclosures.json?v=' + Date.now())
+    ]);
+    const d = await r1.json();
     computeData = d.compute;
     if (!computeData) throw new Error('site-data.json missing :compute block');
+    if (r2.ok) {
+      const cd = await r2.json();
+      forwardCommitments = cd.forward_commitments || null;
+    }
   } catch (e) {
     document.querySelector('.container').insertAdjacentHTML('beforeend',
       '<div style="color:var(--red);text-align:center;padding:40px;">Error loading compute data: '+e.message+'</div>');
@@ -277,6 +300,7 @@ async function init() {
   renderFrontierLabCompute();
   renderDistribution();
   renderTrajectory();
+  renderForwardCommitments();
   renderLayerStack();
   renderWWHBT();
   document.getElementById('last-quarter').textContent = computeData.lastReportedQuarter;
@@ -676,6 +700,65 @@ function renderTrajectory() {
     ctx.textAlign = 'left';
     ctx.fillText(LABELS[slug] + ' ' + fmt$B(last[k]), x + 8, y + 4);
   });
+}
+
+// ─── Forward commitments (wq-094) ───
+function renderForwardCommitments() {
+  const target = document.getElementById('forward-commitments-body');
+  if (!target) return;
+  if (!forwardCommitments) {
+    target.innerHTML = '<div style="color:var(--text-dim);font-size:12px;">Forward commitments block not available.</div>';
+    return;
+  }
+  const fc = forwardCommitments;
+  const rpo = (fc.hyperscaler_backlog && fc.hyperscaler_backlog.google_rpo) || {};
+  const antGoog = (fc.lab_to_hyperscaler && fc.lab_to_hyperscaler.anthropic_google_5yr) || {};
+  const antOaiCommit = (fc.hyperscaler_backlog && fc.hyperscaler_backlog.anthropic_plus_openai_committed_to_mag3_usd_b) || null;
+  const aggTier = (fc.hyperscaler_backlog && fc.hyperscaler_backlog.tier_aggregate) || '';
+  const aggSrc = (fc.hyperscaler_backlog && fc.hyperscaler_backlog.source_aggregate) || '';
+
+  const callouts = [
+    {
+      title: 'Google RPO · Q4 25 → Q1 26 jump',
+      headline: '$' + (rpo.q4_2025_usd_b ?? '—') + 'B → $' + (rpo.q1_2026_usd_b ?? '—') + 'B',
+      delta: rpo.qoq_jump_usd_b != null ? '+$' + rpo.qoq_jump_usd_b + 'B QoQ' : '',
+      color: 'var(--accent)',
+      tier: rpo.tier || '1A',
+      detail: 'Alphabet Q1 2026 10-Q. Order book — converts to Cloud revenue across the contract life of each booking, not in Q1 26.',
+      source: rpo.source || ''
+    },
+    {
+      title: 'Anthropic ↔ Google · 5-year deal',
+      headline: '$' + (antGoog.commitment_usd_b ?? '—') + 'B / ' + (antGoog.duration_years ?? '—') + 'yr',
+      delta: antGoog.share_of_google_rpo_q1_2026_pct != null ? antGoog.share_of_google_rpo_q1_2026_pct + '% of Google Q1 26 RPO' : '',
+      color: 'var(--purple)',
+      tier: antGoog.tier || '1B',
+      detail: 'Anthropic commits ~$40B/yr of TPU compute to Google starting ' + (antGoog.commitment_period_start || '2026') + '. Funded in part by hyperscaler equity into Anthropic — circular flow that Cross-Ledger Reconciliation tracks separately from realised capex.',
+      source: antGoog.source || ''
+    },
+    {
+      title: 'Anthropic + OpenAI committed to MAG3',
+      headline: '$' + (antOaiCommit ?? '—') + 'B aggregate',
+      delta: 'Forward commitments to MSFT/GOOG/AMZN compute',
+      color: 'var(--orange)',
+      tier: aggTier,
+      detail: 'Two largest frontier labs together are committed to ~$718B of MAG3 compute spend across multi-year contracts. This is the supply-side counterpart to the Compute Ledger\'s realised quarterly bars; expect it to convert at $80–150B/yr through 2030 if contracts run as signed.',
+      source: aggSrc
+    }
+  ];
+
+  let html = '<div class="fc-grid">';
+  for (const c of callouts) {
+    html += '<div style="background:rgba(15,23,42,0.55);border:1px solid var(--card-border);border-radius:10px;padding:16px;">';
+    html += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);font-weight:700;margin-bottom:6px;">'+c.title+tierPill(c.tier)+'</div>';
+    html += '<div style="font-size:22px;font-weight:800;color:'+c.color+';line-height:1.15;">'+c.headline+'</div>';
+    if (c.delta) html += '<div style="font-size:11px;color:var(--text-bright);margin-top:4px;font-weight:600;">'+c.delta+'</div>';
+    html += '<div style="font-size:11px;color:var(--text-dim);line-height:1.55;margin-top:10px;">'+c.detail+'</div>';
+    if (c.source) html += '<div style="font-size:10px;color:var(--text-dim);opacity:0.7;margin-top:8px;font-style:italic;">'+c.source+'</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  target.innerHTML = html;
 }
 
 // ─── Layer-Stack Multiplier (signature visual per D4) ───
