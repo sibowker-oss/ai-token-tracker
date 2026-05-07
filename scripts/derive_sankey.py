@@ -268,6 +268,9 @@ def derive_provider(entity: dict, year: str, cost_structure: dict, overrides: di
     # wq-062 — capture revenue_by_channel (may be None) so derive_sankey_routing
     # can split per-provider customer_revenue across Sankey channels.
     revenue_by_channel = _fin(entity, year, "revenue_by_channel")
+    # wq-090 — capture entity_archetype so per-archetype channel + buyer-segment
+    # routing can read it. Falls back to "_default" downstream when missing.
+    entity_archetype = entity.get("entity_archetype")
 
     return {
         "slug": slug,
@@ -285,6 +288,7 @@ def derive_provider(entity: dict, year: str, cost_structure: dict, overrides: di
         "value": round(provider_total, 4),
         "override_discrepancy": override_discrepancy,
         "revenue_by_channel": revenue_by_channel,
+        "entity_archetype": entity_archetype,
     }
 
 
@@ -339,32 +343,62 @@ def aggregate_small_providers(providers: list[dict], cost_structure: dict) -> li
 # wq-062 — per-provider-per-channel routing
 # ---------------------------------------------------------------------------
 
+def _archetype_splits(channel_mapping: dict, archetype: str | None,
+                       table_key: str) -> list[dict]:
+    """Resolve api_pct_by_archetype / enterprise_pct_by_archetype splits for a
+    given archetype, falling back to `_default` when the archetype key is
+    absent. Returns the list of {channel, weight} dicts (empty list if no
+    table is configured)."""
+    table = channel_mapping.get(table_key) or {}
+    if not isinstance(table, dict):
+        return []
+    return list(table.get(archetype) or table.get("_default") or [])
+
+
 def _routing_for_provider(provider: dict, channel_mapping: dict) -> dict:
     """Compute one provider's per-channel net routing values.
 
     Returns {channel_label: value_net_to_provider}. Sums to provider's
     customer_revenue exactly (modulo float rounding).
 
-    Uses provider.revenue_by_channel when present; falls back to
-    channel_mapping["_default_for_unmapped"] when absent. Default is a flat
-    split across the configured default channels (Subs/API/AI Native).
+    wq-090 — channel routing is now per-archetype:
+      - subscription_pct uses the flat `subscription_pct` splits (always 100% Model Subs)
+      - api_pct uses `api_pct_by_archetype[entity_archetype]` (frontier_lab → ~95/5
+        Model API/Hyperscalers; ai_native → 90/10; enterprise_saas → 50/50; etc.)
+      - enterprise_pct uses `enterprise_pct_by_archetype[entity_archetype]`
+      - Falls back to `_default` table entries when the archetype is missing.
+
+    Backward compat: if the cost-structure file still has the wq-062 flat
+    `api_pct` / `enterprise_pct` lists (no `_by_archetype`), the engine reuses
+    them as if they were the `_default` row of the archetype table.
     """
     cr = provider.get("customer_revenue") or 0
     rbc = provider.get("revenue_by_channel")
+    archetype = provider.get("entity_archetype")
     routing = {}
 
     if rbc:
-        # Walk entity-key → channel-splits per channel_mapping
-        for entity_key, channel_splits in channel_mapping.items():
-            if entity_key.startswith("_"):
-                continue
-            entity_pct = (rbc.get(entity_key, 0) or 0) / 100.0
-            entity_value = cr * entity_pct
-            for split in channel_splits:
-                ch = split["channel"]
-                weight = split["weight"]
-                value = entity_value * weight
-                routing[ch] = routing.get(ch, 0) + value
+        # Subscription — flat (consumer-app channel mix for all archetypes)
+        sub_splits = channel_mapping.get("subscription_pct") or []
+        sub_pct = (rbc.get("subscription_pct", 0) or 0) / 100.0
+        for split in sub_splits:
+            routing[split["channel"]] = routing.get(split["channel"], 0) + cr * sub_pct * split["weight"]
+
+        # API — per-archetype (with backward-compat fallback to flat api_pct)
+        api_splits = _archetype_splits(channel_mapping, archetype, "api_pct_by_archetype")
+        if not api_splits:
+            api_splits = channel_mapping.get("api_pct") or []
+        api_pct = (rbc.get("api_pct", 0) or 0) / 100.0
+        for split in api_splits:
+            routing[split["channel"]] = routing.get(split["channel"], 0) + cr * api_pct * split["weight"]
+
+        # Enterprise — per-archetype (with backward-compat fallback to flat enterprise_pct)
+        ent_splits = _archetype_splits(channel_mapping, archetype, "enterprise_pct_by_archetype")
+        if not ent_splits:
+            ent_splits = channel_mapping.get("enterprise_pct") or []
+        ent_pct = (rbc.get("enterprise_pct", 0) or 0) / 100.0
+        for split in ent_splits:
+            routing[split["channel"]] = routing.get(split["channel"], 0) + cr * ent_pct * split["weight"]
     else:
         # Default split — apply percentages to cr directly
         defaults = channel_mapping.get("_default_for_unmapped") or {}
@@ -374,6 +408,296 @@ def _routing_for_provider(provider: dict, channel_mapping: dict) -> dict:
             routing[ch] = routing.get(ch, 0) + cr * pct
 
     return {ch: round(v, 4) for ch, v in routing.items() if v > 0}
+
+
+def derive_buyer_channel_matrix(providers_pre_aggregation: list[dict],
+                                 channel_mapping: dict,
+                                 segment_comp_by_archetype: dict,
+                                 channel_margins: dict) -> dict:
+    """wq-090 — per-(buyer, channel) gross-value matrix.
+
+    The Revenue Ledger Sankey renderer used to compute buyer→channel ribbon
+    values via flat proportional rescale (each buyer flows to each channel
+    pro-rata to channel size). That mis-attributed AI-Native cohort spend to
+    Model Subs, since AI Natives are companies with thin headcount that hit
+    APIs — not consumers paying for Subs.
+
+    The per-archetype engine math already determines which channels each
+    buyer's dollars flow through:
+
+      - Consumer dollars = sum of provider × subscription_pct           → Model Subs (always)
+      - AI Natives dollars = sum of provider × api_pct × seg.api_to_ai_natives
+        → routed via api_pct_by_archetype (Model API + Hyperscalers)
+      - Ents & Govs dollars = api_pct × seg.api_to_ents_govs (same channels)
+        + enterprise_pct                              → Trad. SaaS + Hyperscalers per archetype
+
+    For rbc-less entities, _default_for_unmapped channels × _default_split
+    buyer breakdown are applied as an outer product. This matrix is then
+    surfaced on `market_aggregates.<year>.buyer_channel_matrix` so the
+    renderer can emit ribbons keyed to the actual underlying flow rather
+    than rescale them proportionally.
+
+    Returns: {buyer_label: {channel_label: gross_value}}.
+    """
+    matrix: dict[str, dict[str, float]] = {
+        "Consumer": {},
+        "AI Natives": {},
+        "Enterprises & Govs": {},
+    }
+
+    def _add(buyer, channel, value):
+        if value <= 0:
+            return
+        matrix.setdefault(buyer, {})
+        matrix[buyer][channel] = matrix[buyer].get(channel, 0.0) + value
+
+    def _gross(channel, value):
+        margin = channel_margins.get(channel, 0)
+        factor = (1.0 / (1.0 - margin)) if margin < 1 else 1.0
+        return value * factor
+
+    for p in providers_pre_aggregation:
+        cr = p.get("customer_revenue") or 0
+        if not cr:
+            continue
+        rbc = p.get("revenue_by_channel")
+        archetype = p.get("entity_archetype")
+        seg = (segment_comp_by_archetype.get(archetype)
+               or segment_comp_by_archetype.get("_default")
+               or {})
+
+        if rbc:
+            sub_pct = (rbc.get("subscription_pct", 0) or 0) / 100.0
+            api_pct = (rbc.get("api_pct", 0) or 0) / 100.0
+            ent_pct = (rbc.get("enterprise_pct", 0) or 0) / 100.0
+
+            # Subscription → Consumer (route via subscription_pct splits, gross)
+            for split in (channel_mapping.get("subscription_pct") or []):
+                v = _gross(split["channel"], cr * sub_pct * split["weight"])
+                _add("Consumer", split["channel"], v * seg.get("subscription_to_consumer", 1.0))
+
+            # API → AI Natives + Ents & Govs (route via api_pct_by_archetype splits)
+            api_splits = _archetype_splits(channel_mapping, archetype, "api_pct_by_archetype") \
+                or (channel_mapping.get("api_pct") or [])
+            for split in api_splits:
+                v = _gross(split["channel"], cr * api_pct * split["weight"])
+                _add("AI Natives", split["channel"], v * seg.get("api_to_ai_natives", 0.4))
+                _add("Enterprises & Govs", split["channel"], v * seg.get("api_to_ents_govs", 0.6))
+
+            # Enterprise → Ents & Govs (route via enterprise_pct_by_archetype splits)
+            ent_splits = _archetype_splits(channel_mapping, archetype, "enterprise_pct_by_archetype") \
+                or (channel_mapping.get("enterprise_pct") or [])
+            for split in ent_splits:
+                v = _gross(split["channel"], cr * ent_pct * split["weight"])
+                _add("Enterprises & Govs", split["channel"], v * seg.get("enterprise_to_ents_govs", 1.0))
+        else:
+            # No rbc — channel-aware buyer attribution. Each channel slice
+            # routes only to the buyers that realistically use that channel:
+            # Subs is consumer-only; Trad. SaaS is ents-govs-only; APIs and
+            # Hyperscalers are split between AI Natives and Ents & Govs;
+            # AI Native Apps mixes all three. Avoids the rbc-less leakage of
+            # AI Natives → Model Subs that the prior flat _default_split
+            # produced.
+            defaults = channel_mapping.get("_default_for_unmapped") or {}
+            for ch, pct in defaults.items():
+                if ch.startswith("_"):
+                    continue
+                grossed = _gross(ch, cr * pct)
+                if ch == "Model Subs":
+                    _add("Consumer", ch, grossed)
+                elif ch == "Trad. SaaS":
+                    _add("Enterprises & Govs", ch, grossed)
+                elif ch == "Model API":
+                    _add("AI Natives", ch, grossed * 0.50)
+                    _add("Enterprises & Govs", ch, grossed * 0.50)
+                elif ch == "Hyperscalers":
+                    _add("AI Natives", ch, grossed * 0.30)
+                    _add("Enterprises & Govs", ch, grossed * 0.70)
+                elif ch == "AI Native Apps":
+                    _add("Consumer", ch, grossed * 0.40)
+                    _add("AI Natives", ch, grossed * 0.30)
+                    _add("Enterprises & Govs", ch, grossed * 0.30)
+                else:
+                    # Unknown channel — fall back to even split so we don't drop value
+                    _add("Consumer", ch, grossed * 0.34)
+                    _add("AI Natives", ch, grossed * 0.33)
+                    _add("Enterprises & Govs", ch, grossed * 0.33)
+
+    # Round to 4dp and drop near-zero entries so the renderer doesn't draw 0-value ribbons
+    out: dict[str, dict[str, float]] = {}
+    for buyer, ch_map in matrix.items():
+        ch_round = {ch: round(v, 4) for ch, v in ch_map.items() if v > 0.005}
+        if ch_round:
+            out[buyer] = ch_round
+    return out
+
+
+def derive_buyer_provider_routing(raw_providers: list[dict],
+                                   buyer_segments_gross: dict,
+                                   buyer_channel_matrix: dict,
+                                   channel_margins: dict,
+                                   buyer_provider_split: dict) -> dict:
+    """wq-090 — per-buyer-per-provider net-revenue allocation.
+
+    Inputs:
+      raw_providers           — engine providers (slug + customer_revenue)
+      buyer_segments_gross    — {buyer: gross_total} from derive_buyer_segments
+      buyer_channel_matrix    — {buyer: {channel: gross}} from derive_buyer_channel_matrix
+      channel_margins         — {channel: margin_pct}
+      buyer_provider_split    — editorial table from cost_structure (e.g. AI Natives 45/45/10)
+
+    Output:
+      {buyer_label: {provider_slug: net_value}}
+
+    Conservation:
+      sum_buyers  buyer_provider_routing[B][P] == provider.customer_revenue (within rounding)
+      sum_provs   buyer_provider_routing[B][P] == buyer_net (sum_C matrix[B][C] × (1-margin[C]))
+
+    Logic:
+      1. Compute each buyer's NET total (gross minus channel margins per the matrix).
+      2. Compute Consumer split engine-side from per-provider subscription_pct rollup
+         (Consumer money flows entirely from subscription_pct; allocate per provider).
+      3. Apply editorial split to AI Natives (or other named buyers).
+      4. Back-solve Ents & Govs as the residual: Ents = provider.cr − Consumer × c_split − AI Natives × an_split.
+         Floor at 0 to avoid negatives if editorial split overshoots.
+    """
+    # Per-buyer NET totals (post channel margin)
+    buyer_net = {}
+    for buyer, ch_map in (buyer_channel_matrix or {}).items():
+        net = 0.0
+        for ch, gross in (ch_map or {}).items():
+            margin = channel_margins.get(ch, 0)
+            net += gross * (1 - margin)
+        buyer_net[buyer] = round(net, 4)
+
+    # Provider customer_revenue totals (net)
+    prov_cr = {p["slug"]: (p.get("customer_revenue") or 0) for p in raw_providers}
+    if not prov_cr:
+        return {}
+
+    # Step 2 — Consumer split derives from per-provider subscription_pct rollup
+    # (Consumer money is the Model Subs channel by construction)
+    consumer_total_net = buyer_net.get("Consumer", 0)
+    consumer_to_provider = {}
+    for p in raw_providers:
+        slug = p["slug"]
+        cr = p.get("customer_revenue") or 0
+        rbc = p.get("revenue_by_channel")
+        if rbc:
+            sub_pct = (rbc.get("subscription_pct", 0) or 0) / 100.0
+            consumer_to_provider[slug] = cr * sub_pct
+        else:
+            # rbc-less: use _default_for_unmapped Model Subs share — engine routing already
+            # captures this via routing[provider][Model Subs]
+            consumer_to_provider[slug] = 0.0
+    # Top up rbc-less providers with Model Subs share of total cr (mirrors _default_for_unmapped)
+    for p in raw_providers:
+        slug = p["slug"]
+        if consumer_to_provider.get(slug, 0) == 0:
+            cr = p.get("customer_revenue") or 0
+            # Default Subs share is 0.4 per _default_for_unmapped. Documented in cost_structure.
+            consumer_to_provider[slug] = cr * 0.4
+    # Normalise so Consumer total matches buyer_net["Consumer"]
+    c_sum = sum(consumer_to_provider.values())
+    if c_sum > 0 and consumer_total_net > 0:
+        scale = consumer_total_net / c_sum
+        for slug in consumer_to_provider:
+            consumer_to_provider[slug] *= scale
+
+    # Step 3 — AI Natives split per editorial table
+    ai_natives_total_net = buyer_net.get("AI Natives", 0)
+    an_split = (buyer_provider_split or {}).get("AI Natives") or {}
+    an_to_provider = {}
+    for slug, cr in prov_cr.items():
+        weight = an_split.get(slug, 0)
+        an_to_provider[slug] = ai_natives_total_net * weight
+
+    # Step 4 — Ents & Govs back-solves to satisfy each provider's CR
+    ents_to_provider = {}
+    for slug, cr in prov_cr.items():
+        residual = cr - consumer_to_provider.get(slug, 0) - an_to_provider.get(slug, 0)
+        ents_to_provider[slug] = max(0.0, residual)
+
+    return {
+        "Consumer": {slug: round(v, 4) for slug, v in consumer_to_provider.items() if v > 0.005},
+        "AI Natives": {slug: round(v, 4) for slug, v in an_to_provider.items() if v > 0.005},
+        "Enterprises & Govs": {slug: round(v, 4) for slug, v in ents_to_provider.items() if v > 0.005},
+    }
+
+
+def derive_buyer_segments(providers_pre_aggregation: list[dict],
+                           channel_mapping: dict,
+                           segment_comp_by_archetype: dict,
+                           channel_margins: dict) -> dict:
+    """wq-090 — per-archetype buyer-segment routing in GROSS terms.
+
+    For each provider, the customer-paid amount through each channel is the
+    chPass × 1/(1-margin) for that channel. We then split that gross amount
+    into Consumer / AI Natives / Enterprises & Govs per the archetype's
+    segment_composition row:
+      - subscription_pct  → 100% Consumer
+      - api_pct           → split api_to_ai_natives / api_to_ents_govs
+      - enterprise_pct    → 100% Enterprises & Govs
+
+    Conservation: sum of returned values ≈ sum(channels gross) (the buyer↔
+    channel identity the renderer relies on).
+    """
+    consumer = ai_natives = ents_govs = 0.0
+    for p in providers_pre_aggregation:
+        cr = p.get("customer_revenue") or 0
+        if not cr:
+            continue
+        rbc = p.get("revenue_by_channel")
+        archetype = p.get("entity_archetype")
+        seg = (segment_comp_by_archetype.get(archetype)
+               or segment_comp_by_archetype.get("_default")
+               or {})
+
+        if rbc:
+            sub_pct = (rbc.get("subscription_pct", 0) or 0) / 100.0
+            api_pct = (rbc.get("api_pct", 0) or 0) / 100.0
+            ent_pct = (rbc.get("enterprise_pct", 0) or 0) / 100.0
+
+            sub_splits = channel_mapping.get("subscription_pct") or []
+            api_splits = _archetype_splits(channel_mapping, archetype, "api_pct_by_archetype") \
+                or (channel_mapping.get("api_pct") or [])
+            ent_splits = _archetype_splits(channel_mapping, archetype, "enterprise_pct_by_archetype") \
+                or (channel_mapping.get("enterprise_pct") or [])
+
+            def gross(splits, pct):
+                total = 0.0
+                for s in splits:
+                    margin = channel_margins.get(s["channel"], 0)
+                    factor = (1.0 / (1.0 - margin)) if margin < 1 else 1.0
+                    total += cr * pct * s["weight"] * factor
+                return total
+
+            consumer += gross(sub_splits, sub_pct) * (seg.get("subscription_to_consumer", 1.0))
+            api_grossed = gross(api_splits, api_pct)
+            ai_natives += api_grossed * (seg.get("api_to_ai_natives", 0.4))
+            ents_govs += api_grossed * (seg.get("api_to_ents_govs", 0.6))
+            ents_govs += gross(ent_splits, ent_pct) * (seg.get("enterprise_to_ents_govs", 1.0))
+        else:
+            # No rbc — use _default_for_unmapped channel split, then default segment split
+            defaults = channel_mapping.get("_default_for_unmapped") or {}
+            grossed = 0.0
+            for ch, pct in defaults.items():
+                if ch.startswith("_"):
+                    continue
+                margin = channel_margins.get(ch, 0)
+                factor = (1.0 / (1.0 - margin)) if margin < 1 else 1.0
+                grossed += cr * pct * factor
+            ds = segment_comp_by_archetype.get("_default_split") \
+                or {"consumer": 0.4, "ai_natives": 0.2, "ents_govs": 0.4}
+            consumer += grossed * ds.get("consumer", 0.4)
+            ai_natives += grossed * ds.get("ai_natives", 0.2)
+            ents_govs += grossed * ds.get("ents_govs", 0.4)
+
+    return {
+        "Consumer": round(consumer, 4),
+        "AI Natives": round(ai_natives, 4),
+        "Enterprises & Govs": round(ents_govs, 4),
+    }
 
 
 def derive_sankey_routing(providers_visible: list[dict],
@@ -554,6 +878,27 @@ def derive_sankey(entities: dict, cost_structure_full: dict, year: str,
         channel_mapping, channel_margins, preserve_channels,
     )
 
+    # wq-090 — per-archetype buyer-segment routing (Consumer / AI Natives /
+    # Enterprises & Govs). Emits gross totals so the renderer's buyer column
+    # ties to channels-gross by construction.
+    seg_comp_by_archetype = (
+        (cs_year.get("market_aggregates_estimation") or {})
+        .get("segment_composition_by_archetype") or {}
+    )
+    buyer_segments_gross = derive_buyer_segments(
+        raw_providers, channel_mapping, seg_comp_by_archetype, channel_margins,
+    )
+    buyer_channel_matrix = derive_buyer_channel_matrix(
+        raw_providers, channel_mapping, seg_comp_by_archetype, channel_margins,
+    )
+
+    # wq-090 — per-(buyer, provider) net allocation per the editorial split
+    buyer_provider_split = (channel_mapping.get("buyer_provider_split") or {})
+    buyer_provider_routing = derive_buyer_provider_routing(
+        raw_providers, buyer_segments_gross, buyer_channel_matrix,
+        channel_margins, buyer_provider_split,
+    )
+
     return {
         "providers": aggregated_providers,
         "providers_pre_aggregation": raw_providers,
@@ -565,6 +910,9 @@ def derive_sankey(entities: dict, cost_structure_full: dict, year: str,
         "fallback_log": fallback_log,
         "routing": routing,
         "channels_grossed": channels_grossed,
+        "buyer_segments_gross": buyer_segments_gross,
+        "buyer_channel_matrix": buyer_channel_matrix,
+        "buyer_provider_routing": buyer_provider_routing,
     }
 
 
@@ -834,6 +1182,12 @@ def apply_market_aggregates(entities: dict, sankey: dict, year: str) -> dict:
     # wq-062 — per-provider-per-channel routing + grossed-up channels
     year_block["routing"] = sankey.get("routing") or {}
     year_block["channels_grossed"] = sankey.get("channels_grossed") or []
+    # wq-090 — per-archetype buyer-segment routing (gross terms)
+    year_block["buyer_segments_gross"] = sankey.get("buyer_segments_gross") or {}
+    # wq-090 — per-(buyer, channel) gross-value matrix for the renderer
+    year_block["buyer_channel_matrix"] = sankey.get("buyer_channel_matrix") or {}
+    # wq-090 — per-(buyer, provider) net-revenue allocation
+    year_block["buyer_provider_routing"] = sankey.get("buyer_provider_routing") or {}
     # wq-063 — buyer-gross customer total = sum(channels_grossed.value).
     # Channels are grossed up so chPass = sum(provider routing per channel),
     # and channel margins flow direct to cashflow (kept by Hyperscaler/SaaS

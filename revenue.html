@@ -141,9 +141,14 @@
       <span style="color:#f59e0b;font-weight:700;font-size:13px;margin-top:-1px;">?</span>
       <span><strong style="color:#f1f5f9;">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers &mdash; Hyperscalers clip ~20%, Trad. SaaS ~60%. That retained margin flows directly to Generated Cashflow (bottom right), bypassing Model Providers entirely. So each column is smaller than the one before it &mdash; the drop <em>is</em> the channel margin.</span>
     </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:8px;font-size:11px;color:var(--text-dim);line-height:1.6;">
+      <span style="color:#8b5cf6;font-weight:700;font-size:13px;margin-top:-1px;">i</span>
+      <span><strong style="color:#f1f5f9;">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~95% of API revenue direct (5% via hyperscaler resale); AI Natives ~90% direct; Enterprise SaaS ~50/50. The Who Pays column splits AI buyers into <em>AI Natives</em> (heavy API consumers like Cursor / Glean / Perplexity) and <em>Enterprises &amp; Govs</em> (Fortune 500, regulated, sovereign). See <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology &sect; entity archetype taxonomy</a>.</span>
+    </div>
     <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
       <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
     </div>
+    <div id="buyer-provider-panel" style="margin-top:12px;padding:14px 16px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:11px;color:var(--text-dim);"></div>
   </div>
 
   <!-- What Would Have to Be True -->
@@ -204,7 +209,10 @@ let sankeyData = null, activeYear = '2025';
 let allNodes = [], allFlows = [], lockedNode = null, hoveredNode = null;
 
 const COLORS = {
-  'Consumer':'#f59e0b','SME':'#3b82f6','Enterprise':'#10b981','VC/Investors':'#dc2626',
+  'Consumer':'#f59e0b','AI Natives':'#8b5cf6','Enterprises & Govs':'#3b82f6','VC/Investors':'#dc2626',
+  // wq-090 backward-compat aliases — older data files still referencing SME/Enterprise
+  // labels resolve to the new archetype palette so partial deploys don't break colors.
+  'SME':'#8b5cf6','Enterprise':'#3b82f6',
   'Model Subs':'#f59e0b','Model API':'#3b82f6','Hyperscalers':'#06b6d4','AI Native Apps':'#10b981',
   'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
   'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
@@ -325,6 +333,71 @@ function renderYear(yr) {
 
   buildSankey(d);
   renderWWHBT(d, yr);
+  renderBuyerProviderPanel(d);
+}
+
+// ── wq-090 — buyer-provider routing panel ──
+// Surfaces the engine-derived buyer × provider net-revenue allocation alongside
+// the Sankey. The Sankey itself shows buyer → channel → provider as separate
+// ribbon segments (which fan out at the channel band), so the per-buyer
+// provider preference is editorial information that needs an explicit table.
+function renderBuyerProviderPanel(d) {
+  const el = document.getElementById('buyer-provider-panel');
+  if (!el) return;
+  const bp = d.buyerProviderRouting;
+  if (!bp || !Object.keys(bp).length) { el.innerHTML = ''; return; }
+
+  // Aggregate small-frontier-lab providers under "Other Model Providers" so the
+  // table mirrors the visible Sankey provider column. Keys to surface explicitly:
+  // openai / anthropic / google / iaas; everything else collapses into Other.
+  const NAMED = { openai: 'OpenAI', anthropic: 'Anthropic', google: 'Google/Gemini', iaas: 'IaaS/Open' };
+  const ORDER = ['openai', 'anthropic', 'google', 'iaas', '_other'];
+  function aggregate(row) {
+    const out = { openai: 0, anthropic: 0, google: 0, iaas: 0, _other: 0 };
+    Object.entries(row || {}).forEach(([slug, v]) => {
+      if (slug in NAMED) out[slug] += v;
+      else out._other += v;
+    });
+    return out;
+  }
+
+  const buyers = ['Consumer', 'AI Natives', 'Enterprises & Govs'];
+  const rows = buyers.map(b => ({ buyer: b, agg: aggregate(bp[b] || {}) }));
+  // Drop near-zero columns
+  const colTotals = ORDER.reduce((acc, k) => {
+    acc[k] = rows.reduce((s, r) => s + (r.agg[k] || 0), 0);
+    return acc;
+  }, {});
+  const visibleCols = ORDER.filter(k => colTotals[k] > 0.01);
+  const COLOR = { 'Consumer':'#f59e0b', 'AI Natives':'#8b5cf6', 'Enterprises & Govs':'#3b82f6' };
+
+  let html = '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">';
+  html += '<strong style="color:#f1f5f9;font-size:12px;">Where each buyer\'s money lands (net to providers)</strong>';
+  html += '<span style="font-size:10px;color:var(--text-dim);opacity:0.7;">wq-090 editorial — see <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology</a></span>';
+  html += '</div>';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+  html += '<thead><tr><th style="text-align:left;padding:4px 8px;font-weight:600;color:#94a3b8;">Buyer</th>';
+  visibleCols.forEach(k => {
+    const label = k === '_other' ? 'Other Model Providers' : NAMED[k];
+    html += `<th style="text-align:right;padding:4px 8px;font-weight:600;color:#94a3b8;">${label}</th>`;
+  });
+  html += '<th style="text-align:right;padding:4px 8px;font-weight:600;color:#94a3b8;">Total (net)</th></tr></thead>';
+  html += '<tbody>';
+  rows.forEach(r => {
+    const total = visibleCols.reduce((s, k) => s + (r.agg[k] || 0), 0);
+    const c = COLOR[r.buyer] || '#94a3b8';
+    html += `<tr><td style="padding:6px 8px;border-top:1px solid rgba(148,163,184,0.1);"><span style="display:inline-block;width:8px;height:8px;background:${c};border-radius:2px;margin-right:6px;vertical-align:middle;"></span>${r.buyer}</td>`;
+    visibleCols.forEach(k => {
+      const v = r.agg[k] || 0;
+      const pct = total > 0 ? (v / total * 100).toFixed(0) + '%' : '—';
+      html += `<td style="text-align:right;padding:6px 8px;border-top:1px solid rgba(148,163,184,0.1);font-variant-numeric:tabular-nums;">$${v.toFixed(2)}B <span style="opacity:0.5;font-size:10px;">${pct}</span></td>`;
+    });
+    html += `<td style="text-align:right;padding:6px 8px;border-top:1px solid rgba(148,163,184,0.1);font-weight:600;font-variant-numeric:tabular-nums;color:#cbd5e1;">$${total.toFixed(2)}B</td>`;
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  html += '<p style="margin:8px 0 0;font-size:10px;color:var(--text-dim);opacity:0.7;line-height:1.5;">AI Natives split (45/45/10 to OpenAI / Anthropic / Google) is editorial per <code>data/sankey_cost_structure.json:channel_mapping.buyer_provider_split</code>. Consumer split is engine-derived from per-provider <code>subscription_pct</code> rollup; Enterprises &amp; Govs back-solves to satisfy each provider\'s <code>customer_revenue</code>. Net basis — channel margins kept by Hyperscaler / SaaS resellers flow to Generated Cashflow, not providers.</p>';
+  el.innerHTML = html;
 }
 
 // ── WWHBT (What Would Have to Be True) ──
@@ -454,19 +527,45 @@ function buildSankey(d) {
   const flowDefs = [];
 
   // Buyers -> Channels
+  // wq-090: prefer engine-derived `buyerChannelMatrix` (per-archetype routing)
+  // over the legacy proportional rescale. The matrix gives gross flow values
+  // for every (buyer, channel) pair, matching how the underlying
+  // subscription_pct / api_pct / enterprise_pct slices actually route through
+  // the cost-structure tables. Falls back to proportional when the matrix is
+  // absent (older data files / projection years that pre-date wq-090).
   const custBuyers = allNodes.filter(n=>n.col===0 && n.name!=='VC/Investors');
   const chNodes = allNodes.filter(n=>n.col===1);
   const adsCh = chNodes.filter(c=>c.name==='Ads');
   const nonAdsCh = chNodes.filter(c=>c.name!=='Ads');
   const nonAdsChTotal = nonAdsCh.reduce((s,n)=>s+n.value,0);
   const adsRouting = d.adsRouting || {};
+  const bcMatrix = d.buyerChannelMatrix || null;
   custBuyers.forEach(buyer => {
     const adContrib = adsRouting[buyer.name] || 0;
     const remaining = Math.max(0, buyer.value - adContrib);
     if(adContrib > 0) {
       adsCh.forEach(ch => { flowDefs.push({from:buyer.name, to:ch.name, value:adContrib, fc:0, tc:1}); });
     }
-    if(remaining > 0 && nonAdsChTotal > 0) {
+    if(remaining <= 0) return;
+
+    // wq-090 engine-derived path
+    const matrixRow = bcMatrix && bcMatrix[buyer.name];
+    if (matrixRow) {
+      // Scale matrix row to remaining (= buyer.value − adContrib) so any small
+      // engine-vs-channel rounding drift doesn't break buyer↔channel conservation.
+      const rowSum = Object.values(matrixRow).reduce((s, v) => s + (v || 0), 0);
+      if (rowSum > 0) {
+        const k = remaining / rowSum;
+        nonAdsCh.forEach(ch => {
+          const v = (matrixRow[ch.name] || 0) * k;
+          if (v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
+        });
+        return;
+      }
+    }
+
+    // Fallback: proportional rescale (legacy / projection-year behaviour)
+    if(nonAdsChTotal > 0) {
       nonAdsCh.forEach(ch => {
         const v = remaining * (ch.value / nonAdsChTotal);
         if(v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});

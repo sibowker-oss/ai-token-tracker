@@ -53,15 +53,42 @@
       "preserve_channels": ["Model Subs", "Model API", "Hyperscalers", "AI Native Apps", "IaaS & Agg.", "Trad. SaaS"]
     },
     "channel_mapping": {
-      "_comment": "wq-062 §4.1 — maps entity.financials.<year>.revenue_by_channel keys to Sankey channel labels. Some entity keys split across multiple Sankey channels per editorial routing weights. Engine reads each provider's percent split, applies the mapping, and writes per-provider-per-channel routing values into market_aggregates.<year>.routing. Channel margins (Hyperscalers 0.20, Trad SaaS 0.60) gross up channel.value so chPass = sum(provider routing per channel) — margins continue to flow to the Op Cash Flow outcome.",
+      "_comment": "wq-090 §3 — per-archetype channel routing replaces the wq-062 flat 70/30 api_pct → Model API/Hyperscalers split. Each provider entity carries an `entity_archetype` field (frontier_lab / ai_native / enterprise_saas / hyperscaler / iaas / consumer_app); the engine looks up the matching weights below and applies them to the entity's revenue_by_channel slice. Falls back to `_default` when the archetype is missing or unknown — under-counting Hyperscalers is editorially safer than over-counting (the bug wq-090 corrects). Channel margins (Hyperscalers 0.20, Trad SaaS 0.60) still gross up channel.value so chPass = sum(provider routing per channel).",
       "subscription_pct": [{"channel": "Model Subs", "weight": 1.0}],
-      "api_pct": [{"channel": "Model API", "weight": 0.7}, {"channel": "Hyperscalers", "weight": 0.3}],
-      "enterprise_pct": [{"channel": "Trad. SaaS", "weight": 0.5}, {"channel": "Hyperscalers", "weight": 0.5}],
+      "api_pct_by_archetype": {
+        "frontier_lab":     [{"channel": "Model API", "weight": 0.95}, {"channel": "Hyperscalers", "weight": 0.05}],
+        "ai_native":        [{"channel": "Model API", "weight": 0.90}, {"channel": "Hyperscalers", "weight": 0.10}],
+        "enterprise_saas":  [{"channel": "Model API", "weight": 0.50}, {"channel": "Hyperscalers", "weight": 0.50}],
+        "consumer_app":     [{"channel": "Model API", "weight": 1.00}],
+        "iaas":             [{"channel": "Model API", "weight": 1.00}],
+        "_default":         [{"channel": "Model API", "weight": 0.85}, {"channel": "Hyperscalers", "weight": 0.15}]
+      },
+      "enterprise_pct_by_archetype": {
+        "frontier_lab":     [{"channel": "Trad. SaaS", "weight": 0.50}, {"channel": "Hyperscalers", "weight": 0.50}],
+        "ai_native":        [{"channel": "Trad. SaaS", "weight": 0.80}, {"channel": "Hyperscalers", "weight": 0.20}],
+        "enterprise_saas":  [{"channel": "Trad. SaaS", "weight": 0.40}, {"channel": "Hyperscalers", "weight": 0.60}],
+        "_default":         [{"channel": "Trad. SaaS", "weight": 0.50}, {"channel": "Hyperscalers", "weight": 0.50}]
+      },
       "_default_for_unmapped": {"Model Subs": 0.4, "Model API": 0.4, "AI Native Apps": 0.2},
+      "buyer_provider_split": {
+        "_doc": "wq-090 editorial — per-buyer-segment provider preference (net basis). AI-Native cohort customers (Cursor / Glean / Perplexity / Harvey / etc.) consume frontier APIs roughly evenly between OpenAI and Anthropic with a thin Gemini slice; Other Model Providers (xAI, Mistral, DeepSeek, MiniMax, Moonshot) and IaaS/Open get effectively zero AI-Native spend (their token customers skew enterprise / sovereign / hobbyist). Consumer split is engine-derived from each provider's subscription_pct rollup; Ents & Govs back-solves to satisfy each provider's customer_revenue total. Used by the engine to emit a buyer_provider_routing matrix that the renderer can surface on /revenue.html.",
+        "AI Natives":         {"openai": 0.45, "anthropic": 0.45, "google": 0.10, "_other_model_providers": 0.00, "iaas": 0.00},
+        "_provenance": {
+          "AI Natives": {"tier": "2A", "src": "Editorial — cohort AI-native scale-ups consume OpenAI and Anthropic APIs roughly evenly (Cursor/Codex split, Claude Code traction, Anthropic enterprise share); Gemini ~10% per OpenRouter signals + AI Ledger source scan 2026-04-09. Other / IaaS held at 0% — AI-natives use them at the margin only."}
+        }
+      },
       "_provenance": {
-        "subscription_pct": {"tier": "1B", "src": "Subscription revenue routes 100% to Model Subs"},
-        "api_pct": {"tier": "3C", "src": "70/30 split between direct API and hyperscaler resale (Azure OpenAI, AWS Bedrock, etc.) — editorial estimate"},
-        "enterprise_pct": {"tier": "3C", "src": "50/50 split between Trad SaaS bundles and hyperscaler-routed enterprise contracts — editorial estimate"},
+        "subscription_pct": {"tier": "1B", "src": "Subscription revenue routes 100% to Model Subs (consumer-app channel mix)"},
+        "api_pct_by_archetype.frontier_lab": {"tier": "2A", "src": "Frontier labs (OpenAI, Anthropic, etc.) sell ~95% direct API to AI-native customers and ~5% via Bedrock/Azure OpenAI/Vertex — frontier-lab API revenue is heavily direct because customers want the latest models without resale lag."},
+        "api_pct_by_archetype.ai_native": {"tier": "2A", "src": "AI-native scale-ups (Cursor, Glean, Harvey, Perplexity, etc.) consume frontier-lab APIs ~90% direct and ~10% via hyperscaler resale; cost and latency favour direct over resale for the AI-native cohort."},
+        "api_pct_by_archetype.enterprise_saas": {"tier": "2A", "src": "Enterprise SaaS layering AI features (Salesforce/ServiceNow/Adobe/etc.) routes API consumption ~50% via hyperscaler resale (Azure OpenAI, Bedrock) for compliance/procurement reasons."},
+        "api_pct_by_archetype.consumer_app": {"tier": "3C", "src": "Consumer apps don't buy through hyperscalers; 100% routes to direct API."},
+        "api_pct_by_archetype.iaas": {"tier": "3C", "src": "IaaS aggregators are sellers of token APIs themselves; their api_pct routes 100% to Model API rather than hyperscaler resale."},
+        "api_pct_by_archetype._default": {"tier": "3C", "src": "Default for un-tagged entities — skews to direct (85%) over hyperscaler (15%) so the channel under-counts rather than over-counts (per wq-090 edge-case rule)."},
+        "enterprise_pct_by_archetype.frontier_lab": {"tier": "2A", "src": "Frontier-lab enterprise contracts (ChatGPT Enterprise, Claude for Enterprise) route ~50% via hyperscaler partners (Azure OpenAI Service for OpenAI; AWS Bedrock for Anthropic) for procurement reasons. Direct enterprise contracts are the rest."},
+        "enterprise_pct_by_archetype.ai_native": {"tier": "2A", "src": "AI-native scale-ups' enterprise tier routes ~20% via hyperscaler — most enterprise contracts at AI-native cos are direct because the SaaS app, not the underlying compute, is what the buyer is acquiring."},
+        "enterprise_pct_by_archetype.enterprise_saas": {"tier": "2A", "src": "Enterprise SaaS enterprise SKUs route ~60% via hyperscaler — incumbents lean on Azure / Bedrock for AI feature delivery, with the remainder coming through direct SaaS GTM."},
+        "enterprise_pct_by_archetype._default": {"tier": "3C", "src": "Default 50/50 — symmetric prior absent archetype information. Held conservative to avoid skewing Hyperscalers over- or under-counted for un-tagged entities."},
         "_default_for_unmapped": {"tier": "3C", "src": "Default split for providers without revenue_by_channel populated. Skews to direct channels (Subs+API+AI Native) for new providers without enterprise/hyperscaler partnerships."}
       }
     },
@@ -120,15 +147,24 @@
         "tier": "3C",
         "src": "Editorial classification per AI Ledger structure; sovereign list is short and growing — amend as new sovereign AI funds appear."
       },
-      "segment_composition": {
-        "_doc": "Editorial mapping from per-provider revenue_by_channel into Consumer/SME/Enterprise total buckets. subscription_pct → consumer; api_pct splits 40/60 SME/Enterprise; enterprise_pct → enterprise. When entity has no rbc, falls back to channel_mapping._default_for_unmapped from above + segment_default_split.",
-        "subscription_to_consumer": 1.0,
-        "api_to_sme": 0.4,
-        "api_to_enterprise": 0.6,
-        "enterprise_to_enterprise": 1.0,
-        "_default_split": {"consumer": 0.4, "sme": 0.16, "enterprise": 0.44},
-        "tier": "3C",
-        "src": "Editorial split. Subscription is consumer-dominated (ChatGPT Plus, Claude Pro). API is mostly enterprise integrations + SME developer accounts. Enterprise contracts route entirely to enterprise. Default split derived from channel_mapping defaults applied to segment mapping."
+      "segment_composition_by_archetype": {
+        "_doc": "wq-090 — per-archetype mapping from revenue_by_channel slices to the new Who-Pays buyer segments (Consumer / AI Natives / Enterprises & Govs). Replaces the wq-067 flat api_to_sme/api_to_enterprise split, which inflated SME by treating AI-native customers as if they were small businesses. subscription_pct routes 100% to Consumer for every archetype (ChatGPT Plus, Claude Pro, etc. are consumer-side). api_pct splits per archetype: frontier_lab and ai_native are AI-native-heavy; enterprise_saas is ents-govs-heavy. enterprise_pct routes 100% to Enterprises & Govs for all archetypes (enterprise contracts by definition).",
+        "frontier_lab":      {"subscription_to_consumer": 1.0, "api_to_ai_natives": 0.70, "api_to_ents_govs": 0.30, "enterprise_to_ents_govs": 1.0},
+        "ai_native":         {"subscription_to_consumer": 1.0, "api_to_ai_natives": 0.30, "api_to_ents_govs": 0.70, "enterprise_to_ents_govs": 1.0},
+        "enterprise_saas":   {"subscription_to_consumer": 1.0, "api_to_ai_natives": 0.00, "api_to_ents_govs": 1.00, "enterprise_to_ents_govs": 1.0},
+        "consumer_app":      {"subscription_to_consumer": 1.0, "api_to_ai_natives": 0.50, "api_to_ents_govs": 0.50, "enterprise_to_ents_govs": 1.0},
+        "iaas":              {"subscription_to_consumer": 1.0, "api_to_ai_natives": 0.50, "api_to_ents_govs": 0.50, "enterprise_to_ents_govs": 1.0},
+        "_default":          {"subscription_to_consumer": 1.0, "api_to_ai_natives": 0.40, "api_to_ents_govs": 0.60, "enterprise_to_ents_govs": 1.0},
+        "_default_split":    {"consumer": 0.40, "ai_natives": 0.20, "ents_govs": 0.40},
+        "_provenance": {
+          "frontier_lab":     {"tier": "2A", "src": "Frontier-lab API revenue is heavily AI-native (~70%) — Cursor / Perplexity / Glean / Harvey etc. consume the bulk of OpenAI/Anthropic API. Remaining ~30% is enterprise integrations routed via direct API."},
+          "ai_native":        {"tier": "2A", "src": "AI-native cos selling APIs themselves (Cohere on app side, Mistral) skew to ents-govs ~70% because their API customers are enterprise integrators, not other AI-natives."},
+          "enterprise_saas":  {"tier": "2A", "src": "Enterprise SaaS API revenue is 100% ents-govs by definition — nobody who isn't an enterprise is paying for Salesforce / ServiceNow API access."},
+          "consumer_app":     {"tier": "3C", "src": "Pure consumer apps rarely have meaningful api_pct revenue. 50/50 default if API revenue exists at all."},
+          "iaas":             {"tier": "3C", "src": "IaaS aggregator customer mix is hard to pin without per-customer data; held at 50/50 ai-natives vs ents-govs as neutral prior."},
+          "_default":         {"tier": "3C", "src": "Untagged entities default 40/60 ai-natives/ents-govs — slight skew to ents-govs reflects the typical mix when archetype is unknown but the entity has API revenue."},
+          "_default_split":   {"tier": "3C", "src": "Default segment split when entity has no revenue_by_channel at all. Replaces wq-067 SME-bucketed split with the new buckets."}
+        }
       }
     }
   }
