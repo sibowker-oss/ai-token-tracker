@@ -35,12 +35,6 @@
   .nav-link:hover{background:#334155;}
   .nav-link.active{background:var(--accent);color:white;border-color:var(--accent);}
   .nav-link.disabled{opacity:0.4;pointer-events:none;font-style:italic;}
-  .nav-scenario{margin-left:12px;display:flex;align-items:center;gap:4px;padding:4px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid #334155;}
-  .nav-scenario label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;padding:0 6px;}
-  .scenario-btn{padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1px solid transparent;}
-  .scenario-btn:hover{color:var(--text);background:var(--card);}
-  .scenario-btn.active{background:var(--accent);color:white;}
-  .scenario-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .nav-logo{margin-left:auto;display:flex;align-items:center;gap:8px;text-decoration:none;color:#cbd5e1;font-size:13px;font-weight:600;opacity:0.7;transition:opacity 0.15s;}
   .nav-logo:hover{opacity:1;}
 
@@ -52,12 +46,6 @@
   .masthead h2{font-size:48px;font-weight:700;color:var(--text-bright);letter-spacing:-1.5px;line-height:1.1;max-width:720px;margin:0 auto;}
   .masthead .tagline{font-size:20px;color:var(--text-dim);margin-top:12px;max-width:640px;margin-left:auto;margin-right:auto;}
   .masthead .attribution{font-size:14px;color:var(--text-dim);margin-top:12px;text-align:right;max-width:720px;margin-left:auto;margin-right:auto;}
-
-  /* ── Scenario what-if strip ── */
-  .scenario-strip{text-align:center;padding:12px 24px;font-size:13px;color:var(--text-dim);background:rgba(59,130,246,0.04);border-top:1px solid var(--card-border);border-bottom:1px solid var(--card-border);}
-  .scenario-strip strong{color:var(--text);}
-  .scenario-strip a{color:var(--accent);text-decoration:none;font-weight:600;margin:0 4px;}
-  .scenario-strip a:hover{text-decoration:underline;}
 
   /* ── Hero hook ── */
   .hero-hook{text-align:center;padding:48px 24px;border-bottom:1px solid var(--card-border);}
@@ -101,11 +89,6 @@
   .ais-figure-out{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);font-weight:var(--weight-bold);font-size:var(--text-2xl);color:var(--fg-dark-1);font-family:var(--font-sans);font-variant-numeric:tabular-nums;letter-spacing:-0.3px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
   .ais-figure-out .pill-mini{font-weight:var(--weight-semi);}
 
-  /* Caption shares the .ais-wrap width (no max-width cap) so its right edge
-     aligns with the Capex bar's right edge per Simon 2026-05-07. */
-  .ais-caption{margin:32px 0 0;font-size:13px;line-height:1.65;color:var(--fg-dark-3);}
-  .ais-caption strong{color:var(--fg-dark-2);}
-  .ais-caption-meta{display:block;margin-top:10px;font-size:11px;font-style:italic;color:var(--fg-dark-3);opacity:0.85;}
 
   /* ── Live Tile ── */
   .live-tile-wrap{padding:32px 0;display:flex;justify-content:center;}
@@ -169,7 +152,6 @@
     .nav-link{font-size:10px;padding:6px 10px;min-height:44px;display:inline-flex;align-items:center;}
     .nav-logo{margin-left:0;font-size:11px;gap:5px;}
     .nav-logo svg{width:18px;height:18px;}
-    .nav-scenario{margin-left:0;width:100%;justify-content:center;}
     .container{padding:16px 12px;}
     .masthead{padding:32px 12px 20px;}
     .masthead h2{font-size:28px;}
@@ -192,7 +174,6 @@
     .ais-figure, .ais-figure-out{font-size:var(--text-xl);}
     .ais-figure-out{position:static;transform:none;left:auto;top:auto;margin-left:auto;color:#fff;flex-shrink:0;}
     .ais-note{display:none;/* drop italic notional caveat to save a line on small screens */}
-    .ais-caption{font-size:12px;margin-top:24px;}
   }
 </style>
 <script src="data/format-helpers.js"></script>
@@ -220,15 +201,6 @@
     Hepburn Advisory <span aria-hidden="true">↗</span>
   </a>
 </header>
-
-<div class="ds-toolbar">
-  <div class="nav-scenario">
-    <label>Scenario:</label>
-    <button class="scenario-btn" data-s="bear" onclick="setScenario('bear')" title="Current trajectory continues. Revenue grows 20-30% annually, tokens follow.">Bear</button>
-    <button class="scenario-btn active" data-s="base" onclick="setScenario('base')" title="Enterprise adoption picks up through 2026-27. Revenue grows 80-100% annually.">Base</button>
-    <button class="scenario-btn" data-s="bull" onclick="setScenario('bull')" title="Agent workflows drive step-change in usage. Revenue grows 200%+.">Bull</button>
-  </div>
-</div>
 
 <!-- ── MASTHEAD (wq-093: five-ledger reframe) ── -->
 <section class="masthead">
@@ -301,18 +273,9 @@
       </a>
     </div>
 
-    <p class="ais-caption">
-      <strong>Read this stack this way:</strong> every $1 of customer-paid Apps Revenue is supported by $19 of capital invested, $9.40 of token throughput at retail rates, $2.50 of compute revenue earned by hyperscalers and neoclouds, and $1.40 of power. The stack doesn't reconcile — that's the story. The gap between what's invested and what comes back as revenue is funded by hyperscaler equity in the labs that drive compute demand.
-      <span class="ais-caption-meta">2025 lookback · capex from Capital Ledger · compute &amp; revenue sum-of-quarterlies post-Copilot · usage notional at OpenRouter median output rate ($1.25/M) · power placeholder pending v3 · click each bar for its ledger.</span>
-    </p>
    </div>
   </div>
 </section>
-
-<!-- ── SCENARIO WHAT-IF STRIP ── -->
-<div class="scenario-strip" id="scenario-strip">
-  Viewing: <strong id="strip-label">Base case</strong> &middot; <a href="#" onclick="setScenario('bear');return false;">See Bear</a> <a href="#" onclick="setScenario('bull');return false;">See Bull</a>
-</div>
 
 <div class="container">
 
@@ -363,7 +326,7 @@
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--compute);">Compute Ledger</div>
       <div class="lc-value" style="color:var(--compute);" id="card-compute">$43B</div>
-      <div class="lc-desc">What hyperscalers and neoclouds earned from AI compute in 2025. Three segments — frontier-lab compute (79%), AI workload compute, hosted model APIs. The circular-financing line: most of it goes to the labs hyperscalers also fund.</div>
+      <div class="lc-desc">What hyperscalers and neoclouds earned from AI compute in 2025. Three segments — frontier-lab compute (79%), AI workload compute, hosted model APIs.</div>
       <div class="lc-tier">
         <span class="tier-pill tier-1">60% Sourced</span>
         <span class="tier-pill tier-2">30% Derived</span>
@@ -416,93 +379,43 @@
 </div>
 
 <script>
-// ── wq-093: five-ledger SCENARIOS ──
-// Apps Revenue base = sankey.totalCustomerRevenue (cohort, ~$17.36B per wq-092).
-// Compute base = compute.compute_revenue_2025_gross_usd_b ($43.07B per wq-092).
-// Bear/Bull apply ±15% sensitivity band to Apps + Tokens; Compute is held
-// constant in v1 per brief §7.1 — coupling Compute to Apps under the band
-// implies a methodology call (does Compute drop with Apps, or absorb the
-// gap as more pass-through?) that's deferred. Hook ratio recomputes against
-// the band-shifted Apps so Bear/Bull still move it.
-const FALLBACK_BASE = { capex: 745, apps: 17.36, compute: 43.07, tokens: 360 };
-const SENSITIVITY_BAND = 0.15;
-let SCENARIOS = _buildScenarios(FALLBACK_BASE);
-
-function _buildScenarios(base) {
-  const a = base.apps, c = base.capex, k = base.compute, t = base.tokens;
-  const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
-  const fmtT = v => '~' + Math.round(v) + 'T';
-  const fmtRatio = v => '$' + (Math.round((k / v) * 10) / 10).toFixed(2);
-  return {
-    bear: { capex: fmt$(c), apps: fmt$(a * (1 - SENSITIVITY_BAND)), compute: fmt$(k), tokens: fmtT(t * (1 - SENSITIVITY_BAND)), ratio: fmtRatio(a * (1 - SENSITIVITY_BAND)), label: 'Bear case' },
-    base: { capex: fmt$(c), apps: fmt$(a), compute: fmt$(k), tokens: fmtT(t), ratio: fmtRatio(a), label: 'Base case' },
-    bull: { capex: fmt$(c), apps: fmt$(a * (1 + SENSITIVITY_BAND)), compute: fmt$(k), tokens: fmtT(t * (1 + SENSITIVITY_BAND)), ratio: fmtRatio(a * (1 + SENSITIVITY_BAND)), label: 'Bull case' },
-  };
-}
-
-function _initScenariosFromData(d) {
-  if (!d) return;
-  const base = {
-    capex: (d.cumulative && d.cumulative.capex_total) || FALLBACK_BASE.capex,
-    apps: (d.sankey && d.sankey.totalCustomerRevenue) || FALLBACK_BASE.apps,
-    compute: (d.compute && d.compute.compute_revenue_2025_gross_usd_b) || FALLBACK_BASE.compute,
-    tokens: (d.cumulative && d.cumulative.tokens_2025_annualized) || FALLBACK_BASE.tokens,
-  };
-  SCENARIOS = _buildScenarios(base);
-  applyScenario(getScenario());
-}
-
-// Load aggregates and rebuild scenarios when ready.
-fetch('site-data.json?v=' + Date.now())
-  .then(r => r.json())
-  .then(d => { window.siteData = d; _initScenariosFromData(d); })
-  .catch(() => { /* fallback SCENARIOS already in place */ });
-
-function getScenario() {
-  const p = new URLSearchParams(location.search).get('s');
-  if (p && SCENARIOS[p]) return p;
-  return localStorage.getItem('ai-ledger-scenario') || 'base';
-}
-
-function setScenario(s) {
-  localStorage.setItem('ai-ledger-scenario', s);
-  const url = new URL(location);
-  url.searchParams.set('s', s);
-  history.replaceState(null, '', url);
-  applyScenario(s);
-}
+// Hydrate the ledger cards + hook ratio from site-data.json.
+// Bear/Base/Bull scenario toggle removed 2026-05-07 per Simon — single base
+// view now. Hook ratio is computed live as Compute / Apps; cards read from
+// engine aggregates so quarterly refreshes flow through without copy edits.
+const FALLBACK = { capex: 745, apps: 17.36, compute: 43.07, tokens: 360 };
 
 function _setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
 
-function applyScenario(s) {
-  const d = SCENARIOS[s];
-  // Update toggle
-  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === s));
-  // AI Infrastructure Stack — Revenue figure scenario-reacts (Apps cohort × ±15% band).
-  // Compute, Capex, Power held constant in v1 per brief §7.1 (Bear/Bull coupling deferred);
-  // Usage sub-line updates with band-shifted tokens, but the dollar figure stays the
-  // notional $164B at $1.25/M output rate per brief §5 lock copy.
-  _setText('ais-revenue-figure', d.apps);
-  _setText('ais-usage-sub', '9.4× Apps Revenue · ' + d.tokens + '/day');
+function _hydrate(b) {
+  const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
+  const fmtT = v => '~' + Math.round(v) + 'T';
+  const ratio = '$' + (Math.round((b.compute / b.apps) * 10) / 10).toFixed(2);
   // Ledger cards
-  _setText('card-capex', d.capex);
-  _setText('card-revenue', d.apps);
-  _setText('card-compute', d.compute);
-  _setText('card-tokens', d.tokens + '/day');
-  // Hero hook ratio (Compute-anchored: Compute / Apps)
-  _setText('hook-ratio', d.ratio);
-  // Scenario strip
-  _setText('strip-label', d.label);
-  const stripEl = document.getElementById('scenario-strip');
-  if (stripEl) {
-    const others = Object.keys(SCENARIOS).filter(k => k !== s);
-    stripEl.innerHTML = 'Viewing: <strong>' + d.label + '</strong> &middot; ' +
-      others.map(k => '<a href="#" onclick="setScenario(\'' + k + '\');return false;">See ' + SCENARIOS[k].label.split(' ')[0] + '</a>').join(' ');
-  }
+  _setText('card-capex',   fmt$(b.capex));
+  _setText('card-revenue', fmt$(b.apps));
+  _setText('card-compute', fmt$(b.compute));
+  _setText('card-tokens',  fmtT(b.tokens) + '/day');
+  // Hook one-liner ratio (Compute-anchored: Compute / Apps)
+  _setText('hook-ratio', ratio);
 }
 
-// Init
-applyScenario(getScenario());
+// Render fallback values immediately so the page never shows stale literals
+// during the fetch round-trip; live values overwrite once site-data lands.
+_hydrate(FALLBACK);
+
+fetch('site-data.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(d => {
+    window.siteData = d;
+    _hydrate({
+      capex:   (d.cumulative && d.cumulative.capex_total)                          || FALLBACK.capex,
+      apps:    (d.sankey     && d.sankey.totalCustomerRevenue)                     || FALLBACK.apps,
+      compute: (d.compute    && d.compute.compute_revenue_2025_gross_usd_b)        || FALLBACK.compute,
+      tokens:  (d.cumulative && d.cumulative.tokens_2025_annualized)               || FALLBACK.tokens,
+    });
+  })
+  .catch(() => { /* fallback already rendered */ });
 
 document.querySelectorAll('.cite-btn').forEach(btn => {
   btn.addEventListener('click', () => {

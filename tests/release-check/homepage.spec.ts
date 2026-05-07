@@ -89,15 +89,8 @@ test.describe('index.html — wq-093 five-ledger reframe (Option I)', () => {
     expect(await page.locator('.ais-stat-card').count()).toBe(0);
   });
 
-  test('AC3 — caption carries the §6.2 lock copy ("Read this stack this way")', async ({ page }) => {
-    const cap = (await page.locator('.ais-caption').innerText()).toLowerCase();
-    expect(cap).toContain('read this stack this way');
-    expect(cap).toContain('every $1');
-    expect(cap).toContain('hyperscaler equity');
-    // Per-ratio anchors in the editorial sentence:
-    expect(cap).toContain('$19');
-    expect(cap).toContain('$2.50');
-    expect(cap).toContain('$1.40');
+  test('AC3 — caption removed (Simon 2026-05-07: editorial framing pulled off the homepage)', async ({ page }) => {
+    expect(await page.locator('.ais-caption').count()).toBe(0);
   });
 
   test('AC3-data — Compute and Revenue bar figures match site-data.json (within the engine band)', async ({ page }) => {
