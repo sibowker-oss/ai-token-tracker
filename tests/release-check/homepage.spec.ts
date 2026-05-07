@@ -84,13 +84,9 @@ test.describe('index.html — wq-093 five-ledger reframe (Option I)', () => {
     expect((await pill.innerText()).toUpperCase()).toContain('v3 PENDING'.toUpperCase());
   });
 
-  test('AC3 — three footer stat cards beneath the bars (Investment-to-revenue · Tokens served · Largest ledger)', async ({ page }) => {
-    const statCards = page.locator('.ais-footer-stats .ais-stat-card');
-    await expect(statCards).toHaveCount(3);
-    const labels = (await statCards.locator('.ais-stat-label').allInnerTexts()).map(s => s.toLowerCase());
-    expect(labels).toEqual(['investment-to-revenue', 'tokens served', 'largest ledger']);
-    await expect(page.locator('#ais-stat-capex-ratio')).toHaveText('19×');
-    await expect(statCards.nth(2).locator('.ais-stat-value')).toHaveText('Capital');
+  test('AC3 — footer stat cards removed (Simon 2026-05-07: redundant with the ledger cards + hook line below)', async ({ page }) => {
+    expect(await page.locator('.ais-footer-stats').count()).toBe(0);
+    expect(await page.locator('.ais-stat-card').count()).toBe(0);
   });
 
   test('AC3 — caption carries the §6.2 lock copy ("Read this stack this way")', async ({ page }) => {

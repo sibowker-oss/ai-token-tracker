@@ -16,6 +16,23 @@
 - **Staging URL (local preview):** `http://localhost:4173/index.html` (Node `http-server` on port 4173, serving the working tree).
 - **Approval status:** awaiting Simon's explicit chat approval per the TAIL Publishing Gate (CLAUDE.md). Required affirmative: "approved" / "ship it" / "promote" / "go live".
 
+### Post-build editorial revisions (Simon 2026-05-07, mid-staging)
+
+After the initial Option I build (commit `0017c9a`) was staged, Simon revised the spec in chat:
+
+1. **Hero chart total width reduced by 25%.** The chart sub-block (title + bars + caption) now sits at `max-width: 990px` (75% of the 1320px page-content width) inside `.ais-wrap`.
+2. **Right-anchor instead of centred.** The 990px chart block is `margin-left: auto; margin-right: 0;` so its right edge aligns with the right edge of the page-content area below (ledger cards, hook line, footer). The previous centred 1320px-with-`padding-right:120px` layout sat the Capex bar ~120px shy of the page right edge — the off-centre look Simon flagged.
+3. **Footer stat cards removed.** The three cards (Investment-to-revenue 19× · Tokens served ~360T/day · Largest ledger Capital) are deleted from HTML and CSS — Simon's call: "they're repeated in more clarity below" (the hook ratio, the Usage card, and the Capital card already carry these figures with provenance, so the stat cards were redundant editorial repeats).
+
+This is a strategic deviation from brief §5 ("Footer stat cards (3, mirroring Figma footer aesthetic)") authored by the brief's author in real-time chat. No `docs/decisions/open/` file written — the override is the brief author's direct revision; documenting it here is the appropriate channel.
+
+Implementation: introduced an `.ais-block` sub-wrapper inside `.ais-wrap`. `.ais-wrap` keeps `max-width: 1320px` (page-content parity) so the section's outer chrome stays consistent; `.ais-block { max-width: 990px; margin-left: auto; }` right-anchors the title + bars + caption within that wrap. Mobile (≤768px) drops the `max-width` cap and the right-anchor so everything fills the container at narrow viewports.
+
+Tactical (revision-time):
+
+12. **Title also right-anchors with the bars.** The "AI Infrastructure Stack" h2 sits inside `.ais-block` so it shares the 990px right-anchor. Alternative: keep the title at the full 1320px wrap-left for visual hierarchy. Chose right-anchored for cohesion — the title, the bars, and the caption now form a single editorial column anchored to the page right edge.
+13. **Test updated.** `homepage.spec.ts` AC3 footer-stat-cards sub-test inverted: was "expect 3 cards"; now "expect 0 — section removed". 21/21 still passing.
+
 ## What shipped (on the branch)
 
 ### Modified files
@@ -122,10 +139,11 @@ No silent divergences from already-published numbers. The Usage notional figure 
 
 1. **Masthead** — H2 reads "The AI economy, layer by layer."; tagline reads "Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system."
 2. **AI Infrastructure Stack** (the 5-bar hero) — bars descend Capex → Usage → Compute → Power → Revenue with widths 100% / 50% / 30% / 22% / 17%; Hepburn Advisory canonical colours (Capex blue, Usage violet, Compute cyan, Power amber, Revenue green); Capex and Usage carry figures inside the pill; Compute, Power, Revenue carry figures outside-right.
-3. **Power bar** — the "TIER 3 · v3 PENDING" pill renders inline beside `$25B`.
-4. **Footer stat cards** — three cards beneath the bars: "Investment-to-revenue 19×" · "Tokens served ~360T/day" · "Largest ledger Capital".
-5. **Caption** — "Read this stack this way…" lock copy in place; the italic source-meta line ("2025 lookback · capex from Capital Ledger · …") below it.
-6. **No "three ledgers" string** anywhere on the homepage or any of the 8 swept public pages (case-insensitive).
-7. **Ledger card grid** — 5 cards (Capital, Revenue, Compute, Usage, Power) with Power link-only ("v3 in progress", no big number, no tier pills).
-8. **No regression on the rest of the page** — hook one-liner ("$2.50 of compute spend stands behind every $1 of customer-paid AI Apps Revenue today."), live tile ($43B Compute Revenue 2025 signal), Bear/Base/Bull scenario toggle, footer.
-9. **Mobile (375px)** — bars stack legibly; tier-3 pill stays inline beside $25B; footer stats single-column.
+3. **Chart width + alignment** — the chart sub-block (title + bars + caption) is 25% narrower than the page-content max width and **right-anchored**: the Capex bar's right edge sits at the same x as the right edge of the ledger cards / hook line / footer below.
+4. **Power bar** — the "TIER 3 · v3 PENDING" pill renders inline beside `$25B`.
+5. **No footer stat cards** — the three cards (Investment-to-revenue · Tokens served · Largest ledger) are gone per Simon's revision.
+6. **Caption** — "Read this stack this way…" lock copy in place; the italic source-meta line ("2025 lookback · capex from Capital Ledger · …") below it; right-anchored to share the bars' right edge.
+7. **No "three ledgers" string** anywhere on the homepage or any of the 8 swept public pages (case-insensitive).
+8. **Ledger card grid** — 5 cards (Capital, Revenue, Compute, Usage, Power) with Power link-only ("v3 in progress", no big number, no tier pills).
+9. **No regression on the rest of the page** — hook one-liner ("$2.50 of compute spend stands behind every $1 of customer-paid AI Apps Revenue today."), live tile ($43B Compute Revenue 2025 signal), Bear/Base/Bull scenario toggle, footer.
+10. **Mobile (375px)** — bars stack legibly at full container width (the right-anchor drops on mobile); tier-3 pill stays inline beside $25B.

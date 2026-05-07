@@ -71,12 +71,19 @@
      Figure placement: inside the pill for Capex + Usage (≥50% width); outside the pill
      (right edge, --fg-dark-1) for Compute, Power, Revenue (<50% width) per brief §5. */
   .ai-infra-stack{padding:32px 24px 56px;border-bottom:1px solid var(--card-border);background:var(--bg-dark);}
+  /* Wrap matches the page content width (1320px) so the chart sits in the
+     same container as the ledger cards / hook / footer below. Inside the wrap,
+     the chart sub-block is right-anchored at 75% (990px) per Simon 2026-05-07
+     ("reduce total width by 25% and align Capex bar right edge with right edge
+     of content below"). Title + bars + caption all share the 990px right-anchor
+     so their right edges align cleanly with the 1320px content right edge below. */
   .ais-wrap{max-width:1320px;margin:0 auto;}
+  .ais-block{max-width:990px;margin-left:auto;margin-right:0;}
   .ais-head{margin:0 0 24px;}
   .ais-title{font:var(--type-h2);letter-spacing:var(--tracking-head);color:var(--fg-dark-1);margin:0;}
   .ais-subtitle{display:block;font:var(--type-meta);color:var(--fg-dark-3);margin-top:6px;}
 
-  .ais-bars{display:flex;flex-direction:column;gap:12px;margin:0;padding-right:120px;/* leave room for outside figures */}
+  .ais-bars{display:flex;flex-direction:column;gap:12px;margin:0;}
   .ais-bar{position:relative;display:flex;align-items:center;text-decoration:none;color:#fff;height:64px;border-radius:var(--radius-pill);padding:0 16px;width:var(--bar-w,100%);max-width:100%;transition:filter var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);}
   .ais-bar:hover{filter:brightness(1.06);}
   .ais-bar:focus-visible{outline:none;box-shadow:var(--shadow-focus);}
@@ -95,14 +102,11 @@
   .ais-figure-out{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);font-weight:var(--weight-bold);font-size:var(--text-2xl);color:var(--fg-dark-1);font-family:var(--font-sans);font-variant-numeric:tabular-nums;letter-spacing:-0.3px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
   .ais-figure-out .pill-mini{font-weight:var(--weight-semi);}
 
-  .ais-caption{max-width:840px;margin:32px 0 0;font-size:13px;line-height:1.65;color:var(--fg-dark-3);}
+  /* Caption shares the .ais-wrap width (no max-width cap) so its right edge
+     aligns with the Capex bar's right edge per Simon 2026-05-07. */
+  .ais-caption{margin:32px 0 0;font-size:13px;line-height:1.65;color:var(--fg-dark-3);}
   .ais-caption strong{color:var(--fg-dark-2);}
   .ais-caption-meta{display:block;margin-top:10px;font-size:11px;font-style:italic;color:var(--fg-dark-3);opacity:0.85;}
-
-  .ais-footer-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;}
-  .ais-stat-card{background:var(--surface-dark);border:1px solid var(--border-dark);border-radius:var(--radius-lg);padding:20px;}
-  .ais-stat-label{display:block;font:var(--type-eyebrow);text-transform:uppercase;letter-spacing:var(--tracking-eyebrow);color:var(--fg-dark-3);}
-  .ais-stat-value{display:block;font-weight:var(--weight-bold);font-size:var(--text-xl);color:var(--fg-dark-1);font-variant-numeric:tabular-nums;letter-spacing:-0.01em;margin-top:6px;}
 
   /* ── Live Tile ── */
   .live-tile-wrap{padding:32px 0;display:flex;justify-content:center;}
@@ -183,13 +187,12 @@
        the multiplier sublines ("19×", "9.4×", "2.5×") carry the descending-
        ratio story numerically while the visual stack stays legible. */
     .ai-infra-stack{padding:24px 12px 40px;}
-    .ais-bars{padding-right:0;}
+    .ais-block{max-width:100%;margin-left:0;/* drop right-anchor on mobile */}
     .ais-bar{height:auto;min-height:56px;padding:10px 12px;width:100%;}
     .ais-icon{flex:0 0 32px;width:32px;height:32px;font-size:14px;}
     .ais-figure, .ais-figure-out{font-size:var(--text-xl);}
     .ais-figure-out{position:static;transform:none;left:auto;top:auto;margin-left:auto;color:#fff;flex-shrink:0;}
     .ais-note{display:none;/* drop italic notional caveat to save a line on small screens */}
-    .ais-footer-stats{grid-template-columns:1fr;gap:12px;margin-top:24px;}
     .ais-caption{font-size:12px;margin-top:24px;}
   }
 </style>
@@ -242,6 +245,7 @@
      causal narrative — in a single hero section. -->
 <section class="ai-infra-stack" aria-label="AI Infrastructure Stack — five ledgers, descending by 2025 figure">
   <div class="ais-wrap">
+   <div class="ais-block">
     <header class="ais-head">
       <h2 class="ais-title">AI Infrastructure Stack</h2>
       <span class="ais-subtitle">2025 · Five ledgers, one stack</span>
@@ -302,21 +306,7 @@
       <strong>Read this stack this way:</strong> every $1 of customer-paid Apps Revenue is supported by $19 of capital invested, $9.40 of token throughput at retail rates, $2.50 of compute revenue earned by hyperscalers and neoclouds, and $1.40 of power. The stack doesn't reconcile — that's the story. The gap between what's invested and what comes back as revenue is funded by hyperscaler equity in the labs that drive compute demand.
       <span class="ais-caption-meta">2025 lookback · capex from Capital Ledger · compute &amp; revenue sum-of-quarterlies post-Copilot · usage notional at OpenRouter median output rate ($1.25/M) · power placeholder pending v3 · click each bar for its ledger.</span>
     </p>
-
-    <div class="ais-footer-stats">
-      <div class="ais-stat-card">
-        <span class="ais-stat-label">Investment-to-revenue</span>
-        <span class="ais-stat-value" id="ais-stat-capex-ratio">19×</span>
-      </div>
-      <div class="ais-stat-card">
-        <span class="ais-stat-label">Tokens served</span>
-        <span class="ais-stat-value" id="ais-stat-tokens">~360T/day</span>
-      </div>
-      <div class="ais-stat-card">
-        <span class="ais-stat-label">Largest ledger</span>
-        <span class="ais-stat-value">Capital</span>
-      </div>
-    </div>
+   </div>
   </div>
 </section>
 
@@ -495,7 +485,6 @@ function applyScenario(s) {
   // notional $164B at $1.25/M output rate per brief §5 lock copy.
   _setText('ais-revenue-figure', d.apps);
   _setText('ais-usage-sub', '9.4× Apps Revenue · ' + d.tokens + '/day');
-  _setText('ais-stat-tokens', d.tokens + '/day');
   // Ledger cards
   _setText('card-capex', d.capex);
   _setText('card-revenue', d.apps);
