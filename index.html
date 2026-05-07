@@ -71,14 +71,13 @@
      Figure placement: inside the pill for Capex + Usage (≥50% width); outside the pill
      (right edge, --fg-dark-1) for Compute, Power, Revenue (<50% width) per brief §5. */
   .ai-infra-stack{padding:32px 24px 56px;border-bottom:1px solid var(--card-border);background:var(--bg-dark);}
-  /* Wrap matches the page content width (1320px) so the chart sits in the
-     same container as the ledger cards / hook / footer below. Inside the wrap,
-     the chart sub-block is right-anchored at 75% (990px) per Simon 2026-05-07
-     ("reduce total width by 25% and align Capex bar right edge with right edge
-     of content below"). Title + bars + caption all share the 990px right-anchor
-     so their right edges align cleanly with the 1320px content right edge below. */
+  /* Width: 990px = 75% of the page-content 1320px (Simon 2026-05-07: reduce
+     total width by 25%). Block is centred under the masthead heading per
+     Simon's follow-up: "centred under [the heading]" rather than right-
+     anchored. Title + bars + caption all sit inside .ais-block so they
+     share the same left/right edges and read as one editorial column. */
   .ais-wrap{max-width:1320px;margin:0 auto;}
-  .ais-block{max-width:990px;margin-left:auto;margin-right:0;}
+  .ais-block{max-width:990px;margin:0 auto;}
   .ais-head{margin:0 0 24px;}
   .ais-title{font:var(--type-h2);letter-spacing:var(--tracking-head);color:var(--fg-dark-1);margin:0;}
   .ais-subtitle{display:block;font:var(--type-meta);color:var(--fg-dark-3);margin-top:6px;}
@@ -187,7 +186,7 @@
        the multiplier sublines ("19×", "9.4×", "2.5×") carry the descending-
        ratio story numerically while the visual stack stays legible. */
     .ai-infra-stack{padding:24px 12px 40px;}
-    .ais-block{max-width:100%;margin-left:0;/* drop right-anchor on mobile */}
+    .ais-block{max-width:100%;}
     .ais-bar{height:auto;min-height:56px;padding:10px 12px;width:100%;}
     .ais-icon{flex:0 0 32px;width:32px;height:32px;font-size:14px;}
     .ais-figure, .ais-figure-out{font-size:var(--text-xl);}
