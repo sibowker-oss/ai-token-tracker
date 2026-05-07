@@ -66,7 +66,12 @@
 
   /* Provenance/methodology callout */
   .methodology-callout { display:flex; gap:12px; align-items:flex-start; padding:12px 14px; background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.2); border-radius:8px; font-size:11px; color:var(--text-dim); line-height:1.6; margin-top:10px; }
+  /* Long inline <code> paths and URLs in callout copy were overflowing the box
+     on mobile portrait — Simon flagged 2026-05-07. min-width:0 lets the flex
+     child shrink; overflow-wrap:anywhere breaks long tokens at any point. */
+  .methodology-callout > span:last-child { min-width: 0; flex: 1 1 auto; overflow-wrap: anywhere; word-break: break-word; }
   .methodology-callout strong { color:var(--text-bright); }
+  .methodology-callout code { word-break: break-all; }
 
   /* Watermark for trajectory chart screenshot-export */
   .chart-watermark { position:absolute; right:14px; top:10px; font-size:9px; color:var(--text-dim); opacity:0.6; letter-spacing:0.5px; text-transform:uppercase; }
@@ -397,7 +402,11 @@ function renderFrontierLabCompute() {
     return c2 ? c2.compute_gross_2025_usd_b : 0;
   }));
 
-  h += '<div style="border:1px solid var(--card-border);border-radius:8px;overflow:hidden;">';
+  // Wrap the 5-column grid in overflow-x:auto with a min-width on an inner
+  // shell so the table can scroll horizontally inside its card on mobile
+  // portrait rather than overflowing the page width — Simon 2026-05-07.
+  h += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--card-border);border-radius:8px;">';
+  h += '<div style="min-width:680px;">';
   h += '<div style="display:grid;grid-template-columns:1.3fr 2.0fr 1.5fr 0.7fr 0.5fr;gap:0;background:rgba(15,23,42,0.6);padding:8px 12px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);font-weight:700;">';
   h += '<div>Provider</div><div>Primary frontier-lab attribution</div><div>Frontier share of provider\'s compute</div><div style="text-align:right;">2025 ($B)</div><div style="text-align:right;">Tier</div>';
   h += '</div>';
@@ -431,7 +440,8 @@ function renderFrontierLabCompute() {
     h += '<div style="text-align:right;">'+tierPill(c2.tier_frontier_lab_compute)+'</div>';
     h += '</div>';
   });
-  h += '</div>';
+  h += '</div>'; // close min-width inner shell
+  h += '</div>'; // close overflow-x outer
 
   // Bar legend
   h += '<div style="display:flex;gap:18px;align-items:center;margin-top:10px;font-size:10px;color:var(--text-dim);flex-wrap:wrap;">';

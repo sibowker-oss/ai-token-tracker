@@ -363,11 +363,16 @@ function renderBuyerProviderPanel(d) {
   const visibleCols = ORDER.filter(k => colTotals[k] > 0.01);
   const COLOR = { 'Consumer':'#f59e0b', 'AI Natives':'#8b5cf6', 'Enterprises & Govs':'#3b82f6' };
 
-  let html = '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">';
+  let html = '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap;">';
   html += '<strong style="color:#f1f5f9;font-size:12px;">Where each buyer\'s money lands (net to providers)</strong>';
   html += '<span style="font-size:10px;color:var(--text-dim);opacity:0.7;">wq-090 editorial — see <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology</a></span>';
   html += '</div>';
-  html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+  // Wrap the table in an overflow-x:auto container so the multi-column grid
+  // (Buyer + N providers + Total) scrolls horizontally inside the panel on
+  // narrow viewports rather than blowing out the page width — Simon flagged
+  // mobile portrait rendering 2026-05-07.
+  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px;">';
+  html += '<table style="width:100%;min-width:520px;border-collapse:collapse;font-size:11px;">';
   html += '<thead><tr><th style="text-align:left;padding:4px 8px;font-weight:600;color:#94a3b8;">Buyer</th>';
   visibleCols.forEach(k => {
     const label = k === '_other' ? 'Other Model Providers' : NAMED[k];
@@ -388,7 +393,10 @@ function renderBuyerProviderPanel(d) {
     html += '</tr>';
   });
   html += '</tbody></table>';
-  html += '<p style="margin:8px 0 0;font-size:10px;color:var(--text-dim);opacity:0.7;line-height:1.5;">AI Natives split (45/45/10 to OpenAI / Anthropic / Google) is editorial per <code>data/sankey_cost_structure.json:channel_mapping.buyer_provider_split</code>. Consumer split is engine-derived from per-provider <code>subscription_pct</code> rollup; Enterprises &amp; Govs back-solves to satisfy each provider\'s <code>customer_revenue</code>. Net basis — channel margins kept by Hyperscaler / SaaS resellers flow to Generated Cashflow, not providers.</p>';
+  html += '</div>';
+  // overflow-wrap:anywhere lets long inline <code> paths break inside the
+  // narrow mobile card width so they don't overflow the panel boundary.
+  html += '<p style="margin:8px 0 0;font-size:10px;color:var(--text-dim);opacity:0.7;line-height:1.5;overflow-wrap:anywhere;word-break:break-word;">AI Natives split (45/45/10 to OpenAI / Anthropic / Google) is editorial per <code>data/sankey_cost_structure.json:channel_mapping.buyer_provider_split</code>. Consumer split is engine-derived from per-provider <code>subscription_pct</code> rollup; Enterprises &amp; Govs back-solves to satisfy each provider\'s <code>customer_revenue</code>. Net basis — channel margins kept by Hyperscaler / SaaS resellers flow to Generated Cashflow, not providers.</p>';
   el.innerHTML = html;
 }
 
