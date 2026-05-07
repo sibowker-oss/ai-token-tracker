@@ -12,10 +12,26 @@
 
 ## Status
 
-- **Approved & merged.** Simon authorised the merge in chat 2026-05-07: "approved" / "ship it" / "promote" / "go live" (all four affirmatives, unambiguous).
+- **Approved, merged, and pushed.** Simon authorised the merge in chat 2026-05-07: "approved" / "ship it" / "promote" / "go live" (all four affirmatives, unambiguous). Branch rebased onto `main` (clean — no conflicts; main had diverged with autonomous Phase 1 commits since the branch was cut), fast-forwarded into `main`, pushed to `origin/main` at SHA **`be42986`**.
 - **Approval timestamp:** 2026-05-07 (chat affirmation, exact wall-clock not captured).
 - **Staging URL (pre-approval):** `http://localhost:4173/index.html` (Node `http-server` on port 4173, serving the working tree).
-- **Final SHAs on the merge** (9 commits, fast-forwarded onto `main`): see `git log` from `0fdec64` through to the post-rebaseline commit. Last work-content commit: `943b2da` (nav coverage). Rebaseline + this record update in a final commit.
+
+### Final shipped SHAs (post-rebase, on `main` and `origin/main`)
+
+Branch was rebased onto `main` immediately before the merge; original branch SHAs (listed in the "Post-approval revisions" section below) shifted accordingly. Post-rebase chain on `main` (newest → oldest, all 10 commits):
+
+| Post-rebase SHA | Pre-rebase SHA | Subject |
+|---|---|---|
+| `be42986` | `46f730f` | docs(wq-093): post-approval — rebaseline visual snapshots + finalise deploy record |
+| `e17bc36` | `943b2da` | fix(nav): add Compute Ledger link to primary nav + footer on remaining pages |
+| `5697907` | `5a0e78d` | docs(changelog): Homepage / Compute Ledger / Revenue Ledger entries |
+| `58bd2b4` | `31fc388` | polish(compute): drop two editorial sentences from compute.html |
+| `4e99615` | `c7c72ef` | polish(wq-093): drop hook sub-line |
+| `75194e4` | `a093cdc` | polish(wq-093): drop AIS caption + Bear/Bull toggle + circular-financing line |
+| `98a2dad` | `37e7b58` | polish(wq-093): centre hero chart under masthead heading |
+| `ae6a3a7` | `a482329` | polish(wq-093): hero chart 75% width + drop 3 footer stat cards |
+| `952ba42` | `0017c9a` | feat(wq-093): Option I AI Infrastructure Stack (5 pill bars) |
+| `6a5a293` | `0fdec64` | feat(wq-093): (superseded mid-branch) Option F type-led editorial Layer Stack |
 
 ### Post-build editorial revisions (Simon 2026-05-07, mid-staging)
 
