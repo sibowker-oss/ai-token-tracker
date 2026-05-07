@@ -25,6 +25,10 @@
     --apps:#a855f7; --compute:#06b6d4; --silicon:#fb7185;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  /* iOS Safari shrinks text in narrow flex children unless we lock auto-adjust;
+     Simon saw the Power bar's "1.4× Apps Revenue" rendering smaller than the
+     same sub on the other bars 2026-05-07. Locking to 100% normalises rendering. */
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
   body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
   /* ── Shared Nav ── */
@@ -79,7 +83,7 @@
   .ais-icon{flex:0 0 36px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:var(--weight-semi);font-size:16px;font-family:var(--font-sans);}
   .ais-text{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;margin-left:12px;min-width:0;overflow:hidden;}
   .ais-label{font-weight:var(--weight-semi);font-size:var(--text-md);color:#fff;line-height:1.2;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .ais-sub{font-weight:var(--weight-medium);font-size:var(--text-xs);color:rgba(255,255,255,0.75);line-height:1.3;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ais-sub{font-weight:var(--weight-medium);font-size:11px;color:rgba(255,255,255,0.75);line-height:1.3;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;}
   .ais-note{font-weight:var(--weight-regular);font-style:italic;font-size:10px;color:rgba(255,255,255,0.85);line-height:1.3;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .ais-figure{flex:0 0 auto;font-weight:var(--weight-bold);font-size:var(--text-2xl);color:#fff;font-family:var(--font-sans);font-variant-numeric:tabular-nums;letter-spacing:-0.3px;margin-left:16px;white-space:nowrap;}
   .ais-figure-out{position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);font-weight:var(--weight-bold);font-size:var(--text-2xl);color:var(--fg-dark-1);font-family:var(--font-sans);font-variant-numeric:tabular-nums;letter-spacing:-0.3px;white-space:nowrap;display:flex;align-items:center;gap:8px;}

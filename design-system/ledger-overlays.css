@@ -178,16 +178,23 @@
 .ds-header__cta:hover { border-color: var(--blue); }
 
 @media (max-width: 768px) {
-  .ds-header { padding: 10px 14px; gap: 12px; }
+  /* Two-row header on mobile portrait so the Hepburn Advisory CTA can't sit
+     over the nav. Brand + CTA share row 1; nav gets its own full-width row 2
+     so all 7 links are reachable via horizontal scroll without overlap.
+     Simon flagged this 2026-05-07 — at 375px only "Capital" was visible. */
+  .ds-header { padding: 10px 14px; gap: 8px 12px; flex-wrap: wrap; }
+  .ds-header__brand { order: 1; }
   .ds-header__brand-sub { display: none; }
+  .ds-header__cta { order: 2; margin-left: auto; font-size: 12px; padding: 8px 10px; }
   .ds-header__nav {
-    flex: 1;
+    order: 3;
+    flex: 0 0 100%;
+    width: 100%;
     -webkit-overflow-scrolling: touch;
-    mask-image: linear-gradient(to right, black 90%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+    mask-image: linear-gradient(to right, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 95%, transparent 100%);
   }
   .ds-header__nav-link { font-size: 12px; padding: 8px 10px; min-height: 36px; display: inline-flex; align-items: center; }
-  .ds-header__cta { font-size: 12px; padding: 8px 10px; }
 }
 
 /* ============================================================
