@@ -82,6 +82,11 @@
 
   /* Forward commitments grid (wq-094) */
   .fc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  /* Frontier-lab compute headline pair (annualised + Q1 2026 callouts).
+     2-up on desktop; collapses to 1-up on mobile portrait so the $-figure
+     boxes don't crush their content. */
+  .flc-headline-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; min-width:0; }
+  .flc-headline-grid > div { min-width:0; }
 
   /* Mobile */
   @media(max-width:768px) {
@@ -90,6 +95,7 @@
     .wwhbt-grid { grid-template-columns:1fr; }
     .chart-row { grid-template-columns:1fr; }
     .fc-grid { grid-template-columns:1fr; }
+    .flc-headline-grid { grid-template-columns:1fr; }
     .concentration-headline .lede { font-size:16px; }
   }
 </style>
@@ -379,7 +385,11 @@ function renderFrontierLabCompute() {
     { slug: 'crusoe',          primaryLab: 'Frontier + applied research' }
   ];
 
-  let h = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px;">';
+  // .flc-headline-grid hosts the grid layout; defined in <style> below so the
+  // mobile media query can collapse it to 1 column. Inline style would win
+  // specificity over the media query — Simon flagged the right box stretching
+  // outside its container on mobile portrait 2026-05-07.
+  let h = '<div class="flc-headline-grid" style="margin-bottom:14px;">';
   h += '<div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:8px;padding:14px;">';
   h += '<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--accent);font-weight:700;">Frontier lab compute · 2025 (annualised)</div>';
   h += '<div style="font-size:32px;font-weight:800;color:var(--text-bright);margin:4px 0;">'+fmt$B(flcTotal)+'</div>';
