@@ -141,6 +141,24 @@ const pipelineOrphansStatus = run('node', ['scripts/validate-pipeline-orphans.mj
   RELEASE_CHECK_PIPELINE_ORPHANS_JSON_OUT: pipelineOrphansJson,
 });
 
+// Step 11d (wq-099 §2 Validators): pipeline-health-freshness —
+// data/pipeline-health-latest.json must exist and be <30h old. Catches
+// reconcile_pipeline.py silently stopping; surfaces active alerts.
+console.log('\n→ 11d/13  Pipeline health freshness (wq-099 §2 Validators)');
+const pipelineHealthJson = join(reportDir, 'pipeline-health-freshness.json');
+const pipelineHealthStatus = run('node', ['scripts/validate-pipeline-health-freshness.mjs'], {
+  RELEASE_CHECK_PIPELINE_HEALTH_JSON_OUT: pipelineHealthJson,
+});
+
+// Step 11e (wq-100 §2 Validators): review-surfaces — server-side decision
+// writes are wired, browser-download submit path is gone, variance gate
+// module exists and is invoked, admin_server.py endpoints registered.
+console.log('\n→ 11e/13  Review-surfaces hardening (wq-100 §2 Validators)');
+const reviewSurfacesJson = join(reportDir, 'review-surfaces.json');
+const reviewSurfacesStatus = run('node', ['scripts/validate-review-surfaces.mjs'], {
+  RELEASE_CHECK_REVIEW_SURFACES_JSON_OUT: reviewSurfacesJson,
+});
+
 // Step 12: Playwright suite
 console.log('\n→ 12/13  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
@@ -189,6 +207,12 @@ const telemetryRoutingAdvisories = telemetryRoutingFindings.filter(f => f.severi
 const pipelineOrphansFindings = existsSync(pipelineOrphansJson) ? JSON.parse(readFileSync(pipelineOrphansJson, 'utf8')) : [];
 const pipelineOrphansFails = pipelineOrphansFindings.filter(f => f.severity === 'fail');
 
+const pipelineHealthFindings = existsSync(pipelineHealthJson) ? JSON.parse(readFileSync(pipelineHealthJson, 'utf8')) : [];
+const pipelineHealthFails = pipelineHealthFindings.filter(f => f.severity === 'fail');
+
+const reviewSurfacesFindings = existsSync(reviewSurfacesJson) ? JSON.parse(readFileSync(reviewSurfacesJson, 'utf8')) : [];
+const reviewSurfacesFails = reviewSurfacesFindings.filter(f => f.severity === 'fail');
+
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
 if (existsSync(pwResultsPath)) {
@@ -222,12 +246,14 @@ const report = `# Release-check report
 | Period-attribution (wq-054) | ${periodAttrFindings.length === 0 ? '✓' : ''} | ${periodAttrAdvisories.length} | ${periodAttrFails.length} |
 | Telemetry-routing (wq-047) | ${telemetryRoutingFindings.length === 0 ? '✓' : ''} | ${telemetryRoutingAdvisories.length} | ${telemetryRoutingFails.length} |
 | Pipeline orphans (wq-098) | ${pipelineOrphansFindings.length === 0 ? '✓' : ''} | 0 | ${pipelineOrphansFails.length} |
+| Pipeline health (wq-099) | ${pipelineHealthFindings.length === 0 ? '✓' : ''} | 0 | ${pipelineHealthFails.length} |
+| Review surfaces (wq-100) | ${reviewSurfacesFindings.length === 0 ? '✓' : ''} | 0 | ${reviewSurfacesFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + periodAttrFails.length + telemetryRoutingFails.length + pwSummary.failures, provAdvisories.length + periodAttrAdvisories.length + telemetryRoutingAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + periodAttrFails.length + telemetryRoutingFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + pwSummary.failures, provAdvisories.length + periodAttrAdvisories.length + telemetryRoutingAdvisories.length)}
 
 ## Provenance findings
 
@@ -277,6 +303,14 @@ ${renderFindings(telemetryRoutingFindings)}
 
 ${renderFindings(pipelineOrphansFindings)}
 
+## Pipeline-health-freshness findings (wq-099 §2 Validators)
+
+${renderFindings(pipelineHealthFindings)}
+
+## Review-surfaces findings (wq-100 §2 Validators)
+
+${renderFindings(reviewSurfacesFindings)}
+
 ## Playwright suite
 
 See \`${join('tests', 'reports', 'html', 'index.html')}\` for the full Playwright HTML report.
@@ -316,6 +350,8 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   period_attribution: periodAttrFindings,
   telemetry_routing: telemetryRoutingFindings,
   pipeline_orphans: pipelineOrphansFindings,
+  pipeline_health_freshness: pipelineHealthFindings,
+  review_surfaces: reviewSurfacesFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -323,7 +359,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pipelineOrphansFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);

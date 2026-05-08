@@ -196,7 +196,9 @@ def git_commit_push(date):
         print("ℹ No changes to commit")
         return
 
-    # Stage data files + dashboard
+    # Stage data files + dashboard. data/ already includes the wq-099
+    # pipeline-health-*.json snapshots and audits/pipeline-alerts-*.md
+    # from the reconcile step above.
     subprocess.run(['git', 'add', 'data/', 'dashboard.html', 'index.html', 'site-data.json'], check=True)
 
     # Commit
@@ -251,7 +253,24 @@ def main():
             print(f"  apply_pipeline: {e}")
             outputs["apply_pipeline_error"] = str(e)[:120]
 
-        # Step 6: Commit and push
+        # Step 6: Reconcile pipeline health (wq-099) — runs after apply so
+        # the assertions see the post-apply state. Writes
+        # data/pipeline-health-latest.json + alert markdown on failure.
+        try:
+            from reconcile_pipeline import main as reconcile_main
+            rc = reconcile_main([])
+            outputs["reconcile_rc"] = rc
+            # Surface alert count in the run log so status.html reflects it.
+            health_path = os.path.join(DATA_DIR, "pipeline-health-latest.json")
+            if os.path.exists(health_path):
+                with open(health_path) as f:
+                    health = json.load(f)
+                outputs["pipeline_alert_count"] = health.get("alertCount", 0)
+        except Exception as e:
+            print(f"  reconcile_pipeline: {e}")
+            outputs["reconcile_pipeline_error"] = str(e)[:120]
+
+        # Step 7: Commit and push
         git_commit_push(today)
 
         print(f"\n{'='*60}")

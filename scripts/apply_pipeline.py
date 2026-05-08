@@ -49,6 +49,7 @@ sys.path.insert(0, SCRIPT_DIR)
 
 from apply_handlers import all_handlers, default_handler  # noqa: E402
 from apply_handlers import _shared as S  # noqa: E402
+from apply_handlers import _variance_gate as VG  # noqa: E402
 
 VAULT_DATA = os.path.join(ROOT_DIR, "vault-data.json")
 ENTITIES = os.path.join(ROOT_DIR, "entities.json")
@@ -57,6 +58,8 @@ SITE_DATA = os.path.join(ROOT_DIR, "site-data.json")
 COMPUTE_DISCLOSURES_DIR = os.path.join(ROOT_DIR, "data", "evidence", "compute_disclosures")
 LOG_FILE = os.path.join(ROOT_DIR, "data", "apply_pipeline.log")
 SKIPPED_AUDIT = os.path.join(ROOT_DIR, "data", "audits", "wq-098-skipped-claims.md")
+APPLY_LOG_JSON = os.path.join(ROOT_DIR, "data", "apply_log.json")
+ANOMALIES_DIR = os.path.join(ROOT_DIR, "data", "audits")
 
 MATERIAL_CHANGE_THRESHOLD_B = 5.0  # D9
 
@@ -208,8 +211,220 @@ def collapse_writes(writes, ctx):
 
 # Acceptance #9 threshold — if existing field value diverges from incoming
 # by more than this fraction, log WARN and skip the value overwrite (we
-# still append to provenance trail).
+# still append to provenance trail). Kept in sync with VG.VARIANCE_AUTO_APPLY
+# so the legacy guard and the wq-100 gate agree on the band edge.
 MATERIAL_DIVERGENCE_PCT = 0.15
+
+
+def _write_index_by_claim_id(writes):
+    """Group writes by their source claim id so we can attribute gate
+    decisions back to the originating vault claim."""
+    by_id = {}
+    for w in writes:
+        cid = (w.prov_entry or {}).get("id")
+        by_id.setdefault(cid, []).append(w)
+    return by_id
+
+
+def apply_variance_gate(writes, entities, ctx, counters, diffs, anomalies):
+    """wq-100 D3/D4/D5 gate.
+
+    Partitions `writes` into (auto_apply_writes, review_writes, anomaly_writes).
+    Side effects:
+      - Increments counters['routed_to_review'] and counters['anomalies'].
+      - Appends one entry per auto-applied write to `diffs` (used by
+        write_apply_log_json — the data wq-099 reads).
+      - Appends one entry per anomaly to `anomalies` (used by
+        write_anomalies_doc).
+      - Writes a single audit row per non-auto-applied claim into
+        ctx.audit_rows so the operator sees why the gate routed it.
+
+    Returns (auto, review, anomaly) lists of FieldWrite. Caller uses `auto`
+    for the entities.json commit; `review` and `anomaly` are reported but
+    not written to entities.json.
+    """
+    by_slug = {c["slug"].lower(): c for c in entities.get("companies", [])}
+    auto, review, anomaly = [], [], []
+
+    for w in writes:
+        ent = by_slug.get(w.entity_slug.lower())
+        decision = VG.evaluate(w, ent)
+
+        diff_row = {
+            "claim_id": (w.prov_entry or {}).get("id"),
+            "entity_slug": w.entity_slug,
+            "year_key": w.year_key,
+            "field_key": w.field_key,
+            "incoming_value": w.value,
+            "prior_value": VG._resolve_prior(ent, w.year_key, w.field_key),
+            "incoming_tier": decision.incoming_tier,
+            "existing_tier": decision.existing_tier,
+            "variance": decision.variance,
+            "is_first_time": decision.is_first_time,
+            "label": w.label,
+            "reason": decision.reason,
+        }
+
+        if decision.bucket == "auto_apply":
+            auto.append(w)
+            diffs.append({**diff_row, "bucket": "auto_apply"})
+            ctx.log("GATE", f"auto-apply {w.label} — {decision.reason}")
+        elif decision.bucket == "anomaly":
+            anomaly.append(w)
+            anomalies.append(diff_row)
+            counters["anomalies"] += 1
+            counters["routed_to_review"] += 1
+            ctx.log("ANOMALY", f"{w.label} — {decision.reason}")
+            ctx.audit_rows.append({
+                "id": diff_row["claim_id"],
+                "category": "wq100_anomaly",
+                "reason": decision.reason,
+                "claim": w.label,
+            })
+        else:  # review
+            review.append(w)
+            counters["routed_to_review"] += 1
+            ctx.log("REVIEW", f"{w.label} — {decision.reason}")
+            ctx.audit_rows.append({
+                "id": diff_row["claim_id"],
+                "category": "wq100_review",
+                "reason": decision.reason,
+                "claim": w.label,
+            })
+
+    return auto, review, anomaly
+
+
+def mark_pending_review(vault, claim_ids, reason_by_id):
+    """For each vault dataPoint whose id is in `claim_ids`, set
+    `pending_review: true` with the reason. Strips any `:auto` usedOn
+    markers so the orphan validator surfaces the claim again. Returns the
+    count of vault items updated."""
+    updated = 0
+    for dp in vault.get("dataPoints", []):
+        cid = dp.get("id")
+        if cid not in claim_ids:
+            continue
+        dp["pending_review"] = True
+        dp["pending_review_reason"] = reason_by_id.get(cid, "")[:240]
+        used = [k for k in (dp.get("usedOn") or []) if not k.endswith(":auto")]
+        dp["usedOn"] = used
+        updated += 1
+    return updated
+
+
+def write_anomalies_doc(anomalies, dry_run=False):
+    """Write data/audits/anomalies-YYYY-MM-DD.md when any >50% writes
+    surfaced this run. Always rewrites today's file (idempotent — running
+    apply_pipeline.py twice in a day produces the same content, not
+    duplicates)."""
+    if not anomalies:
+        return None
+    os.makedirs(ANOMALIES_DIR, exist_ok=True)
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    path = os.path.join(ANOMALIES_DIR, f"anomalies-{today}.md")
+    if dry_run:
+        return path
+    lines = [
+        f"# wq-100 — Variance anomalies ({today})",
+        "",
+        f"_Generated_: {datetime.utcnow().isoformat(timespec='seconds')}Z",
+        "",
+        "Writes whose incoming value diverged >50% from the existing entity "
+        "value. The gate routes them to human review and logs them here so "
+        "Simon's morning glance surfaces them.",
+        "",
+        "| claim | entity.field@period | prior | incoming | variance | incoming tier | existing tier |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for a in anomalies:
+        var_pct = (f"{a['variance'] * 100:.1f}%"
+                   if a.get("variance") is not None else "—")
+        lines.append(
+            f"| {a.get('claim_id') or ''} "
+            f"| {a['entity_slug']}.{a['field_key']}@{a['year_key']} "
+            f"| {a['prior_value']!r} | {a['incoming_value']!r} "
+            f"| {var_pct} "
+            f"| {a.get('incoming_tier') or '—'} "
+            f"| {a.get('existing_tier') or '—'} |"
+        )
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    return path
+
+
+def write_apply_log_json(counters, diffs, dry_run=False):
+    """Append a run summary to data/apply_log.json — the structured rolling
+    log wq-099 reads for the Pipeline tab counters and the
+    "Recently auto-applied (last 24h)" card.
+
+    Schema:
+      {
+        "lastUpdated": "<iso>",
+        "runs": [
+          {
+            "ts": "<iso>",
+            "auto_applied": int,
+            "routed_to_review": int,
+            "anomalies": int,
+            "diffs": [...]    # only the auto-applied writes (with prior/new)
+          },
+          ...
+        ],
+        "counters_30d": { "auto_applied": int, ... }
+      }
+
+    Keeps the last 200 runs (the 30-day counter ignores older entries by
+    timestamp). Idempotent — dry-run mode is a no-op so test runs don't
+    poison the dashboard.
+    """
+    if dry_run:
+        return None
+    os.makedirs(os.path.dirname(APPLY_LOG_JSON), exist_ok=True)
+    log = {"lastUpdated": "", "runs": [], "counters_30d": {
+        "auto_applied": 0, "routed_to_review": 0, "anomalies": 0,
+    }}
+    if os.path.exists(APPLY_LOG_JSON):
+        try:
+            with open(APPLY_LOG_JSON, encoding="utf-8") as f:
+                log = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            pass
+
+    now = datetime.utcnow()
+    auto_diffs = [d for d in diffs if d.get("bucket") == "auto_apply"]
+    run_entry = {
+        "ts": now.isoformat(timespec="seconds") + "Z",
+        "auto_applied": counters.get("auto_applied", 0),
+        "routed_to_review": counters.get("routed_to_review", 0),
+        "anomalies": counters.get("anomalies", 0),
+        "diffs": auto_diffs[:50],  # cap per-run payload
+    }
+    log.setdefault("runs", []).append(run_entry)
+    log["runs"] = log["runs"][-200:]
+    log["lastUpdated"] = run_entry["ts"]
+
+    # Recompute the rolling 30-day counter on every write so the file is
+    # the single source of truth for the dashboard.
+    cutoff = now.timestamp() - 30 * 86400
+    c30 = {"auto_applied": 0, "routed_to_review": 0, "anomalies": 0}
+    for r in log["runs"]:
+        try:
+            ts = datetime.strptime(
+                r["ts"].rstrip("Z"), "%Y-%m-%dT%H:%M:%S",
+            ).replace(tzinfo=None).timestamp()
+        except (KeyError, ValueError):
+            continue
+        if ts < cutoff:
+            continue
+        c30["auto_applied"] += r.get("auto_applied", 0)
+        c30["routed_to_review"] += r.get("routed_to_review", 0)
+        c30["anomalies"] += r.get("anomalies", 0)
+    log["counters_30d"] = c30
+
+    with open(APPLY_LOG_JSON, "w", encoding="utf-8") as f:
+        json.dump(log, f, indent=2)
+    return APPLY_LOG_JSON
 
 
 def apply_writes_to_entities(entities, writes, ctx):
@@ -532,6 +747,8 @@ def main(argv=None):
 
     counters = {
         "auto_applied": 0,
+        "routed_to_review": 0,   # wq-100 D3/D4/D5 gate
+        "anomalies": 0,           # wq-100 D5 — variance >50%
         "skipped_below_threshold": 0,
         "skipped_do_not_apply": 0,
         "skipped_entity_unresolved": 0,
@@ -545,6 +762,8 @@ def main(argv=None):
 
     all_writes = []
     used_on_updates = []  # (claim_id, [keys])
+    gate_diffs = []        # wq-100 — every write's gate decision (auto/review/anomaly)
+    gate_anomalies = []    # wq-100 — variance >50% rows (subset of gate_diffs)
 
     for dp in vault.get("dataPoints", []):
         # Idempotency (D8): a non-empty usedOn means this claim was already
@@ -605,6 +824,46 @@ def main(argv=None):
             })
         all_writes = winners
 
+    # wq-100 variance gate (D3 / D4 / D5). Partition writes BEFORE the
+    # material-change gate and the entities.json commit so that
+    # routed-to-review writes don't count against the $5B aggregate
+    # threshold and don't mutate entities.json.
+    review_writes = []
+    anomaly_writes = []
+    if all_writes:
+        all_writes, review_writes, anomaly_writes = apply_variance_gate(
+            all_writes, entities, ctx, counters, gate_diffs, gate_anomalies,
+        )
+
+    # Mark vault claims whose writes were routed to human review or flagged
+    # as anomalies so the next reviewer surface picks them up. These claims
+    # still belong in vault-data.json — they just don't auto-flow through.
+    pending_ids = set()
+    pending_reasons = {}
+    for w in (review_writes + anomaly_writes):
+        cid = (w.prov_entry or {}).get("id")
+        if not cid:
+            continue
+        # Match the audit-row reason for traceability
+        match = next(
+            (r for r in ctx.audit_rows
+             if r.get("id") == cid and r.get("category", "").startswith("wq100_")),
+            None,
+        )
+        if match:
+            pending_reasons[cid] = match.get("reason", "")
+        pending_ids.add(cid)
+    if pending_ids:
+        # Strip the auto-applied counter for claims that produced a write
+        # that the gate actually rejected — those claims didn't auto-apply
+        # despite having a successful handler return. Their handler-level
+        # `applied: True` was decremented at the gate, not at process_claim.
+        counters["auto_applied"] = max(0, counters["auto_applied"] - len(pending_ids))
+        # Drop their pre-staged usedOn updates so they aren't marked applied.
+        used_on_updates = [
+            (cid, keys) for (cid, keys) in used_on_updates if cid not in pending_ids
+        ]
+
     # Material change gate — net delta across ARR fields on entities that
     # feed arrModel.combined.industry_total (ai_app + model_provider). The
     # gate counts only writes that will actually commit (gap-fill or within-
@@ -652,9 +911,28 @@ def main(argv=None):
     if all_writes:
         apply_writes_to_entities(entities, all_writes, ctx)
 
+    # Mark auto-applied writes with the wq-100 :auto suffix so the override
+    # endpoint can find them and the dashboard can show "Recently auto-applied".
+    for w in all_writes:
+        cid = (w.prov_entry or {}).get("id")
+        if not cid:
+            continue
+        # Find or extend the existing usedOn update for this claim id
+        for i, (uid, keys) in enumerate(used_on_updates):
+            if uid == cid:
+                if "entityDirectory:auto" not in keys:
+                    used_on_updates[i] = (uid, list(keys) + ["entityDirectory:auto"])
+                break
+        else:
+            used_on_updates.append((cid, ["entityDirectory:auto"]))
+
     # Update vault usedOn
     for claim_id, keys in used_on_updates:
         append_used_on(vault, claim_id, keys)
+
+    # wq-100 — flip routed-to-review and anomaly claims to pending_review.
+    pending_count = mark_pending_review(vault, pending_ids, pending_reasons)
+    counters["pending_review_marked"] = pending_count
 
     # Reconcile compute disclosures (Microsoft AI / hyperscaler ARR claims
     # whose value already lives in data/evidence/compute_disclosures/*.json
@@ -681,6 +959,14 @@ def main(argv=None):
             return 4
         ctx.log("INFO", "site-data.json regenerated")
 
+    # wq-100 emissions — anomaly doc + apply log JSON for the wq-099 dashboard.
+    anomalies_path = write_anomalies_doc(gate_anomalies, dry_run=args.dry_run)
+    apply_log_path = write_apply_log_json(counters, gate_diffs, dry_run=args.dry_run)
+    if anomalies_path:
+        ctx.log("INFO", f"anomalies report: {anomalies_path}")
+    if apply_log_path:
+        ctx.log("INFO", f"apply_log: {apply_log_path}")
+
     # Audit doc
     summary = {
         **counters,
@@ -696,6 +982,8 @@ def main(argv=None):
     for k, v in summary.items():
         print(f"  {k}: {v}")
     print(f"  audit_doc: {SKIPPED_AUDIT}")
+    if apply_log_path:
+        print(f"  apply_log: {apply_log_path}")
     return 0
 
 
