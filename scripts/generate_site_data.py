@@ -434,7 +434,8 @@ def generate(entities_path, existing_site_data_path, output_path):
 
         year_data = financials.get(latest_year, {}) if latest_year else {}
 
-        # Update ARR
+        # Update ARR — keep numeric and display string in sync so cards
+        # don't render "$200M" alongside arrNumeric=500_000_000.
         arr = year_data.get("arr") or current.get("arr")
         if arr is not None:
             if isinstance(arr, (int, float)):
@@ -442,6 +443,11 @@ def generate(entities_path, existing_site_data_path, output_path):
                     consumer["arrNumeric"] = int(arr * 1e9) if arr < 100 else int(arr)
                 else:
                     consumer["arrNumeric"] = int(arr * 1e9)
+                # Display string: $X.XB at >=1B, $XXXM below
+                if arr >= 1:
+                    consumer["arr"] = f"${arr:.1f}B"
+                else:
+                    consumer["arr"] = f"${int(round(arr * 1000))}M"
 
         # Update tokens
         tokens = current.get("tokens_per_day")

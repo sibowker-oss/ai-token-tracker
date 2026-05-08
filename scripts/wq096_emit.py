@@ -108,10 +108,36 @@ def tag_providers(site, tagging):
 
 
 def tag_and_filter_topconsumers(site, tagging):
-    """Tag topConsumers tier; remove token factories + dup records; apply ARR backfill."""
+    """Tag topConsumers tier; remove token factories + dup records; apply ARR backfill.
+
+    Hotfix 2026-05-08 — defer to the entity-derived arrNumeric written by
+    `generate_site_data.py:418` when the entity has a populated `arr`
+    field (vault-backed via `apply_pipeline.py`). The hardcoded
+    `TOPCONSUMERS_ARR_BACKFILL` table in `data/wq096_tagging.json` is the
+    legacy fallback for entities not yet in entities.json — it must NOT
+    override a fresh entity-backed value, otherwise apply_pipeline writes
+    silently dead-end at the wq096_emit step.
+    """
     remove = set(tagging["TOPCONSUMERS_REMOVE"])
     tier_map = tagging["TIER_FOR_TOPCONSUMER"]
     backfill = tagging["TOPCONSUMERS_ARR_BACKFILL"]
+    entities_lookup = _load_entities_lookup()
+
+    def _entity_has_arr(co_name):
+        if not co_name:
+            return False
+        candidates = (
+            co_name.lower(),
+            co_name.lower().replace(" ", "-").replace(".", ""),
+        )
+        for key in candidates:
+            ent = entities_lookup.get(key)
+            if not ent:
+                continue
+            arr_b, _src, _dp = _entity_arr_b(ent)
+            if arr_b is not None:
+                return True
+        return False
 
     tc = site.get("dashboard", {}).get("topConsumers", [])
     filtered = []
@@ -123,8 +149,10 @@ def tag_and_filter_topconsumers(site, tagging):
             continue
         # tier
         c["tier"] = tier_map.get(co, "ai_native_app")
-        # backfill ARR + provenance
-        if co in backfill:
+        # backfill ARR + provenance — but ONLY when entities.json doesn't
+        # already provide a vault-backed value. Otherwise the hardcoded
+        # legacy figure overrides an applied claim.
+        if co in backfill and not _entity_has_arr(co):
             bf = backfill[co]
             if "arrNumeric" in bf and bf["arrNumeric"] is not None:
                 c["arrNumeric"] = bf["arrNumeric"]
@@ -134,6 +162,14 @@ def tag_and_filter_topconsumers(site, tagging):
             if bf.get("arrPending"):
                 c["arrPending"] = True
                 c["arrPendingReason"] = bf.get("arrPendingReason", "")
+        elif co in backfill:
+            # Entity-backed; leave arrNumeric alone but stamp the source
+            # so the rendered card credits the vault claim, not the
+            # hardcoded backfill.
+            c.setdefault("arrAsOf", "2026-Q1")
+            c["arrSource"] = "entities.json (apply_pipeline)"
+            if not c.get("provenance"):
+                c["provenance"] = "tier_2b"
         # ensure entries with arrNumeric also carry provenance + arrAsOf
         if c.get("arrNumeric") is not None and not c.get("provenance"):
             c["provenance"] = "tier_2b"
