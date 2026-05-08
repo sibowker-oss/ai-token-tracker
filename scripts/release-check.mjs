@@ -125,6 +125,13 @@ const telemetryRoutingStatus = run('node', ['scripts/validate-telemetry-routing.
   RELEASE_CHECK_TELEMETRY_ROUTING_JSON_OUT: telemetryRoutingJson,
 });
 
+// Step 11b (wq-096 §2 Validators): revenue-model invariants — tier/provenance
+// presence, arrModel reconciliation, no double-listed records, tradCompute
+// carve-out resolution, per-hyperscaler net non-negative. Calls the same
+// reconcile.py mode the brief specifies; advisory in standard release-check.
+console.log('\n→ 11b/13  Revenue-model reconciliation (wq-096 §2 Validators)');
+const revenueModelStatus = run('python3', ['scripts/reconcile.py', '--revenue-model']);
+
 // Step 12: Playwright suite
 console.log('\n→ 12/13  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);

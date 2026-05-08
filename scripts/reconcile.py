@@ -13,6 +13,9 @@ volumes using COGS triangulation, and flags conflicts.
 Output: data-updates/reconciliation-{date}.json + console summary
 
 Run: python3 scripts/reconcile.py
+
+wq-096: --revenue-model mode asserts the arrModel structural invariants
+without doing the signals scan. Run: python3 scripts/reconcile.py --revenue-model
 """
 
 import json
@@ -318,5 +321,154 @@ def reconcile():
     return output
 
 
+def reconcile_revenue_model():
+    """wq-096 — assert structural invariants of arrModel + computeProviders.
+
+    Asserts:
+      1. apps.frontier + apps.aiNative + apps.tradSaas == apps.subtotal
+      2. compute.tradCompute.totalNet + aiNativeCompute.total − totalDeductions == compute.netExternal
+      3. apps_total + compute_net == industry_total (tolerance: $0.1B)
+      4. No record exists in both topConsumers and computeProviders.aiNativeCompute
+      5. Every tradCompute.appsCarveout ID resolves to a real trad_saas record
+      6. compute.netExternal >= 0 for every hyperscaler (implicit via per-record net)
+    """
+    today = datetime.now().strftime('%Y-%m-%d')
+    print(f"🔍 wq-096 revenue-model reconciliation — {today}\n{'='*60}")
+
+    with open(SITE_DATA) as f:
+        site = json.load(f)
+
+    arr_model = site.get('arrModel')
+    if not arr_model:
+        raise SystemExit("FAIL: site-data.json has no arrModel block — run scripts/generate_site_data.py first")
+
+    failures = []
+
+    # ── 1. apps subtotal reconciles ──
+    apps = arr_model['apps']
+    f_total = apps['frontier']['total']
+    a_total = apps['aiNative']['total']
+    t_total = apps['tradSaas']['total']
+    apps_subtotal = apps['subtotal']
+    if abs(f_total + a_total + t_total - apps_subtotal) > 0.01:
+        failures.append(f"apps subtotal mismatch: {f_total} + {a_total} + {t_total} != {apps_subtotal}")
+    else:
+        print(f"  ✓ apps subtotal: ${f_total}B + ${a_total}B + ${t_total}B = ${apps_subtotal}B")
+
+    # ── 2. compute.netExternal reconciles ──
+    compute = arr_model['compute']
+    tc_net = compute['tradCompute']['totalNet']
+    nc_total = compute['aiNativeCompute']['total']
+    deductions_total = compute['deductions']['totalDeductions']
+    net_external = compute['netExternal']
+    expected_net = round(tc_net + nc_total - deductions_total, 4)
+    if abs(expected_net - net_external) > 0.01:
+        failures.append(f"compute.netExternal mismatch: {tc_net} + {nc_total} - {deductions_total} = {expected_net} != {net_external}")
+    else:
+        print(f"  ✓ compute net: ${tc_net}B + ${nc_total}B − ${deductions_total}B = ${net_external}B")
+
+    # ── 3. industry_total reconciles within $0.1B ──
+    combined = arr_model['combined']
+    industry_total = combined['industry_total']
+    expected_industry = round(combined['apps_total'] + combined['compute_net'], 4)
+    if abs(expected_industry - industry_total) > 0.1:
+        failures.append(f"industry_total mismatch: {combined['apps_total']} + {combined['compute_net']} = {expected_industry} != {industry_total}")
+    else:
+        print(f"  ✓ industry_total: ${combined['apps_total']}B + ${combined['compute_net']}B = ${industry_total}B (within $0.1B tolerance)")
+
+    # ── 4. No double-listed records (topConsumers vs aiNativeCompute) ──
+    tc_names = {(c.get('co') or '').lower() for c in site.get('dashboard', {}).get('topConsumers', [])}
+    nc_block = site.get('computeProviders', {}).get('aiNativeCompute', [])
+    nc_names = {(e.get('name') or '').lower() for e in nc_block}
+    nc_ids = {(e.get('id') or '').lower() for e in nc_block}
+    overlap = (tc_names & nc_names) | (tc_names & nc_ids)
+    # Allow soft alias-overlap (e.g., 'Together AI' vs 'together_ai') — also strip _ai/-ai suffixes for comparison.
+    soft_tc = {n.replace(' ai', '').replace('.ai', '').strip() for n in tc_names}
+    soft_nc = {n.replace('_ai', '').replace(' ai', '').strip() for n in nc_names}
+    soft_overlap = soft_tc & soft_nc
+    real_overlap = soft_overlap - {''}
+    if real_overlap:
+        failures.append(f"records exist in both topConsumers and computeProviders.aiNativeCompute: {real_overlap}")
+    else:
+        print(f"  ✓ no record exists in both topConsumers and computeProviders.aiNativeCompute")
+
+    # ── 5. tradCompute.appsCarveout IDs all resolve ──
+    er_ids = {(r.get('id') or '').lower() for r in site.get('dashboard', {}).get('enterpriseReality', [])}
+    bad_carveouts = []
+    for t in site.get('computeProviders', {}).get('tradCompute', []):
+        for cid in t.get('appsCarveout', []):
+            if cid.lower() not in er_ids:
+                bad_carveouts.append((t.get('id'), cid))
+    if bad_carveouts:
+        failures.append(f"tradCompute.appsCarveout IDs do not resolve to trad_saas records: {bad_carveouts}")
+    else:
+        print(f"  ✓ every tradCompute.appsCarveout ID resolves to a trad_saas record")
+
+    # ── 6. Per-hyperscaler net >= 0 ──
+    bad_net = []
+    for t in site.get('computeProviders', {}).get('tradCompute', []):
+        if (t.get('arrNetOfAppsCarveout') or 0) < 0:
+            bad_net.append((t.get('id'), t.get('arrNetOfAppsCarveout')))
+    if bad_net:
+        failures.append(f"tradCompute.arrNetOfAppsCarveout < 0 for: {bad_net}")
+    else:
+        print(f"  ✓ every tradCompute.arrNetOfAppsCarveout >= 0")
+
+    # ── 7. Tier field present on every revenue-bearing record ──
+    missing_tier = []
+    for c in site.get('dashboard', {}).get('topConsumers', []):
+        if not c.get('tier'):
+            missing_tier.append(('topConsumers', c.get('co')))
+    for r in site.get('dashboard', {}).get('enterpriseReality', []):
+        if not r.get('tier'):
+            missing_tier.append(('enterpriseReality', r.get('id') or r.get('name')))
+    for e in site.get('computeProviders', {}).get('tradCompute', []):
+        if not e.get('tier'):
+            missing_tier.append(('tradCompute', e.get('id')))
+    for e in site.get('computeProviders', {}).get('aiNativeCompute', []):
+        if not e.get('tier'):
+            missing_tier.append(('aiNativeCompute', e.get('id')))
+    for k, card in site.get('dashboard', {}).get('providers', {}).items():
+        if not card.get('tier'):
+            missing_tier.append(('providers', k))
+    if missing_tier:
+        failures.append(f"records missing tier field: {missing_tier[:10]}{' …' if len(missing_tier) > 10 else ''}")
+    else:
+        print(f"  ✓ every revenue-bearing record carries a tier field")
+
+    # ── 8. provenance + arrAsOf on every numeric ARR ──
+    missing_prov = []
+    for c in site.get('dashboard', {}).get('topConsumers', []):
+        if c.get('arrNumeric') is not None and not c.get('provenance'):
+            missing_prov.append(('topConsumers', c.get('co')))
+    for r in site.get('dashboard', {}).get('enterpriseReality', []):
+        if r.get('arrClaimedNumeric') is not None and not r.get('provenance'):
+            missing_prov.append(('enterpriseReality', r.get('id')))
+    for e in site.get('computeProviders', {}).get('tradCompute', []):
+        if e.get('arrGrossDisclosed') is not None and not e.get('provenance'):
+            missing_prov.append(('tradCompute', e.get('id')))
+    for e in site.get('computeProviders', {}).get('aiNativeCompute', []):
+        if e.get('arrNumeric') is not None and not e.get('provenance'):
+            missing_prov.append(('aiNativeCompute', e.get('id')))
+    if missing_prov:
+        failures.append(f"records with numeric ARR but missing provenance: {missing_prov[:10]}{' …' if len(missing_prov) > 10 else ''}")
+    else:
+        print(f"  ✓ every numeric ARR carries a provenance field")
+
+    # ── Summary ──
+    print(f"\n{'='*60}")
+    if failures:
+        print(f"  ❌ {len(failures)} reconciliation failures:")
+        for f in failures:
+            print(f"     - {f}")
+        raise SystemExit(1)
+    print(f"  ✅ all wq-096 reconciliation invariants pass")
+    print(f"  industry_total ${combined['industry_total']}B  |  ai_native ${combined['ai_native_total']}B ({combined['ai_native_share_pct']}%)  |  trad ${combined['trad_total']}B")
+
+
 if __name__ == '__main__':
-    reconcile()
+    import sys
+    if '--revenue-model' in sys.argv:
+        reconcile_revenue_model()
+    else:
+        reconcile()

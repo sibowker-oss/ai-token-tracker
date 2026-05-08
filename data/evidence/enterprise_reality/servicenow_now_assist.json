@@ -1,0 +1,25 @@
+{
+  "id": "servicenow_now_assist",
+  "name": "ServiceNow Now Assist",
+  "ticker": "NOW",
+  "tier": "trad_saas",
+  "arrClaimedNumeric": 0.6,
+  "arrAsOf": "2025-Q4",
+  "arrSource": "ServiceNow Q4 2025 earnings \u2014 $600M+ Now Assist ACV",
+  "provenance": "tier_1b",
+  "arrClaimedVsReal": {
+    "realRange": [
+      0.4,
+      0.5
+    ],
+    "realNote": "Cleanest reporter \u2014 AI is genuine premium SKU, but Pro Plus bundles non-AI features."
+  },
+  "narrative": {
+    "claimed": "$600M+ Now Assist ACV (verified, Q4 2025 earnings)",
+    "usage": "Pro Plus premium est. 30-60% (UpperEdge). COGS test: inference cost est. $15-50M/yr = 92-97% \"AI margin\"",
+    "real": "~$400-500M (cleanest reporter \u2014 AI is a genuine premium SKU)",
+    "flags": "Most honest of the group. But Pro Plus bundles non-AI features. Gross margin down 1.7pp (79.2->77.5%) \u2014 slight AI cost impact. Hidden consumption-based \"assists\" fees."
+  },
+  "growth": "20-21%",
+  "prevGrowth": "25%"
+}

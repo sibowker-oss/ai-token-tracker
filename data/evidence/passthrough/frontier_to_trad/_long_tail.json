@@ -1,0 +1,11 @@
+{
+  "id": "_long_tail",
+  "from": "_other_frontier",
+  "to": "_trad_compute",
+  "isLongTail": true,
+  "baseValueBasis": "Aggregate ARR of frontier labs ex-OpenAI/Anthropic (xAI, Mistral, Cohere, DeepSeek, Alibaba/Qwen, Baidu, Tencent, Minimax, Moonshot, ByteDance, Meta) \u2014 ~$3.5B 2026-Q1 annualised",
+  "baseValue": 3.5,
+  "multiplierPct": 25,
+  "rationale": "Long-tail frontier labs spend ~25% of ARR on trad-compute (lower than OpenAI/Anthropic because many run own infra (Tencent/Baidu/ByteDance) or use neoclouds rather than hyperscalers). Editorial assumption.",
+  "provenance": "tier_3a"
+}

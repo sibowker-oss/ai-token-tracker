@@ -1,0 +1,13 @@
+{
+  "id": "gcp",
+  "name": "Google Cloud AI",
+  "tier": "trad_compute",
+  "arrGrossDisclosed": 12.0,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "Editorial Tier 2A \u2014 bottom-up from GCP Q1 2026 AI revenue $3.0B \u00d7 4 (per data/compute_disclosures.json:googl_cloud_ai.frontier_lab_compute_q1_2026 + ai_workload_compute + hosted_model_apis_gross + copilot_excluded), grossed for Workspace AI",
+  "provenance": "tier_2a",
+  "appsCarveout": [
+    "google_workspace_ai"
+  ],
+  "appsCarveoutNote": "Decision D9: Google splits across Gemini (frontier), Workspace AI (trad_saas), GCP ex-Workspace (trad_compute). Carve out Workspace AI from gross."
+}

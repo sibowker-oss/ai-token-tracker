@@ -1,0 +1,25 @@
+{
+  "id": "salesforce_agentforce",
+  "name": "Salesforce Agentforce",
+  "ticker": "CRM",
+  "tier": "trad_saas",
+  "arrClaimedNumeric": 0.8,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "Salesforce Q4 FY26 earnings \u2014 Agentforce ACV component of $2.9B AI+Data line",
+  "provenance": "tier_2a",
+  "arrClaimedVsReal": {
+    "realRange": [
+      0.25,
+      0.35
+    ],
+    "realNote": "Real GenAI ~$250-350M (rest is Data Cloud, Informatica, legacy Einstein); ~50% of 29K deals free/seeded."
+  },
+  "narrative": {
+    "claimed": "$800M Agentforce ARR (within $2.9B \"AI+Data\" that includes Informatica acquisition)",
+    "usage": "~50% of 29K deals are free/seeded. COGS test: inference cost est. $6-12M/yr on $800M = 98%+ \"AI margin\"",
+    "real": "~$250-350M real GenAI (rest is Data Cloud, Informatica, legacy Einstein)",
+    "flags": "$2.9B bundles Informatica ($1.5B acq.) + Data 360 + Agentforce. Gross margin flat at 77% = minimal AI COGS. AWU metric criticized as vanity metric. <2% of $41.5B revenue."
+  },
+  "growth": "8-9%",
+  "prevGrowth": "18%"
+}

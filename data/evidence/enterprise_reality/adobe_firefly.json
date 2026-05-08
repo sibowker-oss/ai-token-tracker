@@ -1,0 +1,25 @@
+{
+  "id": "adobe_firefly",
+  "name": "Adobe Firefly",
+  "ticker": "ADBE",
+  "tier": "trad_saas",
+  "arrClaimedNumeric": 0.45,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "Adobe FY25 earnings narrative \u2014 Firefly $400-500M, AI-first ARR $250M; midpoint $450M",
+  "provenance": "tier_2b",
+  "arrClaimedVsReal": {
+    "realRange": [
+      0.2,
+      0.3
+    ],
+    "realNote": "Some cannibalises stock photo revenue; growth flat at 10-11% pre and post AI."
+  },
+  "narrative": {
+    "claimed": "Firefly ~$400-500M, AI-first ARR $250M",
+    "usage": "75% of Fortune 500 \"adopted\" but free tier inflates. Some cannibalizes stock photo revenue.",
+    "real": "~$200-300M incremental",
+    "flags": "Growth completely flat at 10-11% pre AND post AI. Firefly has moved the needle zero on top-line growth."
+  },
+  "growth": "10-11%",
+  "prevGrowth": "10-11%"
+}

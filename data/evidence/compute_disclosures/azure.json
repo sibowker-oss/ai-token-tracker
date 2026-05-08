@@ -1,0 +1,15 @@
+{
+  "id": "azure",
+  "name": "Microsoft Azure AI",
+  "tier": "trad_compute",
+  "arrGrossDisclosed": 37.0,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "Microsoft FY26 Q3 earnings \u2014 '$37B annualised AI run-rate, +123% YoY'",
+  "provenance": "tier_1b",
+  "appsCarveout": [
+    "m365_copilot",
+    "github_copilot",
+    "microsoft_dynamics_copilot"
+  ],
+  "appsCarveoutNote": "Decision D9: Microsoft has NO frontier entry; Azure carves out M365 Copilot + GitHub Copilot + Dynamics Copilot which are trad_saas. Net = gross \u2212 sum(arrClaimedNumeric of carveout records)."
+}

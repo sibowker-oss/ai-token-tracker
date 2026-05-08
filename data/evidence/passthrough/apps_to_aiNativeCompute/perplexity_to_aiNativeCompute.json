@@ -1,0 +1,10 @@
+{
+  "id": "perplexity_to_aiNativeCompute",
+  "from": "perplexity",
+  "to": "_aiNativeCompute_aggregate",
+  "value": 0.05,
+  "valueBasis": "Q1 2026 annualised \u2014 Perplexity compute spend on aiNativeCompute (residual, mostly direct frontier API)",
+  "source": "Perplexity press 2025 \u2014 most spend through frontier APIs; small share via Together/Fireworks for OSS-model serving",
+  "provenance": "tier_3a",
+  "rationale": "Most apps in this layer hit frontier APIs directly; aiNativeCompute share is small."
+}

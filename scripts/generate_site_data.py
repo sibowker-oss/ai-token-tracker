@@ -531,6 +531,16 @@ def generate(entities_path, existing_site_data_path, output_path):
         if public:
             site["capital_sankey"] = public
 
+    # ── wq-096: revenue-model refactor (tier tagging, enterpriseReality numeric,
+    # computeProviders, arrModel). Applied after the standard generator passes
+    # so all upstream blocks (providers, topConsumers) are populated first.
+    try:
+        import wq096_emit
+        wq096_emit.apply_all(site)
+    except Exception as e:
+        print(f"  wq-096 emit failed: {e}")
+        raise
+
     # ── wq-055: write FULL Sankey from market_aggregates engine output ──
     # Per brief §2 #3: providers, costParams.vcSubsidy, buyers, channels,
     # outcomes, totals — all derived consistently from one engine block.
