@@ -308,7 +308,7 @@
     </div>
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--revenue);">Revenue Ledger</div>
-      <div class="lc-value" style="color:var(--revenue);" id="card-revenue">$17B</div>
+      <div class="lc-value" style="color:var(--revenue);" id="card-revenue">$19.3B</div>
       <div class="lc-desc">Customer-paid AI revenue collected by providers in the 2025 measured cohort. Tracks who pays, how, and where it goes.</div>
       <div class="lc-tier">
         <span class="tier-pill tier-1">65% Sourced</span>
@@ -377,21 +377,26 @@
 // Bear/Base/Bull scenario toggle removed 2026-05-07 per Simon — single base
 // view now. Hook ratio is computed live as Compute / Apps; cards read from
 // engine aggregates so quarterly refreshes flow through without copy edits.
-const FALLBACK = { capex: 745, apps: 17.36, compute: 43.07, tokens: 360 };
+const FALLBACK = { capex: 745, apps: 17.36, appsGross: 19.28, compute: 43.07, tokens: 360 };
 
 function _setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
 
 function _hydrate(b) {
   const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
+  const fmt$1 = v => '$' + (Math.round(v * 10) / 10).toFixed(1) + 'B';
   const fmtT = v => '~' + Math.round(v) + 'T';
   const ratio = '$' + (Math.round((b.compute / b.apps) * 10) / 10).toFixed(2);
   // Ledger cards
   _setText('card-capex',   fmt$(b.capex));
-  _setText('card-revenue', fmt$(b.apps));
+  _setText('card-revenue', fmt$1(b.appsGross));
   _setText('card-compute', fmt$(b.compute));
   _setText('card-tokens',  fmtT(b.tokens) + '/day');
-  // Hook one-liner ratio (Compute-anchored: Compute / Apps)
+  // Hook one-liner ratio (Compute-anchored: Compute / Apps net — provider-side)
   _setText('hook-ratio', ratio);
+  // Top bar revenue figure — gross customer revenue, 1-decimal precision
+  // (formatCurrency rounds ≥10 to whole-billions and would lose the .3).
+  // Bar + card both read appsGross so they stay locked in sync.
+  _setText('ais-revenue-figure', fmt$1(b.appsGross));
 }
 
 // Render fallback values immediately so the page never shows stale literals
@@ -403,10 +408,11 @@ fetch('site-data.json?v=' + Date.now())
   .then(d => {
     window.siteData = d;
     _hydrate({
-      capex:   (d.cumulative && d.cumulative.capex_total)                          || FALLBACK.capex,
-      apps:    (d.sankey     && d.sankey.totalCustomerRevenue)                     || FALLBACK.apps,
-      compute: (d.compute    && d.compute.compute_revenue_2025_gross_usd_b)        || FALLBACK.compute,
-      tokens:  (d.cumulative && d.cumulative.tokens_2025_annualized)               || FALLBACK.tokens,
+      capex:    (d.cumulative && d.cumulative.capex_total)                          || FALLBACK.capex,
+      apps:     (d.sankey     && d.sankey.totalCustomerRevenue)                     || FALLBACK.apps,
+      appsGross:(d.sankey     && d.sankey.totalCustomerRevenue_gross)               || FALLBACK.appsGross,
+      compute:  (d.compute    && d.compute.compute_revenue_2025_gross_usd_b)        || FALLBACK.compute,
+      tokens:   (d.cumulative && d.cumulative.tokens_2025_annualized)               || FALLBACK.tokens,
     });
   })
   .catch(() => { /* fallback already rendered */ });
