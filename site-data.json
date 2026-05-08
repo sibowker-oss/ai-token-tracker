@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-08T01:32:16Z",
+    "generatedAt": "2026-05-08T06:00:40Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -1961,7 +1961,7 @@
         ],
         "tokensNumeric": 800000000000,
         "arr": "$1B+",
-        "arrNumeric": 1000000000,
+        "arrNumeric": 2000000000,
         "valuation": "$10B+",
         "valuationNumeric": 10000000000,
         "totalFunding": "$900M+",
@@ -5501,7 +5501,7 @@
         "tokens_per_day_date": "2026-05-03"
       },
       "best_confidence": "high",
-      "provenance_entry_count": 60,
+      "provenance_entry_count": 66,
       "qualifies_for_detail_page": true
     },
     {
@@ -5531,10 +5531,12 @@
           "as_of": "2026-04-30",
           "source": "SemiAnalysis estimate",
           "methodology_note": "Anthropic calculates annualised revenue as last 4 weeks of API revenue \u00d7 13 + monthly chatbot subscription revenue (single-day active subs anchor) \u00d7 12 (per The Information). Selecting a single-day anchor and 4-week-window can inflate vs steady-state. Published number on TAIL = $30B (Anthropic-disclosed); $44B carried as external estimate only."
-        }
+        },
+        "usd_per_gw_year": 10.0,
+        "input_token_price_usd_per_m": 5.0
       },
       "best_confidence": "high",
-      "provenance_entry_count": 42,
+      "provenance_entry_count": 45,
       "qualifies_for_detail_page": true
     },
     {
@@ -5869,7 +5871,7 @@
         ]
       },
       "best_confidence": "high",
-      "provenance_entry_count": 5,
+      "provenance_entry_count": 6,
       "qualifies_for_detail_page": true
     },
     {
@@ -5968,8 +5970,8 @@
       ],
       "region": "",
       "current": {},
-      "best_confidence": "low",
-      "provenance_entry_count": 0,
+      "best_confidence": "high",
+      "provenance_entry_count": 1,
       "qualifies_for_detail_page": false
     },
     {
@@ -6098,10 +6100,13 @@
         "founded": 2022,
         "valuation": 10.0,
         "total_funding": "$900M+",
-        "confidence": "Med-High"
+        "confidence": "Med-High",
+        "team_count": 50000,
+        "price_per_month_usd": 200.0,
+        "price_per_user_month_usd": 40.0
       },
       "best_confidence": "medium",
-      "provenance_entry_count": 5,
+      "provenance_entry_count": 13,
       "qualifies_for_detail_page": true
     },
     {
@@ -7896,7 +7901,7 @@
     "_notes": "Three-segment model: Frontier lab compute (the circular-financing line \u2014 Model Providers paying external hyperscalers/neoclouds), AI workload compute (AI Natives + enterprises + sovereign workloads), Hosted model APIs (packaged token APIs). Pass-through applies to Hosted model APIs only. Copilot scoped OUT \u2014 tracked separately under copilot_excluded_*. See /methodology.html \u00a7Compute Revenue \u2014 three-segment model."
   },
   "computeProviders": {
-    "_generatedAt": "2026-05-08T01:32:16Z",
+    "_generatedAt": "2026-05-08T06:00:40Z",
     "_doc": "wq-096 \u2014 Tier 4 (trad_compute) and Tier 5 (ai_native_compute) records. tradCompute carries appsCarveout pointing at trad_saas record IDs whose ARR is deducted to produce arrNetOfAppsCarveout. Per Decision D9, multi-tier companies (Google, Microsoft, Oracle) split into separate records per tier; Microsoft has no Frontier entry.",
     "tradCompute": [
       {
@@ -8080,7 +8085,7 @@
     ]
   },
   "arrModel": {
-    "_generatedAt": "2026-05-08T01:32:16Z",
+    "_generatedAt": "2026-05-08T06:00:40Z",
     "_brief": "wq-096",
     "_doc": "Five-tier revenue model aggregator. apps_total + compute_net = industry_total within $0.1B tolerance. ai_native_total / trad_total cross-cut the apps/compute split per the editorial axis (Decision D1) and do not sum to industry_total because pass-through deductions are netted at the compute layer.",
     "asOf": "2026-Q1-annualised",
@@ -8177,7 +8182,7 @@
         ]
       },
       "aiNative": {
-        "total": 5.2992,
+        "total": 6.2992,
         "entries": [
           {
             "id": "OpenClaw",
@@ -8187,7 +8192,7 @@
           },
           {
             "id": "Cursor (Anysphere)",
-            "arr": 1.0,
+            "arr": 2.0,
             "provenance": "tier_2b",
             "tier": "ai_native_app"
           },
@@ -8570,7 +8575,7 @@
           }
         ]
       },
-      "subtotal": 81.5292
+      "subtotal": 82.5292
     },
     "compute": {
       "tradCompute": {
@@ -8846,12 +8851,12 @@
       "subtotal": 43.08
     },
     "combined": {
-      "apps_total": 81.5292,
+      "apps_total": 82.5292,
       "compute_net": 43.08,
-      "industry_total": 124.6092,
-      "ai_native_total": 77.7642,
+      "industry_total": 125.6092,
+      "ai_native_total": 78.7642,
       "trad_total": 71.33,
-      "ai_native_share_pct": 62.41
+      "ai_native_share_pct": 62.71
     }
   }
 }

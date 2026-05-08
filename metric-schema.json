@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": "2.3",
-    "description": "Field definitions per role + structured claim types. Supports dynamic field discovery \u2014 new fields proposed by Claude are added to proposed_fields until approved. claim_types (v2.2) defines structured payloads emitted by Stream 2 / Stream 3 extractors per wq-014. v2.3 (wq-054): adds field_patterns + time_period_scope_values for sub-period claim routing.",
-    "lastUpdated": "2026-05-03"
+    "version": "2.4",
+    "description": "Field definitions per role + structured claim types. Supports dynamic field discovery \u2014 new fields proposed by Claude are added to proposed_fields until approved. claim_types (v2.2) defines structured payloads emitted by Stream 2 / Stream 3 extractors per wq-014. v2.3 (wq-054): adds field_patterns + time_period_scope_values for sub-period claim routing. v2.4 (wq-098): documents do_not_apply boolean on vault dataPoints \u2014 claims with do_not_apply=true (or confidence='parked') are skipped by apply_pipeline.py.",
+    "lastUpdated": "2026-05-08"
   },
   "proposed_fields": [
     {

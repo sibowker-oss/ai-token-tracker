@@ -23,7 +23,7 @@ import sys
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA_PATH = os.path.join(BASE, "metric-schema.json")
 sys.path.insert(0, os.path.join(BASE, "scripts"))
-from apply_decisions import match_field  # noqa: E402
+from apply_decisions_legacy import match_field  # noqa: E402
 
 with open(SCHEMA_PATH, "r") as f:
     SCHEMA = json.load(f)

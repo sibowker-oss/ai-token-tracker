@@ -1,5 +1,21 @@
 #!/usr/bin/env python3
 """
+DEPRECATED — archived 2026-05-08 by wq-098 Pipeline Apply Layer Rebuild.
+
+Use scripts/apply_pipeline.py instead. release-check.mjs fails if any
+production module imports from `apply_decisions_legacy`. See
+`docs/briefs/wq-098-pipeline-apply-layer-rebuild.md` and
+`data/audits/wq-098-direct-vault-writers.md`.
+
+Triangulation soft-park / replay logic remains here as reference. wq-098
+intentionally does not re-implement it; if a future apply needs to drain
+triangulations-pending.json, the helper functions can be ported from
+this file (they have unit tests in tests/test_apply_decisions_encoding.py).
+
+The original docstring is preserved below for historical context only.
+
+────────────────────────────────────────────────────────────────────────
+
 apply_decisions.py — Process review decisions end-to-end.
 
 Reads review-decisions-*.json (from review.html Submit),

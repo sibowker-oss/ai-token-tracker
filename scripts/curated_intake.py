@@ -323,7 +323,8 @@ def _provenance_confidence(entity: dict, prov_key: str) -> str:
     usually propagated from a year's data without a separate provenance
     record.
     """
-    from apply_decisions import compute_provenance_tier  # noqa: WPS433
+    # wq-098: helper-only import from the archived legacy module.
+    from apply_decisions_legacy import compute_provenance_tier  # noqa: WPS433
     prov_block = entity.get("provenance") or {}
     prov = prov_block.get(prov_key)
     if not prov or not prov.get("claims"):

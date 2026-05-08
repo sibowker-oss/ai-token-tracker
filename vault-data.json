@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": "1.0",
-    "lastUpdated": "2026-04-01",
+    "lastUpdated": "2026-05-08",
     "description": "Private reference data for APAC AI Intelligence site"
   },
   "dataPoints": [
@@ -374,7 +374,8 @@
       "dateOfClaim": "2025-12-01",
       "dateAdded": "2026-03-28",
       "usedOn": [
-        "sankey"
+        "sankey",
+        "telemetry-signals"
       ],
       "notes": "Meta's official Llama download count. Used in the 'shift to open models' narrative section.",
       "tags": [
@@ -398,7 +399,8 @@
       "dateOfClaim": "2026-01-01",
       "dateAdded": "2026-03-28",
       "usedOn": [
-        "sankey"
+        "sankey",
+        "entityDirectory"
       ],
       "notes": "From OpenRouter's public rankings/statistics. Shows open models dominate by volume even if closed models lead on revenue per query.",
       "tags": [
@@ -635,7 +637,10 @@
       "dateAdded": "2026-03-30",
       "usedOn": [
         "dashboard",
-        "timeline"
+        "timeline",
+        "entityDirectory",
+        "dashboard.providers",
+        "arrModel.apps.frontier"
       ],
       "notes": "Corroborating \u2014 citing widely reported figures. Brad Gerstner (investor) did not dispute.",
       "tags": [
@@ -659,7 +664,8 @@
       "dateOfClaim": "2026-03-13",
       "dateAdded": "2026-03-30",
       "usedOn": [
-        "dashboard"
+        "dashboard",
+        "entityDirectory"
       ],
       "notes": "Authoritative \u2014 direct investor with board-level access. Confirms $14B ARR figure.",
       "tags": [
@@ -706,7 +712,10 @@
       "dateAdded": "2026-03-30",
       "usedOn": [
         "dashboard",
-        "timeline"
+        "timeline",
+        "entityDirectory",
+        "dashboard.providers",
+        "arrModel.apps.frontier"
       ],
       "notes": "Corroborating \u2014 multiple reports. Dashboard updated from $16.8B.",
       "tags": [
@@ -752,7 +761,8 @@
       "dateOfClaim": "2026-03-13",
       "dateAdded": "2026-03-30",
       "usedOn": [
-        "timeline"
+        "timeline",
+        "entityDirectory"
       ],
       "notes": "Authoritative \u2014 from Anthropic CFO directly. Key metric for DC economics.",
       "tags": [
@@ -1199,7 +1209,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-01-31",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Now Assist ACV $600M+ at Q4 2025, doubled YoY (tracking toward $1B+ for 2026). Total ServiceNow FY2026 sub revenue guided at $15.53-15.57B. AI = ~4% of total sub base \u2014 consistent with low-penetration thesis.",
       "tags": [
         "auto-scan",
@@ -1276,7 +1288,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-03-01",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Opus 4.6: $5/$25 per M in/out tokens (was higher; ~67% cut). Sonnet 4.6: $3/$15. Haiku 4.5: $1/$5. Long-context surcharge removed \u2014 1M context window now at standard per-token rates.",
       "tags": [
         "auto-scan",
@@ -1569,7 +1583,11 @@
       "confidence": "verified",
       "dateOfClaim": "2026-03-01",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.providers",
+        "arrModel.apps.frontier"
+      ],
       "notes": "CRITICAL: OpenAI's $25B ARR confirmed to use best 4-week period \u00d7 12, NOT calendar month \u00d7 12. This inflates the figure by an estimated 10-15% vs monthly calculation. Must apply cherry-pick haircut in ARR conversion.",
       "tags": [
         "ARR",
@@ -2459,7 +2477,9 @@
       "confidence": "verified",
       "dateOfClaim": "2024-12-31",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
       "tags": [
         "valuation",
@@ -2480,7 +2500,9 @@
       "confidence": "verified",
       "dateOfClaim": "2024-12-31",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
       "tags": [
         "revenue",
@@ -2522,7 +2544,9 @@
       "confidence": "verified",
       "dateOfClaim": "2024-12-31",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
       "tags": [
         "users",
@@ -2544,7 +2568,9 @@
       "confidence": "verified",
       "dateOfClaim": "2024-12-31",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Auto-extracted from Open AI Press release 31 Mar",
       "tags": [
         "revenue",
@@ -2634,7 +2660,9 @@
       "confidence": "verified",
       "dateOfClaim": "2024-12-31",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Auto-extracted from OpenAI Again",
       "tags": [
         "valuation",
@@ -2655,7 +2683,9 @@
       "confidence": "verified",
       "dateOfClaim": "2024-12-31",
       "dateAdded": "2026-04-02",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "Auto-extracted from OpenAI Again",
       "tags": [
         "revenue",
@@ -3318,7 +3348,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-Q1",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From OpenAI Press Release 31 Mar 25",
       "tags": [
         "provider_revenue"
@@ -3338,7 +3370,11 @@
       "confidence": "verified",
       "dateOfClaim": "February 2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.topConsumers",
+        "arrModel.apps.aiNative"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "provider_revenue"
@@ -3358,7 +3394,11 @@
       "confidence": "verified",
       "dateOfClaim": "November 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.topConsumers",
+        "arrModel.apps.aiNative"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "provider_revenue"
@@ -3378,7 +3418,11 @@
       "confidence": "verified",
       "dateOfClaim": "June 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.topConsumers",
+        "arrModel.apps.aiNative"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "provider_revenue"
@@ -3418,7 +3462,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "enterprise_adoption"
@@ -3438,7 +3484,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "enterprise_adoption"
@@ -3458,7 +3506,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "enterprise_adoption"
@@ -3478,7 +3528,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "pricing"
@@ -3498,7 +3550,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "pricing"
@@ -3518,7 +3572,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "pricing"
@@ -3538,7 +3594,9 @@
       "confidence": "verified",
       "dateOfClaim": "June 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "pricing"
@@ -3578,7 +3636,9 @@
       "confidence": "verified",
       "dateOfClaim": "April 2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3598,7 +3658,9 @@
       "confidence": "verified",
       "dateOfClaim": "April 2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3618,7 +3680,9 @@
       "confidence": "verified",
       "dateOfClaim": "November 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3638,7 +3702,9 @@
       "confidence": "verified",
       "dateOfClaim": "November 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3658,7 +3724,9 @@
       "confidence": "verified",
       "dateOfClaim": "June 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3678,7 +3746,9 @@
       "confidence": "verified",
       "dateOfClaim": "June 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3698,7 +3768,9 @@
       "confidence": "verified",
       "dateOfClaim": "December 2024",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3718,7 +3790,9 @@
       "confidence": "verified",
       "dateOfClaim": "December 2024",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3738,7 +3812,9 @@
       "confidence": "verified",
       "dateOfClaim": "August 2024",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3758,7 +3834,9 @@
       "confidence": "verified",
       "dateOfClaim": "August 2024",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3778,7 +3856,9 @@
       "confidence": "verified",
       "dateOfClaim": "2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "valuation_funding"
@@ -3798,7 +3878,11 @@
       "confidence": "verified",
       "dateOfClaim": "December 2025",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.topConsumers",
+        "arrModel.apps.aiNative"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "provider_revenue"
@@ -3818,7 +3902,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "other"
@@ -3838,7 +3924,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Cursor Deep Dive",
       "tags": [
         "enterprise_adoption"
@@ -3878,7 +3966,9 @@
       "confidence": "verified",
       "dateOfClaim": "last day (as of page capture)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 OpenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -3898,7 +3988,9 @@
       "confidence": "verified",
       "dateOfClaim": "last week (as of page capture)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 OpenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -3918,7 +4010,9 @@
       "confidence": "verified",
       "dateOfClaim": "last month (as of page capture)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 OpenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -3938,7 +4032,9 @@
       "confidence": "verified",
       "dateOfClaim": "as of page capture",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 OpenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -3958,7 +4054,9 @@
       "confidence": "verified",
       "dateOfClaim": "last day (as of page retrieval)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Anthropic SDK",
       "tags": [
         "enterprise_adoption"
@@ -3978,7 +4076,9 @@
       "confidence": "verified",
       "dateOfClaim": "last week (as of page retrieval)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Anthropic SDK",
       "tags": [
         "enterprise_adoption"
@@ -3998,7 +4098,9 @@
       "confidence": "verified",
       "dateOfClaim": "last month (as of page retrieval)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Anthropic SDK",
       "tags": [
         "enterprise_adoption"
@@ -4018,7 +4120,9 @@
       "confidence": "verified",
       "dateOfClaim": "as of page retrieval",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Anthropic SDK",
       "tags": [
         "enterprise_adoption"
@@ -4038,7 +4142,9 @@
       "confidence": "verified",
       "dateOfClaim": "last day (as of scrape date)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Google GenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -4058,7 +4164,9 @@
       "confidence": "verified",
       "dateOfClaim": "last week (as of scrape date)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Google GenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -4078,7 +4186,9 @@
       "confidence": "verified",
       "dateOfClaim": "last month (as of scrape date)",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Google GenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -4098,7 +4208,9 @@
       "confidence": "verified",
       "dateOfClaim": "as of scrape date",
       "dateAdded": "2026-04-25",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From PyPI Stats \u2014 Google GenAI SDK",
       "tags": [
         "enterprise_adoption"
@@ -4247,7 +4359,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-04-23",
       "dateAdded": "2026-04-26",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From SEC EDGAR \u2014 AI company 10-K/10-Q/8-K scan",
       "tags": [
         "filings_catalogue"
@@ -4267,7 +4381,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-04-23",
       "dateAdded": "2026-04-26",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From SEC EDGAR \u2014 AI company 10-K/10-Q/8-K scan",
       "tags": [
         "filings_catalogue"
@@ -4287,7 +4403,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-04-23",
       "dateAdded": "2026-04-26",
-      "usedOn": [],
+      "usedOn": [
+        "telemetry-signals"
+      ],
       "notes": "From SEC EDGAR \u2014 AI company 10-K/10-Q/8-K scan",
       "tags": [
         "filings_catalogue"
@@ -4347,7 +4465,9 @@
       "confidence": "verified",
       "dateOfClaim": "September 2025",
       "dateAdded": "2026-04-26",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 Perplexity Deep Dive",
       "tags": [
         "valuation_funding"
@@ -4367,7 +4487,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026 (annualized)",
       "dateAdded": "2026-04-26",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From economics of AI report",
       "tags": [
         "provider_revenue"
@@ -4487,7 +4609,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-Q1",
       "dateAdded": "2026-04-26",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From OpenAI Press Release 31 Mar 25",
       "tags": [
         "enterprise_adoption"
@@ -4507,7 +4631,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-Q1",
       "dateAdded": "2026-04-27",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From OpenAI Press Release 31 Mar 25",
       "tags": [
         "enterprise_adoption"
@@ -4707,7 +4833,11 @@
       "confidence": "verified",
       "dateOfClaim": "February 2026",
       "dateAdded": "2026-04-27",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.providers",
+        "arrModel.apps.frontier"
+      ],
       "notes": "From Sacra \u2014 OpenAI Deep Dive",
       "tags": [
         "provider_revenue"
@@ -4767,7 +4897,9 @@
       "confidence": "verified",
       "dateOfClaim": "2025",
       "dateAdded": "2026-04-27",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 OpenAI Deep Dive",
       "tags": [
         "provider_revenue"
@@ -4787,7 +4919,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026",
       "dateAdded": "2026-04-27",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 OpenAI Deep Dive",
       "tags": [
         "provider_revenue"
@@ -4807,7 +4941,9 @@
       "confidence": "verified",
       "dateOfClaim": "April 2026",
       "dateAdded": "2026-04-27",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory"
+      ],
       "notes": "From Sacra \u2014 OpenAI Deep Dive",
       "tags": [
         "valuation_funding"
@@ -4847,7 +4983,11 @@
       "confidence": "verified",
       "dateOfClaim": "Early 2026",
       "dateAdded": "2026-04-27",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.providers",
+        "arrModel.apps.frontier"
+      ],
       "notes": "From Sacra \u2014 OpenAI Deep Dive",
       "tags": [
         "provider_revenue"
@@ -4867,7 +5007,11 @@
       "confidence": "verified",
       "dateOfClaim": "Mid-2025",
       "dateAdded": "2026-04-27",
-      "usedOn": [],
+      "usedOn": [
+        "entityDirectory",
+        "dashboard.providers",
+        "arrModel.apps.frontier"
+      ],
       "notes": "From Sacra \u2014 OpenAI Deep Dive",
       "tags": [
         "provider_revenue"
@@ -5197,7 +5341,9 @@
       "confidence": "verified",
       "dateOfClaim": "2026-04",
       "dateAdded": "2026-05-05",
-      "usedOn": [],
+      "usedOn": [
+        "evidence:compute_disclosures/azure"
+      ],
       "notes": "Most recent earnings. TAIL previously held $13B from Jan 2026 \u2014 that was Q2 FY2026. This is the updated Q3 FY2026 figure. Author estimates 70%+ is OpenAI Azure spend (~$24B annualised).",
       "tags": [
         "microsoft",

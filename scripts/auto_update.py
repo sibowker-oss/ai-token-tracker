@@ -234,13 +234,22 @@ def main():
         # Step 4: Update self-hosted estimate in site-data.json
         update_site_data(signals)
 
-        # Step 5: Apply any approved claims from web review
+        # Step 5: Apply vault claims via the canonical wq-098 pipeline
+        # (replaces the pre-098 apply_claims.py invocation; legacy script
+        # archived as scripts/apply_claims.legacy.py).
         try:
-            from apply_claims import main as apply_claims_main
-            apply_claims_main()
+            from apply_pipeline import main as apply_pipeline_main
+            rc = apply_pipeline_main([])
+            outputs["apply_pipeline_rc"] = rc
+            if rc == 2:
+                outputs["apply_pipeline_status"] = "halted_material_change"
+            elif rc != 0:
+                outputs["apply_pipeline_status"] = f"non_zero_exit_{rc}"
+            else:
+                outputs["apply_pipeline_status"] = "ok"
         except Exception as e:
-            print(f"  Claims application: {e}")
-            outputs["apply_claims_error"] = str(e)[:120]
+            print(f"  apply_pipeline: {e}")
+            outputs["apply_pipeline_error"] = str(e)[:120]
 
         # Step 6: Commit and push
         git_commit_push(today)

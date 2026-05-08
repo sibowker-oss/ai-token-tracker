@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 """
+DEPRECATED — archived 2026-05-08 by wq-098 Pipeline Apply Layer Rebuild.
+
+Use scripts/apply_pipeline.py instead. release-check.mjs fails if any
+production module imports from `apply_claims_legacy`. See
+`docs/briefs/wq-098-pipeline-apply-layer-rebuild.md` and
+`data/audits/wq-098-direct-vault-writers.md`.
+
+The original docstring is preserved below for historical context only.
+
+────────────────────────────────────────────────────────────────────────
+
 Apply approved claims to site-data.json.
 
 Reads data-updates/approved-claims.json (written by claims.html Submit),

@@ -132,6 +132,15 @@ const telemetryRoutingStatus = run('node', ['scripts/validate-telemetry-routing.
 console.log('\n→ 11b/13  Revenue-model reconciliation (wq-096 §2 Validators)');
 const revenueModelStatus = run('python3', ['scripts/reconcile.py', '--revenue-model']);
 
+// Step 11c (wq-098 §3 acceptance #2 + #10): pipeline-orphans — every vault
+// `unit` must have a registered handler; no verified tier-2A-or-better
+// claims may sit unused; only allowlisted scripts may write vault-data.json.
+console.log('\n→ 11c/13  Pipeline orphans (wq-098 §3 #2/#10)');
+const pipelineOrphansJson = join(reportDir, 'pipeline-orphans.json');
+const pipelineOrphansStatus = run('node', ['scripts/validate-pipeline-orphans.mjs'], {
+  RELEASE_CHECK_PIPELINE_ORPHANS_JSON_OUT: pipelineOrphansJson,
+});
+
 // Step 12: Playwright suite
 console.log('\n→ 12/13  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
@@ -177,6 +186,9 @@ const telemetryRoutingFindings = existsSync(telemetryRoutingJson) ? JSON.parse(r
 const telemetryRoutingFails = telemetryRoutingFindings.filter(f => f.severity === 'fail');
 const telemetryRoutingAdvisories = telemetryRoutingFindings.filter(f => f.severity === 'advisory');
 
+const pipelineOrphansFindings = existsSync(pipelineOrphansJson) ? JSON.parse(readFileSync(pipelineOrphansJson, 'utf8')) : [];
+const pipelineOrphansFails = pipelineOrphansFindings.filter(f => f.severity === 'fail');
+
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
 if (existsSync(pwResultsPath)) {
@@ -209,6 +221,7 @@ const report = `# Release-check report
 | Narrative-hydration (wq-077) | ${narrativeFindings.length === 0 ? '✓' : ''} | 0 | ${narrativeFails.length} |
 | Period-attribution (wq-054) | ${periodAttrFindings.length === 0 ? '✓' : ''} | ${periodAttrAdvisories.length} | ${periodAttrFails.length} |
 | Telemetry-routing (wq-047) | ${telemetryRoutingFindings.length === 0 ? '✓' : ''} | ${telemetryRoutingAdvisories.length} | ${telemetryRoutingFails.length} |
+| Pipeline orphans (wq-098) | ${pipelineOrphansFindings.length === 0 ? '✓' : ''} | 0 | ${pipelineOrphansFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
@@ -260,6 +273,10 @@ ${renderFindings(periodAttrFindings)}
 
 ${renderFindings(telemetryRoutingFindings)}
 
+## Pipeline-orphans findings (wq-098 §3 #2/#10)
+
+${renderFindings(pipelineOrphansFindings)}
+
 ## Playwright suite
 
 See \`${join('tests', 'reports', 'html', 'index.html')}\` for the full Playwright HTML report.
@@ -298,6 +315,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   narrative_hydration: narrativeFindings,
   period_attribution: periodAttrFindings,
   telemetry_routing: telemetryRoutingFindings,
+  pipeline_orphans: pipelineOrphansFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -305,7 +323,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pipelineOrphansFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);

@@ -43,7 +43,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import apply_decisions as ad  # noqa: E402
+# wq-098: helper-only import from the archived legacy module. Pure-function
+# helpers (match_entity, match_field, match_year, infer_weight,
+# WEIGHT_RANK, _RULE_CACHE, _load_rule_layers) survive here. Do NOT call
+# apply_decisions_legacy.main().
+import apply_decisions_legacy as ad  # noqa: E402
 from log_run import logged_run  # noqa: E402
 
 ENTITIES_PATH = ROOT / "entities.json"

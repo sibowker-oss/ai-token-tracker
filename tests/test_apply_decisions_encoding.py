@@ -21,7 +21,7 @@ import tempfile
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE, "scripts"))
 
-from apply_decisions import safe_str, load_json, save_json, apply_accepted  # noqa: E402
+from apply_decisions_legacy import safe_str, load_json, save_json, apply_accepted  # noqa: E402
 
 EM_DASH = "—"
 CLEAN_AUTHOR = f"Sacra {EM_DASH} Cursor Deep Dive"

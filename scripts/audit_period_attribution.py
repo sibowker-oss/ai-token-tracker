@@ -21,7 +21,10 @@ from collections import OrderedDict, defaultdict
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from apply_decisions import detect_period_scope  # noqa: E402
+# wq-098: helper-only import from the archived legacy module. Do NOT
+# call apply_decisions_legacy.main() — the canonical apply lives in
+# apply_pipeline.py.
+from apply_decisions_legacy import detect_period_scope  # noqa: E402
 
 ENTITIES_PATH = os.path.join(BASE_DIR, 'entities.json')
 REPORT_PATH = os.path.join(BASE_DIR, 'data', 'wq-054-existing-misroutes.md')
