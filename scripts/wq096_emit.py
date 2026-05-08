@@ -28,6 +28,7 @@ ENTITIES_PATH = os.path.join(ROOT, "entities.json")
 VAULT_PATH = os.path.join(ROOT, "vault-data.json")
 AUDIT_DIR = os.path.join(ROOT, "data", "audits")
 ARRMODEL_LEAK_AUDIT = os.path.join(AUDIT_DIR, "wq-098-arrmodel-source-leak.md")
+COVERAGE_AUDIT = os.path.join(AUDIT_DIR, "wq-098-rendered-figure-coverage.md")
 
 # Tracks the source decision for every entry emitted into arrModel so the
 # audit doc + reconcile assertion #8 can verify no orphan/hardcoded values.
@@ -526,6 +527,203 @@ def _record_compute_audit_rows(trad_entries, native_entries):
         })
 
 
+def _write_rendered_figure_coverage(site):
+    """Hotfix-followup audit (2026-05-08): every numeric figure rendered on
+    the public usage page (`usage.html`) and where it actually sources from.
+
+    Three blocks: dashboard.providers (model-provider ARRs),
+    dashboard.topConsumers (ai-native-app ARRs/tokens),
+    dashboard.enterpriseReality (claimed-vs-real for trad-SaaS AI add-ons).
+
+    For each row we record:
+      - rendered value
+      - matched entity slug (if any)
+      - entity-derived value (if any)
+      - whether the rendered value is vault-backed, evidence-backed, or
+        legacy-fixture-backed
+      - notable gap (rendered != entity, suggesting stale fixture or
+        un-applied vault claim)
+
+    Surfaces gaps reconcile assertion #9 picks up. Idempotent — rewritten
+    on every site build.
+    """
+    entities_lookup = _load_entities_lookup()
+    rows = []
+
+    # ── providers ──
+    providers = site.get("dashboard", {}).get("providers", {}) or {}
+    for key, card in providers.items():
+        ent = entities_lookup.get(key.lower())
+        ent_arr, ent_src, ent_dp = _entity_arr_b(ent) if ent else (None, None, None)
+        rendered = card.get("arrNumeric")
+        if rendered is None:
+            rendered = card.get("rev")
+        rendered_b = float(rendered) if isinstance(rendered, (int, float)) else None
+
+        if ent_dp is not None:
+            backing = "vault"
+        elif ent_arr is not None:
+            backing = "entities (no provenance)"
+        elif rendered_b is not None:
+            backing = "legacy fixture"
+        else:
+            backing = "no value"
+
+        gap = None
+        if (ent_arr is not None and rendered_b is not None
+                and rendered_b != 0
+                and abs(ent_arr - rendered_b) / max(abs(rendered_b), 1e-6) > 0.10):
+            gap = abs(ent_arr - rendered_b)
+
+        rows.append({
+            "block": "dashboard.providers",
+            "entity": key,
+            "rendered_b": rendered_b,
+            "entity_arr_b": ent_arr,
+            "entity_dp": ent_dp,
+            "backing": backing,
+            "gap_b": gap,
+        })
+
+    # ── topConsumers ──
+    for c in site.get("dashboard", {}).get("topConsumers", []) or []:
+        co = c.get("co") or ""
+        co_lc = co.lower()
+        ent = (entities_lookup.get(co_lc)
+               or entities_lookup.get(co_lc.replace(" ", "-").replace(".", "")))
+        ent_arr, ent_src, ent_dp = _entity_arr_b(ent) if ent else (None, None, None)
+        rendered_n = c.get("arrNumeric")
+        rendered_b = float(rendered_n) / 1e9 if isinstance(rendered_n, (int, float)) else None
+
+        if ent_dp is not None:
+            backing = "vault"
+        elif ent_arr is not None:
+            backing = "entities (no provenance)"
+        elif rendered_n is not None:
+            backing = "legacy fixture"
+        else:
+            backing = "no value"
+
+        gap = None
+        if (ent_arr is not None and rendered_b is not None
+                and rendered_b != 0
+                and abs(ent_arr - rendered_b) / max(abs(rendered_b), 1e-6) > 0.10):
+            gap = abs(ent_arr - rendered_b)
+
+        rows.append({
+            "block": "dashboard.topConsumers",
+            "entity": co,
+            "rendered_b": rendered_b,
+            "entity_arr_b": ent_arr,
+            "entity_dp": ent_dp,
+            "backing": backing,
+            "gap_b": gap,
+        })
+
+    # ── enterpriseReality ──
+    for r in site.get("dashboard", {}).get("enterpriseReality", []) or []:
+        rid = r.get("id") or ""
+        name = r.get("name") or ""
+        rendered_b = r.get("arrClaimedNumeric")
+        rendered_b = float(rendered_b) if isinstance(rendered_b, (int, float)) else None
+        ent = (entities_lookup.get(rid)
+               or entities_lookup.get(rid.replace("_", "-"))
+               or entities_lookup.get(name.lower())
+               or entities_lookup.get(name.lower().replace(" ", "-")))
+        ent_arr, ent_src, ent_dp = _entity_arr_b(ent) if ent else (None, None, None)
+
+        # enterpriseReality is by design a "claimed" figure that may diverge
+        # from observed entity ARR (the wq-096 design split). The backing
+        # is always evidence-file; we record the gap so an auditor can
+        # spot stale evidence files vs vault-applied entity values.
+        if rendered_b is not None:
+            backing = "evidence"
+        else:
+            backing = "no value"
+
+        gap = None
+        if (ent_arr is not None and rendered_b is not None
+                and rendered_b != 0
+                and abs(ent_arr - rendered_b) / max(abs(rendered_b), 1e-6) > 0.50):
+            gap = abs(ent_arr - rendered_b)
+
+        rows.append({
+            "block": "dashboard.enterpriseReality",
+            "entity": rid or name,
+            "rendered_b": rendered_b,
+            "entity_arr_b": ent_arr,
+            "entity_dp": ent_dp,
+            "backing": backing,
+            "gap_b": gap,
+        })
+
+    # Persist
+    os.makedirs(AUDIT_DIR, exist_ok=True)
+    by_backing = {}
+    for r in rows:
+        by_backing.setdefault(r["backing"], 0)
+        by_backing[r["backing"]] += 1
+
+    lines = [
+        "# wq-098 hotfix follow-up — rendered-figure vault coverage",
+        "",
+        f"_Generated_: {_now_iso()}",
+        "",
+        "Every numeric figure rendered on `usage.html` (and its source). "
+        "Generated on every site build by `scripts/wq096_emit.py` and read by "
+        "reconcile assertion #9 (`a_rendered_figure_coverage`).",
+        "",
+        "**Backing categories:**",
+        "- `vault` — the entity has provenance pointing at a `dp-NNN` vault id.",
+        "- `entities (no provenance)` — entity has the value but provenance is missing (likely set pre-apply-pipeline; flagged for review).",
+        "- `evidence` — sourced from `data/evidence/*` curated files (intentional for trad-SaaS claimed-vs-real).",
+        "- `legacy fixture` — value from a hardcoded site-data.json seed or `wq096_tagging.json` backfill (no entity record exists, or the entity has no `arr` field populated).",
+        "- `no value` — row has no figure at all.",
+        "",
+        "## Summary",
+        "",
+    ]
+    total = len(rows)
+    for k in sorted(by_backing.keys()):
+        lines.append(f"- **{k}**: {by_backing[k]} rows")
+    lines.append(f"- **Total**: {total} rows")
+    gap_rows = [r for r in rows if r["gap_b"] is not None]
+    lines.append(f"- **Rows with rendered ↔ entity gap**: {len(gap_rows)}")
+    lines.append("")
+
+    if gap_rows:
+        lines.append("## Rows where rendered figure diverges from entities.json")
+        lines.append("")
+        lines.append("| block | entity | rendered ($B) | entity arr ($B) | gap ($B) | backing |")
+        lines.append("|---|---|---|---|---|---|")
+        for r in gap_rows:
+            lines.append(
+                f"| {r['block']} | {r['entity']} "
+                f"| {r['rendered_b']} | {r['entity_arr_b']} "
+                f"| {round(r['gap_b'], 3)} | {r['backing']} |"
+            )
+        lines.append("")
+
+    # Per-block detail
+    for block in ("dashboard.providers", "dashboard.topConsumers", "dashboard.enterpriseReality"):
+        block_rows = [r for r in rows if r["block"] == block]
+        lines.append(f"## {block} ({len(block_rows)} rows)")
+        lines.append("")
+        lines.append("| entity | rendered ($B) | entity arr ($B) | dp-id | backing | gap ($B) |")
+        lines.append("|---|---|---|---|---|---|")
+        for r in block_rows:
+            lines.append(
+                f"| {r['entity']} | {r['rendered_b']} | {r['entity_arr_b']} "
+                f"| {r['entity_dp'] or '—'} | {r['backing']} "
+                f"| {round(r['gap_b'], 3) if r['gap_b'] is not None else '—'} |"
+            )
+        lines.append("")
+
+    with open(COVERAGE_AUDIT, "w") as f:
+        f.write("\n".join(lines) + "\n")
+    return COVERAGE_AUDIT, rows
+
+
 def _write_leak_audit():
     """Write the arrModel source-leak audit doc.
 
@@ -769,6 +967,9 @@ def apply_all(site):
     audit_path = _write_leak_audit()
     if audit_path:
         print(f"  wq-098 hotfix: arrModel source-leak audit → {audit_path}")
+    coverage_path, _coverage_rows = _write_rendered_figure_coverage(site)
+    if coverage_path:
+        print(f"  wq-098 hotfix: rendered-figure coverage audit → {coverage_path}")
 
     print(f"  wq-096: enterpriseReality={len(site['dashboard']['enterpriseReality'])} entries; topConsumers moved out: {sorted(moved)}")
     print(f"  wq-096: computeProviders.tradCompute={len(site['computeProviders']['tradCompute'])} aiNativeCompute={len(site['computeProviders']['aiNativeCompute'])}")

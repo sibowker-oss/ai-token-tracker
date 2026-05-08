@@ -638,6 +638,176 @@ def a_arrmodel_vault_backed(site):
     }
 
 
+def a_rendered_figure_coverage(site, entities):
+    """#9 (hotfix follow-up 2026-05-08): every rendered numeric figure on
+    `usage.html` is either vault-backed, evidence-backed (curated file),
+    or has been deliberately accepted as a legacy fixture.
+
+    Walks `dashboard.providers`, `dashboard.topConsumers`, and
+    `dashboard.enterpriseReality`. Surfaces two failure modes:
+
+      - **Stale-fixture** — a rendered value diverges >10% from the
+        entities.json value. Suggests a hardcoded backfill that didn't
+        defer to a fresh apply-pipeline write (the bug class the hotfix
+        targeted), OR an out-of-date evidence file vs a recently-applied
+        entity claim.
+      - **Unbacked** — a rendered figure has no entity record at all
+        (long-standing topConsumers fixtures that need entity surfacing).
+
+    Reads the per-row data the wq096_emit coverage audit emits to
+    `data/audits/wq-098-rendered-figure-coverage.md`. Re-derived in-line
+    here so the assertion is self-contained.
+    """
+    if not site or not entities:
+        return {
+            "name": "rendered_figure_coverage",
+            "passed": True,
+            "count": 0,
+            "details": "site-data.json or entities.json missing — skipping check.",
+        }
+
+    lookup = {}
+    for c in entities.get("companies", []) or []:
+        slug = (c.get("slug") or "").lower()
+        name = (c.get("name") or "").lower()
+        if slug:
+            lookup[slug] = c
+        if name and name not in lookup:
+            lookup[name] = c
+
+    def _entity_arr(co):
+        if not co:
+            return None
+        candidates = (
+            co.lower(),
+            co.lower().replace(" ", "-").replace(".", ""),
+            co.lower().replace("_", "-"),
+        )
+        for k in candidates:
+            ent = lookup.get(k)
+            if not ent:
+                continue
+            cur = (ent.get("current") or {}).get("arr")
+            if isinstance(cur, (int, float)):
+                return cur
+            fins = ent.get("financials") or {}
+            current_year = datetime.now(timezone.utc).year
+            for y in sorted(fins.keys(), reverse=True):
+                if y.endswith("_projected"):
+                    continue
+                try:
+                    yr = int(y.split("_")[0])
+                except ValueError:
+                    continue
+                if yr > current_year:
+                    continue
+                v = fins[y].get("arr") if isinstance(fins[y], dict) else None
+                if isinstance(v, (int, float)):
+                    return v
+        return None
+
+    stale_fixtures = []
+    unbacked = []
+
+    # providers
+    for key, card in (site.get("dashboard", {}).get("providers") or {}).items():
+        rendered = card.get("arrNumeric")
+        if not isinstance(rendered, (int, float)):
+            rendered = card.get("rev")
+        if not isinstance(rendered, (int, float)):
+            continue
+        ent_arr = _entity_arr(key)
+        if ent_arr is None:
+            unbacked.append({
+                "block": "dashboard.providers",
+                "entity": key,
+                "rendered_b": rendered,
+            })
+            continue
+        if rendered != 0 and abs(ent_arr - rendered) / abs(rendered) > 0.10:
+            stale_fixtures.append({
+                "block": "dashboard.providers",
+                "entity": key,
+                "rendered_b": rendered,
+                "entity_arr_b": ent_arr,
+            })
+
+    # topConsumers
+    for c in site.get("dashboard", {}).get("topConsumers") or []:
+        co = c.get("co") or ""
+        rendered_n = c.get("arrNumeric")
+        if not isinstance(rendered_n, (int, float)):
+            continue
+        rendered_b = float(rendered_n) / 1e9
+        ent_arr = _entity_arr(co)
+        if ent_arr is None:
+            unbacked.append({
+                "block": "dashboard.topConsumers",
+                "entity": co,
+                "rendered_b": rendered_b,
+            })
+            continue
+        if rendered_b != 0 and abs(ent_arr - rendered_b) / abs(rendered_b) > 0.10:
+            stale_fixtures.append({
+                "block": "dashboard.topConsumers",
+                "entity": co,
+                "rendered_b": rendered_b,
+                "entity_arr_b": ent_arr,
+            })
+
+    # enterpriseReality — gap > 50% only (claimed-vs-real is by design;
+    # only big drift suggests a stale evidence file or stale entity).
+    for r in site.get("dashboard", {}).get("enterpriseReality") or []:
+        rendered = r.get("arrClaimedNumeric")
+        if not isinstance(rendered, (int, float)):
+            continue
+        co = r.get("id") or r.get("name") or ""
+        ent_arr = _entity_arr(co)
+        if ent_arr is None:
+            continue  # most enterpriseReality rows have no entity by design
+        if rendered != 0 and abs(ent_arr - rendered) / abs(rendered) > 0.50:
+            stale_fixtures.append({
+                "block": "dashboard.enterpriseReality",
+                "entity": co,
+                "rendered_b": rendered,
+                "entity_arr_b": ent_arr,
+                "note": "claimed-vs-real divergence (by design — review whether evidence file or entity is stale)",
+            })
+
+    issues = stale_fixtures
+    if not issues:
+        return {
+            "name": "rendered_figure_coverage",
+            "passed": True,
+            "count": 0,
+            "details": (
+                f"All rendered numeric figures match their entities.json "
+                f"value within ±10% (or ±50% for enterpriseReality). "
+                f"{len(unbacked)} rendered row(s) have no entity record at "
+                f"all — separate gap, not a stale-fixture leak."
+            ),
+            "items": [],
+            "unbacked_count": len(unbacked),
+        }
+    sample = ", ".join(f"{s['block']}/{s['entity']}" for s in issues[:5])
+    return {
+        "name": "rendered_figure_coverage",
+        "passed": False,
+        "count": len(issues),
+        "details": (
+            f"{len(issues)} rendered figure(s) diverge from entities.json. "
+            f"Sample: {sample}. See "
+            f"`data/audits/wq-098-rendered-figure-coverage.md` for the full "
+            f"row list. Likely cause: hardcoded fixture (legacy site-data "
+            f"seed or `wq096_tagging.json`) winning over apply_pipeline "
+            f"writes, or an evidence file out-of-date vs an applied "
+            f"vault claim."
+        ),
+        "items": issues[:25],
+        "unbacked_count": len(unbacked),
+    }
+
+
 def a_handler_coverage(vault):
     """Every distinct vault `unit` has a handler or is in UNHANDLED_UNITS."""
     handler_units = set()
@@ -693,6 +863,7 @@ def build_health(now_utc):
         a_handler_coverage(vault),
         a_inbox_migration_freshness(inbox, vault, now_utc),
         a_arrmodel_vault_backed(site),
+        a_rendered_figure_coverage(site, entities),
     ]
     failed = [a for a in assertions if not a["passed"]]
 
@@ -845,6 +1016,17 @@ def write_alert(health, date_iso):
             "entities.json (with a provenance trail), then rebuild "
             "site-data.json. See "
             "`data/audits/wq-098-arrmodel-source-leak.md`."
+        ),
+        "rendered_figure_coverage": (
+            "A rendered figure on `usage.html` diverges from the entity's "
+            "value in entities.json by more than the per-block tolerance "
+            "(±10% for providers/topConsumers, ±50% for enterpriseReality). "
+            "Likely cause: a hardcoded fixture (legacy site-data.json seed "
+            "or `wq096_tagging.json`) winning over an apply_pipeline write, "
+            "or a stale curated evidence file. Audit the offending rows in "
+            "`data/audits/wq-098-rendered-figure-coverage.md` and either "
+            "(a) remove the fixture entry so the entity-derived value "
+            "reaches the page, or (b) update the evidence file to match."
         ),
     }
     for a in failed:

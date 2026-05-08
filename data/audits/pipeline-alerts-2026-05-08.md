@@ -1,9 +1,9 @@
 # Pipeline alerts — 2026-05-08
 
-_Generated_: 2026-05-08T08:52:38.597813Z
+_Generated_: 2026-05-08T09:56:32.931401Z
 _Source_: `scripts/reconcile_pipeline.py` (wq-099)
 
-**3 assertion(s) failed.** Each entry below names the failing assertion, the affected count, and the recommended next action.
+**4 assertion(s) failed.** Each entry below names the failing assertion, the affected count, and the recommended next action.
 
 ## apply_propagation — failing
 
@@ -28,3 +28,11 @@ _Source_: `scripts/reconcile_pipeline.py` (wq-099)
 **Detail:** 16 arrModel entry/entries source their arr from a non-vault path (sample: arrModel.apps.frontier/ByteDance, arrModel.apps.frontier/Alibaba/Qwen, arrModel.apps.frontier/Tencent, arrModel.apps.frontier/Baidu, arrModel.apps.frontier/Others/Self-hosted). Confirm the entity has been applied via `apply_pipeline.py`, then rebuild site-data.json.
 
 **Recommended action:** An arrModel entity sources its arr from a non-vault path (legacy topConsumers / providers fixture). Confirm the entity has a populated `current.arr` / `financials.<year>.arr` in entities.json (with a provenance trail), then rebuild site-data.json. See `data/audits/wq-098-arrmodel-source-leak.md`.
+
+## rendered_figure_coverage — failing
+
+**Count:** 1
+
+**Detail:** 1 rendered figure(s) diverge from entities.json. Sample: dashboard.enterpriseReality/salesforce_agentforce. See `data/audits/wq-098-rendered-figure-coverage.md` for the full row list. Likely cause: hardcoded fixture (legacy site-data seed or `wq096_tagging.json`) winning over apply_pipeline writes, or an evidence file out-of-date vs an applied vault claim.
+
+**Recommended action:** A rendered figure on `usage.html` diverges from the entity's value in entities.json by more than the per-block tolerance (±10% for providers/topConsumers, ±50% for enterpriseReality). Likely cause: a hardcoded fixture (legacy site-data.json seed or `wq096_tagging.json`) winning over an apply_pipeline write, or a stale curated evidence file. Audit the offending rows in `data/audits/wq-098-rendered-figure-coverage.md` and either (a) remove the fixture entry so the entity-derived value reaches the page, or (b) update the evidence file to match.

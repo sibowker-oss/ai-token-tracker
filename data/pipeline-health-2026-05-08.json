@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-05-08T08:51:49.981587Z",
+  "asOf": "2026-05-08T09:56:32.931401Z",
   "ingestSummary": {
     "lookbackHours": 24,
     "claimsAddedToInbox": 0,
@@ -536,8 +536,8 @@
     {
       "name": "arrmodel_vault_backed",
       "passed": false,
-      "count": 36,
-      "details": "36 arrModel entry/entries source their arr from a non-vault path (sample: arrModel.apps.frontier/ByteDance, arrModel.apps.frontier/Alibaba/Qwen, arrModel.apps.frontier/Tencent, arrModel.apps.frontier/Baidu, arrModel.apps.frontier/Others/Self-hosted). Confirm the entity has been applied via `apply_pipeline.py`, then rebuild site-data.json.",
+      "count": 16,
+      "details": "16 arrModel entry/entries source their arr from a non-vault path (sample: arrModel.apps.frontier/ByteDance, arrModel.apps.frontier/Alibaba/Qwen, arrModel.apps.frontier/Tencent, arrModel.apps.frontier/Baidu, arrModel.apps.frontier/Others/Self-hosted). Confirm the entity has been applied via `apply_pipeline.py`, then rebuild site-data.json.",
       "items": [
         {
           "block": "arrModel.apps.frontier",
@@ -618,54 +618,25 @@
           "block": "arrModel.apps.aiNative",
           "entity": "Suno",
           "source_path": "dashboard.topConsumers (legacy fallback)"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "m365_copilot",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "github_copilot",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "google_workspace_ai",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "salesforce_agentforce",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "databricks_mosaic",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "servicenow_now_assist",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "adobe_firefly",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "microsoft_dynamics_copilot",
-          "source_path": "<missing>"
-        },
-        {
-          "block": "arrModel.apps.tradSaas",
-          "entity": "notion_ai",
-          "source_path": "<missing>"
         }
       ]
+    },
+    {
+      "name": "rendered_figure_coverage",
+      "passed": false,
+      "count": 1,
+      "details": "1 rendered figure(s) diverge from entities.json. Sample: dashboard.enterpriseReality/salesforce_agentforce. See `data/audits/wq-098-rendered-figure-coverage.md` for the full row list. Likely cause: hardcoded fixture (legacy site-data seed or `wq096_tagging.json`) winning over apply_pipeline writes, or an evidence file out-of-date vs an applied vault claim.",
+      "items": [
+        {
+          "block": "dashboard.enterpriseReality",
+          "entity": "salesforce_agentforce",
+          "rendered_b": 0.8,
+          "entity_arr_b": 0.3,
+          "note": "claimed-vs-real divergence (by design \u2014 review whether evidence file or entity is stale)"
+        }
+      ],
+      "unbacked_count": 17
     }
   ],
-  "alertCount": 3
+  "alertCount": 4
 }
