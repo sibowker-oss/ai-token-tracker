@@ -78,7 +78,7 @@ def handle(claim, ctx):
 
     # Conflict resolution
     existing_tier = S.existing_tier(entity, prov_key)
-    incoming_tier = S.derive_tier(claim)
+    incoming_tier = S.derive_tier_for_gate(claim)
     if existing_tier and S.TIER_RANK[existing_tier] > S.TIER_RANK[incoming_tier]:
         result.skip_reason = f"existing_tier_higher ({existing_tier} > {incoming_tier})"
         result.audit_rows.append({

@@ -135,8 +135,58 @@ def derive_tier(claim) -> str:
     return "tier_3B"
 
 
+def is_human_reviewed(claim) -> bool:
+    """Hotfix 2026-05-08 — claim originated from a human-reviewed
+    `vault-inbox.json` item with `status='accepted'`.
+
+    The migration step in apply_pipeline.py stamps `human_reviewed: True`
+    on every vault data point whose id matches an `accepted_as` reference
+    in the inbox. Treat this as the trust signal: an editor (Simon) has
+    looked at the claim in `claims.html` and explicitly accepted it. The
+    confidence field captures source-strength, not review-status — so
+    `estimated` from a human-reviewed Sacra deep-dive is a stronger signal
+    than `verified` from an auto-classified scrape.
+    """
+    return claim.get("human_reviewed") is True
+
+
+def derive_tier_for_gate(claim) -> str:
+    """Tier as evaluated for the auto-apply gate.
+
+    For human-reviewed claims, treat the `confidence` field as `verified`
+    when running through `derive_tier` — the editor's review is the
+    confidence assertion. This bumps Sacra-reporting / web_page claims
+    from `tier_3A`/`tier_2B` (estimated) to `tier_2A` (verified-equivalent),
+    which clears the auto-apply tier bar.
+
+    For non-reviewed claims this is identical to `derive_tier`.
+    """
+    if not is_human_reviewed(claim):
+        return derive_tier(claim)
+    promoted = dict(claim)
+    promoted["confidence"] = "verified"
+    return derive_tier(promoted)
+
+
 def is_auto_apply(claim) -> bool:
-    """D2: verified confidence AND tier_1A/1B/2A auto-apply."""
+    """D2 (revised 2026-05-08): a claim auto-applies when EITHER
+
+      (a) it has been human-reviewed (inbox status='accepted', surfaced as
+          `human_reviewed: True` on the vault entry) and the source-type
+          alone (treating confidence as 'verified') derives to tier_2A or
+          stronger; OR
+      (b) it carries `confidence='verified'` from auto-classification and
+          derives to tier_2A or stronger via the standard ladder
+
+    Rationale: TAIL's domain produces many `estimated`-confidence claims
+    from credible private-company reporting (Sacra deep-dives, The
+    Information leaks). Pre-hotfix the gate required `verified` regardless
+    of human review, which silently blocked these claims even after Simon
+    accepted them. Human review IS the trust signal for this class.
+    """
+    if is_human_reviewed(claim):
+        gate_tier = derive_tier_for_gate(claim)
+        return gate_tier in ("tier_1A", "tier_1B", "tier_2A")
     if (claim.get("confidence") or "").lower() != "verified":
         return False
     return derive_tier(claim) in ("tier_1A", "tier_1B", "tier_2A")
@@ -365,15 +415,23 @@ def _legacy_weight_to_tier(weight):
 
 def build_prov_entry(claim, value, *, role="supports", origin="wq-098-apply"):
     """Standard provenance entry shape. Mirrors apply_decisions.apply_accepted
-    so audit/UI code that already parses entity provenance keeps working."""
+    so audit/UI code that already parses entity provenance keeps working.
+
+    For human-reviewed claims, record the promoted tier so D6 conflict
+    resolution treats Simon's review as the editorial confidence assertion
+    (a Sacra-sourced estimated claim that's been accepted in claims.html
+    competes at tier_2A, not tier_3A).
+    """
+    effective_tier = derive_tier_for_gate(claim)
     return {
         "id": claim.get("id"),
         "claim": (claim.get("claim") or "")[:160],
         "value": value,
         "unit": claim.get("unit") or "",
-        "weight": _tier_to_weight(derive_tier(claim)),
-        "tier": derive_tier(claim),
+        "weight": _tier_to_weight(effective_tier),
+        "tier": effective_tier,
         "confidence": claim.get("confidence") or "estimated",
+        "human_reviewed": is_human_reviewed(claim),
         "source": claim.get("sourceAuthor") or "",
         "source_url": claim.get("sourceUrl") or "",
         "date": claim.get("dateOfClaim") or "",

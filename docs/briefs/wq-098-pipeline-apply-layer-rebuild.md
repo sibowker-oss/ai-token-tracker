@@ -249,4 +249,72 @@ When done, push to main after my chat approval, update Notion card, unblock wq-0
 
 ---
 
+## Addendum 2026-05-08 — D2 gate revision (hotfix)
+
+After the brief shipped, Cowork investigation surfaced that
+`is_auto_apply`'s `confidence='verified'` requirement was silently
+blocking all `estimated`-confidence claims even after Simon accepted
+them in `claims.html`. The blocked cohort included Sacra deep-dives,
+The Information leaks, and other credible private-company reporting
+that TAIL relies on for AI-native ARR coverage. Concrete victim:
+`dp-195` (Perplexity $500M ARR, April 2026) sat with `usedOn: []` so
+`arrModel.apps.aiNative.entries[Perplexity].arr` stuck at the legacy
+$200M figure.
+
+### Revision to D2
+
+- A claim auto-applies if EITHER (a) it has been human-reviewed (
+  `human_reviewed: True`, set during inbox migration when the source
+  inbox item carried `status='accepted'`) AND its source-type-only
+  tier reaches tier_2A; OR (b) it carries `confidence='verified'` AND
+  the standard ladder reaches tier_2A.
+- Human review IS the trust signal for accepted-then-estimated claims.
+  The confidence field captures source-strength, not review-status.
+- `derive_tier_for_gate` is the per-claim helper that promotes a
+  human-reviewed claim's tier as if `confidence='verified'` —
+  `web_page` + `estimated` + `human_reviewed` → `tier_2A` for the
+  gate, instead of the natural `tier_3A`.
+
+### New supporting changes (hotfix scope)
+
+- `apply_pipeline.py:migrate_accepted_inbox_items` — restores the
+  inbox→vault migration step the legacy `apply_decisions.py` used to
+  perform. Stamps `human_reviewed: True` on minted and backfilled
+  vault entries.
+- `_variance_gate.evaluate` — bypasses for `human_reviewed` writes
+  because the wq-100 anomaly band would otherwise lock-out
+  legitimate units corrections.
+- `wq096_emit.py` — vault-first ARR sourcing in
+  `_ai_native_app_entries` and `_frontier_arr_entries`. Closes the
+  hardcoded-`topConsumers` leak that was the originally intended D4
+  cleanup but was deferred per
+  `docs/decisions/open/dec-2026-05-09-d7-dashboard-block-removal.md`.
+  The legacy fixture path remains as a fallback for entities without
+  a record; reconcile assertion #8 surfaces those for follow-up.
+- `reconcile_pipeline.py` — assertions #7 (inbox migration
+  freshness) and #8 (arrModel vault-backed) catch the failure modes
+  the hotfix is correcting.
+
+### Decisions made tactically
+
+- D2.1 (hotfix): "tier promotion" only for the gate, not for the
+  vault claim's natural tier in audit/reporting contexts. Recorded
+  as the `tier` field in `prov_entry` to keep D6 conflict resolution
+  consistent across pre- and post-hotfix entries.
+- D9.1 (hotfix): the material-change gate's `arr_delta` calculation
+  collapses to `|incoming|` when prior is ≥100x larger than incoming
+  AND incoming < $5B. Recognises a units-correction artifact (legacy
+  $M-stored values being overwritten by correctly-normalised $B
+  values from the apply pipeline) without suppressing legitimate
+  large values.
+
+Acceptance: `arrModel.apps.aiNative.entries[Perplexity].arr` = 0.5
+($500M) sourced from `dp-195`. `arrModel.combined.industry_total`
+moves +$0.30B. Reconcile assertion #7 currently surfaces 19 malformed-
+unit inbox items deliberately skipped from the mint path (open work
+to clean up at source); assertion #8 surfaces 16 ai_native_app
+entries that need entity surfacing (open work).
+
+---
+
 *End of brief.*

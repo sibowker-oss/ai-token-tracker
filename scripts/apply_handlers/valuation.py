@@ -37,7 +37,7 @@ def handle(claim, ctx):
     prov_key = f"{period}.{field_key}" if period != "current" else f"current.{field_key}"
 
     existing = S.existing_tier(entity, prov_key)
-    incoming = S.derive_tier(claim)
+    incoming = S.derive_tier_for_gate(claim)
     if existing and S.TIER_RANK[existing] > S.TIER_RANK[incoming]:
         result.skip_reason = f"existing_tier_higher ({existing} > {incoming})"
         return result

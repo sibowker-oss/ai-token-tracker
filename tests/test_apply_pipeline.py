@@ -290,5 +290,194 @@ class TestKnownUnits(unittest.TestCase):
                          f"vault contains units with no handler: {unknown}")
 
 
+# ── Hotfix 2026-05-08 — inbox migration + revised D2 gate + arrModel source ──
+
+class TestInboxMigration(unittest.TestCase):
+    """apply_pipeline.migrate_accepted_inbox_items must:
+      - mint a fresh dp-NNN for accepted inbox items lacking accepted_as
+      - backfill `human_reviewed=True` on already-migrated entries
+      - be idempotent on a second run
+    """
+
+    def setUp(self):
+        self.ctx = make_ctx()
+
+    def test_mint_new_dp_for_unmigrated_accepted(self):
+        inbox = {
+            "items": [{
+                "id": "inbox-1",
+                "claim": "Acme hit $1B ARR",
+                "value": 1.0,
+                "unit": "$B",
+                "sourceUrl": "https://example.com/x",
+                "sourceType": "reporting",
+                "sourceAuthor": "Example",
+                "confidence": "estimated",
+                "dateOfClaim": "2026-04-01",
+                "dateAdded": "2026-04-02",
+                "tags": ["arr"],
+                "metricKey": "arr",
+                "status": "accepted",
+                "accepted_as": None,
+            }]
+        }
+        vault = {"dataPoints": []}
+        new, backfilled, total, skipped = P.migrate_accepted_inbox_items(
+            inbox, vault, self.ctx, known_units={"$B"},
+        )
+        self.assertEqual(new, 1)
+        self.assertEqual(backfilled, 0)
+        self.assertEqual(total, 1)
+        self.assertEqual(skipped, 0)
+        self.assertEqual(len(vault["dataPoints"]), 1)
+        dp = vault["dataPoints"][0]
+        self.assertEqual(dp["id"], "dp-001")
+        self.assertTrue(dp["human_reviewed"])
+        self.assertEqual(dp["status"], "accepted")
+        self.assertEqual(inbox["items"][0]["accepted_as"], "dp-001")
+        self.assertIn("migration_note", inbox["items"][0])
+
+    def test_backfill_flag_for_migrated_accepted(self):
+        inbox = {
+            "items": [{
+                "id": "inbox-2",
+                "claim": "x",
+                "value": 1.0,
+                "unit": "$B",
+                "status": "accepted",
+                "accepted_as": "dp-042",
+                "dateAdded": "2026-04-02",
+            }]
+        }
+        vault = {"dataPoints": [{"id": "dp-042", "claim": "x", "usedOn": []}]}
+        new, backfilled, total, skipped = P.migrate_accepted_inbox_items(
+            inbox, vault, self.ctx, known_units={"$B"},
+        )
+        self.assertEqual(new, 0)
+        self.assertEqual(backfilled, 1)
+        self.assertEqual(skipped, 0)
+        self.assertTrue(vault["dataPoints"][0]["human_reviewed"])
+
+    def test_idempotent_on_second_run(self):
+        inbox = {
+            "items": [{
+                "id": "inbox-3",
+                "claim": "y",
+                "value": 2.0,
+                "unit": "$B",
+                "status": "accepted",
+                "accepted_as": None,
+                "dateAdded": "2026-04-02",
+            }]
+        }
+        vault = {"dataPoints": []}
+        first = P.migrate_accepted_inbox_items(
+            inbox, vault, self.ctx, known_units={"$B"})
+        second = P.migrate_accepted_inbox_items(
+            inbox, vault, self.ctx, known_units={"$B"})
+        self.assertEqual(first, (1, 0, 1, 0))
+        self.assertEqual(second, (0, 0, 1, 0))
+
+    def test_malformed_unit_skipped(self):
+        inbox = {
+            "items": [{
+                "id": "inbox-4",
+                "claim": "we are now generating $2B in revenue per month",
+                "value": 2,
+                "unit": "$2B revenue per month",
+                "status": "accepted",
+                "accepted_as": None,
+                "dateAdded": "2026-04-02",
+            }]
+        }
+        vault = {"dataPoints": []}
+        new, backfilled, total, skipped = P.migrate_accepted_inbox_items(
+            inbox, vault, self.ctx, known_units={"$B"},
+        )
+        self.assertEqual(new, 0)
+        self.assertEqual(skipped, 1)
+        self.assertEqual(len(vault["dataPoints"]), 0)
+        self.assertTrue(self.ctx.audit_rows)
+        self.assertEqual(
+            self.ctx.audit_rows[0]["category"], "inbox_migration_malformed_unit")
+
+
+class TestRevisedD2Gate(unittest.TestCase):
+    """is_auto_apply must honor `human_reviewed=True` as a trust signal."""
+
+    def test_human_reviewed_estimated_web_page_passes(self):
+        # dp-195 shape: Sacra deep-dive, web_page + estimated, human-reviewed
+        claim = {
+            "sourceType": "web_page",
+            "confidence": "estimated",
+            "human_reviewed": True,
+        }
+        self.assertTrue(S.is_auto_apply(claim))
+
+    def test_non_reviewed_estimated_web_page_blocks(self):
+        claim = {"sourceType": "web_page", "confidence": "estimated"}
+        self.assertFalse(S.is_auto_apply(claim))
+
+    def test_human_reviewed_promoted_tier_is_2A(self):
+        claim = {
+            "sourceType": "web_page",
+            "confidence": "estimated",
+            "human_reviewed": True,
+        }
+        self.assertEqual(S.derive_tier_for_gate(claim), "tier_2A")
+
+    def test_human_reviewed_podcast_still_blocks(self):
+        # podcast_discussion is tier_3A even when verified — must stay
+        # blocked because it's below tier_2A regardless of review.
+        claim = {
+            "sourceType": "podcast_discussion",
+            "confidence": "estimated",
+            "human_reviewed": True,
+        }
+        self.assertFalse(S.is_auto_apply(claim))
+
+    def test_verified_path_unaffected(self):
+        # Pre-hotfix behaviour preserved for verified-confidence claims.
+        claim = {"sourceType": "reporting", "confidence": "verified"}
+        self.assertTrue(S.is_auto_apply(claim))
+
+
+class TestArrModelSourceCheck(unittest.TestCase):
+    """Reconcile assertion #8 must flag legacy-fallback entries and pass
+    when every entry is vault-backed."""
+
+    def _site_with(self, entries):
+        return {"arrModel": {"apps": {
+            "frontier": {"entries": []},
+            "aiNative": {"entries": entries},
+            "tradSaas": {"entries": []},
+        }}}
+
+    def test_passes_when_all_entries_vault_backed(self):
+        from reconcile_pipeline import a_arrmodel_vault_backed
+        entries = [
+            {"id": "Perplexity", "arr": 0.5,
+             "_arrSource": "entities.json:financials.2026.arr",
+             "_arrSourceDpId": "dp-195"},
+            {"id": "Cursor", "arr": 2.0,
+             "_arrSource": "entities.json:current.arr",
+             "_arrSourceDpId": "dp-148"},
+        ]
+        result = a_arrmodel_vault_backed(self._site_with(entries))
+        self.assertTrue(result["passed"])
+
+    def test_fails_on_topconsumers_fallback(self):
+        from reconcile_pipeline import a_arrmodel_vault_backed
+        entries = [
+            {"id": "Perplexity", "arr": 0.2,
+             "_arrSource": "dashboard.topConsumers (legacy fallback)",
+             "_arrSourceDpId": None},
+        ]
+        result = a_arrmodel_vault_backed(self._site_with(entries))
+        self.assertFalse(result["passed"])
+        self.assertEqual(result["count"], 1)
+        self.assertEqual(result["items"][0]["entity"], "Perplexity")
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -90,6 +90,15 @@ def evaluate(write, entity) -> GateDecision:
     `write` is a FieldWrite. `entity` is the entities.json companies[] dict
     for the target slug (or None — surfaces as ENTITY_UNRESOLVED, route to
     review).
+
+    Hotfix 2026-05-08 — when the underlying vault claim was human-reviewed
+    (`human_reviewed: True` on the prov_entry, set during inbox migration),
+    auto-apply regardless of variance. The wq-100 variance gate is a
+    safety net for AUTO-classified writes; human review already provides
+    that safety. Otherwise Sacra-sourced claims that legitimately move a
+    figure 99% (because the prior value was a stale legacy mis-unit
+    estimate) get stuck in anomaly review forever, defeating the hotfix's
+    whole point.
     """
     if entity is None:
         return GateDecision(
@@ -103,6 +112,24 @@ def evaluate(write, entity) -> GateDecision:
     prov_key = (f"current.{write.field_key}" if write.year_key == "current"
                 else f"{write.year_key}.{write.field_key}")
     existing_tier = S.existing_tier(entity, prov_key)
+    human_reviewed = bool((write.prov_entry or {}).get("human_reviewed"))
+
+    if human_reviewed:
+        # Compute variance for the audit trail, but the bucket is fixed.
+        variance = None
+        if (isinstance(prior, (int, float)) and prior
+                and isinstance(write.value, (int, float))):
+            variance = abs(write.value - prior) / abs(prior)
+        return GateDecision(
+            bucket="auto_apply",
+            reason=(
+                "human_reviewed — variance gate bypassed because the inbox "
+                "item was accepted in claims.html"
+            ),
+            variance=variance,
+            incoming_tier=incoming_tier,
+            existing_tier=existing_tier,
+        )
 
     # D4: first-time entity value → ALWAYS review.
     if prior is None:

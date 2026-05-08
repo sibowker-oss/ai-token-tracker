@@ -75,7 +75,8 @@
           "total_compute_commitment_source": "Zitron 2026-05-06 (\"OpenAI plans to burn $50 billion on compute in 2026 alone\")",
           "total_compute_commitment_basis": "all-in: training + capacity-prepay + inference. NOT to be confused with inference_cost ($14.1B) which is a narrower line.",
           "growth_multiple": 4.0,
-          "burn_metric": 17.0
+          "burn_metric": 17.0,
+          "revenue_annualised_from_m": 24.0
         },
         "2027_projected": {
           "arr": 50.0
@@ -104,7 +105,7 @@
         "biz_pct": 42,
         "valuation": 852,
         "valuation_date": "2026-03",
-        "user_count": 900000000,
+        "user_count": 800000000,
         "subscriber_count": 50000000,
         "tokens_per_day_date": "2026-05-03"
       },
@@ -1888,7 +1889,7 @@
         },
         "current.user_count": {
           "confidence": "medium",
-          "claim_count": 1,
+          "claim_count": 2,
           "claims": [
             {
               "id": "dp-204",
@@ -1901,6 +1902,21 @@
               "source": "OpenAI Press Release 31 Mar 25",
               "source_url": "https://openai.com/index/accelerating-the-next-phase-ai/",
               "date": "2026-Q1",
+              "origin": "wq-098-apply",
+              "role": "supports"
+            },
+            {
+              "id": "dp-214",
+              "claim": "ChatGPT has 800 million weekly users.",
+              "value": 800000000,
+              "unit": "users",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "estimated",
+              "human_reviewed": true,
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "2025-2026",
               "origin": "wq-098-apply",
               "role": "supports"
             }
@@ -1990,6 +2006,28 @@
             }
           ],
           "needs_source": false
+        },
+        "2026.revenue_annualised_from_m": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-190",
+              "claim": "OpenAI confirmed $2B/month revenue (~$24B ARR) at $122B funding close (March 31, 2026)",
+              "value": 24.0,
+              "unit": "$B/month",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "unverified",
+              "human_reviewed": true,
+              "source": "CoinDesk",
+              "source_url": "https://www.coindesk.com/tech/2026/04/01/openai-raises-a-record-usd122-billion-at-as-revenue-crosses-usd2-billion-per-month",
+              "date": "2026-03-31",
+              "origin": "wq-098-apply",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
         }
       },
       "entity_archetype": "frontier_lab",
@@ -2029,7 +2067,8 @@
       "financials": {
         "2024": {
           "arr": 2.0,
-          "collected_revenue": 1.5
+          "collected_revenue": 1.5,
+          "burn_metric": 5.6
         },
         "2025": {
           "arr": 4.0,
@@ -2111,7 +2150,8 @@
           "methodology_note": "Anthropic calculates annualised revenue as last 4 weeks of API revenue \u00d7 13 + monthly chatbot subscription revenue (single-day active subs anchor) \u00d7 12 (per The Information). Selecting a single-day anchor and 4-week-window can inflate vs steady-state. Published number on TAIL = $30B (Anthropic-disclosed); $44B carried as external estimate only."
         },
         "usd_per_gw_year": 10.0,
-        "input_token_price_usd_per_m": 5.0
+        "input_token_price_usd_per_m": 5.0,
+        "business_customer_count": 300000
       },
       "provenance": {
         "2024.arr": {
@@ -3441,6 +3481,50 @@
               "source": "The New Stack / Anthropic",
               "source_url": "https://thenewstack.io/claude-million-token-pricing/",
               "date": "2026-03-01",
+              "origin": "wq-098-apply",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "current.business_customer_count": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-207",
+              "claim": "Anthropic had 300,000+ business customers as of October 2025, accounting for approximately 80% of revenue.",
+              "value": 300000,
+              "unit": "customers",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "estimated",
+              "human_reviewed": true,
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "October 2025",
+              "origin": "wq-098-apply",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "2024.burn_metric": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-210",
+              "claim": "Anthropic's cash burn was $5.6B in the year prior to 2025.",
+              "value": 5.6,
+              "unit": "USD_billions",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "estimated",
+              "human_reviewed": true,
+              "source": "Sacra \u2014 Anthropic Deep Dive",
+              "source_url": "https://sacra.com/research/anthropic/",
+              "date": "2024",
               "origin": "wq-098-apply",
               "role": "supports"
             }
@@ -6081,7 +6165,8 @@
       "current": {
         "total_funding": 12.0,
         "backlog_q3_2025_usd_b": 55.6,
-        "backlog_source": "CoreWeave Form 10-Q for quarter ended 2025-09-30"
+        "backlog_source": "CoreWeave Form 10-Q for quarter ended 2025-09-30",
+        "user_count": 24
       },
       "provenance": {
         "2025.arr": {
@@ -6230,6 +6315,28 @@
               "role": "supports",
               "time_period_scope": "annual",
               "period_qualifier": null
+            }
+          ],
+          "needs_source": false
+        },
+        "current.user_count": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-225",
+              "claim": "CoreWeave has approximately two dozen named customers.",
+              "value": 24,
+              "unit": "customers",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "estimated",
+              "human_reviewed": true,
+              "source": "Coreweave data points",
+              "source_url": "https://www.nextplatform.com/cloud/2026/04/09/coreweave-takes-as-much-financial-engineering-as-it-does-datacenter-design/5215794?utm_source=tldrai",
+              "date": "April 2026",
+              "origin": "wq-098-apply",
+              "role": "supports"
             }
           ],
           "needs_source": false
@@ -6706,7 +6813,8 @@
         "iaas_connected": [
           "together",
           "fireworks"
-        ]
+        ],
+        "tokens_per_week_t": 4.65
       },
       "provenance": {
         "2025.market_share_pct": {
@@ -6838,6 +6946,28 @@
               "source": "OpenRouter",
               "source_url": "https://openrouter.ai/rankings",
               "date": "2026-01-01",
+              "origin": "wq-098-apply",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
+        },
+        "current.tokens_per_week_t": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-188",
+              "claim": "Xiaomi MiMo V2 Pro #1 on OpenRouter in April 2026 with 4.65T tokens/week; Xiaomi commands 22.3% of OpenRouter market share",
+              "value": 4.65,
+              "unit": "T tokens/week",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "unverified",
+              "human_reviewed": true,
+              "source": "DigitalApplied / OpenRouter",
+              "source_url": "https://www.digitalapplied.com/blog/openrouter-rankings-april-2026-top-ai-models-data",
+              "date": "2026-04-14",
               "origin": "wq-098-apply",
               "role": "supports"
             }
@@ -7792,7 +7922,7 @@
         "2026": {
           "arr": 2.0,
           "growth_pct": 60.0,
-          "valuation": 50.0
+          "valuation": 60.0
         },
         "2024": {
           "valuation": 2.5
@@ -8059,7 +8189,7 @@
         },
         "2026.valuation": {
           "confidence": "medium",
-          "claim_count": 1,
+          "claim_count": 2,
           "claims": [
             {
               "id": "dp-160",
@@ -8069,6 +8199,21 @@
               "weight": "corroborating",
               "tier": "tier_2A",
               "confidence": "verified",
+              "source": "Sacra \u2014 Cursor Deep Dive",
+              "source_url": "https://sacra.com/research/cursor/",
+              "date": "April 2026",
+              "origin": "wq-098-apply",
+              "role": "supports"
+            },
+            {
+              "id": "dp-224",
+              "claim": "SpaceX has an option to acquire Cursor for $60 billion.",
+              "value": 60.0,
+              "unit": "USD",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "estimated",
+              "human_reviewed": true,
               "source": "Sacra \u2014 Cursor Deep Dive",
               "source_url": "https://sacra.com/research/cursor/",
               "date": "April 2026",
@@ -8198,7 +8343,7 @@
           "collected_revenue": 0.0797
         },
         "2026": {
-          "arr": 500,
+          "arr": 0.5,
           "collected_revenue": 55.2032
         }
       },
@@ -15096,7 +15241,11 @@
         "Travel + Finance"
       ],
       "current": {},
-      "financials": {},
+      "financials": {
+        "2026": {
+          "arr": 0.15
+        }
+      },
       "provenance": {
         "_entity_creation": {
           "claim": "Entity created 2026-05-03 to close wq-046 matcher coverage gap; role/region/model_type defaults per editorial classification",
@@ -15104,6 +15253,28 @@
           "origin": "editorial_audit_doc_addition",
           "date": "2026-05-03",
           "_doc": "Consumer AI travel/finance"
+        },
+        "2026.arr": {
+          "confidence": "medium",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-226",
+              "claim": "Henry Shi built Super.com starting in 2016 and grew it to $150MM+ in annual revenues before exiting.",
+              "value": 0.15,
+              "unit": "USD",
+              "weight": "corroborating",
+              "tier": "tier_2A",
+              "confidence": "estimated",
+              "human_reviewed": true,
+              "source": "Lean AI Leaderboard",
+              "source_url": "https://leanaileaderboard.com/",
+              "date": "2026-05-01",
+              "origin": "wq-098-apply",
+              "role": "supports"
+            }
+          ],
+          "needs_source": false
         }
       },
       "entity_archetype": "ai_native"

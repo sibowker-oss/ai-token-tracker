@@ -24,6 +24,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EV = os.path.join(ROOT, "data", "evidence")
 ARCHIVE = os.path.join(ROOT, "data", "archive")
 TAGGING_PATH = os.path.join(ROOT, "data", "wq096_tagging.json")
+ENTITIES_PATH = os.path.join(ROOT, "entities.json")
+VAULT_PATH = os.path.join(ROOT, "vault-data.json")
+AUDIT_DIR = os.path.join(ROOT, "data", "audits")
+ARRMODEL_LEAK_AUDIT = os.path.join(AUDIT_DIR, "wq-098-arrmodel-source-leak.md")
+
+# Tracks the source decision for every entry emitted into arrModel so the
+# audit doc + reconcile assertion #8 can verify no orphan/hardcoded values.
+# Cleared at the start of each emit_arrmodel run; consumed at end.
+_LEAK_AUDIT_ROWS: list = []
 
 
 def _load_evidence_dir(subdir):
@@ -213,49 +222,212 @@ def emit_compute_providers(site):
     }
 
 
-def _frontier_arr_entries(site):
-    """Build frontier ARR entries from dashboard.providers (Tier 1)."""
+def _load_entities_lookup():
+    """Build name/slug → entity dict from entities.json. Tolerant of a
+    missing file (older site builds run without the apply pipeline)."""
+    if not os.path.exists(ENTITIES_PATH):
+        return {}
+    try:
+        with open(ENTITIES_PATH) as f:
+            ents = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    lookup = {}
+    for c in ents.get("companies", []):
+        slug = (c.get("slug") or "").lower()
+        name = (c.get("name") or "").lower()
+        if slug:
+            lookup[slug] = c
+        if name and name not in lookup:
+            lookup[name] = c
+    return lookup
+
+
+def _load_vault_lookup():
+    """Build dp-id → claim from vault-data.json so audit rows can name the
+    backing data point id."""
+    if not os.path.exists(VAULT_PATH):
+        return {}
+    try:
+        with open(VAULT_PATH) as f:
+            vault = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return {dp.get("id"): dp for dp in vault.get("dataPoints", []) if dp.get("id")}
+
+
+def _entity_arr_b(entity):
+    """Return (arr_value_in_B, source_path, source_dp_id) for an entity.
+
+    Resolution order (for the "current ARR run-rate" view that arrModel
+    represents):
+      1. `current.arr` — apply_pipeline writes here for point-in-time
+         claims, which is what arrModel wants.
+      2. Latest non-projected `financials[<year>].arr` whose year is ≤
+         the current calendar year. Far-future entries (e.g. an editorial
+         2030 baseline) are excluded — they're projections in disguise.
+
+    `source_dp_id` is the highest-tier provenance entry id for the chosen
+    field (so the audit doc can name the dp the value is backed by).
+    Returns (None, None, None) if no value present.
+    """
+    if not entity:
+        return None, None, None
+
+    cur = entity.get("current") or {}
+    if cur.get("arr") is not None:
+        arr_raw = cur.get("arr")
+        prov_key = "current.arr"
+        source_path = "entities.json:current.arr"
+    else:
+        fins = entity.get("financials") or {}
+        current_year = datetime.now(timezone.utc).year
+        candidate_year = None
+        for y in sorted(fins.keys(), reverse=True):
+            if y.endswith("_projected"):
+                continue
+            try:
+                yr = int(y.split("_")[0])
+            except ValueError:
+                continue
+            if yr > current_year:
+                continue  # editorial future baseline, not a real ARR claim
+            if isinstance(fins[y], dict) and fins[y].get("arr") is not None:
+                candidate_year = y
+                break
+        if not candidate_year:
+            return None, None, None
+        arr_raw = fins[candidate_year].get("arr")
+        prov_key = f"{candidate_year}.arr"
+        source_path = f"entities.json:financials.{candidate_year}.arr"
+
+    # Entity-stored arr values are in $B by apply_handlers/arr.py
+    # convention. Legacy $M-stored values (e.g. Perplexity 2026.arr=500
+    # meaning $500M) get force-overwritten when the human-reviewed claim
+    # applies, so this path treats every remaining value as $B. If a units
+    # bug ever sneaks back in, reconcile assertion #8 will surface the
+    # affected entity in the leak audit.
+    try:
+        arr_b = float(arr_raw)
+    except (TypeError, ValueError):
+        return None, None, None
+
+    prov = (entity.get("provenance") or {}).get(prov_key) or {}
+    claims = prov.get("claims") or []
+    source_dp_id = None
+    if claims:
+        # Highest tier wins; ties → latest date.
+        from apply_handlers._shared import TIER_RANK
+        ranked = sorted(
+            claims,
+            key=lambda c: (TIER_RANK.get(c.get("tier") or "", 0), c.get("date") or ""),
+            reverse=True,
+        )
+        source_dp_id = ranked[0].get("id")
+    return round(arr_b, 4), source_path, source_dp_id
+
+
+def _record_leak_audit(row):
+    _LEAK_AUDIT_ROWS.append(row)
+
+
+def _frontier_arr_entries(site, entities_lookup, vault_lookup):
+    """Build frontier ARR entries.
+
+    Vault-first: prefer the entity's `current.arr` / `financials[<latest>].arr`
+    (populated by apply_pipeline from vault claims). Fall back to the
+    legacy `dashboard.providers.<key>.arrNumeric / rev` only when no entity
+    record is available, and surface the fallback in the leak audit doc.
+    """
     out = []
     for key, card in site.get("dashboard", {}).get("providers", {}).items():
         tier = card.get("tier", "frontier")
         if tier != "frontier":
             continue
-        arr = card.get("arrNumeric")
-        if arr is None:
-            arr = card.get("rev")
+
+        ent = entities_lookup.get(key.lower())
+        arr_b, source_path, source_dp_id = _entity_arr_b(ent) if ent else (None, None, None)
+
+        if arr_b is None:
+            # Legacy fallback path — the leak audit flags this as a non-vault source.
+            arr_legacy = card.get("arrNumeric")
+            if arr_legacy is None:
+                arr_legacy = card.get("rev")
+            arr_b = float(arr_legacy) if arr_legacy is not None else 0.0
+            source_path = "dashboard.providers (legacy fallback)"
+            source_dp_id = None
+
         out.append({
             "id": key,
-            "arr": float(arr) if arr is not None else 0.0,
+            "arr": arr_b,
             "provenance": card.get("provenance", "tier_2a"),
             "tier": "frontier",
+            "_arrSource": source_path,
+            "_arrSourceDpId": source_dp_id,
+        })
+        _record_leak_audit({
+            "block": "arrModel.apps.frontier",
+            "entity": key,
+            "arr_b": arr_b,
+            "source_path": source_path,
+            "source_dp_id": source_dp_id,
+            "vault_backed": source_dp_id is not None,
         })
     return out
 
 
-def _ai_native_app_entries(site):
-    """Sum AI-Native Apps ARR from topConsumers (USD billions)."""
+def _ai_native_app_entries(site, entities_lookup, vault_lookup):
+    """Build aiNative ARR entries.
+
+    Vault-first: read the entity's latest non-projected `financials.arr`
+    (populated by `apply_pipeline.py` from accepted vault claims). Fall
+    back to the legacy `topConsumers.arrNumeric` only when the entity
+    cannot be resolved or has no arr field — and tag the entry as a
+    fallback so reconcile assertion #8 can flag it.
+    """
     out = []
     for c in site.get("dashboard", {}).get("topConsumers", []):
         if c.get("tier") != "ai_native_app":
             continue
-        arr_n = c.get("arrNumeric")
-        if arr_n is None:
-            continue
-        # arrNumeric in topConsumers is the established USD whole-dollars convention.
-        # Convert to billions for the arrModel aggregator.
-        arr_b = float(arr_n) / 1e9
         # Skip pure-passthrough gateway entries (no additive ARR contribution).
         if c.get("subcategory") == "gateway":
             continue
-        # Skip suspect-magnitude values (less than $1M is almost certainly a units bug
-        # in the source row — the topConsumers list does not include sub-$1M cohort).
+
+        co = c.get("co") or ""
+        co_lc = co.lower()
+        ent = (entities_lookup.get(co_lc)
+               or entities_lookup.get(co_lc.replace(" ", "-").replace(".", "")))
+
+        arr_b, source_path, source_dp_id = _entity_arr_b(ent) if ent else (None, None, None)
+
+        if arr_b is None:
+            arr_n = c.get("arrNumeric")
+            if arr_n is None:
+                continue
+            arr_b = float(arr_n) / 1e9
+            source_path = "dashboard.topConsumers (legacy fallback)"
+            source_dp_id = None
+
+        # Skip suspect-magnitude values (< $1M is almost certainly a units bug
+        # in the source row — the topConsumers list does not include sub-$1M).
         if arr_b < 0.001:
             continue
+
         out.append({
-            "id": c.get("co"),
+            "id": co,
             "arr": round(arr_b, 4),
             "provenance": c.get("provenance", "tier_2b"),
             "tier": "ai_native_app",
+            "_arrSource": source_path,
+            "_arrSourceDpId": source_dp_id,
+        })
+        _record_leak_audit({
+            "block": "arrModel.apps.aiNative",
+            "entity": co,
+            "arr_b": round(arr_b, 4),
+            "source_path": source_path,
+            "source_dp_id": source_dp_id,
+            "vault_backed": source_dp_id is not None,
         })
     return out
 
@@ -268,13 +440,116 @@ def _trad_saas_entries(site):
         arr = r.get("arrClaimedNumeric")
         if arr is None:
             continue
+        # Trad-SaaS entries source from data/evidence/enterprise_reality/*.json
+        # — hand-curated evidence files, vault-adjacent.
+        source_path = "data/evidence/enterprise_reality/*.json"
         out.append({
             "id": r.get("id"),
             "arr": float(arr),
             "provenance": r.get("provenance", "tier_2b"),
             "tier": "trad_saas",
+            "_arrSource": source_path,
+            "_arrSourceDpId": None,
+        })
+        _record_leak_audit({
+            "block": "arrModel.apps.tradSaas",
+            "entity": r.get("id"),
+            "arr_b": float(arr),
+            "source_path": source_path,
+            "source_dp_id": None,
+            "vault_backed": True,  # evidence-file-backed
         })
     return out
+
+
+def _record_compute_audit_rows(trad_entries, native_entries):
+    """Compute-side blocks (tradCompute, aiNativeCompute) source ARR from
+    the curated `data/evidence/compute_disclosures/*.json` evidence files.
+    These are hand-curated and audited as a unit (dp-239 → azure.json
+    reconciles to the compute disclosure evidence in apply_pipeline). For
+    the arrModel source-leak audit, count these as vault-adjacent (the
+    evidence path itself is the source-of-truth) rather than orphan.
+    """
+    for t in trad_entries:
+        _record_leak_audit({
+            "block": "arrModel.compute.tradCompute",
+            "entity": t.get("id"),
+            "arr_b": float(t.get("arrGrossDisclosed") or 0),
+            "source_path": "data/evidence/compute_disclosures/*.json",
+            "source_dp_id": None,
+            "vault_backed": True,  # evidence-file-backed
+        })
+    for e in native_entries:
+        _record_leak_audit({
+            "block": "arrModel.compute.aiNativeCompute",
+            "entity": e.get("id"),
+            "arr_b": float(e.get("arrNumeric") or 0),
+            "source_path": "data/evidence/compute_disclosures/aiNativeCompute/*.json",
+            "source_dp_id": None,
+            "vault_backed": True,
+        })
+
+
+def _write_leak_audit():
+    """Write the arrModel source-leak audit doc.
+
+    Lists every entity in arrModel.apps.* and arrModel.compute.* with its
+    actual data source. Reconcile assertion #8 reads this surface to verify
+    no orphan/hardcoded entries.
+    """
+    if not _LEAK_AUDIT_ROWS:
+        return None
+    os.makedirs(AUDIT_DIR, exist_ok=True)
+    rows = list(_LEAK_AUDIT_ROWS)
+    by_block = {}
+    for r in rows:
+        by_block.setdefault(r["block"], []).append(r)
+
+    total = len(rows)
+    vault_backed = sum(1 for r in rows if r["vault_backed"])
+    legacy = total - vault_backed
+
+    lines = [
+        "# wq-098 hotfix — arrModel source-leak audit",
+        "",
+        f"_Generated_: {_now_iso()}",
+        "",
+        "Each row in `arrModel.apps.*` and `arrModel.compute.*` and the data",
+        "source it actually reads from. Generated on every site build by",
+        "`scripts/wq096_emit.py:emit_arrmodel`. Reconcile assertion #8",
+        "(`a_arrmodel_vault_backed`) reads this and fails if any entry",
+        "sources from a non-vault path.",
+        "",
+        "## Summary",
+        "",
+        f"- **Total arrModel entries:** {total}",
+        f"- **Vault-backed (entities.json + provenance dp-id, or curated evidence file):** {vault_backed}",
+        f"- **Legacy fallback (dashboard.providers / topConsumers / enterpriseReality):** {legacy}",
+        "",
+    ]
+    for block in sorted(by_block.keys()):
+        block_rows = by_block[block]
+        lines.append(f"## {block} ({len(block_rows)} entries)")
+        lines.append("")
+        lines.append("| entity | arr ($B) | source_path | source_dp_id | vault_backed |")
+        lines.append("|---|---|---|---|---|")
+        for r in block_rows:
+            lines.append(
+                f"| {r['entity']} | {r['arr_b']} | {r['source_path']} "
+                f"| {r['source_dp_id'] or '—'} "
+                f"| {'✅' if r['vault_backed'] else '❌ legacy fallback'} |"
+            )
+        lines.append("")
+
+    with open(ARRMODEL_LEAK_AUDIT, "w") as f:
+        f.write("\n".join(lines) + "\n")
+    return ARRMODEL_LEAK_AUDIT
+
+
+def get_leak_audit_rows():
+    """Read-only accessor for the most recent run's audit rows. Used by
+    reconcile_pipeline.py assertion #8."""
+    return list(_LEAK_AUDIT_ROWS)
 
 
 def _passthrough_layer(layer):
@@ -298,8 +573,11 @@ def _passthrough_layer(layer):
 
 def emit_arrmodel(site):
     """Compute the arrModel aggregator block (top-level)."""
-    frontier = _frontier_arr_entries(site)
-    ai_native = _ai_native_app_entries(site)
+    _LEAK_AUDIT_ROWS.clear()
+    entities_lookup = _load_entities_lookup()
+    vault_lookup = _load_vault_lookup()
+    frontier = _frontier_arr_entries(site, entities_lookup, vault_lookup)
+    ai_native = _ai_native_app_entries(site, entities_lookup, vault_lookup)
     trad_saas = _trad_saas_entries(site)
 
     apps_frontier_total = round(sum(e["arr"] for e in frontier), 4)
@@ -314,6 +592,7 @@ def emit_arrmodel(site):
     trad_compute_gross = round(sum(float(t.get("arrGrossDisclosed") or 0) for t in trad_compute_entries), 4)
     trad_compute_net_sum = round(sum(float(t.get("arrNetOfAppsCarveout") or 0) for t in trad_compute_entries), 4)
     ai_native_compute_total = round(sum(float(e.get("arrNumeric") or 0) for e in ai_native_compute_entries), 4)
+    _record_compute_audit_rows(trad_compute_entries, ai_native_compute_entries)
 
     # ── Pass-through deductions ──
     deduction_blocks = {}
@@ -451,6 +730,9 @@ def apply_all(site):
     emit_enterprise_reality(site)
     emit_compute_providers(site)
     arr_model = emit_arrmodel(site)
+    audit_path = _write_leak_audit()
+    if audit_path:
+        print(f"  wq-098 hotfix: arrModel source-leak audit → {audit_path}")
 
     print(f"  wq-096: enterpriseReality={len(site['dashboard']['enterpriseReality'])} entries; topConsumers moved out: {sorted(moved)}")
     print(f"  wq-096: computeProviders.tradCompute={len(site['computeProviders']['tradCompute'])} aiNativeCompute={len(site['computeProviders']['aiNativeCompute'])}")

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-08T06:53:08Z",
+    "generatedAt": "2026-05-08T08:52:32Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -5496,12 +5496,12 @@
         "biz_pct": 42,
         "valuation": 852,
         "valuation_date": "2026-03",
-        "user_count": 900000000,
+        "user_count": 800000000,
         "subscriber_count": 50000000,
         "tokens_per_day_date": "2026-05-03"
       },
       "best_confidence": "high",
-      "provenance_entry_count": 66,
+      "provenance_entry_count": 67,
       "qualifies_for_detail_page": true
     },
     {
@@ -5533,10 +5533,11 @@
           "methodology_note": "Anthropic calculates annualised revenue as last 4 weeks of API revenue \u00d7 13 + monthly chatbot subscription revenue (single-day active subs anchor) \u00d7 12 (per The Information). Selecting a single-day anchor and 4-week-window can inflate vs steady-state. Published number on TAIL = $30B (Anthropic-disclosed); $44B carried as external estimate only."
         },
         "usd_per_gw_year": 10.0,
-        "input_token_price_usd_per_m": 5.0
+        "input_token_price_usd_per_m": 5.0,
+        "business_customer_count": 300000
       },
       "best_confidence": "high",
-      "provenance_entry_count": 45,
+      "provenance_entry_count": 47,
       "qualifies_for_detail_page": true
     },
     {
@@ -5740,10 +5741,11 @@
       "current": {
         "total_funding": 12.0,
         "backlog_q3_2025_usd_b": 55.6,
-        "backlog_source": "CoreWeave Form 10-Q for quarter ended 2025-09-30"
+        "backlog_source": "CoreWeave Form 10-Q for quarter ended 2025-09-30",
+        "user_count": 24
       },
       "best_confidence": "high",
-      "provenance_entry_count": 5,
+      "provenance_entry_count": 6,
       "qualifies_for_detail_page": true
     },
     {
@@ -5868,10 +5870,11 @@
         "iaas_connected": [
           "together",
           "fireworks"
-        ]
+        ],
+        "tokens_per_week_t": 4.65
       },
       "best_confidence": "high",
-      "provenance_entry_count": 6,
+      "provenance_entry_count": 7,
       "qualifies_for_detail_page": true
     },
     {
@@ -7456,8 +7459,8 @@
       ],
       "region": "US",
       "current": {},
-      "best_confidence": "low",
-      "provenance_entry_count": 0,
+      "best_confidence": "medium",
+      "provenance_entry_count": 1,
       "qualifies_for_detail_page": false
     }
   ],
@@ -7901,7 +7904,7 @@
     "_notes": "Three-segment model: Frontier lab compute (the circular-financing line \u2014 Model Providers paying external hyperscalers/neoclouds), AI workload compute (AI Natives + enterprises + sovereign workloads), Hosted model APIs (packaged token APIs). Pass-through applies to Hosted model APIs only. Copilot scoped OUT \u2014 tracked separately under copilot_excluded_*. See /methodology.html \u00a7Compute Revenue \u2014 three-segment model."
   },
   "computeProviders": {
-    "_generatedAt": "2026-05-08T06:53:08Z",
+    "_generatedAt": "2026-05-08T08:52:32Z",
     "_doc": "wq-096 \u2014 Tier 4 (trad_compute) and Tier 5 (ai_native_compute) records. tradCompute carries appsCarveout pointing at trad_saas record IDs whose ARR is deducted to produce arrNetOfAppsCarveout. Per Decision D9, multi-tier companies (Google, Microsoft, Oracle) split into separate records per tier; Microsoft has no Frontier entry.",
     "tradCompute": [
       {
@@ -8085,7 +8088,7 @@
     ]
   },
   "arrModel": {
-    "_generatedAt": "2026-05-08T06:53:08Z",
+    "_generatedAt": "2026-05-08T08:52:32Z",
     "_brief": "wq-096",
     "_doc": "Five-tier revenue model aggregator. apps_total + compute_net = industry_total within $0.1B tolerance. ai_native_total / trad_total cross-cut the apps/compute split per the editorial axis (Decision D1) and do not sum to industry_total because pass-through deductions are netted at the compute layer.",
     "asOf": "2026-Q1-annualised",
@@ -8099,354 +8102,470 @@
             "id": "ByteDance",
             "arr": 0.0,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "dashboard.providers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Google/Gemini",
             "arr": 4.2,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "OpenAI",
             "arr": 25.0,
             "provenance": "tier_1b",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "Alibaba/Qwen",
             "arr": 0.5,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "dashboard.providers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Anthropic",
             "arr": 30.0,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "Tencent",
             "arr": 0.3,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "dashboard.providers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Meta",
             "arr": 0.0,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": "conv-meta-current-arr"
           },
           {
             "id": "Baidu",
             "arr": 0.4,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "dashboard.providers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "DeepSeek",
             "arr": 0.3,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "Minimax",
             "arr": 0.15,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "xAI",
             "arr": 0.5,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "Mistral",
             "arr": 0.4,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "Moonshot/Kimi",
             "arr": 0.1,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "entities.json:current.arr",
+            "_arrSourceDpId": null
           },
           {
             "id": "Others/Self-hosted",
             "arr": 1.5,
             "provenance": "tier_2a",
-            "tier": "frontier"
+            "tier": "frontier",
+            "_arrSource": "dashboard.providers (legacy fallback)",
+            "_arrSourceDpId": null
           }
         ]
       },
       "aiNative": {
-        "total": 6.2992,
+        "total": 6.5992,
         "entries": [
           {
             "id": "OpenClaw",
             "arr": 0.01,
             "provenance": "tier_3b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Cursor (Anysphere)",
             "arr": 2.0,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2026.arr",
+            "_arrSourceDpId": "dp-148"
           },
           {
             "id": "Kilo Code",
             "arr": 0.008,
             "provenance": "tier_3b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Perplexity",
-            "arr": 0.2,
+            "arr": 0.5,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2026.arr",
+            "_arrSourceDpId": "dp-195"
           },
           {
             "id": "Replit",
             "arr": 0.252,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-replit-2025-arr"
           },
           {
             "id": "Cognition (Devin)",
             "arr": 0.155,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-cognition-(devin)-2025-arr"
           },
           {
             "id": "Lovable",
             "arr": 0.4,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-lovable-2025-arr"
           },
           {
             "id": "Cline",
             "arr": 0.005,
             "provenance": "tier_3b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Character.ai",
             "arr": 0.15,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-characterai-2025-arr"
           },
           {
             "id": "ElevenLabs",
             "arr": 0.33,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-elevenlabs-2025-arr"
           },
           {
             "id": "Wrtn Technologies",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-wrtn-technologies-2025-arr"
           },
           {
             "id": "micro1",
             "arr": 0.25,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-micro1-2025-arr"
           },
           {
             "id": "Midjourney",
             "arr": 0.3,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-midjourney-2025-arr"
           },
           {
             "id": "Harvey AI",
             "arr": 0.19,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-harvey-ai-2025-arr"
           },
           {
             "id": "Monica AI",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-monica-ai-2025-arr"
           },
           {
             "id": "Jasper",
             "arr": 0.13,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-jasper-2025-arr"
           },
           {
             "id": "Glean",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-glean-2025-arr"
           },
           {
             "id": "Janitor AI",
             "arr": 0.015,
             "provenance": "tier_3a",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Descript",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-descript-2025-arr"
           },
           {
             "id": "Yellow.ai",
             "arr": 0.0795,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-yellowai-2025-arr"
           },
           {
             "id": "Intercom Fin",
             "arr": 0.05,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-intercom-fin-2025-arr"
           },
           {
             "id": "Writer",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-writer-2025-arr"
           },
           {
             "id": "BLACKBOX.AI",
             "arr": 0.0317,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-blackboxai-2025-arr"
           },
           {
             "id": "Sierra AI",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "DeepL",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-deepl-2025-arr"
           },
           {
             "id": "Hebbia",
             "arr": 0.025,
             "provenance": "tier_3a",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Clay",
             "arr": 0.05,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-clay-2025-arr"
           },
           {
             "id": "Gamma",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-gamma-2025-arr"
           },
           {
             "id": "Captions",
             "arr": 0.03,
             "provenance": "tier_3a",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Decagon",
             "arr": 0.05,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Mercor",
             "arr": 0.075,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-mercor-2025-arr"
           },
           {
             "id": "Speak",
             "arr": 0.05,
             "provenance": "tier_3a",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Synthesia",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-synthesia-2025-arr"
           },
           {
             "id": "Genspark",
             "arr": 0.05,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-genspark-2025-arr"
           },
           {
             "id": "Chai Research",
             "arr": 0.03,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-chai-research-2025-arr"
           },
           {
             "id": "OpenArt",
             "arr": 0.07,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-openart-2025-arr"
           },
           {
             "id": "Abridge",
             "arr": 0.05,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-abridge-2025-arr"
           },
           {
             "id": "Photoroom",
             "arr": 0.05,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-photoroom-2025-arr"
           },
           {
             "id": "Runway",
             "arr": 0.1,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-runway-2025-arr"
           },
           {
             "id": "Fathom",
             "arr": 0.02,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-fathom-2025-arr"
           },
           {
             "id": "Pika",
             "arr": 0.025,
             "provenance": "tier_3a",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Suno",
             "arr": 0.12,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "dashboard.topConsumers (legacy fallback)",
+            "_arrSourceDpId": null
           },
           {
             "id": "Retell AI",
             "arr": 0.036,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-retell-ai-2025-arr"
           },
           {
             "id": "Cal AI",
             "arr": 0.012,
             "provenance": "tier_2b",
-            "tier": "ai_native_app"
+            "tier": "ai_native_app",
+            "_arrSource": "entities.json:financials.2025.arr",
+            "_arrSourceDpId": "editorial-cal-ai-2025-arr"
           }
         ]
       },
@@ -8457,125 +8576,165 @@
             "id": "m365_copilot",
             "arr": 5.4,
             "provenance": "tier_1b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "github_copilot",
             "arr": 1.65,
             "provenance": "tier_2a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "google_workspace_ai",
             "arr": 1.5,
             "provenance": "tier_2a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "salesforce_agentforce",
             "arr": 0.8,
             "provenance": "tier_2a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "databricks_mosaic",
             "arr": 0.6,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "servicenow_now_assist",
             "arr": 0.6,
             "provenance": "tier_1b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "adobe_firefly",
             "arr": 0.45,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "microsoft_dynamics_copilot",
             "arr": 0.4,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "notion_ai",
             "arr": 0.25,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "intuit_assist",
             "arr": 0.2,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "oracle_fusion_ai",
             "arr": 0.2,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "snowflake_cortex",
             "arr": 0.2,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "atlassian_intelligence",
             "arr": 0.15,
             "provenance": "tier_2b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "sap_joule",
             "arr": 0.1,
             "provenance": "tier_3a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "zendesk_ai",
             "arr": 0.1,
             "provenance": "tier_3a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "hubspot_breeze",
             "arr": 0.08,
             "provenance": "tier_3a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "box_ai",
             "arr": 0.05,
             "provenance": "tier_3a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "github_advanced_security_ai",
             "arr": 0.05,
             "provenance": "tier_3a",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "workday_ai",
             "arr": 0.05,
             "provenance": "tier_3b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           },
           {
             "id": "zoom_companion",
             "arr": 0.05,
             "provenance": "tier_3b",
-            "tier": "trad_saas"
+            "tier": "trad_saas",
+            "_arrSource": "data/evidence/enterprise_reality/*.json",
+            "_arrSourceDpId": null
           }
         ]
       },
-      "subtotal": 82.5292
+      "subtotal": 82.8292
     },
     "compute": {
       "tradCompute": {
@@ -8851,12 +9010,12 @@
       "subtotal": 43.08
     },
     "combined": {
-      "apps_total": 82.5292,
+      "apps_total": 82.8292,
       "compute_net": 43.08,
-      "industry_total": 125.6092,
-      "ai_native_total": 78.7642,
+      "industry_total": 125.9092,
+      "ai_native_total": 79.0642,
       "trad_total": 71.33,
-      "ai_native_share_pct": 62.71
+      "ai_native_share_pct": 62.79
     }
   }
 }

@@ -300,6 +300,172 @@ needs the publishing-gate approval before pushing).
 - `python3 scripts/apply_pipeline.py --dry-run` — auto_applied: 0,
   writes_queued: 0, evidence_reconciled: 0 (idempotent).
 
+## Errata — hotfix 2026-05-08 (later in the day)
+
+Cowork investigation surfaced three compounding gaps in the layer that
+shipped earlier today. The canonical example: vault `dp-195` (Perplexity
+$500M ARR, April 2026, Sacra) was accepted in claims.html but never
+reached `arrModel`, which still showed the legacy $200M figure. Three
+gaps stacked on top of each other.
+
+### Gap A — inbox→vault migration missing
+
+The legacy `apply_decisions.py` minted a `dp-NNN` data point for every
+`vault-inbox.json` item with `status='accepted'`. The wq-098 rebuild
+read directly from `vault-data.json` and assumed migration had already
+happened. Outcome: 36 accepted inbox items had no `accepted_as` vault
+id and never propagated; the remaining 129 already-migrated items had
+no signal that they'd been human-reviewed.
+
+**Fix** — `apply_pipeline.py:migrate_accepted_inbox_items` runs at the
+start of every pipeline pass. For accepted items lacking
+`accepted_as`, mints a fresh `dp-NNN` (with `human_reviewed: True` and
+`migrated_from_inbox` cross-reference). For already-migrated items,
+backfills `human_reviewed: True` on the matching vault dp. Idempotent.
+Items whose `unit` field is malformed (e.g. `"$2B revenue per month"`
+— 19 such items) are skipped and audited rather than minted, so the
+unit-coverage CI gate stays clean.
+
+### Gap B — D2 gate too strict for human-reviewed claims
+
+Pre-hotfix `is_auto_apply` required `confidence='verified'` for any
+auto-apply. TAIL's domain produces many `estimated`-confidence claims
+from credible private-company reporting (Sacra deep-dives, The
+Information leaks). Once Simon accepts these in claims.html, the
+review IS the trust signal; the confidence field captures source
+strength, not review status. Pre-hotfix the gate silently blocked the
+entire Sacra-sourced cohort even after acceptance.
+
+**Fix** — D2 revised in `apply_handlers/_shared.py`:
+- New `is_human_reviewed(claim)` returns True when
+  `claim.human_reviewed is True`.
+- New `derive_tier_for_gate(claim)` promotes a human-reviewed claim's
+  tier as if `confidence='verified'` (e.g. Sacra `web_page` +
+  `estimated` + `human_reviewed` → `tier_2A` for the gate, instead of
+  `tier_3A`).
+- `is_auto_apply` now passes when EITHER (a) human-reviewed AND the
+  promoted tier ≥ tier_2A, OR (b) `confidence='verified'` AND natural
+  tier ≥ tier_2A.
+- `build_prov_entry` records the promoted tier on entity provenance
+  trails so D6 conflict resolution treats Simon's review as the
+  editorial confidence assertion.
+- The wq-100 variance gate (`_variance_gate.evaluate`) bypasses
+  variance / first-time / floor / weaker-provenance checks for human-
+  reviewed writes — those guards are a safety net for AUTO-classified
+  data; human review already provides that safety, and Sacra-sourced
+  claims that legitimately move a figure 99% (because the prior was a
+  stale legacy mis-unit estimate) would otherwise stick in anomaly
+  review forever.
+- `apply_writes_to_entities` force-overwrites for human-reviewed
+  writes, ignoring the ±15% divergence guard for the same reason.
+
+**Side-effect on D6 conflict resolution.** Existing prov entries on
+entities have non-promoted tiers (recorded pre-hotfix); new entries
+have promoted tiers. The hybrid is consistent — both reflect "tier as
+evaluated for the gate", and the comparison is always a same-namespace
+TIER_RANK lookup.
+
+### Gap C — arrModel sourcing leak
+
+`scripts/wq096_emit.py:_ai_native_app_entries` and
+`_frontier_arr_entries` read ARR values from
+`dashboard.topConsumers.arrNumeric` and
+`dashboard.providers.<key>.rev` — the legacy fixture surfaces the
+wq-098 D4 decision flagged for eventual removal. When an entity had no
+populated `arr` in `entities.json`, the emit fell back to whatever
+`topConsumers` carried, which was a hardcoded Webflow-era value.
+Compounded by Gap B blocking dp-195, Perplexity's $200M legacy figure
+stuck around even though the apply layer "worked" for its other
+claims.
+
+**Fix** — both helpers now read entity ARR from `entities.json`
+directly:
+1. Prefer `current.arr` (the apply pipeline writes here for point-in-
+   time claims, which is what `arrModel.combined` represents).
+2. Fall back to the latest non-projected `financials[<year>].arr`
+   whose year is ≤ the current calendar year (so editorial 2030
+   baselines don't hijack the run-rate view — bug observed on OpenAI
+   during verification: `financials.2030.arr=280` was being picked
+   first, mis-classifying as $0.28B).
+3. Fall back to the legacy fixture only when no entity record exists.
+
+Each emitted entry now carries `_arrSource` + `_arrSourceDpId` fields
+so reconcile assertion #8 can verify vault backing entry-by-entity.
+
+### Material-change gate adjustment
+
+The `arr_delta` calculation was double-counting one units-correction
+case: Perplexity's legacy `entities.json:financials.2026.arr=500` (mis-
+stored as $M during the legacy migration) vs the dp-195 incoming `$0.5B`
+read as a $499.5B "movement". Fix in `apply_pipeline.py`: when a
+human-reviewed write would force-overwrite a prior that's ≥100x larger
+than incoming AND incoming is < $5B, count only the incoming magnitude
+against the gate. Bounded so legitimate large values (Nvidia $250B,
+OpenAI 2030 projections) are not suppressed.
+
+### Reconcile assertions added
+
+Two new assertions in `scripts/reconcile_pipeline.py`:
+
+- **#7 `inbox_migration_freshness`** — fails if any inbox item has
+  `status='accepted'` AND no `accepted_as` in vault AND `dateAdded` is
+  older than 24h. Catches Gap A regression. Currently flags the 19
+  malformed-unit items intentionally skipped from the mint path.
+- **#8 `arrmodel_vault_backed`** — fails if any
+  `arrModel.apps.{frontier,aiNative,tradSaas}.entries[]` has no
+  `_arrSourceDpId` AND no `entities.json` source AND no curated
+  evidence source. Currently flags 16 ai_native_app entries that
+  don't have entity records (Cline, Janitor AI, Sierra AI, etc.) —
+  long-standing topConsumers fixtures that need entity surfacing
+  outside this hotfix.
+
+### Files modified for the hotfix
+
+- `scripts/apply_pipeline.py` — new `migrate_accepted_inbox_items`,
+  variance-aware `arr_delta` accounting, human_reviewed force-
+  overwrite in `apply_writes_to_entities`, inbox loaded/written in
+  `main`.
+- `scripts/apply_handlers/_shared.py` — `is_human_reviewed`,
+  `derive_tier_for_gate`, revised `is_auto_apply`, promoted tier in
+  `build_prov_entry`.
+- `scripts/apply_handlers/_variance_gate.py` — human-reviewed bypass
+  at the top of `evaluate`.
+- `scripts/apply_handlers/{arr,acv,burn,employee_count,growth,
+  infrastructure,pricing,quarterly_revenue,user_count,valuation}.py`
+  — switched `incoming_tier`/`incoming` derivation to
+  `derive_tier_for_gate` so handler-level conflict resolution sees the
+  promoted tier.
+- `scripts/wq096_emit.py` — `_load_entities_lookup`,
+  `_load_vault_lookup`, `_entity_arr_b`, vault-first
+  `_ai_native_app_entries` + `_frontier_arr_entries`, leak-audit
+  generation, `_arrSource`/`_arrSourceDpId` stamps on every emitted
+  entry, `data/audits/wq-098-arrmodel-source-leak.md` writer.
+- `scripts/reconcile_pipeline.py` — `a_inbox_migration_freshness`,
+  `a_arrmodel_vault_backed`, wired into `build_health` + alert action
+  text.
+- `tests/test_apply_pipeline.py` — `TestInboxMigration`,
+  `TestRevisedD2Gate`, `TestArrModelSourceCheck`.
+
+### Acceptance verification (post-hotfix)
+
+- `python3 scripts/apply_pipeline.py --dry-run` → 11 auto-applied,
+  17 inbox-minted, 129 human_reviewed-backfilled, `arr_delta_b: 0.65`
+  (well below $5B gate). Idempotent on re-run.
+- `python3 -m unittest discover -s tests` → 52 tests pass (1 skip).
+- `arrModel.apps.aiNative.entries[Perplexity].arr` = 0.5 ($500M),
+  sourced from `entities.json:financials.2026.arr` with `dp-195`
+  backing. Was 0.2 ($200M).
+- `arrModel.combined.industry_total` 125.6092 → 125.9092 (+$0.30B,
+  the Perplexity correction). No other entity moved.
+- `data/audits/wq-098-arrmodel-source-leak.md` lists 92 arrModel
+  entries: 68 vault-backed, 24 legacy fallback (the 16 entity-less
+  ai_native_app entries that assertion #8 flags + 8 legacy
+  hyperscaler entries from `dashboard.providers`).
+- `python3 scripts/reconcile_pipeline.py` runs clean for the original
+  6 wq-099 assertions and surfaces 19 inbox migration gaps + 16
+  arrModel leaks via the new assertions (#7, #8) — both expected and
+  actionable.
+
 ## Push instruction (for Simon)
 
 Per CLAUDE.md publishing gate: **do NOT push to main without explicit

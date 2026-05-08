@@ -529,6 +529,115 @@ def a_arrmodel_consistency(site):
     }
 
 
+def a_inbox_migration_freshness(inbox, vault, now_utc):
+    """#7 (hotfix 2026-05-08): zero accepted-but-unmigrated inbox items
+    older than 24h.
+
+    An accepted inbox item is "migrated" when it carries an `accepted_as`
+    referencing a vault dp-id that exists in vault-data.json. This
+    assertion catches the failure mode that triggered the hotfix — items
+    Simon accepted in claims.html but that the apply pipeline never moved
+    into vault.
+    """
+    items = (inbox or {}).get("items", [])
+    by_id = {dp.get("id") for dp in (vault or {}).get("dataPoints", [])}
+    cutoff = now_utc - timedelta(hours=24)
+    stuck = []
+    for it in items:
+        if (it.get("status") or "").lower() != "accepted":
+            continue
+        accepted_as = it.get("accepted_as")
+        if accepted_as and accepted_as in by_id:
+            continue
+        added = parse_date(it.get("dateAdded"))
+        if added is not None and added > cutoff:
+            continue  # within the 24h grace window
+        stuck.append({
+            "inbox_id": it.get("id"),
+            "dateAdded": it.get("dateAdded"),
+            "claim": (it.get("claim") or "")[:120],
+        })
+    if not stuck:
+        return {
+            "name": "inbox_migration_freshness",
+            "passed": True,
+            "count": 0,
+            "details": (
+                "No accepted inbox items >24h old without a vault dp-id."
+            ),
+        }
+    sample = ", ".join(s["inbox_id"] for s in stuck[:5])
+    return {
+        "name": "inbox_migration_freshness",
+        "passed": False,
+        "count": len(stuck),
+        "details": (
+            f"{len(stuck)} accepted inbox item(s) older than 24h have no vault "
+            f"dp-id (sample: {sample}). Run "
+            f"`python3 scripts/apply_pipeline.py` to mint vault entries."
+        ),
+        "items": stuck[:25],
+    }
+
+
+def a_arrmodel_vault_backed(site):
+    """#8 (hotfix 2026-05-08): every entity in `arrModel.apps.*` and
+    `arrModel.compute.*` has its `arr` value sourced from a vault dp-id or
+    from the curated compute-disclosure evidence files. No orphan /
+    hardcoded entries.
+
+    Reads the `_arrSource` + `_arrSourceDpId` fields the wq096_emit
+    pipeline now stamps on each emitted entry. An entry without a dp-id
+    AND a non-evidence source is flagged as a leak.
+    """
+    arr_model = (site or {}).get("arrModel") or {}
+    apps = arr_model.get("apps") or {}
+    leaks = []
+
+    def _check(block_name, entries):
+        for e in entries or []:
+            if not isinstance(e, dict):
+                continue
+            src = e.get("_arrSource") or ""
+            has_dp = bool(e.get("_arrSourceDpId"))
+            evidence_backed = "compute_disclosures" in src or "evidence" in src
+            entities_backed = src.startswith("entities.json:")
+            if has_dp or entities_backed or evidence_backed:
+                continue
+            leaks.append({
+                "block": block_name,
+                "entity": e.get("id"),
+                "source_path": src or "<missing>",
+            })
+
+    for sub in ("frontier", "aiNative", "tradSaas"):
+        block = apps.get(sub) or {}
+        _check(f"arrModel.apps.{sub}", block.get("entries") or [])
+
+    if not leaks:
+        return {
+            "name": "arrmodel_vault_backed",
+            "passed": True,
+            "count": 0,
+            "details": (
+                "Every arrModel entity sources its arr from entities.json + "
+                "vault dp-id or from a curated evidence file."
+            ),
+        }
+    sample = ", ".join(f"{l['block']}/{l['entity']}" for l in leaks[:5])
+    return {
+        "name": "arrmodel_vault_backed",
+        "passed": False,
+        "count": len(leaks),
+        "details": (
+            f"{len(leaks)} arrModel entry/entries source their arr from a "
+            f"non-vault path (sample: {sample}). Confirm the entity has been "
+            f"applied via `apply_pipeline.py`, then rebuild site-data.json."
+        ),
+        "items": leaks[:25],
+    }
+
+
 def a_handler_coverage(vault):
     """Every distinct vault `unit` has a handler or is in UNHANDLED_UNITS."""
     handler_units = set()
@@ -582,6 +691,8 @@ def build_health(now_utc):
         a_entity_vault_sync(stale),
         a_arrmodel_consistency(site),
         a_handler_coverage(vault),
+        a_inbox_migration_freshness(inbox, vault, now_utc),
+        a_arrmodel_vault_backed(site),
     ]
     failed = [a for a in assertions if not a["passed"]]
 
@@ -720,6 +831,20 @@ def write_alert(health, date_iso):
             "`scripts/apply_handlers/` (and a row in `__init__.py`'s "
             "`_REGISTERED`) or add it to "
             "`scripts/apply_handlers/_default.py:UNHANDLED_UNITS`."
+        ),
+        "inbox_migration_freshness": (
+            "Accepted inbox items are sitting unmigrated. Run "
+            "`python3 scripts/apply_pipeline.py` — the hotfix migration "
+            "phase mints vault dp-NNN entries for any accepted inbox item "
+            "lacking an `accepted_as` reference."
+        ),
+        "arrmodel_vault_backed": (
+            "An arrModel entity sources its arr from a non-vault path "
+            "(legacy topConsumers / providers fixture). Confirm the entity "
+            "has a populated `current.arr` / `financials.<year>.arr` in "
+            "entities.json (with a provenance trail), then rebuild "
+            "site-data.json. See "
+            "`data/audits/wq-098-arrmodel-source-leak.md`."
         ),
     }
     for a in failed:
