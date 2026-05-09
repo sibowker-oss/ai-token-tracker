@@ -584,7 +584,11 @@ function updateHeroStats() {
     '<div class="hero-stat"><div class="label">Provider Rollup</div><div class="value" style="color:var(--accent);">~' + Math.ceil(totalTokens) + 'T/day</div><div class="detail">' + provCount + ' providers tracked <span class="tier-pill tier-3a">Tier 2A/3A</span></div><div class="kpi-period">Current run-rate</div></div>' +
     '<div class="hero-stat" title="ARR = trailing-quarter revenue × 4. NOT the same as audited fiscal-year collected revenue (see methodology.html#arr-vs-collected). For audited annual figures, see timeline.html#fy-revenue."><div class="label">Combined Provider ARR (run-rate)</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail">Trailing-quarter × 4 <span class="tier-pill tier-2a">Tier 1B/2A</span></div><div class="kpi-period">ARR, not collected</div></div>' +
     '<div class="hero-stat"><div class="label">Top 3 ARR Share</div><div class="value" style="color:var(--accent2);">' + top3Pct + '%</div><div class="detail">' + top3Names + '</div><div class="kpi-period">Current ARR</div></div>' +
-    '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">Frontier-equivalent cost (ARK Invest)</div><div class="kpi-period">YoY</div></div>';
+    (function() {
+      const knownArrB = (getKnownArrTotal() / 1e9);
+      const cohortCount = getFilteredConsumers().filter(c => c.arrNumeric).length;
+      return '<div class="hero-stat"><div class="label">AI Native Apps ARR</div><div class="value" style="color:var(--green);">$' + knownArrB.toFixed(1) + 'B</div><div class="detail">Sum across ' + cohortCount + ' cohort companies with disclosed ARR</div><div class="kpi-period">Known ARR</div></div>';
+    })();
 
   // Reconciliation note: provider rollup methodology
   const noteEl = document.getElementById('token-reconciliation');
@@ -957,28 +961,39 @@ function renderPostureSection(){
 let consumerSort = 'tokens', consumerSortAsc = false, consumerCatFilter = 'all', consumerVintage = 'all';
 
 function toggleConsumerSort(col) { if (consumerSort === col) consumerSortAsc = !consumerSortAsc; else { consumerSort = col; consumerSortAsc = col === 'co'; } updateConsumerTable(); }
-function setConsumerCat(cat) { consumerCatFilter = cat; updateConsumerTable(); }
-function toggleVintage() { consumerVintage = consumerVintage === 'all' ? 'ai-era' : 'all'; updateConsumerTable(); }
+function setConsumerCat(cat) { consumerCatFilter = cat; updateConsumerTable(); updateHeroStats(); }
+function toggleVintage() { consumerVintage = consumerVintage === 'all' ? 'ai-era' : 'all'; updateConsumerTable(); updateHeroStats(); }
 
-function updateConsumerTable() {
-  const t = document.getElementById('consumer-table');
-  const label = document.getElementById('consumer-filter-label');
-  let filtered = TOP_CONSUMERS;
-
+function getFilteredConsumers() {
+  let filtered = TOP_CONSUMERS || [];
   if (modelTypeFilter !== 'all') {
     const openProvs = ['meta', 'deepseek', 'mistral', 'alibaba', 'qwen', 'own', 'self-hosted', 'others'];
     const frontierProvs = ['openai', 'anthropic', 'google', 'xai', 'bytedance', 'tencent', 'baidu', 'minimax', 'moonshot'];
     const matchProvs = modelTypeFilter === 'open' ? openProvs : frontierProvs;
     filtered = filtered.filter(c => { const provArr = (c.providers || []).map(p => p.toLowerCase()); if (provArr.length === 0) return c.prov.toLowerCase().split(',').some(s => matchProvs.some(m => s.trim().includes(m))); return provArr.some(p => matchProvs.includes(p)); });
   }
-
   if (filters.providers.length > 0) {
     filtered = filtered.filter(c => { const provArr = (c.providers || []).map(p => p.toLowerCase()); return filters.providers.some(fp => { const fpLower = fp.toLowerCase().split('/')[0]; if (provArr.length > 0) return provArr.some(p => p.includes(fpLower)); return c.prov.toLowerCase().includes(fpLower); }); });
-    label.textContent = '\u2014 filtered by: ' + filters.providers.join(', ');
-  } else { label.textContent = modelTypeFilter !== 'all' ? '\u2014 showing ' + modelTypeFilter + ' models' : ''; }
-
+  }
   if (consumerCatFilter !== 'all') filtered = filtered.filter(c => c.category === consumerCatFilter);
   if (consumerVintage === 'ai-era') filtered = filtered.filter(c => c.founded && c.founded >= 2023);
+  return filtered;
+}
+
+function getKnownArrTotal() {
+  return getFilteredConsumers().reduce((s, c) => s + (c.arrNumeric || 0), 0);
+}
+
+function updateConsumerTable() {
+  const t = document.getElementById('consumer-table');
+  const label = document.getElementById('consumer-filter-label');
+  let filtered = getFilteredConsumers();
+
+  if (filters.providers.length > 0) {
+    label.textContent = '\u2014 filtered by: ' + filters.providers.join(', ');
+  } else {
+    label.textContent = modelTypeFilter !== 'all' ? '\u2014 showing ' + modelTypeFilter + ' models' : '';
+  }
 
   filtered.sort((a, b) => {
     let cmp = 0;
