@@ -390,7 +390,49 @@ async function loadSiteData() {
   } catch(e) { console.warn('Could not load site-data for impact preview'); }
 }
 
+// Format a numeric value using the unit string the pipeline emits.
+// Modern claims carry value already scaled (e.g. value=30, unit="USD_B"),
+// so legacy raw-dollar conversions like (claim.value / 1e9) produce $0.0B.
+function fmtClaimValue(value, unit) {
+  if (value == null) return '';
+  const u = (unit || '').toLowerCase();
+  if (u.includes('usd_b') || u.includes('usd billion') || u.includes('$b') || u.includes(' b ')) return '$' + value + 'B';
+  if (u.includes('usd_m') || u.includes('usd million') || u.includes('$m')) return '$' + value + 'M';
+  if (u.includes('mw')) return value + ' MW';
+  if (u === '%' || u.includes('percent') || u.includes('pct')) return value + '%';
+  return value + (unit ? ' ' + unit : '');
+}
+
 function getImpact(claim) {
+  if (!claim || claim.value == null) return null;
+
+  // Preferred path: the wq-098 extractor already emits a structured comparison
+  // (existing_value / value / value_display / delta_pct). Use it directly so
+  // the UI doesn't have to re-derive units against siteData. The legacy
+  // siteData branch below assumed claim.value was in raw dollars and produced
+  // "$0.0B / -100%" for any claim where value is already scaled to billions.
+  if (typeof claim.value === 'number'
+      && claim.existing_value != null
+      && typeof claim.existing_value === 'number') {
+    const proposed = claim.value_display || fmtClaimValue(claim.value, claim.unit);
+    const current  = fmtClaimValue(claim.existing_value, claim.unit);
+    const pctChange = claim.delta_pct != null
+      ? (Number(claim.delta_pct) * 100).toFixed(1)
+      : (claim.existing_value !== 0
+          ? ((claim.value - claim.existing_value) / Math.abs(claim.existing_value) * 100).toFixed(1)
+          : '');
+    return {
+      type: claim.comparison_type || 'updates',
+      name: [claim.entity, claim.metric].filter(Boolean).join(' · '),
+      current,
+      proposed,
+      pctChange,
+      isMajor: pctChange !== '' && Math.abs(parseFloat(pctChange)) > 15,
+    };
+  }
+
+  // Legacy fallback: derive from siteData. Only used by older claim shapes
+  // that lack the structured comparison fields above.
   if (!siteData || !claim.value) return null;
   const entity = (claim.entity || '').toLowerCase();
   const metric = (claim.metric || '').toLowerCase();
