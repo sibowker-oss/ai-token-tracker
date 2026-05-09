@@ -1,0 +1,97 @@
+{
+  "date": "2026-04-25",
+  "timestamp": "2026-04-25T07:00:26.552195",
+  "pypi": {
+    "openai": null,
+    "anthropic": 99004938,
+    "langchain-core": 108075663,
+    "litellm": 221103765,
+    "google-generativeai": 15799338,
+    "vllm": 11028599,
+    "transformers": 126341228,
+    "ollama": 11784710,
+    "mistralai": 24724252,
+    "cohere": null,
+    "together": null,
+    "groq": 15770422
+  },
+  "npm": {
+    "openai": 74532981,
+    "@anthropic-ai/sdk": 57410374,
+    "@langchain/core": 15798392,
+    "ai": 47239724,
+    "@google/generative-ai": 11065693,
+    "ollama": 1983913,
+    "@mistralai/mistralai": 8455434,
+    "cohere-ai": 1738040,
+    "groq-sdk": 2823123
+  },
+  "huggingface": {
+    "meta-llama/Llama-3.1-8B-Instruct": 9145891,
+    "meta-llama/Llama-3.1-70B-Instruct": 676330,
+    "meta-llama/Llama-4-Scout-17B-16E-Instruct": 409128,
+    "deepseek-ai/DeepSeek-R1": 4011990,
+    "deepseek-ai/DeepSeek-V3": 997301,
+    "mistralai/Mistral-7B-Instruct-v0.3": 2699857,
+    "Qwen/Qwen2.5-72B-Instruct": 409357,
+    "google/gemma-2-9b-it": 384958
+  },
+  "openrouter": {
+    "total_models": 355,
+    "providers": 56,
+    "free_models": 30,
+    "min_output_price_per_m": -1000000.0,
+    "max_output_price_per_m": 600.0,
+    "median_output_price_per_m": 1.25
+  },
+  "openrouter_rankings": {
+    "week_date": "2026-04-12",
+    "weekly_tokens_total": 20506289765346,
+    "weekly_tokens_total_T": 20.51,
+    "weekly_gmv_usd": 3075943,
+    "arr_estimate_usd": 15994906,
+    "blended_price_per_m_usd": 0.15,
+    "take_rate": 0.1,
+    "top_providers": {
+      "google": 3688240590838,
+      "anthropic": 3542042033824,
+      "openai": 2573478558921,
+      "others": 2540692717256,
+      "minimax": 2095690535808
+    },
+    "total_providers_in_week": 10
+  },
+  "github": {
+    "ollama": {
+      "total_downloads": 4403134,
+      "latest_tag": "v0.21.2"
+    },
+    "vllm": {
+      "total_downloads": 80553,
+      "latest_tag": "v0.19.1"
+    },
+    "llama_cpp": {
+      "total_downloads": 15003,
+      "latest_tag": "b8922"
+    },
+    "tgi": {
+      "total_downloads": 0,
+      "latest_tag": "v3.3.7"
+    }
+  },
+  "docker": {
+    "vllm": 18821978
+  },
+  "derived": {
+    "anthropic_total": 156415312,
+    "google_total": 26865031,
+    "self_hosted_sdk": 24797222,
+    "self_hosted_sdk_basis": "monthly_rate",
+    "self_hosted_github": 4498690,
+    "self_hosted_github_basis": "cumulative_last_5_releases",
+    "self_hosted_docker": 18821978,
+    "self_hosted_docker_basis": "cumulative_alltime",
+    "hf_total_downloads": 18734812,
+    "litellm_downloads": 221103765
+  }
+}

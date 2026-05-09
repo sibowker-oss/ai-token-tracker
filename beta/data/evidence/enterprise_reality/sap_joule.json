@@ -1,0 +1,25 @@
+{
+  "id": "sap_joule",
+  "name": "SAP Joule",
+  "ticker": "SAP",
+  "tier": "trad_saas",
+  "arrClaimedNumeric": 0.1,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "SAP commentary \u2014 'Joule bundled free in RISE/GROW; 2/3 of deals include AI'; no separate metering. Editorial midpoint of $0-200M range.",
+  "provenance": "tier_3a",
+  "arrClaimedVsReal": {
+    "realRange": [
+      0.0,
+      0.2
+    ],
+    "realNote": "Like saying '100% of iPhones include Siri.' Cloud growth (23%) driven by S/4HANA forced migration, not Joule."
+  },
+  "narrative": {
+    "claimed": "\"2/3 of deals include AI\" \u2014 Joule bundled free in RISE/GROW",
+    "usage": "No separate metering. No AI revenue disclosed = immaterial.",
+    "real": "~$0-200M. Like saying \"100% of iPhones include Siri\"",
+    "flags": "Cloud growth (23%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT AI. No analyst attributes growth to Joule."
+  },
+  "growth": "8-9%",
+  "prevGrowth": "8%"
+}

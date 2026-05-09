@@ -1,0 +1,83 @@
+{
+  "_schema": {
+    "version": "1.0",
+    "purpose": "wq-073 — single source-of-truth for editorial methodology constants currently hardcoded across HTML pages. HTML pages fetch this file and interpolate into [data-method] spans at render time.",
+    "principle": "If a value appears in narrative text but represents an editorial methodology constant (a rate, percentage, or industry-figure that would change as data updates), it lives here.",
+    "fetch_pattern": "fetch('data/methodology_constants.json').then(r => r.json()).then(c => { document.querySelectorAll('[data-method]').forEach(el => { const path = el.dataset.method; const v = path.split('.').reduce((o,k) => o && o[k], c); if (v != null) el.textContent = v; }); })"
+  },
+  "headline": {
+    "annual_ai_investment_usd_b": 260,
+    "annual_ai_investment_usd_b_label": "$260B",
+    "annual_ai_investment_per_day_usd_m": 711,
+    "annual_ai_investment_per_day_usd_m_label": "$711M",
+    "investment_to_revenue_ratio": 15,
+    "investment_to_revenue_ratio_label": "$15:$1",
+    "_doc": "$260B/yr industry investment ($711M/day; $15 per $1 of revenue) per assumptions-audit.md §6 'Annual Investment (capex + VC subsidy) ~$260B'. The ~$15:$1 ratio = $260B annual investment / ~$17B annual customer revenue (cumulative-equivalent at run rate). Pre-formatted *_label variants for direct innerHTML injection."
+  },
+  "tier_definitions": {
+    "tier_1b_agreement_pct": 15,
+    "_doc": "Tier 1B 'Corroborated' source-credibility threshold: independent reporting sources agreeing within ~15% per methodology.html §3.1 / source credibility scoring. See model-assumptions.md §3."
+  },
+  "compute_revenue": {
+    "_doc": "wq-087 D6 verification gate, retained under wq-089 / wq-091. Records principal/agent treatment for the four hyperscaler AI reseller arrangements. The aggregator (scripts/derive_compute_revenue.py) refuses to run if any treatment shifts to 'agent'. Re-verify each cycle when 10-Ks refile.",
+    "segment_model_doc": "wq-089 introduced three-segment decomposition; wq-091 renamed segments to plain English (Frontier lab compute / AI workload compute / Hosted model APIs) and restated per-provider sizing per Andy Jassy's $15B AWS AI run-rate disclosure plus GCP bottom-up build. Pass-through applies to Hosted model APIs only. Copilot scoped OUT. See data/compute_disclosures.json:_schema and methodology.html §three-segment-model.",
+    "principal_agent_treatment": {
+      "msft_azure_openai_service": {
+        "treatment": "principal",
+        "basis": "MSFT FY25 10-K Note 1 (cloud services consumption-based revenue + cost of revenue includes royalties — OpenAI rev-share is a royalty/COGS, not a revenue offset).",
+        "filing_url": "https://www.sec.gov/Archives/edgar/data/789019/000119312525177583/msft-20250630.htm",
+        "filing_date": "2025-07-30",
+        "verified_at": "2026-05-06",
+        "verified_by": "wq-087 phase A; re-asserted wq-089"
+      },
+      "amzn_aws_bedrock": {
+        "treatment": "principal",
+        "basis": "AMZN FY25 10-K Note 1 (Marketplace explicitly carved out as agent — 'we are not the seller of record'; AWS is NOT in that carve-out, so principal).",
+        "filing_url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000007/amzn-20251231.htm",
+        "filing_date": "2026-02-06",
+        "verified_at": "2026-05-06",
+        "verified_by": "wq-087 phase A; re-asserted wq-089"
+      },
+      "googl_vertex_partner_models": {
+        "treatment": "principal",
+        "basis": "GOOGL FY25 10-K Note 1 (principal/agent test invoked only for Google Network ad properties; Cloud is consumption-based fees with content licensing as cost of revenue — gross treatment).",
+        "filing_url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000022/goog-20251231.htm",
+        "filing_date": "2026-02-05",
+        "verified_at": "2026-05-06",
+        "verified_by": "wq-087 phase A; re-asserted wq-089"
+      },
+      "orcl_oci_partner_workloads": {
+        "treatment": "principal",
+        "basis": "ORCL FY25 10-K Note 1 (cloud services revenue recognized over contractual period or as consumed; no marketplace carve-out).",
+        "filing_url": "https://www.sec.gov/Archives/edgar/data/1341439/000119312525146091/orcl-20250531.htm",
+        "filing_date": "2025-06-18",
+        "verified_at": "2026-05-06",
+        "verified_by": "wq-087 phase A; re-asserted wq-089"
+      }
+    }
+  },
+  "_provenance": {
+    "headline.annual_ai_investment_usd_b": {
+      "source": "assumptions-audit.md §6 'Annual Investment (capex + VC subsidy) ~$260B | Ticks the clock'",
+      "tier": "1B",
+      "set_by": "simon",
+      "set_at": "2026-05-03"
+    },
+    "headline.annual_ai_investment_per_day_usd_m": {
+      "source": "Derived: 260e9 / 365 = ~711e6 (= $711M/day)",
+      "tier": "2A",
+      "set_at": "2026-05-03"
+    },
+    "headline.investment_to_revenue_ratio": {
+      "source": "Editorial framing per AI Ledger 'follow the dollar' narrative; matches $260B annual investment / ~$17B run-rate customer revenue.",
+      "tier": "3C",
+      "set_by": "simon",
+      "set_at": "2026-05-03"
+    },
+    "tier_definitions.tier_1b_agreement_pct": {
+      "source": "methodology.html §3.1 source-credibility scoring",
+      "tier": "1B",
+      "set_at": "2026-05-03"
+    }
+  }
+}

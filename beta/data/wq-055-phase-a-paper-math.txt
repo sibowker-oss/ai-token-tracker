@@ -1,0 +1,294 @@
+# wq-055 Phase A — paper math trace
+
+_Generated 2026-05-03. NO engine code written yet. Confirmation gate per
+brief §11 + global rule "Phase A: STOP for methodology discussion before
+any engine code."_
+
+## Inputs
+
+Cost-structure parameters used (per brief §3.3 example):
+
+  inference_estimation:
+    default_rate: 0.57
+    providerRates: openai 0.55 | anthropic 0.55 | google 0.30 | iaas 0.30 | _default 0.50
+
+  opex_estimation.size_bands:
+    Sub-$1B: 1.20  |  $1-5B: 1.00  |  $5-15B: 0.90  |  $15-50B: 0.75  |  $50B+: 0.60
+
+Hand-curated baseline (from data/sankey-projections.json:2025):
+    OpenAI 13.65 ($7.65 customer + $6.0 vc; vcSubsidy hand-set 5.20)
+    Anthropic 7.71 ($4.71 + $3.0; vcSubsidy 2.94)
+    Google 2.50 ($2.0 + $0.5; vcSubsidy 0.95)
+    IaaS 0.80 ($0.5 + $0.3; vcSubsidy 0.30)
+    totalCustomerRevenue 17.47 | totalVCSubsidy 9.39 | totalSystem 26.86
+
+## Critical methodology question — flagged for Simon
+
+Two interpretations of resolve_opex TIER 2 condition. The pseudocode in §3.1:
+
+    if op_loss is not None and cr is not None and inf is not None:
+        ...
+
+reads `inf = fin.get("inference_cost")` (entity field). But the
+math comment "opex = (op_loss + ref_revenue) - inf" implies
+the resolved inference (which can be sourced/derived/estimated).
+
+  Interpretation A (LITERAL pseudocode): TIER 2 of opex requires
+    entity-field `inf` to be present. Otherwise falls to TIER 3.
+    For OpenAI, both interpretations give same result ($5B is sourced
+    AND in entity field). For Anthropic this matters: inf would have
+    to be entity-field-present (it isn't), so opex TIER 2 fails →
+    falls to TIER 3 size_band estimate.
+
+  Interpretation B (LOOSE reading): TIER 2 uses resolved inf
+    regardless of source tier. For Anthropic this would fire TIER 2
+    with inf=2.59 (estimated) and ref_revenue=4.5 → opex=$7.11B →
+    provider_total=$9.70B (+25.8% vs hand-curated $7.71B, OUTSIDE band).
+
+Math below uses interpretation A. Flagging this for Simon's confirm
+because Anthropic's outcome flips dramatically between the two.
+
+## A.1 OpenAI 2025 — sourced inference + derived opex
+
+Entity 2025: cr=9.3147 | inference_cost=5.0 | opex=absent | operating_loss=6.0
+Reference revenue (per brief §3.3 worked example): 7.65 — REQUIRES BACKFILL
+  Without backfill, engine uses current cr=9.3147, producing different result.
+
+resolve_inference_cost(openai, 2025):
+  TIER 1 SOURCED ✓  → ($5.0, "sourced", ["openai.2025.inference_cost"])
+
+resolve_opex(openai, 2025):
+  TIER 1 SOURCED ✗  (opex absent)
+  TIER 2 DERIVED ✓  inf=5 (entity field), op_loss=6, cr=9.3147
+                    derived = max(0, op_loss + ref_revenue - inf)
+                            = max(0, 6.0 + 7.65 - 5.0)
+                            = $8.65B
+  → ($8.65, "derived", ["openai.2025.operating_loss", "openai.2025.inference_cost", "reference_revenue=7.65"])
+
+Aggregation:
+  provider_total = inf + opex = 5.0 + 8.65 = $13.65B
+  vc_subsidy = max(0, 13.65 - 9.3147) = $4.3353B
+  provider.value = $13.65B
+
+Comparison to hand-curated $13.65B: 0.0% delta ✓ EXACT MATCH
+  vc_subsidy moved $5.20 → $4.34 (-16.5%) — exactly the published behaviour
+  ("when revenue rises with new data but costs stable, vc_subsidy decreases")
+
+WITHOUT ref_revenue backfill (engine falls back to current cr=$9.3147):
+  opex_derived = max(0, 6.0 + 9.3147 - 5.0) = $10.3147B
+  provider_total = $15.3147B (+12.2% vs hand-curated)
+  vc_subsidy = max(0, 15.31 - 9.31) = $6.0B  (back where it was)
+  Engine would NOT match brief's worked example without the backfill.
+
+## A.2 Anthropic 2025 — estimated inference + estimated opex (interp A)
+
+Entity 2025: cr=4.71 (override) | inference_cost=absent | opex=absent | operating_loss=5.2
+Reference revenue (need to backfill from claim date 2026-03-28 → cr at time was $4.5B per dp-057).
+
+resolve_inference_cost(anthropic, 2025):
+  TIER 1 SOURCED ✗  (inf absent)
+  TIER 2 DERIVED ✗  (opex_estimate absent — required for inf TIER 2)
+  TIER 3 ESTIMATED ✓  rate = providerRates.anthropic = 0.55
+                       inf = 4.71 × 0.55 = $2.5905B
+  → ($2.59, "estimated", ["customer_revenue × 0.55 (provider rate)"])
+
+resolve_opex(anthropic, 2025) — INTERPRETATION A (literal pseudocode):
+  TIER 1 SOURCED ✗  (opex absent)
+  TIER 2 DERIVED ✗  (inf entity field absent → condition fails)
+  TIER 3 ESTIMATED ✓  cr=$4.71B → "$1-5B" band → rate 1.00
+                       opex = 4.71 × 1.00 = $4.71B
+  → ($4.71, "estimated", ["customer_revenue × 1.00 (opex rate from size band)"])
+
+Aggregation:
+  provider_total = 2.59 + 4.71 = $7.30B
+  vc_subsidy = max(0, 7.30 - 4.71) = $2.59B
+  provider.value = $7.30B
+
+Comparison to hand-curated $7.71B: -5.3% delta ✓ within ±15% band
+  vc_subsidy moved $2.94 → $2.59 (-11.9%) — moderate divergence within band
+
+INTERPRETATION B (loose reading; TIER 2 uses resolved inf):
+  opex_derived = max(0, 5.2 + 4.5 - 2.59) = $7.11B
+  provider_total = $9.70B (+25.8% vs hand-curated, OUTSIDE band)
+  vc_subsidy = $4.99B (+70% vs hand-curated)
+  → would trigger Phase A stop condition for Anthropic.
+
+Recommend: Interpretation A. Flag for Simon's confirm.
+
+## A.3 Google 2025 — all estimated
+
+Entity 2025: cr=2.2516 | inference_cost=absent | opex=absent | operating_loss=absent
+No op_loss to derive from; everything falls to TIER 3 estimates.
+
+resolve_inference_cost(google, 2025):
+  TIER 1 ✗  TIER 2 ✗
+  TIER 3 ESTIMATED ✓  rate = providerRates.google = 0.30
+                       inf = 2.2516 × 0.30 = $0.6755B
+  → ($0.68, "estimated", ["customer_revenue × 0.30"])
+
+resolve_opex(google, 2025):
+  TIER 1 ✗  TIER 2 ✗
+  TIER 3 ESTIMATED ✓  cr=$2.2516B → "$1-5B" band → rate 1.00
+                       opex = 2.2516 × 1.00 = $2.2516B
+  → ($2.25, "estimated", ["customer_revenue × 1.00"])
+
+Aggregation:
+  provider_total = 0.68 + 2.25 = $2.93B
+  vc_subsidy = max(0, 2.93 - 2.2516) = $0.68B
+  provider.value = $2.93B
+
+Comparison to hand-curated $2.50B: +17.0% delta ✗ OUTSIDE ±15% band (just barely)
+  vc_subsidy moved $0.95 → $0.68 (-28.4%)
+
+Worth flagging — Google is the only "original 4" provider that misses
+the band under default cost-structure params. Possible calibration
+adjustments to bring Google in:
+  (a) Lower opex rate for $1-5B band from 1.00 → 0.85 → opex=$1.91 → provider=$2.59 (+3.6% in band)
+  (b) Add inference_cost or operating_loss claim for Google → moves to TIER 1/2
+  (c) Editorial vc_subsidy override for Google 2025 → pin to $0.95
+  (d) Provider-specific opex rate override
+
+## A.4 Mistral 2025 — all estimated, small provider
+
+Entity 2025: cr=0.2154 | all cost fields absent
+
+resolve_inference_cost(mistral, 2025):
+  TIER 3 ESTIMATED ✓  rate = providerRates._default = 0.50
+                       inf = 0.2154 × 0.50 = $0.1077B
+  → ($0.11, "estimated", [...])
+
+resolve_opex(mistral, 2025):
+  TIER 3 ESTIMATED ✓  cr=$0.2154B → "Sub-$1B" band → rate 1.20
+                       opex = 0.2154 × 1.20 = $0.2585B
+  → ($0.26, "estimated", [...])
+
+Aggregation:
+  provider_total = 0.11 + 0.26 = $0.37B (matches brief §3.3 worked example $0.374B)
+  vc_subsidy = max(0, 0.37 - 0.22) = $0.15B
+  provider.value = $0.37B
+
+  Falls into "Other Model Providers" aggregation per §5 (value < 2% of total).
+
+## A.5 Other small providers — all estimated, all aggregated
+
+Same TIER 3 estimation pattern as Mistral. Resolved values:
+
+  Provider     cr        inf_est   opex_est   total    vc_sub
+  ──────────   ──────    ───────   ────────   ──────   ──────
+  DeepSeek     0.1615    0.0808    0.1938     0.27     0.11
+  Mistral      0.2154    0.1077    0.2585     0.37     0.15
+  xAI          0.2692    0.1346    0.3230     0.46     0.19
+  Minimax      0.0808    0.0404    0.0970     0.14     0.06
+  Moonshot     0.0538    0.0269    0.0646     0.09     0.04
+  Sum          0.7807    0.3904    0.9369     1.33     0.55
+
+Per §5 aggregation (threshold 2% / floor top 4):
+  Total provider value (incl small providers): 13.65 + 7.30 + 2.93 + 0.80 + 1.33 = 26.01
+  2% of total: 0.52
+  Top 4 by value: OpenAI (13.65) | Anthropic (7.30) | Google (2.93) | IaaS (0.80) — all above floor
+  Below 2% AND outside top 4: xAI (0.46), Mistral (0.37), DeepSeek (0.27), Minimax (0.14), Moonshot (0.09)
+  → All 5 collapse into "Other Model Providers" = $1.33B (5.1% of total — visible)
+
+## Comparison table — original 4 providers
+
+| Provider  | Engine value | Hand-curated | Δ %     | Engine vc_subsidy | Hand-curated vc_subsidy |
+|-----------|--------------|--------------|---------|-------------------|-------------------------|
+| OpenAI    | $13.65B      | $13.65B      | 0.0% ✓  | $4.34B            | $5.20B                  |
+| Anthropic | $7.30B       | $7.71B       | -5.3% ✓ | $2.59B            | $2.94B                  |
+| Google    | $2.93B       | $2.50B       | +17.0% ✗ | $0.68B           | $0.95B                  |
+| IaaS      | (not derived; aggregation node, no entity slug) — preserved hand-curated $0.80B |
+
+3 of 4 within band (OpenAI exact, Anthropic -5.3%, IaaS preserved).
+1 of 4 outside band (Google +17.0%).
+
+## Reference_revenue backfill scope check
+
+Walked entities.json to count operating_loss provenance entries needing
+ref_revenue backfill:
+
+  openai.2025.operating_loss      claim dp-005 dated 2025-09-01 — ref_revenue ABSENT
+                                  (cr at that date: $4.3B per zitron-20260328-b2;
+                                   brief says use $7.65B per §7.2 weighted-consensus)
+  anthropic.2025.operating_loss   claim dp-006 dated 2026-03-28 — ref_revenue ABSENT
+                                  (cr at that date: $4.5B per dp-057)
+  No other model_provider entities have operating_loss claims.
+
+Backfill scope: 2 entries. Trivially small. Could be done by hand for
+this case OR via the scripts/backfill_reference_revenue.py the brief
+specifies. Either way feasible.
+
+Backfill-stop-condition check (>50% inferrable): we have 2 of 2
+inferrable. Passes the threshold by a wide margin.
+
+Open question for Simon: which ref_revenue date convention?
+  (a) Use cr value at exact claim date (OpenAI=$4.3B, Anthropic=$4.5B)
+  (b) Use the §7.2 weighted-consensus published at time (OpenAI=$7.65B per brief)
+  (c) Use current cr (OpenAI=$9.31B — known to inflate)
+
+(a) gives OpenAI provider.value = max(0, 6+4.3-5)+5 = 5+5.3 = $10.3B (-24.5% vs hand-curated)
+(b) gives OpenAI = $13.65B (matches brief worked example — recommended)
+(c) gives OpenAI = $15.31B (+12.2%; this is what wq-044 wire-completion shipped)
+
+Recommend (b) — matches the brief's worked example AND matches the
+hand-curated baseline. Backfill should encode "the published cr at time
+of the loss claim" not "cr at exact claim date."
+
+## Size_band opex rate sanity check
+
+Per Simon's proposed bands (Sub-$1B 1.20 / $1-5B 1.00 / $5-15B 0.90 /
+$15-50B 0.75 / $50B+ 0.60), implied opex:
+
+  Mistral    cr=$0.22B  →  band Sub-$1B  →  opex=$0.26B  (opex 1.20× revenue)
+  Anthropic  cr=$4.71B  →  band $1-5B    →  opex=$4.71B  (opex equals revenue)
+  Google     cr=$2.25B  →  band $1-5B    →  opex=$2.25B  (opex equals revenue)
+  OpenAI     cr=$9.31B  →  band $5-15B   →  opex=$8.38B  (opex 0.90× revenue) [TIER 3 fallback]
+
+OpenAI under TIER 3 fallback: $8.38B opex vs derived $8.65B opex. Close
+(within 3%). Fallback would land OpenAI at $13.50B (-1% vs hand-curated).
+
+The bands feel directionally right:
+  - Sub-$1B at 1.20× captures "early stage, opex outpaces revenue" — yes
+  - $1-5B at 1.00× captures "scaling, opex matches revenue" — yes; might be
+    a bit aggressive (Anthropic should arguably be 1.10-1.20 given known
+    R&D heaviness, would push provider_total higher and bring it nearer
+    to hand-curated $7.71)
+  - $5-15B at 0.90× captures "scaling efficiency" — directionally right
+  - $15-50B / $50B+ untested in 2025 data (all model_providers below $15B cr)
+
+Recommended tuning if Simon wants Anthropic closer to hand-curated:
+  raise $1-5B opex rate from 1.00 → 1.10 → Anthropic provider_total = $2.59 + $5.18 = $7.77 (vs hand $7.71, +0.8% in band)
+  but this also moves Google $1.00 → $1.10 → provider_total = $0.68 + $2.48 = $3.16 (+26% from $2.50, worse)
+
+So no single band tuning fixes both Anthropic and Google. Could need
+provider-specific opex rate overrides for Google (the brief's override
+mechanism §3.4 supports this).
+
+## Recommendation — go/no-go for Phase B
+
+GO with these confirmations from Simon:
+
+1. Confirm interpretation A for resolve_opex TIER 2 condition (literal
+   pseudocode reading: requires entity-field `inf` present; falls to
+   TIER 3 size_band otherwise).
+
+2. Confirm reference_revenue backfill convention (b): use the published
+   cr at time of the operating_loss claim (i.e. $7.65B for OpenAI 2025,
+   $4.5B for Anthropic 2025).
+
+3. Confirm Google +17.0% delta is acceptable as-is (default cost
+   structure produces $2.93B vs hand-curated $2.50B), OR pre-decide
+   the calibration:
+     (a) accept the engine value (publish $2.93B for Google in updated
+         Sankey)
+     (b) override Google opex rate to bring closer to $2.50
+     (c) editorial vc_subsidy override for Google
+     (d) defer decision to Phase B calibration session
+
+Without these confirmations, Phase B implementation makes implicit
+choices on Simon's behalf. Phase A's job is to surface them.
+
+NO STOP CONDITIONS TRIGGERED:
+  - OpenAI within 5% of $13.65B (exact match) ✓ — but ONLY with ref_revenue
+    backfill convention (b). With (a) or (c), engine diverges.
+  - All 9 components resolved across the 4 cases ✓
+  - ref_revenue backfill scope: 2/2 = 100% inferrable ✓

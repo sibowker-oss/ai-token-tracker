@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Changelog — AI Ledger v2</title>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
 <style>
   :root{--bg:#0a0e1a;--card:#111827;--card-border:#1e293b;--text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f8fafc;--accent:#3b82f6;--purple:#8b5cf6;--cyan:#06b6d4;--green:#10b981;--orange:#f59e0b;--red:#ef4444;}
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -44,15 +46,17 @@
   .entry::before{content:'';position:absolute;left:-20px;top:8px;width:10px;height:10px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);}
   .entry[data-scope="capital"]::before{border-color:var(--accent);}
   .entry[data-scope="revenue"]::before{border-color:var(--green);}
+  .entry[data-scope="compute"]::before{border-color:var(--cyan);}
   .entry[data-scope="usage"]::before{border-color:var(--purple);}
-  .entry[data-scope="platform"]::before{border-color:var(--orange);}
+  .entry[data-scope="methodology"]::before{border-color:var(--orange);}
   .entry-meta{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
   .entry-date{font-size:13px;font-weight:700;color:var(--text-bright);}
   .entry-scope{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;}
   .entry-scope.capital{background:rgba(59,130,246,0.15);color:var(--accent);}
   .entry-scope.revenue{background:rgba(16,185,129,0.15);color:var(--green);}
+  .entry-scope.compute{background:rgba(6,182,212,0.15);color:var(--cyan);}
   .entry-scope.usage{background:rgba(139,92,246,0.15);color:var(--purple);}
-  .entry-scope.platform{background:rgba(245,158,11,0.15);color:var(--orange);}
+  .entry-scope.methodology{background:rgba(245,158,11,0.15);color:var(--orange);}
   .entry-text{font-size:14px;line-height:1.6;color:var(--text);}
   .entry.hidden{display:none;}
 
@@ -77,48 +81,91 @@
   }
 </style>
 </head>
-<body>
+<body class="surface-dark">
 
-<nav class="nav-bar">
-  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
-  <a href="index.html" class="nav-link">Home</a>
-  <a href="capital.html" class="nav-link">Capital</a>
-  <a href="revenue.html" class="nav-link">Revenue</a>
-  <a href="usage.html" class="nav-link">Usage</a>
-  <a href="methodology.html" class="nav-link">Methodology</a>
-  <a href="changelog.html" class="nav-link active">Changelog</a>
-  <a href="power.html" class="nav-link disabled">Power (v3)</a>
-  <a href="about.html" class="nav-link">About</a>
-  <div class="nav-scenario">
-    <label>Scenario:</label>
-    <button class="scenario-btn" data-s="bear" onclick="setScenario('bear')">Bear</button>
-    <button class="scenario-btn active" data-s="base" onclick="setScenario('base')">Base</button>
-    <button class="scenario-btn" data-s="bull" onclick="setScenario('bull')">Bull</button>
-  </div>
-  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
-    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
-    Hepburn Advisory
+<header class="ds-header">
+  <a href="/" class="ds-header__brand" aria-label="The AI Ledger — home">
+    <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+    <span class="ds-header__brand-text">
+      <span class="ds-header__brand-name">AI Ledger</span>
+      <span class="ds-header__brand-sub">Hepburn Advisory</span>
+    </span>
   </a>
-</nav>
+  <nav class="ds-header__nav" aria-label="Primary">
+    <a class="ds-header__nav-link" href="/capital.html">Capital</a>
+    <a class="ds-header__nav-link" href="/revenue.html">Revenue</a>
+    <a class="ds-header__nav-link" href="/compute.html">Compute</a>
+    <a class="ds-header__nav-link" href="/usage.html">Usage</a>
+    <a class="ds-header__nav-link" href="/power.html">Power</a>
+    <a class="ds-header__nav-link" href="/methodology.html">Methodology</a>
+    <a class="ds-header__nav-link" href="/about.html">About</a>
+  </nav>
+  <a class="ds-header__cta" href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=header-cta" target="_blank" rel="noopener">
+    Hepburn Advisory <span aria-hidden="true">↗</span>
+  </a>
+</header>
+
 
 <div class="container">
   <h1>Changelog</h1>
   <p class="subtitle">Every estimate revision, data upgrade, and structural change — in reverse chronological order.</p>
+  <p class="subtitle">Each entry reflects a change to a published number, a new section of the site, or a methodology revision. For the underlying engineering log, see git history.</p>
 
   <div class="filters">
     <button class="filter-btn active" data-filter="all" onclick="filterEntries('all')">All</button>
     <button class="filter-btn" data-filter="capital" onclick="filterEntries('capital')">Capital</button>
     <button class="filter-btn" data-filter="revenue" onclick="filterEntries('revenue')">Revenue</button>
+    <button class="filter-btn" data-filter="compute" onclick="filterEntries('compute')">Compute</button>
     <button class="filter-btn" data-filter="usage" onclick="filterEntries('usage')">Usage</button>
-    <button class="filter-btn" data-filter="platform" onclick="filterEntries('platform')">Platform</button>
+    <button class="filter-btn" data-filter="methodology" onclick="filterEntries('methodology')">Methodology</button>
   </div>
 
   <div class="timeline">
 
-    <div class="entry" data-scope="platform">
+    <div class="entry" data-scope="methodology">
+      <div class="entry-meta">
+        <span class="entry-date">7 May 2026</span>
+        <span class="entry-scope methodology">Homepage</span>
+      </div>
+      <div class="entry-text">The homepage is refreshed to reflect the five-ledger architecture. The masthead reads "The AI economy, layer by layer." with a tagline that names every ledger in causal order ("Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system."), replacing the prior three-ledger framing.<br><br>A new hero visual — <strong>The AI &ldquo;$&rdquo; Stack</strong> — replaces the previous tile strip and the four-step narrative-flow loop. Five horizontal pill bars descend in size by 2025 figure: Capex $330B → Usage $164B (notional at OpenRouter median output rate) → Compute $43B → Power $25B → Apps Revenue $17B. Each bar links through to its ledger; Power carries an explicit Tier 3 placeholder pill until v3 hardens.<br><br>The Apps Revenue figure published on the homepage is restated to the 2025 cohort sum-of-quarterlies basis ($17B), aligning with the Revenue Ledger and the Compute Ledger's Layer Stack. The hook one-liner is now Compute-anchored — $2.50 of compute spend stands behind every $1 of customer-paid AI Apps Revenue. Several editorial sentences (homepage card commentary, hero hook sub-line, sub-headers on the Compute Ledger page) were trimmed at the same time so ledger surfaces stay methodology-first.<br><br>The Bear / Base / Bull scenario toggle is retired from the homepage. wq-093.</div>
+    </div>
+
+    <div class="entry" data-scope="compute">
+      <div class="entry-meta">
+        <span class="entry-date">6 May 2026</span>
+        <span class="entry-scope compute">Compute Ledger</span>
+      </div>
+      <div class="entry-text">The <strong>Compute Ledger</strong> goes live as the fourth Ledger surface, answering "what hyperscalers and neoclouds earned from AI compute in 2025." Built around a three-segment model: <em>frontier-lab compute</em> — what model labs (OpenAI, Anthropic, Mistral and others) paid external compute providers — at ~79% of the dollar; <em>AI workload compute</em> — the rest of business AI demand running on hyperscaler and neocloud infrastructure; and <em>hosted model APIs</em> — Bedrock, Vertex, Foundry and the equivalents.<br><br>The methodology iterated through four refinements before ship: (1) bucket decomposition with a Copilot scope-out and a pass-through correction to avoid double-counting flow that hyperscalers recognise from labs they themselves fund; (2) segment sizing correction following Andy Jassy's Q1 2026 commentary, taking AMZN AI compute from a top-down $18B to a bottom-up $10B and GCP from $18B to $7B; (3) a quarterly trajectory back-cast that uses Q4 2025 ≈ Q1 2026 run-rate where issuers haven't yet published; (4) a switch to the sum-of-quarterlies basis for the 2025 calendar so the year doesn't drop on Q4 → Q1 methodology changes.<br><br>Published 2025 total: <strong>$43.07B</strong>. The page also introduces the <em>Layer Stack</em> — a four-row proportional bar showing Apps Revenue ↔ Compute ↔ Silicon ↔ Power at canonical 2025 dollars. wq-087 / wq-089 / wq-091 / wq-092.</div>
+    </div>
+
+    <div class="entry" data-scope="revenue">
+      <div class="entry-meta">
+        <span class="entry-date">6 May 2026</span>
+        <span class="entry-scope revenue">Revenue Ledger</span>
+      </div>
+      <div class="entry-text">The Revenue Ledger's published headline figure is now the <strong>2025 cohort sum-of-quarterlies total ($17.36B)</strong>. This is the same cohort that flows through to the homepage Apps Revenue card, The AI &ldquo;$&rdquo; Stack hero, and the Compute Ledger's Layer Stack — so the figure quoted on every public surface lines up.<br><br>The cumulative-since-2023 framing ($22B) that previously appeared in the homepage hero and meta tags is retired; the Revenue Sankey continues to publish per-provider quarterly flows on the same cohort scope (rebalanced 3 May, see entry below). The change is a framing alignment — provider-level data and the Sankey methodology are unchanged.</div>
+    </div>
+
+    <div class="entry" data-scope="revenue">
+      <div class="entry-meta">
+        <span class="entry-date">3 May 2026</span>
+        <span class="entry-scope revenue">Revenue Ledger</span>
+      </div>
+      <div class="entry-text">The Follow the Dollar Sankey now derives every published value from our underlying entity database, applying the same documented methodology to every provider rather than hand-curating each one. Previously, per-provider customer revenue and investor subsidy were calculated separately and the chart was rebalanced manually whenever an input changed.<br><br>The methodological shift: investor subsidy now functions as a balancing figure. When customer revenue is revised — for example, when stronger data arrives for a provider's reported revenue — the chart holds total provider value steady (anchored to documented inference costs and operating losses) and adjusts the investor subsidy to keep the Sankey balanced. Future revenue revisions will visibly shift the customer-versus-investor split for each provider without changing the provider's overall flow size.<br><br>Specific changes published in this update:<br><br><strong>OpenAI:</strong> Customer revenue revised $7.65B → $9.31B (+22%). Provider total holds at $13.65B; investor subsidy correspondingly adjusts $5.20B → $4.34B. The methodology change in action.<br><br><strong>Google (Gemini):</strong> Customer revenue $2.00B → $2.25B; provider total $2.50B → $2.93B (+17%). Lower data depth than OpenAI — no published operating loss available yet, so methodology-derived estimates apply throughout. Worth flagging in case more granular Google AI revenue data lands.<br><br><strong>Anthropic:</strong> Provider total $7.71B → $7.30B (−5.3%). Small methodology-driven adjustment.<br><br><strong>Five smaller providers</strong> (DeepSeek, Mistral, xAI, Minimax, Moonshot) now appear collapsed into a single "Other Model Providers" node at $1.33B combined. Each is preserved individually in the provenance trail; the aggregation rule keeps the chart readable as more providers enter the registry.<br><br>For full methodology and per-provider source classifications, see <a href="methodology.html">methodology</a>.</div>
+    </div>
+
+    <div class="entry" data-scope="methodology">
+      <div class="entry-meta">
+        <span class="entry-date">4 May 2026</span>
+        <span class="entry-scope methodology">Methodology</span>
+      </div>
+      <div class="entry-text">site-data.json gains an <code>entityDirectory</code> section listing all 103 tracked entities with current snapshot, best-source confidence, and a <code>qualifies_for_detail_page</code> flag based on the data threshold (≥3 fields, ≥medium confidence, ≥1 provenance entry). 57 of 103 qualify at the default threshold. Auto-generated detail pages under <code>companies/&lt;slug&gt;.html</code> appear when an entity crosses the threshold. wq-042.</div>
+    </div>
+
+    <div class="entry" data-scope="methodology">
       <div class="entry-meta">
         <span class="entry-date">21 Apr 2026</span>
-        <span class="entry-scope platform">Platform</span>
+        <span class="entry-scope methodology">Methodology</span>
       </div>
       <div class="entry-text">The AI Ledger v2 launches. We've replaced the single token-centric dashboard with three interlocking ledgers — Capital, Revenue, Usage — each answering a different question about the same underlying economy. The numbers now carry explicit provenance tiers (1A–3C) and can be viewed under Bear, Base, or Bull assumptions via the top-right toggle. A fourth ledger tracking physical power and grid constraints is coming in v3.</div>
     </div>
@@ -129,14 +176,6 @@
         <span class="entry-scope capital">Capital Ledger</span>
       </div>
       <div class="entry-text">CapEx revised to $745B following Platformonomics cross-check. Previously $770B. The $25B delta came from double-counting non-AI networking spend in hyperscaler totals.</div>
-    </div>
-
-    <div class="entry" data-scope="platform">
-      <div class="entry-meta">
-        <span class="entry-date">17 Apr 2026</span>
-        <span class="entry-scope platform">Platform</span>
-      </div>
-      <div class="entry-text">Site renamed from "Follow the Dollar" to "Follow the Revenue". All internal references and page titles updated. URLs unchanged.</div>
     </div>
 
     <div class="entry" data-scope="capital">
@@ -160,36 +199,11 @@
         <span class="entry-date">1 Apr 2026</span>
         <span class="entry-scope revenue">Revenue Ledger</span>
       </div>
-      <div class="entry-text">32 accepted claims applied to entity data from podcast triage pipeline. Source-weighted provenance enforced — no lower-tier overwrites.</div>
+      <div class="entry-text">Entity-level revenue figures refreshed from earnings calls and analyst commentary across 32 source records. Higher-tier sources (10-K filings, IR disclosures) take precedence over commentary and podcast estimates.</div>
     </div>
 
   </div>
 </div>
-
-<footer>
-    <div class="footer-grid">
-      <div>
-        <h4>Hepburn Advisory</h4>
-        <a href="about.html">About the firm</a>
-        <a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a>
-      </div>
-      <div>
-        <h4>The Ledger</h4>
-        <a href="capital.html">Capital</a>
-        <a href="revenue.html">Revenue</a>
-        <a href="usage.html">Usage</a>
-        <a href="power.html">Power (v3)</a>
-      </div>
-      <div>
-        <h4>Reference</h4>
-        <a href="methodology.html">Methodology</a>
-        <a href="changelog.html">Changelog</a>
-      </div>
-    </div>
-    <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
-    <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
-</footer>
 
 <script>
 function getScenario(){const p=new URLSearchParams(window.location.search).get('s'); if(p&&['bear','base','bull'].includes(p)) return p; return localStorage.getItem('ai-ledger-scenario')||'base';}
@@ -207,5 +221,58 @@ function filterEntries(scope){
   });
 }
 </script>
+
+<aside class="byline">
+  <span>Prepared by</span>
+  <a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=byline" target="_blank" rel="noopener">Hepburn Advisory</a>
+  <span class="meta">Independent advisory · Melbourne · grounded in Ledger data</span>
+</aside>
+
+<footer class="ds-footer">
+  <div class="ds-footer__inner">
+    <div class="ds-footer__brand">
+      <div class="ds-footer__brand-lockup">
+        <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+        <span class="ds-footer__brand-name">Hepburn Advisory</span>
+      </div>
+      <span class="ds-footer__brand-desc">Independent advisory · Melbourne · working globally</span>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Ledger pages</h4>
+      <ul>
+        <li><a href="/capital.html">Capital</a></li>
+        <li><a href="/revenue.html">Revenue</a></li>
+        <li><a href="/compute.html">Compute</a></li>
+        <li><a href="/usage.html">Usage</a></li>
+        <li><a href="/power.html">Power</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Methodology + provenance</h4>
+      <ul>
+        <li><a href="/methodology.html">Methodology</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Other Ledger views</h4>
+      <ul>
+        <li><a href="/timeline.html">Timeline</a></li>
+        <li><a href="/openrouter.html">Live pricing</a></li>
+        <li><a href="/changelog.html">Changelog</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Hepburn Advisory</h4>
+      <ul>
+        <li><a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=footer-attribution" target="_blank" rel="noopener">hepburnadvisory.com.au ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ds-footer__base">
+    © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated 2026-04-29 · <a href="/methodology.html">Methodology at /methodology</a>
+  </div>
+</footer>
+
 </body>
 </html>

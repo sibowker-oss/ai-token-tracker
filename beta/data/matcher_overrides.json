@@ -1,0 +1,48 @@
+{
+  "_doc": "Hand-maintained matcher overrides (wq-039 §2.4). Resolution order: overrides → generated → legacy. Bare aliases here trump anything generated from entities.json.",
+  "entity_overrides": [],
+  "field_overrides": [],
+  "entity_aliases": {
+    "_doc": "{ slug: [extra alias strings] } — appended to the generated entity rule. Useful when entity names contain parentheticals, the slug is too short, or the entity goes by multiple names in source text.",
+    "openai": ["chatgpt", "openai/chatgpt"],
+    "google": ["alphabet", "googl", "google/gemini", "gemini", "google deepmind", "deepmind", "google genai", "google genai sdk", "google ai studio"],
+    "microsoft": ["msft", "azure openai"],
+    "amazon": ["amzn", "aws bedrock", "amazon bedrock"],
+    "meta": ["fb", "facebook", "llama", "meta ai"],
+    "cursor-(anysphere)": ["cursor", "anysphere"],
+    "nvidia": ["nvda", "blackwell", "vera rubin", "h100", "h200", "gb200"],
+    "anthropic": ["claude", "claude.ai"]
+  },
+  "field_synonyms": {
+    "_doc": "{ field_id: [extra synonym strings] } — appended to the generated field rule. Order doesn't matter; the longest-first sort happens at generation time.",
+    "market_share_pct": [
+      "share of new ai tool spending",
+      "share of new ai spending",
+      "share of new/marginal ai spend",
+      "share of marginal ai spend",
+      "share of ai tool spending",
+      "ai spending share",
+      "share of enterprise spend"
+    ],
+    "dc_power_capacity_gw": [
+      "power pipeline",
+      "gigawatts in pipeline",
+      "gigawatts of power",
+      "datacenter power pipeline",
+      "data center power pipeline"
+    ],
+    "total_revenue": [
+      "quarterly revenue",
+      "q1 revenue",
+      "q2 revenue",
+      "q3 revenue",
+      "q4 revenue",
+      "annual revenue"
+    ],
+    "enterprise_revenue": [
+      "revenue share from top 5 hyperscalers",
+      "enterprise spend share",
+      "share of enterprise revenue"
+    ]
+  }
+}

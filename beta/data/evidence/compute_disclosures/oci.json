@@ -1,0 +1,13 @@
+{
+  "id": "oci",
+  "name": "Oracle OCI AI",
+  "tier": "trad_compute",
+  "arrGrossDisclosed": 3.6,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "Oracle Q3 FY26 earnings narrative \u2014 OCI AI portion editorial Tier 2A; Q1 26 quarterly $0.9B \u00d7 4",
+  "provenance": "tier_2a",
+  "appsCarveout": [
+    "oracle_fusion_ai"
+  ],
+  "appsCarveoutNote": "Decision D9: Oracle splits across Fusion AI (trad_saas) and OCI AI infra (trad_compute). Carve out Fusion AI."
+}

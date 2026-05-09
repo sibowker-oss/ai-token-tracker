@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Source Ledger — The AI Ledger</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1100px; margin:0 auto; padding:24px; }
+  h1 { font-size:28px; font-weight:800; display:flex; align-items:center; gap:8px; }
+  h1 span { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
+  .intro { font-size:12px; color:var(--text-dim); margin-top:4px; margin-bottom:20px; }
+
+  .search-bar { display:flex; gap:8px; margin-bottom:16px; }
+  .search-bar input { flex:1; padding:10px 14px; background:var(--card); border:1px solid var(--card-border); border-radius:8px; color:var(--text); font-size:13px; outline:none; }
+  .search-bar input:focus { border-color:var(--accent); }
+  .search-bar input::placeholder { color:var(--text-dim); }
+
+  .stats { display:flex; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+  .stat { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:12px; }
+  .stat strong { color:var(--text); }
+
+  .filters { display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; }
+  .f-btn { padding:4px 10px; border-radius:6px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:10px; cursor:pointer; transition:all 0.15s; }
+  .f-btn:hover { color:var(--text); border-color:var(--text-dim); }
+  .f-btn.active { background:var(--accent); color:white; border-color:var(--accent); }
+
+  .source-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; margin-bottom:8px; overflow:hidden; }
+  .source-header { padding:12px 16px; cursor:pointer; display:flex; align-items:center; gap:12px; transition:background 0.15s; }
+  .source-header:hover { background:rgba(59,130,246,0.04); }
+
+  .source-title { font-size:13px; font-weight:600; flex:1; }
+  .source-url { font-size:10px; color:var(--accent); text-decoration:none; word-break:break-all; }
+  .source-url:hover { text-decoration:underline; }
+
+  .source-meta { display:flex; gap:8px; flex-shrink:0; align-items:center; flex-wrap:wrap; }
+  .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
+  .badge-podcast { background:rgba(6,182,212,0.15); color:var(--cyan); }
+  .badge-api { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-web { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .badge-report { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .badge-news { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .badge-manual { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .badge-slide { background:rgba(236,72,153,0.15); color:#ec4899; }
+  .badge-social { background:rgba(249,115,22,0.15); color:#f97316; }
+
+  .claims-count { font-size:11px; color:var(--text-dim); min-width:70px; text-align:right; }
+  .claims-count strong { color:var(--text); }
+
+  .source-detail { display:none; padding:0 16px 14px; }
+  .source-detail.open { display:block; }
+
+  .claim-row { padding:8px 12px; background:var(--bg); border:1px solid rgba(30,41,59,0.5); border-radius:6px; margin-bottom:4px; font-size:11px; }
+  .claim-row .entity { font-weight:600; color:var(--text); }
+  .claim-row .value { color:var(--accent); font-weight:600; }
+  .claim-row .weight { font-size:9px; padding:1px 5px; border-radius:3px; }
+  .w-authoritative { background:rgba(16,185,129,0.12); color:var(--green); }
+  .w-corroborating { background:rgba(59,130,246,0.12); color:var(--accent); }
+  .w-indicative { background:rgba(148,163,184,0.12); color:var(--text-dim); }
+  .w-reporting { background:rgba(245,158,11,0.12); color:var(--orange); }
+
+  .no-claims { font-size:11px; color:var(--text-dim); padding:8px; font-style:italic; }
+
+  footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
+  @media(max-width:768px) {
+    .nav-bar { padding:8px 12px; gap:4px; justify-content:center; }
+    .nav-brand { font-size:13px; margin-right:auto; }
+    .nav-logo { margin-left:0; font-size:11px; gap:5px; }
+    .nav-logo svg { width:18px; height:18px; }
+    .nav-link { font-size:10px; padding:5px 8px; border-radius:6px; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .card { padding:14px; margin-bottom:14px; }
+    .card h2 { font-size:14px; }
+    table { font-size:11px; }
+    table th, table td { padding:6px 8px; }
+  }
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-211EY55BEQ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-211EY55BEQ");</script>
+</head>
+<body>
+
+<style>
+  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
+  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
+  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
+  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
+  .nav-logo { margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none; color:#cbd5e1; font-size:13px; font-weight:600; opacity:0.7; transition:opacity 0.15s; }
+  .nav-logo:hover { opacity:1; }
+  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
+  @media (max-width:768px) { .nav-bar { padding:8px 12px; gap:4px; justify-content:center; } .nav-brand { font-size:13px; margin-right:auto; } .nav-logo { margin-left:0; font-size:11px; gap:5px; } .nav-logo svg { width:18px; height:18px; } .nav-link { font-size:10px; padding:5px 8px; border-radius:6px; } }
+</style>
+<nav class="nav-bar">
+  <a href="/index.html" class="nav-brand"><span>AI Ledger</span></a>
+  <span style="flex-grow:1"></span>
+  <a href="vault.html" class="nav-link">Vault</a>
+  <a href="sources.html" class="nav-link">Sources</a>
+  <a href="claims.html" class="nav-link">Claims</a>
+  <a href="source-ledger.html" class="nav-link active">Source Ledger</a>
+  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
+    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
+    Hepburn Advisory
+  </a>
+</nav>
+
+<div class="container">
+  <h1>Source Ledger <span>Admin</span></h1>
+  <p class="intro">Every URL that has contributed data to the dashboard. Searchable by company, provider, source, or claim.</p>
+
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search by company, provider, URL, claim text..." oninput="render()">
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="filters" id="filters"></div>
+  <!-- wq-086: triangulation replay record (pending soft-park + applied) -->
+  <div id="triangulationsPanel" style="margin-bottom:24px;"></div>
+  <div id="ledger"><div style="text-align:center;padding:40px;color:var(--text-dim);">Loading sources...</div></div>
+</div>
+
+<footer>The AI Ledger — Admin</footer>
+
+<script>
+let allSources = []; // unified source list
+let activeFilter = 'all';
+
+async function loadData() {
+  // 1. Load sources registry
+  let registry = { sources: [] };
+  try {
+    const r = await fetch('sources-registry.json?v=' + Date.now());
+    registry = await r.json();
+  } catch(e) {}
+
+  // 2. Load vault data points (accepted claims with source URLs)
+  let vault = { dataPoints: [] };
+  try {
+    const r = await fetch('vault-data.json?v=' + Date.now());
+    vault = await r.json();
+  } catch(e) {}
+
+  // 3. Load claim files from index (no guessing filenames)
+  let allClaims = [];
+  try {
+    const idxResp = await fetch('data-updates/index.json?v=' + Date.now());
+    if (idxResp.ok) {
+      const fileList = await idxResp.json();
+      const claimFiles = fileList.filter(f => f.endsWith('.json') && !f.includes('reconciliation') && !f.includes('draft') && !f.includes('approved'));
+      const fetches = claimFiles.map(f => fetch('data-updates/' + f).then(r => r.ok ? r.json() : []).catch(() => []));
+      const results = await Promise.all(fetches);
+      results.forEach(claims => { if (Array.isArray(claims)) allClaims = allClaims.concat(claims); });
+    }
+  } catch(e) { console.warn('Could not load claim index:', e); }
+
+  // 4. Build unified source map
+  const sourceMap = {}; // url → { source info + claims[] }
+
+  // From registry
+  registry.sources.forEach(s => {
+    const key = normalizeUrl(s.url);
+    sourceMap[key] = {
+      url: s.url,
+      title: s.title,
+      type: s.type,
+      author: s.author || s.organization || '',
+      frequency: s.frequency,
+      lastChecked: s.last_checked,
+      registryClaims: s.last_claims_count || 0,
+      claims: [],
+    };
+  });
+
+  // From vault data points
+  vault.dataPoints.forEach(dp => {
+    if (!dp.sourceUrl) return;
+    const key = normalizeUrl(dp.sourceUrl);
+    if (!sourceMap[key]) {
+      sourceMap[key] = { url: dp.sourceUrl, title: '', type: guessType(dp.sourceUrl), author: dp.sourceAuthor || '', frequency: 'one_time', lastChecked: dp.dateAdded, registryClaims: 0, claims: [] };
+    }
+    if (!sourceMap[key].title && dp.sourceAuthor) sourceMap[key].title = dp.sourceAuthor;
+    sourceMap[key].claims.push({
+      entity: extractEntity(dp.claim || dp.notes || ''),
+      claim: dp.claim || '',
+      value: dp.value,
+      unit: dp.unit || '',
+      valueDisplay: dp.value ? formatValue(dp.value, dp.unit) : '',
+      weight: dp.sourceType || 'observation',
+      confidence: dp.confidence || '',
+      date: dp.dateOfClaim || dp.dateAdded || '',
+      status: dp.status || 'accepted',
+      metric: dp.metricKey || '',
+    });
+  });
+
+  // From extracted claims
+  allClaims.forEach(c => {
+    const url = c.source_url || c.sourceUrl || '';
+    if (!url) return;
+    const key = normalizeUrl(url);
+    if (!sourceMap[key]) {
+      sourceMap[key] = { url: url, title: c.source_podcast || c.source_title || '', type: guessType(url), author: c.speaker || '', frequency: 'one_time', lastChecked: c.source_date || c.extracted_at || '', registryClaims: 0, claims: [] };
+    }
+    if (!sourceMap[key].title && c.source_podcast) sourceMap[key].title = c.source_podcast + (c.source_episode ? ' — ' + c.source_episode.substring(0, 50) : '');
+    sourceMap[key].claims.push({
+      entity: c.entity || '',
+      claim: c.claim || '',
+      value: c.value,
+      unit: c.unit || '',
+      valueDisplay: c.value_display || (c.value ? String(c.value) : ''),
+      weight: c.weight || 'indicative',
+      confidence: c.confidence || '',
+      date: c.source_date || '',
+      status: c.dedup_status || 'extracted',
+      metric: c.metric || '',
+    });
+  });
+
+  // Deduplicate claims within each source (by entity + value)
+  Object.values(sourceMap).forEach(s => {
+    const seen = new Set();
+    s.claims = s.claims.filter(c => {
+      const key = (c.entity + '|' + c.value + '|' + c.claim.substring(0, 50)).toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  });
+
+  // Convert to array and sort by claim count
+  allSources = Object.values(sourceMap).sort((a, b) => b.claims.length - a.claims.length);
+  console.log('Source Ledger loaded:', allSources.length, 'sources,', allSources.reduce((s, x) => s + x.claims.length, 0), 'claims');
+  console.log('Registry sources:', registry.sources.length, 'Vault points:', vault.dataPoints.length, 'Extracted claims:', allClaims.length);
+  if (allSources.length === 0) {
+    document.getElementById('ledger').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-dim);">No sources found. Check console for errors.</div>';
+    return;
+  }
+  render();
+}
+
+function normalizeUrl(url) {
+  return (url || '').replace(/^https?:\/\/(www\.)?/, '').replace(/\?.*$/, '').replace(/\/$/, '').toLowerCase();
+}
+
+function guessType(url) {
+  url = url.toLowerCase();
+  if (/substack|latent\.space|allintranscripts/.test(url)) return 'podcast';
+  if (/megaphone|anchor\.fm|transistor|libsyn|simplecast|buzzsprout/.test(url)) return 'podcast';
+  if (/happyscribe/.test(url)) return 'podcast';
+  if (/openrouter|pypistats|api\./.test(url)) return 'api';
+  if (/\.pdf/.test(url)) return 'report';
+  if (/docs\.google.*presentation/.test(url)) return 'slide';
+  if (/twitter\.com|x\.com/.test(url)) return 'social';
+  if (/bloomberg|wsj|ft\.com|techcrunch|cnbc/.test(url)) return 'news';
+  if (/forbes|gartner|mckinsey/.test(url)) return 'report';
+  return 'web';
+}
+
+function formatValue(v, unit) {
+  if (!v) return '';
+  if (unit === '$' || unit === 'USD') {
+    if (v >= 1e12) return '$' + (v/1e12).toFixed(1) + 'T';
+    if (v >= 1e9) return '$' + (v/1e9).toFixed(1) + 'B';
+    if (v >= 1e6) return '$' + (v/1e6).toFixed(0) + 'M';
+    return '$' + v.toLocaleString();
+  }
+  return String(v) + (unit ? ' ' + unit : '');
+}
+
+function extractEntity(text) {
+  const match = text.match(/^([\w\s./()-]+?)[\s:—–-]/);
+  return match ? match[1].trim().substring(0, 30) : '';
+}
+
+function getTypeBadge(type) {
+  const map = {
+    podcast: 'badge-podcast', api: 'badge-api', web: 'badge-web',
+    report: 'badge-report', news: 'badge-news', manual: 'badge-manual',
+    slide: 'badge-slide', social: 'badge-social',
+    rss_feed: 'badge-podcast', podcast_feed: 'badge-podcast',
+    web_page: 'badge-web', web_scrape: 'badge-api',
+    slide_deck: 'badge-slide', pdf_report: 'badge-report',
+    news_article: 'badge-news', social_thread: 'badge-social',
+  };
+  return map[type] || 'badge-web';
+}
+
+function getWeightBadge(w) {
+  if (w === 'authoritative' || w === 'sworn-affidavit' || w === 'sec-filing') return 'w-authoritative';
+  if (w === 'corroborating' || w === 'reporting' || w === 'official' || w === 'earnings-aggregation') return 'w-corroborating';
+  return 'w-indicative';
+}
+
+function render() {
+  const query = (document.getElementById('search').value || '').toLowerCase().trim();
+
+  let filtered = allSources;
+
+  // Type filter
+  if (activeFilter !== 'all') {
+    filtered = filtered.filter(s => s.type === activeFilter || guessType(s.url) === activeFilter);
+  }
+
+  // Search
+  if (query) {
+    filtered = filtered.filter(s => {
+      const text = [s.url, s.title, s.author, ...s.claims.map(c => c.entity + ' ' + c.claim + ' ' + c.metric)].join(' ').toLowerCase();
+      return text.includes(query);
+    });
+  }
+
+  // Stats
+  const totalClaims = filtered.reduce((s, x) => s + x.claims.length, 0);
+  const withClaims = filtered.filter(s => s.claims.length > 0).length;
+  const entities = new Set();
+  filtered.forEach(s => s.claims.forEach(c => { if (c.entity) entities.add(c.entity.toLowerCase()); }));
+
+  document.getElementById('stats').innerHTML =
+    '<div class="stat">Sources: <strong>' + filtered.length + '</strong></div>' +
+    '<div class="stat">With claims: <strong>' + withClaims + '</strong></div>' +
+    '<div class="stat">Total claims: <strong>' + totalClaims + '</strong></div>' +
+    '<div class="stat">Entities mentioned: <strong>' + entities.size + '</strong></div>';
+
+  // Type filters
+  const types = ['all', ...new Set(allSources.map(s => s.type))].filter(Boolean);
+  document.getElementById('filters').innerHTML = types.map(t =>
+    '<button class="f-btn' + (activeFilter === t ? ' active' : '') + '" onclick="activeFilter=\'' + t + '\';render();">' +
+    (t === 'all' ? 'All' : t.replace(/_/g, ' ')) + '</button>'
+  ).join('');
+
+  // Render sources
+  document.getElementById('ledger').innerHTML = filtered.map((s, i) => {
+    const typeBadge = '<span class="badge ' + getTypeBadge(s.type) + '">' + (s.type || 'web').replace(/_/g, ' ') + '</span>';
+    const shortUrl = s.url.replace(/^https?:\/\/(www\.)?/, '').substring(0, 50);
+    const title = s.title || shortUrl;
+
+    const claimsHtml = s.claims.length > 0
+      ? s.claims.map(c =>
+          '<div class="claim-row">' +
+          '<span class="entity">' + (c.entity || '—') + '</span>' +
+          (c.valueDisplay ? ' — <span class="value">' + c.valueDisplay + '</span>' : '') +
+          ' <span class="weight ' + getWeightBadge(c.weight) + '">' + c.weight + '</span>' +
+          (c.confidence ? ' <span style="font-size:9px;color:var(--text-dim);">' + c.confidence + '</span>' : '') +
+          (c.date ? ' <span style="font-size:9px;color:var(--text-dim);">' + c.date + '</span>' : '') +
+          '<div style="color:var(--text-dim);margin-top:2px;">' + c.claim.substring(0, 120) + (c.claim.length > 120 ? '...' : '') + '</div>' +
+          '</div>'
+        ).join('')
+      : '<div class="no-claims">No claims extracted from this source yet' + (s.registryClaims > 0 ? ' (registry shows ' + s.registryClaims + ' from previous run)' : '') + '</div>';
+
+    return '<div class="source-card">' +
+      '<div class="source-header" onclick="this.nextElementSibling.classList.toggle(\'open\')">' +
+        '<div style="flex:1;">' +
+          '<div class="source-title">' + title + '</div>' +
+          '<a class="source-url" href="' + s.url + '" target="_blank" onclick="event.stopPropagation()">' + shortUrl + '</a>' +
+          (s.author ? '<span style="font-size:10px;color:var(--text-dim);margin-left:8px;">' + s.author + '</span>' : '') +
+        '</div>' +
+        '<div class="source-meta">' +
+          typeBadge +
+          '<span style="font-size:10px;color:var(--text-dim);">' + (s.frequency || '').replace(/_/g, ' ') + '</span>' +
+          '<div class="claims-count"><strong>' + s.claims.length + '</strong> claim' + (s.claims.length !== 1 ? 's' : '') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="source-detail">' + claimsHtml + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+loadData();
+renderTriangulationsPanel();
+
+// wq-086 commit 6 — surface pending soft-park + applied triangulations.
+// Pending: data/triangulations-pending.json (claims accepted but not yet
+// drained by apply_decisions.py). Applied: every role=triangulates entry
+// in entities.json provenance. This is the audit trail for indirect evidence.
+async function renderTriangulationsPanel() {
+  const panel = document.getElementById('triangulationsPanel');
+  if (!panel) return;
+
+  // Load both in parallel — silent failures land cleanly as empty lists.
+  const [pendingRes, entitiesRes] = await Promise.all([
+    fetch('data/triangulations-pending.json?v=' + Date.now()).then(r => r.ok ? r.json() : []).catch(() => []),
+    fetch('entities.json?v=' + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null),
+  ]);
+
+  const pending = Array.isArray(pendingRes) ? pendingRes : [];
+
+  // Walk applied triangulations from entities.json provenance.
+  const applied = [];
+  if (entitiesRes) {
+    function walk(label, provBlock) {
+      Object.entries(provBlock || {}).forEach(([provKey, prov]) => {
+        (prov.claims || []).forEach(c => {
+          if (c.role !== 'triangulates') return;
+          applied.push({
+            entityLabel: label,
+            provKey,
+            target_node: c.target_node,
+            confidence_impact: c.confidence_impact,
+            derivation: c.derivation || '',
+            source: c.source,
+            date: c.date,
+            decision_id: c.decision_id,
+            model_classified_as: c.model_classified_as || null,
+          });
+        });
+      });
+    }
+    (entitiesRes.companies || []).forEach(c => walk(c.name || c.slug, c.provenance || {}));
+    walk('market_aggregates', (entitiesRes.market_aggregates || {}).provenance || {});
+  }
+
+  if (pending.length === 0 && applied.length === 0) {
+    panel.innerHTML = '';
+    return;
+  }
+
+  const impactColor = { strengthens:'#22c55e', widens_range:'#a78bfa', weakens:'#ef4444' };
+
+  function row(rec, isPending) {
+    const targets = isPending
+      ? (rec.target_nodes || []).join(', ')
+      : (rec.target_node || '');
+    const impact = isPending
+      ? (rec.accepted_confidence_impact || rec.confidence_impact || '')
+      : (rec.confidence_impact || '');
+    const date = isPending ? (rec.soft_parked_at || '').slice(0, 10) : (rec.date || '');
+    const source = isPending
+      ? (rec.claim?.speaker || rec.claim?.sourceAuthor || rec.claim?.source_slug || '')
+      : (rec.source || '');
+    const derivation = isPending
+      ? (rec.claim?.triangulation?.derivation || '')
+      : (rec.derivation || '');
+    const ic = impactColor[impact] || '#a78bfa';
+    return '<div style="padding:10px 12px;border-left:2px solid ' + ic + ';background:rgba(139,92,246,0.04);border-radius:4px;margin-bottom:6px;">' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:11px;">' +
+        '<span style="font-weight:700;color:' + ic + ';letter-spacing:0.5px;">[' + (impact || '?') + ']</span>' +
+        (source ? '<span style="color:var(--text-dim);">' + source + '</span>' : '') +
+        (date ? '<span style="color:var(--text-dim);">' + date + '</span>' : '') +
+        (rec.entityLabel ? '<span style="color:var(--text-dim);">→ ' + rec.entityLabel + ' · ' + rec.provKey + '</span>' : '') +
+      '</div>' +
+      (targets ? '<div style="font-size:10px;color:var(--text-dim);margin-top:4px;">targets: <code>' + targets + '</code></div>' : '') +
+      (derivation ? '<div style="font-size:11px;color:var(--text-dim);margin-top:4px;line-height:1.5;">' + derivation.slice(0, 240) + (derivation.length > 240 ? '…' : '') + '</div>' : '') +
+    '</div>';
+  }
+
+  let html = '<h3 style="font-size:14px;font-weight:700;color:#a78bfa;margin-bottom:8px;">Triangulations</h3>';
+  if (pending.length > 0) {
+    html += '<div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">Pending (' + pending.length + ') — soft-parked, awaiting apply_decisions.py drain:</div>';
+    html += pending.map(p => row(p, true)).join('');
+  }
+  if (applied.length > 0) {
+    html += '<div style="font-size:11px;color:var(--text-dim);margin:14px 0 6px;">Applied (' + applied.length + ') — written to entities.json provenance:</div>';
+    html += applied.map(a => row(a, false)).join('');
+  }
+  panel.innerHTML = html;
+}
+</script>
+</body>
+</html>

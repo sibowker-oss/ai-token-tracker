@@ -1,0 +1,44 @@
+[
+  {
+    "review_decision": "accepted",
+    "confirmed": true,
+    "entity": "Fathom",
+    "metric": "new_company",
+    "value": 20000000,
+    "unit": "USD",
+    "value_display": "$20M",
+    "claim": "Add Fathom to Top Token Consumers (~7B/day)",
+    "category": "new_company",
+    "confidence": "medium",
+    "weight": "authoritative",
+    "source_type": "manual_add",
+    "source_url": "https://www.fathom.ai/",
+    "reviewed_at": "2026-03-31T10:34:06.279Z",
+    "company_data": {
+      "co": "Fathom",
+      "hq": "US",
+      "type": "AI Meeting Assistant / Note-taking AI",
+      "tokens": "~7B/day",
+      "prov": "Openai, Anthropic",
+      "ev": "Fathom is an AI-powered meeting assistant that automatically records, transcribes, highlights, and summarizes video calls on platforms like Zoom, Google Meet, and Microsoft Teams.\n\nSources: Crunchbase funding data, TechCrunch coverage, ProductHunt launch, LinkedIn employee count, general SaaS freemium benchmarking\nConfidence: low — Fathom is a private company with limited public financial disclosures. They raised a ~$17-18M seed/Series A round (reported ~2022-2023), have a freemium model with a paid tier (Fathom Team Edition), and have reported strong user growth (millions of users). ARR estimate is a rough extrapolation based on funding size, team size, and freemium conversion typical for this category — no verified press report of exact ARR figure.",
+      "conf": "Low",
+      "founded": 2020,
+      "category": "ai-application",
+      "subcategory": "",
+      "providers": [
+        "openai",
+        "anthropic"
+      ],
+      "tokensNumeric": 6575342466,
+      "arr": "$20M",
+      "arrNumeric": 20000000,
+      "valuation": null,
+      "valuationNumeric": null,
+      "totalFunding": "$18M",
+      "status": "private",
+      "website": "https://www.fathom.ai/",
+      "employeeCount": null,
+      "lastUpdated": "2026-03-31"
+    }
+  }
+]

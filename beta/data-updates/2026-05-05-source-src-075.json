@@ -1,0 +1,50 @@
+[
+  {
+    "claim": "World Bank: WLD nominal GDP 110982661180013 USD for 2024.",
+    "category": "macro_denominator",
+    "entity": "WLD",
+    "metric": "NY.GDP.MKTP.CD",
+    "value": 110982661180013,
+    "unit": "USD",
+    "value_display": "$110,982,661,180,013",
+    "time_period": "2024",
+    "confidence": "high",
+    "weight": "authoritative",
+    "source_type": "gov_api",
+    "source_url": "https://api.worldbank.org/v2/country/WLD/indicator/NY.GDP.MKTP.CD?format=json&per_page=5",
+    "source_title": "World Bank \u2014 WLD NY.GDP.MKTP.CD (2024)",
+    "extracted_at": "2026-05-05T09:59:06.631568"
+  },
+  {
+    "claim": "World Bank: USA nominal GDP 28750956130731 USD for 2024.",
+    "category": "macro_denominator",
+    "entity": "USA",
+    "metric": "NY.GDP.MKTP.CD",
+    "value": 28750956130731.2,
+    "unit": "USD",
+    "value_display": "$28,750,956,130,731",
+    "time_period": "2024",
+    "confidence": "high",
+    "weight": "authoritative",
+    "source_type": "gov_api",
+    "source_url": "https://api.worldbank.org/v2/country/USA/indicator/NY.GDP.MKTP.CD?format=json&per_page=5",
+    "source_title": "World Bank \u2014 USA NY.GDP.MKTP.CD (2024)",
+    "extracted_at": "2026-05-05T09:59:07.180255"
+  },
+  {
+    "claim": "World Bank: CHN nominal GDP 18743803170827 USD for 2024.",
+    "category": "macro_denominator",
+    "entity": "CHN",
+    "metric": "NY.GDP.MKTP.CD",
+    "value": 18743803170827.2,
+    "unit": "USD",
+    "value_display": "$18,743,803,170,827",
+    "time_period": "2024",
+    "confidence": "high",
+    "weight": "authoritative",
+    "source_type": "gov_api",
+    "source_url": "https://api.worldbank.org/v2/country/CHN/indicator/NY.GDP.MKTP.CD?format=json&per_page=5",
+    "source_title": "World Bank \u2014 CHN NY.GDP.MKTP.CD (2024)",
+    "extracted_at": "2026-05-05T09:59:07.552233"
+  }
+]

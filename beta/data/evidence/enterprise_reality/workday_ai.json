@@ -1,0 +1,25 @@
+{
+  "id": "workday_ai",
+  "name": "Workday AI",
+  "ticker": "WDAY",
+  "tier": "trad_saas",
+  "arrClaimedNumeric": 0.05,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "Workday narrative \u2014 'growing demand for AI SKUs'; no AI metric disclosed. Editorial midpoint of $0-100M range.",
+  "provenance": "tier_3b",
+  "arrClaimedVsReal": {
+    "realRange": [
+      0.0,
+      0.1
+    ],
+    "realNote": "Growth crashing 21%->13%; AI has zero visible impact."
+  },
+  "narrative": {
+    "claimed": "Not disclosed \u2014 \"growing demand for AI SKUs\"",
+    "usage": "No AI metric = immaterial. Flex Credits model.",
+    "real": "~$0-100M",
+    "flags": "Growth crashing: 21%->13%. AI has zero visible impact."
+  },
+  "growth": "13%",
+  "prevGrowth": "21%"
+}

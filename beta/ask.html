@@ -18,6 +18,9 @@
   });
 })();
 </script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -90,15 +93,9 @@
   footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:40px; }
 </style>
 </head>
-<body>
+<body class="surface-dark" data-active-tab="ask">
 
-<div class="standalone-bar" id="standalone-bar" style="display:none;padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:11px;">
-  <a href="admin.html" style="color:#3b82f6;text-decoration:none;">Open in Command Centre</a>
-</div>
-<script>
-// Show standalone bar if NOT in an iframe
-if (window === window.top) document.getElementById('standalone-bar').style.display = 'block';
-</script>
+<div id="admin-nav-mount"></div>
 
 <div class="container">
   <h1>Ask the Vault <span class="tag">Beta</span></h1>
@@ -114,7 +111,7 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
     <button class="qq-btn" onclick="askQuick(this)">What is Anthropic's current revenue?</button>
     <button class="qq-btn" onclick="askQuick(this)">How much do AI providers lose per year?</button>
     <button class="qq-btn" onclick="askQuick(this)">What sources do we have on OpenAI financials?</button>
-    <button class="qq-btn" onclick="askQuick(this)">What's the evidence for the $15:$1 investment ratio?</button>
+    <button class="qq-btn" onclick="askQuick(this)">What's the evidence for the <span data-method="headline.investment_to_revenue_ratio_label">$15:$1</span> investment ratio?</button>
     <button class="qq-btn" onclick="askQuick(this)">How fast is Anthropic growing?</button>
   </div>
 
@@ -454,6 +451,21 @@ function esc(s) {
 }
 
 init();
+
+// wq-073 — hydrate [data-method] spans from data/methodology_constants.json.
+// Falls back silently to existing inline literals if fetch fails.
+(function() {
+  fetch('data/methodology_constants.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(c => {
+      document.querySelectorAll('[data-method]').forEach(el => {
+        const path = el.dataset.method;
+        const v = path.split('.').reduce((o, k) => (o == null ? o : o[k]), c);
+        if (v != null) el.textContent = v;
+      });
+    })
+    .catch(() => { /* graceful fallback to inline literals */ });
+})();
 </script>
 </body>
 </html>

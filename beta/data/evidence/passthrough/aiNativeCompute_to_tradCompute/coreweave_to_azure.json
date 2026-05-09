@@ -1,0 +1,10 @@
+{
+  "id": "coreweave_to_azure",
+  "from": "coreweave",
+  "to": "azure",
+  "value": 5.1,
+  "valueBasis": "Q1 2026 annualised \u2014 CoreWeave revenue from Microsoft sub-rent for OpenAI workload",
+  "source": "CoreWeave 10-Q customer concentration; ~85% of CoreWeave $6B run-rate is Microsoft sub-rent",
+  "provenance": "tier_2a",
+  "rationale": "Critical double-count guard. Microsoft's $37B AI run-rate already includes Azure capacity powered by CoreWeave GPUs. CoreWeave's revenue from MSFT must be deducted from the gross-summed compute layer to avoid counting the same dollars twice."
+}

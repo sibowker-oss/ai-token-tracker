@@ -1,18 +1,18 @@
 {
   "date": "2026-04-01",
-  "timestamp": "2026-04-01T07:00:27.339589",
+  "timestamp": "2026-04-01T09:31:07.033566",
   "pypi": {
-    "openai": 223541270,
-    "anthropic": null,
+    "openai": null,
+    "anthropic": 79431358,
     "langchain-core": null,
     "litellm": 93803706,
     "google-generativeai": null,
-    "vllm": null,
-    "transformers": 124403547,
+    "vllm": 8081293,
+    "transformers": null,
     "ollama": null,
-    "mistralai": null,
+    "mistralai": 14919165,
     "cohere": null,
-    "together": 4879525,
+    "together": null,
     "groq": null
   },
   "npm": {
@@ -37,7 +37,7 @@
     "google/gemma-2-9b-it": 262937
   },
   "openrouter": {
-    "total_models": 350,
+    "total_models": 348,
     "providers": 57,
     "free_models": 28,
     "min_output_price_per_m": -1000000.0,
@@ -63,16 +63,16 @@
   },
   "github": {
     "ollama": {
-      "total_downloads": 2888101,
+      "total_downloads": 2925003,
       "latest_tag": "v0.19.0"
     },
     "vllm": {
-      "total_downloads": 21051,
+      "total_downloads": 21209,
       "latest_tag": "v0.18.1"
     },
     "llama_cpp": {
-      "total_downloads": 12842,
-      "latest_tag": "b8599"
+      "total_downloads": 1160,
+      "latest_tag": "b8603"
     },
     "tgi": {
       "total_downloads": 0,
@@ -80,15 +80,15 @@
     }
   },
   "docker": {
-    "vllm": 16591583
+    "vllm": 16598815
   },
   "derived": {
-    "openai_total": 292101694,
-    "self_hosted_sdk": 1955721,
+    "anthropic_total": 118113701,
+    "self_hosted_sdk": 10037014,
     "self_hosted_sdk_basis": "monthly_rate",
-    "self_hosted_github": 2921994,
+    "self_hosted_github": 2947372,
     "self_hosted_github_basis": "cumulative_last_5_releases",
-    "self_hosted_docker": 16591583,
+    "self_hosted_docker": 16598815,
     "self_hosted_docker_basis": "cumulative_alltime",
     "hf_total_downloads": 15880641,
     "litellm_downloads": 93803706

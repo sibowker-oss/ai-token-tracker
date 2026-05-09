@@ -1,0 +1,3140 @@
+{
+  "submitted_at": "2026-04-27T22:42:04.983Z",
+  "accepted": [],
+  "declined": [],
+  "parked": [],
+  "raw_pool": [
+    {
+      "id": "email-20260328-e5v",
+      "claim": "Anthropic expects cash flow breakeven by 2028, burned ~$3B in 2025",
+      "note": ""
+    },
+    {
+      "id": "zitron-20260328-c3",
+      "claim": "OpenAI full-year 2025 estimated collected revenue ~$11.9B (Zitron extrapolation)",
+      "note": ""
+    },
+    {
+      "id": "scan-20260401-i9j",
+      "claim": "Nvidia AI inference market share projected to fall from 90%+ today to 20-30% by 2028 as TPUs/ASICs capture 70-75% of production inference",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-2024-arr",
+      "claim": "[NEEDS SOURCE] OpenAI 2024 arr: 4.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-2024-operating_loss",
+      "claim": "[NEEDS SOURCE] OpenAI 2024 operating loss: 5.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-2025-revenue_by_channel_subscription_pct",
+      "claim": "[NEEDS SOURCE] OpenAI 2025 revenue by channel subscription pct: 55 %",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-2025-revenue_by_channel_api_pct",
+      "claim": "[NEEDS SOURCE] OpenAI 2025 revenue by channel api pct: 30 %",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-2025-revenue_by_channel_enterprise_pct",
+      "claim": "[NEEDS SOURCE] OpenAI 2025 revenue by channel enterprise pct: 15 %",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-2027_projected-arr",
+      "claim": "[NEEDS SOURCE] OpenAI 2027_projected arr: 50.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-2030_projected-arr",
+      "claim": "[NEEDS SOURCE] OpenAI 2030_projected arr: 280.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] OpenAI current tokens per day: 200 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-current-growth_rate",
+      "claim": "[NEEDS SOURCE] OpenAI current growth rate: +150% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] OpenAI current consumer pct: 60 %",
+      "note": ""
+    },
+    {
+      "id": "resource-openai-current-biz_pct",
+      "claim": "[NEEDS SOURCE] OpenAI current biz pct: 40 %",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-2025-cash_burn",
+      "claim": "[NEEDS SOURCE] Anthropic 2025 cash burn: 3.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-2025-revenue_by_channel_api_pct",
+      "claim": "[NEEDS SOURCE] Anthropic 2025 revenue by channel api pct: 72 %",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-2025-revenue_by_channel_subscription_pct",
+      "claim": "[NEEDS SOURCE] Anthropic 2025 revenue by channel subscription pct: 13 %",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-2025-revenue_by_channel_enterprise_pct",
+      "claim": "[NEEDS SOURCE] Anthropic 2025 revenue by channel enterprise pct: 15 %",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Anthropic current tokens per day: 110 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-current-growth_rate",
+      "claim": "[NEEDS SOURCE] Anthropic current growth rate: 14x in 14mo ",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] Anthropic current consumer pct: 35 %",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-current-biz_pct",
+      "claim": "[NEEDS SOURCE] Anthropic current biz pct: 65 %",
+      "note": ""
+    },
+    {
+      "id": "resource-anthropic-current-latest_round",
+      "claim": "[NEEDS SOURCE] Anthropic current latest round: Series G at $380B (Feb 2026) ",
+      "note": ""
+    },
+    {
+      "id": "resource-google-2025-arr",
+      "claim": "[NEEDS SOURCE] Google/Gemini 2025 arr: 4.2 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-google-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Google/Gemini current tokens per day: 90 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-google-current-growth_rate",
+      "claim": "[NEEDS SOURCE] Google/Gemini current growth rate: 14x in '24 ",
+      "note": ""
+    },
+    {
+      "id": "resource-google-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] Google/Gemini current consumer pct: 40 %",
+      "note": ""
+    },
+    {
+      "id": "resource-google-current-biz_pct",
+      "claim": "[NEEDS SOURCE] Google/Gemini current biz pct: 60 %",
+      "note": ""
+    },
+    {
+      "id": "resource-google-current-user_count",
+      "claim": "[NEEDS SOURCE] Google/Gemini current user count: 650000000 count",
+      "note": ""
+    },
+    {
+      "id": "resource-meta-current-arr",
+      "claim": "[NEEDS SOURCE] Meta current arr: 0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-meta-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Meta current tokens per day: 80 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-meta-current-growth_rate",
+      "claim": "[NEEDS SOURCE] Meta current growth rate: +400% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-meta-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] Meta current consumer pct: 0 %",
+      "note": ""
+    },
+    {
+      "id": "resource-meta-current-biz_pct",
+      "claim": "[NEEDS SOURCE] Meta current biz pct: 0 %",
+      "note": ""
+    },
+    {
+      "id": "resource-deepseek-2025-arr",
+      "claim": "[NEEDS SOURCE] DeepSeek 2025 arr: 0.3 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-deepseek-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] DeepSeek current tokens per day: 40 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-deepseek-current-growth_rate",
+      "claim": "[NEEDS SOURCE] DeepSeek current growth rate: +800% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-deepseek-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] DeepSeek current consumer pct: 50 %",
+      "note": ""
+    },
+    {
+      "id": "resource-deepseek-current-biz_pct",
+      "claim": "[NEEDS SOURCE] DeepSeek current biz pct: 50 %",
+      "note": ""
+    },
+    {
+      "id": "resource-mistral-2025-arr",
+      "claim": "[NEEDS SOURCE] Mistral 2025 arr: 0.4 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-mistral-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Mistral current tokens per day: 15 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-mistral-current-growth_rate",
+      "claim": "[NEEDS SOURCE] Mistral current growth rate: +250% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-mistral-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] Mistral current consumer pct: 20 %",
+      "note": ""
+    },
+    {
+      "id": "resource-mistral-current-biz_pct",
+      "claim": "[NEEDS SOURCE] Mistral current biz pct: 80 %",
+      "note": ""
+    },
+    {
+      "id": "resource-xai-2025-arr",
+      "claim": "[NEEDS SOURCE] xAI 2025 arr: 0.5 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-xai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] xAI current tokens per day: 10 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-xai-current-growth_rate",
+      "claim": "[NEEDS SOURCE] xAI current growth rate: +500% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-xai-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] xAI current consumer pct: 70 %",
+      "note": ""
+    },
+    {
+      "id": "resource-xai-current-biz_pct",
+      "claim": "[NEEDS SOURCE] xAI current biz pct: 30 %",
+      "note": ""
+    },
+    {
+      "id": "resource-minimax-2025-arr",
+      "claim": "[NEEDS SOURCE] Minimax 2025 arr: 0.15 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-minimax-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Minimax current tokens per day: 30 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-minimax-current-growth_rate",
+      "claim": "[NEEDS SOURCE] Minimax current growth rate: +400% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-minimax-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] Minimax current consumer pct: 60 %",
+      "note": ""
+    },
+    {
+      "id": "resource-minimax-current-biz_pct",
+      "claim": "[NEEDS SOURCE] Minimax current biz pct: 40 %",
+      "note": ""
+    },
+    {
+      "id": "resource-minimax-current-user_count",
+      "claim": "[NEEDS SOURCE] Minimax current user count: 212000000 count",
+      "note": ""
+    },
+    {
+      "id": "resource-moonshot-2025-arr",
+      "claim": "[NEEDS SOURCE] Moonshot/Kimi 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-moonshot-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Moonshot/Kimi current tokens per day: 8 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-moonshot-current-growth_rate",
+      "claim": "[NEEDS SOURCE] Moonshot/Kimi current growth rate: +300% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-moonshot-current-consumer_pct",
+      "claim": "[NEEDS SOURCE] Moonshot/Kimi current consumer pct: 50 %",
+      "note": ""
+    },
+    {
+      "id": "resource-moonshot-current-biz_pct",
+      "claim": "[NEEDS SOURCE] Moonshot/Kimi current biz pct: 50 %",
+      "note": ""
+    },
+    {
+      "id": "resource-aws-current-margin_on_resale_pct",
+      "claim": "[NEEDS SOURCE] AWS current margin on resale pct: 20 %",
+      "note": ""
+    },
+    {
+      "id": "resource-azure-current-margin_on_resale_pct",
+      "claim": "[NEEDS SOURCE] Azure current margin on resale pct: 20 %",
+      "note": ""
+    },
+    {
+      "id": "resource-gcp-current-margin_on_resale_pct",
+      "claim": "[NEEDS SOURCE] GCP current margin on resale pct: 20 %",
+      "note": ""
+    },
+    {
+      "id": "resource-coreweave-2025-arr",
+      "claim": "[NEEDS SOURCE] CoreWeave 2025 arr: 1.9 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-coreweave-2025-valuation",
+      "claim": "[NEEDS SOURCE] CoreWeave 2025 valuation: 35 ",
+      "note": ""
+    },
+    {
+      "id": "resource-coreweave-current-total_funding",
+      "claim": "[NEEDS SOURCE] CoreWeave current total funding: 12.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-lambda-2025-arr",
+      "claim": "[NEEDS SOURCE] Lambda Labs 2025 arr: 0.5 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-lambda-current-total_funding",
+      "claim": "[NEEDS SOURCE] Lambda Labs current total funding: 1.7 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-crusoe-current-total_funding",
+      "claim": "[NEEDS SOURCE] Crusoe Energy current total funding: 3.5 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-together-2025-arr",
+      "claim": "[NEEDS SOURCE] Together AI 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-together-current-total_funding",
+      "claim": "[NEEDS SOURCE] Together AI current total funding: 0.425 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-together-current-valuation",
+      "claim": "[NEEDS SOURCE] Together AI current valuation: 3.3 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-fireworks-current-total_funding",
+      "claim": "[NEEDS SOURCE] Fireworks AI current total funding: 0.077 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-replicate-current-total_funding",
+      "claim": "[NEEDS SOURCE] Replicate current total funding: 0.058 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-anyscale-current-total_funding",
+      "claim": "[NEEDS SOURCE] Anyscale current total funding: 0.26 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-openrouter-current-user_count",
+      "claim": "[NEEDS SOURCE] OpenRouter current user count: 2500000 count",
+      "note": ""
+    },
+    {
+      "id": "resource-openrouter-current-model_count",
+      "claim": "[NEEDS SOURCE] OpenRouter current model count: 300 count",
+      "note": ""
+    },
+    {
+      "id": "resource-portkey-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Portkey.ai current tokens per day: 1900 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-portkey-current-user_count",
+      "claim": "[NEEDS SOURCE] Portkey.ai current user count: 24000 count",
+      "note": ""
+    },
+    {
+      "id": "resource-portkey-current-total_funding",
+      "claim": "[NEEDS SOURCE] Portkey.ai current total funding: 0.018 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-nvidia-current-market_share_pct",
+      "claim": "[NEEDS SOURCE] NVIDIA current market share pct: 90 %",
+      "note": ""
+    },
+    {
+      "id": "resource-nvidia-current-data_center_revenue",
+      "claim": "[NEEDS SOURCE] NVIDIA current data center revenue: 130 ",
+      "note": ""
+    },
+    {
+      "id": "resource-nvidia-current-data_center_revenue_year",
+      "claim": "[NEEDS SOURCE] NVIDIA current data center revenue year: 2025 ",
+      "note": ""
+    },
+    {
+      "id": "resource-nvidia-current-growth_rate",
+      "claim": "[NEEDS SOURCE] NVIDIA current growth rate: +55% YoY ",
+      "note": ""
+    },
+    {
+      "id": "resource-amd-current-market_share_pct",
+      "claim": "[NEEDS SOURCE] AMD current market share pct: 8 %",
+      "note": ""
+    },
+    {
+      "id": "resource-amd-current-data_center_revenue",
+      "claim": "[NEEDS SOURCE] AMD current data center revenue: 12 ",
+      "note": ""
+    },
+    {
+      "id": "resource-amd-current-data_center_revenue_year",
+      "claim": "[NEEDS SOURCE] AMD current data center revenue year: 2025 ",
+      "note": ""
+    },
+    {
+      "id": "resource-portkeyai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Portkey.ai current tokens per day: 1900.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-portkeyai-current-total_funding",
+      "claim": "[NEEDS SOURCE] Portkey.ai current total funding: $18M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-github-copilot-2025-arr",
+      "claim": "[NEEDS SOURCE] GitHub Copilot 2025 arr: 1.65 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-github-copilot-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] GitHub Copilot current tokens per day: 1000.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-openclaw-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] OpenClaw current tokens per day: 829.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-cursor-(anysphere)-2025-arr",
+      "claim": "[NEEDS SOURCE] Cursor (Anysphere) 2025 arr: 1.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-cursor-(anysphere)-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Cursor (Anysphere) current tokens per day: 800.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-cursor-(anysphere)-current-valuation",
+      "claim": "[NEEDS SOURCE] Cursor (Anysphere) current valuation: 10.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-cursor-(anysphere)-current-total_funding",
+      "claim": "[NEEDS SOURCE] Cursor (Anysphere) current total funding: $900M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-kilo-code-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Kilo Code current tokens per day: 271.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-perplexity-2025-arr",
+      "claim": "[NEEDS SOURCE] Perplexity 2025 arr: 0.2 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-perplexity-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Perplexity current tokens per day: 200.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-perplexity-current-valuation",
+      "claim": "[NEEDS SOURCE] Perplexity current valuation: 18.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-perplexity-current-total_funding",
+      "claim": "[NEEDS SOURCE] Perplexity current total funding: $900M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-replit-2025-arr",
+      "claim": "[NEEDS SOURCE] Replit 2025 arr: 0.252 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-replit-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Replit current tokens per day: 150.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-replit-current-valuation",
+      "claim": "[NEEDS SOURCE] Replit current valuation: 9.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-replit-current-total_funding",
+      "claim": "[NEEDS SOURCE] Replit current total funding: $400M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-cognition-(devin)-2025-arr",
+      "claim": "[NEEDS SOURCE] Cognition (Devin) 2025 arr: 0.155 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-cognition-(devin)-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Cognition (Devin) current tokens per day: 125.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-cognition-(devin)-current-valuation",
+      "claim": "[NEEDS SOURCE] Cognition (Devin) current valuation: 3.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-cognition-(devin)-current-total_funding",
+      "claim": "[NEEDS SOURCE] Cognition (Devin) current total funding: $275M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-duolingo-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Duolingo current tokens per day: 100.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-together-ai-2025-arr",
+      "claim": "[NEEDS SOURCE] Together AI 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-together-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Together AI current tokens per day: 100.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-together-ai-current-valuation",
+      "claim": "[NEEDS SOURCE] Together AI current valuation: 3.3 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-together-ai-current-total_funding",
+      "claim": "[NEEDS SOURCE] Together AI current total funding: $400M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-lovable-2025-arr",
+      "claim": "[NEEDS SOURCE] Lovable 2025 arr: 0.4 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-lovable-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Lovable current tokens per day: 100.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-canva-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Canva current tokens per day: 75.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-canva-current-valuation",
+      "claim": "[NEEDS SOURCE] Canva current valuation: 40.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-cline-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Cline current tokens per day: 69.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-characterai-2025-arr",
+      "claim": "[NEEDS SOURCE] Character.ai 2025 arr: 0.15 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-characterai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Character.ai current tokens per day: 60.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-characterai-current-valuation",
+      "claim": "[NEEDS SOURCE] Character.ai current valuation: 1.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-characterai-current-total_funding",
+      "claim": "[NEEDS SOURCE] Character.ai current total funding: $250M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-fireworks-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Fireworks AI current tokens per day: 60.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-fireworks-ai-current-valuation",
+      "claim": "[NEEDS SOURCE] Fireworks AI current valuation: 2.5 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-fireworks-ai-current-total_funding",
+      "claim": "[NEEDS SOURCE] Fireworks AI current total funding: $220M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-elevenlabs-2025-arr",
+      "claim": "[NEEDS SOURCE] ElevenLabs 2025 arr: 0.33 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-elevenlabs-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] ElevenLabs current tokens per day: 60.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-elevenlabs-current-valuation",
+      "claim": "[NEEDS SOURCE] ElevenLabs current valuation: 3.3 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-elevenlabs-current-total_funding",
+      "claim": "[NEEDS SOURCE] ElevenLabs current total funding: $180M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-wrtn-technologies-2025-arr",
+      "claim": "[NEEDS SOURCE] Wrtn Technologies 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-wrtn-technologies-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Wrtn Technologies current tokens per day: 50.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-wrtn-technologies-current-total_funding",
+      "claim": "[NEEDS SOURCE] Wrtn Technologies current total funding: $73.5M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-micro1-2025-arr",
+      "claim": "[NEEDS SOURCE] micro1 2025 arr: 0.25 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-micro1-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] micro1 current tokens per day: 50.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-midjourney-2025-arr",
+      "claim": "[NEEDS SOURCE] Midjourney 2025 arr: 0.3 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-midjourney-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Midjourney current tokens per day: 50.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-midjourney-current-valuation",
+      "claim": "[NEEDS SOURCE] Midjourney current valuation: 10.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-midjourney-current-total_funding",
+      "claim": "[NEEDS SOURCE] Midjourney current total funding: $0 (self-funded) $B",
+      "note": ""
+    },
+    {
+      "id": "resource-harvey-ai-2025-arr",
+      "claim": "[NEEDS SOURCE] Harvey AI 2025 arr: 0.19 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-harvey-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Harvey AI current tokens per day: 45.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-harvey-ai-current-valuation",
+      "claim": "[NEEDS SOURCE] Harvey AI current valuation: 11.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-harvey-ai-current-total_funding",
+      "claim": "[NEEDS SOURCE] Harvey AI current total funding: $400M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-monica-ai-2025-arr",
+      "claim": "[NEEDS SOURCE] Monica AI 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-monica-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Monica AI current tokens per day: 45.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-groq-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Groq current tokens per day: 40.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-groq-current-valuation",
+      "claim": "[NEEDS SOURCE] Groq current valuation: 3.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-groq-current-total_funding",
+      "claim": "[NEEDS SOURCE] Groq current total funding: $640M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-jasper-2025-arr",
+      "claim": "[NEEDS SOURCE] Jasper 2025 arr: 0.13 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-jasper-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Jasper current tokens per day: 30.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-jasper-current-valuation",
+      "claim": "[NEEDS SOURCE] Jasper current valuation: 1.5 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-jasper-current-total_funding",
+      "claim": "[NEEDS SOURCE] Jasper current total funding: $300M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-glean-2025-arr",
+      "claim": "[NEEDS SOURCE] Glean 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-glean-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Glean current tokens per day: 30.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-glean-current-valuation",
+      "claim": "[NEEDS SOURCE] Glean current valuation: 4.6 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-glean-current-total_funding",
+      "claim": "[NEEDS SOURCE] Glean current total funding: $350M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-janitor-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Janitor AI current tokens per day: 29.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-descript-2025-arr",
+      "claim": "[NEEDS SOURCE] Descript 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-descript-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Descript current tokens per day: 27.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-descript-current-total_funding",
+      "claim": "[NEEDS SOURCE] Descript current total funding: $400M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-yellowai-2025-arr",
+      "claim": "[NEEDS SOURCE] Yellow.ai 2025 arr: 0.0795 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-yellowai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Yellow.ai current tokens per day: 25.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-yellowai-current-valuation",
+      "claim": "[NEEDS SOURCE] Yellow.ai current valuation: 1.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-yellowai-current-total_funding",
+      "claim": "[NEEDS SOURCE] Yellow.ai current total funding: $100M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-intercom-fin-2025-arr",
+      "claim": "[NEEDS SOURCE] Intercom Fin 2025 arr: 0.05 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-intercom-fin-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Intercom Fin current tokens per day: 25.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-intercom-fin-current-valuation",
+      "claim": "[NEEDS SOURCE] Intercom Fin current valuation: 1.8 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-intercom-fin-current-total_funding",
+      "claim": "[NEEDS SOURCE] Intercom Fin current total funding: $240M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-writer-2025-arr",
+      "claim": "[NEEDS SOURCE] Writer 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-writer-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Writer current tokens per day: 25.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-writer-current-valuation",
+      "claim": "[NEEDS SOURCE] Writer current valuation: 1.9 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-writer-current-total_funding",
+      "claim": "[NEEDS SOURCE] Writer current total funding: $390M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-blackboxai-2025-arr",
+      "claim": "[NEEDS SOURCE] BLACKBOX.AI 2025 arr: 0.0317 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-blackboxai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] BLACKBOX.AI current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-klarna-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Klarna current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-grab-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Grab current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-sea/shopee-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Sea/Shopee current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-kakao-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Kakao current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-sierra-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Sierra AI current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-sierra-ai-current-valuation",
+      "claim": "[NEEDS SOURCE] Sierra AI current valuation: 4.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-sierra-ai-current-total_funding",
+      "claim": "[NEEDS SOURCE] Sierra AI current total funding: $300M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-deepl-2025-arr",
+      "claim": "[NEEDS SOURCE] DeepL 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-deepl-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] DeepL current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-deepl-current-total_funding",
+      "claim": "[NEEDS SOURCE] DeepL current total funding: $420M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-falai-2025-arr",
+      "claim": "[NEEDS SOURCE] Fal.ai 2025 arr: 0.095 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-falai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Fal.ai current tokens per day: 20.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-salesforce-agentforce-2025-arr",
+      "claim": "[NEEDS SOURCE] Salesforce Agentforce 2025 arr: 0.3 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-salesforce-agentforce-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Salesforce Agentforce current tokens per day: 15.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-hebbia-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Hebbia current tokens per day: 15.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-hebbia-current-valuation",
+      "claim": "[NEEDS SOURCE] Hebbia current valuation: 0.7 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-hebbia-current-total_funding",
+      "claim": "[NEEDS SOURCE] Hebbia current total funding: $130M+ $B",
+      "note": ""
+    },
+    {
+      "id": "resource-clay-2025-arr",
+      "claim": "[NEEDS SOURCE] Clay 2025 arr: 0.05 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-clay-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Clay current tokens per day: 15.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-clay-current-total_funding",
+      "claim": "[NEEDS SOURCE] Clay current total funding: $104M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-gamma-2025-arr",
+      "claim": "[NEEDS SOURCE] Gamma 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-gamma-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Gamma current tokens per day: 15.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-roo-code-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Roo Code current tokens per day: 12.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-captions-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Captions current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-captions-current-total_funding",
+      "claim": "[NEEDS SOURCE] Captions current total funding: $100M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-decagon-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Decagon current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-decagon-current-total_funding",
+      "claim": "[NEEDS SOURCE] Decagon current total funding: $100M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-luminance-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Luminance current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-luminance-current-total_funding",
+      "claim": "[NEEDS SOURCE] Luminance current total funding: $165M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-mercor-2025-arr",
+      "claim": "[NEEDS SOURCE] Mercor 2025 arr: 0.075 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-mercor-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Mercor current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-mercor-current-total_funding",
+      "claim": "[NEEDS SOURCE] Mercor current total funding: $135M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-speak-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Speak current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-speak-current-valuation",
+      "claim": "[NEEDS SOURCE] Speak current valuation: 1.0 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-speak-current-total_funding",
+      "claim": "[NEEDS SOURCE] Speak current total funding: $162M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-synthesia-2025-arr",
+      "claim": "[NEEDS SOURCE] Synthesia 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-synthesia-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Synthesia current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-synthesia-current-total_funding",
+      "claim": "[NEEDS SOURCE] Synthesia current total funding: $330M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-genspark-2025-arr",
+      "claim": "[NEEDS SOURCE] Genspark 2025 arr: 0.05 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-genspark-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Genspark current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-chai-research-2025-arr",
+      "claim": "[NEEDS SOURCE] Chai Research 2025 arr: 0.03 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-chai-research-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Chai Research current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-openart-2025-arr",
+      "claim": "[NEEDS SOURCE] OpenArt 2025 arr: 0.07 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-openart-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] OpenArt current tokens per day: 10.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-sillytavern-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] SillyTavern current tokens per day: 8.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-abridge-2025-arr",
+      "claim": "[NEEDS SOURCE] Abridge 2025 arr: 0.05 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-abridge-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Abridge current tokens per day: 8.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-abridge-current-total_funding",
+      "claim": "[NEEDS SOURCE] Abridge current total funding: $458M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-photoroom-2025-arr",
+      "claim": "[NEEDS SOURCE] Photoroom 2025 arr: 0.05 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-photoroom-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Photoroom current tokens per day: 8.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-photoroom-current-total_funding",
+      "claim": "[NEEDS SOURCE] Photoroom current total funding: $64M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-runway-2025-arr",
+      "claim": "[NEEDS SOURCE] Runway 2025 arr: 0.1 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-runway-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Runway current tokens per day: 8.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-runway-current-total_funding",
+      "claim": "[NEEDS SOURCE] Runway current total funding: $545M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-agent-zero-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Agent Zero current tokens per day: 7.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-fathom-2025-arr",
+      "claim": "[NEEDS SOURCE] Fathom 2025 arr: 0.02 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-fathom-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Fathom current tokens per day: 6.575342466 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-fathom-current-total_funding",
+      "claim": "[NEEDS SOURCE] Fathom current total funding: $18M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-pika-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Pika current tokens per day: 5.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-pika-current-total_funding",
+      "claim": "[NEEDS SOURCE] Pika current total funding: $135M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-suno-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Suno current tokens per day: 5.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-suno-current-total_funding",
+      "claim": "[NEEDS SOURCE] Suno current total funding: $125M $B",
+      "note": ""
+    },
+    {
+      "id": "resource-retell-ai-2025-arr",
+      "claim": "[NEEDS SOURCE] Retell AI 2025 arr: 0.036 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-retell-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Retell AI current tokens per day: 5.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-openhands-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] OpenHands current tokens per day: 4.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "resource-cal-ai-2025-arr",
+      "claim": "[NEEDS SOURCE] Cal AI 2025 arr: 0.012 $B",
+      "note": ""
+    },
+    {
+      "id": "resource-cal-ai-current-tokens_per_day",
+      "claim": "[NEEDS SOURCE] Cal AI current tokens per day: 2.0 T/day",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-021-4",
+      "claim": "OpenAI was the fastest to 100 million users",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-021-6",
+      "claim": "OpenAI was generating $1B per quarter by the end of 2024",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-021-11",
+      "claim": "ChatGPT has over 50 million subscribers",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-021-12",
+      "claim": "OpenAI's ads pilot reached more than $100 million in ARR in under six weeks",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-021-14",
+      "claim": "OpenAI's APIs process more than 15 billion tokens per minute",
+      "note": ""
+    },
+    {
+      "id": "extract-20260402-src-022-5",
+      "claim": "OpenAI will soon be the fastest to 1 billion weekly active users",
+      "note": ""
+    },
+    {
+      "id": "scan-20260404-a1b",
+      "claim": "ChatGPT reaches 900M weekly active users (Feb 2026), up from 800M in Oct 2025",
+      "note": ""
+    },
+    {
+      "id": "scan-20260404-e5f",
+      "claim": "Anthropic internal target: $26B annualized revenue by end of 2026 (vs current $19B ARR)",
+      "note": ""
+    },
+    {
+      "id": "scan-20260404-f6g",
+      "claim": "OpenAI enterprise revenue = 40%+ of total; on track to reach parity with consumer revenue by end 2026",
+      "note": ""
+    },
+    {
+      "id": "audit-20260404-gap-5",
+      "claim": "Within a year of launching ChatGPT, we reached $1B in revenue",
+      "note": ""
+    },
+    {
+      "id": "audit-20260404-gap-13",
+      "claim": "10 weeks ago, it was 50-50 with OpenAI",
+      "note": ""
+    },
+    {
+      "id": "audit-20260404-gap-14",
+      "claim": "Early December, it was 60-40 in OpenAI's favor",
+      "note": ""
+    },
+    {
+      "id": "audit-20260404-gap-18",
+      "claim": "Ramp data suggested that Anthropic now captures 73% of all spending among companies buying AI tools",
+      "note": ""
+    },
+    {
+      "id": "audit-20260404-gap-19",
+      "claim": "10 weeks ago, it was 50-50 with OpenAI",
+      "note": ""
+    },
+    {
+      "id": "audit-20260404-gap-20",
+      "claim": "Early December, it was 60-40 in OpenAI's favor",
+      "note": ""
+    },
+    {
+      "id": "audit-20260404-gap-21",
+      "claim": "the marginal person opting for AI today... the switches are moving towards Claude... people in the market today for a new AI went 70% on tropics",
+      "note": ""
+    },
+    {
+      "id": "audit-20260405-gap-21",
+      "claim": "the marginal person opting for AI today... the switches are moving towards Claude... people in the market today for a new AI went 70% on tropics",
+      "note": ""
+    },
+    {
+      "id": "scan-20260407-d4e",
+      "claim": "Anthropic gross margin: -94% in 2024, turned to ~+40% in 2025; targets 50% in 2026 and 77% in 2028",
+      "note": ""
+    },
+    {
+      "id": "scan-20260408-a1b",
+      "claim": "Anthropic revenue run rate topped $30B (April 6, 2026), up from $9B at end of 2025",
+      "note": ""
+    },
+    {
+      "id": "scan-20260408-c3d",
+      "claim": "Anthropic signs 3.5GW TPU compute deal with Google and Broadcom; Mizuho estimates $21B AI revenue for Broadcom from Anthropic in 2026, $42B in 2027",
+      "note": ""
+    },
+    {
+      "id": "scan-20260410-b2y",
+      "claim": "Anthropic enterprise customers spending >$1M/yr doubled to 1,000+ between Feb and Apr 2026",
+      "note": ""
+    },
+    {
+      "id": "scan-20260411-e5f",
+      "claim": "OpenAI projects $2.5B in ad revenue for 2026, growing to $53B by 2029 and $100B by 2030",
+      "note": ""
+    },
+    {
+      "id": "scan-20260416-b2c",
+      "claim": "Anthropic Project Glasswing: $100M+ in Claude Mythos Preview credits distributed to 50+ organizations (April 7, 2026); model withheld from public due to cybersecurity risk",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-5",
+      "claim": "Anduril will do a couple billion in revenue this year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-14",
+      "claim": "Metaview customers close roles 30% faster using their AI recruiting platform.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-22",
+      "claim": "Anthropic may now be at a $22 billion run rate in revenue, which is consistent with the Ramp spending shift data.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-26",
+      "claim": "The TerraFab chip volume is expected to be 20% Tesla and 80% SpaceX/data centers.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-28",
+      "claim": "Starlink reportedly has 53% profit margins and is wildly profitable at scale.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-33",
+      "claim": "Jonathan (Groq founder) is expected to make about $950 million after double taxation from the Nvidia deal.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-34",
+      "claim": "Chamath reportedly made $950 million from the Groq/Nvidia deal, though Chamath himself said on Twitter he made much more.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-37",
+      "claim": "Token spend as a percentage of revenue for some AI apps is 5-8%, while for coding apps it may be 40-50%.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-38",
+      "claim": "Jason Lemkin described running AI agents (VP of marketing, VP of customer success) on Claude Sonnet 4.7 and some Opus, costing somewhere in the range of $200 to $10,000 per month in tokens.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-42",
+      "claim": "The effective tax rate to the founders is roughly 60% and they can't hold Nvidia stock.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-47",
+      "claim": "Anthropic is doing $22 billion in the blink of an eye, with people lining up to buy agentic products.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-58",
+      "claim": "Spark paid $4 billion pre-revenue for Anthropic, and it paid off.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-61",
+      "claim": "In 2014 when Steve left Microsoft, his net worth was $20 billion, almost entirely comprised of Microsoft stock. Today, 11 years later, it is a staggering $130 billion according to Forbes.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-62",
+      "claim": "In 2014 when Steve left Microsoft, his net worth was $20 billion, almost entirely comprised of Microsoft stock.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-64",
+      "claim": "Microsoft ends 1992 at $2.8 billion in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-68",
+      "claim": "By spring quarter of the 1997-98 academic year, Google was doing 10,000 queries a day.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-74",
+      "claim": "Google (Alphabet) generates more net income or profit than any other US company, more than Apple, Microsoft, ExxonMobil, J.P. Morgan Chase, and Berkshire Hathaway.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-81",
+      "claim": "Jeff Bezos's stake in Google, if he never sold, is estimated to be worth about $20 billion today.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-82",
+      "claim": "If Jeff Bezos sold at Google's IPO, he would have turned his $250,000 seed investment into approximately $200 million.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-89",
+      "claim": "Google's Series A raised $25 million at a $100 million post-money valuation, split between Sequoia (Michael Moritz) and Kleiner Perkins (John Doerr), each receiving 12.5%.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-95",
+      "claim": "Yahoo paid Google $7.2 million for organic search results in 2001, the first full year of the Yahoo portal search deal.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-102",
+      "claim": "Yahoo's revenue from Overture-powered paid search was approximately 75% of Yahoo's overall company revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-106",
+      "claim": "In 2001, Google did $86 million in revenue and $10 million in profit, turning profitable that year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-107",
+      "claim": "In 2002, Google did $440 million of revenue, up roughly 5x-6x from the $86 million they did in 2001.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-109",
+      "claim": "Google's international revenue share grew from 18% in 2002 to 22% in 2002 accrued, and 29% in 2003.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-110",
+      "claim": "AOL had 34 million users at the time of the Google-AOL deal in summer 2002.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-114",
+      "claim": "AOL made $35 million in the first half year of the Google deal alone in 2002, and then $200 million in 2003.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-117",
+      "claim": "Terry Semel, CEO of Yahoo, offered to buy Google for $1 billion in late 2001, knowing Yahoo was Google's biggest customer paying less than $10 million.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-121",
+      "claim": "Search is today a half a trillion dollar annual revenue market.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-124",
+      "claim": "AdSense launched at the end of Q1 2003, and by the end of the year, just a few months later, it's doing over $1 million dollars a day in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-125",
+      "claim": "Google's 2002 revenue was $440 million with $185 million in profits.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-126",
+      "claim": "Google's 2002 operating income was $185 million.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-127",
+      "claim": "In 2003, Google's revenue exploded to $1.5 billion with almost $350 million in operating income.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-128",
+      "claim": "Google's 2003 operating income was almost $350 million, up from $185 million the prior year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-129",
+      "claim": "AdSense added $0.5 billion in 2003 at much lower margin.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-138",
+      "claim": "Microsoft's P/E ratio is 37 as of the time of recording.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-139",
+      "claim": "NVIDIA's P/E ratio is 46 as of the time of recording.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-140",
+      "claim": "Apple's P/E ratio is 30 as of the time of recording.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-141",
+      "claim": "Meta's P/E ratio is 27 as of the time of recording.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-143",
+      "claim": "By 2007, Google was using 200 different pieces of information to determine the ranking on a query.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-163",
+      "claim": "Google full year 2005 revenue was $6.1 billion, almost double the $3.1 billion in 2004.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-164",
+      "claim": "Google's 2004 full year revenue was $3.1 billion, the first year it went public.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-165",
+      "claim": "Google bought YouTube for $1.6 billion in 2006.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-166",
+      "claim": "Following Google's Q4 2005 earnings announcement showing flat earnings, the stock fell 27% in January 2006.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-172",
+      "claim": "Estimates are that Google Maps does well over $5 billion in revenue, maybe even $10 billion in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-177",
+      "claim": "Digital advertising would not eclipse TV advertising until 2017–2018, roughly 15 years after Google started working on video.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-179",
+      "claim": "Google acquired YouTube in November 2006 for $1.65 billion in stock, less than 18 months after the product launched.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-182",
+      "claim": "YouTube ad revenue tripled in 2009 in one year, according to Google's disclosure.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-183",
+      "claim": "YouTube was estimated to make about $4 billion in revenue in 2012 and was roughly break-even.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-184",
+      "claim": "In 2007, YouTube consumed as much bandwidth as the entire internet did in the year 2000.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-185",
+      "claim": "In 2014, YouTube was 20% of the bits on the Internet, according to Shishir Mehrotra.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-190",
+      "claim": "Google's total investment in YouTube was approximately $6.7 billion ($1.7B purchase price plus ~$5B in additional operating losses), and the asset now generates $8 billion in annual profit.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-191",
+      "claim": "YouTube revenue is growing 10% to 15% every year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-193",
+      "claim": "Google's Docs and Sheets have roughly 500 million to 1 billion users each, while Microsoft Office has a couple hundred million users worldwide.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-194",
+      "claim": "Microsoft Office has a couple hundred million users worldwide.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-197",
+      "claim": "Google bought YouTube in October 2006 for $1.65 billion.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-198",
+      "claim": "Google bought DoubleClick in April 2007 for $3.1 billion in cash.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-205",
+      "claim": "About $30 billion of Google's 2024 revenue is from Google Network (display ads, including DoubleClick-related business).",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-208",
+      "claim": "Google had $3 billion in revenue in 2004, doubling to $6 billion in 2005.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-209",
+      "claim": "In 2007, when Google launched Universal Search, they did $16.5 billion in revenue, becoming the largest seller of advertisements in the world.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-211",
+      "claim": "Microsoft made a bid to buy Yahoo for $44 billion in February 2008.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-225",
+      "claim": "Google's incremental gross margin on search revenue is like 98% or something like that.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-226",
+      "claim": "Google bought Android for $50 million in July 2005.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-230",
+      "claim": "Apple and the iPhone went from not in the smartphone market at all to over 50% market share of smartphones basically overnight.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-234",
+      "claim": "Google's TPUs are the only real scale deployment of AI chips in the world besides NVIDIA GPUs, with AMD possibly third.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-235",
+      "claim": "PHIL, Google's early language model, was using 15% of Google's entire data center infrastructure by the mid-2000s.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-247",
+      "claim": "Google is estimated to have 2–3 million TPUs today.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-248",
+      "claim": "NVIDIA shipped somewhere around 4 million GPUs last year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-249",
+      "claim": "Incorporating LSTMs into Google Translate in 2016 reduced the error rate by 60%.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-251",
+      "claim": "Almost all the big AI companies use WorkOS today, including OpenAI, Anthropic, Cursor, Perplexity, Sierra, Replit, and Vercel, along with hundreds of other AI startups.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-252",
+      "claim": "Noam Shazeer's Character.AI ended up with Google via a licensing, IP, and hiring agreement on the order of a few billion dollars.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-255",
+      "claim": "After that, Microsoft invests another $2 billion in OpenAI, which seemed like a lot of money at the time. That takes us to the end of 2021.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-256",
+      "claim": "January 2023 when OpenAI hits 100 million registered users for ChatGPT, Microsoft announces they're investing another $10 billion in OpenAI, and says that they now own 49% of the for-profit entity.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-258",
+      "claim": "ChatGPT gets one million users within less than a week of launch on November 30, 2022.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-259",
+      "claim": "By the end of December 31, 2022, ChatGPT has 30 million users.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-260",
+      "claim": "By the end of January 2023, two months after launch, ChatGPT crosses 100 million registered users, the fastest product in history to hit that milestone.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-262",
+      "claim": "Google's high watermark was November 19th of 2021 at right at $2 trillion of market cap. About a year after that slide began, they were worth a trillion dollars, nearly a 50% drawdown.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-267",
+      "claim": "In April of 2024, Google was processing 10 trillion tokens across all their surfaces. In April of 2025, that was almost 500 trillion. That's a 50x increase in one year of the number of tokens that they're vending out across Google services through inference.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-268",
+      "claim": "In April of 2024, Google was processing 10 trillion tokens across all their surfaces.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-269",
+      "claim": "Between April of 2025 and June 2025, Google's token processing went from a little under 500 trillion to a little under one quadrillion tokens (technically 980 trillion).",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-271",
+      "claim": "Broadcom has something like a 50% margin when working with Google on the TPU versus NVIDIA's 80%. A 50% gross margin from your supplier or an 80% gross margin from your supplier is the difference between a 2x markup and a 5x markup.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-272",
+      "claim": "I've seen estimates that over half the cost of running an AI data center is the chips and the associated depreciation.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-273",
+      "claim": "Human cost (R&D, AI researchers, software engineering) is approximately 25%–33% of the cost of running an AI data center.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-274",
+      "claim": "Power is actually a very small part of AI data center costs — approximately 2%–6%.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-277",
+      "claim": "Google makes something like $400-ish per user per year just based on some napkin math in the US.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-278",
+      "claim": "Google owns 90% of the search market. In AI, Google's market share is not 90% — possibly around 25%, maybe up to 50%.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-289",
+      "claim": "Dan Bane said on a podcast that when he retired in 2023, Trader Joe's was doing north of $20 billion a year in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-290",
+      "claim": "When Dan Bane joined Trader Joe's in the late 1990s, they had just hit $1 billion in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-291",
+      "claim": "Over the last 20 years or so, Trader Joe's has grown revenue at a little over 11% per year, putting estimated revenue at $24–25 billion today.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-319",
+      "claim": "Crusoe's Managed Inference delivers up to 10 times faster time to first token compared to alternatives.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-329",
+      "claim": "The NFL was already making like 50 million plus a year in broadcast rights by the mid-1970s.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-339",
+      "claim": "Hellman & Friedman acquired a 37% stake in F1 in February 2000 and collectively built up a 50% ownership stake.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-344",
+      "claim": "Top F1 teams were spending $400 to $500 million a year on their cars in the mid-to-late 2000s.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-349",
+      "claim": "Russia invested $50 billion into Sochi infrastructure for the 2014 Winter Olympics.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-359",
+      "claim": "McLaren F1 team does around $650 to $700 million in revenue now.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-362",
+      "claim": "Ferrari F1 team does about $80 million in operating profit.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-387",
+      "claim": "The percent of F1 management revenue going to teams has shrunk from 50% in 2018 to about 37% last year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-394",
+      "claim": "Cerebras on-premise systems cost about one to one and a half million dollars depending on configuration.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-395",
+      "claim": "Cerebras cloud pricing ranges from 50 cents per million tokens to several dollars per million tokens depending on the model.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-397",
+      "claim": "OpenAI placed a major purchase order with Cerebras for cloud inference infrastructure; OpenAI was also an original investor in Cerebras.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-401",
+      "claim": "Even the most frequent consumer AI users currently go six to eight times a day; if usage scaled to 100 times a day or devices queried on their behalf, inference demand would be enormous.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-402",
+      "claim": "The share of enterprises that have meaningfully adopted AI in a way that has changed their workflow is described as 'tiny', suggesting enterprise adoption is still very early.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-403",
+      "claim": "Cognition uses Cerebras to power their coding engine, delivering zero perceptible latency between a user's request and the answer.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-404",
+      "claim": "Space-based data centers are estimated to be an 8–10 year horizon, not 3–5 years.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-408",
+      "claim": "SoftBank and NVIDIA put a billion dollars into Skilled AI.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-413",
+      "claim": "From the peak interest rate of 5.25-5.5% down to approximately 3.5%, representing roughly a 35-40% decline in interest rates, USDC saw a multi-hundred percent increase in circulation.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-424",
+      "claim": "Stargate's total spend number is described as $500 billion, incorporating chips, data centers, and energy to power intelligent infrastructure scaling ChatGPT and other core services.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-425",
+      "claim": "Crusoe's biggest customer by far is Oracle and OpenAI.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-427",
+      "claim": "Electricians working on AI data center construction are earning hundreds of thousands of dollars a year, with salaries in the industry having doubled or tripled.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-433",
+      "claim": "Vera Rubin Ultra is expected to require 600 kW per rack.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-434",
+      "claim": "Data centers are ultimately expected to reach one megawatt per rack.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-439",
+      "claim": "Crusoe's managed inference product charges customers on a dollar per token basis.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-440",
+      "claim": "Crusoe's GPU cloud charges on a dollar per GPU hour basis for managed clusters.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-441",
+      "claim": "Crusoe's data center colocation charges on a dollar per kW rent basis.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-443",
+      "claim": "Thomson Reuters down 20%, LexisNexis down 15%, Legal Zoom down 15%, Figma down 13%, Salesforce 11%, ServiceNow 11%, Adobe 8% in a two-day period following Anthropic's Claude Co-work legal tool announcement.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-455",
+      "claim": "Bitcoin price went from roughly $70 in mid-2013 to $1,000 by end of 2013, more than 15X.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-462",
+      "claim": "CZ's IT company in Shanghai grew to about 200 people and stayed at that level as far as he knows, even after he left in 2013.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-465",
+      "claim": "New study published in HBR suggesting that AI tools intensify work but do not reduce it; employees who use AI worked at a faster pace, took a broader scope of tasks, and extended work into more hours of the day.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-470",
+      "claim": "Chamath stated that superstar developers' token costs are already exceeding their salary, while rank-and-file employees spend a few thousand dollars on tokens and average non-technical employees spend in the hundreds to low thousands.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-471",
+      "claim": "Chamath said that unless there is a gigantic leap forward in generating output tokens at one-tenth the cost of today, token costs will outpace employee salaries for top developers.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-496",
+      "claim": "Lucas one-way attack drones that can travel 500–700 miles cost approximately $50,000–$80,000 depending on equipment.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-504",
+      "claim": "One speaker believes Anthropic could reach a $1.5 trillion market cap at the end of the day, representing roughly a 5x multiple from its current ~$350B valuation.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-508",
+      "claim": "Anthropic had deeply embedded forward-deployed engineers Palantir-style across combatant commands including Central Command, Indo-Pacific Command, and several intelligence agencies.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-509",
+      "claim": "Anthropic's model is hosted in AWS GovCloud, with Palantir serving it from there; Anthropic held the control plane for the model.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-510",
+      "claim": "Claude Code (referred to as 'co-work') was described as innovative and ahead of competitors, with the speaker expecting OpenAI's Codex to close the gap within 12 months.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-516",
+      "claim": "OpenAI is valued at $840 billion as of last month.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-518",
+      "claim": "Anthropic revenue growth was driven by crossing a threshold with Opus 4.6, where models and agents are now competing with labor budgets rather than IT budgets.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-519",
+      "claim": "Jensen Huang said last week that he expected the $40 billion he recently invested in OpenAI and Anthropic would be his last money in because both were going to go public this year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-520",
+      "claim": "Chamath stated he is personally paying AI models millions of dollars per year and consuming more tokens every single day, but is not seeing revenues increase proportionally.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-522",
+      "claim": "Consumer revenue accounts for roughly half of OpenAI's total revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-528",
+      "claim": "For every gigawatt of data center capacity, there is roughly a 5-year payback period just to get to break even, with year 6, 7, and 8 being where the profit is.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-532",
+      "claim": "Using Sarah Friar's number of $10B revenue per GW, the 5 GW canceled in 2025 represents $50 billion a year of revenue off the table.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-533",
+      "claim": "As of end of February 2026, about 100 data centers are being protested, representing about 7 gigawatts, implying about 40 will be canceled and $70 billion a year of revenue potential lost.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-534",
+      "claim": "In total, last year and this year combined, $120 billion of cumulative annual revenue potential has been taken off the table due to data center cancellations.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-536",
+      "claim": "About 85% of tokens are being picked up by open source models at startups known to the speaker.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-548",
+      "claim": "Palantir took about 5 years to get to $10 million annually in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-555",
+      "claim": "Shuttle costs $50,000 a kilogram to get to orbit; Starship Heavy reuse will be under $20 a kilogram.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-558",
+      "claim": "Anthropic's Mythos model autonomously found thousands of vulnerabilities, including a 27-year-old vulnerability in OpenBSD and a 16-year-old bug in FFmpeg that was missed by automated tools after 5 million scans.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-560",
+      "claim": "Users with $200 subscriptions were using $2,000 to $20,000 worth of tokens when accessing Claude via OpenClaw.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-561",
+      "claim": "Anthropic is estimated to be delivering over 50% of coding tokens in the market, giving them dominant market share in coding.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-562",
+      "claim": "Chamath estimates Anthropic has 50 to 60% market share in coding, noting Codex is also broadly used.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-564",
+      "claim": "A BitTensor Subnet 62 project called Bridges AI spent about $1 million in TAO rewards and in 45 days hit 80% of what Claude 4 achieves in coding.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-565",
+      "claim": "Bridges AI spent about $1 million in TAO rewards to reach 80% of Claude 4's coding capability in 45 days.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-568",
+      "claim": "GPT-2 was a 1.5 billion parameter model, which at the time of its cautious rollout in February 2019 was considered potentially dangerous but turned out to be a 'nothing burger'.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-569",
+      "claim": "Chinese open source models like GIMME and K2 are about 6 months behind in coding/cyber capability compared to Anthropic's Mythos.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-573",
+      "claim": "OpenAI is planning to pull the plug on its Sora video platform, a product that released to great fanfare last year, and has since fallen from public view.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-574",
+      "claim": "OpenAI is taking steps to refocus on business and coding functions ahead of a potential IPO as soon as the fourth quarter of this year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-575",
+      "claim": "ChatGPT's shopping feature already had a hundred million dollar annualized run rate after being out for six weeks.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-580",
+      "claim": "Meta is spending 115 to 135 billion on AI infrastructure this year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-582",
+      "claim": "Anthropic is developing and has begun testing with early access customers a new AI model called Claude Mythos (also called Capybara), which the company says represents a step change in AI performance and is the most capable model it has built to date.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-583",
+      "claim": "OpenAI CEO Sam Altman said the company has completed the initial development of its next major AI model code named Spud and expects to have a very strong model in a few weeks.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-584",
+      "claim": "Apple plans to open up Siri to rival AI assistants in an iOS 27 update, allowing competing services to integrate with Siri similar to the existing ChatGPT partnership.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-586",
+      "claim": "AWS, Zoom, Glean, and Airtable are building their core agent products on top of Composeo.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-587",
+      "claim": "The team that manages Composeo's own agent pipeline has a token bill that exceeds human payroll.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-588",
+      "claim": "Individual engineers at Composeo manage tens of AI agents each.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-592",
+      "claim": "Composio's token cost is definitely much higher than their human cost right now.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-596",
+      "claim": "The speaker estimates that using Composio's 133 Intercom tools with a custom skill could save approximately 90% versus paying Intercom's Fin agent, reducing cost to around 10 cents in token cost per ticket.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-597",
+      "claim": "Skills written with Claude Opus can be traded off to Claude Sonnet for speed, and the speaker does this regularly; Haiku does not work as reliably for this purpose.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-600",
+      "claim": "Over the last month, Composio probably spent a hundred thousand dollars on the pipeline that builds agents, so token cost is definitely much higher than human cost right now.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-601",
+      "claim": "Composio has around 15 people overall, but the team that builds and improves the agent pipeline and tools is just a three-member team.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-602",
+      "claim": "At Composio, LLM token spend for internal development is already a multiple of human capital costs, with token spending being multiples of human capital.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-610",
+      "claim": "Claude Opus 4 achieved approximately 16 hours on the meter exponential task-length benchmark, per a blog post by Jaya Kattra.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-611",
+      "claim": "Meta has spent north of $20 billion on talent for AI.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-616",
+      "claim": "Software optimizations for a given GPT family have yielded throughput improvements of 5x, 10x, maybe 40x in tokens-per-dollar-per-watt on a quarter-over-quarter, year-over-year basis.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-617",
+      "claim": "AI labs are projecting revenues of $100 billion in 2027–28 and projecting revenue to keep growing at 2x–3x per year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-620",
+      "claim": "Google is expected to produce something like five to seven million of its own TPU chips.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-621",
+      "claim": "Amazon is trying to make three to five million of its own accelerator chips (lifetime shipment units).",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-622",
+      "claim": "Microsoft's Maia 200 chip data looks great, per Satya Nadella's review.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-625",
+      "claim": "OpenAI's API business is Azure-exclusive, while their SaaS business (ChatGPT) can run anywhere.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-626",
+      "claim": "Microsoft paused a significant portion of its data center leasing in the second half of 2024, dropping sites that were then taken by Google, Meta, Amazon, and Oracle.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-627",
+      "claim": "Microsoft was on pace to beat Amazon in data center capacity by 2026 or 2027, and certainly by 2028, prior to its infrastructure pause.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-628",
+      "claim": "Microsoft has announced capacity deals with Iris Energy, Nebius, and Lambda Labs, among others, renting GPU capacity from neoclouds.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-631",
+      "claim": "The network optics in Fairwater 2 is almost as much as all of Azure across all data centers two and a half years ago.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-635",
+      "claim": "Models currently cost on the order of dollars or cents per million tokens, leaving enormous room for margin expansion.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-645",
+      "claim": "The GitHub market (excluding AI coding agents) is expected to grow at 10–20% annually.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-646",
+      "claim": "Investing 1% of GDP in AI is happening now.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-648",
+      "claim": "A lot of the compute for big companies goes for inference, and those big fundraising numbers are earmarked for inference.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-649",
+      "claim": "There have been public estimates that companies like OpenAI spend on the order of $5-6 billion a year just on experiments, separate from inference.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-650",
+      "claim": "Based on what people say on Twitter, companies now spend more compute on RL than on pre-training, because RL can consume quite a bit of compute through very long rollouts.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-652",
+      "claim": "The transformer was built on 8 to 64 GPUs; no single transformer paper experiment used more than 64 GPUs of 2017, which would be like two GPUs of today.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-653",
+      "claim": "Based on what people say on Twitter, it appears Gemini has found a way to get more out of pre-training.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-655",
+      "claim": "Ilya Sutskever forecasts that a human-like learning system (superintelligence) will arrive in 5 to 20 years.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-656",
+      "claim": "Even if AI stalls out on current approaches, Sutskever believes these companies could make stupendous revenue, possibly not profits due to competition, but revenue definitely — with current AI companies potentially earning low hundreds of billions in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-657",
+      "claim": "OpenAI and Anthropic did a first small step in collaborating on AI safety, something Sutskever predicted approximately three years ago would happen.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-658",
+      "claim": "We need something like a 1,000,000x scale-up of total RL compute to give a boost similar to a GPT level, according to Toby Ord's analysis connecting dots between different o-series benchmark charts.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-659",
+      "claim": "If models were actually at AGI level, people would be willing to spend trillions of dollars a year buying tokens, given that knowledge workers cumulatively earn tens of trillions of dollars of wages a year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-660",
+      "claim": "The reason that lab revenue is 4 orders of magnitude off right now is that the models are nowhere near as capable as human knowledge workers.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-661",
+      "claim": "By 2030, models will start earning hundreds of billions in revenue, but won't have automated all knowledge work.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-676",
+      "claim": "We need something like a 1,000,000x scale-up of total RL compute to give a boost similar to a GPT level.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-677",
+      "claim": "If the capabilities were actually at AGI level, people would be willing to spend trillions of dollars a year buying tokens; knowledge workers cumulatively earn tens of trillions of dollars of wages a year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-678",
+      "claim": "The reason that lab revenues are 4 orders of magnitude off right now is that the models are nowhere near as capable as human knowledge workers.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-679",
+      "claim": "By 2030 the labs will have made significant progress on continual learning, and the models will start earning hundreds of billions in revenue, but they won't have automated all knowledge work.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-691",
+      "claim": "Tesla's lithium refinery in Corpus Christi, Texas has been completed and begun operations, and the nickel/cathode refinery in Austin is the largest outside China and the only one in America.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-693",
+      "claim": "Anthropic's revenue was approximately $100 million in 2023.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-695",
+      "claim": "In January 2026, Anthropic added another few billion dollars to revenue, suggesting the 10x annual growth curve is continuing.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-698",
+      "claim": "Dario Amodei estimates that AI coding models currently give roughly a 15-20% total factor speedup in software engineering productivity, up from about 5% six months prior.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-700",
+      "claim": "Claude computer use at initial release (approximately Q4 2024) scored around 15% on OSWorld.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-703",
+      "claim": "Dario Amodei is 90% confident that within ten years (by 2035) we will have what he calls 'a country of geniuses in a data center', equating to AGI-level capability.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-704",
+      "claim": "Dario Amodei believes AI will generate trillions of dollars of revenue even without solving continual on-the-job learning, based on current in-context learning capabilities.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-705",
+      "claim": "Dario Amodei believes even AGI-level AI ('country of geniuses in a data center') would sustain 3-5x or 10x annual revenue growth even at hundreds of billions of dollars in revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-709",
+      "claim": "Revenue could be $100 billion at the end of 2026 if the 10x annual growth rate continues.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-710",
+      "claim": "Revenue could be $1 trillion at the end of 2027 if the 10x annual growth rate continues.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-711",
+      "claim": "The industry is building roughly 10-15 gigawatts of compute this year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-712",
+      "claim": "Compute capacity grows by roughly 3x a year, so next year will be 30-40 gigawatts.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-713",
+      "claim": "2028 industry compute capacity might be 100 gigawatts.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-714",
+      "claim": "2029 industry compute capacity might be around 300 gigawatts.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-715",
+      "claim": "Each gigawatt of data center capacity costs maybe $10-15 billion a year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-716",
+      "claim": "Industry compute investment totals multiple trillions of dollars per year by 2028 or 2029.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-717",
+      "claim": "It is hard for me to see that there won't be trillions of dollars in revenue before 2030 for the AI industry.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-719",
+      "claim": "In a stylized model, if you pay $100 billion a year for compute, $50 billion supports $150 billion of revenue at over 50% gross margins on inference; the other $50 billion is used for training, resulting in $50 billion of profit.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-720",
+      "claim": "In the stylized model, a model trained for $1 billion last year produces $4 billion of revenue this year with $1 billion inference cost, implying 75% gross margins.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-721",
+      "claim": "Anthropic plans to have AI systems by late 2026 or early 2027 with the ability to navigate digital interfaces, intellectual capabilities matching or exceeding Nobel Prize winners, and ability to interface with the physical world.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-723",
+      "claim": "The economy could grow 10-20% per year with AI, but not 300% per year like compute is currently growing.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-725",
+      "claim": "Claude Code has millions of people using it externally, following initial fast adoption within Anthropic.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-726",
+      "claim": "Anthropic has an internal audience of many hundreds of people using Claude Code, which served as an early product-market-fit signal before external launch.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-729",
+      "claim": "Anthropic revenue grew from $0 to $100M in 2023.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-731",
+      "claim": "Anthropic added another few billion dollars in revenue in January of the current year, continuing the exponential growth trend.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-732",
+      "claim": "Dario Amodei noted that global human wages total approximately $50 trillion, referencing the scale of human economic value relative to AI adoption.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-735",
+      "claim": "Processing a frame every ten seconds at 1,000 tokens per frame across all 100 million cameras in America would cost approximately 30 billion dollars per year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-736",
+      "claim": "A given level of AI ability gets 10x cheaper year over year — so mass surveillance processing would cost 3 billion in one year, 300 million the year after, and by 2030 it might be trivially cheap.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-738",
+      "claim": "Anthropic's frontier safety roadmap states: 'At the most advanced capability levels and risks, the appropriate governance analogy may be closer to nuclear energy or financial regulation than to today's approach to software.'",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-739",
+      "claim": "Leopold Aschenbrenner wrote in his 2024 Situational Awareness memo: 'I find it an insane proposition that the US government will let a random SF startup develop superintelligence.'",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-747",
+      "claim": "Apple has the majority of N2 capacity being fabricated this year, with only a small amount going to AMD.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-748",
+      "claim": "In the following year, Apple's share of N2 falls to closer to half as other customers ramp, and then falls drastically thereafter, similar to N3.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-750",
+      "claim": "Huawei's Ascend AI chip was produced two months before Google's TPU and four months before Nvidia's A100 on 7nm.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-751",
+      "claim": "If something happens to Taiwan, global incremental compute capacity could fall from hundreds of gigawatts per year by end of the decade to roughly 10–20 gigawatts across Intel and Samsung.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-752",
+      "claim": "Elon Musk signed a massive deal with Samsung to manufacture his robot chips in Texas, motivated partly by Taiwan geopolitical risk.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-753",
+      "claim": "Nvidia is launching a new AI chip built on Samsung (LPU) the week after this recording.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-755",
+      "claim": "Increasing watts per square millimeter of die area from 1 to 2 might yield only about 20% more tokens per wafer manufactured.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-761",
+      "claim": "SemiAnalysis reported Nvidia will have $250 billion in purchase commitments with foundries, memory, and packaging.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-768",
+      "claim": "Nvidia has several hundred million GPUs installed globally across all clouds and generations.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-770",
+      "claim": "ASIC margins are approximately 65%, close to Nvidia's ~70% margins.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-771",
+      "claim": "It has been reported that Nvidia has done up to $30 billion in investment in OpenAI and $10 billion in Anthropic.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-773",
+      "claim": "Anthropic announced a multi-gigawatt deal with Broadcom and Google for TPUs, with TPUs being the majority of their compute.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-775",
+      "claim": "For Nvidia to be generating two trillion a year in revenue, we would need way more EUV machines, according to Dwarkesh's framing which Jensen did not dispute.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-779",
+      "claim": "Jensen Huang stated that the United States has 100x more compute than anywhere else in the world.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-780",
+      "claim": "Jensen Huang said Huawei had the largest single year in the history of their company, shipping millions of chips.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-782",
+      "claim": "Jensen Huang stated that China has 50% of the world's AI researchers.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-785",
+      "claim": "Dwarkesh Patel cited estimates that because China is stuck on 7nm without EUV, they have approximately one tenth the amount of flops that the US has.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-788",
+      "claim": "Dwarkesh Patel noted that the Huawei 910C has roughly half to a third the flops or memory bandwidth compared to the H200.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-790",
+      "claim": "Nvidia had almost $100 billion in purchase commitments with foundries, memory, and packaging in their latest filings.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-791",
+      "claim": "SemiAnalysis has reported that Nvidia will have $250 billion in purchase commitments with supply chain partners.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-792",
+      "claim": "Jensen Huang stated that if Nvidia's next several years are a trillion dollars in scale, they have the supply chain to support it.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-793",
+      "claim": "Nvidia has been 2x-ing revenue year over year for many years.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-795",
+      "claim": "AI as a whole this year is going to be 60% of TSMC's N3 node production, according to SemiAnalysis.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-796",
+      "claim": "AI is going to be 86% of TSMC's N3 node next year, according to SemiAnalysis.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-797",
+      "claim": "Jane Street spent approximately 20,000 GPU hours training backdoors into 3 different language models.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-799",
+      "claim": "Nvidia has several hundred million GPUs in its installed base across clouds including A10, A100, H100, H200, L series, and P series.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-800",
+      "claim": "Blackwell is 30x to 50x more efficient than Hopper; when first announced it was stated as 35x more energy efficient, later reported as actually 50x.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-801",
+      "claim": "60% of Nvidia's revenue comes from the top five hyperscalers.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-802",
+      "claim": "Nvidia's gross margins are approximately 70%.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-803",
+      "claim": "ASIC margins are approximately 65%, close to Nvidia's ~70% margins.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-804",
+      "claim": "Nvidia has invested up to $30 billion in OpenAI and $10 billion in Anthropic, per reports.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-805",
+      "claim": "Nvidia has invested up to $10 billion in Anthropic, per reports.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-806",
+      "claim": "Nvidia is backstopping CoreWeave up to $6.3 billion and has invested $2 billion in CoreWeave.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-807",
+      "claim": "Jensen Huang stated that for Nvidia to generate two trillion a year in revenue, more EUV machines would be needed.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-808",
+      "claim": "Anthropic announced a multi-gigawatt deal with Broadcom and Google for TPUs, with TPUs being a majority of Anthropic's compute.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-811",
+      "claim": "OpenAI's investment round was at a $30 billion scale, per Jensen Huang's confirmation of supporting them at that level.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-812",
+      "claim": "Jensen Huang said early AI investors like Micron doubled down on HBM memory investments when he predicted AI demand 5 years ago, which has been 'tremendous for the company'.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-813",
+      "claim": "Nvidia is investing in neoclouds including CoreWeave, Nscale, and Nebius to help them exist and scale.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-815",
+      "claim": "There are tens of thousands of AI companies in the world now.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-820",
+      "claim": "Estimates suggest China has one tenth the amount of flops that the US has, because they are at 7nm without EUV due to chip-making export controls.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-821",
+      "claim": "Today's models are largely trained on Hopper generation chips, and 7nm chips are essentially equivalent to Hopper.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-822",
+      "claim": "Huawei just had the largest single year in the history of their company.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-823",
+      "claim": "Anthropic announced Claude Mythos Preview, which found thousands of high-severity vulnerabilities across every major operating system and every browser, including one in OpenBSD that had existed for 27 years.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-829",
+      "claim": "Claude Code autonomy from Anthropic's production traffic numbers showed 20 to 45 minutes of autonomous operation.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-831",
+      "claim": "Build.nvidia.com was at one point the largest inference deployment at Nvidia, possibly still the largest.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-832",
+      "claim": "The speaker expects that before the end of the year, an agent will be capable of running for longer than 24 hours with self-consistency the entire time.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-836",
+      "claim": "Turbopuffer manages trillions of vectors and tens of petabytes as of end of 2025.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-837",
+      "claim": "Turbopuffer manages tens of petabytes of data as of end of 2025.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-843",
+      "claim": "NVMe SSDs were not available in the cloud until around 2017.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-845",
+      "claim": "Turbopuffer is running tens of clusters across all 3 clouds, with plans to scale to hundreds of clusters.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-846",
+      "claim": "Turbopuffer's customers include Anthropic, Cursor, and Notion.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-847",
+      "claim": "At Shopify, the Elasticsearch search clusters were doing tens or hundreds of QPS for reads, but millions of updates per second for writes — a ~10 to 100 read/write ratio.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-848",
+      "claim": "Turbo puffer is reducing query pricing because agentic systems are dramatically increasing query volume.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-849",
+      "claim": "Turbo Puffer reduced Cursor's cost by 95%, which kind of fixed their per user economics.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-852",
+      "claim": "TurboPuffer's ANNV3 can search 100 billion vectors with a P50 of around 40 milliseconds and a P99 of 200 milliseconds.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-855",
+      "claim": "TurboPuffer became profitable due to pricing pressure in the early days when it was running on the founder's credit card and they had spent tens of thousands of dollars on compute bills.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-856",
+      "claim": "TurboPuffer beats Lucene on some benchmarks, particularly for very long queries generated or augmented by LLMs on web-scale datasets such as Common Crawl.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-864",
+      "claim": "Turbo Puffer reduced Cursor's cost by 95%, which fixed their per-user economics.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-865",
+      "claim": "S3 only became consistent in December of 2020, which was a key enabling condition for building Turbo Puffer's architecture.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-866",
+      "claim": "NVMe SSDs were not available in the cloud until around 2017, which was a key enabling condition for Turbo Puffer's architecture.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-867",
+      "claim": "Compare and swap was not available in S3 until late 2024, but was available in GCP, which drove Turbo Puffer to start on GCP.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-868",
+      "claim": "Buying dark fiber between AWS and GCP regions in Oregon cost around $5,000, which Turbo Puffer purchased to reduce latency for Notion.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-872",
+      "claim": "Claude Code users noticed over December were using it even though they're not technical, or they started using Claude Code for non-coding workloads like managing expenses, filling out receipts, or organizing a knowledge base.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-879",
+      "claim": "Dreamer has hundreds of agents in its gallery built by the community.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-885",
+      "claim": "Dreamer uses Claude Haiku 4.5 for certain agent tasks such as scheduling LLM calls for time slots.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-886",
+      "claim": "Dreamer's gallery has hundreds of agents built by community members, covering personal productivity and information management use cases.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-893",
+      "claim": "Mistral raised the largest European AI funding round in history.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-894",
+      "claim": "Mistral Voxtral (ASR) was first released in summer (around July last year), with a follow-up transcription-only model family released in January.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-902",
+      "claim": "Nvidia folks are actually paying a lot of dollars to purchase interactive worlds, whether it's for the sake of evaluation or training the robots, or policies or models.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-905",
+      "claim": "Working with five orders of magnitude less data than people working purely from pixels would allow making a lot more progress, a lot more quickly.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-909",
+      "claim": "It took 15 years from 2000 to 2015 to fill up all the fiber/data center capacity that was overbuilt during the dot-com era.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-910",
+      "claim": "Every dollar being put into anything that results in a running GPU is being turned into revenue right away; everybody is starved for compute capacity.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-911",
+      "claim": "In the next three or four years, basically everything in the AI supply chain is selling out or sold out, resulting in chronic supply shortage for years to come.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-912",
+      "claim": "Older Nvidia inference chips running today are making more money than they did three years ago because the pace of software improvement is faster than the depreciation cycle of the chip.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-913",
+      "claim": "Google is reportedly running very old TPUs very profitably for inference.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-914",
+      "claim": "Anthropic and OpenAI are now at really serious size as companies with very serious revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-918",
+      "claim": "There's latent demand of up to five or ten thousand dollars a day of tokens for a fully deployed personal agent.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-919",
+      "claim": "Even with a 10x improvement in price performance, inference costs would still be around $100 a day per personal agent, which is beyond what consumers can pay.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-920",
+      "claim": "Between the US and China right now there are about a dozen primary foundation model companies at scale, but in three years it will consolidate to three or four big winners or maybe one or two.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-923",
+      "claim": "Marc has friends today who are paying a thousand dollars a day for Claude tokens to run Open Claude, which is $30,000 a month.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-924",
+      "claim": "There is latent demand of up to $5,000–$10,000 a day in tokens for a fully deployed personal agent, but consumers can't pay that.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-925",
+      "claim": "Every dollar that's being put into anything that results in a running GPU is being turned into revenue right away; everybody is starved for compute capacity.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-926",
+      "claim": "The entire supply chain is sold out or selling out for somewhere between three or four years out.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-927",
+      "claim": "Older Nvidia inference chips running today are making more money than three years ago because the pace of software improvement is faster than the chip depreciation cycle.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-928",
+      "claim": "Google is reportedly running very old TPUs very profitably for inference.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-929",
+      "claim": "OpenAI and Anthropic are now at really serious size as companies with very serious revenue.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-930",
+      "claim": "It took 15 years from 2000 to 2015 to fill up the overbuilt fiber and data center capacity from the dot-com era, with approximately $2 trillion wiped out in the crash.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-932",
+      "claim": "Friends running Claude are spending $1,000 a day for Claude tokens, amounting to $30,000 a month.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-933",
+      "claim": "There is latent demand of up to $5,000 to $10,000 a day of tokens for a fully deployed personal agent.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-934",
+      "claim": "Even with a 10x improvement in price performance, personal agent token costs would still be around $100 a day, which is still beyond what consumers can pay.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-935",
+      "claim": "The rate of decline in inference costs may level out due to supply constraints from GPU and CPU/memory bottlenecks driven by agentic demand.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-952",
+      "claim": "Ryan Lopopolo calls it borderline 'negligent' if you aren't using >1B tokens a day, which is roughly $2-3k/day in token spend based on market rates and caching assumptions.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-954",
+      "claim": "Custom Agents was the most successful launch in terms of free trials and converting people.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-957",
+      "claim": "The big unlock for Notion's agent capability was Sonnet 3.6 or 3.7 in early last year.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-962",
+      "claim": "Notion partnered with Anthropic and OpenAI over the past two or three months to develop frontier/headroom evals after their existing evals became saturated.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-970",
+      "claim": "Notion's first AI version was built in late 2022 as a coding agent using JavaScript APIs for tool interaction.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-972",
+      "claim": "Notion's agent saying 'hello' was costing thousands and thousands of tokens due to the large number of tools being passed in the context.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-973",
+      "claim": "Notion's custom agents use usage-based pricing, and the team is focused on avoiding wasteful token usage where deterministic code could be used instead.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-976",
+      "claim": "The majority of search load and search traffic on Notion's AI-enabled plans is now coming from agents, not humans.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-977",
+      "claim": "Allowing the database autofill feature to run as an agent on Opus for every single database cell would cost billions of dollars.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-980",
+      "claim": "Notion offers enterprise customers discounts on credit packs when they buy above a certain volume, and sells credit packs as part of its enterprise sales motion.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-982",
+      "claim": "Custom Agents was Notion's most successful launch in terms of free trials and converting people.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-983",
+      "claim": "Notion rebuilt its agent feature approximately four or five times before shipping Custom Agents.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-984",
+      "claim": "Notion first got access to GPT-4 in late 2022 and immediately tried to build an agent that had access to all Notion tools.",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-985",
+      "claim": "The big unlock for Notion's agent work was probably Sonic 3.6 or 3.7 (Claude Sonnet), early last year (2025).",
+      "note": ""
+    },
+    {
+      "id": "podcast-20260416-986",
+      "claim": "Notion had partnered with both Anthropic and OpenAI at different times to try to fine-tune models for tool-calling on Notion functions.",
+      "note": ""
+    },
+    {
+      "id": "scan-20260423-f6g",
+      "claim": "AWS AI services revenue run-rate estimated ~$15B (Q1 2026), driven by Bedrock multi-model strategy hosting both OpenAI and Anthropic",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-33",
+      "claim": "Distilling an 8B Llama on just 0.5–2M NaturalReasoning problems yields steeper accuracy gains than training on larger WebInstruct / OpenMathInstruct sets, cutting tokens and compute.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-39",
+      "claim": "An actively fine-tuned 3.8B Phi-3 model via SIFT can outperform a base 27B Gemma-2 model on complex tasks.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-40",
+      "claim": "Local Mixtures of Experts (test-time model merging) runs up to ~100× faster than SIFT-style test-time training while approaching TTT accuracy on ~1B base models.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-86",
+      "claim": "ElevenLabs customers have created over 2M agents that have handled over 33M conversations in 2026.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-91",
+      "claim": "Black Forest Labs has a 78% gross margin including a large deal with Meta worth $140M over two years.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-96",
+      "claim": "The Lean AI Leaderboard of 44 AI-first companies with more than $5M ARR, under 50 FTE, and under five years old sums over $4B revenue.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-116",
+      "claim": "The top 100 fastest-growing AI companies on Stripe grow to $5M ARR 1.5x faster than the top 100 SaaS companies by revenue in 2018.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-117",
+      "claim": "AI companies founded in or after 2022 are growing to $5M ARR 4.5x faster than those founded before 2020.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-118",
+      "claim": "AI companies with $1–20M annualized revenue grew quarterly revenue at 60% in the last quarter, 1.5x greater than all-sector peers.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-119",
+      "claim": "AI companies with $20M+ annualized revenue grew quarterly revenue at 30% in the last quarter, 1.5x greater than all-sector peers.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-120",
+      "claim": "ATOKEN by Apple was trained up to 256×H100 GPUs using approximately 138,000 GPU-hours.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-128",
+      "claim": "MCP protocol has been cited in 3x more research papers than Google's competing A2A protocol, per Zeta Alpha data.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-131",
+      "claim": "Black Forest Labs revenue grew 3.5x year-over-year.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-134",
+      "claim": "AI adoption among US businesses as estimated by US Government trails private estimates at 9.2%.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-136",
+      "claim": "Meta's SPV deal was valued at $26B.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-137",
+      "claim": "Groq reported to investors that revenue would exceed $2B in 2025, but that forecast was revised down dramatically to just $500M.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-138",
+      "claim": "Groq's original 2025 revenue forecast was over $2B before being revised down to $500M.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-157",
+      "claim": "Cambricon reportedly sold just ~10K GPUs in 2024, but will ship ~150K GPUs in 2025, with rumors of 500K GPU orders in 2026.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-159",
+      "claim": "Huawei will be responsible for just ~62% of the XPU volume produced by Chinese firms in 2025, compared to NVIDIA's 90%+ of the global XPU market.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-185",
+      "claim": "Anthropic's annualized revenue is poised to approximately 10x year on year.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-186",
+      "claim": "OpenAI's annualized revenue appears on track to approximately 3x year on year.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-187",
+      "claim": "xAI's annualized revenue remains an order of magnitude behind Anthropic despite a valuation that recently surpassed Anthropic's.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-188",
+      "claim": "xAI's revenue multiples remain 10x higher than other AI labs.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-191",
+      "claim": "Unitree's R1 humanoid robot is priced at $5,566 and the company has over $140M in annual revenue, with a ~$7B onshore IPO underway.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-196",
+      "claim": "NVIDIA has shipped roughly 1.9 million GPUs to China since 2023.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-199",
+      "claim": "Meta's year-to-date lobbying expenditures are approximately $14 million.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-200",
+      "claim": "Google's year-to-date lobbying expenditures are approximately $8 million.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-218",
+      "claim": "The IAPP estimates that only approximately 40 bills (of the over 1,000 introduced) may significantly impact American AI labs.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260423-src-001-276",
+      "claim": "Entry-level hiring in software declined 11% and customer support declined 21%, roles highly exposed to AI automation.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260424-src-038-3",
+      "claim": "Guodun Quantum (国盾量子) reported Q1 2026 revenue of approximately 22.9995 million CNY, up 17.80% YoY, with a net loss of 19.0136 million CNY attributable to shareholders.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260424-src-038-4",
+      "claim": "Qizhong Technology (颀中科技) reported Q1 2026 revenue of approximately 420 million CNY, down 11.37% YoY, with a net loss of approximately 293 million CNY.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260424-src-038-5",
+      "claim": "Xinruida (芯瑞达), a semiconductor lighting component company, reported 2025 annual revenue of approximately 989 million CNY, down 16.44% YoY, while net profit increased 5.9% to approximately 125 million CNY.",
+      "note": ""
+    },
+    {
+      "id": "auto-20260424-src-038-6",
+      "claim": "Juyi Technology (巨一科技), an EV and industrial automation tech company, reported 2025 annual revenue of 4.335 billion CNY, up 23.04% YoY, with net profit surging 279.77% to 80.96 million CNY.",
+      "note": ""
+    }
+  ],
+  "new_fields_approved": [],
+  "new_fields_rejected": []
+}

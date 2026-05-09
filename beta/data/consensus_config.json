@@ -1,0 +1,51 @@
+{
+  "_doc": "wq-048 — consensus engine config. Lifts assumptions-audit.md §2.1–§2.5 lookup tables into structured form. Engine: scripts/derive_collected_revenue.py.",
+  "version": "1.0",
+  "audit_section_ref": "assumptions-audit.md §2",
+
+  "segment_factors": {
+    "_doc": "§2.1 — collection factor per revenue segment.",
+    "api": 1.00,
+    "consumer": 0.95,
+    "sme": 0.90,
+    "enterprise": 0.80
+  },
+
+  "arr_methods": {
+    "_doc": "§2.3 — haircut applied to growth-method output (NOT to endingARR before growth math). See engine for placement.",
+    "monthly_x12":     {"factor": 1.00, "description": "Calendar month rev × 12. Standard."},
+    "quarterly_x4":    {"factor": 0.98, "description": "Calendar quarter × 4. Slight smoothing benefit."},
+    "best_period_x12": {"factor": 0.88, "description": "Cherry-picked best 4-week period × 12. Inflates 10–15%. Confirmed by Zitron for OpenAI."},
+    "unknown":         {"factor": 0.93, "description": "Method undisclosed. Moderate haircut."}
+  },
+
+  "company_profiles": {
+    "_doc": "§2.2 — per-company segment mix + NRR + ARR reporting method. Fall back to _default when slug not present.",
+    "openai":    {"segments": {"api": 0.15, "consumer": 0.40, "sme": 0.20, "enterprise": 0.25}, "nrr": 1.30, "arr_method": "best_period_x12"},
+    "anthropic": {"segments": {"api": 0.70, "consumer": 0.15, "sme": 0.00, "enterprise": 0.15}, "nrr": 1.50, "arr_method": "monthly_x12"},
+    "google":    {"segments": {"api": 0.20, "consumer": 0.50, "sme": 0.00, "enterprise": 0.30}, "nrr": 1.20, "arr_method": "unknown"},
+    "_default":  {"segments": {"api": 0.40, "consumer": 0.20, "sme": 0.20, "enterprise": 0.20}, "nrr": 1.15, "arr_method": "unknown"}
+  },
+
+  "growth_method_rules": {
+    "_doc": "§2.4 — growth method selector. quarterly_data_available is checked first; if Q1.arr..Q4.arr present, use sum_quarterly. Else use ratio = endingARR/startingARR to pick log_mean (>1.5), simple_average (≤1.5), or 60% haircut (no startingARR).",
+    "quarterly_data_available": "sum_quarterly_x_0.25",
+    "hyper_growth_ratio_gt_1.5": "logarithmic_mean",
+    "moderate_growth_ratio_le_1.5": "simple_average",
+    "only_ending_arr_known": "ending_x_0.60"
+  },
+
+  "nrr_formula": {
+    "_doc": "§2.5 — nrrBoost = 1.0 + (profile.nrr - 1.0) × multiplier (when NRR > 1.0). E.g., NRR 1.50 yields nrrBoost 1.125.",
+    "multiplier": 0.25
+  },
+
+  "confidence_band": [0.85, 1.15],
+
+  "validation_targets": {
+    "_doc": "§4.4 hand-curated values used by --validate to gate calibration. ±15% per acceptance criteria #4. iaas dropped pending IaaS provider entity records — see wq-053 Notion card.",
+    "openai":    {"2025": 7.65},
+    "anthropic": {"2025": 4.71},
+    "google":    {"2025": 2.00}
+  }
+}

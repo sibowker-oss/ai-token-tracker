@@ -1,0 +1,82 @@
+{
+  "asOf": "2026-05-08T06:58:48.803239Z",
+  "ingestSummary": {
+    "lookbackHours": 24,
+    "claimsAddedToInbox": 0,
+    "scrapersScheduled": [
+      "monitor_sources.py",
+      "news_monitor.py",
+      "scan_sources.py"
+    ],
+    "scrapersThatProducedZero": [
+      "monitor_sources.py",
+      "scan_sources.py"
+    ],
+    "lastInboxProcessed": "2026-05-07"
+  },
+  "reviewQueueSummary": {
+    "total": 2461,
+    "pending": 218,
+    "oldestPendingDate": "2026-05-02",
+    "oldestPendingAgeDays": 6,
+    "stalePendingCount": 0,
+    "stalePendingIds": []
+  },
+  "staleEntities": {
+    "count": 0,
+    "items": []
+  },
+  "vaultSummary": {
+    "totalClaims": 242,
+    "orphanedClaims": 131
+  },
+  "applyGate": {
+    "lastRunAt": "2026-05-08T06:53:08Z",
+    "counters30d": {
+      "auto_applied": 0,
+      "routed_to_review": 0,
+      "anomalies": 0
+    },
+    "recentAutoApplied24h": [],
+    "available": true
+  },
+  "assertions": [
+    {
+      "name": "ingest_health",
+      "passed": true,
+      "count": 0,
+      "details": "0 new claim(s) overnight; 2 scraper(s) of 3 produced zero (monitor_sources.py, scan_sources.py)."
+    },
+    {
+      "name": "review_queue_freshness",
+      "passed": true,
+      "count": 0,
+      "details": "No pending claims older than 7 days (218 pending total)."
+    },
+    {
+      "name": "apply_propagation",
+      "passed": false,
+      "count": 19,
+      "details": "19 verified tier-2A-or-better claim(s) have usedOn=[]. Sample IDs: dp-042, dp-048, dp-051, dp-104, dp-107, dp-110, dp-151, dp-159, dp-174, dp-199."
+    },
+    {
+      "name": "entity_vault_sync",
+      "passed": true,
+      "count": 0,
+      "details": "Every published entity ARR matches the highest-tier verified vault claim within \u00b115%."
+    },
+    {
+      "name": "arrmodel_consistency",
+      "passed": true,
+      "count": 0,
+      "details": "apps_total $82.5292B + compute_net $43.0800B = $125.6092B \u2248 industry_total $125.6092B (\u0394 $0.0000B \u2264 tolerance $0.1B)."
+    },
+    {
+      "name": "handler_coverage",
+      "passed": true,
+      "count": 0,
+      "details": "All 83 distinct vault unit(s) have a registered handler or are in UNHANDLED_UNITS."
+    }
+  ],
+  "alertCount": 1
+}

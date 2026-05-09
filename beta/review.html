@@ -18,6 +18,9 @@
   });
 })();
 </script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -34,6 +37,24 @@
 
   /* Source tabs */
   .source-tabs { display:flex; gap:4px; margin-bottom:16px; flex-wrap:wrap; }
+  /* wq-040 — lane toggle (Material vs Context) sits above source-tabs */
+  .lane-toggle { display:flex; gap:4px; margin:14px 0 8px 0; padding:4px; background:rgba(255,255,255,0.02); border-radius:10px; width:fit-content; }
+  .lane-btn { padding:8px 18px; border-radius:8px; border:none; background:transparent; color:var(--text-dim); font-size:12px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all 0.15s; }
+  .lane-btn:hover { color:var(--text); }
+  .lane-btn.active { background:var(--card); color:var(--text); }
+  .lane-btn .lane-count { font-size:10px; padding:2px 8px; border-radius:10px; background:rgba(255,255,255,0.08); font-weight:700; }
+  .lane-btn[data-lane="material"].active { background:rgba(16,185,129,0.15); color:var(--green); }
+  .lane-btn[data-lane="context"].active { background:rgba(100,116,139,0.18); color:var(--text); }
+  .lane-helper { font-size:11px; color:var(--text-dim); margin-bottom:14px; }
+  /* sublane / age badges */
+  .badge-sub-would { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-sub-expansion { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .badge-sub-context { background:rgba(100,116,139,0.18); color:var(--text-dim); }
+  .badge-age-yellow { background:rgba(234,179,8,0.18); color:#facc15; }
+  .badge-age-orange { background:rgba(245,158,11,0.20); color:var(--orange); }
+  .badge-age-red { background:rgba(239,68,68,0.20); color:var(--red); }
+  .claim-card.sub-would { border-left:3px solid var(--green); }
+  .claim-card.sub-expansion { border-left:3px solid var(--purple); }
   .source-tab { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:transparent; color:var(--text-dim); font-size:12px; font-weight:500; cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:6px; }
   .source-tab:hover { border-color:var(--text-dim); color:var(--text); }
   .source-tab.active { background:var(--accent); color:white; border-color:var(--accent); }
@@ -85,6 +106,18 @@
   .claim-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
   .claim-meta strong { color:var(--text); font-weight:600; }
   .claim-conflict { font-size:11px; color:var(--red); margin-top:6px; padding:6px 10px; background:rgba(239,68,68,0.06); border-radius:6px; }
+  /* wq-041: source grounding */
+  .source-context { margin-top:8px; border-left:2px solid var(--purple); padding:6px 12px; background:rgba(139,92,246,0.04); border-radius:0 6px 6px 0; }
+  .source-context-header { display:flex; align-items:center; gap:8px; cursor:pointer; user-select:none; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--purple); }
+  .source-context-header .sc-toggle { transition:transform 0.15s; opacity:0.6; font-size:11px; }
+  .source-context[data-collapsed="true"] .sc-toggle { transform:rotate(-90deg); }
+  .source-context[data-collapsed="true"] .source-context-body { display:none; }
+  .source-context-body { margin-top:6px; }
+  .source-context-body blockquote { font-size:12px; color:var(--text); line-height:1.5; font-style:italic; margin:0 0 6px 0; padding:0; border:none; }
+  .source-context-body blockquote strong { color:var(--green); font-weight:700; font-style:normal; background:rgba(16,185,129,0.10); padding:0 3px; border-radius:3px; }
+  .source-context-meta { display:flex; flex-wrap:wrap; gap:6px; align-items:center; font-size:10px; color:var(--text-dim); }
+  .badge-primary-src { background:rgba(16,185,129,0.15); color:var(--green); }
+  .badge-cites-src { background:rgba(139,92,246,0.15); color:var(--purple); }
 
   /* Actions */
   .claim-actions { display:flex; gap:6px; margin-top:10px; align-items:center; flex-wrap:wrap; }
@@ -96,6 +129,8 @@
   .action-btn.act-decline:hover, .action-btn.act-decline.active { background:rgba(239,68,68,0.15); color:var(--red); border-color:var(--red); }
   .action-btn.act-park { border-color:rgba(245,158,11,0.3); }
   .action-btn.act-park:hover, .action-btn.act-park.active { background:rgba(245,158,11,0.15); color:var(--orange); border-color:var(--orange); }
+  .action-btn.act-rawpool { border-color:rgba(6,182,212,0.3); }
+  .action-btn.act-rawpool:hover, .action-btn.act-rawpool.active { background:rgba(6,182,212,0.15); color:var(--cyan); border-color:var(--cyan); }
   .claim-note { flex:1; min-width:150px; padding:5px 10px; background:var(--bg); border:1px solid var(--card-border); border-radius:6px; color:var(--text); font-size:11px; font-family:inherit; outline:none; }
   .claim-note:focus { border-color:var(--accent); }
   .claim-note::placeholder { color:#475569; }
@@ -155,6 +190,26 @@
   .nf-btn.nf-remap { border-color:rgba(59,130,246,0.3); color:var(--accent); }
   .nf-btn.nf-remap:hover, .nf-btn.nf-remap.active { background:rgba(59,130,246,0.15); border-color:var(--accent); }
 
+  /* Bulk actions */
+  .bulk-bar { display:flex; align-items:center; gap:10px; padding:10px 16px; background:var(--card); border:1px solid var(--card-border); border-radius:10px; margin-bottom:12px; flex-wrap:wrap; }
+  .bulk-bar.hidden { display:none; }
+  .bulk-count { font-size:12px; color:var(--text); font-weight:600; min-width:80px; }
+  .bulk-btn { padding:5px 14px; border-radius:6px; border:1px solid var(--card-border); background:transparent; font-size:11px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .bulk-btn:hover { color:var(--text); }
+  .bulk-btn.bulk-accept { border-color:rgba(16,185,129,0.3); color:var(--green); }
+  .bulk-btn.bulk-accept:hover { background:rgba(16,185,129,0.15); border-color:var(--green); }
+  .bulk-btn.bulk-decline { border-color:rgba(239,68,68,0.3); color:var(--red); }
+  .bulk-btn.bulk-decline:hover { background:rgba(239,68,68,0.15); border-color:var(--red); }
+  .bulk-btn.bulk-park { border-color:rgba(245,158,11,0.3); color:var(--orange); }
+  .bulk-btn.bulk-park:hover { background:rgba(245,158,11,0.15); border-color:var(--orange); }
+  .bulk-btn.bulk-rawpool { border-color:rgba(6,182,212,0.3); color:var(--cyan); }
+  .bulk-btn.bulk-rawpool:hover { background:rgba(6,182,212,0.15); border-color:var(--cyan); }
+  .bulk-btn.bulk-select { border-color:rgba(59,130,246,0.3); color:var(--accent); }
+  .bulk-btn.bulk-select:hover { background:rgba(59,130,246,0.1); border-color:var(--accent); }
+  .bulk-btn.bulk-clear { color:var(--text-dim); }
+  .claim-card .select-check { position:absolute; top:12px; right:12px; width:18px; height:18px; cursor:pointer; accent-color:var(--accent); }
+  .claim-card { position:relative; }
+
   /* Submit bar */
   .submit-bar { position:sticky; bottom:0; background:var(--card); border:1px solid var(--card-border); border-radius:10px 10px 0 0; padding:14px 20px; margin-top:24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; box-shadow:0 -4px 20px rgba(0,0,0,0.3); }
   .submit-bar .summary { font-size:12px; color:var(--text-dim); flex:1; }
@@ -181,15 +236,9 @@
   /* Nav removed — shown via admin.html */ .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
 </style>
 </head>
-<body>
+<body class="surface-dark" data-active-tab="review">
 
-<div class="standalone-bar" id="standalone-bar" style="display:none;padding:8px 16px;background:#0f172a;border-bottom:1px solid #1e293b;font-size:11px;">
-  <a href="admin.html" style="color:#3b82f6;text-decoration:none;">Open in Command Centre</a>
-</div>
-<script>
-// Show standalone bar if NOT in an iframe
-if (window === window.top) document.getElementById('standalone-bar').style.display = 'block';
-</script>
+<div id="admin-nav-mount"></div>
 
 <div class="container">
   <h1>Inbox <span class="tag">Admin</span></h1>
@@ -200,11 +249,29 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
     <strong style="color:var(--green);">Authoritative</strong> = first-hand, can override existing data.
     <strong style="color:var(--accent);">Corroborating</strong> = cites named primary source, raises confidence.
     <strong style="color:var(--text-dim);">Indicative</strong> = market colour only, never overrides.
+    <button class="bulk-btn" style="margin-left:auto;float:right;border-color:rgba(139,92,246,0.3);color:var(--purple);" onclick="autoClearInbox()">Auto-clear safe items…</button>
+    <div style="clear:both;"></div>
   </div>
 
   <div class="stats-row" id="stats-row"></div>
+  <!-- wq-040 — lane toggle. Material lane is the daily review queue; Context is opt-in. -->
+  <div class="lane-toggle" id="lane-toggle">
+    <button class="lane-btn active" data-lane="material" onclick="setLane('material')">Material <span class="lane-count" id="material-count">0</span></button>
+    <button class="lane-btn" data-lane="context" onclick="setLane('context')">Context <span class="lane-count" id="context-count">0</span></button>
+  </div>
+  <div class="lane-helper" id="lane-helper"></div>
   <div class="source-tabs" id="source-tabs"></div>
   <div class="filters" id="filters"></div>
+  <div class="bulk-bar hidden" id="bulk-bar">
+    <span class="bulk-count" id="bulk-count">0 selected</span>
+    <button class="bulk-btn bulk-select" onclick="selectAllVisible()">Select all visible</button>
+    <button class="bulk-btn bulk-clear" onclick="clearSelection()">Clear</button>
+    <span style="border-left:1px solid var(--card-border);height:20px;"></span>
+    <button class="bulk-btn bulk-accept" onclick="bulkDecision('accepted')">Accept all</button>
+    <button class="bulk-btn bulk-decline" onclick="bulkDecision('declined')">Decline all</button>
+    <button class="bulk-btn bulk-park" onclick="bulkDecision('parked')">Park all</button>
+    <button class="bulk-btn bulk-rawpool" onclick="bulkDecision('raw_pool')">Raw pool all</button>
+  </div>
   <div id="claims-list"></div>
 </div>
 
@@ -220,6 +287,7 @@ if (window === window.top) document.getElementById('standalone-bar').style.displ
 
 <script>
 const DECISIONS_KEY = 'review-decisions-v2';
+let selectedIds = new Set();
 let allItems = [];       // unified list
 let sourcesRegistry = {};// id -> source object
 let vaultDataPoints = {};// id -> data point (for "replaces" lookups)
@@ -231,7 +299,16 @@ let fieldDecisions = {}; // { field_id: 'approved'|'rejected'|'remapped' }
 let decisions = {};      // keyed by item.id
 let activeSource = 'all';
 let activeFilter = 'pending';
+let activeConfidence = 'all';
+let activeBatch = null; // null | 'first' — quick-filter chip per wq-018 §4
+// wq-040 — lane filter persists in localStorage; default to material
+let activeLane = (localStorage.getItem('review-lane') || 'material');
 let siteData = null;
+// wq-029: baseline mojibake-marker count captured at page load. Each commit
+// of vault-inbox.json re-counts the outgoing object and aborts if it rose.
+// review.html never touches source strings, so any rise means a stale-cached
+// readFile() or upstream regression has corrupted the inbox in transit.
+let _inboxMojibakeBaseline = null;
 
 // ----- Data loading -----
 
@@ -253,6 +330,10 @@ async function loadAll() {
   // Build vault data point lookup (for "replaces" resolution)
   if (vault?.dataPoints) {
     vault.dataPoints.forEach(dp => vaultDataPoints[dp.id] = dp);
+  }
+
+  if (window.GitHubAPI && typeof GitHubAPI.countMojibakeMarkers === 'function' && inbox) {
+    _inboxMojibakeBaseline = GitHubAPI.countMojibakeMarkers(inbox);
   }
 
   metricSchema = schema;
@@ -302,6 +383,12 @@ async function loadAll() {
           replaces: i.replaces || null,
           metricKey: i.metricKey || null,
           metric: inferMetric(i),
+          // wq-041: source grounding
+          sourceExcerpt: i.sourceExcerpt || null,
+          isPrimarySource: i.isPrimarySource ?? null,
+          originalSourceCited: i.originalSourceCited || null,
+          // wq-040: materiality block (lane / sublane / reason / age_days / pct_delta / etc.)
+          materiality: i.materiality || null,
         });
         } catch(e) { console.error('Failed to add inbox item:', i.id, e); }
       });
@@ -312,7 +399,12 @@ async function loadAll() {
     renderSourceTabs();
     renderStats();
     renderFilters();
-      renderClaims();
+    // wq-040 — sync the lane toggle UI with persisted state and compute counts
+    document.querySelectorAll('.lane-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lane') === activeLane);
+    });
+    updateLaneCounts();
+    renderClaims();
     updateSubmitBar();
     } catch(e) {
     document.getElementById('claims-list').innerHTML = '<div style="color:var(--red);padding:20px;">Error loading claims: ' + e.message + '</div>';
@@ -325,6 +417,24 @@ async function loadJSON(path) {
     if (r.ok) return await r.json();
   } catch(e) {}
   return null;
+}
+
+// wq-029: pre-commit defensive guard for vault-inbox.json. Throws if the
+// outgoing inbox has more mojibake markers than the page-load baseline,
+// meaning either a stale-cached readFile() mangled the bytes on this read
+// or an upstream commit rewrote the file. review.html never edits source
+// strings, so any rise is unsafe to commit.
+function _assertNoNewMojibake(inbox, callsite) {
+  if (!window.GitHubAPI || typeof GitHubAPI.countMojibakeMarkers !== 'function') return;
+  if (_inboxMojibakeBaseline == null) return;
+  const now = GitHubAPI.countMojibakeMarkers(inbox);
+  if (now > _inboxMojibakeBaseline) {
+    throw new Error(
+      'Refusing to commit: mojibake markers rose from ' + _inboxMojibakeBaseline +
+      ' to ' + now + ' between page load and ' + callsite + '. ' +
+      'Hard-refresh (Cmd+Shift+R) and try again — likely stale cached github-api.js.'
+    );
+  }
 }
 
 // ----- Inference helpers -----
@@ -500,10 +610,14 @@ function renderImpactRow(item) {
       html += pctHtml + annualNote;
       html += '</div>';
     } else if (displayValue != null) {
+      // wq-100 D4 — first-time entity values always go to review.
+      // Surface a clear badge so the reviewer knows the gate will route
+      // this claim to review even if everything else looks clean.
       html += '<div style="margin-top:6px;font-size:12px;">';
-      html += '<span style="color:var(--text-dim);">New: </span>';
+      html += '<span class="badge" style="background:rgba(59,130,246,0.15);color:var(--accent);margin-right:6px;">first-time</span>';
       html += '<span class="impact-new">' + displayValue + ' ' + esc(unit) + '</span>';
       html += annualNote;
+      html += '<div style="margin-top:3px;font-size:10px;color:var(--text-dim);">No existing value — wq-100 gate always routes first-time entity values to review (D4).</div>';
       html += '</div>';
     }
 
@@ -525,6 +639,9 @@ function renderImpactRow(item) {
         html += '<div style="margin-top:4px;font-size:10px;color:var(--cyan);">Derived: ' + esc(derivation.formula) + '</div>';
       }
     }
+
+    // Provenance tier guard warning
+    html += renderProvenanceGuard(entity, fieldId, year, item);
 
     // Provenance — other sources for this same number
     html += renderProvenance(entity, fieldId, year, item.id);
@@ -574,6 +691,40 @@ function renderImpactRow(item) {
   }
 
   return '';
+}
+
+// ----- Provenance tier guard -----
+
+const WEIGHT_RANK = { authoritative: 3, corroborating: 2, indicative: 1 };
+
+function renderProvenanceGuard(entity, fieldId, year, item) {
+  if (!entity?.provenance) return '';
+  const key = year ? year + '.' + fieldId : fieldId;
+  const prov = entity.provenance[key];
+  if (!prov || !prov.claims || prov.claims.length === 0) return '';
+
+  // Determine this claim's weight
+  const newWeight = item.weight || 'indicative';
+  const newRank = WEIGHT_RANK[newWeight] || 0;
+
+  // Find strongest existing source
+  let bestWeight = null;
+  let bestSource = null;
+  prov.claims.forEach(c => {
+    const w = c.weight || 'indicative';
+    if ((WEIGHT_RANK[w] || 0) > (WEIGHT_RANK[bestWeight] || 0)) {
+      bestWeight = w;
+      bestSource = c.source || 'unknown';
+    }
+  });
+
+  const bestRank = WEIGHT_RANK[bestWeight] || 0;
+  if (newRank >= bestRank) return ''; // OK to overwrite
+
+  return '<div style="margin-top:6px;padding:8px 12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:8px;font-size:11px;">' +
+    '<strong style="color:var(--red);">PROVENANCE GUARD</strong> ' +
+    '<span style="color:var(--text-dim);">This claim is <strong style="color:var(--text);">' + newWeight + '</strong> (tier ' + newRank + ') but the existing value comes from a <strong style="color:var(--text);">' + bestWeight + '</strong> source (tier ' + bestRank + ', ' + esc(bestSource) + '). ' +
+    'Accepting will add to provenance trail but <strong style="color:var(--red);">will NOT overwrite</strong> the existing value.</span></div>';
 }
 
 // ----- Provenance -----
@@ -677,11 +828,12 @@ async function deleteClaim(id) {
   if (!confirm('Permanently delete this claim?')) return;
   if (!GitHubAPI.hasToken()) { showToast('GitHub token not set'); return; }
   try {
-    const inboxFile = await GitHubAPI.readFile('beta/vault-inbox.json');
+    const inboxFile = await GitHubAPI.readFile('vault-inbox.json');
     const inbox = JSON.parse(inboxFile.content);
     inbox.items = inbox.items.filter(item => item.id !== id);
+    _assertNoNewMojibake(inbox, 'deleteClaim');
     await GitHubAPI.commitFiles(
-      [{ path: 'beta/vault-inbox.json', content: inbox }],
+      [{ path: 'vault-inbox.json', content: inbox }],
       'Delete claim: ' + id
     );
     // Remove from local view
@@ -698,7 +850,33 @@ async function deleteClaim(id) {
   }
 }
 
+// wq-023 §4.2 — per-session stickiness for the Accept-on-no-metric prompt.
+// Possible values: null (ask), 'route' (silently apply raw_pool),
+// 'override' (silently apply accepted anyway).
+let unmetricAutoRoute = null;
+
+function claimHasMetric(item) {
+  if (!item) return true; // unknown item — don't gate
+  const mk = item.metricKey;
+  return !!mk && mk !== 'unknown';
+}
+
 function setDecision(id, decision) {
+  // Auto-route Accept-with-no-metric (wq-023 §4.2). Reserved for
+  // single-item clicks; bulkDecision applies decisions verbatim.
+  if (decision === 'accepted') {
+    const item = allItems.find(i => i.id === id);
+    if (item && !claimHasMetric(item)) {
+      if (unmetricAutoRoute === 'route') {
+        decision = 'raw_pool';
+      } else if (unmetricAutoRoute !== 'override') {
+        showUnmetricRouteModal(id, item);
+        return;
+      }
+      // 'override' falls through and accepts as requested.
+    }
+  }
+
   if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
   if (decisions[id].decision === decision) {
     decisions[id].decision = '';
@@ -712,6 +890,40 @@ function setDecision(id, decision) {
   updateSubmitBar();
 }
 
+function showUnmetricRouteModal(id, item) {
+  // Already open? Bail (defensive against double-fire).
+  if (document.getElementById('unmetric-modal')) return;
+
+  const choose = (route) => {
+    document.getElementById('unmetric-modal')?.remove();
+    if (route === 'override') {
+      if (!confirm('Override: accept this claim even though it has no mapped metric? It will land as status=accepted but won\'t move any number on the site.')) {
+        return; // user cancelled the confirm — don't set sticky preference
+      }
+      unmetricAutoRoute = 'override';
+      setDecision(id, 'accepted');
+    } else {
+      unmetricAutoRoute = 'route';
+      setDecision(id, 'raw_pool');
+    }
+  };
+
+  const claimText = (item.claim || '').substring(0, 220);
+  let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="unmetric-modal">';
+  html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:540px;width:90%;">';
+  html += '<h2 style="font-size:16px;margin-bottom:8px;color:var(--cyan);">No mapped metric on this claim</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.5;">Accepts are reserved for claims that update a live data point on the site. This claim is trustworthy but doesn\'t map to any metric, so accepting it would file it without surfacing it anywhere.</p>';
+  html += '<div style="font-size:11px;color:var(--text-dim);font-style:italic;margin-bottom:14px;padding:10px;background:var(--bg);border-radius:6px;">"' + esc(claimText) + (item.claim && item.claim.length > 220 ? '…' : '') + '"</div>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">Move to <strong style="color:var(--cyan);">Raw pool</strong> instead? Your choice sticks for the rest of this session.</p>';
+  html += '<div style="display:flex;gap:8px;justify-content:flex-end;">';
+  html += '<button id="unmetric-override" style="padding:8px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Override and Accept anyway</button>';
+  html += '<button id="unmetric-route" style="padding:8px 20px;border-radius:8px;border:none;background:var(--cyan);color:white;font-weight:600;font-size:12px;cursor:pointer;">Move to Raw pool</button>';
+  html += '</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.getElementById('unmetric-route').addEventListener('click', () => choose('route'));
+  document.getElementById('unmetric-override').addEventListener('click', () => choose('override'));
+}
+
 function setNote(id, note) {
   if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
   decisions[id].note = note;
@@ -723,6 +935,98 @@ function setMonitor(id, checked) {
   if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
   decisions[id].monitor = checked;
   saveDecisions();
+}
+
+// ----- Bulk selection -----
+
+function toggleSelect(id) {
+  if (selectedIds.has(id)) selectedIds.delete(id);
+  else selectedIds.add(id);
+  updateBulkBar();
+  // Update checkbox without full re-render
+  const cb = document.getElementById('sel-' + id);
+  if (cb) cb.checked = selectedIds.has(id);
+}
+
+function selectAllVisible() {
+  const visible = getVisibleItems();
+  visible.forEach(i => selectedIds.add(i.id));
+  updateBulkBar();
+  renderClaims();
+}
+
+function clearSelection() {
+  selectedIds.clear();
+  updateBulkBar();
+  renderClaims();
+}
+
+function bulkDecision(decision) {
+  if (selectedIds.size === 0) return;
+  const count = selectedIds.size;
+  if (!confirm(decision.charAt(0).toUpperCase() + decision.slice(1) + ' ' + count + ' selected claim(s)?')) return;
+  selectedIds.forEach(id => {
+    if (!decisions[id]) decisions[id] = { decision: '', note: '', monitor: true };
+    decisions[id].decision = decision;
+  });
+  saveDecisions();
+  selectedIds.clear();
+  updateBulkBar();
+  renderStats();
+  renderClaims();
+  updateSubmitBar();
+  showToast(count + ' claims ' + decision);
+}
+
+function updateBulkBar() {
+  const bar = document.getElementById('bulk-bar');
+  const count = document.getElementById('bulk-count');
+  if (selectedIds.size > 0) {
+    bar.classList.remove('hidden');
+    count.textContent = selectedIds.size + ' selected';
+  } else {
+    bar.classList.add('hidden');
+  }
+}
+
+// First-batch predicate (wq-018 §4): warm-up queue of high-confidence items.
+// PyPI Stats (deterministic), Jiemian (translated), Sacra Cursor verified-only.
+function isFirstBatchItem(item) {
+  if (item.inboxStatus !== 'pending') return false;
+  const a = item.sourceAuthor || '';
+  if (a.includes('PyPI')) return true;
+  if (a.includes('Jiemian')) return true;
+  if (a.includes('Cursor') && item.confidence === 'verified') return true;
+  return false;
+}
+
+function firstBatchProducer(item) {
+  const a = item.sourceAuthor || '';
+  if (a.includes('PyPI')) return 'PyPI';
+  if (a.includes('Jiemian')) return 'Jiemian';
+  if (a.includes('Cursor')) return 'Cursor';
+  return 'other';
+}
+
+function getVisibleItems() {
+  if (activeBatch === 'first') {
+    return allItems.filter(isFirstBatchItem);
+  }
+  let filtered = allItems;
+  if (activeSource !== 'all') {
+    if (activeSource === 'unsourced') {
+      filtered = filtered.filter(i => !i.source_id);
+    } else {
+      filtered = filtered.filter(i => i.source_id === activeSource);
+    }
+  }
+  if (['pending', 'accepted', 'declined', 'parked', 'raw_pool'].includes(activeFilter)) {
+    filtered = filtered.filter(i => i.inboxStatus === activeFilter);
+  }
+  if (activeConfidence !== 'all') {
+    filtered = filtered.filter(i => i.confidence === activeConfidence);
+  }
+  return filtered;
 }
 
 // ----- Rendering -----
@@ -755,11 +1059,13 @@ function renderStats() {
   const accepted = allItems.filter(i => i.inboxStatus === 'accepted').length;
   const declined = allItems.filter(i => i.inboxStatus === 'declined').length;
   const parked = allItems.filter(i => i.inboxStatus === 'parked').length;
+  const rawPool = allItems.filter(i => i.inboxStatus === 'raw_pool').length;
 
   let html = '<span class="stat-pill">Pending: <strong>' + pending + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(16,185,129,0.3);">Accepted: <strong style="color:var(--green);">' + accepted + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(239,68,68,0.3);">Declined: <strong style="color:var(--red);">' + declined + '</strong></span>';
   html += '<span class="stat-pill" style="border-color:rgba(245,158,11,0.3);">Parked: <strong style="color:var(--orange);">' + parked + '</strong></span>';
+  html += '<span class="stat-pill" style="border-color:rgba(6,182,212,0.3);">Raw pool: <strong style="color:var(--cyan);">' + rawPool + '</strong></span>';
   document.getElementById('stats-row').innerHTML = html;
 }
 
@@ -768,49 +1074,189 @@ function renderFilters() {
   const acceptedCount = allItems.filter(i => i.inboxStatus === 'accepted').length;
   const declinedCount = allItems.filter(i => i.inboxStatus === 'declined').length;
   const parkedCount = allItems.filter(i => i.inboxStatus === 'parked').length;
+  const rawPoolCount = allItems.filter(i => i.inboxStatus === 'raw_pool').length;
+
+  // First-batch progress: count remaining-pending vs reviewed for the same predicate.
+  // "reviewed" = any non-pending status on items that match the batch's producer set
+  // (sourceAuthor contains PyPI / Jiemian / Cursor — for Cursor, only verified counts as
+  // a reviewed batch member).
+  const isBatchProducer = (i) => {
+    const a = i.sourceAuthor || '';
+    if (a.includes('PyPI') || a.includes('Jiemian')) return true;
+    if (a.includes('Cursor') && i.confidence === 'verified') return true;
+    return false;
+  };
+  const batchPending = allItems.filter(i => i.inboxStatus === 'pending' && isBatchProducer(i));
+  const batchReviewed = allItems.filter(i => i.inboxStatus !== 'pending' && isBatchProducer(i)).length;
+  const perProducer = { PyPI: 0, Jiemian: 0, Cursor: 0 };
+  batchPending.forEach(i => { perProducer[firstBatchProducer(i)] = (perProducer[firstBatchProducer(i)] || 0) + 1; });
+
+  let html = '';
+
+  // First-batch chip (wq-018 §4) — sits left, distinct styling.
+  html += '<button class="filter-btn' + (activeBatch === 'first' ? ' active' : '') +
+          '" onclick="setBatch(\'first\')" style="border-color:rgba(139,92,246,0.4);' +
+          (activeBatch === 'first' ? 'background:var(--purple);' : 'color:var(--purple);') +
+          '" title="High-confidence warm-up: PyPI + Jiemian + Sacra Cursor verified">' +
+          'First batch (' + batchPending.length + ')' +
+          '</button>';
+  html += '<span style="font-size:10px;color:var(--text-dim);align-self:center;margin-right:4px;">' +
+          'PyPI ' + perProducer.PyPI + ' · Jiemian ' + perProducer.Jiemian +
+          ' · Cursor verified ' + perProducer.Cursor +
+          (batchReviewed > 0 ? ' · ' + batchReviewed + ' reviewed' : '') +
+          '</span>';
+  html += '<span style="border-left:1px solid var(--card-border);height:16px;margin:0 4px;"></span>';
 
   const filters = [
     { key: 'pending', label: 'Pending (' + pendingCount + ')' },
     { key: 'parked', label: 'Parked (' + parkedCount + ')' },
     { key: 'accepted', label: 'Accepted (' + acceptedCount + ')' },
     { key: 'declined', label: 'Declined (' + declinedCount + ')' },
+    { key: 'raw_pool', label: 'Raw pool (' + rawPoolCount + ')' },
     { key: 'all', label: 'All (' + allItems.length + ')' },
   ];
 
-  let html = '';
   filters.forEach(f => {
-    html += '<button class="filter-btn' + (activeFilter === f.key ? ' active' : '') + '" onclick="setFilter(\'' + f.key + '\')">' + f.label + '</button>';
+    html += '<button class="filter-btn' + (activeFilter === f.key && !activeBatch ? ' active' : '') + '" onclick="setFilter(\'' + f.key + '\')">' + f.label + '</button>';
   });
+
+  // Confidence sub-filters
+  html += '<span style="border-left:1px solid var(--card-border);height:16px;margin:0 4px;"></span>';
+  const confFilters = [
+    { key: 'all', label: 'All confidence' },
+    { key: 'verified', label: 'Verified' },
+    { key: 'estimated', label: 'Estimated' },
+  ];
+  confFilters.forEach(f => {
+    html += '<button class="filter-btn' + (activeConfidence === f.key && !activeBatch ? ' active' : '') + '" onclick="setConfidence(\'' + f.key + '\')" style="' + (f.key === 'verified' ? 'border-color:rgba(16,185,129,0.3);' : f.key === 'estimated' ? 'border-color:rgba(245,158,11,0.3);' : '') + '">' + f.label + '</button>';
+  });
+
   document.getElementById('filters').innerHTML = html;
+}
+
+function setBatch(b) {
+  activeBatch = (activeBatch === b) ? null : b;
+  renderFilters();
+  renderClaims();
+}
+
+function setConfidence(c) {
+  activeConfidence = c;
+  activeBatch = null;
+  renderFilters();
+  renderClaims();
 }
 
 function setSource(s) {
   activeSource = s;
-  renderSourceTabs();
+  activeBatch = null;
+  renderFilters();
   renderClaims();
 }
 
 function setFilter(f) {
   activeFilter = f;
+  activeBatch = null;
   renderFilters();
   renderClaims();
 }
 
-function renderClaims() {
-  let filtered = allItems;
+// wq-040 — lane toggle (Material vs Context)
+function setLane(lane) {
+  activeLane = lane;
+  try { localStorage.setItem('review-lane', lane); } catch(e) {}
+  document.querySelectorAll('.lane-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-lane') === lane);
+  });
+  updateLaneCounts();
+  renderClaims();
+}
 
-  // Source filter
-  if (activeSource !== 'all') {
-    if (activeSource === 'unsourced') {
-      filtered = filtered.filter(i => !i.source_id);
-    } else {
-      filtered = filtered.filter(i => i.source_id === activeSource);
-    }
+function laneOf(item) {
+  // Material if scored material; Context otherwise (incl. unscored).
+  return (item.materiality && item.materiality.lane) || 'context';
+}
+
+function updateLaneCounts() {
+  // Count *pending* items per lane so the badge reflects the daily review queue.
+  const pending = allItems.filter(i => i.inboxStatus === 'pending');
+  const m = pending.filter(i => laneOf(i) === 'material').length;
+  const c = pending.filter(i => laneOf(i) === 'context').length;
+  const mEl = document.getElementById('material-count');
+  const cEl = document.getElementById('context-count');
+  if (mEl) mEl.textContent = m;
+  if (cEl) cEl.textContent = c;
+  const helper = document.getElementById('lane-helper');
+  if (helper) {
+    helper.textContent = activeLane === 'material'
+      ? 'Material lane: claims that would change a tracked metric or expand the schema.'
+      : 'Context lane: claims that match no entity, have no value, or confirm existing data within tolerance. Sorted oldest first.';
   }
+}
 
-  // Status filter (from vault-inbox status)
-  if (['pending', 'accepted', 'declined', 'parked'].includes(activeFilter)) {
-    filtered = filtered.filter(i => i.inboxStatus === activeFilter);
+function ageBadgeClass(days) {
+  if (days <= 7) return null;
+  if (days <= 14) return 'badge-age-yellow';
+  if (days <= 30) return 'badge-age-orange';
+  return 'badge-age-red';
+}
+
+function sublaneBadge(item) {
+  const m = item.materiality;
+  if (!m) return '';
+  if (m.lane === 'context') return '<span class="badge badge-sub-context">📋 context</span>';
+  if (m.sublane === 'field_expansion') return '<span class="badge badge-sub-expansion">🌱 new field</span>';
+  if (m.reason === 'would_change_existing_value') return '<span class="badge badge-sub-would">🎯 would change</span>';
+  if (m.reason === 'new_value_for_known_field') return '<span class="badge badge-sub-would">🆕 new value</span>';
+  if (m.reason === 'stronger_provenance_for_existing') return '<span class="badge badge-sub-would">🔬 stronger source</span>';
+  if (m.reason === 'proposed_field_evidence') return '<span class="badge badge-sub-expansion">🧪 proposed-field evidence</span>';
+  return '';
+}
+
+// wq-041 — source context helpers
+function renderExcerpt(raw) {
+  // Escape HTML, then convert minimal markdown bold (**X**) to <strong>.
+  // The extractor only uses **value** for the matched number; no other
+  // markdown is expected. Keep this strict so source text can't inject HTML.
+  const esced = esc(raw);
+  return esced.replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>');
+}
+
+function toggleSourceContext(headerEl) {
+  const wrapper = headerEl.closest('.source-context');
+  if (!wrapper) return;
+  const collapsed = wrapper.getAttribute('data-collapsed') === 'true';
+  wrapper.setAttribute('data-collapsed', collapsed ? 'false' : 'true');
+  // Persist user preference for next render. Per-card override stays in DOM
+  // until next renderClaims() call — fine for the review session.
+  try { localStorage.setItem('sc-default', collapsed ? 'expanded' : 'collapsed'); } catch(e) {}
+}
+
+function renderClaims() {
+  let filtered;
+
+  if (activeBatch === 'first') {
+    filtered = allItems.filter(isFirstBatchItem);
+  } else {
+    filtered = allItems;
+    // wq-040 — apply lane filter first so all subsequent filters apply within the chosen lane
+    filtered = filtered.filter(i => laneOf(i) === activeLane);
+    // Source filter
+    if (activeSource !== 'all') {
+      if (activeSource === 'unsourced') {
+        filtered = filtered.filter(i => !i.source_id);
+      } else {
+        filtered = filtered.filter(i => i.source_id === activeSource);
+      }
+    }
+    // Status filter (from vault-inbox status)
+    if (['pending', 'accepted', 'declined', 'parked', 'raw_pool'].includes(activeFilter)) {
+      filtered = filtered.filter(i => i.inboxStatus === activeFilter);
+    }
+    // Confidence filter
+    if (activeConfidence !== 'all') {
+      filtered = filtered.filter(i => i.confidence === activeConfidence);
+    }
   }
 
   if (filtered.length === 0) {
@@ -818,12 +1264,22 @@ function renderClaims() {
     return;
   }
 
-  // Sort: newest first (by dateAdded, then dateOfClaim)
-  filtered.sort((a, b) => {
-    const da = a.dateAdded || a.dateOfClaim || '';
-    const db = b.dateAdded || b.dateOfClaim || '';
-    return db.localeCompare(da);
-  });
+  if (activeBatch === 'first') {
+    // Brief order: PyPI → Jiemian → Cursor verified.
+    const rank = { PyPI: 0, Jiemian: 1, Cursor: 2, other: 3 };
+    filtered.sort((a, b) => {
+      const r = rank[firstBatchProducer(a)] - rank[firstBatchProducer(b)];
+      if (r !== 0) return r;
+      return (a.id || '').localeCompare(b.id || '');
+    });
+  } else {
+    // Sort: newest first (by dateAdded, then dateOfClaim)
+    filtered.sort((a, b) => {
+      const da = a.dateAdded || a.dateOfClaim || '';
+      const db = b.dateAdded || b.dateOfClaim || '';
+      return db.localeCompare(da);
+    });
+  }
 
   let html = '';
   filtered.forEach(item => {
@@ -831,7 +1287,11 @@ function renderClaims() {
     const decidedClass = d.decision ? ' decided-' + d.decision : '';
     const sourceName = getSourceName(item.source_id);
 
-    html += '<div class="claim-card w-' + item.weight + decidedClass + '">';
+    // wq-040 — sublane visual: green border for would_change, purple for field_expansion
+    const subClass = item.materiality?.sublane === 'field_expansion' ? ' sub-expansion'
+                   : item.materiality?.sublane === 'would_change' ? ' sub-would' : '';
+    html += '<div class="claim-card w-' + item.weight + decidedClass + subClass + '">';
+    html += '<input type="checkbox" class="select-check" id="sel-' + item.id + '"' + (selectedIds.has(item.id) ? ' checked' : '') + ' onclick="event.stopPropagation();toggleSelect(\'' + item.id + '\')">';
 
     // Header
     html += '<div class="claim-top">';
@@ -858,6 +1318,12 @@ function renderClaims() {
     html += '<span class="badge badge-' + item.weight + '">' + item.weight + '</span>';
     html += '<span class="badge badge-' + item.confidence + '">' + item.confidence + '</span>';
     if (item.origin === 'extraction') html += '<span class="badge badge-source">podcast</span>';
+    // wq-040 — sublane reason badge
+    html += sublaneBadge(item);
+    // wq-040 — age pill (yellow 8-14d, orange 15-30d, red >30d). Hide ≤7d.
+    const ageDays = item.materiality?.age_days || 0;
+    const ageCls = ageBadgeClass(ageDays);
+    if (ageCls) html += '<span class="badge ' + ageCls + '">' + ageDays + 'd</span>';
     html += '</div></div>';
 
     // Source row
@@ -877,11 +1343,31 @@ function renderClaims() {
     // Claim text
     html += '<div class="claim-quote">"' + esc(item.claim) + '"</div>';
 
+    // wq-041: Source context — surrounding text from the source so reviewer
+    // can verify interpretation without click-out. Default expanded; user can
+    // collapse via the chevron. Lane-aware default behaviour comes with wq-040.
+    if (item.sourceExcerpt) {
+      const startCollapsed = (localStorage.getItem('sc-default') === 'collapsed');
+      html += '<div class="source-context" data-collapsed="' + (startCollapsed ? 'true' : 'false') + '">';
+      html += '<div class="source-context-header" onclick="toggleSourceContext(this)">';
+      html += '<span>Source context</span><span class="sc-toggle">▾</span>';
+      html += '</div>';
+      html += '<div class="source-context-body">';
+      html += '<blockquote>' + renderExcerpt(item.sourceExcerpt) + '</blockquote>';
+      html += '<div class="source-context-meta">';
+      if (item.isPrimarySource === true) html += '<span class="badge badge-primary-src">🎙 primary source</span>';
+      if (item.originalSourceCited) html += '<span class="badge badge-cites-src">📰 cites ' + esc(item.originalSourceCited) + '</span>';
+      if (item.sourceUrl) html += '<a href="' + esc(item.sourceUrl) + '" target="_blank" style="color:var(--accent);font-size:10px;margin-left:auto;">Open source ↗</a>';
+      html += '</div>';
+      html += '</div></div>';
+    }
+
     // Metadata
     html += '<div class="claim-meta">';
     if (item.metric) html += '<strong>Metric:</strong> ' + esc(item.metric) + ' &nbsp; ';
     if (item.speaker) html += '<strong>Speaker:</strong> ' + esc(item.speaker) + ' &nbsp; ';
-    if (item.original_source_cited) html += '<strong>Cites:</strong> ' + esc(item.original_source_cited) + ' &nbsp; ';
+    // Backwards compat: legacy snake_case field; new items use originalSourceCited surfaced as a badge above
+    if (item.original_source_cited && !item.originalSourceCited) html += '<strong>Cites:</strong> ' + esc(item.original_source_cited) + ' &nbsp; ';
     if (item.notes) html += '<br><span style="color:var(--text-dim);font-size:10px;">' + esc(item.notes) + '</span>';
     html += '</div>';
 
@@ -901,6 +1387,7 @@ function renderClaims() {
     html += '<button class="action-btn act-accept' + (d.decision === 'accepted' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'accepted\')">Accept</button>';
     html += '<button class="action-btn act-decline' + (d.decision === 'declined' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'declined\')">Decline</button>';
     html += '<button class="action-btn act-park' + (d.decision === 'parked' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'parked\')">Park</button>';
+    html += '<button class="action-btn act-rawpool' + (d.decision === 'raw_pool' ? ' active' : '') + '" onclick="setDecision(\'' + item.id + '\',\'raw_pool\')" title="Trustworthy but no mapped metric — file in raw pool">Raw pool</button>';
     html += '<button class="action-btn" style="margin-left:auto;color:var(--red);border-color:rgba(239,68,68,0.3);font-size:10px;opacity:0.6;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6" onclick="event.stopPropagation();deleteClaim(\'' + item.id + '\')">Delete</button>';
     html += '<input class="claim-note" placeholder="Add a note..." value="' + esc(d.note || '') + '" oninput="setNote(\'' + item.id + '\', this.value)">';
     html += '</div>';
@@ -921,12 +1408,13 @@ function renderClaims() {
 }
 
 function updateSubmitBar() {
-  let accepted = 0, declined = 0, parked = 0, pending = 0;
+  let accepted = 0, declined = 0, parked = 0, rawPool = 0, pending = 0;
   allItems.forEach(i => {
     const d = decisions[i.id]?.decision;
     if (d === 'accepted') accepted++;
     else if (d === 'declined') declined++;
     else if (d === 'parked') parked++;
+    else if (d === 'raw_pool') rawPool++;
     else pending++;
   });
 
@@ -934,9 +1422,11 @@ function updateSubmitBar() {
     '<span class="s-green">Accept: <strong>' + accepted + '</strong></span> &nbsp; ' +
     '<span class="s-red">Decline: <strong>' + declined + '</strong></span> &nbsp; ' +
     '<span class="s-orange">Park: <strong>' + parked + '</strong></span> &nbsp; ' +
+    '<span style="color:var(--cyan);">Raw pool: <strong>' + rawPool + '</strong></span> &nbsp; ' +
     'Pending: <strong>' + pending + '</strong>';
 
-  document.getElementById('submit-btn').disabled = accepted === 0;
+  // Submit is enabled if any decision is staged (Accept, Decline, Park, or Raw pool).
+  document.getElementById('submit-btn').disabled = (accepted + declined + parked + rawPool) === 0;
 }
 
 // ----- Submit -----
@@ -1004,10 +1494,131 @@ function exportDecisions() {
   showToast('Decisions exported');
 }
 
+// ---------------------------------------------------------------------------
+// Auto-clear — same logic as scripts/auto_clear_inbox.py. Keep the two in sync.
+// ---------------------------------------------------------------------------
+let _autoClearPendingPlan = null;   // stashed between preview click and Apply click
+
+function autoClearClassify(item) {
+  if (item.status !== 'pending') return null;
+  const w = item.weight;
+  const c = item.confidence || '';
+  const t = item.type;
+  if (t === 'hiring_snapshot') return { action: 'accepted', rule: 'rule1_hiring_snapshot_structured' };
+  if (c === 'speculative')    return { action: 'declined', rule: 'rule2_speculative' };
+  if (w === 'indicative')     return { action: 'declined', rule: 'rule3_indicative_never_overrides' };
+  if (!w || w === '?')        return { action: 'declined', rule: 'rule4_orphaned_weight' };
+  if (w === 'corroborating' && c === 'estimated')
+                              return { action: 'parked',   rule: 'rule5_triangulation_only' };
+  return null;
+}
+
+async function autoClearInbox() {
+  if (!GitHubAPI.hasToken()) {
+    showToast('GitHub token required — Settings tab');
+    return;
+  }
+  const pending = allItems.filter(i => i.inboxStatus === 'pending');
+  if (pending.length === 0) {
+    showToast('No pending items to clear');
+    return;
+  }
+
+  // Classify against the 5 rules
+  const plan = { accepted: [], declined: [], parked: [], perRule: {} };
+  for (const i of pending) {
+    const c = autoClearClassify({ status: 'pending', weight: i.weight, confidence: i.confidence, type: i.type });
+    if (!c) continue;
+    plan[c.action].push(i.id);
+    plan.perRule[c.rule] = (plan.perRule[c.rule] || 0) + 1;
+  }
+  const total = plan.accepted.length + plan.declined.length + plan.parked.length;
+  if (total === 0) {
+    showToast('No items match the auto-clear rules');
+    return;
+  }
+
+  // Confirmation modal
+  let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="autoclear-modal">';
+  html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:560px;width:90%;">';
+  html += '<h2 style="font-size:16px;margin-bottom:12px;">Auto-clear — preview</h2>';
+  html += '<p style="font-size:12px;color:var(--text-dim);margin-bottom:16px;">' + total + ' of ' + pending.length + ' pending items match safe rules. Nothing gets applied to site-data — these just clear from the review queue. Audit trail preserved on every touched item.</p>';
+  html += '<div style="padding:12px 14px;background:var(--bg);border-radius:8px;font-size:12px;line-height:1.8;margin-bottom:14px;">';
+  html += '<strong style="color:var(--green);">Accept (' + plan.accepted.length + ')</strong> — hiring_snapshot items (API-deterministic)<br>';
+  html += '<strong style="color:var(--red);">Decline (' + plan.declined.length + ')</strong> — speculative / indicative / no-weight (triangulation-only or low confidence)<br>';
+  html += '<strong style="color:var(--orange);">Park (' + plan.parked.length + ')</strong> — corroborating+estimated (preserved for later)<br>';
+  html += '</div>';
+  html += '<div style="font-size:10px;color:var(--text-dim);margin-bottom:16px;">';
+  for (const [rule, n] of Object.entries(plan.perRule)) {
+    html += '<div>' + rule + ': ' + n + '</div>';
+  }
+  html += '</div>';
+  html += '<div style="display:flex;gap:10px;justify-content:flex-end;">';
+  html += '<button onclick="document.getElementById(\'autoclear-modal\').remove()" style="padding:8px 20px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);cursor:pointer;">Cancel</button>';
+  html += '<button onclick="autoClearApply()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--purple);color:white;font-weight:600;cursor:pointer;">Apply ' + total + ' decisions</button>';
+  html += '</div></div></div>';
+  _autoClearPendingPlan = plan;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+async function autoClearApply() {
+  const plan = _autoClearPendingPlan;
+  _autoClearPendingPlan = null;
+  if (!plan) { showToast('No auto-clear plan in memory — click Auto-clear again'); return; }
+  document.getElementById('autoclear-modal')?.remove();
+  showToast('Auto-clear running…');
+
+  try {
+    const inboxFile = await GitHubAPI.readFile('vault-inbox.json');
+    const inbox = JSON.parse(inboxFile.content);
+    const now = new Date().toISOString();
+    const byAction = {
+      accepted: new Set(plan.accepted),
+      declined: new Set(plan.declined),
+      parked: new Set(plan.parked),
+    };
+    const ruleForId = {};
+    for (const [rule, _] of Object.entries(plan.perRule)) { /* no-op */ }
+
+    // We don't carry per-ID rule from the plan (only per-rule counts). Re-classify
+    // each touched item to tag it with the rule that matched. Matches auto_clear_inbox.py.
+    let updated = 0;
+    inbox.items.forEach(item => {
+      if (item.status !== 'pending') return;
+      let action = null;
+      if (byAction.accepted.has(item.id)) action = 'accepted';
+      else if (byAction.declined.has(item.id)) action = 'declined';
+      else if (byAction.parked.has(item.id)) action = 'parked';
+      if (!action) return;
+      const c = autoClearClassify({ status: 'pending', weight: item.weight, confidence: item.confidence, type: item.type });
+      item.status = action;
+      item.decidedAt = now;
+      item.decidedBy = 'auto-clear@1.0-ui';
+      item.decisionReason = c ? c.rule : 'unknown';
+      updated++;
+    });
+    inbox.lastProcessed = now.split('T')[0];
+
+    const msg = 'Auto-clear: ' + plan.accepted.length + ' accepted, ' +
+                plan.declined.length + ' declined, ' + plan.parked.length + ' parked';
+    _assertNoNewMojibake(inbox, 'autoClearApply');
+    const result = await GitHubAPI.commitFiles(
+      [{ path: 'vault-inbox.json', content: inbox }], msg
+    );
+    showToast(updated + ' items cleared');
+    setTimeout(() => location.reload(), 1200);
+  } catch(e) {
+    showToast('Error: ' + e.message);
+  }
+}
+
+
 function submitDecisions() {
   const accepted = [];
+  let stagedTotal = 0;
   allItems.forEach(item => {
     const d = decisions[item.id] || {};
+    if (d.decision) stagedTotal++;
     if (d.decision === 'accepted') {
       const impact = getImpact(item);
       accepted.push({
@@ -1022,7 +1633,7 @@ function submitDecisions() {
     }
   });
 
-  if (accepted.length === 0) { showToast('No accepted items'); return; }
+  if (stagedTotal === 0) { showToast('No decisions staged'); return; }
 
   const major = accepted.filter(c => c.major_change);
   if (major.length > 0) {
@@ -1088,13 +1699,18 @@ function confirmSubmit() {
   writeApproved(accepted);
 }
 
+// wq-100 — server-side decision write via admin_server.py.
+// Replaces the GitHubAPI.commitFiles path. Admin server is the single
+// canonical writer; UI fails loudly if the server isn't running.
 async function writeApproved(accepted) {
   const declined = [];
   const parked = [];
+  const rawPool = [];
   allItems.forEach(item => {
     const d = decisions[item.id] || {};
     if (d.decision === 'declined') declined.push(item);
     if (d.decision === 'parked') parked.push(item);
+    if (d.decision === 'raw_pool') rawPool.push(item);
   });
 
   const approvedFields = proposedFields
@@ -1104,82 +1720,157 @@ async function writeApproved(accepted) {
     .filter(f => fieldDecisions[f.field_id] === 'rejected')
     .map(f => f.field_id);
 
-  const output = {
+  const decisionsPayload = {
     submitted_at: new Date().toISOString(),
     accepted: accepted,
     declined: declined.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
     parked: parked.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
+    raw_pool: rawPool.map(i => ({ id: i.id, claim: i.claim, note: decisions[i.id]?.note || '' })),
     new_fields_approved: approvedFields,
-    new_fields_rejected: rejectedFields
+    new_fields_rejected: rejectedFields,
   };
 
-  // Show processing spinner
   document.getElementById('claims-list').innerHTML =
     '<div style="text-align:center;padding:40px;"><div style="display:inline-block;width:24px;height:24px;border:3px solid var(--card-border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;"></div>' +
-    '<div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Applying decisions...</div></div>' +
+    '<div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Submitting to admin server (apply runs inline)…</div></div>' +
     '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
 
-  if (!GitHubAPI.hasToken()) {
+  let resp;
+  try {
+    resp = await fetch('http://localhost:8080/api/decision', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ui: 'review', decisions: decisionsPayload }),
+    });
+  } catch (netErr) {
     document.getElementById('claims-list').innerHTML =
-      '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">' +
-      '<h3 style="font-size:16px;margin-bottom:12px;color:var(--orange);">GitHub Token Not Set</h3>' +
-      '<p style="font-size:12px;color:var(--text-dim);">Add a GitHub token in the Settings tab to submit decisions.</p></div>';
+      '<div style="padding:24px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:12px;">' +
+      '<h3 style="font-size:16px;margin-bottom:8px;color:var(--red);">Admin server not running</h3>' +
+      '<p style="font-size:13px;color:var(--text-dim);line-height:1.7;">' +
+      'wq-100 routes review decisions through <code>scripts/admin_server.py</code> on localhost:8080. Start it and resubmit:<br><br>' +
+      '<code style="color:var(--accent);">python3 scripts/admin_server.py</code><br><br>' +
+      'Your decisions are still cached locally — they will be there when you reload.</p></div>';
+    showToast('Admin server not reachable');
     return;
   }
 
-  try {
-    // Read vault-inbox.json directly from GitHub
-    const inboxFile = await GitHubAPI.readFile('beta/vault-inbox.json');
-    const inbox = JSON.parse(inboxFile.content);
-
-    // Build lookup of decisions by ID
-    const acceptedIds = new Set(accepted.map(i => i.id));
-    const declinedIds = new Set(declined.map(i => i.id));
-    const parkedIds = new Set(parked.map(i => i.id));
-
-    // Update statuses in vault-inbox
-    let updated = 0;
-    inbox.items.forEach(item => {
-      if (acceptedIds.has(item.id)) { item.status = 'accepted'; updated++; }
-      else if (declinedIds.has(item.id)) { item.status = 'declined'; updated++; }
-      else if (parkedIds.has(item.id)) { item.status = 'parked'; updated++; }
-    });
-
-    inbox.lastProcessed = new Date().toISOString().split('T')[0];
-
-    // Commit updated vault-inbox.json directly
-    const result = await GitHubAPI.commitFiles(
-      [{ path: 'beta/vault-inbox.json', content: inbox }],
-      'Review: ' + accepted.length + ' accepted, ' + declined.length + ' declined, ' + parked.length + ' parked'
-    );
-
-    localStorage.removeItem(DECISIONS_KEY);
-    localStorage.removeItem('field-decisions');
-    showToast(accepted.length + ' accepted, ' + declined.length + ' declined');
-
-    let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
-    html += '<h3 style="font-size:16px;margin-bottom:16px;color:var(--green);">Decisions Applied</h3>';
-    html += '<div style="padding:12px 16px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;margin-bottom:10px;">';
-    html += '<div style="font-size:13px;color:var(--text);line-height:1.8;">';
-    html += '<strong style="color:var(--green);">' + accepted.length + ' accepted</strong><br>';
-    if (declined.length > 0) html += '<strong style="color:var(--red);">' + declined.length + ' declined</strong><br>';
-    if (parked.length > 0) html += '<strong style="color:var(--orange);">' + parked.length + ' parked</strong><br>';
-    html += '</div></div>';
-    html += '<div style="margin-top:12px;font-size:11px;color:var(--text-dim);">';
-    html += updated + ' items updated in vault-inbox.json<br>';
-    html += '<a href="' + esc(result.url) + '" target="_blank" style="color:var(--accent);">View commit →</a>';
-    html += '</div>';
-    html += '<div style="margin-top:16px;display:flex;gap:10px;">';
-    html += '<button onclick="location.reload()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Reload Inbox</button>';
-    html += '</div></div>';
-    document.getElementById('claims-list').innerHTML = html;
-
-  } catch(e) {
-    showToast('Error: ' + e.message);
+  let result = {};
+  try { result = await resp.json(); } catch (_) {}
+  if (!resp.ok || result.success === false) {
     document.getElementById('claims-list').innerHTML =
-      '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">' +
-      '<h3 style="font-size:16px;margin-bottom:12px;color:var(--red);">Submit Failed</h3>' +
-      '<div style="font-size:12px;color:var(--text-dim);">' + esc(e.message) + '</div></div>';
+      '<div style="padding:24px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:12px;">' +
+      '<h3 style="font-size:16px;margin-bottom:8px;color:var(--red);">Submit failed</h3>' +
+      '<p style="font-size:13px;color:var(--text-dim);">' + esc(result.message || ('HTTP ' + resp.status)) + '</p>' +
+      (result.details ? '<pre style="margin-top:12px;font-size:10px;color:var(--text-dim);background:var(--bg);padding:10px;border-radius:6px;max-height:240px;overflow:auto;">' + esc(result.details) + '</pre>' : '') +
+      '</div>';
+    showToast('Submit failed');
+    return;
+  }
+
+  // Success — clear staged decisions, render summary with apply counters
+  localStorage.removeItem(DECISIONS_KEY);
+  localStorage.removeItem('field-decisions');
+
+  const parts = [];
+  if (accepted.length) parts.push(accepted.length + ' accepted');
+  if (declined.length) parts.push(declined.length + ' declined');
+  if (parked.length) parts.push(parked.length + ' parked');
+  if (rawPool.length) parts.push(rawPool.length + ' raw_pool');
+  showToast(parts.join(', ') || 'Submitted');
+
+  const a = result.apply_summary || {};
+  let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
+  html += '<h3 style="font-size:16px;margin-bottom:14px;color:var(--green);">Decisions Applied</h3>';
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:14px;">';
+  if (accepted.length) html += '<div style="padding:8px 12px;background:rgba(16,185,129,0.08);border-radius:6px;font-size:11px;"><div style="color:var(--text-dim);">accepted</div><strong style="font-size:18px;color:var(--green);">' + accepted.length + '</strong></div>';
+  if (declined.length) html += '<div style="padding:8px 12px;background:rgba(239,68,68,0.08);border-radius:6px;font-size:11px;"><div style="color:var(--text-dim);">declined</div><strong style="font-size:18px;color:var(--red);">' + declined.length + '</strong></div>';
+  if (parked.length) html += '<div style="padding:8px 12px;background:rgba(245,158,11,0.08);border-radius:6px;font-size:11px;"><div style="color:var(--text-dim);">parked</div><strong style="font-size:18px;color:var(--orange);">' + parked.length + '</strong></div>';
+  if (rawPool.length) html += '<div style="padding:8px 12px;background:rgba(6,182,212,0.08);border-radius:6px;font-size:11px;"><div style="color:var(--text-dim);">raw_pool</div><strong style="font-size:18px;color:var(--cyan);">' + rawPool.length + '</strong></div>';
+  html += '</div>';
+  html += '<div style="padding:12px 14px;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);line-height:1.7;">';
+  html += '<strong style="color:var(--text);">Apply gate result:</strong><br>';
+  html += '· Auto-applied: <strong style="color:var(--green);">' + (a.auto_applied || 0) + '</strong><br>';
+  html += '· Routed to review: <strong style="color:var(--orange);">' + (a.routed_to_review || 0) + '</strong><br>';
+  html += '· Anomalies (>50% variance): <strong style="color:var(--red);">' + (a.anomalies || 0) + '</strong>';
+  html += '</div>';
+  html += '<div style="margin-top:12px;font-size:11px;color:var(--text-dim);">' + (result.inbox_updated || 0) + ' inbox items updated · decision file <code style="color:var(--accent);">' + esc(result.decisions_path || '') + '</code></div>';
+  html += '<div style="margin-top:16px;display:flex;gap:10px;">';
+  html += '<button onclick="location.reload()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Reload Inbox</button>';
+  html += '<button onclick="openOverrideModal()" style="padding:8px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Override last apply</button>';
+  html += '</div></div>';
+  document.getElementById('claims-list').innerHTML = html;
+}
+
+// wq-100 D9 — override modal. Reads recent auto-applies from data/apply_log.json
+// and POSTs a revert to /api/override.
+async function openOverrideModal() {
+  let log;
+  try {
+    const r = await fetch('data/apply_log.json?v=' + Date.now());
+    if (!r.ok) throw new Error('apply_log.json not available');
+    log = await r.json();
+  } catch (e) {
+    showToast('No apply log yet — run apply_pipeline.py first');
+    return;
+  }
+  const cutoff = Date.now() - 24 * 3600 * 1000;
+  const recent = [];
+  (log.runs || []).slice(-10).forEach(run => {
+    (run.diffs || []).forEach(d => {
+      if (d.bucket !== 'auto_apply') return;
+      const ts = run.ts ? new Date(run.ts.replace(/Z$/, '')).getTime() : 0;
+      if (ts < cutoff) return;
+      recent.push({ ...d, ts: run.ts });
+    });
+  });
+  if (recent.length === 0) { showToast('No auto-applies in the last 24h'); return; }
+
+  let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="override-modal">';
+  html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:760px;width:92%;max-height:80vh;overflow-y:auto;">';
+  html += '<h2 style="font-size:16px;margin-bottom:8px;">Override last apply</h2>';
+  html += '<p style="font-size:11px;color:var(--text-dim);margin-bottom:14px;">Auto-applies in the last 24 hours. Revert restores the prior entity value and re-queues the source claim.</p>';
+  recent.slice(0, 30).forEach((d, i) => {
+    const variancePct = d.variance != null ? (d.variance * 100).toFixed(1) + '%' : '—';
+    html += '<div style="padding:10px 12px;border:1px solid var(--card-border);border-radius:8px;margin-bottom:8px;">';
+    html += '<div style="font-size:12px;"><strong>' + esc(d.entity_slug) + '</strong>.' + esc(d.field_key) + '@' + esc(d.year_key) + '</div>';
+    html += '<div style="font-size:11px;color:var(--text-dim);margin:3px 0;">' + esc(String(d.prior_value)) + ' → <strong style="color:var(--green);">' + esc(String(d.incoming_value)) + '</strong> · variance ' + variancePct + ' · ' + esc(d.incoming_tier || '?') + ' · claim ' + esc(d.claim_id || '?') + '</div>';
+    html += '<button onclick="performOverride(' + i + ')" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(239,68,68,0.4);background:transparent;color:var(--red);font-size:11px;cursor:pointer;">Revert</button>';
+    html += '</div>';
+  });
+  html += '<div style="margin-top:12px;display:flex;justify-content:flex-end;">';
+  html += '<button onclick="document.getElementById(\'override-modal\').remove()" style="padding:6px 14px;border-radius:6px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Close</button>';
+  html += '</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend', html);
+  window._overrideCandidates = recent.slice(0, 30);
+}
+
+async function performOverride(idx) {
+  const d = (window._overrideCandidates || [])[idx];
+  if (!d) { showToast('Override target lost'); return; }
+  const reason = prompt('Reason for the override (logged):', '');
+  if (reason === null) return;
+  try {
+    const r = await fetch('http://localhost:8080/api/override', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        entity_slug: d.entity_slug,
+        year_key: d.year_key,
+        field_key: d.field_key,
+        revert_to_value: d.prior_value,
+        claim_id: d.claim_id,
+        reason: reason,
+      }),
+    });
+    const result = await r.json();
+    if (!r.ok || result.success === false) {
+      showToast('Override failed: ' + (result.message || r.status));
+      return;
+    }
+    showToast('Reverted — ' + result.message);
+    document.getElementById('override-modal')?.remove();
+  } catch (e) {
+    showToast('Override failed: admin server not reachable');
   }
 }
 
@@ -1194,6 +1885,18 @@ function esc(s) {
 
 // ----- Init -----
 loadAll();
+
+// Keyboard shortcut: `r` — bulk raw_pool the currently selected items (wq-023 §4.1).
+// Skips when typing in an input/textarea so the note field still works.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'r' && e.key !== 'R') return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const tag = (e.target && e.target.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target && e.target.isContentEditable)) return;
+  if (selectedIds.size === 0) return;
+  e.preventDefault();
+  bulkDecision('raw_pool');
+});
 </script>
 <script src="github-api.js?v=2026-04-28-wq029-p1.6"></script>
 </body>

@@ -1,0 +1,642 @@
+{
+  "asOf": "2026-05-08T09:56:32.931401Z",
+  "ingestSummary": {
+    "lookbackHours": 24,
+    "claimsAddedToInbox": 0,
+    "scrapersScheduled": [
+      "monitor_sources.py",
+      "news_monitor.py",
+      "scan_sources.py"
+    ],
+    "scrapersThatProducedZero": [
+      "monitor_sources.py",
+      "scan_sources.py"
+    ],
+    "lastInboxProcessed": "2026-05-08T08:51:32Z"
+  },
+  "reviewQueueSummary": {
+    "total": 2461,
+    "pending": 218,
+    "oldestPendingDate": "2026-05-02",
+    "oldestPendingAgeDays": 6,
+    "stalePendingCount": 0,
+    "stalePendingIds": []
+  },
+  "staleEntities": {
+    "count": 0,
+    "items": []
+  },
+  "vaultSummary": {
+    "totalClaims": 259,
+    "orphanedClaims": 137
+  },
+  "applyGate": {
+    "lastRunAt": "2026-05-08T08:51:32Z",
+    "counters30d": {
+      "auto_applied": 22,
+      "routed_to_review": 0,
+      "anomalies": 0
+    },
+    "recentAutoApplied24h": [
+      {
+        "claim_id": "dp-188",
+        "entity_slug": "openrouter",
+        "year_key": "current",
+        "field_key": "tokens_per_week_t",
+        "incoming_value": 4.65,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "OpenRouter current.tokens_per_week_t = 4.65",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-190",
+        "entity_slug": "openai",
+        "year_key": "2026",
+        "field_key": "revenue_annualised_from_m",
+        "incoming_value": 24.0,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "OpenAI 2026.revenue_annualised_from_m = 24.0",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-195",
+        "entity_slug": "perplexity",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 0.5,
+        "prior_value": 500,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_3A",
+        "variance": 0.999,
+        "is_first_time": false,
+        "label": "Perplexity 2026.arr = $0.5B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-206",
+        "entity_slug": "anthropic",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 30.0,
+        "prior_value": 30,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.0,
+        "is_first_time": false,
+        "label": "Anthropic 2026.arr = $30.0B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-207",
+        "entity_slug": "anthropic",
+        "year_key": "current",
+        "field_key": "business_customer_count",
+        "incoming_value": 300000,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "Anthropic current.business_customer_count = 300,000",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-210",
+        "entity_slug": "anthropic",
+        "year_key": "2024",
+        "field_key": "burn_metric",
+        "incoming_value": 5.6,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "Anthropic 2024.burn_metric = 5.6",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-212",
+        "entity_slug": "openai",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 25.0,
+        "prior_value": 25.0,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.0,
+        "is_first_time": false,
+        "label": "OpenAI 2026.arr = $25.0B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-214",
+        "entity_slug": "openai",
+        "year_key": "current",
+        "field_key": "user_count",
+        "incoming_value": 800000000,
+        "prior_value": 900000000,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.1111111111111111,
+        "is_first_time": false,
+        "label": "OpenAI current.user_count = 800,000,000",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-224",
+        "entity_slug": "cursor-(anysphere)",
+        "year_key": "2026",
+        "field_key": "valuation",
+        "incoming_value": 60.0,
+        "prior_value": 50.0,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.2,
+        "is_first_time": false,
+        "label": "Cursor (Anysphere) 2026.valuation = $60.0B valuation",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-225",
+        "entity_slug": "coreweave",
+        "year_key": "current",
+        "field_key": "user_count",
+        "incoming_value": 24,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "CoreWeave current.user_count = 24",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-226",
+        "entity_slug": "super_com",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 0.15,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "Super.com 2026.arr = $0.15B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:51:32Z"
+      },
+      {
+        "claim_id": "dp-188",
+        "entity_slug": "openrouter",
+        "year_key": "current",
+        "field_key": "tokens_per_week_t",
+        "incoming_value": 4.65,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "OpenRouter current.tokens_per_week_t = 4.65",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-190",
+        "entity_slug": "openai",
+        "year_key": "2026",
+        "field_key": "revenue_annualised_from_m",
+        "incoming_value": 24.0,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "OpenAI 2026.revenue_annualised_from_m = 24.0",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-195",
+        "entity_slug": "perplexity",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 0.5,
+        "prior_value": 500,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_3A",
+        "variance": 0.999,
+        "is_first_time": false,
+        "label": "Perplexity 2026.arr = $0.5B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-206",
+        "entity_slug": "anthropic",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 30.0,
+        "prior_value": 30,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.0,
+        "is_first_time": false,
+        "label": "Anthropic 2026.arr = $30.0B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-207",
+        "entity_slug": "anthropic",
+        "year_key": "current",
+        "field_key": "business_customer_count",
+        "incoming_value": 300000,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "Anthropic current.business_customer_count = 300,000",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-210",
+        "entity_slug": "anthropic",
+        "year_key": "2024",
+        "field_key": "burn_metric",
+        "incoming_value": 5.6,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "Anthropic 2024.burn_metric = 5.6",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-212",
+        "entity_slug": "openai",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 25.0,
+        "prior_value": 25.0,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.0,
+        "is_first_time": false,
+        "label": "OpenAI 2026.arr = $25.0B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-214",
+        "entity_slug": "openai",
+        "year_key": "current",
+        "field_key": "user_count",
+        "incoming_value": 800000000,
+        "prior_value": 900000000,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.1111111111111111,
+        "is_first_time": false,
+        "label": "OpenAI current.user_count = 800,000,000",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-224",
+        "entity_slug": "cursor-(anysphere)",
+        "year_key": "2026",
+        "field_key": "valuation",
+        "incoming_value": 60.0,
+        "prior_value": 50.0,
+        "incoming_tier": "tier_2A",
+        "existing_tier": "tier_2A",
+        "variance": 0.2,
+        "is_first_time": false,
+        "label": "Cursor (Anysphere) 2026.valuation = $60.0B valuation",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-225",
+        "entity_slug": "coreweave",
+        "year_key": "current",
+        "field_key": "user_count",
+        "incoming_value": 24,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "CoreWeave current.user_count = 24",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      },
+      {
+        "claim_id": "dp-226",
+        "entity_slug": "super_com",
+        "year_key": "2026",
+        "field_key": "arr",
+        "incoming_value": 0.15,
+        "prior_value": null,
+        "incoming_tier": "tier_2A",
+        "existing_tier": null,
+        "variance": null,
+        "is_first_time": false,
+        "label": "Super.com 2026.arr = $0.15B",
+        "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+        "bucket": "auto_apply",
+        "ts": "2026-05-08T08:49:51Z"
+      }
+    ],
+    "available": true
+  },
+  "assertions": [
+    {
+      "name": "ingest_health",
+      "passed": true,
+      "count": 0,
+      "details": "0 new claim(s) overnight; 2 scraper(s) of 3 produced zero (monitor_sources.py, scan_sources.py)."
+    },
+    {
+      "name": "review_queue_freshness",
+      "passed": true,
+      "count": 0,
+      "details": "No pending claims older than 7 days (218 pending total)."
+    },
+    {
+      "name": "apply_propagation",
+      "passed": false,
+      "count": 19,
+      "details": "19 verified tier-2A-or-better claim(s) have usedOn=[]. Sample IDs: dp-042, dp-048, dp-051, dp-104, dp-107, dp-110, dp-151, dp-159, dp-174, dp-199."
+    },
+    {
+      "name": "entity_vault_sync",
+      "passed": true,
+      "count": 0,
+      "details": "Every published entity ARR matches the highest-tier verified vault claim within \u00b115%."
+    },
+    {
+      "name": "arrmodel_consistency",
+      "passed": true,
+      "count": 0,
+      "details": "apps_total $82.8292B + compute_net $43.0800B = $125.9092B \u2248 industry_total $125.9092B (\u0394 $0.0000B \u2264 tolerance $0.1B)."
+    },
+    {
+      "name": "handler_coverage",
+      "passed": true,
+      "count": 0,
+      "details": "All 83 distinct vault unit(s) have a registered handler or are in UNHANDLED_UNITS."
+    },
+    {
+      "name": "inbox_migration_freshness",
+      "passed": false,
+      "count": 19,
+      "details": "19 accepted inbox item(s) older than 24h have no vault dp-id (sample: audit-20260404-gap-1, audit-20260404-gap-3, audit-20260404-gap-4, audit-20260404-gap-6, audit-20260404-gap-7). Run `python3 scripts/apply_pipeline.py` to mint vault entries.",
+      "items": [
+        {
+          "inbox_id": "audit-20260404-gap-1",
+          "dateAdded": "2026-04-04",
+          "claim": "we closed our latest funding round with $122 billion in committed capital"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-3",
+          "dateAdded": "2026-04-04",
+          "claim": "the fastest to 100 million users"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-4",
+          "dateAdded": "2026-04-04",
+          "claim": "soon the fastest to 1 billion weekly active users"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-6",
+          "dateAdded": "2026-04-04",
+          "claim": "By the end of 2024 we were generating $1B per quarter"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-7",
+          "dateAdded": "2026-04-04",
+          "claim": "We are now generating $2B in revenue per month"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-8",
+          "dateAdded": "2026-04-04",
+          "claim": "we are growing revenue four times faster than the companies who defined the Internet and mobile eras, including Alphabet"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-12",
+          "dateAdded": "2026-04-04",
+          "claim": "enterprise side, which now makes up more than 40% of our revenue"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-15",
+          "dateAdded": "2026-04-04",
+          "claim": "they now plan to nearly double headcount to 8000 by the end of the year"
+        },
+        {
+          "inbox_id": "audit-20260404-gap-16",
+          "dateAdded": "2026-04-04",
+          "claim": "5,000 other organizations use Metaview"
+        },
+        {
+          "inbox_id": "audit-20260404-conflict-1",
+          "dateAdded": "2026-04-04",
+          "claim": "Our APIs now process more than 15 billion tokens per minute"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-1",
+          "dateAdded": "2026-04-05",
+          "claim": "we closed our latest funding round with $122 billion in committed capital"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-3",
+          "dateAdded": "2026-04-05",
+          "claim": "the fastest to 100 million users"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-4",
+          "dateAdded": "2026-04-05",
+          "claim": "soon the fastest to 1 billion weekly active users"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-6",
+          "dateAdded": "2026-04-05",
+          "claim": "By the end of 2024 we were generating $1B per quarter"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-7",
+          "dateAdded": "2026-04-05",
+          "claim": "We are now generating $2B in revenue per month"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-12",
+          "dateAdded": "2026-04-05",
+          "claim": "enterprise side, which now makes up more than 40% of our revenue"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-15",
+          "dateAdded": "2026-04-05",
+          "claim": "they now plan to nearly double headcount to 8000 by the end of the year"
+        },
+        {
+          "inbox_id": "audit-20260405-gap-18",
+          "dateAdded": "2026-04-05",
+          "claim": "Ramp data suggested that Anthropic now captures 73% of all spending among companies buying AI tools"
+        },
+        {
+          "inbox_id": "audit-20260405-conflict-1",
+          "dateAdded": "2026-04-05",
+          "claim": "Our APIs now process more than 15 billion tokens per minute"
+        }
+      ]
+    },
+    {
+      "name": "arrmodel_vault_backed",
+      "passed": false,
+      "count": 16,
+      "details": "16 arrModel entry/entries source their arr from a non-vault path (sample: arrModel.apps.frontier/ByteDance, arrModel.apps.frontier/Alibaba/Qwen, arrModel.apps.frontier/Tencent, arrModel.apps.frontier/Baidu, arrModel.apps.frontier/Others/Self-hosted). Confirm the entity has been applied via `apply_pipeline.py`, then rebuild site-data.json.",
+      "items": [
+        {
+          "block": "arrModel.apps.frontier",
+          "entity": "ByteDance",
+          "source_path": "dashboard.providers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.frontier",
+          "entity": "Alibaba/Qwen",
+          "source_path": "dashboard.providers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.frontier",
+          "entity": "Tencent",
+          "source_path": "dashboard.providers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.frontier",
+          "entity": "Baidu",
+          "source_path": "dashboard.providers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.frontier",
+          "entity": "Others/Self-hosted",
+          "source_path": "dashboard.providers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "OpenClaw",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Kilo Code",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Cline",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Janitor AI",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Sierra AI",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Hebbia",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Captions",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Decagon",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Speak",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Pika",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        },
+        {
+          "block": "arrModel.apps.aiNative",
+          "entity": "Suno",
+          "source_path": "dashboard.topConsumers (legacy fallback)"
+        }
+      ]
+    },
+    {
+      "name": "rendered_figure_coverage",
+      "passed": false,
+      "count": 1,
+      "details": "1 rendered figure(s) diverge from entities.json. Sample: dashboard.enterpriseReality/salesforce_agentforce. See `data/audits/wq-098-rendered-figure-coverage.md` for the full row list. Likely cause: hardcoded fixture (legacy site-data seed or `wq096_tagging.json`) winning over apply_pipeline writes, or an evidence file out-of-date vs an applied vault claim.",
+      "items": [
+        {
+          "block": "dashboard.enterpriseReality",
+          "entity": "salesforce_agentforce",
+          "rendered_b": 0.8,
+          "entity_arr_b": 0.3,
+          "note": "claimed-vs-real divergence (by design \u2014 review whether evidence file or entity is stale)"
+        }
+      ],
+      "unbacked_count": 17
+    }
+  ],
+  "alertCount": 4
+}

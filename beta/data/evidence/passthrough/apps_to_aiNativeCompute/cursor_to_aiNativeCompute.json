@@ -1,0 +1,10 @@
+{
+  "id": "cursor_to_aiNativeCompute",
+  "from": "cursor",
+  "to": "_aiNativeCompute_aggregate",
+  "value": 0.45,
+  "valueBasis": "Q1 2026 annualised \u2014 Cursor compute spend on AI-native compute (token factories + neoclouds)",
+  "source": "SemiAnalysis 2025 commentary \u2014 Cursor blended COGS ~45% of $1B ARR; majority via direct frontier APIs (not aiNativeCompute), residual ~10% via aiNativeCompute serving",
+  "provenance": "tier_2b",
+  "rationale": "Cursor mostly hits frontier API endpoints directly (Anthropic, OpenAI). aiNativeCompute exposure modest."
+}

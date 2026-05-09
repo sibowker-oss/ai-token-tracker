@@ -1,0 +1,11 @@
+{
+  "id": "_long_tail",
+  "from": "_other_aiNativeCompute",
+  "to": "_trad_compute",
+  "isLongTail": true,
+  "baseValueBasis": "Aggregate aiNativeCompute ARR ex-named entries (Lambda, Crusoe, Nebius, Groq, Replicate, Anyscale, Fal.ai)",
+  "baseValue": 2.85,
+  "multiplierPct": 30,
+  "rationale": "Smaller neoclouds and token factories pass ~30% of ARR through to trad-compute (most have own datacenters or rent from hyperscaler partners; Nebius is full owner-operator so contributes 0 to long tail; weighted avg 30%). Editorial.",
+  "provenance": "tier_3a"
+}

@@ -1,0 +1,42 @@
+{
+  "_doc": "wq-042 — drives generate_site_data.py + build_entity_pages.py. Detail-page promotion is data-threshold (no hand-picking).",
+  "detail_page_threshold": {
+    "min_populated_fields": 3,
+    "min_best_confidence": "medium",
+    "min_provenance_entries": 1
+  },
+  "roles": {
+    "model_provider": {
+      "dashboard_card": true,
+      "card_fields": ["arr", "tokens_per_day", "growth_rate", "consumer_pct", "biz_pct"]
+    },
+    "ai_app": {
+      "dashboard_card": false,
+      "card_fields": ["arr", "user_count"]
+    },
+    "hyperscaler": {
+      "dashboard_card": false,
+      "card_fields": ["ai_cloud_revenue", "gpu_capex"]
+    },
+    "neo_cloud": {
+      "dashboard_card": false,
+      "card_fields": ["arr", "data_center_capacity"]
+    },
+    "gpu_provider": {
+      "dashboard_card": false,
+      "card_fields": ["data_center_revenue", "capex_from_customers"]
+    },
+    "iaas_provider": {
+      "dashboard_card": false,
+      "card_fields": ["managed_api_revenue", "blended_price_per_m"]
+    },
+    "aggregator": {
+      "dashboard_card": false,
+      "card_fields": ["daily_spend", "models_hosted"]
+    },
+    "traditional_saas": {
+      "dashboard_card": false,
+      "card_fields": ["ai_arr", "paid_seats"]
+    }
+  }
+}

@@ -60,7 +60,7 @@
     </div>
     <div class="rate-card">
       <div class="lbl">Per Day</div>
-      <div class="val" style="color:var(--green);" id="per-day">~680T</div>
+      <div class="val" style="color:var(--green);" id="per-day">~320T</div>
     </div>
   </div>
 
@@ -86,14 +86,14 @@
       </div>
     </div>
     <p style="margin-top:16px; font-size:11px; opacity:0.6;">
-      Based on ~680T tokens/day estimated across all providers (OpenAI, Anthropic, Google, Meta, DeepSeek, Mistral, xAI, others).
+      Based on ~320T tokens/day estimated across 14 providers (ByteDance, Google, OpenAI, Alibaba, Anthropic, Meta, Tencent, Baidu, DeepSeek, + others). Multi-model consensus estimate, April 2026.
       1 token ≈ 0.75 words. A book ≈ 100K tokens. Wikipedia ≈ 4.4B tokens. An email ≈ 200 tokens. A line of code ≈ 10 tokens.
     </p>
   </div>
 </div>
 
 <script>
-const TOKENS_PER_DAY = 680e12; // 680 trillion
+const TOKENS_PER_DAY = 320e12; // 320 trillion (v3 consensus, Apr 2026)
 const TOKENS_PER_SEC = TOKENS_PER_DAY / 86400; // ~7.87 billion
 const BOOK_TOKENS = 100000;
 const WIKI_TOKENS = 4.4e9;

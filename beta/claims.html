@@ -18,12 +18,15 @@
   });
 })();
 </script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
   .container { max-width:1000px; margin:0 auto; padding:24px; }
-  h1 { font-size:18px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+  h1 { font-size:28px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
   h1 span.tag { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; }
   .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; }
 
@@ -55,9 +58,28 @@
   .badge-new { background:rgba(6,182,212,0.12); color:var(--cyan); }
   .badge-confirms { background:rgba(16,185,129,0.12); color:var(--green); }
   .badge-conflicts { background:rgba(239,68,68,0.15); color:var(--red); }
+  /* wq-083 v2 — triangulation: indirect arithmetic against ledger nodes */
+  .badge-triangulates { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .claim-triangulation { font-size:11px; color:var(--text-dim); margin-top:6px; padding:8px 10px; background:rgba(139,92,246,0.06); border-left:2px solid var(--purple); border-radius:4px; line-height:1.5; }
+  .claim-triangulation strong { color:var(--purple); font-weight:600; }
+  .claim-triangulation code { background:var(--bg); padding:1px 5px; border-radius:3px; font-size:10px; color:var(--text); }
+  /* wq-086 commit 5 — reviewer override on confidence_impact at accept time */
+  .impact-override { display:inline-flex; align-items:center; gap:6px; margin-top:6px; font-size:11px; }
+  .impact-override label { color:var(--text-dim); }
+  .impact-override select { background:var(--bg); border:1px solid var(--card-border); color:var(--text); border-radius:4px; padding:2px 6px; font-size:11px; cursor:pointer; }
+  .impact-override .override-flag { color:var(--orange); font-size:10px; font-style:italic; }
   .badge-high { background:rgba(16,185,129,0.1); color:var(--green); }
   .badge-medium { background:rgba(245,158,11,0.1); color:var(--orange); }
   .badge-low { background:rgba(148,163,184,0.1); color:var(--text-dim); }
+  /* Structured claim type badges (wq-014) */
+  .badge-power_project { background:rgba(6,182,212,0.15); color:var(--cyan); }
+  .badge-hiring_snapshot { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .badge-patent_snapshot { background:rgba(59,130,246,0.15); color:var(--accent); }
+  .badge-company_surfaced { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .metric-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:6px 16px; font-size:11px; color:var(--text-dim); margin-top:6px; }
+  .metric-grid strong { color:var(--text); font-weight:600; display:block; font-size:13px; }
+  .cpc-list { margin-top:4px; font-size:11px; color:var(--text-dim); }
+  .cpc-list code { background:var(--bg); padding:1px 5px; border-radius:4px; font-size:10px; }
 
   .claim-quote { font-size:12px; color:var(--text); line-height:1.5; margin-bottom:8px; font-style:italic; }
   .claim-meta { font-size:11px; color:var(--text-dim); line-height:1.6; }
@@ -104,32 +126,27 @@
   .toast.show { opacity:1; }
 
   footer { text-align:center; padding:20px; font-size:11px; color:#64748b; border-top:1px solid #1e293b; margin-top:80px; }
+  @media(max-width:768px) {
+    .nav-bar { padding:8px 12px; gap:4px; justify-content:center; }
+    .nav-brand { font-size:13px; margin-right:auto; }
+    .nav-logo { margin-left:0; font-size:11px; gap:5px; }
+    .nav-logo svg { width:18px; height:18px; }
+    .nav-link { font-size:10px; padding:5px 8px; border-radius:6px; }
+    .container { padding:16px 12px; }
+    h1 { font-size:22px; }
+    .card { padding:14px; margin-bottom:14px; }
+    .card h2 { font-size:14px; }
+    table { font-size:11px; }
+    table th, table td { padding:6px 8px; }
+  }
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-211EY55BEQ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-211EY55BEQ");</script>
 </head>
-<body>
+<body class="surface-dark" data-active-tab="claims">
 
-<style>
-  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
-  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
-  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
-  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
-  .nav-logo { margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none; color:#cbd5e1; font-size:13px; font-weight:600; opacity:0.7; transition:opacity 0.15s; }
-  .nav-logo:hover { opacity:1; }
-  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
-  @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
-</style>
-<nav class="nav-bar">
-  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
-  <span style="flex-grow:1"></span>
-  <a href="vault.html" class="nav-link">Vault</a>
-  <a href="sources.html" class="nav-link">Sources</a>
-  <a href="claims.html" class="nav-link active">Claims</a>
-  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
-    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
-    Hepburn Advisory
-  </a>
-</nav>
+<div id="admin-nav-mount"></div>
 
 <div class="container">
   <h1>Claim Review Queue <span class="tag">Admin</span></h1>
@@ -171,7 +188,55 @@ function saveDecisions() {
   localStorage.setItem(DECISIONS_KEY, JSON.stringify(decisions));
 }
 
+// Structured claim types introduced by wq-014. Anything else renders with the
+// original free-text card.
+const STRUCTURED_TYPES = ['power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced'];
+const CONFIDENCE_TO_WEIGHT = { high: 'authoritative', medium: 'corroborating', low: 'indicative' };
+
+// Stable per-claim fingerprint shared with admin_server.py + apply_pipeline.
+// Same logic must exist in scripts/_decided_signatures.py — change both together.
+function claimSignature(c) {
+  if (!c) return '';
+  const norm = v => String(v == null ? '' : v).trim().toLowerCase();
+  const parts = [
+    norm(c.entity),
+    norm(c.metric),
+    norm(c.value_display || c.value),
+    norm(c.source_url),
+    norm(c.time_period),
+  ];
+  let sig = parts.join('|');
+  if (sig.replace(/\|/g, '').trim() === '') {
+    sig = 'claim:' + norm(c.claim).slice(0, 200);
+  }
+  return sig;
+}
+// Fallback signature based on claim text only — matches historical declined/parked
+// decisions that didn't carry structured fields. Loaded items are checked against
+// BOTH this and the structured signature so old decisions still suppress correctly.
+function claimSignatureFallback(c) {
+  if (!c) return '';
+  return 'claim:' + String(c.claim || '').trim().toLowerCase().slice(0, 200);
+}
+
+function normaliseStructuredClaim(c) {
+  // Structured claims don't carry weight/category/dedup_status/confidence at top level.
+  // Synthesize them from the nested source block so the existing card shell, sort, and
+  // filter machinery keep working without a parallel code path.
+  const conf = (c.source && c.source.confidence) || 'low';
+  return Object.assign({}, c, {
+    weight: c.weight || CONFIDENCE_TO_WEIGHT[conf] || 'indicative',
+    confidence: c.confidence || conf,
+    category: c.category || c.type,
+    dedup_status: c.dedup_status || 'new',
+    entity: c.entity || c.company_slug || c.candidate_name || c.queue_market || '?',
+  });
+}
+
 async function loadClaims() {
+  // Single file per day: data-updates/<date>-candidates.json. Contains both
+  // free-text and structured claims; the renderer branches on claim.type.
+  // Walk back up to 14 days looking for the most recent non-empty day.
   const today = new Date().toISOString().split('T')[0];
   const dates = [today];
   for (let i = 1; i <= 14; i++) {
@@ -179,20 +244,84 @@ async function loadClaims() {
     dates.push(d.toISOString().split('T')[0]);
   }
 
+  let raw = [], loadedDate = null;
   for (const date of dates) {
     try {
       const resp = await fetch('data-updates/' + date + '-candidates.json?v=' + Date.now());
       if (resp.ok) {
-        allClaims = await resp.json();
-        sourceFile = date + '-candidates.json';
-        console.log('Loaded ' + allClaims.length + ' claims from ' + date);
+        raw = await resp.json();
+        loadedDate = date;
         break;
       }
     } catch(e) {}
   }
 
+  // wq-083 — also load curated_intake.py output. Discovered via
+  // data-updates/curated-index.json (a manifest the script keeps current);
+  // a static page can't enumerate the directory itself. Each curated file
+  // is a wrapper { source, slug, claims: [...] }. We extract claims and
+  // merge them onto the same review queue so the human gate stays consistent.
+  const curatedFiles = [];
+  try {
+    const idxResp = await fetch('data-updates/curated-index.json?v=' + Date.now());
+    if (idxResp.ok) {
+      const idx = await idxResp.json();
+      for (const entry of (idx.files || [])) {
+        // Only show curated files from the same lookback window as candidates.
+        if (dates.indexOf(entry.date) >= 0) {
+          try {
+            const fResp = await fetch('data-updates/' + entry.file + '?v=' + Date.now());
+            if (fResp.ok) {
+              const payload = await fResp.json();
+              const items = Array.isArray(payload) ? payload : (payload.claims || []);
+              items.forEach(c => { c._curated_slug = entry.slug; });
+              curatedFiles.push({ entry, items });
+            }
+          } catch(e) {}
+        }
+      }
+    }
+  } catch(e) {}
+
+  let combined = raw.slice();
+  curatedFiles.forEach(cf => combined = combined.concat(cf.items));
+
+  // Suppress claims already decided in a previous session. The index is written
+  // by admin_server.py (via /api/decision) so the filter is server-authoritative
+  // and survives localStorage clears, browser switches, and machine swaps.
+  let suppressedCount = 0;
+  try {
+    const sigResp = await fetch('data-updates/decided-signatures.json?v=' + Date.now());
+    if (sigResp.ok) {
+      const sigIndex = await sigResp.json();
+      const decidedSigs = new Set(Object.keys(sigIndex || {}));
+      const before = combined.length;
+      combined = combined.filter(c => {
+        const s1 = claimSignature(c);
+        const s2 = claimSignatureFallback(c);
+        return !decidedSigs.has(s1) && !decidedSigs.has(s2);
+      });
+      suppressedCount = before - combined.length;
+    }
+  } catch (_) { /* index optional — first run, no decisions yet */ }
+  if (suppressedCount > 0) {
+    console.log('Suppressed ' + suppressedCount + ' previously-decided claim(s) via decided-signatures.json');
+  }
+
+  // Normalise structured claims on load so weight/confidence/dedup_status/category
+  // come from the nested source block and the existing card/sort/filter machinery
+  // keeps working without a parallel code path.
+  allClaims = combined.map(c => STRUCTURED_TYPES.indexOf(c.type) !== -1
+    ? normaliseStructuredClaim(c) : c);
+
+  const parts = [];
+  if (loadedDate) parts.push(loadedDate + '-candidates.json');
+  curatedFiles.forEach(cf => parts.push(cf.entry.file));
+  sourceFile = parts.join(' + ');
+  console.log('Loaded ' + allClaims.length + ' claims from ' + (sourceFile || '(none)'));
+
   if (allClaims.length === 0) {
-    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run extract_claims.py to generate candidates.</div>';
+    document.getElementById('claims-list').innerHTML = '<div class="empty">No claim candidates found. Run <code>python3 scripts/monitor_sources.py</code> to generate candidates, or wait for the daily 11:30am cron.</div>';
     return;
   }
 
@@ -263,6 +392,135 @@ function setNote(idx, note) {
   saveDecisions();
 }
 
+// wq-086 commit 5 — reviewer override on confidence_impact for triangulations.
+// The model's classification is a guide, not a verdict (resolution doc §2).
+// Override is recorded on decisions[idx] and flowed into the submitted payload
+// as `accepted_confidence_impact`. apply_decisions.apply_triangulation reads
+// this first and falls back to triangulation.confidence_impact when absent
+// (preserves backwards compatibility for older decision files).
+function setImpactOverride(idx, value) {
+  if (!decisions[idx]) decisions[idx] = { decision: '', note: '' };
+  decisions[idx].accepted_confidence_impact = value;
+  saveDecisions();
+  // No re-render needed — the select control owns its visual state.
+}
+
+function escapeHtml(s) {
+  return (s == null ? '' : String(s))
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function renderCardTitle(c) {
+  if (c.type === 'power_project') {
+    const mw = c.mw_requested != null ? c.mw_requested + ' MW' : 'MW ?';
+    return escapeHtml(c.queue_market + ' ' + c.queue_id) + ' — ' + escapeHtml(mw) +
+      (c.company_slug ? ' <span style="color:var(--text-dim);font-weight:400;">→ ' + escapeHtml(c.company_slug) + '</span>' : '');
+  }
+  if (c.type === 'hiring_snapshot') {
+    const m = c.metrics || {};
+    return escapeHtml(c.company_slug) + ' — ' +
+      escapeHtml(m.open_roles_ai_titled + ' AI roles / ' + m.open_roles_total + ' total') +
+      ' <span style="color:var(--text-dim);font-weight:400;">(' + escapeHtml(c.window) + ')</span>';
+  }
+  if (c.type === 'patent_snapshot') {
+    const m = c.metrics || {};
+    return escapeHtml(c.company_slug) + ' — ' +
+      escapeHtml(m.applications_published_trailing_12m + ' apps / ' + m.grants_trailing_12m + ' grants 12m') +
+      ' <span style="color:var(--text-dim);font-weight:400;">(' + escapeHtml(c.window) + ')</span>';
+  }
+  if (c.type === 'company_surfaced') {
+    return escapeHtml(c.candidate_name) +
+      (c.density_score_estimate != null ? ' <span style="color:var(--text-dim);font-weight:400;">density ' + escapeHtml(c.density_score_estimate) + '</span>' : '');
+  }
+  // Free-text
+  return escapeHtml(c.entity || '?') + ' — ' + escapeHtml(c.value_display || c.value || '?');
+}
+
+function renderStructuredBody(c) {
+  let body = '';
+  const src = c.source || {};
+  const srcUrl = src.url ? '<a href="' + escapeHtml(src.url) + '" target="_blank" rel="noopener" style="color:var(--accent);">source</a>' : 'no url';
+  const retrieved = src.retrievedAt ? src.retrievedAt.split('T')[0] : '?';
+  const nextReview = src.nextReview || '(event)';
+
+  if (c.type === 'power_project') {
+    body += '<div class="metric-grid">';
+    body += '<div><strong>' + escapeHtml(c.stage) + '</strong>Stage</div>';
+    body += '<div><strong>' + escapeHtml(c.mw_requested ?? '?') + '</strong>MW requested</div>';
+    body += '<div><strong>' + escapeHtml(c.mw_approved ?? '—') + '</strong>MW approved</div>';
+    body += '<div><strong>' + escapeHtml(c.mw_in_service ?? '—') + '</strong>MW in service</div>';
+    body += '<div><strong>' + escapeHtml(c.requested_cod || '—') + '</strong>Requested COD</div>';
+    body += '<div><strong>' + escapeHtml(c.county || '—') + '</strong>County</div>';
+    body += '</div>';
+    body += '<div class="claim-meta" style="margin-top:8px;">';
+    if (c.llc_of_record) body += '<strong>LLC:</strong> ' + escapeHtml(c.llc_of_record) + ' &nbsp; ';
+    if (c.poi) body += '<strong>POI:</strong> ' + escapeHtml(c.poi) + '<br>';
+    if (c.attribution_confidence) body += '<strong>Attribution:</strong> ' + escapeHtml(c.attribution_confidence) + ' ';
+    if (c.attribution_sources && c.attribution_sources.length) {
+      body += '(' + c.attribution_sources.map((u, i) => '<a href="' + escapeHtml(u) + '" target="_blank" rel="noopener" style="color:var(--accent);">ref ' + (i+1) + '</a>').join(', ') + ') ';
+    }
+    body += '<br><strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += ' &nbsp; <strong>Next review:</strong> ' + escapeHtml(nextReview);
+    body += '</div>';
+  }
+  else if (c.type === 'hiring_snapshot') {
+    const m = c.metrics || {};
+    body += '<div class="metric-grid">';
+    body += '<div><strong>' + escapeHtml(m.open_roles_total) + '</strong>Total open</div>';
+    body += '<div><strong>' + escapeHtml(m.open_roles_ai_titled) + '</strong>AI-titled</div>';
+    body += '<div><strong>' + escapeHtml(m.open_roles_prompt_engineer) + '</strong>Prompt eng</div>';
+    body += '<div><strong>' + escapeHtml((m.ai_titled_share * 100).toFixed(1)) + '%</strong>AI share</div>';
+    body += '<div><strong>' + escapeHtml(m.new_ai_roles_7d) + '</strong>New 7d</div>';
+    body += '</div>';
+    if (c.by_function) {
+      const bf = c.by_function;
+      body += '<div class="claim-meta" style="margin-top:8px;"><strong>By function:</strong> ';
+      body += Object.keys(bf).map(k => escapeHtml(k.replace(/_/g, ' ')) + ' ' + escapeHtml(bf[k])).join(' · ');
+      body += '</div>';
+    }
+    body += '<div class="claim-meta" style="margin-top:6px;">';
+    body += '<strong>ATS:</strong> ' + escapeHtml(src.type || '?') + ' (' + escapeHtml(src.token || '?') + ') &nbsp; ';
+    body += '<strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += ' &nbsp; <strong>Next review:</strong> ' + escapeHtml(nextReview);
+    body += '</div>';
+  }
+  else if (c.type === 'patent_snapshot') {
+    const m = c.metrics || {};
+    body += '<div class="metric-grid">';
+    body += '<div><strong>' + escapeHtml(m.applications_published_last_30d) + '</strong>Apps 30d</div>';
+    body += '<div><strong>' + escapeHtml(m.applications_published_trailing_12m) + '</strong>Apps 12m</div>';
+    body += '<div><strong>' + escapeHtml(m.grants_last_30d) + '</strong>Grants 30d</div>';
+    body += '<div><strong>' + escapeHtml(m.grants_trailing_12m) + '</strong>Grants 12m</div>';
+    body += '<div><strong>' + escapeHtml((m.ai_cpc_share_trailing_12m * 100).toFixed(1)) + '%</strong>AI-CPC share</div>';
+    body += '</div>';
+    if (c.top_cpc_subclasses && c.top_cpc_subclasses.length) {
+      body += '<div class="cpc-list"><strong style="color:var(--text);">Top CPC:</strong> ';
+      body += c.top_cpc_subclasses.map(x => '<code>' + escapeHtml(x.code) + '</code> ×' + escapeHtml(x.n)).join(' · ');
+      body += '</div>';
+    }
+    body += '<div class="claim-meta" style="margin-top:6px;">';
+    body += '<strong>Assignee IDs:</strong> ' + escapeHtml((c.assignee_ids || []).join(', ')) + '<br>';
+    body += '<strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += ' &nbsp; <strong>Next review:</strong> ' + escapeHtml(nextReview);
+    body += '</div>';
+  }
+  else if (c.type === 'company_surfaced') {
+    const fs = c.first_seen_signal || {};
+    body += '<div class="claim-meta">';
+    body += '<strong>First-seen signal:</strong> ' + escapeHtml(fs.kind || '?');
+    if (fs.cpc) body += ' &nbsp; <strong>CPC:</strong> <code>' + escapeHtml(fs.cpc) + '</code>';
+    if (fs.application_id) body += ' &nbsp; <strong>App:</strong> ' + escapeHtml(fs.application_id);
+    if (fs.filing_date) body += ' &nbsp; <strong>Filed:</strong> ' + escapeHtml(fs.filing_date);
+    if (c.candidate_aliases && c.candidate_aliases.length) {
+      body += '<br><strong>Aliases:</strong> ' + escapeHtml(c.candidate_aliases.join(' · '));
+    }
+    body += '<br><strong>Source:</strong> ' + srcUrl + ' &nbsp; <strong>Retrieved:</strong> ' + escapeHtml(retrieved);
+    body += '</div>';
+  }
+  return body;
+}
+
 function renderClaims() {
   let filtered = allClaims.map((c, i) => ({ ...c, _idx: i }));
 
@@ -281,9 +539,10 @@ function renderClaims() {
     return;
   }
 
-  // Sort: conflicts first, then by weight
+  // Sort: conflicts first, then triangulations (need human eyeball on the
+  // derivation), then new, then confirms. wq-083 v2 added triangulates.
   const weightOrder = { authoritative: 0, corroborating: 1, indicative: 2 };
-  const statusOrder = { conflicts: 0, new: 1, confirms: 2, stale: 3 };
+  const statusOrder = { conflicts: 0, triangulates: 1, new: 2, confirms: 3, stale: 4 };
   filtered.sort((a, b) => {
     const sa = statusOrder[a.dedup_status] ?? 9;
     const sb = statusOrder[b.dedup_status] ?? 9;
@@ -297,33 +556,104 @@ function renderClaims() {
     const d = decisions[idx] || {};
     const decidedClass = d.decision ? ' decided-' + d.decision : '';
 
+    const isStructured = STRUCTURED_TYPES.indexOf(c.type) !== -1;
+
     html += '<div class="claim-card w-' + c.weight + decidedClass + '">';
 
     // Header row
     html += '<div class="claim-top">';
-    html += '<span class="claim-entity">' + (c.entity || '?') + ' — ' + (c.value_display || c.value || '?') + '</span>';
+    html += '<span class="claim-entity">' + renderCardTitle(c) + '</span>';
     html += '<div class="claim-badges">';
     if (d.decision) html += '<span class="badge badge-' + (d.decision === 'accepted' ? 'confirms' : d.decision === 'declined' ? 'conflicts' : 'medium') + '">' + d.decision.toUpperCase() + '</span>';
+    if (isStructured) html += '<span class="badge badge-' + c.type + '">' + c.type.replace(/_/g, ' ') + '</span>';
     html += '<span class="badge badge-' + c.weight + '">' + c.weight + '</span>';
     html += '<span class="badge badge-' + c.dedup_status + '">' + c.dedup_status + '</span>';
     html += '<span class="badge badge-' + c.confidence + '">' + c.confidence + '</span>';
     html += '</div></div>';
 
-    // Quote
-    html += '<div class="claim-quote">"' + c.claim + '"</div>';
+    if (isStructured) {
+      html += renderStructuredBody(c);
+    } else {
+      // Free-text (podcast / text-extraction) claim
+      html += '<div class="claim-quote">"' + (c.claim || '') + '"</div>';
+      html += '<div class="claim-meta">';
+      html += '<strong>Metric:</strong> ' + (c.metric || '?') + ' &nbsp; ';
+      html += '<strong>Period:</strong> ' + (c.time_period || '?') + ' &nbsp; ';
+      html += '<strong>Speaker:</strong> ' + (c.speaker || '?') + '<br>';
+      html += '<strong>Source:</strong> ' + (c.source_podcast || '?') + ' (' + (c.source_date || '?') + ')';
+      if (c.original_source_cited) html += ' &nbsp; <strong>Cites:</strong> ' + c.original_source_cited;
+      if (c.source_excerpt_original) html += '<br><strong>Original excerpt:</strong> <em>' + c.source_excerpt_original + '</em>';
+      html += '</div>';
+    }
 
-    // Metadata
-    html += '<div class="claim-meta">';
-    html += '<strong>Metric:</strong> ' + (c.metric || '?') + ' &nbsp; ';
-    html += '<strong>Period:</strong> ' + (c.time_period || '?') + ' &nbsp; ';
-    html += '<strong>Speaker:</strong> ' + (c.speaker || '?') + '<br>';
-    html += '<strong>Source:</strong> ' + (c.source_podcast || '?') + ' (' + (c.source_date || '?') + ')';
-    if (c.original_source_cited) html += ' &nbsp; <strong>Cites:</strong> ' + c.original_source_cited;
-    html += '</div>';
+    // wq-100 D7 — inline impact affordance: old/new/variance/source/tier.
+    // Free-text claims use getImpact() (legacy); structured claims pull
+    // metadata from their nested source block. Card stays compact.
+    const impact = getImpact(c);
+    const sourceUrl = (c.source && c.source.url) || c.source_url || c.sourceUrl || '';
+    const tier = c.tier || c.source_tier || (c.source && c.source.tier) || '';
+    let bits = [];
+    if (impact) {
+      const pct = parseFloat(impact.pctChange);
+      const colour = isNaN(pct) ? 'var(--text)' : (Math.abs(pct) > 50 ? 'var(--red)' : (Math.abs(pct) > 15 ? 'var(--orange)' : 'var(--green)'));
+      bits.push('<span style="color:var(--text-dim);">old ' + escapeHtml(String(impact.current)) + '</span>');
+      bits.push('<span style="color:' + colour + ';font-weight:600;">new ' + escapeHtml(String(impact.proposed)) + '</span>');
+      if (!isNaN(pct)) bits.push('<span style="color:' + colour + ';">' + (pct > 0 ? '+' : '') + impact.pctChange + '%</span>');
+    } else if (c.value != null) {
+      bits.push('<span style="color:var(--accent);">first-time</span> · ' + escapeHtml(String(c.value_display || c.value)) + ' ' + escapeHtml(c.unit || ''));
+    }
+    if (tier) bits.push('<span style="color:var(--text-dim);">tier ' + escapeHtml(String(tier)) + '</span>');
+    if (sourceUrl) bits.push('<a href="' + escapeHtml(sourceUrl) + '" target="_blank" rel="noopener" style="color:var(--accent);">source ↗</a>');
+    if (bits.length) {
+      html += '<div class="claim-impact" style="font-size:11px;color:var(--text-dim);margin-top:6px;padding:6px 10px;background:var(--bg);border-radius:6px;line-height:1.6;">' + bits.join(' &nbsp;·&nbsp; ') + '</div>';
+    }
 
     // Conflict note
     if (c.dedup_note) {
       html += '<div class="claim-conflict">' + c.dedup_note + '</div>';
+    }
+
+    // wq-083 v2 — triangulation derivation. Surfaces the arithmetic so the
+    // reviewer can audit the connection without round-tripping through the
+    // source text.
+    if (c.triangulation && c.triangulation.derivation) {
+      const tri = c.triangulation;
+      let triHtml = '<div class="claim-triangulation">';
+      triHtml += '<strong>Triangulation:</strong> ' + escapeHtml(tri.derivation);
+      if (Array.isArray(tri.target_nodes) && tri.target_nodes.length) {
+        triHtml += '<br><strong>Targets:</strong> ' +
+          tri.target_nodes.map(n => '<code>' + escapeHtml(n) + '</code>').join(', ');
+      }
+      const bits = [];
+      if (tri.implied_value !== null && tri.implied_value !== undefined) {
+        bits.push('implied: ' + escapeHtml(String(tri.implied_value)));
+      }
+      if (tri.confidence_impact) {
+        bits.push('model says: ' + escapeHtml(tri.confidence_impact));
+      }
+      if (bits.length) triHtml += ' &nbsp; <em>' + bits.join(' · ') + '</em>';
+
+      // wq-086 commit 5 — reviewer override on confidence_impact. Default
+      // is the model's classification; reviewer can promote / downgrade
+      // before accepting. Submitted in the decision payload as
+      // accepted_confidence_impact and read by apply_decisions.apply_triangulation.
+      const modelImpact = tri.confidence_impact || 'widens_range';
+      const accepted = d.accepted_confidence_impact || modelImpact;
+      const overrideFlag = accepted !== modelImpact
+        ? '<span class="override-flag">(reviewer override)</span>'
+        : '';
+      triHtml += '<div class="impact-override">';
+      triHtml += '<label for="impact-' + idx + '">Accepted impact:</label>';
+      triHtml += '<select id="impact-' + idx + '" onchange="setImpactOverride(' + idx + ', this.value)">';
+      ['strengthens', 'widens_range', 'weakens'].forEach(opt => {
+        const sel = (opt === accepted) ? ' selected' : '';
+        triHtml += '<option value="' + opt + '"' + sel + '>' + opt + '</option>';
+      });
+      triHtml += '</select>';
+      triHtml += overrideFlag;
+      triHtml += '</div>';
+      triHtml += '</div>';
+      html += triHtml;
     }
 
     // Action buttons
@@ -481,6 +811,9 @@ function submitDecisions() {
         major_change: impact?.isMajor || false,
         confirmed: false,  // major changes need confirm step
         impact: impact,
+        // wq-086 commit 5 — reviewer's accepted confidence_impact (may differ
+        // from triangulation.confidence_impact if they overrode in the UI).
+        accepted_confidence_impact: d.accepted_confidence_impact || null,
       });
     }
   });
@@ -566,40 +899,171 @@ function confirmAndSubmit() {
   writeApprovedClaims(accepted);
 }
 
+// wq-100 — server-side decision write. Browser-download path removed.
+// Submits to admin_server.py POST /api/decision. Fails loudly if the
+// admin server is not running rather than falling back to a download.
 async function writeApprovedClaims(accepted) {
-  // Write to approved-claims.json via GitHub API (if available) or download
-  const jsonStr = JSON.stringify(accepted, null, 2);
+  // Build the same decisions payload the legacy path produced, but POST it
+  // instead of writing a file. Also include declined/parked from the local
+  // decision state so the inbox status sync is complete in one round trip.
+  const declined = [];
+  const parked = [];
+  allClaims.forEach((c, i) => {
+    const d = decisions[i] || {};
+    // Send the full claim object (not just id+claim+note) so server-side
+    // signature emission can fingerprint declined/parked decisions the same
+    // way it does accepted ones. _sync_inbox_status only reads .id so the
+    // extra fields are inert there.
+    if (d.decision === 'declined') declined.push({ ...c, id: c.id || c._claim_id, note: d.note || '' });
+    if (d.decision === 'parked')   parked.push({ ...c, id: c.id || c._claim_id, note: d.note || '' });
+  });
 
-  // Try to write directly via fetch to the repo (works on GitHub Pages with token)
-  // Fallback: write as a downloadable file that gets committed by next cron
+  const payload = {
+    ui: 'claims',
+    decisions: {
+      submitted_at: new Date().toISOString(),
+      accepted: accepted,
+      declined: declined,
+      parked: parked,
+    },
+  };
+
+  document.getElementById('claims-list').innerHTML =
+    '<div style="text-align:center;padding:40px;"><div style="display:inline-block;width:24px;height:24px;border:3px solid var(--card-border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;"></div>' +
+    '<div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Submitting decisions to admin server…</div></div>' +
+    '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
+
+  let resp;
   try {
-    // Save to localStorage as backup
-    localStorage.setItem('last-approved-claims', jsonStr);
-
-    // Create the file for download — auto_update.py will pick it up
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'approved-claims.json';
-    a.click();
-    URL.revokeObjectURL(url);
-
-    showToast(accepted.length + ' claim(s) approved! Save the downloaded file to data-updates/ in the repo. Next auto_update will apply them.');
-
-    // Show instruction
+    resp = await fetch('http://localhost:8080/api/decision', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (netErr) {
     document.getElementById('claims-list').innerHTML =
-      '<div style="padding:24px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:12px;text-align:center;">' +
-      '<h3 style="color:var(--green);margin-bottom:8px;">' + accepted.length + ' Claims Approved</h3>' +
+      '<div style="padding:24px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:12px;">' +
+      '<h3 style="color:var(--red);margin-bottom:8px;">Admin server not running</h3>' +
       '<p style="font-size:13px;color:var(--text-dim);line-height:1.6;">' +
-      'Save <code>approved-claims.json</code> to:<br>' +
-      '<code style="color:var(--accent);">data-updates/approved-claims.json</code><br><br>' +
-      'The daily auto-update (7am) will apply the changes to site-data.json, add them to the vault, and push to GitHub Pages.<br><br>' +
-      '<span style="font-size:11px;">Or run manually: <code>python3 scripts/apply_claims.py</code></span>' +
-      '</p></div>';
+      'wq-100 requires <code>scripts/admin_server.py</code> running locally to submit decisions. Start it and try again:<br><br>' +
+      '<code style="color:var(--accent);">python3 scripts/admin_server.py</code><br><br>' +
+      'Your staged decisions are still in localStorage — reload the page after the server is running to keep them.</p></div>';
+    showToast('Admin server not reachable');
+    return;
+  }
 
-  } catch(e) {
-    showToast('Error: ' + e.message);
+  let result = {};
+  try { result = await resp.json(); } catch (_) {}
+  if (!resp.ok || result.success === false) {
+    document.getElementById('claims-list').innerHTML =
+      '<div style="padding:24px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:12px;">' +
+      '<h3 style="color:var(--red);margin-bottom:8px;">Submit failed</h3>' +
+      '<p style="font-size:13px;color:var(--text-dim);line-height:1.6;">' +
+      escapeHtml(result.message || ('HTTP ' + resp.status)) + '</p>' +
+      (result.details ? '<pre style="margin-top:12px;font-size:10px;color:var(--text-dim);background:var(--bg);padding:10px;border-radius:6px;max-height:200px;overflow:auto;">' + escapeHtml(result.details) + '</pre>' : '') +
+      '</div>';
+    showToast('Submit failed — see details');
+    return;
+  }
+
+  // Success — clear localStorage and render summary with apply-pipeline counters.
+  localStorage.removeItem(DECISIONS_KEY);
+  const a = result.apply_summary || {};
+  const totalAuto = a.auto_applied || 0;
+  const totalReview = a.routed_to_review || 0;
+  const totalAnom = a.anomalies || 0;
+
+  let html = '<div style="padding:24px;background:var(--card);border:1px solid var(--card-border);border-radius:12px;">';
+  html += '<h3 style="font-size:16px;margin-bottom:12px;color:var(--green);">' + accepted.length + ' decision(s) submitted</h3>';
+  html += '<div style="font-size:13px;color:var(--text);line-height:1.8;">' + escapeHtml(result.message || '') + '</div>';
+  html += '<div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;">';
+  html += '<div style="padding:10px 14px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:8px;"><div style="font-size:11px;color:var(--text-dim);">Auto-applied</div><strong style="font-size:18px;color:var(--green);">' + totalAuto + '</strong></div>';
+  html += '<div style="padding:10px 14px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;"><div style="font-size:11px;color:var(--text-dim);">Routed to review</div><strong style="font-size:18px;color:var(--orange);">' + totalReview + '</strong></div>';
+  html += '<div style="padding:10px 14px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;"><div style="font-size:11px;color:var(--text-dim);">Anomalies (>50%)</div><strong style="font-size:18px;color:var(--red);">' + totalAnom + '</strong></div>';
+  html += '</div>';
+  html += '<div style="margin-top:16px;font-size:11px;color:var(--text-dim);">Decision file: <code style="color:var(--accent);">' + escapeHtml(result.decisions_path || '') + '</code></div>';
+  html += '<div style="margin-top:14px;display:flex;gap:8px;">';
+  html += '<button onclick="location.reload()" style="padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:white;font-size:12px;font-weight:600;cursor:pointer;">Reload</button>';
+  html += '<button onclick="openOverrideModal()" style="padding:8px 16px;border-radius:8px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Override last apply</button>';
+  html += '</div></div>';
+  document.getElementById('claims-list').innerHTML = html;
+  showToast('Applied — ' + totalAuto + ' auto, ' + totalReview + ' review');
+}
+
+// wq-100 D9 — override action. Reads recent auto-applies from data/apply_log.json
+// and lets the operator revert one (POSTs to /api/override).
+async function openOverrideModal() {
+  let log;
+  try {
+    const r = await fetch('data/apply_log.json?v=' + Date.now());
+    if (!r.ok) throw new Error('apply_log.json not available');
+    log = await r.json();
+  } catch (e) {
+    showToast('No apply log yet — run apply_pipeline.py first');
+    return;
+  }
+  const runs = log.runs || [];
+  const cutoff = Date.now() - 24 * 3600 * 1000;
+  const recent = [];
+  runs.slice(-10).forEach(run => {
+    (run.diffs || []).forEach(d => {
+      if (d.bucket !== 'auto_apply') return;
+      const ts = run.ts ? new Date(run.ts.replace(/Z$/, '')).getTime() : 0;
+      if (ts < cutoff) return;
+      recent.push({ ...d, ts: run.ts });
+    });
+  });
+  if (recent.length === 0) {
+    showToast('No auto-applies in the last 24h');
+    return;
+  }
+
+  let html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:center;justify-content:center;" id="override-modal">';
+  html += '<div style="background:var(--card);border:1px solid var(--card-border);border-radius:12px;padding:24px;max-width:720px;width:92%;max-height:80vh;overflow-y:auto;">';
+  html += '<h2 style="font-size:16px;margin-bottom:8px;">Override last apply</h2>';
+  html += '<p style="font-size:11px;color:var(--text-dim);margin-bottom:14px;">Recently auto-applied (last 24h). Click revert to roll the entity field back to its prior value and re-queue the source claim for human review.</p>';
+  recent.slice(0, 30).forEach((d, i) => {
+    const variancePct = d.variance != null ? (d.variance * 100).toFixed(1) + '%' : '—';
+    html += '<div style="padding:10px 12px;border:1px solid var(--card-border);border-radius:8px;margin-bottom:8px;">';
+    html += '<div style="font-size:12px;color:var(--text);"><strong>' + escapeHtml(d.entity_slug) + '</strong>.' + escapeHtml(d.field_key) + '@' + escapeHtml(d.year_key) + '</div>';
+    html += '<div style="font-size:11px;color:var(--text-dim);margin:3px 0;">' + escapeHtml(String(d.prior_value)) + ' → <strong style="color:var(--green);">' + escapeHtml(String(d.incoming_value)) + '</strong> · variance ' + variancePct + ' · ' + escapeHtml(d.incoming_tier || '?') + ' · claim ' + escapeHtml(d.claim_id || '?') + '</div>';
+    html += '<button onclick="performOverride(' + i + ')" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(239,68,68,0.4);background:transparent;color:var(--red);font-size:11px;cursor:pointer;">Revert</button>';
+    html += '</div>';
+  });
+  html += '<div style="margin-top:12px;display:flex;justify-content:flex-end;">';
+  html += '<button onclick="document.getElementById(\'override-modal\').remove()" style="padding:6px 14px;border-radius:6px;border:1px solid var(--card-border);background:transparent;color:var(--text-dim);font-size:12px;cursor:pointer;">Close</button>';
+  html += '</div></div></div>';
+  document.body.insertAdjacentHTML('beforeend', html);
+  window._overrideCandidates = recent.slice(0, 30);
+}
+
+async function performOverride(idx) {
+  const d = (window._overrideCandidates || [])[idx];
+  if (!d) { showToast('Override target lost'); return; }
+  const reason = prompt('Reason for the override (logged):', '');
+  if (reason === null) return;
+  try {
+    const r = await fetch('http://localhost:8080/api/override', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        entity_slug: d.entity_slug,
+        year_key: d.year_key,
+        field_key: d.field_key,
+        revert_to_value: d.prior_value,
+        claim_id: d.claim_id,
+        reason: reason,
+      }),
+    });
+    const result = await r.json();
+    if (!r.ok || result.success === false) {
+      showToast('Override failed: ' + (result.message || r.status));
+      return;
+    }
+    showToast('Reverted — ' + result.message);
+    document.getElementById('override-modal')?.remove();
+  } catch (e) {
+    showToast('Override failed: admin server not reachable');
   }
 }
 

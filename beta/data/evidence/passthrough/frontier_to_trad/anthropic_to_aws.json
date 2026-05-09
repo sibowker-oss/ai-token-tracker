@@ -1,0 +1,10 @@
+{
+  "id": "anthropic_to_aws",
+  "from": "anthropic",
+  "to": "aws",
+  "value": 5.5,
+  "valueBasis": "Q1 2026 annualised \u2014 Anthropic's AWS compute spend",
+  "source": "Anthropic + Amazon disclosures 2025-26; ~60% of Anthropic compute on AWS; aggregate compute spend > Anthropic's $30B ARR",
+  "provenance": "tier_2b",
+  "rationale": "Anthropic's compute spend exceeds its revenue (training-heavy phase). AWS share ~60% of compute."
+}

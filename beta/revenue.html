@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Revenue Ledger — AI Ledger v2</title>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --text-bright:#f8fafc; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -78,30 +80,32 @@
     .footer-grid{grid-template-columns:1fr;gap:16px;}
   }
 </style>
+<script src="data/format-helpers.js"></script>
 </head>
-<body>
+<body class="surface-dark">
 
-<nav class="nav-bar">
-  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
-  <a href="index.html" class="nav-link">Home</a>
-  <a href="capital.html" class="nav-link">Capital</a>
-  <a href="revenue.html" class="nav-link active">Revenue</a>
-  <a href="usage.html" class="nav-link">Usage</a>
-  <a href="methodology.html" class="nav-link">Methodology</a>
-  <a href="changelog.html" class="nav-link">Changelog</a>
-  <a href="power.html" class="nav-link disabled">Power (v3)</a>
-  <a href="about.html" class="nav-link">About</a>
-  <div class="nav-scenario">
-    <label>Scenario:</label>
-    <button class="scenario-btn" data-s="bear" onclick="setScenario('bear')" title="Current trajectory continues. Revenue grows 20-30% annually.">Bear</button>
-    <button class="scenario-btn active" data-s="base" onclick="setScenario('base')" title="Enterprise adoption picks up through 2026-27. Revenue grows 80-100% annually.">Base</button>
-    <button class="scenario-btn" data-s="bull" onclick="setScenario('bull')" title="Agent workflows drive step-change in usage. Revenue grows 200%+.">Bull</button>
-  </div>
-  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
-    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
-    Hepburn Advisory
+<header class="ds-header">
+  <a href="/" class="ds-header__brand" aria-label="The AI Ledger — home">
+    <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+    <span class="ds-header__brand-text">
+      <span class="ds-header__brand-name">AI Ledger</span>
+      <span class="ds-header__brand-sub">Hepburn Advisory</span>
+    </span>
   </a>
-</nav>
+  <nav class="ds-header__nav" aria-label="Primary">
+    <a class="ds-header__nav-link" href="/capital.html">Capital</a>
+    <a class="ds-header__nav-link is-active" href="/revenue.html">Revenue</a>
+    <a class="ds-header__nav-link" href="/compute.html">Compute</a>
+    <a class="ds-header__nav-link" href="/usage.html">Usage</a>
+    <a class="ds-header__nav-link" href="/power.html">Power</a>
+    <a class="ds-header__nav-link" href="/methodology.html">Methodology</a>
+    <a class="ds-header__nav-link" href="/about.html">About</a>
+  </nav>
+  <a class="ds-header__cta" href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=header-cta" target="_blank" rel="noopener">
+    Hepburn Advisory <span aria-hidden="true">↗</span>
+  </a>
+</header>
+
 
 <div class="container">
   <h1>Revenue Ledger</h1>
@@ -129,9 +133,14 @@
       <span style="color:#f59e0b;font-weight:700;font-size:13px;margin-top:-1px;">?</span>
       <span><strong style="color:#f1f5f9;">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers &mdash; Hyperscalers clip ~20%, Trad. SaaS ~60%. That retained margin flows directly to Generated Cashflow (bottom right), bypassing Model Providers entirely. So each column is smaller than the one before it &mdash; the drop <em>is</em> the channel margin.</span>
     </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:8px;font-size:11px;color:var(--text-dim);line-height:1.6;">
+      <span style="color:#8b5cf6;font-weight:700;font-size:13px;margin-top:-1px;">i</span>
+      <span><strong style="color:#f1f5f9;">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~95% of API revenue direct (5% via hyperscaler resale); AI Natives ~90% direct; Enterprise SaaS ~50/50. The Who Pays column splits AI buyers into <em>AI Natives</em> (heavy API consumers like Cursor / Glean / Perplexity) and <em>Enterprises &amp; Govs</em> (Fortune 500, regulated, sovereign). See <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology &sect; entity archetype taxonomy</a>.</span>
+    </div>
     <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
       <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
     </div>
+    <div id="buyer-provider-panel" style="margin-top:12px;padding:14px 16px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:11px;color:var(--text-dim);"></div>
   </div>
 
   <!-- What Would Have to Be True -->
@@ -142,41 +151,28 @@
   </div>
 
 <div style="text-align:center;margin:24px 0 0;"><button class="cite-btn" data-path="/revenue" style="background:transparent;border:1px solid var(--card-border);color:var(--text-dim);padding:6px 16px;border-radius:6px;font-size:11px;cursor:pointer;">Cite this page</button></div>
-  <footer>
-    <div class="footer-grid">
-      <div>
-        <h4>Hepburn Advisory</h4>
-        <a href="about.html">About the firm</a>
-        <a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a>
-      </div>
-      <div>
-        <h4>The Ledger</h4>
-        <a href="capital.html">Capital</a>
-        <a href="revenue.html">Revenue</a>
-        <a href="usage.html">Usage</a>
-        <a href="power.html">Power (v3)</a>
-      </div>
-      <div>
-        <h4>Reference</h4>
-        <a href="methodology.html">Methodology</a>
-        <a href="changelog.html">Changelog</a>
-      </div>
-    </div>
-    <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
-    <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
-  </footer>
 </div>
 
 <script>
-// ── Scenario data ──
+// ── Scenario data (wq-073 — fetched from data/scenarios.json) ──
+// Inline defaults remain as graceful fallback if fetch fails.
 // Scenario multipliers: 2025 is actual (no flex). 2026E/2027E flex by scenario.
 // Bear = current trajectory decelerates. Base = data as modeled. Bull = agent-driven acceleration.
-const SCENARIOS = {
+let SCENARIOS = {
   bear:  { revenue: 17, label: 'Bear', growth: '20-30%', multiplier: { '2025': 1.0, '2026E': 0.55, '2027E': 0.40 } },
   base:  { revenue: 22, label: 'Base', growth: '80-100%', multiplier: { '2025': 1.0, '2026E': 1.0, '2027E': 1.0 } },
   bull:  { revenue: 27, label: 'Bull', growth: '200%+', multiplier: { '2025': 1.0, '2026E': 1.35, '2027E': 1.80 } }
 };
+fetch('data/scenarios.json?v=' + Date.now())
+  .then(r => r.json())
+  .then(s => {
+    if (s && s.revenue_projection) {
+      SCENARIOS = s.revenue_projection;
+      // Re-render against fetched scenarios if the page has already initialised.
+      if (typeof renderYear === 'function' && typeof activeYear !== 'undefined') renderYear(activeYear);
+    }
+  })
+  .catch(() => { /* fallback SCENARIOS already in place */ });
 // Bear 2026E: $64B * 0.55 = ~$35B (growth decelerates to ~2x from $17.5B)
 // Bear 2027E: $112B * 0.40 = ~$45B (growth continues at ~30% from bear-26)
 // Bull 2026E: $64B * 1.35 = ~$86B (agent workflows accelerate adoption)
@@ -205,7 +201,10 @@ let sankeyData = null, activeYear = '2025';
 let allNodes = [], allFlows = [], lockedNode = null, hoveredNode = null;
 
 const COLORS = {
-  'Consumer':'#f59e0b','SME':'#3b82f6','Enterprise':'#10b981','VC/Investors':'#dc2626',
+  'Consumer':'#f59e0b','AI Natives':'#8b5cf6','Enterprises & Govs':'#3b82f6','VC/Investors':'#dc2626',
+  // wq-090 backward-compat aliases — older data files still referencing SME/Enterprise
+  // labels resolve to the new archetype palette so partial deploys don't break colors.
+  'SME':'#8b5cf6','Enterprise':'#3b82f6',
   'Model Subs':'#f59e0b','Model API':'#3b82f6','Hyperscalers':'#06b6d4','AI Native Apps':'#10b981',
   'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
   'OpenAI':'#10a37f','Anthropic':'#d97706','Google (Gemini)':'#4285f4','IaaS/Open':'#8b5cf6',
@@ -232,6 +231,13 @@ async function init() {
   document.getElementById('year-toggle').innerHTML = html;
   document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === activeYear));
   renderYear(activeYear);
+
+  // wq-077 — hydrate [data-narrative] spans from site-data.json. Independent
+  // fetch from the sankey-projections one above; failure leaves inline defaults.
+  fetch('site-data.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(d => { if (typeof hydrateNarrative === 'function') hydrateNarrative(d); })
+    .catch(() => { /* graceful fallback to inline defaults */ });
 }
 
 function switchYear(yr) {
@@ -258,18 +264,29 @@ function renderYear(yr) {
   // Base scenario = the data as-is. Bear/bull scale the customer revenue headline.
   const scenarioData = SCENARIOS[currentScenario];
   const mult = scenarioData.multiplier[yr] || 1.0;
-  const baseRevenue = d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  // wq-063: hero "Customer Revenue" displays BUYER-GROSS (what customers
+  // actually paid, ~$19.86B). Provider-received chPass (~$17.56B) remains
+  // visible as the secondary "→ providers receive" line and via the Sankey
+  // provider column. Falls back to net (totalCustomerRevenue) when gross is
+  // absent (older site-data.json), then to summing non-VC buyers (oldest fallback).
+  const baseRevenue = (d.totalCustomerRevenue_gross != null)
+    ? d.totalCustomerRevenue_gross
+    : (d.totalCustomerRevenue != null)
+      ? d.totalCustomerRevenue
+      : d.buyers.filter(b => b.label !== 'VC/Investors').reduce((s,b) => s + b.value, 0);
+  const revenueNet = (d.totalCustomerRevenue != null) ? d.totalCustomerRevenue : null;
   const revenue = baseRevenue * mult;
 
   // VC subsidy scales inversely with revenue growth (higher revenue = less subsidy needed)
+  // wq-076: keep as Number; format at display via formatCurrency()
   const baseVC = d.totalVCSubsidy || 0;
   const vcMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 1.3 : currentScenario === 'bull' ? 0.5 : 1.0);
-  const vcSubsidy = (baseVC * vcMultiplier).toFixed(1);
+  const vcSubsidy = baseVC * vcMultiplier;
 
   // Cashflow scales with revenue scenario
   const baseCF = cf ? cf.value : 0;
   const cfMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 0.4 : currentScenario === 'bull' ? 2.2 : 1.0);
-  const cashflow = (baseCF * cfMultiplier).toFixed(1);
+  const cashflow = baseCF * cfMultiplier;
 
   const capex = (d.infrastructureCapex || {}).value || 0;
   const capexTier = (d.infrastructureCapex || {}).tier || '';
@@ -279,26 +296,108 @@ function renderYear(yr) {
   // Tier degrades for non-base scenarios on projected years
   const scenarioTier = (yr === '2025' || currentScenario === 'base') ? '' : ' (scenario)';
 
+  // wq-063: secondary line shows provider-received (net) when gross is the
+  // primary number — gives readers transparency into the channel-margin gap.
+  const heroSecondary = (d.totalCustomerRevenue_gross != null && revenueNet != null)
+    ? '<div class="detail" style="margin-top:2px;font-size:9px;opacity:0.75;">→ providers receive '+ formatCurrency(revenueNet * mult) +'</div>'
+    : '';
+
   let h = '';
-  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">$'+revenue.toFixed(1)+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">$'+capex+'B</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">$'+vcSubsidy+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">$'+cashflow+'B</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">'+formatCurrency(revenue)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">'+formatCurrency(capex)+'</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">'+formatCurrency(vcSubsidy)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">'+formatCurrency(cashflow)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
   document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
 
-  // Dynamic subtitles incorporating scenario
+  // Dynamic subtitles incorporating scenario.
+  // wq-077: 2025 branch hydrates from engine values (was hardcoded "$17.5B" / "$9.4B").
   let subtitle = '';
   if (yr === '2025') {
-    subtitle = '$17.5B in customer revenue and $9.4B in VC-funded operating losses across frontier AI providers.';
+    const grossYr = (d.totalCustomerRevenue_gross != null) ? d.totalCustomerRevenue_gross : revenue;
+    const vcYr = (d.totalVCSubsidy != null) ? d.totalVCSubsidy : vcSubsidy;
+    subtitle = formatCurrency(grossYr) + ' in customer revenue and ' + formatCurrency(vcYr) + ' in VC-funded operating losses across frontier AI providers.';
   } else {
-    subtitle = scenarioData.label + ' case: $' + revenue.toFixed(0) + 'B in customer revenue. VC subsidy $' + vcSubsidy + 'B. Growth assumption: ' + scenarioData.growth + ' annually.';
+    subtitle = scenarioData.label + ' case: ' + formatCurrency(revenue) + ' in customer revenue. VC subsidy ' + formatCurrency(vcSubsidy) + '. Growth assumption: ' + scenarioData.growth + ' annually.';
   }
   const subtitleEl = document.getElementById('page-subtitle');
   if (subtitleEl) subtitleEl.textContent = subtitle;
 
   buildSankey(d);
   renderWWHBT(d, yr);
+  renderBuyerProviderPanel(d);
+}
+
+// ── wq-090 — buyer-provider routing panel ──
+// Surfaces the engine-derived buyer × provider net-revenue allocation alongside
+// the Sankey. The Sankey itself shows buyer → channel → provider as separate
+// ribbon segments (which fan out at the channel band), so the per-buyer
+// provider preference is editorial information that needs an explicit table.
+function renderBuyerProviderPanel(d) {
+  const el = document.getElementById('buyer-provider-panel');
+  if (!el) return;
+  const bp = d.buyerProviderRouting;
+  if (!bp || !Object.keys(bp).length) { el.innerHTML = ''; return; }
+
+  // Aggregate small-frontier-lab providers under "Other Model Providers" so the
+  // table mirrors the visible Sankey provider column. Keys to surface explicitly:
+  // openai / anthropic / google / iaas; everything else collapses into Other.
+  const NAMED = { openai: 'OpenAI', anthropic: 'Anthropic', google: 'Google/Gemini', iaas: 'IaaS/Open' };
+  const ORDER = ['openai', 'anthropic', 'google', 'iaas', '_other'];
+  function aggregate(row) {
+    const out = { openai: 0, anthropic: 0, google: 0, iaas: 0, _other: 0 };
+    Object.entries(row || {}).forEach(([slug, v]) => {
+      if (slug in NAMED) out[slug] += v;
+      else out._other += v;
+    });
+    return out;
+  }
+
+  const buyers = ['Consumer', 'AI Natives', 'Enterprises & Govs'];
+  const rows = buyers.map(b => ({ buyer: b, agg: aggregate(bp[b] || {}) }));
+  // Drop near-zero columns
+  const colTotals = ORDER.reduce((acc, k) => {
+    acc[k] = rows.reduce((s, r) => s + (r.agg[k] || 0), 0);
+    return acc;
+  }, {});
+  const visibleCols = ORDER.filter(k => colTotals[k] > 0.01);
+  const COLOR = { 'Consumer':'#f59e0b', 'AI Natives':'#8b5cf6', 'Enterprises & Govs':'#3b82f6' };
+
+  let html = '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap;">';
+  html += '<strong style="color:#f1f5f9;font-size:12px;">Where each buyer\'s money lands (net to providers)</strong>';
+  html += '<span style="font-size:10px;color:var(--text-dim);opacity:0.7;">wq-090 editorial — see <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology</a></span>';
+  html += '</div>';
+  // Wrap the table in an overflow-x:auto container so the multi-column grid
+  // (Buyer + N providers + Total) scrolls horizontally inside the panel on
+  // narrow viewports rather than blowing out the page width — Simon flagged
+  // mobile portrait rendering 2026-05-07.
+  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -16px;padding:0 16px;">';
+  html += '<table style="width:100%;min-width:520px;border-collapse:collapse;font-size:11px;">';
+  html += '<thead><tr><th style="text-align:left;padding:4px 8px;font-weight:600;color:#94a3b8;">Buyer</th>';
+  visibleCols.forEach(k => {
+    const label = k === '_other' ? 'Other Model Providers' : NAMED[k];
+    html += `<th style="text-align:right;padding:4px 8px;font-weight:600;color:#94a3b8;">${label}</th>`;
+  });
+  html += '<th style="text-align:right;padding:4px 8px;font-weight:600;color:#94a3b8;">Total (net)</th></tr></thead>';
+  html += '<tbody>';
+  rows.forEach(r => {
+    const total = visibleCols.reduce((s, k) => s + (r.agg[k] || 0), 0);
+    const c = COLOR[r.buyer] || '#94a3b8';
+    html += `<tr><td style="padding:6px 8px;border-top:1px solid rgba(148,163,184,0.1);"><span style="display:inline-block;width:8px;height:8px;background:${c};border-radius:2px;margin-right:6px;vertical-align:middle;"></span>${r.buyer}</td>`;
+    visibleCols.forEach(k => {
+      const v = r.agg[k] || 0;
+      const pct = total > 0 ? (v / total * 100).toFixed(0) + '%' : '—';
+      html += `<td style="text-align:right;padding:6px 8px;border-top:1px solid rgba(148,163,184,0.1);font-variant-numeric:tabular-nums;">$${v.toFixed(2)}B <span style="opacity:0.5;font-size:10px;">${pct}</span></td>`;
+    });
+    html += `<td style="text-align:right;padding:6px 8px;border-top:1px solid rgba(148,163,184,0.1);font-weight:600;font-variant-numeric:tabular-nums;color:#cbd5e1;">$${total.toFixed(2)}B</td>`;
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  html += '</div>';
+  // overflow-wrap:anywhere lets long inline <code> paths break inside the
+  // narrow mobile card width so they don't overflow the panel boundary.
+  html += '<p style="margin:8px 0 0;font-size:10px;color:var(--text-dim);opacity:0.7;line-height:1.5;overflow-wrap:anywhere;word-break:break-word;">AI Natives split (45/45/10 to OpenAI / Anthropic / Google) is editorial per <code>data/sankey_cost_structure.json:channel_mapping.buyer_provider_split</code>. Consumer split is engine-derived from per-provider <code>subscription_pct</code> rollup; Enterprises &amp; Govs back-solves to satisfy each provider\'s <code>customer_revenue</code>. Net basis — channel margins kept by Hyperscaler / SaaS resellers flow to Generated Cashflow, not providers.</p>';
+  el.innerHTML = html;
 }
 
 // ── WWHBT (What Would Have to Be True) ──
@@ -396,7 +495,10 @@ function buildSankey(d) {
   const spacing = (W - margin*2 - colW*4) / 3;
   const barH = 450, gap = 5, topY = 50;
 
-  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null}));
+  // wq-062 — pass color + slug through so the renderer can use data-supplied colors
+  // (fixes Google/Gemini and Other Model Providers grey-fallback bug) and so the
+  // routing-aware Channels→Providers builder can match routing entries by slug.
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null}));
   const colDefs = [
     { label:'Who Pays', items: wrap(d.buyers) },
     { label:'Channels', items: wrap(d.channels) },
@@ -415,7 +517,7 @@ function buildSankey(d) {
     const x = margin + ci*(colW + spacing);
     col.items.forEach(item => {
       const h = item.value * scale;
-      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, color:item.color, slug:item.slug, x, y, w:colW, h, col:ci, _in:0, _out:0 });
       y += h + gap;
     });
   });
@@ -425,19 +527,45 @@ function buildSankey(d) {
   const flowDefs = [];
 
   // Buyers -> Channels
+  // wq-090: prefer engine-derived `buyerChannelMatrix` (per-archetype routing)
+  // over the legacy proportional rescale. The matrix gives gross flow values
+  // for every (buyer, channel) pair, matching how the underlying
+  // subscription_pct / api_pct / enterprise_pct slices actually route through
+  // the cost-structure tables. Falls back to proportional when the matrix is
+  // absent (older data files / projection years that pre-date wq-090).
   const custBuyers = allNodes.filter(n=>n.col===0 && n.name!=='VC/Investors');
   const chNodes = allNodes.filter(n=>n.col===1);
   const adsCh = chNodes.filter(c=>c.name==='Ads');
   const nonAdsCh = chNodes.filter(c=>c.name!=='Ads');
   const nonAdsChTotal = nonAdsCh.reduce((s,n)=>s+n.value,0);
   const adsRouting = d.adsRouting || {};
+  const bcMatrix = d.buyerChannelMatrix || null;
   custBuyers.forEach(buyer => {
     const adContrib = adsRouting[buyer.name] || 0;
     const remaining = Math.max(0, buyer.value - adContrib);
     if(adContrib > 0) {
       adsCh.forEach(ch => { flowDefs.push({from:buyer.name, to:ch.name, value:adContrib, fc:0, tc:1}); });
     }
-    if(remaining > 0 && nonAdsChTotal > 0) {
+    if(remaining <= 0) return;
+
+    // wq-090 engine-derived path
+    const matrixRow = bcMatrix && bcMatrix[buyer.name];
+    if (matrixRow) {
+      // Scale matrix row to remaining (= buyer.value − adContrib) so any small
+      // engine-vs-channel rounding drift doesn't break buyer↔channel conservation.
+      const rowSum = Object.values(matrixRow).reduce((s, v) => s + (v || 0), 0);
+      if (rowSum > 0) {
+        const k = remaining / rowSum;
+        nonAdsCh.forEach(ch => {
+          const v = (matrixRow[ch.name] || 0) * k;
+          if (v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
+        });
+        return;
+      }
+    }
+
+    // Fallback: proportional rescale (legacy / projection-year behaviour)
+    if(nonAdsChTotal > 0) {
       nonAdsCh.forEach(ch => {
         const v = remaining * (ch.value / nonAdsChTotal);
         if(v > 0.01) flowDefs.push({from:buyer.name, to:ch.name, value:v, fc:0, tc:1});
@@ -463,11 +591,30 @@ function buildSankey(d) {
   const baseValue = (p) => (p.name==='OpenAI' ? Math.max(p.value - adsBump, 0) : p.value);
   const frontierBaseTotal = frontierNodes.reduce((s,n)=>s+baseValue(n),0);
 
+  // wq-062 — routing-aware Channels→Providers. d.routing is keyed by provider slug;
+  // each entry maps Sankey channel label → customer-revenue contribution. Channel
+  // values are already grossed up by the engine so chPass = sum(routing per channel)
+  // and the channel margin still flows to Generated Cashflow. Falls back to the
+  // pre-wq-062 proportional logic when d.routing is absent (backward compat).
+  const routing = d.routing || null;
+  const provBySlug = {};
+  if (routing) {
+    provNodes.forEach(p => { if (p.slug) provBySlug[p.slug] = p; });
+  }
+
   chNodes.forEach(ch => {
     const mPct = marginPcts[ch.name]||0;
     const pass = ch.value * (1-mPct);
 
-    if(ch.name==='Ads') {
+    if (routing && ch.name !== 'Ads') {
+      Object.entries(routing).forEach(([slug, channels]) => {
+        const v = channels[ch.name] || 0;
+        const prov = provBySlug[slug];
+        if (v > 0.01 && prov) {
+          flowDefs.push({from:ch.name, to:prov.name, value:v, fc:1, tc:2});
+        }
+      });
+    } else if(ch.name==='Ads') {
       flowDefs.push({from:ch.name, to:'OpenAI', value:pass, fc:1, tc:2});
     } else if(ch.name==='IaaS & Agg.' && iaasNode) {
       flowDefs.push({from:ch.name, to:'IaaS/Open', value:pass, fc:1, tc:2});
@@ -567,7 +714,7 @@ function renderCanvas(ctx, W) {
     ctx.fillText(labels[ci], x, 18);
     ctx.font = '11px -apple-system,sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('$'+colTotals[ci].toFixed(1)+'B', x, 33);
+    ctx.fillText(formatCurrency(colTotals[ci]), x, 33);
     ctx.strokeStyle = '#334155'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(nodes[0].x, 38); ctx.lineTo(nodes[0].x+nodes[0].w, 38); ctx.stroke();
   });
@@ -578,7 +725,8 @@ function renderCanvas(ctx, W) {
     const connected = aName && (f.from.name===aName || f.to.name===aName);
     const dimmed = aName && !connected;
     ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.5 : 0.18;
-    ctx.fillStyle = COLORS[f.from.name] || '#475569';
+    // wq-062 — prefer node-supplied color (from data) over the hard-coded COLORS map
+    ctx.fillStyle = f.from.color || COLORS[f.from.name] || '#475569';
     ctx.beginPath();
     const cp = (f.rx - f.lx) * 0.4;
     ctx.moveTo(f.lx, f.ly);
@@ -604,7 +752,8 @@ function renderCanvas(ctx, W) {
     const isActive = n.name === aName;
     const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
     ctx.globalAlpha = dimmed ? 0.25 : 1;
-    ctx.fillStyle = COLORS[n.name] || '#475569';
+    // wq-062 — prefer node-supplied color over the hard-coded COLORS map
+    ctx.fillStyle = n.color || COLORS[n.name] || '#475569';
     ctx.beginPath(); ctx.roundRect(n.x, n.y, n.w, Math.max(n.h,2), 4); ctx.fill();
     if(isActive) { ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke(); }
     if(n.h > 16) {
@@ -615,8 +764,7 @@ function renderCanvas(ctx, W) {
       ctx.fillText(label, n.x+3, n.y+n.h/2-2);
       ctx.font = '9px -apple-system,sans-serif';
       ctx.fillStyle = 'rgba(255,255,255,0.8)';
-      const vt = '$'+n.value.toFixed(n.value<10?1:0)+'B';
-      ctx.fillText(vt, n.x+3, n.y+n.h/2+10);
+      ctx.fillText(formatCurrency(n.value), n.x+3, n.y+n.h/2+10);
     }
     // Tier badge
     if(n.tier && n.h >= 10) {
@@ -641,21 +789,21 @@ function renderCanvas(ctx, W) {
       ? '<span style="display:inline-block;background:'+tierColor(active.tier)+';color:#0a0e1a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle;">TIER '+active.tier+'</span>'
       : '';
     let html = '<div style="display:flex;gap:32px;flex-wrap:wrap;">';
-    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">$'+active.value.toFixed(1)+'B</div>';
+    html += '<div style="min-width:160px;"><strong style="color:#f1f5f9;font-size:15px;">'+active.name+'</strong>'+badge+'<div style="color:var(--accent);font-weight:800;font-size:20px;">'+formatCurrency(active.value)+'</div>';
     if(active.src) {
       html += '<div style="font-size:10px;color:#64748b;line-height:1.4;margin-top:4px;max-width:240px;">'+active.src+'</div>';
     }
     html += '</div>';
     if(inflows.length) {
       const inTotal = inflows.reduce((s,f)=>s+f.value,0);
-      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows $'+inTotal.toFixed(1)+'B</div>';
-      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '<div><div style="font-size:10px;color:var(--green);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Inflows '+formatCurrency(inTotal)+'</div>';
+      inflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.from.name+': <strong>'+formatCurrency(f.value)+'</strong></div>'; });
       html += '</div>';
     }
     if(outflows.length) {
       const outTotal = outflows.reduce((s,f)=>s+f.value,0);
-      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows $'+outTotal.toFixed(1)+'B</div>';
-      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>$'+f.value.toFixed(1)+'B</strong></div>'; });
+      html += '<div><div style="font-size:10px;color:var(--orange);text-transform:uppercase;font-weight:600;margin-bottom:4px;">Outflows '+formatCurrency(outTotal)+'</div>';
+      outflows.forEach(f => { html += '<div style="font-size:11px;color:#cbd5e1;">'+f.to.name+': <strong>'+formatCurrency(f.value)+'</strong></div>'; });
       html += '</div>';
     }
     html += '</div>';
@@ -704,5 +852,58 @@ document.querySelectorAll('.cite-btn').forEach(btn => {
   });
 });
 </script>
+
+<aside class="byline">
+  <span>Prepared by</span>
+  <a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=byline" target="_blank" rel="noopener">Hepburn Advisory</a>
+  <span class="meta">Independent advisory · Melbourne · grounded in Ledger data</span>
+</aside>
+
+<footer class="ds-footer">
+  <div class="ds-footer__inner">
+    <div class="ds-footer__brand">
+      <div class="ds-footer__brand-lockup">
+        <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+        <span class="ds-footer__brand-name">Hepburn Advisory</span>
+      </div>
+      <span class="ds-footer__brand-desc">Independent advisory · Melbourne · working globally</span>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Ledger pages</h4>
+      <ul>
+        <li><a href="/capital.html">Capital</a></li>
+        <li><a href="/revenue.html">Revenue</a></li>
+        <li><a href="/compute.html">Compute</a></li>
+        <li><a href="/usage.html">Usage</a></li>
+        <li><a href="/power.html">Power</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Methodology + provenance</h4>
+      <ul>
+        <li><a href="/methodology.html">Methodology</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Other Ledger views</h4>
+      <ul>
+        <li><a href="/timeline.html">Timeline</a></li>
+        <li><a href="/openrouter.html">Live pricing</a></li>
+        <li><a href="/changelog.html">Changelog</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Hepburn Advisory</h4>
+      <ul>
+        <li><a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=footer-attribution" target="_blank" rel="noopener">hepburnadvisory.com.au ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ds-footer__base">
+    © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated 2026-04-29 · <a href="/methodology.html">Methodology at /methodology</a>
+  </div>
+</footer>
+
 </body>
 </html>

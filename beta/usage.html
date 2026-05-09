@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Usage Ledger — The AI Ledger v2</title>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -35,7 +37,7 @@
   .container{max-width:1400px;margin:0 auto;padding:24px;}
 
   /* ── Hero ── */
-  .hero-strip{text-align:center;padding:24px 0 20px;border-bottom:1px solid var(--card-border);margin-bottom:24px;}
+  .hero-strip{text-align:left;padding:24px 0 20px;border-bottom:1px solid var(--card-border);margin-bottom:24px;}
   .hero-strip h1{font-size:28px;font-weight:700;margin-bottom:4px;}
   .hero-strip .sub{font-size:13px;color:var(--text-dim);}
   .hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0;}
@@ -115,6 +117,65 @@
   .pace-lagging{background:rgba(239,68,68,0.15);color:#ef4444;}
   .pace-ahead{background:rgba(59,130,246,0.15);color:#3b82f6;}
 
+  /* ── SaaS AI Transition Map (wq-101) ── */
+  .posture-row{display:grid;grid-template-columns:240px 220px 1fr 110px 90px;gap:20px;padding:22px 0;border-bottom:1px solid var(--card-border);align-items:center;}
+  .posture-row:last-child{border-bottom:none;}
+  .posture-header{display:grid;grid-template-columns:240px 220px 1fr 110px 90px;gap:20px;padding:0 4px 12px;border-bottom:1px solid var(--card-border);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;}
+  .posture-header .col-c{text-align:center;}
+  .posture-nameplate .product{font-size:15px;font-weight:600;line-height:1.25;color:var(--text-bright);margin:0 0 3px;}
+  .posture-nameplate .parent-line{font-size:10.5px;color:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;}
+  .posture-nameplate .archetype{font-size:12px;color:var(--accent3);line-height:1.4;font-weight:500;}
+  .posture-nameplate .private-flag{display:inline-block;font-size:9px;background:rgba(139,92,246,0.18);color:#a78bfa;padding:1px 6px;border-radius:3px;letter-spacing:0.08em;text-transform:uppercase;margin-left:6px;vertical-align:middle;font-weight:600;}
+  .posture-radar-cell{display:flex;justify-content:center;align-items:center;}
+  .posture-radar-cell svg{display:block;}
+  .posture-data{font-size:12.5px;line-height:1.45;color:var(--text);}
+  .posture-data .arr-block{margin-bottom:6px;}
+  .posture-data .arr-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);display:inline-block;width:60px;font-weight:600;}
+  .posture-data .arr-claimed{color:var(--text);}
+  .posture-data .arr-real{color:var(--green);font-weight:600;}
+  .posture-data .arr-share{color:var(--text-dim);font-weight:500;}
+  .posture-data .arr-note{font-size:11px;color:var(--text-dim);margin-top:2px;line-height:1.45;padding-left:60px;}
+  .posture-growth{text-align:center;font-size:12px;}
+  .posture-growth .now{font-size:17px;font-weight:700;color:var(--text-bright);display:block;}
+  .posture-growth .prev{font-size:10px;color:var(--text-dim);margin-top:2px;text-transform:uppercase;letter-spacing:0.06em;}
+  .posture-growth .arrow-down{color:var(--orange);}
+  .posture-growth .arrow-up{color:var(--green);}
+  .posture-growth .arrow-flat{color:var(--text-dim);}
+  .posture-source{text-align:center;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);}
+  .posture-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-bottom:4px;background:var(--accent);}
+  .posture-dot.tier-1b{background:var(--accent);}
+  .posture-dot.tier-2a{background:var(--accent);opacity:0.6;}
+  .posture-dot.tier-2b{background:var(--accent);opacity:0.32;border:1px solid var(--accent);}
+  .posture-dot.tier-3a{background:transparent;border:1px dashed var(--accent);opacity:0.7;}
+  .posture-note-row{display:grid;grid-template-columns:220px 1fr;gap:24px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+  .posture-note-row:last-child{border-bottom:none;}
+  .posture-note-row .note-name{font-size:13.5px;font-weight:600;color:var(--text-bright);}
+  .posture-note-row .note-name .note-ticker{font-size:10px;color:var(--text-dim);letter-spacing:0.08em;text-transform:uppercase;display:block;margin-top:2px;font-weight:500;}
+  .posture-note-row .note-body{font-size:12.5px;line-height:1.6;color:var(--text);}
+  .posture-note-row .note-body p{margin:0 0 6px;}
+  .posture-note-row .note-source{font-size:11px;color:var(--text-dim);margin-top:6px;line-height:1.45;}
+  .posture-note-row .note-citation{font-size:10.5px;color:var(--text-dim);margin-top:4px;line-height:1.45;padding:6px 10px;background:rgba(245,158,11,0.05);border-left:2px solid rgba(245,158,11,0.4);border-radius:3px;}
+  .posture-note-row .note-citation strong{color:var(--orange);text-transform:uppercase;letter-spacing:0.06em;font-size:9.5px;font-weight:700;}
+  .radar-grid{fill:none;stroke:rgba(148,163,184,0.18);stroke-width:0.7;}
+  .radar-axis{stroke:rgba(148,163,184,0.22);stroke-width:0.7;}
+  .radar-axis-na{stroke-dasharray:3,3;stroke:rgba(148,163,184,0.12);}
+  .radar-fill{fill:rgba(59,130,246,0.20);stroke:rgba(96,165,250,0.85);stroke-width:1.4;}
+  .radar-point{fill:#60a5fa;}
+  .radar-label{font-size:8.5px;fill:var(--text-dim);letter-spacing:0.06em;text-transform:uppercase;font-weight:600;}
+  .radar-label-na{fill:var(--text-dim);opacity:0.45;}
+  .posture-rubric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;}
+  .posture-rubric-grid h4{font-size:10.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin:0 0 6px;font-weight:700;}
+  .posture-rubric-grid p{font-size:11.5px;margin:0;line-height:1.5;color:var(--text);}
+  @media(max-width:1100px){
+    .posture-header{display:none;}
+    .posture-row{grid-template-columns:1fr;gap:14px;padding:24px 0;}
+    .posture-data .arr-note{padding-left:0;}
+    .posture-note-row{grid-template-columns:1fr;}
+    .posture-rubric-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:480px){
+    .posture-rubric-grid{grid-template-columns:1fr;}
+  }
   footer{text-align:center;padding:32px 0 16px;font-size:12px;color:var(--text-dim);border-top:1px solid var(--card-border);margin-top:32px;}
   footer a{color:var(--accent);text-decoration:none;}
   footer a:hover{text-decoration:underline;}
@@ -154,29 +215,30 @@
   }
 </style>
 </head>
-<body>
+<body class="surface-dark">
 
-<nav class="nav-bar">
-  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
-  <a href="index.html" class="nav-link">Home</a>
-  <a href="capital.html" class="nav-link">Capital</a>
-  <a href="revenue.html" class="nav-link">Revenue</a>
-  <a href="usage.html" class="nav-link active">Usage</a>
-  <a href="methodology.html" class="nav-link">Methodology</a>
-  <a href="changelog.html" class="nav-link">Changelog</a>
-  <a href="power.html" class="nav-link disabled">Power (v3)</a>
-  <a href="about.html" class="nav-link">About</a>
-  <div class="nav-scenario">
-    <label>Scenario:</label>
-    <button class="scenario-btn" data-s="bear" onclick="setScenario('bear')" title="Current trajectory continues. Revenue grows 20-30% annually.">Bear</button>
-    <button class="scenario-btn active" data-s="base" onclick="setScenario('base')" title="Enterprise adoption picks up through 2026-27. Revenue grows 80-100% annually.">Base</button>
-    <button class="scenario-btn" data-s="bull" onclick="setScenario('bull')" title="Agent workflows drive step-change in usage. Revenue grows 200%+.">Bull</button>
-  </div>
-  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
-    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
-    Hepburn Advisory
+<header class="ds-header">
+  <a href="/" class="ds-header__brand" aria-label="The AI Ledger — home">
+    <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+    <span class="ds-header__brand-text">
+      <span class="ds-header__brand-name">AI Ledger</span>
+      <span class="ds-header__brand-sub">Hepburn Advisory</span>
+    </span>
   </a>
-</nav>
+  <nav class="ds-header__nav" aria-label="Primary">
+    <a class="ds-header__nav-link" href="/capital.html">Capital</a>
+    <a class="ds-header__nav-link" href="/revenue.html">Revenue</a>
+    <a class="ds-header__nav-link" href="/compute.html">Compute</a>
+    <a class="ds-header__nav-link is-active" href="/usage.html">Usage</a>
+    <a class="ds-header__nav-link" href="/power.html">Power</a>
+    <a class="ds-header__nav-link" href="/methodology.html">Methodology</a>
+    <a class="ds-header__nav-link" href="/about.html">About</a>
+  </nav>
+  <a class="ds-header__cta" href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=header-cta" target="_blank" rel="noopener">
+    Hepburn Advisory <span aria-hidden="true">↗</span>
+  </a>
+</header>
+
 
 <div class="container">
 
@@ -188,7 +250,7 @@
   <div class="hero-grid" id="hero-stats"></div>
   <div id="token-reconciliation" style="font-size:11px;color:var(--text-dim);text-align:center;margin-top:10px;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;"></div>
   <p class="reconciliation-note" style="font-size:11px;color:var(--text-dim);line-height:1.6;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;margin-top:6px;text-align:center;">
-    <strong>Revenue reconciliation:</strong> This page shows combined provider ARR (annualised Q4 run-rate, includes inference from ad-platform workloads). The home page shows $22B customer revenue (CY23–25 cumulative, collected). See <a href="methodology.html" style="color:var(--accent);">Methodology</a> for the reconciliation.
+    <strong>Revenue reconciliation:</strong> This page shows combined provider ARR (trailing-quarter run-rate × 4, includes inference from ad-platform workloads). The home page shows $22B customer revenue (CY23–25 cumulative, collected). Audited fiscal-year collected revenue surfaces on <a href="timeline.html#fy-revenue" style="color:var(--accent);">/timeline</a> when available. See <a href="methodology.html#arr-vs-collected" style="color:var(--accent);">Methodology</a> for the reconciliation. Per <em>SKILL.md hard rule #6</em>, ARR and collected revenue are never interchangeable.
   </p>
 </section>
 
@@ -250,13 +312,41 @@
   </div>
 </div>
 
-<!-- ══════ SECTION 5: ENTERPRISE REALITY CHECK ══════ -->
+<!-- ══════ SECTION 5: SAAS AI TRANSITION MAP ══════ -->
 <div class="card">
-  <h2>Enterprise AI Adoption <span class="sub">&mdash; Booked ARR vs. actual token consumption</span></h2>
-  <div class="mobile-hint" style="display:none;">Rotate to landscape or scroll horizontally to view full table.</div>
-  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
-    <table class="detail" id="enterprise-table"></table>
+  <h2>SaaS AI Transition Map <span class="sub">&mdash; Twelve trad-SaaS AI products scored on five posture axes</span></h2>
+  <div id="posture-prototype-banner" style="display:none;font-size:11px;line-height:1.5;color:var(--orange);background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:6px;padding:10px 14px;margin:0 0 14px;">
+    <strong style="font-weight:700;">Prototype scoring.</strong> <span id="posture-banner-detail">Posture scores in this initial release are first-pass editorial estimates pending primary-source verification per TAIL publishing standards.</span>
   </div>
+  <p id="posture-rubric-intro" style="font-size:12px;color:var(--text-dim);margin:0 0 10px;line-height:1.55;">
+    A larger filled area = a more aggressive transition posture (which can be the cost of doing the work, not a verdict). Two axes read counter-intuitively: <strong style="color:var(--text);">COST</strong> rewards GM compression attributable to AI (proof of real workload) — stable margins on a heavily-marketed AI product score low. <strong style="color:var(--text);">PRICE</strong> reserves a 5 only for vendors where new commercial models (per-action, per-agent, outcome-based) are the only way they sell — none of this cohort qualifies. Private vendors render four-axis radars (no public GM disclosure).
+  </p>
+  <details style="margin:0 0 14px;font-size:12px;">
+    <summary style="cursor:pointer;color:var(--accent);font-weight:600;">Scoring rubric (5 axes)</summary>
+    <div id="posture-rubric" style="margin-top:10px;padding:14px 16px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:8px;color:var(--text-dim);line-height:1.6;"></div>
+  </details>
+  <div class="mobile-hint" style="display:none;">Scroll horizontally if needed; the layout collapses to single-column at &lt;1100px.</div>
+  <div class="posture-header">
+    <div>Product / Parent</div>
+    <div class="col-c">Posture</div>
+    <div>Reported AI ARR &rarr; Estimated Real &rarr; Share</div>
+    <div class="col-c">Growth</div>
+    <div class="col-c">Source</div>
+  </div>
+  <div id="posture-table"></div>
+
+  <div id="posture-notes-section" style="margin-top:36px;">
+    <h3 style="font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-dim);font-weight:600;margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--card-border);">Watch notes &amp; sources</h3>
+    <div id="posture-notes"></div>
+  </div>
+
+  <div id="posture-source-key" style="display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--text-dim);padding-top:14px;margin-top:18px;border-top:1px solid var(--card-border);">
+    <div style="display:flex;align-items:center;gap:6px;"><span class="posture-dot tier-1b"></span>Tier 1b — directly disclosed in earnings</div>
+    <div style="display:flex;align-items:center;gap:6px;"><span class="posture-dot tier-2a"></span>Tier 2a — narrative + reconciled</div>
+    <div style="display:flex;align-items:center;gap:6px;"><span class="posture-dot tier-2b"></span>Tier 2b — editorial estimate</div>
+    <div style="display:flex;align-items:center;gap:6px;"><span class="posture-dot tier-3a"></span>Tier 3a — modelled / press</div>
+  </div>
+  <p id="posture-footnote" style="margin-top:14px;font-size:11px;color:var(--text-dim);line-height:1.55;"></p>
 </div>
 
 <!-- ══════ SECTION 6: TOP CONSUMERS ══════ -->
@@ -296,31 +386,6 @@
 </div>
 
 <div style="text-align:center;margin:24px 0 0;"><button class="cite-btn" data-path="/usage" style="background:transparent;border:1px solid var(--card-border);color:var(--text-dim);padding:6px 16px;border-radius:6px;font-size:11px;cursor:pointer;">Cite this page</button></div>
-<footer>
-    <div class="footer-grid">
-      <div>
-        <h4>Hepburn Advisory</h4>
-        <a href="about.html">About the firm</a>
-        <a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a>
-      </div>
-      <div>
-        <h4>The Ledger</h4>
-        <a href="capital.html">Capital</a>
-        <a href="revenue.html">Revenue</a>
-        <a href="usage.html">Usage</a>
-        <a href="power.html">Power (v3)</a>
-      </div>
-      <div>
-        <h4>Reference</h4>
-        <a href="methodology.html">Methodology</a>
-        <a href="changelog.html">Changelog</a>
-      </div>
-    </div>
-    <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
-    <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
-</footer>
-
 </div>
 
 <script>
@@ -354,6 +419,7 @@ function switchTab(id, btn) {
 let PROVIDERS, REGIONS, INDUSTRIES, USE_CASES, CROSS_WEIGHTS;
 let DEMAND_MATRIX, ENTERPRISE_REALITY, TOP_CONSUMERS, MODELS;
 let DEMAND_TYPES, DEMAND_WEIGHTS;
+let VENDOR_POSTURE_METHODOLOGY;
 let SANKEY_BC_FLOWS = {};
 
 const filters = { providers: [], providerRegion: [], regions: [], industries: [], useCases: [], demandTypes: [] };
@@ -378,6 +444,7 @@ async function loadDashboardData() {
     MODELS = d.models;
     DEMAND_TYPES = d.demandTypes;
     DEMAND_WEIGHTS = d.demandWeights;
+    VENDOR_POSTURE_METHODOLOGY = d.vendorPostureMethodology || null;
 
     if (all.sankey && all.sankey.flows) {
       SANKEY_BC_FLOWS = {};
@@ -518,8 +585,8 @@ function updateHeroStats() {
 
   document.getElementById('hero-stats').innerHTML =
     '<div class="hero-stat"><div class="label">Provider Rollup</div><div class="value" style="color:var(--accent);">~' + Math.ceil(totalTokens) + 'T/day</div><div class="detail">' + provCount + ' providers tracked <span class="tier-pill tier-3a">Tier 2A/3A</span></div><div class="kpi-period">Current run-rate</div></div>' +
-    '<div class="hero-stat"><div class="label">Combined Provider ARR</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail">Current annualised run-rate <span class="tier-pill tier-2a">Tier 1B/2A</span></div><div class="kpi-period">Annualised</div></div>' +
-    '<div class="hero-stat"><div class="label">Top 3 Revenue Share</div><div class="value" style="color:var(--accent2);">' + top3Pct + '%</div><div class="detail">' + top3Names + '</div><div class="kpi-period">Current</div></div>' +
+    '<div class="hero-stat" title="ARR = trailing-quarter revenue × 4. NOT the same as audited fiscal-year collected revenue (see methodology.html#arr-vs-collected). For audited annual figures, see timeline.html#fy-revenue."><div class="label">Combined Provider ARR (run-rate)</div><div class="value" style="color:var(--green);">$' + totalRev.toFixed(1) + 'B</div><div class="detail">Trailing-quarter × 4 <span class="tier-pill tier-2a">Tier 1B/2A</span></div><div class="kpi-period">ARR, not collected</div></div>' +
+    '<div class="hero-stat"><div class="label">Top 3 ARR Share</div><div class="value" style="color:var(--accent2);">' + top3Pct + '%</div><div class="detail">' + top3Names + '</div><div class="kpi-period">Current ARR</div></div>' +
     '<div class="hero-stat"><div class="label">Price Deflation</div><div class="value" style="color:var(--orange);">~10x/yr</div><div class="detail">Frontier-equivalent cost (ARK Invest)</div><div class="kpi-period">YoY</div></div>';
 
   // Reconciliation note: provider rollup methodology
@@ -552,14 +619,14 @@ function updateProviderChart() {
     type: 'bar',
     data: { labels, datasets: [
       { label: 'Tokens (T/day)', data: tokenVals, backgroundColor: colors.map(c => c + 'cc'), yAxisID: 'y', borderRadius: 4, order: 1 },
-      { label: 'ARR ($B)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
+      { label: 'ARR ($B, run-rate)', data: revVals, backgroundColor: colors.map(c => c + '55'), yAxisID: 'y1', borderRadius: 4, order: 2 },
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
       onClick: (e, els) => { if (els.length > 0) { const label = charts.provider.data.labels[els[0].index]; const pill = document.querySelector('.filter-pill[data-dim="providers"][data-value="' + label + '"]'); if (pill) pill.click(); } },
-      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR' } } },
-      scales: { y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid }, y1: { position: 'right', title: { display: true, text: 'ARR ($B)' }, grid: noGrid }, x: { grid: noGrid } }
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } }, tooltip: { callbacks: { label: ctx => ctx.dataset.yAxisID === 'y' ? ctx.parsed.y.toFixed(0) + 'T tokens/day' : '$' + ctx.parsed.y.toFixed(1) + 'B ARR (run-rate, not collected)' } } },
+      scales: { y: { position: 'left', title: { display: true, text: 'Tokens (T/day)' }, grid: darkGrid }, y1: { position: 'right', title: { display: true, text: 'ARR ($B, run-rate)' }, grid: noGrid }, x: { grid: noGrid } }
     }
   });
 }
@@ -686,14 +753,216 @@ function renderDemandMatrix() {
   t.innerHTML = html;
 }
 
-function renderEnterpriseTable() {
-  const t = document.getElementById('enterprise-table');
-  let html = '<thead><tr><th>Company</th><th>Reported AI ARR</th><th>Observed Usage</th><th>Est. Real Token Demand</th><th>Growth Trend</th><th>Notes</th></tr></thead><tbody>';
-  ENTERPRISE_REALITY.forEach(c => {
-    html += '<tr><td><strong>' + c.name + '</strong> <span style="color:var(--text-dim);font-size:11px;">' + c.ticker + '</span></td><td style="font-size:12px;">' + c.claimed + '</td><td style="font-size:12px;color:var(--orange);">' + c.usage + '</td><td style="font-size:12px;color:var(--green);font-weight:600;">' + c.real + '</td><td style="font-size:12px;">' + (c.growth || '\u2014') + '</td><td style="font-size:11px;color:var(--text-dim);">' + c.flags + '</td></tr>';
+// \u2500\u2500 SaaS AI Transition Map (wq-101) \u2500\u2500
+const POSTURE_AXIS_ORDER = ['disclosure','bundling','pricing','cost','acceleration'];
+const POSTURE_AXIS_LABELS = { disclosure:'DISC', bundling:'BNDL', pricing:'PRICE', cost:'COST', acceleration:'ACCEL' };
+const POSTURE_RUBRIC = [
+  { axis:'disclosure', name:'Disclosure (DISC)',
+    body:'Combines provenance tier with AI ARR as share of relevant business-unit revenue. 5 = directly disclosed in earnings (tier 1b) AND material share (&gt;5%). 1 = editorial estimate AND immaterial (&lt;1%).' },
+  { axis:'bundling', name:'Bundling (BNDL)',
+    body:'Whether AI is priced as a premium add-on (5) or absorbed into existing SKUs at no upcharge (1).' },
+  { axis:'pricing', name:'Pricing Model (PRICE)',
+    body:'5 = new commercial model (per-action, per-agent, outcome-based) is the only way they sell. 3 = usage / credit option exists alongside seat pricing. 2 = AI premium SKU on existing pricing. 1 = no change.' },
+  { axis:'cost', name:'AI Cost Realisation (COST)',
+    body:'Whether AI inference cost is visibly hitting parent gross margin. Clear AI-attributable compression = 5; no observable signal = 1. NA for private companies.' },
+  { axis:'acceleration', name:'Acceleration (ACCEL)',
+    body:'Whether parent top-line growth has inflected since AI product GA. Materially accelerated = 5; decelerated = 1.' },
+];
+
+function posturePoint(angleDeg, distance, cx, cy){
+  const rad = angleDeg * Math.PI / 180;
+  return { x: cx + distance * Math.sin(rad), y: cy - distance * Math.cos(rad) };
+}
+
+function renderPostureRadar(scores, opts){
+  opts = opts || {};
+  const cx = 120, cy = 120, maxR = 88, step = maxR / 5;
+  const angles = [0, 72, 144, 216, 288];
+  const gmNA = !!opts.gmUnavailable;
+  const scorePoints = POSTURE_AXIS_ORDER.map((axis, i) => {
+    if (axis === 'cost' && gmNA) return null;
+    const s = scores[axis] || 0;
+    return posturePoint(angles[i], s * step, cx, cy);
   });
-  html += '</tbody>';
+  const polyPoints = scorePoints.filter(p => p).map(p => p.x.toFixed(2) + ',' + p.y.toFixed(2)).join(' ');
+  let grid = '';
+  for (let k = 1; k <= 5; k++){
+    const r = k * step;
+    const ringPts = angles.map(a => posturePoint(a, r, cx, cy)).map(p => p.x.toFixed(2) + ',' + p.y.toFixed(2)).join(' ');
+    grid += '<polygon class="radar-grid" points="' + ringPts + '"/>';
+  }
+  let axes = '';
+  POSTURE_AXIS_ORDER.forEach((axis, i) => {
+    const end = posturePoint(angles[i], maxR, cx, cy);
+    const cls = (axis === 'cost' && gmNA) ? 'radar-axis radar-axis-na' : 'radar-axis';
+    axes += '<line class="' + cls + '" x1="' + cx + '" y1="' + cy + '" x2="' + end.x.toFixed(2) + '" y2="' + end.y.toFixed(2) + '"/>';
+  });
+  let pts = '';
+  scorePoints.forEach(p => { if (!p) return; pts += '<circle class="radar-point" cx="' + p.x.toFixed(2) + '" cy="' + p.y.toFixed(2) + '" r="2.5"/>'; });
+  let labels = '';
+  POSTURE_AXIS_ORDER.forEach((axis, i) => {
+    const labelOffset = maxR + 14;
+    const lp = posturePoint(angles[i], labelOffset, cx, cy);
+    const isNA = (axis === 'cost' && gmNA);
+    const cls = isNA ? 'radar-label radar-label-na' : 'radar-label';
+    const lbl = isNA ? POSTURE_AXIS_LABELS[axis] + '\u00b7NA' : POSTURE_AXIS_LABELS[axis];
+    let anchor = 'middle';
+    if (lp.x - cx > 4) anchor = 'start';
+    else if (lp.x - cx < -4) anchor = 'end';
+    const dy = (lp.y < cy - 30) ? 0 : (lp.y > cy + 30 ? 8 : 3);
+    labels += '<text class="' + cls + '" x="' + lp.x.toFixed(2) + '" y="' + (lp.y + dy).toFixed(2) + '" text-anchor="' + anchor + '">' + lbl + '</text>';
+  });
+  return '<svg viewBox="0 0 240 240" width="200" height="200" role="img" aria-label="Posture radar">' + grid + axes + '<polygon class="radar-fill" points="' + polyPoints + '"/>' + pts + labels + '</svg>';
+}
+
+function postureGrowthArrow(dir){
+  if (dir === 'up')   return '<span class="arrow-up">\u25b2</span>';
+  if (dir === 'down') return '<span class="arrow-down">\u25bc</span>';
+  return '<span class="arrow-flat">\u25ac</span>';
+}
+
+function postureGrowthDir(c){
+  if (c.growthDir) return c.growthDir;
+  const g = (c.growth || '').toLowerCase();
+  const p = (c.prevGrowth || '').toLowerCase();
+  if (g.indexOf('fast') >= 0 && (!p || p === 'n/a' || p === 'na')) return 'up';
+  const num = (s) => { const m = (s || '').match(/(\d+(?:\.\d+)?)/); return m ? parseFloat(m[1]) : null; };
+  const ng = num(g), np = num(p);
+  if (ng !== null && np !== null){
+    if (ng < np) return 'down';
+    if (ng > np) return 'up';
+    return 'flat';
+  }
+  return 'flat';
+}
+
+function postureProductLabel(c){
+  return c.productLabel || c.product || c.name || c.id;
+}
+
+function postureParentLabel(c){
+  const parent = c.parent || c.parentName || c.companyParent || (c.ticker === 'private' ? c.name : c.ticker);
+  const ticker = c.ticker || '';
+  if (!parent) return ticker;
+  if (parent === ticker) return parent;
+  return parent + ' \u00b7 ' + ticker;
+}
+
+function renderPostureRubric(){
+  const el = document.getElementById('posture-rubric');
+  if (!el) return;
+  let html = '<div class="posture-rubric-grid">';
+  POSTURE_RUBRIC.forEach(r => {
+    html += '<div><h4>' + r.name + '</h4><p>' + r.body + '</p></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function renderPostureBanner(cohort){
+  const banner = document.getElementById('posture-prototype-banner');
+  if (!banner) return;
+  const anyPrototype = cohort.some(c => c.postureScores && c.postureScores._prototype === true);
+  banner.style.display = anyPrototype ? '' : 'none';
+}
+
+function renderPostureFootnote(cohort){
+  const el = document.getElementById('posture-footnote');
+  if (!el) return;
+  const m = VENDOR_POSTURE_METHODOLOGY || {};
+  const verified = (cohort[0] && cohort[0].postureScores && cohort[0].postureScores._lastVerified) || (m.lastUpdated || '');
+  el.innerHTML = 'Source: TAIL site-data.json (enterpriseReality). Posture as of ' + (verified || 'latest') +
+    '. Bundling, AI Cost Realisation citations are first-pass editorial drafts pending verification per the TAIL publishing gate (D4 path-b). ' +
+    'Share calculations use business-unit revenue where one exists, otherwise parent-total (D7). Disclosure may shift quarter-over-quarter as AI ARR grows or contracts as a share of host revenue.';
+}
+
+function renderPostureTable(){
+  const t = document.getElementById('posture-table');
+  if (!t) return;
+  const cohort = (ENTERPRISE_REALITY || []).filter(c => c && c.postureScores);
+  renderPostureBanner(cohort);
+  renderPostureFootnote(cohort);
+  let html = '';
+  cohort.forEach(c => {
+    const isPrivate = (c.ticker || '').toLowerCase() === 'private';
+    const privateFlag = isPrivate ? '<span class="private-flag">Private</span>' : '';
+    const scores = c.postureScores || {};
+    const radarSvg = renderPostureRadar(scores, { gmUnavailable: !!c.gmUnavailable });
+    const arrShare = c.arrShare || {};
+    const shareValue = arrShare.value || '\u2014';
+    const shareDenom = arrShare.denominator ? 'of ' + arrShare.denominator : '';
+    const claimed = c.arrClaimed || c.claimed || '\u2014';
+    const claimedNote = c.arrClaimedNote || '';
+    const real = c.arrReal || c.real || '\u2014';
+    const realNote = c.arrRealNote || '';
+    const growth = c.growth || '\u2014';
+    const prev = c.prevGrowth && c.prevGrowth !== 'n/a' && c.prevGrowth !== 'N/A' ? c.prevGrowth : '\u2014';
+    const dir = postureGrowthDir(c);
+    const provenance = (c.provenance || 'tier_2b').replace('_', '-');
+    const provenanceLbl = (c.provenance || 'tier_2b').replace('_', ' ');
+    html +=
+      '<div class="posture-row">' +
+        '<div class="posture-nameplate">' +
+          '<div class="product">' + postureProductLabel(c) + privateFlag + '</div>' +
+          '<div class="parent-line">' + postureParentLabel(c) + '</div>' +
+          '<div class="archetype">' + (c.archetype || '') + '</div>' +
+        '</div>' +
+        '<div class="posture-radar-cell">' + radarSvg + '</div>' +
+        '<div class="posture-data">' +
+          '<div class="arr-block"><span class="arr-label">Claimed</span><span class="arr-claimed">' + claimed + '</span>' +
+            (claimedNote ? '<div class="arr-note">' + claimedNote + '</div>' : '') +
+          '</div>' +
+          '<div class="arr-block"><span class="arr-label">Real</span><span class="arr-real">' + real + '</span>' +
+            (realNote ? '<div class="arr-note">' + realNote + '</div>' : '') +
+          '</div>' +
+          '<div class="arr-block"><span class="arr-label">Share</span><span class="arr-share">' + shareValue + '</span>' +
+            (shareDenom ? '<div class="arr-note">' + shareDenom + '</div>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="posture-growth">' +
+          '<span class="now">' + growth + ' ' + postureGrowthArrow(dir) + '</span>' +
+          '<span class="prev">prev ' + prev + '</span>' +
+        '</div>' +
+        '<div class="posture-source">' +
+          '<span class="posture-dot ' + provenance + '"></span>' +
+          '<div>' + provenanceLbl + '</div>' +
+        '</div>' +
+      '</div>';
+  });
   t.innerHTML = html;
+}
+
+function renderPostureNotes(){
+  const n = document.getElementById('posture-notes');
+  if (!n) return;
+  const cohort = (ENTERPRISE_REALITY || []).filter(c => c && c.postureScores);
+  let html = '';
+  cohort.forEach(c => {
+    const cit = (c.postureScores && c.postureScores._citations) || {};
+    const citationBlock = (cit.bundling || cit.cost) ?
+      '<div class="note-citation">' +
+        (cit.bundling ? '<div><strong>Bundling:</strong> ' + cit.bundling + '</div>' : '') +
+        (cit.cost ? '<div style="margin-top:4px;"><strong>Cost:</strong> ' + cit.cost + '</div>' : '') +
+      '</div>' : '';
+    html +=
+      '<div class="posture-note-row">' +
+        '<div class="note-name">' + postureProductLabel(c) +
+          '<span class="note-ticker">' + postureParentLabel(c) + '</span>' +
+        '</div>' +
+        '<div class="note-body">' +
+          '<p>' + (c.watchSignals || c.flags || '') + '</p>' +
+          (c.arrSource ? '<p class="note-source">Source: ' + c.arrSource + '</p>' : '') +
+          citationBlock +
+        '</div>' +
+      '</div>';
+  });
+  n.innerHTML = html;
+}
+
+function renderPostureSection(){
+  renderPostureRubric();
+  renderPostureTable();
+  renderPostureNotes();
 }
 
 let consumerSort = 'tokens', consumerSortAsc = false, consumerCatFilter = 'all', consumerVintage = 'all';
@@ -828,7 +1097,7 @@ function updateAll() {
   updateConsumerTable();
   renderModelTable();
   renderDemandMatrix();
-  renderEnterpriseTable();
+  renderPostureSection();
 }
 
 loadDashboardData();
@@ -844,5 +1113,58 @@ document.querySelectorAll('.cite-btn').forEach(btn => {
   });
 });
 </script>
+
+<aside class="byline">
+  <span>Prepared by</span>
+  <a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=byline" target="_blank" rel="noopener">Hepburn Advisory</a>
+  <span class="meta">Independent advisory · Melbourne · grounded in Ledger data</span>
+</aside>
+
+<footer class="ds-footer">
+  <div class="ds-footer__inner">
+    <div class="ds-footer__brand">
+      <div class="ds-footer__brand-lockup">
+        <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+        <span class="ds-footer__brand-name">Hepburn Advisory</span>
+      </div>
+      <span class="ds-footer__brand-desc">Independent advisory · Melbourne · working globally</span>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Ledger pages</h4>
+      <ul>
+        <li><a href="/capital.html">Capital</a></li>
+        <li><a href="/revenue.html">Revenue</a></li>
+        <li><a href="/compute.html">Compute</a></li>
+        <li><a href="/usage.html">Usage</a></li>
+        <li><a href="/power.html">Power</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Methodology + provenance</h4>
+      <ul>
+        <li><a href="/methodology.html">Methodology</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Other Ledger views</h4>
+      <ul>
+        <li><a href="/timeline.html">Timeline</a></li>
+        <li><a href="/openrouter.html">Live pricing</a></li>
+        <li><a href="/changelog.html">Changelog</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Hepburn Advisory</h4>
+      <ul>
+        <li><a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=footer-attribution" target="_blank" rel="noopener">hepburnadvisory.com.au ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ds-footer__base">
+    © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated 2026-04-29 · <a href="/methodology.html">Methodology at /methodology</a>
+  </div>
+</footer>
+
 </body>
 </html>

@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Power Ledger — AI Ledger v2</title>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
 <style>
   :root{--bg:#0a0e1a;--card:#111827;--card-border:#1e293b;--text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f8fafc;--accent:#3b82f6;--purple:#8b5cf6;--cyan:#06b6d4;--green:#10b981;--orange:#f59e0b;--red:#ef4444;}
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -74,29 +76,30 @@
   }
 </style>
 </head>
-<body>
+<body class="surface-dark">
 
-<nav class="nav-bar">
-  <a href="index.html" class="nav-brand"><span>AI Ledger</span> &middot; Hepburn Advisory</a>
-  <a href="index.html" class="nav-link">Home</a>
-  <a href="capital.html" class="nav-link">Capital</a>
-  <a href="revenue.html" class="nav-link">Revenue</a>
-  <a href="usage.html" class="nav-link">Usage</a>
-  <a href="methodology.html" class="nav-link">Methodology</a>
-  <a href="changelog.html" class="nav-link">Changelog</a>
-  <a href="power.html" class="nav-link active">Power (v3)</a>
-  <a href="about.html" class="nav-link">About</a>
-  <div class="nav-scenario">
-    <label>Scenario:</label>
-    <button class="scenario-btn" data-s="bear" onclick="setScenario('bear')">Bear</button>
-    <button class="scenario-btn active" data-s="base" onclick="setScenario('base')">Base</button>
-    <button class="scenario-btn" data-s="bull" onclick="setScenario('bull')">Bull</button>
-  </div>
-  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
-    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
-    Hepburn Advisory
+<header class="ds-header">
+  <a href="/" class="ds-header__brand" aria-label="The AI Ledger — home">
+    <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+    <span class="ds-header__brand-text">
+      <span class="ds-header__brand-name">AI Ledger</span>
+      <span class="ds-header__brand-sub">Hepburn Advisory</span>
+    </span>
   </a>
-</nav>
+  <nav class="ds-header__nav" aria-label="Primary">
+    <a class="ds-header__nav-link" href="/capital.html">Capital</a>
+    <a class="ds-header__nav-link" href="/revenue.html">Revenue</a>
+    <a class="ds-header__nav-link" href="/compute.html">Compute</a>
+    <a class="ds-header__nav-link" href="/usage.html">Usage</a>
+    <a class="ds-header__nav-link is-active" href="/power.html">Power</a>
+    <a class="ds-header__nav-link" href="/methodology.html">Methodology</a>
+    <a class="ds-header__nav-link" href="/about.html">About</a>
+  </nav>
+  <a class="ds-header__cta" href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=header-cta" target="_blank" rel="noopener">
+    Hepburn Advisory <span aria-hidden="true">↗</span>
+  </a>
+</header>
+
 
 <div class="container">
   <div class="hero">
@@ -139,31 +142,6 @@
   </div>
 </div>
 
-<footer>
-    <div class="footer-grid">
-      <div>
-        <h4>Hepburn Advisory</h4>
-        <a href="about.html">About the firm</a>
-        <a href="https://www.linkedin.com/company/hepburnadvisory-apac" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener">hepburnadvisory.com.au</a>
-      </div>
-      <div>
-        <h4>The Ledger</h4>
-        <a href="capital.html">Capital</a>
-        <a href="revenue.html">Revenue</a>
-        <a href="usage.html">Usage</a>
-        <a href="power.html">Power (v3)</a>
-      </div>
-      <div>
-        <h4>Reference</h4>
-        <a href="methodology.html">Methodology</a>
-        <a href="changelog.html">Changelog</a>
-      </div>
-    </div>
-    <div>Published by <a href="about.html">Hepburn Advisory</a>. Independent analysis of the AI economy.</div>
-    <div style="margin-top:8px;">Last updated: 21 Apr 2026 &middot; <a href="methodology.html">Methodology</a> &middot; <a href="changelog.html">Changelog</a> &middot; <a href="about.html">About</a></div>
-</footer>
-
 <script>
 function getScenario(){const p=new URLSearchParams(window.location.search).get('s'); if(p&&['bear','base','bull'].includes(p)) return p; return localStorage.getItem('ai-ledger-scenario')||'base';}
 function setScenario(s){localStorage.setItem('ai-ledger-scenario',s);const u=new URL(window.location);u.searchParams.set('s',s);history.replaceState(null,'',u);document.querySelectorAll('.scenario-btn').forEach(b=>b.classList.toggle('active',b.dataset.s===s));}
@@ -172,5 +150,58 @@ function setScenario(s){localStorage.setItem('ai-ledger-scenario',s);const u=new
   document.querySelectorAll('.scenario-btn').forEach(b=>{b.classList.toggle('active',b.dataset.s===s);});
 })();
 </script>
+
+<aside class="byline">
+  <span>Prepared by</span>
+  <a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=byline" target="_blank" rel="noopener">Hepburn Advisory</a>
+  <span class="meta">Independent advisory · Melbourne · grounded in Ledger data</span>
+</aside>
+
+<footer class="ds-footer">
+  <div class="ds-footer__inner">
+    <div class="ds-footer__brand">
+      <div class="ds-footer__brand-lockup">
+        <img src="/design-system/assets/logo-icon-inverse.svg" alt="">
+        <span class="ds-footer__brand-name">Hepburn Advisory</span>
+      </div>
+      <span class="ds-footer__brand-desc">Independent advisory · Melbourne · working globally</span>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Ledger pages</h4>
+      <ul>
+        <li><a href="/capital.html">Capital</a></li>
+        <li><a href="/revenue.html">Revenue</a></li>
+        <li><a href="/compute.html">Compute</a></li>
+        <li><a href="/usage.html">Usage</a></li>
+        <li><a href="/power.html">Power</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Methodology + provenance</h4>
+      <ul>
+        <li><a href="/methodology.html">Methodology</a></li>
+        <li><a href="/about.html">About</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Other Ledger views</h4>
+      <ul>
+        <li><a href="/timeline.html">Timeline</a></li>
+        <li><a href="/openrouter.html">Live pricing</a></li>
+        <li><a href="/changelog.html">Changelog</a></li>
+      </ul>
+    </div>
+    <div class="ds-footer__col">
+      <h4 class="ds-footer__col-title">Hepburn Advisory</h4>
+      <ul>
+        <li><a href="https://hepburnadvisory.com.au/?utm_source=ledger&utm_medium=site&utm_campaign=v2-launch&utm_content=footer-attribution" target="_blank" rel="noopener">hepburnadvisory.com.au ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ds-footer__base">
+    © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated 2026-04-29 · <a href="/methodology.html">Methodology at /methodology</a>
+  </div>
+</footer>
+
 </body>
 </html>

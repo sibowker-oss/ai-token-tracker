@@ -18,6 +18,9 @@
   });
 })();
 </script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
 <style>
   :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -25,7 +28,7 @@
 
   /* Top bar */
   .topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 24px; background:var(--card); border-bottom:1px solid var(--card-border); }
-  .topbar h1 { font-size:16px; font-weight:700; display:flex; align-items:center; gap:8px; }
+  .topbar h1 { font-size:28px; font-weight:700; display:flex; align-items:center; gap:8px; }
   .topbar h1 span { background:var(--red); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; }
   .topbar-actions { display:flex; gap:8px; }
   .topbar-actions button { padding:6px 14px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--text-dim); font-size:12px; cursor:pointer; transition:all 0.15s; }
@@ -248,31 +251,9 @@
   }
 </style>
 </head>
-<body>
+<body class="surface-dark" data-active-tab="vault">
 
-<style>
-  .nav-bar { display:flex; align-items:center; gap:6px; padding:12px 24px; background:#0f172a; border-bottom:2px solid #1e293b; flex-wrap:wrap; }
-  .nav-brand { font-size:15px; font-weight:700; color:#f8fafc; text-decoration:none; margin-right:12px; letter-spacing:-0.3px; }
-  .nav-brand span { background:linear-gradient(135deg,#3b82f6,#8b5cf6); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .nav-link { padding:8px 18px; border-radius:8px; background:#1e293b; color:#cbd5e1; text-decoration:none; font-size:13px; font-weight:500; border:1px solid #334155; transition:all 0.15s ease; }
-  .nav-link:hover { background:#334155; color:#f1f5f9; border-color:#475569; }
-  .nav-logo { margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none; color:#cbd5e1; font-size:13px; font-weight:600; opacity:0.7; transition:opacity 0.15s; }
-  .nav-logo:hover { opacity:1; }
-  .nav-link.active { background:#1e3a5f; color:#ffffff; border-color:#3b82f6; font-weight:600; box-shadow:0 0 0 1px rgba(59,130,246,0.3); }
-  @media (max-width:768px) { .nav-bar { padding:10px 12px; gap:4px; } .nav-link { font-size:11px; padding:6px 12px; } .nav-brand { font-size:13px; margin-right:8px; } }
-</style>
-<nav class="nav-bar">
-  <a href="dashboard.html" class="nav-brand"><span>AI Ledger</span></a>
-  <span style="flex-grow:1"></span>
-  <a href="vault.html" class="nav-link active">Vault</a>
-  <a href="sources.html" class="nav-link">Sources</a>
-  <a href="review.html" class="nav-link">Review</a>
-  <a href="ask.html" class="nav-link">Ask</a>
-  <a href="https://hepburnadvisory.com.au" target="_blank" rel="noopener" class="nav-logo">
-    <svg width="22" height="22" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" rx="18" fill="#f8fafc"/><path d="M50 12 C52 38, 62 48, 88 50 C62 52, 52 62, 50 88 C48 62, 38 52, 12 50 C38 48, 48 38, 50 12Z" fill="#0f172a"/></svg>
-    Hepburn Advisory
-  </a>
-</nav>
+<div id="admin-nav-mount"></div>
 
 <div class="topbar">
   <h1>Intel Vault <span>Private</span></h1>
@@ -320,6 +301,7 @@
     <button class="tab" onclick="switchTab('submit')">Full Add</button>
     <button class="tab" onclick="switchTab('consensus')">Consensus</button>
     <button class="tab" onclick="switchTab('audit')">Audit by Page</button>
+    <button class="tab" onclick="switchTab('triangulations')">Triangulations</button>
     <button class="tab" onclick="switchTab('settings')" style="margin-left:auto;font-size:11px;">Settings</button>
   </div>
 
@@ -585,6 +567,18 @@
   <div id="view-audit" class="view-section" style="display:none;">
     <div id="auditContent"></div>
   </div>
+
+  <!-- TRIANGULATIONS VIEW (wq-086) -->
+  <div id="view-triangulations" class="view-section" style="display:none;">
+    <div style="margin-bottom:16px;">
+      <p style="font-size:13px; color:var(--text-dim); line-height:1.6;">
+        Indirect evidence (<strong style="color:#a78bfa;">triangulations</strong>) appended to ledger fields via <code>target_nodes</code>.
+        These don't move published numbers — they shift confidence tier (capped at <strong>medium</strong>) and surface validation patterns.
+        Per <a href="docs/decisions/resolved/dec-2026-05-05-triangulation-apply-semantics.md" style="color:var(--cyan);">resolution doc</a>.
+      </p>
+    </div>
+    <div id="triangulationsContent"><div class="empty-state"><p>Loading…</p></div></div>
+  </div>
 </div>
 
 <!-- Toast -->
@@ -595,7 +589,7 @@
 // DATA LAYER
 // ============================================================
 const STORAGE_KEY = 'intel-vault-data';
-const TABS = ['search','quickadd','addcompany','submit','consensus','audit','settings'];
+const TABS = ['search','quickadd','addcompany','submit','consensus','audit','triangulations','settings'];
 
 let vaultData = {
   meta: { version: '2.0', lastUpdated: new Date().toISOString().slice(0,10) },
@@ -2455,6 +2449,120 @@ function switchTab(name) {
   if (name === 'review') renderReview();
   if (name === 'consensus') renderConsensus();
   if (name === 'submit') populateReplacesDropdown();
+  if (name === 'triangulations') renderTriangulations();
+}
+
+// ============================================================
+// TRIANGULATIONS VIEW (wq-086)
+// ============================================================
+//
+// Reads entities.json provenance and lists every claim with
+// role: "triangulates". Direct claims are not shown here — vault search/browse
+// covers those. Fields with needs_review:true (≥2 weakens against the same
+// field, per resolution doc §2) get a prominent banner. Fields tagged
+// scope_uncertain by a reviewer get a smaller tag.
+//
+async function renderTriangulations() {
+  const container = document.getElementById('triangulationsContent');
+  container.innerHTML = '<div class="empty-state"><p>Loading entities.json…</p></div>';
+
+  let entities = null;
+  try {
+    const r = await fetch('entities.json?v=' + Date.now());
+    entities = await r.json();
+  } catch (e) {
+    container.innerHTML = '<div class="empty-state"><p style="color:var(--red)">Failed to load entities.json: ' + (e.message || e) + '</p></div>';
+    return;
+  }
+
+  // Collect role=triangulates entries by (entity_label, prov_key)
+  const buckets = []; // { entityLabel, provKey, needsReview, scopeUncertain, confidenceTier, claims:[] }
+
+  function pushFromProvBlock(entityLabel, provBlock) {
+    if (!provBlock) return;
+    Object.entries(provBlock).forEach(([provKey, prov]) => {
+      const tris = (prov.claims || []).filter(c => c && c.role === 'triangulates');
+      if (tris.length === 0) return;
+      buckets.push({
+        entityLabel,
+        provKey,
+        needsReview: !!prov.needs_review,
+        scopeUncertain: !!prov.scope_uncertain,
+        confidenceTier: prov.confidence || 'unsourced',
+        claims: tris,
+      });
+    });
+  }
+
+  (entities.companies || []).forEach(c => {
+    pushFromProvBlock(c.name || c.slug || '?', c.provenance || {});
+  });
+  pushFromProvBlock('market_aggregates', (entities.market_aggregates || {}).provenance || {});
+
+  if (buckets.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">&#x1F50D;</div><p>No triangulation provenance entries found in entities.json yet.</p><p class="hint">After accepting a triangulation in claims.html, run scripts/apply_decisions.py to drain the pending file and write provenance.</p></div>';
+    return;
+  }
+
+  buckets.sort((a, b) => {
+    if (a.needsReview !== b.needsReview) return a.needsReview ? -1 : 1;
+    return (a.entityLabel + a.provKey).localeCompare(b.entityLabel + b.provKey);
+  });
+
+  const impactColor = {
+    strengthens: '#22c55e',
+    widens_range: '#a78bfa',
+    weakens:      '#ef4444',
+  };
+
+  const html = buckets.map(b => {
+    const banner = b.needsReview
+      ? '<div style="padding:8px 12px;background:rgba(239,68,68,0.10);border:1px solid rgba(239,68,68,0.3);border-radius:6px;font-size:12px;color:#fca5a5;margin-bottom:8px;">&#x26A0; Review needed — multiple weakening triangulations against this field</div>'
+      : '';
+    const scopeTag = b.scopeUncertain
+      ? '<span style="font-size:10px;padding:2px 6px;border-radius:3px;background:rgba(251,191,36,0.12);color:#fbbf24;margin-left:8px;">scope uncertain</span>'
+      : '';
+    const tierColor = { high:'#22c55e', medium:'#fbbf24', low:'#f97316', unsourced:'#71717a' }[b.confidenceTier] || '#71717a';
+    const claimRows = b.claims.map(c => {
+      const imp = c.confidence_impact || 'widens_range';
+      const overrideTag = c.model_classified_as
+        ? '<span style="font-size:9px;color:#fb923c;margin-left:6px;">(reviewer overrode model: ' + c.model_classified_as + ')</span>'
+        : '';
+      const target = c.target_node ? '<code style="background:rgba(255,255,255,0.05);padding:1px 4px;border-radius:3px;font-size:10px;color:var(--text);">' + c.target_node + '</code>' : '';
+      const derivation = c.derivation
+        ? '<div style="font-size:11px;color:var(--text-dim);margin-top:4px;line-height:1.5;">' + escapeHtmlSafe(c.derivation) + '</div>'
+        : '';
+      return '<div style="padding:10px 12px;border-left:2px solid #a78bfa;background:rgba(139,92,246,0.04);border-radius:4px;margin-bottom:6px;">' +
+        '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
+          '<span style="font-size:10px;font-weight:700;letter-spacing:0.5px;color:' + (impactColor[imp] || '#a78bfa') + ';">[triangulates: ' + imp + ']</span>' +
+          target +
+          overrideTag +
+          (c.source ? '<span style="font-size:10px;color:var(--text-dim);">' + escapeHtmlSafe(c.source) + '</span>' : '') +
+          (c.date ? '<span style="font-size:10px;color:var(--text-dim);">' + escapeHtmlSafe(c.date) + '</span>' : '') +
+        '</div>' +
+        derivation +
+      '</div>';
+    }).join('');
+
+    return '<div class="dp-card" style="border-left:3px solid #a78bfa;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +
+        '<div style="font-size:14px;font-weight:600;">' + escapeHtmlSafe(b.entityLabel) + ' · <span style="color:var(--text-dim);font-weight:400;">' + escapeHtmlSafe(b.provKey) + '</span>' + scopeTag + '</div>' +
+        '<span style="font-size:11px;color:' + tierColor + ';font-weight:600;">' + b.confidenceTier + '</span>' +
+      '</div>' +
+      banner +
+      claimRows +
+    '</div>';
+  }).join('');
+
+  container.innerHTML = html;
+}
+
+function escapeHtmlSafe(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 // ============================================================

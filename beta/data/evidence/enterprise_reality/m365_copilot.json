@@ -1,0 +1,25 @@
+{
+  "id": "m365_copilot",
+  "name": "M365 Copilot",
+  "ticker": "MSFT",
+  "tier": "trad_saas",
+  "arrClaimedNumeric": 5.4,
+  "arrAsOf": "2026-Q1",
+  "arrSource": "Microsoft FY26 Q3 earnings \u2014 15M paid seats \u00d7 $30/mo annualised = $5.4B list-billings",
+  "provenance": "tier_1b",
+  "arrClaimedVsReal": {
+    "realRange": [
+      2.5,
+      3.5
+    ],
+    "realNote": "40-60% effective discounting per Citi/JPM channel checks; cloud margin down 3pp = real AI infra cost."
+  },
+  "narrative": {
+    "claimed": "15M seats x $30/mo = $5.4B list (verified, MSFT Q2 FY26 earnings)",
+    "usage": "35.8% active (Recon Analytics, 150K respondents). Only 5% of orgs past pilot (Gartner). 70% tried, only 8% kept choosing it.",
+    "real": "~$2.5-3.5B net (40-60% discounting per Citi/JPM). Cloud margin down 3pp (72->69%) \u2014 real AI infra cost.",
+    "flags": "3.3% of 450M installed base after 2 years. Market share FELL 18.8%->11.5% (Recon Analytics Jul->Jan). Auto-installing. Morgan Stanley: \"wall of sorry.\""
+  },
+  "growth": "12-15%",
+  "prevGrowth": "15%"
+}

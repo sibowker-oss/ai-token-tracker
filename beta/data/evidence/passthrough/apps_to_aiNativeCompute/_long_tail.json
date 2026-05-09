@@ -1,0 +1,11 @@
+{
+  "id": "_long_tail",
+  "from": "_other_apps",
+  "to": "_aiNativeCompute",
+  "isLongTail": true,
+  "baseValueBasis": "Aggregate ai_native_app ARR ex-named entries \u2014 see arrModel.apps.aiNative residual",
+  "baseValue": 4.0,
+  "multiplierPct": 8,
+  "rationale": "Smaller AI-Native Apps spend ~8% of ARR on AI-Native Compute (token-factory inference for OSS models, residual after most spend goes direct to frontier APIs or hyperscalers). Editorial.",
+  "provenance": "tier_3a"
+}

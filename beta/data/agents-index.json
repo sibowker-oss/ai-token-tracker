@@ -1,0 +1,447 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-05T22:38:38Z",
+  "registry_path": "data/agents.registry.md",
+  "registry": [
+    {
+      "name": "release-check",
+      "version": "1.0.0",
+      "purpose": "Run the §11 release gate — Playwright suite + provenance validator + §11.5 editorial read-through. Read-only audit.",
+      "sources": "all (read-only across `site-data.json` and every rendered page)",
+      "fieldsTouched": "_none — read-only; emits report only_",
+      "outputSchema": "`tests/reports/<iso>/report.md` + `report.json`",
+      "cadence": "on-demand (local `/release-check`, PR via GitHub Actions)",
+      "owner": "Simon",
+      "promptLocation": "`.claude/agents/release-check.md`",
+      "briefLocation": "`briefs/active/2026-04-23-testing-runbook.md`",
+      "createdOn": "2026-04-23",
+      "status": "active"
+    },
+    {
+      "name": "stream-1-activation-monitor",
+      "version": "0.1.0",
+      "purpose": "Drive the Stream 1 registered-but-inert sources from `pending_first_extraction` → live via `monitor_sources.py`. Currently wired for IR pages (src-026..032), SEC EDGAR broad scan (src-025 + data/edgar-tickers.json), FLI EU AI Act (src-055), Chinese sources (src-037/038/042), and the four Chinese hyperscaler IRs (src-056..059).",
+      "sources": "src-001, src-025, src-026..032, src-037/038/042, src-055..059",
+      "fieldsTouched": "none during catalogue pass; `data-updates/<date>-candidates.json` + `data-updates/<date>-source-<id>.json` patches for downstream Accept/Decline in `claims.html` (existing flow).",
+      "outputSchema": "per-source candidates JSON + `data/snapshots/<source-id>/<YYYY-MM-DD>/` raw artefact",
+      "cadence": "on-demand (manually triggered per source via `python3 scripts/monitor_sources.py --force src-NNN`)",
+      "owner": "Simon",
+      "promptLocation": "`scripts/monitor_sources.py` (adapters: `ir_page_extract`, `sec_edgar_scan`, `web_extract` with language='zh' hint)",
+      "briefLocation": "`briefs/active/2026-04-23-stream-1-activation.md`",
+      "createdOn": "2026-04-23",
+      "status": "active (no extractions triggered yet)"
+    },
+    {
+      "name": "structured-claims-applier",
+      "version": "1.1.0",
+      "purpose": "Accept-side routing of the four wq-014 structured claim types (power_project / hiring_snapshot / patent_snapshot / company_surfaced) from `claims.html` into `site-data.json` / `companies.json`. Not a monitor — runs when Simon clicks Submit in claims.html.",
+      "sources": "any source that emits a structured claim (Streams 2/3 adapters in future; manual CLI today)",
+      "fieldsTouched": "`site-data.json.power.projects[]`, `site-data.json.hiring.snapshots.<slug>.<window>`, `site-data.json.patents.snapshots.<slug>.<window>`, `companies.json.candidates[]`, `data/company-surfaced.log.json`, `data/sources.log.md`",
+      "outputSchema": "patched `site-data.json` / `companies.json` via the existing `apply_claims.py` flow; row-per-write on `sources.log.md`",
+      "cadence": "on-demand (Accept in `claims.html` → `apply_claims.py`)",
+      "owner": "Simon",
+      "promptLocation": "`scripts/apply_claims.py` (STRUCTURED_APPLIERS dispatch)",
+      "briefLocation": "`briefs/active/2026-04-23-structured-claim-schema.md`",
+      "createdOn": "2026-04-23",
+      "status": "active"
+    },
+    {
+      "name": "stream-2-power-monitor",
+      "version": "0.1.0",
+      "purpose": "Drive Stream 2 power sources from `pending_first_extraction` → live. Emits `power_project` structured claims (wq-014) per ISO queue entry. Consults `data/datacenter-attribution-map.json` for LLC / facility → AI-operator resolution.",
+      "sources": "src-060 (ERCOT), src-061 (PJM), src-062 (EIA), src-063 (NESO TEC), src-064 (Epoch AI)",
+      "fieldsTouched": "`data-updates/<date>-source-<id>.json` (per-source candidates) + `data/datacenter-attribution-map.json` (map refresh) + `data/snapshots/<source-id>/<YYYY-MM-DD>/`",
+      "outputSchema": "structured `power_project` claims → reviewed in `claims.html` → routed by `structured-claims-applier` into `site-data.json.power.projects[]`",
+      "cadence": "on-demand (manual trigger: `python3 scripts/monitor_sources.py --force src-NNN`)",
+      "owner": "Simon",
+      "promptLocation": "`scripts/monitor_sources.py` (adapters: `iso_queue_ercot`, `iso_queue_pjm`, `eia_api`, `neso_tec`, `epoch_frontier`)",
+      "briefLocation": "`briefs/active/2026-04-23-stream-2-energy.md`",
+      "createdOn": "2026-04-23",
+      "status": "active (attribution map seeded 2026-04-23; no queue extractions yet)"
+    },
+    {
+      "name": "company-discovery",
+      "version": "0.1.0",
+      "purpose": "Drive Stream 3 hiring + patent discovery. Fans out to per-company ATS endpoints (Greenhouse / Lever / Ashby / Workable) and patent APIs (PatentsView, optionally BigQuery / EPO OPS). Emits `hiring_snapshot`, `patent_snapshot`, and `company_surfaced` structured claims (wq-014). Consults `data/company-alias-map.json` for entity resolution.",
+      "sources": "src-065..072",
+      "fieldsTouched": "`data-updates/<date>-source-<id>.json` (per-source candidates, one per company target) + `data/company-alias-map.json` (updated as candidates are accepted) + `data/snapshots/<source-id>-<slug>/<YYYY-MM-DD>/`",
+      "outputSchema": "structured hiring/patent claims → `claims.html` → `structured-claims-applier` → `site-data.json.{hiring,patents}.snapshots.<slug>.<window>`",
+      "cadence": "on-demand (manual trigger: `python3 scripts/monitor_sources.py --force src-NNN`; recommended cadence per wq-013 §7: weekly for ATS, monthly for patents)",
+      "owner": "Simon",
+      "promptLocation": "`scripts/monitor_sources.py` (adapters: `greenhouse_board`, `lever_postings`, `ashby_public`, `workable_jobs`, `patentsview_search`, `google_patents_bq`, `epo_ops`, `dol_lca_xlsx`) + `scripts/ai_native_density.py` + `scripts/discovery_validation.py`",
+      "briefLocation": "`briefs/active/2026-04-23-stream-3-hiring-patents.md`",
+      "createdOn": "2026-04-23",
+      "status": "active (alias map seeded with 31-company validation set; no ATS or patent extractions yet)"
+    }
+  ],
+  "scripts": [
+    {
+      "name": "add_chinese_providers.py",
+      "path": "scripts/add_chinese_providers.py",
+      "purpose": "wq-070 — Add 5 new model_provider entities (Chinese + self-hosted aggregator).",
+      "group": "other"
+    },
+    {
+      "name": "add_company.py",
+      "path": "scripts/add_company.py",
+      "purpose": "Add a company to topConsumers in site-data.json.",
+      "group": "other"
+    },
+    {
+      "name": "add_other_closed_entity.py",
+      "path": "scripts/add_other_closed_entity.py",
+      "purpose": "wq-070 extension — add _other_closed synthetic aggregator entity.",
+      "group": "other"
+    },
+    {
+      "name": "add_wq046_entities.py",
+      "path": "scripts/add_wq046_entities.py",
+      "purpose": "wq-046 — add 7 missing entities to entities.json.",
+      "group": "other"
+    },
+    {
+      "name": "admin_server.py",
+      "path": "scripts/admin_server.py",
+      "purpose": "Local server for the AI Ledger admin interface.",
+      "group": "other"
+    },
+    {
+      "name": "ai_native_density.py",
+      "path": "scripts/ai_native_density.py",
+      "purpose": "AI Native Density — ranking score for the Stream 3 discovery review queue.",
+      "group": "other"
+    },
+    {
+      "name": "anthropic_monthly_review.py",
+      "path": "scripts/anthropic_monthly_review.py",
+      "purpose": "wq-079 monthly editorial cadence.",
+      "group": "anthropic"
+    },
+    {
+      "name": "apply_claims.py",
+      "path": "scripts/apply_claims.py",
+      "purpose": "Apply approved claims to site-data.json.",
+      "group": "apply"
+    },
+    {
+      "name": "apply_decisions.py",
+      "path": "scripts/apply_decisions.py",
+      "purpose": "Process review decisions end-to-end.",
+      "group": "apply"
+    },
+    {
+      "name": "audit_hardcoded_numbers.py",
+      "path": "scripts/audit_hardcoded_numbers.py",
+      "purpose": "wq-064 — Site-wide hardcoded number audit (report-only).",
+      "group": "audit"
+    },
+    {
+      "name": "audit_period_attribution.py",
+      "path": "scripts/audit_period_attribution.py",
+      "purpose": "wq-054 §4.4 audit backfill.",
+      "group": "audit"
+    },
+    {
+      "name": "audit_sources.py",
+      "path": "scripts/audit_sources.py",
+      "purpose": "Reprocess all sources and compare against current entity data.",
+      "group": "audit"
+    },
+    {
+      "name": "auto_clear_inbox.py",
+      "path": "scripts/auto_clear_inbox.py",
+      "purpose": "Auto-clear the vault-inbox review queue using the safe rules agreed with",
+      "group": "other"
+    },
+    {
+      "name": "auto_update.py",
+      "path": "scripts/auto_update.py",
+      "purpose": "Auto-update pipeline: scrape signals, update dashboard data, commit and push.",
+      "group": "other"
+    },
+    {
+      "name": "backfill_capex_and_2024_revenue.py",
+      "path": "scripts/backfill_capex_and_2024_revenue.py",
+      "purpose": "wq-071 + wq-072 — Non-mag7 capex backfill + 2024 collected_revenue per provider.",
+      "group": "backfill"
+    },
+    {
+      "name": "backfill_editorial.py",
+      "path": "scripts/backfill_editorial.py",
+      "purpose": "wq-066 — Apply audit-extract values to entities.json:market_aggregates.",
+      "group": "backfill"
+    },
+    {
+      "name": "backfill_reference_revenue.py",
+      "path": "scripts/backfill_reference_revenue.py",
+      "purpose": "wq-055 — backfill `reference_revenue` on existing operating_loss",
+      "group": "backfill"
+    },
+    {
+      "name": "build_agents_index.py",
+      "path": "scripts/build_agents_index.py",
+      "purpose": "wq-088 §\"Files touched\"/Implementation §5.",
+      "group": "build"
+    },
+    {
+      "name": "build_briefs_index.py",
+      "path": "scripts/build_briefs_index.py",
+      "purpose": "wq-088 §\"Files touched\"/Implementation §4.",
+      "group": "build"
+    },
+    {
+      "name": "build_entity_pages.py",
+      "path": "scripts/build_entity_pages.py",
+      "purpose": "wq-042 — auto-build per-entity detail pages for entities crossing the",
+      "group": "build"
+    },
+    {
+      "name": "build_matcher_rules.py",
+      "path": "scripts/build_matcher_rules.py",
+      "purpose": "wq-039 — derive matcher rules from canonical sources.",
+      "group": "build"
+    },
+    {
+      "name": "classify_claim.py",
+      "path": "scripts/classify_claim.py",
+      "purpose": "Classify a claim to entity + field + year.",
+      "group": "classify"
+    },
+    {
+      "name": "classify_source.py",
+      "path": "scripts/classify_source.py",
+      "purpose": "Source classifier — given a URL, determine type, extraction method, and frequency.",
+      "group": "classify"
+    },
+    {
+      "name": "coerce_date.py",
+      "path": "scripts/coerce_date.py",
+      "purpose": "Coerce loose date strings to ISO YYYY-MM-DD.",
+      "group": "other"
+    },
+    {
+      "name": "cohort_metrics.py",
+      "path": "scripts/cohort_metrics.py",
+      "purpose": "Phase 1 cohort health snapshot (wq-081).",
+      "group": "other"
+    },
+    {
+      "name": "curated_intake.py",
+      "path": "scripts/curated_intake.py",
+      "purpose": "wq-083 — curated source intake.",
+      "group": "other"
+    },
+    {
+      "name": "dedupe_candidates.py",
+      "path": "scripts/dedupe_candidates.py",
+      "purpose": "Dedupe the candidates queue. Future runs of monitor_sources.py replace per",
+      "group": "other"
+    },
+    {
+      "name": "derive_capital_sankey.py",
+      "path": "scripts/derive_capital_sankey.py",
+      "purpose": "wq-074 — Capital sankey engine.",
+      "group": "derive"
+    },
+    {
+      "name": "derive_collected_revenue.py",
+      "path": "scripts/derive_collected_revenue.py",
+      "purpose": "wq-048 — consensus engine: derive collected_revenue from ARR + assumptions.",
+      "group": "derive"
+    },
+    {
+      "name": "derive_compute_revenue.py",
+      "path": "scripts/derive_compute_revenue.py",
+      "purpose": "wq-087 — Compute Revenue aggregator.",
+      "group": "derive"
+    },
+    {
+      "name": "derive_cumulative_aggregates.py",
+      "path": "scripts/derive_cumulative_aggregates.py",
+      "purpose": "wq-063 — Cumulative aggregator.",
+      "group": "derive"
+    },
+    {
+      "name": "derive_market_aggregates.py",
+      "path": "scripts/derive_market_aggregates.py",
+      "purpose": "wq-067 — Market aggregates engine extension.",
+      "group": "derive"
+    },
+    {
+      "name": "derive_sankey.py",
+      "path": "scripts/derive_sankey.py",
+      "purpose": "wq-055 — Sankey balancing engine.",
+      "group": "derive"
+    },
+    {
+      "name": "discovery_validation.py",
+      "path": "scripts/discovery_validation.py",
+      "purpose": "Discovery validation harness — wq-013 §12.6.",
+      "group": "other"
+    },
+    {
+      "name": "enrich.py",
+      "path": "scripts/enrich.py",
+      "purpose": "APAC AI Intel — Company Enrichment Pipeline",
+      "group": "enrich"
+    },
+    {
+      "name": "enrich_vault.py",
+      "path": "scripts/enrich_vault.py",
+      "purpose": "Enrich vault data points that only have a URL + title.",
+      "group": "enrich"
+    },
+    {
+      "name": "extract_audit_values.py",
+      "path": "scripts/extract_audit_values.py",
+      "purpose": "wq-066 — Extract documented market-aggregate values from assumptions-audit.md.",
+      "group": "extract"
+    },
+    {
+      "name": "extract_claims.py",
+      "path": "scripts/extract_claims.py",
+      "purpose": "Podcast claim extractor — uses Claude API to extract structured data points",
+      "group": "extract"
+    },
+    {
+      "name": "extract_structured_claims.py",
+      "path": "scripts/extract_structured_claims.py",
+      "purpose": "Structured claim extractor — produces the four structured claim types defined",
+      "group": "extract"
+    },
+    {
+      "name": "fix_vault_data_mojibake.py",
+      "path": "scripts/fix_vault_data_mojibake.py",
+      "purpose": "One-shot iterative mojibake cleanup over a vault-data-shaped JSON file.",
+      "group": "other"
+    },
+    {
+      "name": "fix_vault_dates.py",
+      "path": "scripts/fix_vault_dates.py",
+      "purpose": "One-shot: coerce loose dateOfClaim values to ISO YYYY-MM-DD on",
+      "group": "other"
+    },
+    {
+      "name": "fix_vault_inbox_mojibake.py",
+      "path": "scripts/fix_vault_inbox_mojibake.py",
+      "purpose": "wq-030: One-shot mojibake cleanup of vault-inbox.json items.",
+      "group": "other"
+    },
+    {
+      "name": "fix_vault_mojibake.py",
+      "path": "scripts/fix_vault_mojibake.py",
+      "purpose": "One-shot: unmojibake pending vault-inbox items.",
+      "group": "other"
+    },
+    {
+      "name": "generate_feed.py",
+      "path": "scripts/generate_feed.py",
+      "purpose": "Generate feed-data.json from review decisions and newsletter briefs.",
+      "group": "other"
+    },
+    {
+      "name": "generate_site_data.py",
+      "path": "scripts/generate_site_data.py",
+      "purpose": "Generates site-data.json from entities.json",
+      "group": "other"
+    },
+    {
+      "name": "log_run.py",
+      "path": "scripts/log_run.py",
+      "purpose": "wq-043 — append-only run log writer.",
+      "group": "other"
+    },
+    {
+      "name": "migrate_orphan_accepts.py",
+      "path": "scripts/migrate_orphan_accepts.py",
+      "purpose": "One-shot: migrate orphan-Accepts to raw_pool (wq-023 §5).",
+      "group": "other"
+    },
+    {
+      "name": "monitor.py",
+      "path": "scripts/monitor.py",
+      "purpose": "APAC AI Intel — Monitoring & Scheduling",
+      "group": "other"
+    },
+    {
+      "name": "monitor_sources.py",
+      "path": "scripts/monitor_sources.py",
+      "purpose": "Source monitor — checks registry for due sources and runs extraction.",
+      "group": "monitor"
+    },
+    {
+      "name": "news_monitor.py",
+      "path": "scripts/news_monitor.py",
+      "purpose": "News monitor: checks RSS feeds and flags when dashboard assumptions may be outdated.",
+      "group": "news"
+    },
+    {
+      "name": "newsletter.py",
+      "path": "scripts/newsletter.py",
+      "purpose": "APAC AI Intel — Newsletter Formatter",
+      "group": "newsletter"
+    },
+    {
+      "name": "prune_cumulative_overrides.py",
+      "path": "scripts/prune_cumulative_overrides.py",
+      "purpose": "wq-070 — Prune redundant cumulative overrides.",
+      "group": "other"
+    },
+    {
+      "name": "reconcile.py",
+      "path": "scripts/reconcile.py",
+      "purpose": "Reconcile signals against topConsumers — detect stale ARR/token estimates.",
+      "group": "other"
+    },
+    {
+      "name": "refresh_entity_data.py",
+      "path": "scripts/refresh_entity_data.py",
+      "purpose": "wq-068 — Entity-level data refresh.",
+      "group": "other"
+    },
+    {
+      "name": "scan_sources.py",
+      "path": "scripts/scan_sources.py",
+      "purpose": "Daily scan of all active web sources for new claims.",
+      "group": "scan"
+    },
+    {
+      "name": "score_materiality.py",
+      "path": "scripts/score_materiality.py",
+      "purpose": "wq-040 — materiality scoring for review-queue triage.",
+      "group": "other"
+    },
+    {
+      "name": "scrape_podcasts.py",
+      "path": "scripts/scrape_podcasts.py",
+      "purpose": "Podcast transcript scraper — Tier 1 + Tier 2 sources.",
+      "group": "scrape"
+    },
+    {
+      "name": "scrape_signals.py",
+      "path": "scripts/scrape_signals.py",
+      "purpose": "Daily/weekly signal scraper for AI Token Dashboard.",
+      "group": "scrape"
+    },
+    {
+      "name": "sync_ideas.py",
+      "path": "scripts/sync_ideas.py",
+      "purpose": "Syncs markdown files from ~/Documents/Claude/Project Ideas/ into the",
+      "group": "other"
+    },
+    {
+      "name": "validate_page_registry.py",
+      "path": "scripts/validate_page_registry.py",
+      "purpose": "wq-031 P1 validator.",
+      "group": "validate"
+    },
+    {
+      "name": "wq053_iaas_backfill.py",
+      "path": "scripts/wq053_iaas_backfill.py",
+      "purpose": "wq-053 — IaaS provider backfill + match rules.",
+      "group": "other"
+    }
+  ],
+  "script_count": 61,
+  "registry_count": 5
+}

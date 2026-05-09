@@ -1,0 +1,193 @@
+{
+  "_doc": "wq-096 tier-tagging tables consumed by scripts/generate_site_data.py.",
+  "_provenance": {
+    "set_by": "scripts/migrate_wq096.py (wq-096)",
+    "set_at": "2026-05-08T01:28:48Z"
+  },
+  "TIER_FOR_PROVIDER_KEY": {
+    "OpenAI": "frontier",
+    "Anthropic": "frontier",
+    "Google/Gemini": "frontier",
+    "xAI": "frontier",
+    "Mistral": "frontier",
+    "DeepSeek": "frontier",
+    "Alibaba/Qwen": "frontier",
+    "Baidu": "frontier",
+    "Tencent": "frontier",
+    "Minimax": "frontier",
+    "Moonshot/Kimi": "frontier",
+    "ByteDance": "frontier",
+    "Meta": "frontier",
+    "Others/Self-hosted": "frontier"
+  },
+  "TIER_FOR_TOPCONSUMER": {
+    "Portkey.ai": "ai_native_app",
+    "OpenClaw": "ai_native_app",
+    "Cursor (Anysphere)": "ai_native_app",
+    "OpenRouter": "ai_native_app",
+    "Kilo Code": "ai_native_app",
+    "Perplexity": "ai_native_app",
+    "Replit": "ai_native_app",
+    "Cognition (Devin)": "ai_native_app",
+    "Duolingo": "ai_native_app",
+    "Lovable": "ai_native_app",
+    "Canva": "ai_native_app",
+    "Cline": "ai_native_app",
+    "Character.ai": "ai_native_app",
+    "ElevenLabs": "ai_native_app",
+    "Wrtn Technologies": "ai_native_app",
+    "micro1": "ai_native_app",
+    "Midjourney": "ai_native_app",
+    "Harvey AI": "ai_native_app",
+    "Monica AI": "ai_native_app",
+    "Jasper": "ai_native_app",
+    "Glean": "ai_native_app",
+    "Janitor AI": "ai_native_app",
+    "Descript": "ai_native_app",
+    "Yellow.ai": "ai_native_app",
+    "Intercom Fin": "ai_native_app",
+    "Writer": "ai_native_app",
+    "BLACKBOX.AI": "ai_native_app",
+    "Klarna": "ai_native_app",
+    "Grab": "ai_native_app",
+    "Sea/Shopee": "ai_native_app",
+    "Kakao": "ai_native_app",
+    "Sierra AI": "ai_native_app",
+    "DeepL": "ai_native_app",
+    "Hebbia": "ai_native_app",
+    "Clay": "ai_native_app",
+    "Gamma": "ai_native_app",
+    "Roo Code": "ai_native_app",
+    "Captions": "ai_native_app",
+    "Decagon": "ai_native_app",
+    "Luminance": "ai_native_app",
+    "Mercor": "ai_native_app",
+    "Speak": "ai_native_app",
+    "Synthesia": "ai_native_app",
+    "Genspark": "ai_native_app",
+    "Chai Research": "ai_native_app",
+    "OpenArt": "ai_native_app",
+    "SillyTavern": "ai_native_app",
+    "Abridge": "ai_native_app",
+    "Photoroom": "ai_native_app",
+    "Runway": "ai_native_app",
+    "Agent Zero": "ai_native_app",
+    "Fathom": "ai_native_app",
+    "Pika": "ai_native_app",
+    "Suno": "ai_native_app",
+    "Retell AI": "ai_native_app",
+    "OpenHands": "ai_native_app",
+    "Cal AI": "ai_native_app"
+  },
+  "TOPCONSUMERS_REMOVE": [
+    "Fal.ai",
+    "Fireworks AI",
+    "GitHub Copilot",
+    "Groq",
+    "Notion AI",
+    "Salesforce Agentforce",
+    "Together AI"
+  ],
+  "TOPCONSUMERS_ARR_BACKFILL": {
+    "Perplexity": {
+      "arrNumeric": 200000000,
+      "arrSource": "Perplexity press end-2025 \u2014 $200M ARR",
+      "provenance": "tier_2b"
+    },
+    "Sierra AI": {
+      "arrNumeric": 100000000,
+      "arrSource": "Sierra press 2025 \u2014 $100M ARR end-2025 at $4.5B+ valuation",
+      "provenance": "tier_2b"
+    },
+    "Decagon": {
+      "arrNumeric": 50000000,
+      "arrSource": "Decagon Series C 2025 \u2014 ~$50M ARR end-2025",
+      "provenance": "tier_2b"
+    },
+    "Hebbia": {
+      "arrNumeric": 25000000,
+      "arrSource": "Hebbia press 2025 \u2014 ~$25M ARR; legal/finance vertical",
+      "provenance": "tier_3a"
+    },
+    "Suno": {
+      "arrNumeric": 120000000,
+      "arrSource": "Suno press 2025 \u2014 $120M ARR estimated end-2025",
+      "provenance": "tier_2b"
+    },
+    "Pika": {
+      "arrNumeric": 25000000,
+      "arrSource": "Pika press 2025 \u2014 ~$25M ARR estimated",
+      "provenance": "tier_3a"
+    },
+    "Captions": {
+      "arrNumeric": 30000000,
+      "arrSource": "Captions press 2025 \u2014 ~$30M ARR estimated",
+      "provenance": "tier_3a"
+    },
+    "Speak": {
+      "arrNumeric": 50000000,
+      "arrSource": "Speak press 2025 \u2014 ~$50M ARR; language-learning AI",
+      "provenance": "tier_3a"
+    },
+    "Cline": {
+      "arrNumeric": 5000000,
+      "arrSource": "Cline press 2025 \u2014 small commercial ARR (mostly OSS); ~$5M editorial",
+      "provenance": "tier_3b"
+    },
+    "Janitor AI": {
+      "arrNumeric": 15000000,
+      "arrSource": "Janitor AI press 2025 \u2014 ~$15M ARR; consumer roleplay",
+      "provenance": "tier_3a"
+    },
+    "OpenClaw": {
+      "arrNumeric": 10000000,
+      "arrSource": "OpenClaw press 2026 \u2014 recent launch; ~$10M editorial",
+      "provenance": "tier_3b"
+    },
+    "Kilo Code": {
+      "arrNumeric": 8000000,
+      "arrSource": "Kilo Code press 2025 \u2014 small commercial ARR; ~$8M editorial",
+      "provenance": "tier_3b"
+    },
+    "Canva": {
+      "arrPending": true,
+      "arrPendingReason": "Canva is a digital-native platform \u2014 AI-attributable ARR not separately disclosed; would require split from total Canva ARR ($3B+)"
+    },
+    "Duolingo": {
+      "arrPending": true,
+      "arrPendingReason": "Duolingo Max AI-tier disclosed but not as discrete ARR line"
+    },
+    "Klarna": {
+      "arrPending": true,
+      "arrPendingReason": "Klarna AI-attributable revenue not separately disclosed; AI-driven cost savings reported, not revenue"
+    },
+    "Grab": {
+      "arrPending": true,
+      "arrPendingReason": "Grab AI-attributable revenue not separately disclosed"
+    },
+    "Sea/Shopee": {
+      "arrPending": true,
+      "arrPendingReason": "Sea/Shopee AI-attributable revenue not separately disclosed"
+    },
+    "Kakao": {
+      "arrPending": true,
+      "arrPendingReason": "Kakao AI-attributable revenue not separately disclosed"
+    },
+    "Roo Code": {
+      "arrPending": true,
+      "arrPendingReason": "Roo Code is OSS-first; no public commercial ARR disclosure"
+    },
+    "SillyTavern": {
+      "arrPending": true,
+      "arrPendingReason": "SillyTavern is OSS \u2014 no commercial ARR"
+    },
+    "OpenHands": {
+      "arrPending": true,
+      "arrPendingReason": "OpenHands (All Hands AI) commercial ARR not publicly disclosed"
+    },
+    "Agent Zero": {
+      "arrPending": true,
+      "arrPendingReason": "Agent Zero is OSS / experimental \u2014 no commercial ARR"
+    }
+  }
+}
