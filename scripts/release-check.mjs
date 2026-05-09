@@ -159,6 +159,17 @@ const reviewSurfacesStatus = run('node', ['scripts/validate-review-surfaces.mjs'
   RELEASE_CHECK_REVIEW_SURFACES_JSON_OUT: reviewSurfacesJson,
 });
 
+// Step 11f (wq-101 §2 Validators): vendor-posture — site-data carries the
+// 12-product cohort with valid postureScores; usage.html embeds the
+// "SaaS AI Transition Map" section + renderPostureRadar() symbol; private
+// companies render with COST=0 + gmUnavailable; prototype scores carry
+// bundling/cost citations per D4 path-b.
+console.log('\n→ 11f/13  Vendor-posture (wq-101 §2 Validators)');
+const vendorPostureJson = join(reportDir, 'vendor-posture.json');
+const vendorPostureStatus = run('node', ['scripts/validate-vendor-posture.mjs'], {
+  RELEASE_CHECK_VENDOR_POSTURE_JSON_OUT: vendorPostureJson,
+});
+
 // Step 12: Playwright suite
 console.log('\n→ 12/13  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
@@ -213,6 +224,9 @@ const pipelineHealthFails = pipelineHealthFindings.filter(f => f.severity === 'f
 const reviewSurfacesFindings = existsSync(reviewSurfacesJson) ? JSON.parse(readFileSync(reviewSurfacesJson, 'utf8')) : [];
 const reviewSurfacesFails = reviewSurfacesFindings.filter(f => f.severity === 'fail');
 
+const vendorPostureFindings = existsSync(vendorPostureJson) ? JSON.parse(readFileSync(vendorPostureJson, 'utf8')) : [];
+const vendorPostureFails = vendorPostureFindings.filter(f => f.severity === 'fail');
+
 const pwResultsPath = join(root, 'tests', 'reports', 'playwright-results.json');
 let pwSummary = { tests: 0, failures: 0 };
 if (existsSync(pwResultsPath)) {
@@ -248,12 +262,13 @@ const report = `# Release-check report
 | Pipeline orphans (wq-098) | ${pipelineOrphansFindings.length === 0 ? '✓' : ''} | 0 | ${pipelineOrphansFails.length} |
 | Pipeline health (wq-099) | ${pipelineHealthFindings.length === 0 ? '✓' : ''} | 0 | ${pipelineHealthFails.length} |
 | Review surfaces (wq-100) | ${reviewSurfacesFindings.length === 0 ? '✓' : ''} | 0 | ${reviewSurfacesFails.length} |
+| Vendor posture (wq-101) | ${vendorPostureFindings.length === 0 ? '✓' : ''} | 0 | ${vendorPostureFails.length} |
 | Playwright suite | ${pwSummary.tests - pwSummary.failures} | — | ${pwSummary.failures} |
 | Editorial (§11.5) | — | via \`/release-check\` | — |
 
 ## Verdict
 
-${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + periodAttrFails.length + telemetryRoutingFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + pwSummary.failures, provAdvisories.length + periodAttrAdvisories.length + telemetryRoutingAdvisories.length)}
+${verdict(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + periodAttrFails.length + telemetryRoutingFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + vendorPostureFails.length + pwSummary.failures, provAdvisories.length + periodAttrAdvisories.length + telemetryRoutingAdvisories.length)}
 
 ## Provenance findings
 
@@ -311,6 +326,10 @@ ${renderFindings(pipelineHealthFindings)}
 
 ${renderFindings(reviewSurfacesFindings)}
 
+## Vendor-posture findings (wq-101 §2 Validators)
+
+${renderFindings(vendorPostureFindings)}
+
 ## Playwright suite
 
 See \`${join('tests', 'reports', 'html', 'index.html')}\` for the full Playwright HTML report.
@@ -352,6 +371,7 @@ writeFileSync(join(reportDir, 'report.json'), JSON.stringify({
   pipeline_orphans: pipelineOrphansFindings,
   pipeline_health_freshness: pipelineHealthFindings,
   review_surfaces: reviewSurfacesFindings,
+  vendor_posture: vendorPostureFindings,
   playwright: pwSummary,
 }, null, 2));
 
@@ -359,7 +379,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + vendorPostureFails.length + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);
