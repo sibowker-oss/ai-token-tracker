@@ -193,6 +193,32 @@ function saveDecisions() {
 const STRUCTURED_TYPES = ['power_project', 'hiring_snapshot', 'patent_snapshot', 'company_surfaced'];
 const CONFIDENCE_TO_WEIGHT = { high: 'authoritative', medium: 'corroborating', low: 'indicative' };
 
+// Stable per-claim fingerprint shared with admin_server.py + apply_pipeline.
+// Same logic must exist in scripts/_decided_signatures.py — change both together.
+function claimSignature(c) {
+  if (!c) return '';
+  const norm = v => String(v == null ? '' : v).trim().toLowerCase();
+  const parts = [
+    norm(c.entity),
+    norm(c.metric),
+    norm(c.value_display || c.value),
+    norm(c.source_url),
+    norm(c.time_period),
+  ];
+  let sig = parts.join('|');
+  if (sig.replace(/\|/g, '').trim() === '') {
+    sig = 'claim:' + norm(c.claim).slice(0, 200);
+  }
+  return sig;
+}
+// Fallback signature based on claim text only — matches historical declined/parked
+// decisions that didn't carry structured fields. Loaded items are checked against
+// BOTH this and the structured signature so old decisions still suppress correctly.
+function claimSignatureFallback(c) {
+  if (!c) return '';
+  return 'claim:' + String(c.claim || '').trim().toLowerCase().slice(0, 200);
+}
+
 function normaliseStructuredClaim(c) {
   // Structured claims don't carry weight/category/dedup_status/confidence at top level.
   // Synthesize them from the nested source block so the existing card shell, sort, and
@@ -259,6 +285,28 @@ async function loadClaims() {
 
   let combined = raw.slice();
   curatedFiles.forEach(cf => combined = combined.concat(cf.items));
+
+  // Suppress claims already decided in a previous session. The index is written
+  // by admin_server.py (via /api/decision) so the filter is server-authoritative
+  // and survives localStorage clears, browser switches, and machine swaps.
+  let suppressedCount = 0;
+  try {
+    const sigResp = await fetch('data-updates/decided-signatures.json?v=' + Date.now());
+    if (sigResp.ok) {
+      const sigIndex = await sigResp.json();
+      const decidedSigs = new Set(Object.keys(sigIndex || {}));
+      const before = combined.length;
+      combined = combined.filter(c => {
+        const s1 = claimSignature(c);
+        const s2 = claimSignatureFallback(c);
+        return !decidedSigs.has(s1) && !decidedSigs.has(s2);
+      });
+      suppressedCount = before - combined.length;
+    }
+  } catch (_) { /* index optional — first run, no decisions yet */ }
+  if (suppressedCount > 0) {
+    console.log('Suppressed ' + suppressedCount + ' previously-decided claim(s) via decided-signatures.json');
+  }
 
   // Normalise structured claims on load so weight/confidence/dedup_status/category
   // come from the nested source block and the existing card/sort/filter machinery
@@ -862,8 +910,12 @@ async function writeApprovedClaims(accepted) {
   const parked = [];
   allClaims.forEach((c, i) => {
     const d = decisions[i] || {};
-    if (d.decision === 'declined') declined.push({ id: c.id || c._claim_id, claim: c.claim, note: d.note || '' });
-    if (d.decision === 'parked')   parked.push({ id: c.id || c._claim_id, claim: c.claim, note: d.note || '' });
+    // Send the full claim object (not just id+claim+note) so server-side
+    // signature emission can fingerprint declined/parked decisions the same
+    // way it does accepted ones. _sync_inbox_status only reads .id so the
+    // extra fields are inert there.
+    if (d.decision === 'declined') declined.push({ ...c, id: c.id || c._claim_id, note: d.note || '' });
+    if (d.decision === 'parked')   parked.push({ ...c, id: c.id || c._claim_id, note: d.note || '' });
   });
 
   const payload = {

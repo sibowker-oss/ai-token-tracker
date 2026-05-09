@@ -25,6 +25,15 @@ import json, os, sys, subprocess, webbrowser
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime
 
+# macOS framework Python ships without root certs; pipeline subprocesses (scrape_*, monitor_*)
+# fall over on HTTPS without this. Self-heal so the LaunchAgent and manual runs both work.
+if not os.environ.get("SSL_CERT_FILE"):
+    try:
+        import certifi
+        os.environ["SSL_CERT_FILE"] = certifi.where()
+    except ImportError:
+        pass
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SCRIPT_DIR)
 SITE_DIR = ROOT_DIR
@@ -131,6 +140,18 @@ class AdminHandler(SimpleHTTPRequestHandler):
                 **decisions,
             }
             save_json(decisions_path, payload)
+
+            # Append fingerprints to data-updates/decided-signatures.json so
+            # claims.html / review.html stop resurfacing the same items on
+            # subsequent loads. Done before apply_pipeline so the index is
+            # ready by the time the user reloads the page.
+            try:
+                from _decided_signatures import record_decisions
+                record_decisions(decisions, decided_at=now.isoformat(timespec="seconds"))
+            except Exception as _sig_err:
+                # Non-fatal: failing to write the suppress-list shouldn't block
+                # the decision itself. Log to stderr for visibility.
+                print(f"  WARN: decided-signatures append failed: {_sig_err}", file=sys.stderr)
 
             # Update vault-inbox.json statuses so the inbox reflects the human
             # decision before apply runs. Both review surfaces operate on
@@ -750,8 +771,9 @@ def main():
     print(f"           POST /api/add-company")
     print(f"  Press Ctrl+C to stop\n")
 
-    # Open browser
-    webbrowser.open(f"http://localhost:{PORT}/admin.html")
+    # Open browser unless --no-browser (used by the LaunchAgent to run headless on login).
+    if "--no-browser" not in sys.argv:
+        webbrowser.open(f"http://localhost:{PORT}/admin.html")
 
     try:
         server.serve_forever()
