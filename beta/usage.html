@@ -315,9 +315,6 @@
 <!-- ══════ SECTION 5: SAAS AI TRANSITION MAP ══════ -->
 <div class="card">
   <h2>SaaS AI Transition Map <span class="sub">&mdash; Twelve trad-SaaS AI products scored on five posture axes</span></h2>
-  <div id="posture-prototype-banner" style="display:none;font-size:11px;line-height:1.5;color:var(--orange);background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:6px;padding:10px 14px;margin:0 0 14px;">
-    <strong style="font-weight:700;">Prototype scoring.</strong> <span id="posture-banner-detail">Posture scores in this initial release are first-pass editorial estimates pending primary-source verification per TAIL publishing standards.</span>
-  </div>
   <p id="posture-rubric-intro" style="font-size:12px;color:var(--text-dim);margin:0 0 10px;line-height:1.55;">
     A larger filled area = a more aggressive transition posture (which can be the cost of doing the work, not a verdict). Two axes read counter-intuitively: <strong style="color:var(--text);">COST</strong> rewards GM compression attributable to AI (proof of real workload) — stable margins on a heavily-marketed AI product score low. <strong style="color:var(--text);">PRICE</strong> reserves a 5 only for vendors where new commercial models (per-action, per-agent, outcome-based) are the only way they sell — none of this cohort qualifies. Private vendors render four-axis radars (no public GM disclosure).
   </p>
@@ -349,9 +346,9 @@
   <p id="posture-footnote" style="margin-top:14px;font-size:11px;color:var(--text-dim);line-height:1.55;"></p>
 </div>
 
-<!-- ══════ SECTION 6: TOP CONSUMERS ══════ -->
+<!-- ══════ SECTION 6: TOP AI NATIVES ══════ -->
 <div class="card">
-  <h2>Top Token Consumers <span class="sub" id="consumer-filter-label"></span></h2>
+  <h2>Top AI Natives <span class="sub" id="consumer-filter-label"></span></h2>
   <div id="consumer-stats" style="display:flex;gap:16px;margin-bottom:12px;flex-wrap:wrap;"></div>
   <div id="consumer-filters" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;"></div>
   <div class="mobile-hint" style="display:none;">Rotate to landscape or scroll horizontally to view full table.</div>
@@ -859,28 +856,20 @@ function renderPostureRubric(){
   el.innerHTML = html;
 }
 
-function renderPostureBanner(cohort){
-  const banner = document.getElementById('posture-prototype-banner');
-  if (!banner) return;
-  const anyPrototype = cohort.some(c => c.postureScores && c.postureScores._prototype === true);
-  banner.style.display = anyPrototype ? '' : 'none';
-}
-
 function renderPostureFootnote(cohort){
   const el = document.getElementById('posture-footnote');
   if (!el) return;
-  const m = VENDOR_POSTURE_METHODOLOGY || {};
-  const verified = (cohort[0] && cohort[0].postureScores && cohort[0].postureScores._lastVerified) || (m.lastUpdated || '');
-  el.innerHTML = 'Source: TAIL site-data.json (enterpriseReality). Posture as of ' + (verified || 'latest') +
-    '. Bundling, AI Cost Realisation citations are first-pass editorial drafts pending verification per the TAIL publishing gate (D4 path-b). ' +
-    'Share calculations use business-unit revenue where one exists, otherwise parent-total (D7). Disclosure may shift quarter-over-quarter as AI ARR grows or contracts as a share of host revenue.';
+  const verified = cohort[0] && cohort[0].postureScores && cohort[0].postureScores._lastVerified;
+  const asOf = verified ? 'Posture as of ' + verified + '. ' : '';
+  el.innerHTML = asOf +
+    'Share calculations use business-unit revenue where one exists, otherwise parent-total — so single-product stories read honestly even when scores are not strictly cross-comparable. ' +
+    'Disclosure may shift quarter-over-quarter as AI ARR grows or contracts as a share of host revenue.';
 }
 
 function renderPostureTable(){
   const t = document.getElementById('posture-table');
   if (!t) return;
   const cohort = (ENTERPRISE_REALITY || []).filter(c => c && c.postureScores);
-  renderPostureBanner(cohort);
   renderPostureFootnote(cohort);
   let html = '';
   cohort.forEach(c => {
