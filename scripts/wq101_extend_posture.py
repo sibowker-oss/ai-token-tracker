@@ -299,6 +299,9 @@ VENDOR_POSTURE_METHODOLOGY = {
         "acceleration": "ACCEL",
     },
     "lastUpdated": "2026-05-09",
+    "lastEditorialReview": "2026-05-09",
+    "reviewCadence": "per_earnings_cycle",
+    "reviewPlaybook": "docs/playbooks/vendor-posture-quarterly-review.md",
     "sourceBrief": "wq-101-vendor-ai-posture-radar",
     "rubricLocation": "inline-accordion",
 }

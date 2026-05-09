@@ -315,6 +315,11 @@
 <!-- ══════ SECTION 5: SAAS AI TRANSITION MAP ══════ -->
 <div class="card">
   <h2>SaaS AI Transition Map <span class="sub">&mdash; Twelve trad-SaaS AI products scored on five posture axes</span></h2>
+  <div id="posture-review-stamp" style="display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;font-size:11px;color:var(--text-dim);margin:0 0 10px;text-transform:uppercase;letter-spacing:0.06em;">
+    <span><strong style="color:var(--text);font-weight:600;">Last editorial review:</strong> <span id="posture-review-date">—</span></span>
+    <span style="opacity:0.7;">Cadence: per earnings cycle</span>
+    <span style="opacity:0.7;">ARR cells refresh automatically between reviews</span>
+  </div>
   <p id="posture-rubric-intro" style="font-size:12px;color:var(--text-dim);margin:0 0 10px;line-height:1.55;">
     A larger filled area = a more aggressive transition posture (which can be the cost of doing the work, not a verdict). Two axes read counter-intuitively: <strong style="color:var(--text);">COST</strong> rewards GM compression attributable to AI (proof of real workload) — stable margins on a heavily-marketed AI product score low. <strong style="color:var(--text);">PRICE</strong> reserves a 5 only for vendors where new commercial models (per-action, per-agent, outcome-based) are the only way they sell — none of this cohort qualifies. Private vendors render four-axis radars (no public GM disclosure).
   </p>
@@ -860,6 +865,13 @@ function renderPostureRubric(){
   el.innerHTML = html;
 }
 
+function renderPostureReviewStamp(){
+  const el = document.getElementById('posture-review-date');
+  if (!el) return;
+  const m = VENDOR_POSTURE_METHODOLOGY || {};
+  el.textContent = m.lastEditorialReview || m.lastUpdated || 'pending';
+}
+
 function renderPostureFootnote(cohort){
   const el = document.getElementById('posture-footnote');
   if (!el) return;
@@ -867,7 +879,8 @@ function renderPostureFootnote(cohort){
   const asOf = verified ? 'Posture as of ' + verified + '. ' : '';
   el.innerHTML = asOf +
     'Share calculations use business-unit revenue where one exists, otherwise parent-total — so single-product stories read honestly even when scores are not strictly cross-comparable. ' +
-    'Disclosure may shift quarter-over-quarter as AI ARR grows or contracts as a share of host revenue.';
+    'Disclosure may shift quarter-over-quarter as AI ARR grows or contracts as a share of host revenue. ' +
+    'The five axis scores are reviewed editorially each earnings cycle, not auto-derived from claims.';
 }
 
 function renderPostureTable(){
@@ -954,6 +967,7 @@ function renderPostureNotes(){
 
 function renderPostureSection(){
   renderPostureRubric();
+  renderPostureReviewStamp();
   renderPostureTable();
   renderPostureNotes();
 }

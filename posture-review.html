@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Posture Review — Admin</title>
+<script>
+(function() {
+  const AUTH_KEY = 'ai-ledger-admin-auth';
+  const HASH = '4b756188d30a1d735ddd721d016e010ab1c26839786e57ecf5a1b8c60789e9d6';
+  if (localStorage.getItem(AUTH_KEY) === 'ok') return;
+  const pw = prompt('Admin access required. Enter password:');
+  if (!pw) { document.location = 'dashboard.html'; return; }
+  crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw)).then(buf => {
+    const hash = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    if (hash === HASH) { localStorage.setItem(AUTH_KEY, 'ok'); }
+    else { alert('Incorrect password'); document.location = 'dashboard.html'; }
+  });
+})();
+</script>
+<link rel="stylesheet" href="/design-system/colors_and_type.css">
+<link rel="stylesheet" href="/design-system/ledger-overlays.css">
+<script src="/design-system/components/admin-nav.js" defer></script>
+<style>
+  :root { --bg:#0a0e1a; --card:#111827; --card-border:#1e293b; --text:#e2e8f0; --text-bright:#f8fafc; --text-dim:#94a3b8; --accent:#3b82f6; --green:#10b981; --orange:#f59e0b; --red:#ef4444; --purple:#8b5cf6; --cyan:#06b6d4; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  .container { max-width:1200px; margin:0 auto; padding:24px; }
+
+  h1 { font-size:24px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+  h1 .tag { background:var(--purple); color:white; font-size:9px; padding:2px 6px; border-radius:4px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; }
+  .intro { font-size:12px; color:var(--text-dim); margin-bottom:20px; line-height:1.6; max-width:880px; }
+  .intro a { color:var(--accent); }
+
+  .meta-row { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; align-items:center; }
+  .meta-pill { padding:6px 14px; border-radius:8px; background:var(--card); border:1px solid var(--card-border); font-size:11px; }
+  .meta-pill strong { color:var(--text-bright); }
+
+  .toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+  .btn { padding:8px 14px; border-radius:6px; border:1px solid var(--card-border); background:var(--card); color:var(--text); font-size:12px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .btn:hover { border-color:var(--accent); }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:white; }
+  .btn.primary:hover { background:#2563eb; border-color:#2563eb; }
+  .btn.warn { background:transparent; color:var(--orange); border-color:rgba(245,158,11,0.4); }
+  .btn.warn:hover { background:rgba(245,158,11,0.08); }
+
+  .global-notes { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:14px 16px; margin-bottom:20px; }
+  .global-notes h3 { font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-dim); margin-bottom:8px; }
+  .global-notes textarea { width:100%; min-height:80px; background:#0a0e1a; border:1px solid var(--card-border); color:var(--text); padding:10px 12px; border-radius:6px; font-family:inherit; font-size:12.5px; line-height:1.5; resize:vertical; }
+  .global-notes textarea:focus { outline:1px solid var(--accent); outline-offset:0; border-color:var(--accent); }
+
+  .vendor-card { background:var(--card); border:1px solid var(--card-border); border-radius:10px; padding:18px 20px; margin-bottom:14px; }
+  .vendor-card.has-changes { border-left:3px solid var(--orange); }
+  .vendor-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:14px; flex-wrap:wrap; }
+  .vendor-name { font-size:16px; font-weight:600; color:var(--text-bright); }
+  .vendor-name .ticker { font-size:11px; color:var(--text-dim); font-weight:500; margin-left:8px; }
+  .vendor-name .private { font-size:9px; background:rgba(139,92,246,0.18); color:#a78bfa; padding:1px 6px; border-radius:3px; letter-spacing:0.08em; text-transform:uppercase; margin-left:6px; vertical-align:middle; font-weight:600; }
+  .vendor-meta { font-size:11px; color:var(--text-dim); }
+  .vendor-meta a { color:var(--accent); }
+
+  .axis-grid { display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; margin-bottom:14px; }
+  .axis-cell { background:#0a0e1a; border:1px solid var(--card-border); border-radius:8px; padding:10px; }
+  .axis-cell h4 { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); font-weight:700; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center; }
+  .axis-cell h4 .changed { color:var(--orange); font-size:8.5px; padding:1px 4px; background:rgba(245,158,11,0.12); border-radius:3px; letter-spacing:0.08em; }
+  .axis-input { width:100%; background:transparent; border:1px solid var(--card-border); border-radius:5px; padding:6px 8px; color:var(--text-bright); font-size:18px; font-weight:700; text-align:center; font-family:inherit; }
+  .axis-input:focus { outline:1px solid var(--accent); outline-offset:0; border-color:var(--accent); }
+  .axis-input.na { color:var(--text-dim); background:rgba(148,163,184,0.05); cursor:not-allowed; }
+  .axis-rationale { width:100%; background:#0a0e1a; border:1px solid var(--card-border); color:var(--text); font-size:11px; padding:6px 8px; border-radius:5px; resize:vertical; min-height:36px; line-height:1.4; font-family:inherit; margin-top:6px; }
+  .axis-rationale:focus { outline:1px solid var(--accent); outline-offset:0; border-color:var(--accent); }
+  .axis-original { font-size:10px; color:var(--text-dim); margin-top:4px; }
+
+  .vendor-detail { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  .detail-block label { display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); font-weight:600; margin-bottom:4px; }
+  .detail-block input, .detail-block textarea { width:100%; background:#0a0e1a; border:1px solid var(--card-border); color:var(--text); font-size:12px; padding:7px 10px; border-radius:5px; font-family:inherit; line-height:1.5; }
+  .detail-block textarea { min-height:54px; resize:vertical; }
+  .detail-block input:focus, .detail-block textarea:focus { outline:1px solid var(--accent); outline-offset:0; border-color:var(--accent); }
+
+  .citations-block { background:rgba(245,158,11,0.04); border:1px solid rgba(245,158,11,0.2); border-radius:6px; padding:10px 12px; margin-bottom:12px; }
+  .citations-block h5 { font-size:9.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--orange); font-weight:700; margin-bottom:6px; }
+  .citation-row { margin-bottom:8px; }
+  .citation-row:last-child { margin-bottom:0; }
+  .citation-row label { font-size:10px; color:var(--text-dim); display:block; margin-bottom:3px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
+  .citation-row textarea { width:100%; background:#0a0e1a; border:1px solid var(--card-border); color:var(--text); font-size:11.5px; padding:6px 8px; border-radius:5px; font-family:inherit; line-height:1.45; min-height:36px; resize:vertical; }
+
+  .vendor-notes label { display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); font-weight:600; margin-bottom:4px; }
+  .vendor-notes textarea { width:100%; background:#0a0e1a; border:1px solid var(--card-border); color:var(--text); font-size:12px; padding:8px 10px; border-radius:5px; font-family:inherit; min-height:48px; resize:vertical; line-height:1.5; }
+
+  .prompt-out { background:#0a0e1a; border:1px solid var(--accent); border-radius:10px; padding:18px 20px; margin-top:24px; }
+  .prompt-out h3 { font-size:12px; color:var(--accent); margin-bottom:10px; text-transform:uppercase; letter-spacing:0.08em; }
+  .prompt-out pre { background:var(--card); border:1px solid var(--card-border); border-radius:6px; padding:14px; max-height:520px; overflow:auto; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:11.5px; line-height:1.5; color:var(--text); white-space:pre-wrap; word-break:break-word; }
+  .prompt-out .hint { font-size:11px; color:var(--text-dim); margin-bottom:8px; }
+  .copy-btn { float:right; }
+
+  .legend { font-size:10.5px; color:var(--text-dim); margin-top:14px; line-height:1.55; }
+  .legend strong { color:var(--text); }
+
+  @media (max-width:900px) {
+    .axis-grid { grid-template-columns:repeat(2, 1fr); }
+    .vendor-detail { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body data-active-tab="posture">
+<div id="admin-nav-mount"></div>
+
+<div class="container">
+  <h1>Posture Review <span class="tag">Editorial</span></h1>
+  <p class="intro">
+    Quarterly editorial review for the SaaS AI Transition Map on the <a href="/usage.html#posture-table">Usage Ledger</a>.
+    Edit any score (1–5; private vendors lock COST to NA), refresh the bundling/cost citations, update the watch-signals paragraph, and add a free-text note explaining why a score moved. When you've finished a pass, click <strong>Generate Claude prompt</strong> at the bottom — it bundles the diff and a copy of the playbook into a single prompt block you can paste into a Claude session. Claude will re-read the playbook, sanity-check your edits against primary sources, and run the data extension script + push to staging.
+    Process: <a href="/docs/playbooks/vendor-posture-quarterly-review.md">docs/playbooks/vendor-posture-quarterly-review.md</a>.
+  </p>
+
+  <div class="meta-row" id="meta-row"></div>
+
+  <div class="toolbar">
+    <button class="btn" id="btn-reload">Reload from site-data.json</button>
+    <button class="btn warn" id="btn-clear">Clear local edits</button>
+    <button class="btn primary" id="btn-prompt">Generate Claude prompt</button>
+  </div>
+
+  <div class="global-notes">
+    <h3>Editor's overall notes (cycle context)</h3>
+    <textarea id="global-notes" placeholder="Cycle context: what earnings season, which vendors had material disclosures, anything Claude should weight when re-cutting…"></textarea>
+  </div>
+
+  <div id="vendor-list"></div>
+
+  <div class="prompt-out" id="prompt-out" style="display:none;">
+    <h3>Claude prompt
+      <button class="btn primary copy-btn" id="btn-copy">Copy to clipboard</button>
+    </h3>
+    <p class="hint">Paste this into a fresh Claude Code session. The prompt includes your diff, your notes, the playbook reference, and instructions to push to <code>beta</code> for staging review per the publish gate.</p>
+    <pre id="prompt-text"></pre>
+  </div>
+
+  <p class="legend">
+    Edits are stored in <strong>localStorage</strong> as you type — closing the tab is safe. The page does <strong>not</strong> write directly to <code>site-data.json</code>; that's intentional. The Claude prompt is the handoff. Direct write-through to <code>admin_server.py</code> is a future enhancement.
+  </p>
+</div>
+
+<script>
+const STORAGE_KEY = 'ai-ledger-posture-review-edits-v1';
+const NOTES_KEY = 'ai-ledger-posture-review-notes-v1';
+const AXES = ['disclosure', 'bundling', 'pricing', 'cost', 'acceleration'];
+const AXIS_LABELS = { disclosure:'DISC', bundling:'BNDL', pricing:'PRICE', cost:'COST', acceleration:'ACCEL' };
+
+let ORIGINAL = [];          // canonical entries from site-data.json
+let METHODOLOGY = null;     // vendorPostureMethodology block
+let edits = {};             // { id: { scores:{...}, rationales:{...}, archetype, arrShareValue, arrShareDenominator, arrShareDenominatorType, watchSignals, citationBundling, citationCost, notes } }
+
+function loadEdits() {
+  try { edits = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { edits = {}; }
+}
+function saveEdits() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(edits));
+}
+function loadNotes() {
+  return localStorage.getItem(NOTES_KEY) || '';
+}
+function saveNotes(v) {
+  localStorage.setItem(NOTES_KEY, v);
+}
+
+function ensureRow(id) {
+  if (!edits[id]) edits[id] = { scores:{}, rationales:{} };
+  if (!edits[id].scores) edits[id].scores = {};
+  if (!edits[id].rationales) edits[id].rationales = {};
+  return edits[id];
+}
+
+function fieldVal(c, key, fallback) {
+  const e = edits[c.id] || {};
+  if (e[key] !== undefined && e[key] !== null) return e[key];
+  return fallback;
+}
+
+function rowChanged(c) {
+  const e = edits[c.id]; if (!e) return false;
+  if (e.scores) {
+    for (const a of AXES) {
+      if (e.scores[a] !== undefined && Number(e.scores[a]) !== Number(c.postureScores[a])) return true;
+    }
+  }
+  if (e.rationales && Object.values(e.rationales).some(v => v && v.trim())) return true;
+  if (e.archetype !== undefined && e.archetype !== c.archetype) return true;
+  if (e.arrShareValue !== undefined && e.arrShareValue !== (c.arrShare && c.arrShare.value)) return true;
+  if (e.arrShareDenominator !== undefined && e.arrShareDenominator !== (c.arrShare && c.arrShare.denominator)) return true;
+  if (e.watchSignals !== undefined && e.watchSignals !== c.watchSignals) return true;
+  const cit = (c.postureScores && c.postureScores._citations) || {};
+  if (e.citationBundling !== undefined && e.citationBundling !== (cit.bundling || '')) return true;
+  if (e.citationCost !== undefined && e.citationCost !== (cit.cost || '')) return true;
+  if (e.notes !== undefined && e.notes && e.notes.trim()) return true;
+  return false;
+}
+
+function vendorTemplate(c) {
+  const isPrivate = (c.ticker || '').toLowerCase() === 'private';
+  const cit = (c.postureScores && c.postureScores._citations) || {};
+  const e = edits[c.id] || {};
+  const changed = rowChanged(c);
+  let axisHtml = '';
+  for (const axis of AXES) {
+    const orig = c.postureScores[axis];
+    const cur = e.scores && e.scores[axis] !== undefined ? e.scores[axis] : orig;
+    const isCostNA = (axis === 'cost' && c.gmUnavailable);
+    const inputCls = 'axis-input' + (isCostNA ? ' na' : '');
+    const inputAttr = isCostNA ? 'value="NA" disabled readonly' : 'type="number" min="' + (axis==='cost'?0:1) + '" max="5" step="1" value="' + cur + '"';
+    const isChanged = !isCostNA && Number(cur) !== Number(orig);
+    const ration = (e.rationales && e.rationales[axis]) || '';
+    axisHtml += '<div class="axis-cell">' +
+      '<h4>' + AXIS_LABELS[axis] + (isChanged ? '<span class="changed">moved</span>' : '') + '</h4>' +
+      '<input class="' + inputCls + '" data-id="' + c.id + '" data-axis="' + axis + '" ' + inputAttr + ' />' +
+      (isCostNA ? '' : '<div class="axis-original">was ' + orig + '</div>') +
+      '<textarea class="axis-rationale" data-id="' + c.id + '" data-axis="' + axis + '" placeholder="Why this score? (cite source if it moved)">' + escapeHtml(ration) + '</textarea>' +
+      '</div>';
+  }
+
+  return '<div class="vendor-card' + (changed ? ' has-changes' : '') + '" id="card-' + c.id + '">' +
+    '<div class="vendor-head">' +
+      '<div>' +
+        '<div class="vendor-name">' + escapeHtml(c.product || c.name || c.id) +
+          (isPrivate ? ' <span class="private">Private</span>' : '') +
+          ' <span class="ticker">' + escapeHtml(c.parent || '') + (c.parent ? ' · ' : '') + escapeHtml(c.ticker || '') + '</span>' +
+        '</div>' +
+        '<div class="vendor-meta">' +
+          'Provenance: <strong>' + escapeHtml(c.provenance || '—') + '</strong> · ' +
+          'Last verified: <strong>' + escapeHtml((c.postureScores && c.postureScores._lastVerified) || '—') + '</strong> · ' +
+          'Prototype: <strong>' + ((c.postureScores && c.postureScores._prototype) ? 'yes' : 'no') + '</strong>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="axis-grid">' + axisHtml + '</div>' +
+
+    '<div class="vendor-detail">' +
+      '<div class="detail-block">' +
+        '<label>Archetype (3–6 word editorial label)</label>' +
+        '<input data-id="' + c.id + '" data-field="archetype" type="text" value="' + escapeHtml(fieldVal(c, 'archetype', c.archetype || '')) + '" />' +
+      '</div>' +
+      '<div class="detail-block">' +
+        '<label>ARR share — value / denominator</label>' +
+        '<input data-id="' + c.id + '" data-field="arrShareValue" type="text" placeholder="e.g., ~3.6–4.5%" value="' + escapeHtml(fieldVal(c, 'arrShareValue', (c.arrShare && c.arrShare.value) || '')) + '" />' +
+        '<input data-id="' + c.id + '" data-field="arrShareDenominator" type="text" placeholder="e.g., NOW total revenue (~$11B FY24)" value="' + escapeHtml(fieldVal(c, 'arrShareDenominator', (c.arrShare && c.arrShare.denominator) || '')) + '" style="margin-top:6px;" />' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="citations-block">' +
+      '<h5>Score citations (D4 path-b — primary source per axis)</h5>' +
+      '<div class="citation-row">' +
+        '<label>Bundling source</label>' +
+        '<textarea data-id="' + c.id + '" data-field="citationBundling" placeholder="e.g., Vendor pricing page URL + the line that justifies the score">' + escapeHtml(fieldVal(c, 'citationBundling', cit.bundling || '')) + '</textarea>' +
+      '</div>' +
+      '<div class="citation-row">' +
+        '<label>Cost realisation source</label>' +
+        '<textarea data-id="' + c.id + '" data-field="citationCost" placeholder="e.g., Earnings call transcript line attributing GM movement to AI">' + escapeHtml(fieldVal(c, 'citationCost', cit.cost || '')) + '</textarea>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="detail-block" style="margin-bottom:12px;">' +
+      '<label>Watch signals (narrative paragraph)</label>' +
+      '<textarea data-id="' + c.id + '" data-field="watchSignals" rows="4">' + escapeHtml(fieldVal(c, 'watchSignals', c.watchSignals || '')) + '</textarea>' +
+    '</div>' +
+
+    '<div class="vendor-notes">' +
+      '<label>Editor&#39;s note for Claude (free-form, optional)</label>' +
+      '<textarea data-id="' + c.id + '" data-field="notes" placeholder="Anything Claude should weight when re-cutting this vendor — context, doubts, additional sources to chase.">' + escapeHtml(fieldVal(c, 'notes', '')) + '</textarea>' +
+    '</div>' +
+  '</div>';
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function renderMeta() {
+  const el = document.getElementById('meta-row');
+  if (!METHODOLOGY) { el.innerHTML = ''; return; }
+  el.innerHTML =
+    '<div class="meta-pill">Cohort: <strong>' + ORIGINAL.length + '</strong></div>' +
+    '<div class="meta-pill">Last editorial review: <strong>' + escapeHtml(METHODOLOGY.lastEditorialReview || METHODOLOGY.lastUpdated || '—') + '</strong></div>' +
+    '<div class="meta-pill">Cadence: <strong>' + escapeHtml(METHODOLOGY.reviewCadence || 'per_earnings_cycle') + '</strong></div>' +
+    '<div class="meta-pill">Playbook: <strong><a href="/' + escapeHtml(METHODOLOGY.reviewPlaybook || 'docs/playbooks/vendor-posture-quarterly-review.md') + '">open</a></strong></div>';
+}
+
+function renderAll() {
+  renderMeta();
+  document.getElementById('global-notes').value = loadNotes();
+  const list = document.getElementById('vendor-list');
+  list.innerHTML = ORIGINAL.map(vendorTemplate).join('');
+  bindInputs();
+}
+
+function bindInputs() {
+  document.getElementById('vendor-list').querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('input', onEdit);
+    el.addEventListener('change', onEdit);
+  });
+}
+
+function onEdit(ev) {
+  const el = ev.target;
+  const id = el.dataset.id;
+  if (!id) return;
+  const row = ensureRow(id);
+  if (el.classList.contains('axis-input')) {
+    const axis = el.dataset.axis;
+    const v = el.value === '' ? undefined : Number(el.value);
+    if (v === undefined || Number.isNaN(v)) delete row.scores[axis];
+    else row.scores[axis] = v;
+  } else if (el.classList.contains('axis-rationale')) {
+    const axis = el.dataset.axis;
+    row.rationales[axis] = el.value;
+  } else if (el.dataset.field) {
+    row[el.dataset.field] = el.value;
+  }
+  saveEdits();
+  // Toggle has-changes class on the card without full re-render so cursor stays put.
+  const c = ORIGINAL.find(x => x.id === id);
+  if (c) {
+    const card = document.getElementById('card-' + id);
+    if (card) card.classList.toggle('has-changes', rowChanged(c));
+    // Update "moved" pill on the relevant axis without re-render.
+    if (el.classList.contains('axis-input')) {
+      const axisCell = el.closest('.axis-cell');
+      const orig = c.postureScores[el.dataset.axis];
+      const cur = row.scores[el.dataset.axis] === undefined ? orig : row.scores[el.dataset.axis];
+      const isChanged = Number(cur) !== Number(orig);
+      const head = axisCell.querySelector('h4');
+      const existingPill = head.querySelector('.changed');
+      if (isChanged && !existingPill) head.insertAdjacentHTML('beforeend', '<span class="changed">moved</span>');
+      if (!isChanged && existingPill) existingPill.remove();
+    }
+  }
+}
+
+function buildDiff() {
+  const cycleNotes = document.getElementById('global-notes').value.trim();
+  const diff = { cycleNotes, vendors: [] };
+  ORIGINAL.forEach(c => {
+    if (!rowChanged(c)) return;
+    const e = edits[c.id] || {};
+    const cit = (c.postureScores && c.postureScores._citations) || {};
+    const entry = { id: c.id, product: c.product || c.name, parent: c.parent, ticker: c.ticker };
+    // Score diff
+    const scoreDiff = {};
+    for (const axis of AXES) {
+      if (e.scores && e.scores[axis] !== undefined && Number(e.scores[axis]) !== Number(c.postureScores[axis])) {
+        scoreDiff[axis] = { from: c.postureScores[axis], to: Number(e.scores[axis]), rationale: (e.rationales && e.rationales[axis]) || '' };
+      }
+    }
+    if (Object.keys(scoreDiff).length) entry.scoreChanges = scoreDiff;
+    // Other fields
+    if (e.archetype !== undefined && e.archetype !== c.archetype) entry.archetype = { from: c.archetype, to: e.archetype };
+    if (e.arrShareValue !== undefined && e.arrShareValue !== (c.arrShare && c.arrShare.value)) entry.arrShareValue = { from: (c.arrShare && c.arrShare.value), to: e.arrShareValue };
+    if (e.arrShareDenominator !== undefined && e.arrShareDenominator !== (c.arrShare && c.arrShare.denominator)) entry.arrShareDenominator = { from: (c.arrShare && c.arrShare.denominator), to: e.arrShareDenominator };
+    if (e.watchSignals !== undefined && e.watchSignals !== c.watchSignals) entry.watchSignals = { from: c.watchSignals, to: e.watchSignals };
+    if (e.citationBundling !== undefined && e.citationBundling !== (cit.bundling || '')) entry.citationBundling = { from: cit.bundling || '', to: e.citationBundling };
+    if (e.citationCost !== undefined && e.citationCost !== (cit.cost || '')) entry.citationCost = { from: cit.cost || '', to: e.citationCost };
+    if (e.notes && e.notes.trim()) entry.editorNote = e.notes.trim();
+    diff.vendors.push(entry);
+  });
+  return diff;
+}
+
+function buildPrompt() {
+  const diff = buildDiff();
+  const today = new Date().toISOString().slice(0,10);
+  const cycle = METHODOLOGY && METHODOLOGY.lastEditorialReview ? '(previous: ' + METHODOLOGY.lastEditorialReview + ')' : '';
+  const header = 'Vendor AI Posture — editorial review handoff (' + today + ' ' + cycle + ')\n\n' +
+'Read in order:\n' +
+'1. /Users/simonbowker/Developer/apac-ai-intel/CLAUDE.md (publishing gate, workflow protocol)\n' +
+'2. /Users/simonbowker/Developer/apac-ai-intel/docs/playbooks/vendor-posture-quarterly-review.md (the canonical review playbook)\n' +
+'3. /Users/simonbowker/Developer/apac-ai-intel/docs/briefs/wq-101-vendor-ai-posture-radar.md (rubric §6)\n\n' +
+'Context: Simon has just completed a pass of the Posture Review admin surface (/posture-review.html). His edits and rationales are in the JSON block below. Treat his edits as proposals, not commits — your job is to:\n\n' +
+'1. For each proposed score change, open the cited primary source (or, if not cited, find one). Confirm the rubric in §6 supports the move at the new value.\n' +
+'2. If the source confirms the move, fold it into scripts/wq101_extend_posture.py: update the integer, the citation strings, and (if Simon updated them) archetype, arrShare, watchSignals.\n' +
+'3. If the source does NOT support the move, push back. Flag in your reply with the rubric line that conflicts and the source line you found. Do NOT silently overwrite Simon\'s edit.\n' +
+'4. Bump VENDOR_POSTURE_METHODOLOGY.lastEditorialReview to ' + today + '. Bump postureScores._lastVerified for any vendor whose scores or citations changed. Clear postureScores._prototype: false on entries whose Bundling AND Cost citations now point to a primary source you actually opened in this session.\n' +
+'5. Re-run scripts/wq101_extend_posture.py to regenerate site-data.json idempotently.\n' +
+'6. Run node scripts/validate-vendor-posture.mjs — must report 0 fail.\n' +
+'7. Commit on a fresh branch wq-NNN-posture-review-' + today + '. Push to beta. Wait for the deploy + Pages workflows. Probe https://ai-index.hepburnadvisory.com.au/beta/usage.html to confirm the "Last editorial review" stamp shows ' + today + '.\n' +
+'8. Share the staging URL in chat. Wait for Simon\'s explicit "approved" / "ship it" before promoting to main per the publish gate.\n' +
+'9. Write a deployment record at docs/deployments/deploy-' + today + '-vendor-posture-review.md summarising which scores moved, which didn\'t, and why.\n\n' +
+'Constraints:\n' +
+'- Do NOT push to main without Simon\'s chat approval.\n' +
+'- Do NOT change scores Simon did not touch unless a primary source moved underneath them since the last review.\n' +
+'- Microsoft trio (M365/GitHub/Dynamics Copilot) shares parent GM — if you change one COST score, change the other two by the same amount.\n' +
+'- Private vendors (Databricks, Notion) keep cost: 0 + gmUnavailable: true. Don\'t score Cost from press estimates.\n\n' +
+'Editor cycle context (free-form, may be empty):\n' +
+(diff.cycleNotes ? diff.cycleNotes : '(none)') + '\n\n' +
+'Diff payload (JSON):\n```json\n' + JSON.stringify(diff.vendors, null, 2) + '\n```\n';
+  return header;
+}
+
+function renderPrompt() {
+  const out = document.getElementById('prompt-out');
+  const txt = document.getElementById('prompt-text');
+  txt.textContent = buildPrompt();
+  out.style.display = '';
+  out.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+document.getElementById('btn-prompt').addEventListener('click', renderPrompt);
+document.getElementById('btn-copy').addEventListener('click', () => {
+  const txt = document.getElementById('prompt-text').textContent;
+  navigator.clipboard.writeText(txt).then(() => {
+    const btn = document.getElementById('btn-copy');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied ✓';
+    setTimeout(() => btn.textContent = orig, 1400);
+  });
+});
+document.getElementById('btn-clear').addEventListener('click', () => {
+  if (!confirm('Clear all local edits on this page? Your saved cycle notes also clear.')) return;
+  edits = {};
+  saveEdits();
+  saveNotes('');
+  renderAll();
+  document.getElementById('prompt-out').style.display = 'none';
+});
+document.getElementById('btn-reload').addEventListener('click', () => { loadAll(); });
+document.getElementById('global-notes').addEventListener('input', (e) => saveNotes(e.target.value));
+
+async function loadAll() {
+  loadEdits();
+  try {
+    const r = await fetch('/site-data.json?v=' + Date.now());
+    if (!r.ok) throw new Error('site-data.json failed: ' + r.status);
+    const data = await r.json();
+    METHODOLOGY = data.dashboard.vendorPostureMethodology || null;
+    ORIGINAL = (data.dashboard.enterpriseReality || []).filter(c => c && c.postureScores);
+    renderAll();
+  } catch (e) {
+    document.getElementById('vendor-list').innerHTML =
+      '<div style="padding:18px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);border-radius:8px;color:var(--red);font-size:13px;">' +
+      'Failed to load site-data.json: ' + escapeHtml(e.message) + '</div>';
+  }
+}
+loadAll();
+</script>
+</body>
+</html>

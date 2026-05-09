@@ -61,6 +61,20 @@ if (!existsSync(sitePath)) {
         add('vendor-posture-methodology', 'pass',
           `vendorPostureMethodology v${m.version || '?'} present with 5 axes`);
       }
+      // wq-101 D5: lastEditorialReview must be set so the surface can show
+      // readers how stale the radars are; reviewPlaybook must point at the
+      // canonical playbook.
+      if (typeof m.lastEditorialReview !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(m.lastEditorialReview)) {
+        add('vendor-posture-review-stamp', 'fail',
+          `vendorPostureMethodology.lastEditorialReview must be YYYY-MM-DD, got ${JSON.stringify(m.lastEditorialReview)}`);
+      } else {
+        add('vendor-posture-review-stamp', 'pass',
+          `lastEditorialReview present (${m.lastEditorialReview})`);
+      }
+      if (typeof m.reviewPlaybook !== 'string' || !m.reviewPlaybook.endsWith('.md')) {
+        add('vendor-posture-review-playbook', 'fail',
+          `vendorPostureMethodology.reviewPlaybook must point to a .md file, got ${JSON.stringify(m.reviewPlaybook)}`);
+      }
     }
 
     const er = Array.isArray(dash.enterpriseReality) ? dash.enterpriseReality : [];
