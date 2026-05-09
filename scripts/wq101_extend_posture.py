@@ -301,11 +301,6 @@ VENDOR_POSTURE_METHODOLOGY = {
     "lastUpdated": "2026-05-09",
     "sourceBrief": "wq-101-vendor-ai-posture-radar",
     "rubricLocation": "inline-accordion",
-    "prototypeBanner": (
-        "Posture scores in initial release are first-pass editorial estimates pending "
-        "primary-source verification per TAIL publishing standards. Banner removes once "
-        "all _prototype flags clear."
-    ),
 }
 
 
