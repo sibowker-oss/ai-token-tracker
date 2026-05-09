@@ -1,0 +1,225 @@
+# wq-098 — Vault → Entity ARR Propagation Fix
+
+**Stage:** Scoped
+**Priority:** H (blocks wq-097; the $124.6B headline number wq-096 produced is partly stale because verified vault claims never reached arrModel)
+**Owner:** Claude Code
+**Briefing status:** ready_for_review
+**Decisions resolved:** 2026-05-08 (Simon, in Cowork session)
+**Repo copy (canonical for Claude Code):** `/Users/simonbowker/Developer/apac-ai-intel/docs/briefs/wq-098-vault-to-entity-arr-propagation.md`
+**Parent context:**
+- `docs/deployments/deploy-2026-05-08-wq-096-revenue-model-data-structure-refactor.md` (which surfaced the gap)
+- `vault-data.json` (the source-of-truth that wasn't being read)
+- `scripts/apply_claims.py` (the script that should propagate but doesn't, for direct-add claims)
+- Successor brief: **wq-097 Combined Run-Rate Publication** — now gated on this brief shipping cleanly
+
+---
+
+## §0 — Context
+
+The vault → entityDirectory → arrModel propagation chain is broken at the apply step. Concrete evidence surfaced 2026-05-08:
+
+- `vault-data.json` contains 242 data points
+- **191 (79%) have `usedOn: []`** — never marked as applied to any consumer
+- **16 of those are verified USD-denominated claims >$100M** — high-confidence ARR data that should have flowed to segment-level ARR fields
+
+Specific load-bearing example — Cursor:
+- `dp-148`: "Cursor hit $2B in annualized revenue in February 2026." Source: Sacra (verified). Date added: 2026-04-25. **`usedOn: []`**
+- `dp-149`: $1B Nov 2025. **`usedOn: []`**
+- `dp-150`: $500M Jun 2025. **`usedOn: []`**
+- `dp-170`: $3.4B 2025 (high-bound estimate). **`usedOn: []`**
+
+Meanwhile `entityDirectory.Cursor.arrEstimate = "$1B+ ARR"` (last refreshed pre-Feb 2026). wq-096 sourced arrModel from entityDirectory, inheriting the stale figure. AI-Native Apps total under-counted by ≥$1B from this entity alone; cascade across all 16 verified-but-unused claims is unknown but material.
+
+**Why the chain broke (best diagnosis):**
+
+`scripts/apply_claims.py` is wired to read **only** from `data-updates/approved-claims.json` (the output of the `claims.html` review UI). Claims added to `vault-data.json` via any other ingestion path — direct API ingest, structured extraction (e.g. wq-086 triangulation), automated source pulls — are never replayed through the apply step. They land in the vault with `usedOn: []` and stay there.
+
+Additionally, even claims that DO route through `apply_claims.py` are dispatched only to `dashboard.providers` (frontier) and `dashboard.topConsumers` (AI-native apps). They are NOT propagated to `entityDirectory.<entity>.arrEstimate`, which is the structure that wq-096's generator actually reads when building `arrModel.apps.aiNative`. So even the "happy path" wasn't fully wired.
+
+This brief fixes both gaps: (a) ensure all vault writes trigger apply; (b) ensure apply writes to entityDirectory (and any other consumers).
+
+---
+
+## §Decisions (resolved 2026-05-08)
+
+> All decisions resolved by Simon in Cowork. Implement as below without relitigating.
+
+| # | Decision | Resolved choice |
+|---|---|---|
+| D1 | Trigger surface | apply runs on **any** write to `vault-data.json`, not just the `approved-claims.json` route. Implement via either (a) a `vault_apply_pass.py` script that runs nightly across the full vault and applies eligible claims, or (b) a wrapper around vault writes that triggers apply inline. Pick whichever is cleaner; document in the deploy record. |
+| D2 | Auto-apply confidence threshold | Auto-apply for `confidence: verified` AND provenance `tier_1A` / `tier_1B` / `tier_2A`. Tier 2B and below stays in `usedOn: []` until manually queued via the existing review UI. Reason: avoid silently propagating low-tier claims into headline numbers. |
+| D3 | Conflict resolution | When multiple claims exist for the same entity at overlapping `arrAsOf` dates: pick the claim with **highest provenance tier**. Ties broken by **latest `dateOfClaim`**. Further ties by **latest `dateAdded`**. Document chosen claim's `id` in the apply log. |
+| D4 | Backfill scope | Re-process the existing 191 `usedOn: []` claims through the new apply path. Of those, the 16 verified ARR-class claims must update entityDirectory/arrModel. Lower-tier claims must surface in a `data/audits/wq-098-skipped-claims.md` audit so we know what's parked. |
+| D5 | Parked figures preserved | The Anthropic "latest-highest-figure parked" precedent stands. Any claim with `confidence: parked` or explicit `do_not_apply: true` flag remains untouched. New `do_not_apply` field added to vault schema for this purpose. |
+| D6 | Consumers of entityDirectory ARR | Apply must update `entityDirectory.<entity>.arrEstimate` (string) AND `entityDirectory.<entity>.arrNumeric` (USD float, $B). Also update `entityDirectory.<entity>.arrAsOf`, `arrSource`, `arrProvenance`. arrModel generator already reads these via `generate_site_data.py` (per wq-096). |
+| D7 | Mark `usedOn` on apply | After successful apply, vault data point's `usedOn` array gets the consumer key appended (e.g. `["entityDirectory", "arrModel"]`). Idempotent — running apply twice doesn't duplicate the entry. |
+| D8 | Refresh cadence | After this brief ships, vault apply runs daily as part of `auto_update.py` (already runs 7am, currently triggers `apply_claims.py` from approved-claims path only). Add `vault_apply_pass.py` as a sibling step. |
+
+No open decisions. Implement directly.
+
+---
+
+## §1 — Goal
+
+Every verified vault claim that meets the auto-apply threshold (D2) flows through to `entityDirectory` and onward to `arrModel`, automatically and idempotently. Existing vault backlog gets processed once. Direct-to-vault ingestion paths no longer create stale state. After this brief: zero verified ARR-class claims with `usedOn: []` unless intentionally parked.
+
+---
+
+## §2 — Files touched
+
+### Modified
+- `scripts/apply_claims.py` — extend dispatch table to include entityDirectory updates. Add idempotency check (skip if `usedOn` already lists the consumer). Surface a `--dry-run` flag for use during backfill.
+- `scripts/auto_update.py` — wire in the new `vault_apply_pass.py` step after the existing `apply_claims.py` step.
+- `vault-data.json` — schema additions per D5 (`do_not_apply` optional field). Existing 191 claims get re-processed; their `usedOn` arrays get populated where applicable.
+- `site-data.json` — entityDirectory fields refresh after backfill; arrModel rebuilds. **This is the visible consequence — the headline numbers will move.**
+
+### New
+- `scripts/vault_apply_pass.py` — full-vault scan that finds all eligible claims (verified + meets D2 threshold + `usedOn: []`) and routes them through the existing per-type apply functions in `apply_claims.py`. Logs everything to `data/vault_apply_pass.log`.
+- `data/audits/wq-098-skipped-claims.md` — audit doc listing all vault claims that didn't auto-apply (below threshold or parked). Generated by `vault_apply_pass.py --report`.
+
+### Validators
+- `scripts/release-check.mjs` — extend to assert: (a) zero `vault-data.json` entries with `confidence: verified` AND `usedOn: []` AND provenance ≥ tier_2A, (b) every `entityDirectory.<entity>.arrNumeric` has a matching `arrSource` referencing a real `vault-data.json` data point id.
+
+---
+
+## §3 — Acceptance criteria
+
+1. **`vault_apply_pass.py` exists** and processes all eligible claims per D2 in a single run.
+2. **Idempotent.** Running `vault_apply_pass.py` twice in a row produces zero second-run changes (everything from run 1 already marked applied).
+3. **Backfill complete.** After first run on existing vault, the 16 verified ARR-class claims have `usedOn` populated (typically `["entityDirectory", "arrModel"]`). entityDirectory entries for affected companies show updated `arrNumeric` + `arrAsOf` + `arrSource` pointing at the vault `id`.
+4. **Cursor specifically.** `entityDirectory.Cursor.arrNumeric` reflects the highest-provenance most-recent claim from the vault — likely $2.0B from `dp-148` (or $3.4B from `dp-170` if its provenance is rated higher; D3 picks). `arrModel.apps.aiNative.entries` shows the refreshed Cursor value, and `arrModel.apps.aiNative.total` increases accordingly.
+5. **Audit doc generated.** `data/audits/wq-098-skipped-claims.md` lists every vault claim that wasn't auto-applied, grouped by reason (below threshold, parked, no matching entity, etc.).
+6. **No silent overwrites.** Where the existing entityDirectory value diverges materially (>15%) from the incoming claim, the apply emits a `WARN` line in the log AND requires `--confirm-major-change` flag (mirrors the existing apply_claims.py safety pattern).
+7. **Validator extension.** `release-check.mjs` fails if any tier_2A-or-better verified claim sits in vault unused. Re-running on a freshly-backfilled vault passes.
+8. **auto_update.py wired.** Daily 7am cron now runs `vault_apply_pass.py` after `apply_claims.py`. Verify in `data/auto_update.log` the next morning.
+9. **Headline number documented.** Deploy record states the pre/post arrModel numbers explicitly: pre-wq-098 industry total $X, post-wq-098 industry total $Y, segment-level deltas listed.
+10. **Deployment record written** at `docs/deployments/deploy-YYYY-MM-DD-wq-098-vault-to-entity-arr-propagation.md` per CLAUDE.md template.
+
+---
+
+## §4 — Implementation outline
+
+### Phase A — Audit current apply paths
+1. Read `scripts/apply_claims.py` and document every entry point (which JSON shape goes where).
+2. Map every consumer of entity-level ARR data: `dashboard.providers`, `dashboard.topConsumers`, `entityDirectory`, `sankey.providers`, `arrModel.*`. Build a "who reads what" matrix.
+3. Identify which consumers are written by `apply_claims.py` today vs which need wiring.
+
+### Phase B — Extend apply dispatch
+1. Add an `apply_entity_arr` function in `apply_claims.py` that updates `entityDirectory.<entity>` fields per D6.
+2. Hook into the existing dispatch table so verified ARR claims for any entity hit this path.
+3. Maintain backward compat — existing `apply_provider_arr` and `apply_consumer_arr` keep working; `apply_entity_arr` is additive.
+
+### Phase C — Build `vault_apply_pass.py`
+1. Walk `vault-data.json:dataPoints[]`. For each:
+   - Skip if `usedOn` already populated for the relevant consumer (idempotency).
+   - Skip if `do_not_apply: true` or `confidence: parked` (D5).
+   - Skip if confidence/provenance below D2 threshold.
+   - Otherwise, dispatch through `apply_claims.py`'s functions.
+2. After successful apply, append consumer key to `usedOn` (D7) and write back to vault.
+3. Generate the skipped-claims audit doc per D4.
+4. Support `--dry-run` and `--report` flags.
+
+### Phase D — Backfill run
+1. Run `python3 scripts/vault_apply_pass.py --dry-run` — review the change set with Simon before committing.
+2. **Decision point:** if dry-run shows >$5B aggregate change in arrModel.industry_total, surface in chat for explicit approval before running for real. (Per the publishing-gate spirit — material changes need a beat of human review.)
+3. Run for real. Commit `vault-data.json` + `site-data.json` + audit doc together.
+4. Regenerate visual baselines if any rendered figures shifted (likely the Usage page Combined Provider ARR pill).
+
+### Phase E — Wire into auto_update
+1. Add `vault_apply_pass.py` invocation to `scripts/auto_update.py` after the existing `apply_claims.py` step.
+2. Verify next-morning log shows clean run.
+
+### Phase F — Validators + tests
+1. Extend `release-check.mjs` per D7 / acceptance #7.
+2. Unit test `apply_entity_arr` with synthetic vault claims + entity directory.
+3. Unit test idempotency: run apply twice, assert no second-run changes.
+4. Unit test conflict resolution per D3.
+
+### Phase G — Verify & ship
+1. `npm run build-lint` passes.
+2. `npm run release-check` passes (with new assertion).
+3. Manual eyeball of arrModel.apps.aiNative for top 12 entries — figures match what we'd expect from current public reporting.
+4. Write deploy record.
+5. Push to main after Simon's chat approval.
+
+---
+
+## §5 — Edge cases
+
+1. **Entity name resolution.** Cursor vs Anysphere vs "Cursor (Anysphere)" — claim may reference one form, entityDirectory uses another. Reuse the existing fuzzy-match logic in `apply_consumer_arr` (substring match, case-insensitive). Surface unmatched claims in the audit doc, don't silently skip.
+
+2. **Multiple ARR claims for one entity, different periods.** Cursor has dp-150 (Jun 2025 $500M), dp-149 (Nov 2025 $1B), dp-148 (Feb 2026 $2B), dp-170 (2025 $3.4B). Per D3, pick highest provenance + latest `dateOfClaim`. dp-148 (Feb 2026, verified, Sacra) likely wins over dp-170 (2025 generic, even if numerically higher). Document the chosen claim's id in arrSource.
+
+3. **Missing entityDirectory entry.** Claim references a company not in entityDirectory — log to audit doc, don't auto-create the entity (entity creation is a separate workflow).
+
+4. **Tiered companies.** Microsoft / Google / Oracle each have multiple records in entityDirectory per the wq-096 multi-tier model. Apply must route the claim to the correct tier-record (e.g., a Workspace AI ARR claim → `entityDirectory.google_workspace_ai`, not `entityDirectory.google_gemini`). Use claim's entity field exactly; if ambiguous, skip with audit log entry.
+
+5. **Provenance recalibration.** If the new claim has higher provenance than the existing entityDirectory value AND a different number, take the new claim. If lower provenance, skip (log to audit). This protects against a Tier 2B claim overwriting a Tier 1B disclosed figure.
+
+6. **Visual regression risk.** This brief WILL change rendered numbers across multiple pages. Re-baseline visual snapshots in the same deploy. Document in the deploy record which pages shifted.
+
+---
+
+## §6 — Test plan
+
+1. Unit test for `apply_entity_arr` — synthetic vault claim + entity registry, assert correct fields update.
+2. Unit test for `vault_apply_pass.py` idempotency — run twice on a fixture, assert run-2 produces no changes.
+3. Unit test for D3 conflict resolution — two competing claims, assert highest-provenance + latest-date wins.
+4. Integration test — full vault fixture, run `vault_apply_pass.py`, diff resulting site-data.json against golden file.
+5. Manual smoke: confirm arrModel.apps.aiNative.total moves from $5.30B to whatever the backfilled total produces.
+
+---
+
+## §7 — Out of scope (explicit)
+
+- Refresh of frontier ARR figures from non-vault sources (e.g., Anthropic $30B integrity question stays governed by provenance system, no extra task).
+- New ingestion paths for vault data (this brief fixes propagation, not extraction).
+- Sankey-side ARR propagation if it diverges from entityDirectory — flag any divergence in the audit doc but don't fix here.
+- New review UI for claims pending apply — existing claims.html stays; this brief just makes the bypass-the-UI path also work.
+- Building a "claims pending apply" queue for sub-threshold claims — they sit in the vault as today, just clearly logged in the audit doc.
+
+---
+
+## §8 — Definition of done
+
+1. All §3 acceptance criteria met.
+2. `python3 scripts/vault_apply_pass.py --dry-run` reports zero pending changes (everything applied).
+3. `npm run release-check` passes including the new assertion.
+4. `data/audits/wq-098-skipped-claims.md` exists and is reviewed.
+5. Deployment record written per §3 #10, including pre/post arrModel headline figures.
+6. Branch merged to main after Simon's chat approval.
+7. Notion Kanban card moved to Done. wq-097 Notion card unblocked.
+8. Memory updated: shipped state recorded.
+
+---
+
+## §9 — Handoff prompt for VS Code / Claude Code
+
+> Paste the block below into a fresh VS Code Claude Code session.
+
+```
+Implement wq-098 — Vault → Entity ARR Propagation Fix.
+
+Read in order:
+1. /Users/simonbowker/Developer/apac-ai-intel/CLAUDE.md
+2. /Users/simonbowker/Developer/apac-ai-intel/TAIL-WORKFLOW-PROTOCOL.md
+3. /Users/simonbowker/Developer/apac-ai-intel/docs/briefs/wq-098-vault-to-entity-arr-propagation.md (canonical brief)
+
+Context: wq-096 just shipped a five-tier revenue model in arrModel. Investigation surfaced that 79% of vault data points have usedOn=[] — verified ARR claims aren't propagating to entityDirectory or arrModel. Concrete example: Cursor's $2B Feb 2026 ARR (dp-148, Sacra-verified) sits unused; arrModel inherited a stale $1B figure. This brief fixes the propagation chain.
+
+The brief is fully scoped — all 8 decisions resolved 2026-05-08. Implement Phases A through G sequentially.
+
+Critical reminders:
+- Idempotency required: running vault_apply_pass.py twice must produce zero second-run changes.
+- Auto-apply threshold: verified + tier_1A/1B/2A only. Tier 2B+ stays in audit log, doesn't propagate silently.
+- Conflict resolution: highest provenance, then latest dateOfClaim, then latest dateAdded (Decision D3).
+- Material change gate: if backfill dry-run shows >$5B aggregate change in arrModel.industry_total, surface in chat for explicit approval before committing.
+- Multi-tier companies (Microsoft, Google, Oracle): route claims to the correct tier-record, not the parent.
+- This brief WILL change rendered numbers. Re-baseline visual snapshots in the same deploy. Document pre/post arrModel figures in the deploy record.
+
+When done, push to main after my chat approval, update the Notion Kanban card, and unblock the wq-097 Notion card.
+```
+
+---
+
+*End of brief.*
