@@ -108,7 +108,7 @@
   <p class="intro">
     Quarterly editorial review for the SaaS AI Transition Map on the <a href="/usage.html#posture-table">Usage Ledger</a>.
     Edit any score (1–5; private vendors lock COST to NA), refresh the bundling/cost citations, update the watch-signals paragraph, and add a free-text note explaining why a score moved. When you've finished a pass, click <strong>Generate Claude prompt</strong> at the bottom — it bundles the diff and a copy of the playbook into a single prompt block you can paste into a Claude session. Claude will re-read the playbook, sanity-check your edits against primary sources, and run the data extension script + push to staging.
-    Process: <a href="/docs/playbooks/vendor-posture-quarterly-review.md">docs/playbooks/vendor-posture-quarterly-review.md</a>.
+    Process: <a href="https://github.com/sibowker-oss/ai-token-tracker/blob/main/docs/playbooks/vendor-posture-quarterly-review.md" target="_blank" rel="noopener">docs/playbooks/vendor-posture-quarterly-review.md</a> (repo).
   </p>
 
   <div class="meta-row" id="meta-row"></div>
@@ -281,7 +281,7 @@ function renderMeta() {
     '<div class="meta-pill">Cohort: <strong>' + ORIGINAL.length + '</strong></div>' +
     '<div class="meta-pill">Last editorial review: <strong>' + escapeHtml(METHODOLOGY.lastEditorialReview || METHODOLOGY.lastUpdated || '—') + '</strong></div>' +
     '<div class="meta-pill">Cadence: <strong>' + escapeHtml(METHODOLOGY.reviewCadence || 'per_earnings_cycle') + '</strong></div>' +
-    '<div class="meta-pill">Playbook: <strong><a href="/' + escapeHtml(METHODOLOGY.reviewPlaybook || 'docs/playbooks/vendor-posture-quarterly-review.md') + '">open</a></strong></div>';
+    '<div class="meta-pill">Playbook: <strong><a href="https://github.com/sibowker-oss/ai-token-tracker/blob/main/' + escapeHtml(METHODOLOGY.reviewPlaybook || 'docs/playbooks/vendor-posture-quarterly-review.md') + '" target="_blank" rel="noopener">open</a></strong></div>';
 }
 
 function renderAll() {
@@ -426,7 +426,7 @@ document.getElementById('global-notes').addEventListener('input', (e) => saveNot
 async function loadAll() {
   loadEdits();
   try {
-    const r = await fetch('/site-data.json?v=' + Date.now());
+    const r = await fetch('site-data.json?v=' + Date.now());
     if (!r.ok) throw new Error('site-data.json failed: ' + r.status);
     const data = await r.json();
     METHODOLOGY = data.dashboard.vendorPostureMethodology || null;
