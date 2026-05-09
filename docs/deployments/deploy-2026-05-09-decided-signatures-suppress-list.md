@@ -2,7 +2,8 @@
 
 **Date:** 2026-05-09
 **WQ:** none (operational fix, surfaced during the same 2026-05-09 review session as the LaunchAgent deploy)
-**Branch/Commit:** main (uncommitted at time of writing)
+**Branch/Commit:** main 99dfe12 (pushed 2026-05-09T06:19:47Z)
+**Publish approval:** Simon, in chat 2026-05-09 — staging-first sequence skipped per `docs/decisions/open/dec-2026-05-09-publish-gate-exception.md`
 
 ## What shipped
 
