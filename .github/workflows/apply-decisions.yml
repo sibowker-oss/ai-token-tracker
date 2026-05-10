@@ -37,10 +37,12 @@ jobs:
         run: python scripts/derive_layer_stack_ratios.py
 
       - name: Re-render bound numbers (wq-102)
-        # Refreshes value substitutions in /beta/*.html priority pages
-        # against the just-regenerated site-data.json + entities.json.
-        # Idempotent — no-op when no resolved value moved since last build.
-        run: python scripts/render_numbers.py
+        # Refreshes value substitutions in BOTH /beta/*.html (preview)
+        # and root *.html (live ai-index.hepburnadvisory.com.au/) for
+        # the six priority pages, kept in lockstep against the just-
+        # regenerated site-data.json + entities.json. Idempotent — no-op
+        # when no resolved value moved since last build.
+        run: python scripts/render_numbers.py --page-dirs beta .
 
       - name: Regenerate feed data
         run: python scripts/generate_feed.py
@@ -56,6 +58,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A data-updates/ beta/ entities.json vault-data.json vault-inbox.json site-data.json sources-registry.json feed-data.json data/runs.jsonl
+          # wq-102: include root priority *.html so render_numbers.py
+          # changes to the live surface get committed alongside /beta/.
+          git add -A data-updates/ beta/ entities.json vault-data.json vault-inbox.json site-data.json sources-registry.json feed-data.json data/runs.jsonl data/numbers-changelog.md
+          git add index.html capital.html revenue.html compute.html usage.html power.html 2>/dev/null || true
           git diff --cached --quiet || git commit -m "Auto-apply review decisions $(date +%Y-%m-%d)"
           git push

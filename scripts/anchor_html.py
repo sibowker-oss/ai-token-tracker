@@ -263,6 +263,13 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--manifest", default=str(MANIFEST))
     ap.add_argument("--beta-dir", default=str(BETA))
+    ap.add_argument(
+        "--page-dirs",
+        nargs="+",
+        default=None,
+        help="Anchor priority pages in MULTIPLE directories in lockstep "
+        "(e.g. /beta/ AND repo root). Overrides --beta-dir when set.",
+    )
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
@@ -271,20 +278,25 @@ def main() -> int:
     for e in manifest["entries"]:
         by_page[e["page"]].append(e)
 
+    page_dirs = args.page_dirs if args.page_dirs else [args.beta_dir]
     overall = []
-    for page in (
+    PRIORITY_PAGES = (
         "index.html",
         "capital.html",
         "revenue.html",
         "compute.html",
         "usage.html",
         "power.html",
-    ):
-        path = Path(args.beta_dir) / page
+    )
+    for page in PRIORITY_PAGES:
+      for d in page_dirs:
+        path = Path(d) / page
         if not path.exists():
             print(f"  ! missing {path}")
             continue
         stats = anchor_page(path, by_page.get(page, []), dry_run=args.dry_run)
+        # tag stats with the dir for the print
+        stats["page"] = f"{d}/{page}" if d not in (".", "") else page
         overall.append(stats)
         print(
             f"  {page:>14}: id={stats['anchored_via_id']:>3} "

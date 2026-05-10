@@ -381,11 +381,6 @@
 // avoid a flash of stale FALLBACK constants on hard refresh. JS only
 // updates the cards if fetch succeeds AND the live value differs from
 // the build-time literal.
-//
-// FALLBACK is retained for the fetch path's `||` fallback when an
-// individual engine key is missing. Values approximate the current
-// build state but don't need to be exact — a fetch failure leaves the
-// data-num literals visible, which are accurate.
 const FALLBACK = { capex: 766, apps: 17.36, appsGross: 19.28, compute: 43, tokens: 310 };
 
 function _setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
@@ -399,7 +394,6 @@ function _hydrate(b) {
   // shows gross). Matches site-data.compute.layer_stack_ratios.
   // compute_per_dollar_apps_gross — see scripts/derive_layer_stack_ratios.py.
   const ratio = '$' + (Math.round((b.compute / b.appsGross) * 100) / 100).toFixed(2);
-  // Ledger cards
   _setText('card-capex',   fmt$(b.capex));
   _setText('card-revenue', fmt$1(b.appsGross));
   _setText('card-compute', fmt$(b.compute));
@@ -407,14 +401,12 @@ function _hydrate(b) {
   _setText('hook-ratio', ratio);
   // Top bar revenue figure — gross customer revenue, 1-decimal precision
   // (formatCurrency rounds ≥10 to whole-billions and would lose the .3).
-  // Bar + card both read appsGross so they stay locked in sync.
   _setText('ais-revenue-figure', fmt$1(b.appsGross));
 }
 
-// wq-102 (2026-05-10): no immediate _hydrate(FALLBACK) — would cause a
-// flash of stale FALLBACK values over the build-time data-num literals
-// on hard refresh. The data-num literals are the editorial fallback
-// now; JS only hydrates after fetch resolves with live engine values.
+// wq-102: no immediate _hydrate(FALLBACK) — would flash stale values
+// over the build-time data-num literals on hard refresh. JS hydrates
+// only after fetch resolves with live engine values.
 fetch('site-data.json?v=' + Date.now())
   .then(r => r.json())
   .then(d => {

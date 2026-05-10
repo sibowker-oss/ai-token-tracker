@@ -131,11 +131,11 @@
     </div>
     <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.2);border-radius:8px;font-size:11px;color:var(--text-dim);line-height:1.6;">
       <span style="color:#f59e0b;font-weight:700;font-size:13px;margin-top:-1px;">?</span>
-      <span><strong style="color:#f1f5f9;">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers &mdash; Hyperscalers clip ~20%, Trad. SaaS ~60%. That retained margin flows directly to Generated Cashflow (bottom right), bypassing Model Providers entirely. So each column is smaller than the one before it &mdash; the drop <em>is</em> the channel margin.</span>
+      <span><strong style="color:#f1f5f9;">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers &mdash; Hyperscalers clip ~<span data-num="revenue.market_aggregate_compute_revenue.why_middle_columns_shrink">20%</span>, Trad. SaaS ~<span data-num="revenue.market_aggregate_compute_revenue.why_middle_columns_shrink_2">60%</span>. That retained margin flows directly to Generated Cashflow (bottom right), bypassing Model Providers entirely. So each column is smaller than the one before it &mdash; the drop <em>is</em> the channel margin.</span>
     </div>
     <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:8px;font-size:11px;color:var(--text-dim);line-height:1.6;">
       <span style="color:#8b5cf6;font-weight:700;font-size:13px;margin-top:-1px;">i</span>
-      <span><strong style="color:#f1f5f9;">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~95% of API revenue direct (5% via hyperscaler resale); AI Natives ~90% direct; Enterprise SaaS ~50/50. The Who Pays column splits AI buyers into <em>AI Natives</em> (heavy API consumers like Cursor / Glean / Perplexity) and <em>Enterprises &amp; Govs</em> (Fortune 500, regulated, sovereign). See <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology &sect; entity archetype taxonomy</a>.</span>
+      <span><strong style="color:#f1f5f9;">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~<span data-num="revenue.market_aggregate_compute_revenue.archetype_channel_routing_each">95%</span> of API revenue direct (<span data-num="revenue.market_aggregate_compute_revenue.archetype_channel_routing_each_2">5%</span> via hyperscaler resale); AI Natives ~<span data-num="revenue.market_aggregate_compute_revenue.archetype_channel_routing_each_3">90%</span> direct; Enterprise SaaS ~50/50. The Who Pays column splits AI buyers into <em>AI Natives</em> (heavy API consumers like Cursor / Glean / Perplexity) and <em>Enterprises &amp; Govs</em> (Fortune 500, regulated, sovereign). See <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology &sect; entity archetype taxonomy</a>.</span>
     </div>
     <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
       <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
@@ -498,7 +498,7 @@ function buildSankey(d) {
   // wq-062 — pass color + slug through so the renderer can use data-supplied colors
   // (fixes Google/Gemini and Other Model Providers grey-fallback bug) and so the
   // routing-aware Channels→Providers builder can match routing entries by slug.
-  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null}));
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null, inference_cost:(x.inference_cost!=null?x.inference_cost:null), opex:(x.opex!=null?x.opex:null)}));
   const colDefs = [
     { label:'Who Pays', items: wrap(d.buyers) },
     { label:'Channels', items: wrap(d.channels) },
@@ -517,7 +517,7 @@ function buildSankey(d) {
     const x = margin + ci*(colW + spacing);
     col.items.forEach(item => {
       const h = item.value * scale;
-      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, color:item.color, slug:item.slug, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, color:item.color, slug:item.slug, inference_cost:item.inference_cost, opex:item.opex, x, y, w:colW, h, col:ci, _in:0, _out:0 });
       y += h + gap;
     });
   });
@@ -661,16 +661,19 @@ function buildSankey(d) {
   }
 
   // Providers -> Outcomes
+  // Prefer engine-derived per-provider inference_cost / opex (summed bottom-up
+  // from real entity financials → outcomes column segment values exactly equal
+  // sum of per-provider inflows). Falls back to flat INFERENCE_PCT × value when
+  // per-provider fields are absent (older sankey-projections.json data files).
   provNodes.forEach(p => {
     const r = rates[p.name] || 0.55;
-    const costPct = INFERENCE_PCT + r;
-    const opShare = Math.min(r, 1 - INFERENCE_PCT);
-    flowDefs.push({from:p.name, to:'Inference', value:p.value*INFERENCE_PCT, fc:2, tc:3});
-    flowDefs.push({from:p.name, to:'Other Operating Costs', value:p.value*opShare, fc:2, tc:3});
-    if (costPct < 1.0) {
-      const surplus = p.value * (1.0 - costPct);
-      if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
-    }
+    const hasPerProv = (p.inference_cost != null) && (p.opex != null);
+    const infFlow = hasPerProv ? p.inference_cost : p.value * INFERENCE_PCT;
+    const opFlow  = hasPerProv ? p.opex          : p.value * Math.min(r, 1 - INFERENCE_PCT);
+    flowDefs.push({from:p.name, to:'Inference', value:infFlow, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating Costs', value:opFlow, fc:2, tc:3});
+    const surplus = p.value - infFlow - opFlow;
+    if (surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
   });
 
   // Convert to visual flows

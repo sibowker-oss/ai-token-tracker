@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="/design-system/ledger-overlays.css">
 <meta name="description" content="The AI economy, layer by layer. Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system.">
 <meta property="og:title" content="The AI Ledger — Hepburn Advisory">
-<meta property="og:description" content="$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.">
+<meta property="og:description" content="$766B of infrastructure investment. $43B of AI compute revenue earned. $19B of customer-paid Apps Revenue. ~310T tokens/day. The full AI economy, triangulated from primary sources.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -222,38 +222,38 @@
         <span class="ais-icon" aria-hidden="true">$</span>
         <span class="ais-text">
           <span class="ais-label">Capex</span>
-          <span class="ais-sub" id="ais-capex-sub">19× Apps Revenue · 2025 calendar</span>
+          <span class="ais-sub" id="ais-capex-sub" data-num="index.dom.ais_capex_sub">17.1× Apps Revenue · 2025 calendar</span>
         </span>
-        <span class="ais-figure" id="ais-capex-figure">$330B</span>
+        <span class="ais-figure" id="ais-capex-figure" data-num="index.dom.ais_capex_figure">$330B</span>
       </a>
 
       <a class="ais-bar ais-bar--usage" href="usage.html" data-ledger="usage" style="--bar-w:50%;" aria-label="Usage — $164B notional — open Usage Ledger">
         <span class="ais-icon" aria-hidden="true">$</span>
         <span class="ais-text">
           <span class="ais-label">Usage</span>
-          <span class="ais-sub" id="ais-usage-sub">9.4× Apps Revenue · ~360T/day</span>
-          <span class="ais-note">notional @ $1.25/M output rate</span>
+          <span class="ais-sub" id="ais-usage-sub"><span data-num="index.dom.ais_usage_sub_2">7.3×</span> Apps Revenue · <span data-num="index.dom.ais_usage_sub">~310T/day</span></span>
+          <span class="ais-note">notional @ <span data-num="index.methodology_constant.notional_output_rate">$1.25</span>/M output rate</span>
         </span>
-        <span class="ais-figure" id="ais-usage-figure">$164B</span>
+        <span class="ais-figure" id="ais-usage-figure" data-num="index.dom.ais_usage_figure">$141B</span>
       </a>
 
       <a class="ais-bar ais-bar--compute" href="compute.html" data-ledger="compute" style="--bar-w:30%;" aria-label="Compute — $43.1B — open Compute Ledger">
         <span class="ais-icon" aria-hidden="true">$</span>
         <span class="ais-text">
           <span class="ais-label">Compute</span>
-          <span class="ais-sub">2.5× Apps Revenue</span>
+          <span class="ais-sub"><span data-num="index.ratio_derived.apps_revenue">2.2×</span> Apps Revenue</span>
         </span>
-        <span class="ais-figure-out" id="ais-compute-figure">$43.1B</span>
+        <span class="ais-figure-out" id="ais-compute-figure" data-num="index.dom.ais_compute_figure">$43B</span>
       </a>
 
       <a class="ais-bar ais-bar--power" href="power.html" data-ledger="power" style="--bar-w:22%;" aria-label="Power — $25B Tier 3 placeholder — open Power Ledger">
         <span class="ais-icon" aria-hidden="true">$</span>
         <span class="ais-text">
           <span class="ais-label">Power</span>
-          <span class="ais-sub">1.4× Apps Revenue</span>
+          <span class="ais-sub"><span data-num="index.ratio_derived.apps_revenue_2">1.3×</span> Apps Revenue</span>
         </span>
         <span class="ais-figure-out">
-          <span id="ais-power-figure">$25B</span>
+          <span id="ais-power-figure" data-num="index.dom.ais_power_figure">$25B</span>
           <span class="pill-mini tier-3" title="Power v3 hardening in progress — figure is a Tier 3C placeholder">TIER 3 · v3 PENDING</span>
         </span>
       </a>
@@ -262,9 +262,9 @@
         <span class="ais-icon" aria-hidden="true">$</span>
         <span class="ais-text">
           <span class="ais-label">Revenue</span>
-          <span class="ais-sub">1× baseline · 2025 cohort</span>
+          <span class="ais-sub"><span data-num="index.ratio_derived.baseline_cohort">1×</span> baseline · 2025 cohort</span>
         </span>
-        <span class="ais-figure-out" id="ais-revenue-figure">$19.3B</span>
+        <span class="ais-figure-out" id="ais-revenue-figure" data-num="index.dom.ais_revenue_figure">$19B</span>
       </a>
     </div>
 
@@ -276,15 +276,15 @@
 
   <!-- ── HERO HOOK ONE-LINER (wq-093 D7: Compute-anchored) ── -->
   <section class="hero-hook">
-    <div class="hook-number"><span id="hook-ratio">$2.50</span> of compute spend stands behind every $1 of customer-paid AI Apps Revenue today.</div>
+    <div class="hook-number"><span id="hook-ratio"><span data-num="index.dom.hook_ratio">$2.23</span></span> of compute spend stands behind every <span data-num="index.dom.hook_ratio_2">$1</span> of customer-paid AI Apps Revenue today.</div>
   </section>
 
   <!-- ── LIVE TILE (wq-093 D5: Compute-derived signal) ── -->
   <section class="live-tile-wrap">
     <div class="live-tile">
       <div class="lt-label">Key convergence signal</div>
-      <div class="lt-value" style="color:var(--compute);" id="lt-value">$43B</div>
-      <div style="font-size:13px;color:var(--text);margin-bottom:8px;" id="lt-subline">AI compute revenue earned in 2025 — +153% YoY. Frontier labs paid 79% of it.</div>
+      <div class="lt-value" style="color:var(--compute);" id="lt-value" data-num="index.dom.lt_value">$43B</div>
+      <div style="font-size:13px;color:var(--text);margin-bottom:8px;" id="lt-subline">AI compute revenue earned in 2025 — <span data-num="index.dom.lt_subline">+153.4%</span> YoY. Frontier labs paid <span data-num="index.dom.lt_subline_2">79%</span> of it.</div>
       <div class="lt-meta">
         <span class="lt-badge fresh" id="lt-age">Updated May 2026</span>
         <a href="methodology.html#compute-revenue-three-segment-model" style="color:var(--accent);text-decoration:none;font-size:11px;">Source: 10-Q filings &rarr;</a>
@@ -297,44 +297,44 @@
   <section class="ledger-cards">
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--capital);">Capital Ledger</div>
-      <div class="lc-value" style="color:var(--capital);" id="card-capex">$745B</div>
+      <div class="lc-value" style="color:var(--capital);" id="card-capex" data-num="index.dom.card_capex">$766B</div>
       <div class="lc-desc">Cumulative 2023–25 AI capital expenditure. Where every dollar went — from spender to silicon to current workload state.</div>
       <div class="lc-tier">
-        <span class="tier-pill tier-1">40% Sourced</span>
-        <span class="tier-pill tier-2">35% Derived</span>
-        <span class="tier-pill tier-3">25% Modeled</span>
+        <span class="tier-pill tier-1"><span data-num="index.percentage_uncategorised.sourced">40%</span> Sourced</span>
+        <span class="tier-pill tier-2"><span data-num="index.percentage_uncategorised.derived">35%</span> Derived</span>
+        <span class="tier-pill tier-3"><span data-num="index.percentage_uncategorised.modeled">25%</span> Modeled</span>
       </div>
       <a href="capital.html" class="lc-link">Open Capital Ledger &rarr;</a>
     </div>
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--revenue);">Revenue Ledger</div>
-      <div class="lc-value" style="color:var(--revenue);" id="card-revenue">$19.3B</div>
+      <div class="lc-value" style="color:var(--revenue);" id="card-revenue" data-num="index.dom.card_revenue">$19B</div>
       <div class="lc-desc">Customer-paid AI revenue collected by providers in the 2025 measured cohort. Tracks who pays, how, and where it goes.</div>
       <div class="lc-tier">
-        <span class="tier-pill tier-1">65% Sourced</span>
-        <span class="tier-pill tier-2">25% Derived</span>
-        <span class="tier-pill tier-3">10% Modeled</span>
+        <span class="tier-pill tier-1"><span data-num="index.percentage_uncategorised.sourced_2">65%</span> Sourced</span>
+        <span class="tier-pill tier-2"><span data-num="index.percentage_uncategorised.derived_2">25%</span> Derived</span>
+        <span class="tier-pill tier-3"><span data-num="index.percentage_uncategorised.modeled_2">10%</span> Modeled</span>
       </div>
       <a href="revenue.html" class="lc-link">Open Revenue Ledger &rarr;</a>
     </div>
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--compute);">Compute Ledger</div>
-      <div class="lc-value" style="color:var(--compute);" id="card-compute">$43B</div>
-      <div class="lc-desc">What hyperscalers and neoclouds earned from AI compute in 2025. Three segments — frontier-lab compute (79%), AI workload compute, hosted model APIs.</div>
+      <div class="lc-value" style="color:var(--compute);" id="card-compute" data-num="index.dom.card_compute">$43B</div>
+      <div class="lc-desc">What hyperscalers and neoclouds earned from AI compute in 2025. Three segments — frontier-lab compute (<span data-num="index.percentage_uncategorised.hyperscalers_neoclouds_earned_compute">79.1%</span>), AI workload compute, hosted model APIs.</div>
       <div class="lc-tier">
-        <span class="tier-pill tier-1">60% Sourced</span>
-        <span class="tier-pill tier-2">30% Derived</span>
-        <span class="tier-pill tier-3">10% Modeled</span>
+        <span class="tier-pill tier-1"><span data-num="index.percentage_uncategorised.sourced_3">60%</span> Sourced</span>
+        <span class="tier-pill tier-2"><span data-num="index.percentage_uncategorised.derived_3">30%</span> Derived</span>
+        <span class="tier-pill tier-3"><span data-num="index.percentage_uncategorised.modeled_3">10%</span> Modeled</span>
       </div>
       <a href="compute.html" class="lc-link">Open Compute Ledger &rarr;</a>
     </div>
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--usage);">Usage Ledger</div>
-      <div class="lc-value" style="color:var(--usage);" id="card-tokens">~360T/day</div>
+      <div class="lc-value" style="color:var(--usage);" id="card-tokens" data-num="index.dom.card_tokens">~310T/day</div>
       <div class="lc-desc">Token volume, pricing trends, model mix, and demand quality. The operational pulse of the AI economy.</div>
       <div class="lc-tier">
-        <span class="tier-pill tier-2">50% Derived</span>
-        <span class="tier-pill tier-3">50% Modeled</span>
+        <span class="tier-pill tier-2"><span data-num="index.percentage_uncategorised.derived_4">50%</span> Derived</span>
+        <span class="tier-pill tier-3"><span data-num="index.percentage_uncategorised.modeled_4">50%</span> Modeled</span>
       </div>
       <a href="usage.html" class="lc-link">Open Usage Ledger &rarr;</a>
     </div>
@@ -374,10 +374,14 @@
 
 <script>
 // Hydrate the ledger cards + hook ratio from site-data.json.
-// Bear/Base/Bull scenario toggle removed 2026-05-07 per Simon — single base
-// view now. Hook ratio is computed live as Compute / Apps; cards read from
-// engine aggregates so quarterly refreshes flow through without copy edits.
-const FALLBACK = { capex: 745, apps: 17.36, appsGross: 19.28, compute: 43.07, tokens: 360 };
+// wq-102 (2026-05-10): the visible literals (`<span data-num="…">$766B</span>`
+// etc.) are now baked at build time by scripts/render_numbers.py against
+// the SAME engine paths read here. So the data-num literal IS the
+// editorial fallback — we skip the immediate _hydrate(FALLBACK) call to
+// avoid a flash of stale FALLBACK constants on hard refresh. JS only
+// updates the cards if fetch succeeds AND the live value differs from
+// the build-time literal.
+const FALLBACK = { capex: 766, apps: 17.36, appsGross: 19.28, compute: 43, tokens: 310 };
 
 function _setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
 
@@ -385,24 +389,24 @@ function _hydrate(b) {
   const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
   const fmt$1 = v => '$' + (Math.round(v * 10) / 10).toFixed(1) + 'B';
   const fmtT = v => '~' + Math.round(v) + 'T';
-  const ratio = '$' + (Math.round((b.compute / b.apps) * 10) / 10).toFixed(2);
-  // Ledger cards
+  // Hook ratio (Compute / Apps Revenue GROSS — per wq-102, anchored on
+  // gross to stay consistent with the visible Revenue pill which also
+  // shows gross). Matches site-data.compute.layer_stack_ratios.
+  // compute_per_dollar_apps_gross — see scripts/derive_layer_stack_ratios.py.
+  const ratio = '$' + (Math.round((b.compute / b.appsGross) * 100) / 100).toFixed(2);
   _setText('card-capex',   fmt$(b.capex));
   _setText('card-revenue', fmt$1(b.appsGross));
   _setText('card-compute', fmt$(b.compute));
   _setText('card-tokens',  fmtT(b.tokens) + '/day');
-  // Hook one-liner ratio (Compute-anchored: Compute / Apps net — provider-side)
   _setText('hook-ratio', ratio);
   // Top bar revenue figure — gross customer revenue, 1-decimal precision
   // (formatCurrency rounds ≥10 to whole-billions and would lose the .3).
-  // Bar + card both read appsGross so they stay locked in sync.
   _setText('ais-revenue-figure', fmt$1(b.appsGross));
 }
 
-// Render fallback values immediately so the page never shows stale literals
-// during the fetch round-trip; live values overwrite once site-data lands.
-_hydrate(FALLBACK);
-
+// wq-102: no immediate _hydrate(FALLBACK) — would flash stale values
+// over the build-time data-num literals on hard refresh. JS hydrates
+// only after fetch resolves with live engine values.
 fetch('site-data.json?v=' + Date.now())
   .then(r => r.json())
   .then(d => {

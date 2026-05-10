@@ -498,7 +498,7 @@ function buildSankey(d) {
   // wq-062 — pass color + slug through so the renderer can use data-supplied colors
   // (fixes Google/Gemini and Other Model Providers grey-fallback bug) and so the
   // routing-aware Channels→Providers builder can match routing entries by slug.
-  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null}));
+  const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null, inference_cost:(x.inference_cost!=null?x.inference_cost:null), opex:(x.opex!=null?x.opex:null)}));
   const colDefs = [
     { label:'Who Pays', items: wrap(d.buyers) },
     { label:'Channels', items: wrap(d.channels) },
@@ -517,7 +517,7 @@ function buildSankey(d) {
     const x = margin + ci*(colW + spacing);
     col.items.forEach(item => {
       const h = item.value * scale;
-      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, color:item.color, slug:item.slug, x, y, w:colW, h, col:ci, _in:0, _out:0 });
+      allNodes.push({ name:item.name, value:item.value, tier:item.tier, src:item.src, color:item.color, slug:item.slug, inference_cost:item.inference_cost, opex:item.opex, x, y, w:colW, h, col:ci, _in:0, _out:0 });
       y += h + gap;
     });
   });
@@ -661,16 +661,19 @@ function buildSankey(d) {
   }
 
   // Providers -> Outcomes
+  // Prefer engine-derived per-provider inference_cost / opex (summed bottom-up
+  // from real entity financials → outcomes column segment values exactly equal
+  // sum of per-provider inflows). Falls back to flat INFERENCE_PCT × value when
+  // per-provider fields are absent (older sankey-projections.json data files).
   provNodes.forEach(p => {
     const r = rates[p.name] || 0.55;
-    const costPct = INFERENCE_PCT + r;
-    const opShare = Math.min(r, 1 - INFERENCE_PCT);
-    flowDefs.push({from:p.name, to:'Inference', value:p.value*INFERENCE_PCT, fc:2, tc:3});
-    flowDefs.push({from:p.name, to:'Other Operating Costs', value:p.value*opShare, fc:2, tc:3});
-    if (costPct < 1.0) {
-      const surplus = p.value * (1.0 - costPct);
-      if(surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
-    }
+    const hasPerProv = (p.inference_cost != null) && (p.opex != null);
+    const infFlow = hasPerProv ? p.inference_cost : p.value * INFERENCE_PCT;
+    const opFlow  = hasPerProv ? p.opex          : p.value * Math.min(r, 1 - INFERENCE_PCT);
+    flowDefs.push({from:p.name, to:'Inference', value:infFlow, fc:2, tc:3});
+    flowDefs.push({from:p.name, to:'Other Operating Costs', value:opFlow, fc:2, tc:3});
+    const surplus = p.value - infFlow - opFlow;
+    if (surplus > 0.01) flowDefs.push({from:p.name, to:'Generated Cashflow', value:surplus, fc:2, tc:3, bypass:true});
   });
 
   // Convert to visual flows

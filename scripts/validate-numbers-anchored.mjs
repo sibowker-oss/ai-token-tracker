@@ -28,6 +28,10 @@ const PRIORITY = [
   'usage.html',
   'power.html',
 ];
+// wq-102: the priority pages live in BOTH /beta/ (preview surface) and
+// the repo root (the live ai-index.hepburnadvisory.com.au/ surface).
+// render_numbers.py keeps them in lockstep; this validator checks BOTH.
+const PAGE_DIRS = [BETA, ROOT];
 
 const NUMERIC_PATTERNS = [
   // dollar with magnitude:  $745B, $43.07B, $1.2T, ~$5B
@@ -133,8 +137,8 @@ function isAllowedNonData(tok, surroundingLine) {
   return false;
 }
 
-function check(file) {
-  const html = readFileSync(join(BETA, file), 'utf8');
+function check(file, dir) {
+  const html = readFileSync(join(dir, file), 'utf8');
   const stripped = stripIgnoredBlocks(html);
   const violations = [];
   // Track positions on the stripped string. We need to map back to the
@@ -184,13 +188,19 @@ function check(file) {
 }
 
 const allViolations = [];
-for (const file of PRIORITY) {
-  try {
-    const v = check(file);
-    allViolations.push(...v);
-    console.log(`  ${file.padStart(14)}: ${v.length} violations`);
-  } catch (err) {
-    console.error(`  ${file}: ERROR ${err.message}`);
+for (const dir of PAGE_DIRS) {
+  const dirLabel = dir === ROOT ? '(root)' : '(beta)';
+  for (const file of PRIORITY) {
+    try {
+      const v = check(file, dir).map((row) => ({ ...row, dir: dirLabel }));
+      allViolations.push(...v);
+      console.log(`  ${dirLabel.padStart(7)} ${file.padStart(14)}: ${v.length} violations`);
+    } catch (err) {
+      // missing file in a dir is fine — pages may be pending sync
+      if (err.code !== 'ENOENT') {
+        console.error(`  ${dirLabel} ${file}: ERROR ${err.message}`);
+      }
+    }
   }
 }
 

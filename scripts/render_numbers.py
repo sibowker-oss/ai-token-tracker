@@ -314,7 +314,18 @@ def main() -> int:
     ap.add_argument("--manifest", default=str(MANIFEST))
     ap.add_argument("--site-data", default=str(ROOT / "site-data.json"))
     ap.add_argument("--entities", default=str(ROOT / "entities.json"))
+    # `--beta-dir` retained for back-compat (single directory). Use
+    # `--page-dirs A B …` to render the priority pages in MULTIPLE
+    # directories in lockstep (e.g. /beta/ AND repo root). When
+    # --page-dirs is supplied it overrides --beta-dir.
     ap.add_argument("--beta-dir", default=str(BETA))
+    ap.add_argument(
+        "--page-dirs",
+        nargs="+",
+        default=None,
+        help="Render against multiple page-dirs in lockstep "
+        "(default: just --beta-dir)",
+    )
     ap.add_argument("--changelog", default=str(CHANGELOG))
     ap.add_argument("--build-log", default=None)
     ap.add_argument("--dry-run", action="store_true")
@@ -331,19 +342,30 @@ def main() -> int:
     decisions: list[dict] = []
     counts = defaultdict(int)
 
-    for page in (
+    page_dirs = args.page_dirs if args.page_dirs else [args.beta_dir]
+    PRIORITY_PAGES = (
         "index.html",
         "capital.html",
         "revenue.html",
         "compute.html",
         "usage.html",
         "power.html",
-    ):
-        path = Path(args.beta_dir) / page
-        if not path.exists():
+    )
+
+    for page in PRIORITY_PAGES:
+        # Collect all live target paths for this page across page_dirs.
+        target_paths = [
+            Path(d) / page for d in page_dirs if (Path(d) / page).exists()
+        ]
+        if not target_paths:
             continue
+        # Use the FIRST path's HTML as the source of truth for resolution.
+        # All target paths must be byte-equal at start (they're mirror copies).
+        path = target_paths[0]
         html = path.read_text()
         original = html
+        # Track all targets for the persist pass.
+        all_targets = [(p, p.read_text()) for p in target_paths]
 
         # First pass — resolve every entry, decide rendered value
         per_entry = []
@@ -441,10 +463,16 @@ def main() -> int:
             })
             counts[f"chosen:{rec['chosen_source']}"] += 1
 
-        if html != original and not args.dry_run:
-            path.write_text(html)
+        # Write the rendered HTML to ALL target paths (kept in lockstep).
+        # Each target may already contain `html` (already rendered); only
+        # write when its current content differs.
         if html != original:
             counts[f"page_changed:{page}"] += 1
+        if not args.dry_run:
+            for p, current in all_targets:
+                if current != html:
+                    p.write_text(html)
+                    counts[f"file_written:{p}"] += 1
 
     # ── Changelog ─────────────────────────────────────────────────────
     flipped = [d for d in decisions if d["source_state_at_build"] == "sourced"]
