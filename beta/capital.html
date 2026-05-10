@@ -191,9 +191,9 @@
   <h1>Capital Ledger</h1>
   <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
   <div class="sub">
-    <strong><span data-narrative="capital_sankey_total" data-num="capital.market_aggregate_capex_cumulative.766b_infrastructure_investment_ndash">$766B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
+    <strong><span data-narrative="capital_sankey_total">$766B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
     Every dollar of cumulative AI capital expenditure &mdash; from spender &rarr; silicon &rarr; current workload &mdash; mapped as a balance-sheet view.
-    Anchored from <strong>NVIDIA DC revenue: <span data-num="capital.market_aggregate_capex_cumulative.anchored_nvidia_revenue_356b">$356B</span> cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.
+    Anchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.
     The balance-sheet mirror of <a href="revenue.html" class="link-revenue">the Revenue Ledger</a>.
   </div>
 
@@ -219,11 +219,11 @@
     <div class="counterfactual-toggle" id="cf-toggle">
       <input type="checkbox" id="cf-check" onchange="toggleCounterfactual()">
       <div>
-        <label for="cf-check">Ad-platform counterfactual: exclude <span data-num="capital.uncategorised.platform_counterfactual_exclude_170b">$170B</span> of self-funded ad/cloud infrastructure</label>
+        <label for="cf-check">Ad-platform counterfactual: exclude $170B of self-funded ad/cloud infrastructure</label>
         <div class="cf-detail">
-          Meta, Google, and Microsoft allocate approximately <span data-num="capital.market_aggregate_capex_annual.meta_google_microsoft_allocate">$170B</span> of AI CapEx to ad ranking, search, recommendations, and cloud workloads.
+          Meta, Google, and Microsoft allocate approximately $170B of AI CapEx to ad ranking, search, recommendations, and cloud workloads.
           These investments are funded by existing business models and do not depend on new AI revenue.
-          Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-ratio="cumulative.infra_to_revenue_ratio_2025"><span data-num="capital.dom.cf_ratio_from">$34</span>:<span data-num="capital.dom.cf_ratio_from_2">$1</span></strong> to <strong id="cf-ratio-to" data-ratio="cumulative.infra_to_revenue_ratio_2025_excl_self_use">~<span data-num="capital.dom.cf_ratio_from_3">$13</span>:<span data-num="capital.dom.cf_ratio_from_4">$1</span></strong>.
+          Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-ratio="cumulative.infra_to_revenue_ratio_2025">$34:$1</strong> to <strong id="cf-ratio-to" data-ratio="cumulative.infra_to_revenue_ratio_2025_excl_self_use">~$13:$1</strong>.
         </div>
       </div>
     </div>
@@ -238,16 +238,16 @@
 
       <div style="margin-bottom:6px;">
         <strong style="color:var(--accent); font-size:13px;">3. Revenue vs. depreciation</strong>
-        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx reached approximately <span data-narrative="market_2025_total_capex" data-num="capital.market_aggregate_capex_cumulative.total_capex_reached_approximately">$330B</span> in 2025. Current AI customer revenue is approximately <span data-narrative="market_2025_total_customer_revenue_gross" data-num="capital.market_aggregate_capex_cumulative.total_capex_reached_approximately_2">$19B</span>/yr.</span>
+        <span style="color:var(--text-dim); font-size:12px;"> Total AI CapEx reached approximately <span data-narrative="market_2025_total_capex">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative="market_2025_total_customer_revenue_gross">$17.5B</span>/yr.</span>
       </div>
       <table class="convergence-table" style="margin-top:8px;">
         <tr><th>Question</th><th>What it requires</th><th style="text-align:right;">Current status</th></tr>
-        <tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;<span data-num="capital.ratio_derived.revenue_growth_rate_depreciation">4x</span> annual growth to cover depreciation</td><td class="num"><span class="status-pill status-gap">Gap: <span data-num="capital.per_entity_metric_revenue.revenue_growth_rate_depreciation">$24B</span></span> <span style="color:var(--text-dim);font-size:11px;"><span data-num="capital.per_entity_metric_revenue.revenue_growth_rate_depreciation_2">$17.5B</span> rev vs <span data-num="capital.per_entity_metric_revenue.revenue_growth_rate_depreciation_3">$41B</span> dep</span></td></tr>
-        <tr><td>Ad/cloud workloads covering their share</td><td>Existing business models justify the CapEx</td><td class="num"><span class="status-pill status-covered">Covered</span> <span style="color:var(--text-dim);font-size:11px;"><span data-num="capital.market_aggregate_capex_annual.cloud_workloads_covering_share">~$170B</span> self-funding</span></td></tr>
-        <tr><td>CapEx growth trajectory</td><td>New purchases stabilise so depreciation levels</td><td class="num"><span class="status-pill status-growing">Accelerating</span> <span style="color:var(--text-dim);font-size:11px;">FY27 <span data-num="capital.market_aggregate_capex_annual.capex_growth_trajectory_new">$368B</span> guided</span></td></tr>
+        <tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation</td><td class="num"><span class="status-pill status-gap">Gap: $24B</span> <span style="color:var(--text-dim);font-size:11px;">$17.5B rev vs $41B dep</span></td></tr>
+        <tr><td>Ad/cloud workloads covering their share</td><td>Existing business models justify the CapEx</td><td class="num"><span class="status-pill status-covered">Covered</span> <span style="color:var(--text-dim);font-size:11px;">~$170B self-funding</span></td></tr>
+        <tr><td>CapEx growth trajectory</td><td>New purchases stabilise so depreciation levels</td><td class="num"><span class="status-pill status-growing">Accelerating</span> <span style="color:var(--text-dim);font-size:11px;">FY27 $368B guided</span></td></tr>
       </table>
       <div style="margin-top:10px;font-size:11px;color:var(--text-dim);">
-        <strong>NVIDIA <span data-num="capital.market_aggregate_revenue.nvidia_target_cumulative_chip">$1T</span> target:</strong> cumulative AI-chip revenue through CY2027 = <span data-num="capital.market_aggregate_revenue.nvidia_target_cumulative_chip_2">~$1.07T</span> at projected rates. That represents <span data-num="capital.market_aggregate_revenue.nvidia_target_cumulative_chip_3">$1T</span> of silicon entering depreciation over a 3&ndash;4yr window.
+        <strong>NVIDIA $1T target:</strong> cumulative AI-chip revenue through CY2027 = ~$1.07T at projected rates. That represents $1T of silicon entering depreciation over a 3&ndash;4yr window.
       </div>
     </div>
 
@@ -290,22 +290,22 @@
       <div class="sens-slider">
         <label>Idle CapEx</label>
         <input type="range" id="sens-idle" min="0" max="150" value="50" step="10" oninput="updateSensitivity()">
-        <div class="sens-val" id="sens-idle-val" data-num="capital.dom.sens_idle_val">$50B</div>
+        <div class="sens-val" id="sens-idle-val">$50B</div>
       </div>
       <div class="sens-slider">
         <label>Ad-fleet allocation</label>
         <input type="range" id="sens-ads" min="0" max="300" value="170" step="10" oninput="updateSensitivity()">
-        <div class="sens-val" id="sens-ads-val" data-num="capital.dom.sens_ads_val">$170B</div>
+        <div class="sens-val" id="sens-ads-val">$170B</div>
       </div>
       <div class="sens-slider">
         <label>China GPU count (vs. base)</label>
         <input type="range" id="sens-china" min="50" max="150" value="100" step="5" oninput="updateSensitivity()">
-        <div class="sens-val" id="sens-china-val" data-num="capital.dom.sens_china_val">100%</div>
+        <div class="sens-val" id="sens-china-val">100%</div>
       </div>
       <div class="sens-result">
-        <div class="sens-label">Infrastructure per <span data-num="capital.per_entity_metric_revenue.infrastructure_current_revenue">$1</span> of current revenue</div>
-        <div class="sens-ratio" id="sens-ratio-display" data-num="capital.dom.sens_ratio_display">$35</div>
-        <div class="sens-label" id="sens-ratio-detail" style="margin-top:4px;"><span data-num="capital.dom.sens_ratio_detail">$766B</span> total &middot; <span data-num="capital.dom.sens_ratio_detail_2">$22B</span> revenue</div>
+        <div class="sens-label">Infrastructure per $1 of current revenue</div>
+        <div class="sens-ratio" id="sens-ratio-display">$35</div>
+        <div class="sens-label" id="sens-ratio-detail" style="margin-top:4px;">$766B total &middot; $22B revenue</div>
       </div>
     </div>
   </div>
@@ -317,20 +317,20 @@
     <div class="convergence-paths">
       <div class="conv-path">
         <div class="cp-num">1</div>
-        <div class="cp-title">Revenue compounds at 3&ndash;<span data-num="capital.ratio_derived.revenue_compounds_ndash_annually">4x</span> annually</div>
-        <div class="cp-desc">AI customer revenue (<span data-narrative="market_2025_total_customer_revenue_gross" data-num="capital.market_aggregate_revenue.customer_revenue_must_grow">$19B</span> in 2025) must grow at 80&ndash;<span data-num="capital.market_aggregate_revenue.customer_revenue_must_grow_2">100%</span> CAGR for several years. Enterprise adoption, pricing power, and new product categories all contribute.</div>
+        <div class="cp-title">Revenue compounds at 3&ndash;4x annually</div>
+        <div class="cp-desc">AI customer revenue (<span data-narrative="market_2025_total_customer_revenue_gross">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categories all contribute.</div>
         <div class="cp-signal">Signal to watch: quarterly revenue growth rate across OpenAI, Anthropic, Google Cloud AI, AWS Bedrock</div>
       </div>
       <div class="conv-path">
         <div class="cp-num">2</div>
         <div class="cp-title">CapEx growth decelerates</div>
-        <div class="cp-desc">If annual CapEx stabilises at <span data-num="capital.market_aggregate_capex_annual.annual_capex_stabilises_ndash_2">$700</span>&ndash;<span data-num="capital.market_aggregate_capex_annual.annual_capex_stabilises_ndash">750B</span>, the depreciation wave crests by 2029&ndash;2030. Current guidance suggests 2026&ndash;2027 is still accelerating.</div>
+        <div class="cp-desc">If annual CapEx stabilises at $700&ndash;750B, the depreciation wave crests by 2029&ndash;2030. Current guidance suggests 2026&ndash;2027 is still accelerating.</div>
         <div class="cp-signal">Signal to watch: hyperscaler CapEx guidance in quarterly earnings calls</div>
       </div>
       <div class="conv-path">
         <div class="cp-num">3</div>
         <div class="cp-title">GPU useful life extends</div>
-        <div class="cp-desc">If GPU depreciation is extended from 4 to 5&ndash;6 years (as Microsoft and Google have done for servers), annual depreciation charges decrease by 25&ndash;<span data-num="capital.scenario_assumption.gpu_depreciation_extended_ndash">35%</span>.</div>
+        <div class="cp-desc">If GPU depreciation is extended from 4 to 5&ndash;6 years (as Microsoft and Google have done for servers), annual depreciation charges decrease by 25&ndash;35%.</div>
         <div class="cp-signal">Signal to watch: depreciation policy changes in 10-K filings</div>
       </div>
     </div>
@@ -341,20 +341,20 @@
     <h2>Structure notes</h2>
     <div class="notes">
       <ul>
-        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative="capital_sankey_total" data-num="capital.market_aggregate_capex_cumulative.lhs_source_buckets_cumulative">$766B</span>). Anchored from NVIDIA DC <span data-num="capital.market_aggregate_capex_cumulative.lhs_source_buckets_cumulative_2">$356B</span> (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
-        <li><strong>Middle = 5 nodes</strong> &mdash; what the money physically bought. NVIDIA GPU <span data-num="capital.per_entity_metric_revenue.middle_nodes_mdash_money">$303B</span> cross-checks against calendarised NVIDIA DC revenue (Tier 1A).</li>
+        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative="capital_sankey_total">$766B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
+        <li><strong>Middle = 5 nodes</strong> &mdash; what the money physically bought. NVIDIA GPU $303B cross-checks against calendarised NVIDIA DC revenue (Tier 1A).</li>
         <li><strong>RHS = 6 nodes = current physical state of each asset</strong> (balance-sheet view, full purchase price):
           <ul>
-            <li><strong>Inference (Paid) (<span data-num="capital.per_entity_metric_revenue.inference_paid_50b_mdash">$51B</span>)</strong> &mdash; fleet currently serving paid API + subscription queries</li>
-            <li><strong>Inference (Free Tier) (<span data-num="capital.uncategorised.inference_free_tier_32b">$33B</span>)</strong> &mdash; fleet serving free-tier ChatGPT, Gemini in search, Meta AI</li>
-            <li><strong>Inference (Ad Platform) (<span data-num="capital.uncategorised.inference_platform_201b_mdash">$207B</span>)</strong> &mdash; fleet running ads, feed ranking, search, recommendations</li>
-            <li><strong>Model Training (<span data-num="capital.uncategorised.model_training_84b_mdash">$87B</span>)</strong> &mdash; fleet currently dedicated to training runs</li>
-            <li><strong>Idle (<span data-num="capital.market_aggregate_power.idle_68b_mdash_commissioned">$68B</span>)</strong> &mdash; commissioned, powered, no current workload</li>
-            <li><strong>In build / in transit (<span data-num="capital.market_aggregate_capex_annual.build_transit_310b_mdash">$310B</span>)</strong> &mdash; CapEx committed, not yet commissioned. Mostly 2025 DC shell + substations.</li>
+            <li><strong>Inference (Paid) ($50B)</strong> &mdash; fleet currently serving paid API + subscription queries</li>
+            <li><strong>Inference (Free Tier) ($32B)</strong> &mdash; fleet serving free-tier ChatGPT, Gemini in search, Meta AI</li>
+            <li><strong>Inference (Ad Platform) ($201B)</strong> &mdash; fleet running ads, feed ranking, search, recommendations</li>
+            <li><strong>Model Training ($84B)</strong> &mdash; fleet currently dedicated to training runs</li>
+            <li><strong>Idle ($68B)</strong> &mdash; commissioned, powered, no current workload</li>
+            <li><strong>In build / in transit ($310B)</strong> &mdash; CapEx committed, not yet commissioned. Mostly 2025 DC shell + substations.</li>
           </ul>
         </li>
-        <li><strong>Bridge to Revenue Ledger:</strong> Paid + Consumer fleet (<span data-num="capital.ratio_derived.bridge_revenue_paid_consumer">$82B</span>) generates <span data-num="capital.ratio_derived.bridge_revenue_paid_consumer_2">~$14B</span>/yr COGS via depreciation + hosting + electricity. Ratio ~<span data-num="capital.ratio_derived.bridge_revenue_paid_consumer_3">5.9x</span> consistent with ~3.5yr asset life + operating overhead.</li>
-        <li><strong>Ad Platform context:</strong> Meta/Google/MSFT use this fleet for ads/search/cloud workloads. These <span data-num="capital.market_aggregate_capex_annual.platform_context_meta_google">$201B</span> of assets are funded through existing business models and do not require new AI revenue to justify the investment.</li>
+        <li><strong>Bridge to Revenue Ledger:</strong> Paid + Consumer fleet ($82B) generates ~$14B/yr COGS via depreciation + hosting + electricity. Ratio ~5.9x consistent with ~3.5yr asset life + operating overhead.</li>
+        <li><strong>Ad Platform context:</strong> Meta/Google/MSFT use this fleet for ads/search/cloud workloads. These $201B of assets are funded through existing business models and do not require new AI revenue to justify the investment.</li>
       </ul>
     </div>
   </div>
@@ -368,19 +368,19 @@
           <tr><th>Assumption</th><th>Value used</th><th>Source / rationale</th><th style="text-align:center;">Tier</th></tr>
           <tr>
             <td>NVIDIA DC revenue (cumulative 2023&ndash;25)</td>
-            <td class="num"><span data-num="capital.uncategorised.356b">$356B</span></td>
-            <td>FY24 <span data-num="capital.per_entity_metric_revenue.fy24_fy25_fy26_mdash">$47.5B</span> + FY25 <span data-num="capital.per_entity_metric_revenue.fy24_fy25_fy26_mdash_2">$115.2B</span> + FY26 <span data-num="capital.per_entity_metric_revenue.fy24_fy25_fy26_mdash_3">$193.7B</span> &mdash; quarterly earnings</td>
+            <td class="num">$356B</td>
+            <td>FY24 $47.5B + FY25 $115.2B + FY26 $193.7B &mdash; quarterly earnings</td>
             <td style="text-align:center;color:#10b981;font-weight:700;">1A</td>
           </tr>
           <tr>
             <td>NVIDIA revenue split (GPU vs networking)</td>
-            <td class="num">~<span data-num="capital.percentage_uncategorised.value">85%</span> / ~<span data-num="capital.percentage_uncategorised.value_2">15%</span></td>
+            <td class="num">~85% / ~15%</td>
             <td>NVIDIA segment reporting; networking = InfiniBand + NVLink</td>
             <td style="text-align:center;color:#10b981;font-weight:700;">1B</td>
           </tr>
           <tr>
             <td>Silicon as % of total AI CapEx</td>
-            <td class="num">~<span data-num="capital.percentage_uncategorised.value_3">55%</span></td>
+            <td class="num">~55%</td>
             <td>Industry rule of thumb; cross-checked against hyperscaler 10-K CapEx vs known GPU purchases</td>
             <td style="text-align:center;color:#3b82f6;font-weight:700;">2A</td>
           </tr>
@@ -404,25 +404,25 @@
           </tr>
           <tr>
             <td>Inference fleet &rarr; annual COGS</td>
-            <td class="num"><span data-num="capital.uncategorised.14b">$14B</span>/yr</td>
-            <td>From the <a href="revenue.html" class="link-revenue">Revenue Ledger</a> 2025 inference spend; cross-checks at ~<span data-num="capital.ratio_derived.revenue_inference_spend_cross">4x</span> ratio to fleet value</td>
+            <td class="num">$14B/yr</td>
+            <td>From the <a href="revenue.html" class="link-revenue">Revenue Ledger</a> 2025 inference spend; cross-checks at ~4x ratio to fleet value</td>
             <td style="text-align:center;color:#3b82f6;font-weight:700;">2A</td>
           </tr>
           <tr>
             <td>Ad Platform fleet allocation</td>
-            <td class="num"><span data-num="capital.uncategorised.170b">~$170B</span></td>
-            <td>Meta (<span data-num="capital.uncategorised.meta_55b_gpu_ads">$55B</span> GPU + ads infra), Google (TPU fleet for search/ads), MSFT (Bing/Copilot). Largest single workload category.</td>
+            <td class="num">~$170B</td>
+            <td>Meta ($55B GPU + ads infra), Google (TPU fleet for search/ads), MSFT (Bing/Copilot). Largest single workload category.</td>
             <td style="text-align:center;color:#f59e0b;font-weight:700;">3B</td>
           </tr>
           <tr>
             <td>China NVIDIA GPUs (estimated)</td>
-            <td class="num"><span data-num="capital.uncategorised.474k_h100e">474K</span> H100e</td>
+            <td class="num">474K H100e</td>
             <td>Epoch AI tentative estimate; export controls make this inherently uncertain</td>
             <td style="text-align:center;color:#f59e0b;font-weight:700;">3C</td>
           </tr>
           <tr>
             <td>Idle compute (utilisation gap)</td>
-            <td class="num"><span data-num="capital.uncategorised.50b">~$50B</span></td>
+            <td class="num">~$50B</td>
             <td>Residual after allocating to known workloads. Public utilisation data is limited &mdash; CoreWeave S-1, earnings commentary</td>
             <td style="text-align:center;color:#f59e0b;font-weight:700;">3C</td>
           </tr>
@@ -817,9 +817,9 @@ function updateSensitivity() {
 
 // ─── The Three-Stage Lag chart ─────────────────────────────────────
 const LAG_RAW = [
-  { year:'2023',  nvidia: 48, totalCapex:167, nvDep:  0, totalDep:   0, revenue:  1  },
-  { year:'2024',  nvidia:115, totalCapex:269, nvDep: 12, totalDep:  22, revenue:  5.9  },
-  { year:'2025',  nvidia:194, totalCapex:330, nvDep: 41, totalDep:  74, revenue: 19  },
+  { year:'2023',  nvidia: 48, totalCapex:160, nvDep:  0, totalDep:   0, revenue:  1  },
+  { year:'2024',  nvidia:115, totalCapex:280, nvDep: 12, totalDep:  22, revenue:  4  },
+  { year:'2025',  nvidia:194, totalCapex:380, nvDep: 41, totalDep:  74, revenue: 17  },
   // wq-094 — 2026E refreshed from $550B to $850B (4-hyperscaler aggregate
   // capex guidance, MAG3 + Meta, post Q1 2026 earnings cycle); 2027E refreshed
   // from $700B to $1.1T per same source. Out-years (2028E–2030E) left at the

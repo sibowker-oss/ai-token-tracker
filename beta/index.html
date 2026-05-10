@@ -387,8 +387,8 @@ function _hydrate(b) {
   const fmtT = v => '~' + Math.round(v) + 'T';
   // Hook ratio (Compute / Apps Revenue GROSS — per wq-102, anchored on
   // gross to stay consistent with the visible Revenue pill which also
-  // shows gross). When the engine pre-computes compute_per_dollar_apps_gross
-  // we read it directly; otherwise we compute from compute / appsGross.
+  // shows gross). Matches site-data.compute.layer_stack_ratios.
+  // compute_per_dollar_apps_gross — see scripts/derive_layer_stack_ratios.py.
   const ratio = '$' + (Math.round((b.compute / b.appsGross) * 100) / 100).toFixed(2);
   // Ledger cards
   _setText('card-capex',   fmt$(b.capex));

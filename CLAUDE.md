@@ -167,6 +167,14 @@ The id matches a manifest entry whose `source_path` resolves the value at build 
 
 **Adding a new number** to one of the priority pages: add a manifest entry first (run `scripts/build_numbers_manifest.py` to regenerate), then anchor the literal (`scripts/anchor_html.py`), then verify the render (`scripts/render_numbers.py`). The release-gate fails the build otherwise.
 
+**JS hydration vs `data-num`** (added 2026-05-10 per Simon's hook-ratio catch). Some `data-num` anchors live inside elements that are also overwritten at runtime by JS (e.g. `_setText('hook-ratio', …)`, `_setText('card-capex', …)`). When the JS runs `el.textContent = newValue`, it replaces the entire inner content of the element — including the `<span data-num="…">` child — with a single text node. Two contracts apply:
+
+1. **For JS-hydrated elements that read engine values** (e.g. homepage hero cards): the JS must read from the SAME engine path the manifest binds. If the manifest binds `card-capex` to `site-data.cumulative.capex_total`, the JS must also read `d.cumulative.capex_total`. A mismatch means the page shows one value at first paint (from the data-num literal) and a different value after JS runs — visible flicker. Audit: `data/wq-102-notion-id-map.json` lists every `anchor_dom_id`; the JS handler for each id is in the surrounding `<script>` block. Verify with `python3 -c "import json; m=json.load(open('data/numbers-manifest.json'))..."` (see commit `52779da` for the hook-ratio fix that aligned `compute / apps_GROSS` against `compute_per_dollar_apps_gross`).
+
+2. **For JS-driven interactive elements** (capital.html sensitivity sliders, counterfactual checkbox, scenario togglers): JS computes from user state + scenario data, not from manifest paths. The `data-num` literal acts as a build-time placeholder for the release-gate; runtime values come from JS. Don't try to align them — these intentionally diverge once the user interacts.
+
+When adding a new JS-hydrated number on a priority page, fix the alignment **before** committing: the data-num literal at first paint should equal the JS first-render output. Otherwise users see a flicker or, worse, conflicting values from different sources.
+
 This rule exists because the wq-038 → wq-064 → wq-066 chain saw the site mix engine-derived and editorial numbers without a systematic boundary. By 2026-05-10, ~30% of numbers were wired ad-hoc via JS hydration, and new pages reintroduced hardcoded literals because there was no binding contract. wq-102 installs the contract for the priority pages; a follow-on sweep will extend it to the remaining ~30 pages.
 
 ---
