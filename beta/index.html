@@ -374,10 +374,19 @@
 
 <script>
 // Hydrate the ledger cards + hook ratio from site-data.json.
-// Bear/Base/Bull scenario toggle removed 2026-05-07 per Simon — single base
-// view now. Hook ratio is computed live as Compute / Apps; cards read from
-// engine aggregates so quarterly refreshes flow through without copy edits.
-const FALLBACK = { capex: 745, apps: 17.36, appsGross: 19.28, compute: 43.07, tokens: 360 };
+// wq-102 (2026-05-10): the visible literals (`<span data-num="…">$766B</span>`
+// etc.) are now baked at build time by scripts/render_numbers.py against
+// the SAME engine paths read here. So the data-num literal IS the
+// editorial fallback — we skip the immediate _hydrate(FALLBACK) call to
+// avoid a flash of stale FALLBACK constants on hard refresh. JS only
+// updates the cards if fetch succeeds AND the live value differs from
+// the build-time literal.
+//
+// FALLBACK is retained for the fetch path's `||` fallback when an
+// individual engine key is missing. Values approximate the current
+// build state but don't need to be exact — a fetch failure leaves the
+// data-num literals visible, which are accurate.
+const FALLBACK = { capex: 766, apps: 17.36, appsGross: 19.28, compute: 43, tokens: 310 };
 
 function _setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
 
@@ -402,10 +411,10 @@ function _hydrate(b) {
   _setText('ais-revenue-figure', fmt$1(b.appsGross));
 }
 
-// Render fallback values immediately so the page never shows stale literals
-// during the fetch round-trip; live values overwrite once site-data lands.
-_hydrate(FALLBACK);
-
+// wq-102 (2026-05-10): no immediate _hydrate(FALLBACK) — would cause a
+// flash of stale FALLBACK values over the build-time data-num literals
+// on hard refresh. The data-num literals are the editorial fallback
+// now; JS only hydrates after fetch resolves with live engine values.
 fetch('site-data.json?v=' + Date.now())
   .then(r => r.json())
   .then(d => {
