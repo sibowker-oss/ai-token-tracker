@@ -145,6 +145,30 @@ If a new aggregate contradicts an existing higher-tier published number with no 
 
 This rule exists because the Compute Ledger and Revenue Ledger shipped in late April / early May 2026 with materially different views of the same hyperscaler-AI flow (Compute pass-through ~$11.5B vs Revenue Hyperscalers channel ~$3.6B for what is essentially overlapping economic reality). The Cowork review session 2026-05-06 caught the gap; wq-089 and wq-090 fix it; this rule prevents recurrence.
 
+### Numbers Binding Contract (added 2026-05-10 per wq-102)
+
+Every visible numeric literal on the six priority pages — `index.html`, `capital.html`, `revenue.html`, `compute.html`, `usage.html`, `power.html` (in `/beta/`) — must be catalogued in `data/numbers-manifest.json` and anchored in HTML.
+
+**For DOM-rendered numbers**, the literal lives inside an element carrying a `data-num="<id>"` attribute:
+
+```html
+<span data-num="index.dom.card_capex">$766B</span>
+```
+
+The id matches a manifest entry whose `source_path` resolves the value at build time. The literal in the HTML is the editorial fallback.
+
+**For JS-embedded data arrays** (e.g. `LAG_RAW` on `capital.html`), the manifest carries an `anchor_selector: "js:NAME[idx].column"` and the build script (`scripts/render_numbers.py`) rewrites the JS literal in place.
+
+**For the `og:description` meta tag**, all four numbers are catalogued with `_capture.line=11`; the build script rewrites the `content` attribute string via per-token mapping.
+
+**Build sequence**: `generate_site_data.py` → `render_numbers.py` (resolves manifest, rewrites HTML/JS/meta, emits `data/numbers-changelog.md`).
+
+**Release-gate** (`scripts/validate-numbers-anchored.mjs`): walks the six priority pages and rejects any visible numeric literal not anchored to a manifest id, except an explicit allowlist (4-digit years, tier-letter codes like `1A/1B`/`2A/2B`/`3A/3B/3C`).
+
+**Adding a new number** to one of the priority pages: add a manifest entry first (run `scripts/build_numbers_manifest.py` to regenerate), then anchor the literal (`scripts/anchor_html.py`), then verify the render (`scripts/render_numbers.py`). The release-gate fails the build otherwise.
+
+This rule exists because the wq-038 → wq-064 → wq-066 chain saw the site mix engine-derived and editorial numbers without a systematic boundary. By 2026-05-10, ~30% of numbers were wired ad-hoc via JS hydration, and new pages reintroduced hardcoded literals because there was no binding contract. wq-102 installs the contract for the priority pages; a follow-on sweep will extend it to the remaining ~30 pages.
+
 ---
 
 ## File structure reference

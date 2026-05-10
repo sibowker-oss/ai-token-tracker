@@ -170,6 +170,13 @@ const vendorPostureStatus = run('node', ['scripts/validate-vendor-posture.mjs'],
   RELEASE_CHECK_VENDOR_POSTURE_JSON_OUT: vendorPostureJson,
 });
 
+// Step 11g (wq-102 §4.4 #7): every visible numeric literal on the six
+// priority pages must be anchored to a manifest id (`data-num="..."`)
+// or fall on the explicit allowlist (years, tier letters). New numbers
+// added without a manifest entry fail the gate.
+console.log('\n→ 11g/13  Numbers anchored on priority pages (wq-102 §4.4 #7)');
+const numbersAnchoredStatus = run('node', ['scripts/validate-numbers-anchored.mjs']);
+
 // Step 12: Playwright suite
 console.log('\n→ 12/13  Playwright suite (smoke, structure, labels, mobile, freshness, links, reconciliation, visual)');
 const pwStatus = run('npx', ['playwright', 'test', '--output', join(reportDir, 'playwright-artefacts')]);
@@ -379,7 +386,7 @@ console.log(`\n=== Report written to ${join(reportDir, 'report.md')} ===`);
 console.log(verdictLine(provFails.length + pwSummary.failures, provAdvisories.length));
 
 if (MODE === 'strict') {
-  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + vendorPostureFails.length + pwSummary.failures > 0 ? 1 : 0);
+  process.exit(provFails.length + consensusFails.length + sankeyConsFails.length + crossPageFails.length + marketAggFails.length + noHardcodedFails.length + capitalSankeyFails.length + currencyFormatFails.length + narrativeFails.length + pipelineOrphansFails.length + pipelineHealthFails.length + reviewSurfacesFails.length + vendorPostureFails.length + (numbersAnchoredStatus !== 0 ? 1 : 0) + pwSummary.failures > 0 ? 1 : 0);
 }
 // Advisory mode: always 0
 process.exit(0);

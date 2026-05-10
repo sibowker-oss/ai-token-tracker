@@ -4,10 +4,10 @@ Generated 2026-05-10 by `scripts/build_numbers_manifest.py`.
 
 ## Summary
 
-- Total manifest entries: **153**
-- Auto-resolved (`source_path` populated): **48**
+- Total manifest entries: **154**
+- Auto-resolved (`source_path` populated): **49**
 - Intentionally fixed editorial (no path needed, `source_state=fixed`): **104**
-- **Auto-resolution rate (path or fixed): 99.3%** (target ≥40%)
+- **Auto-resolution rate (path or fixed): 99.4%** (target ≥40%)
 - Needs manual path assignment: **1**
 - No path candidate at all: **0** (0.0%) (target ≤10%)
 

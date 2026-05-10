@@ -29,6 +29,12 @@ jobs:
       - name: Regenerate site-data.json
         run: python scripts/generate_site_data.py
 
+      - name: Re-render bound numbers (wq-102)
+        # Refreshes value substitutions in /beta/*.html priority pages
+        # against the just-regenerated site-data.json + entities.json.
+        # Idempotent — no-op when no resolved value moved since last build.
+        run: python scripts/render_numbers.py
+
       - name: Regenerate feed data
         run: python scripts/generate_feed.py
 

@@ -1428,6 +1428,8 @@ def extract_page_entries(
                 "notion_id": None,
                 "_capture": {
                     "line": lineno,
+                    "col": t["span"][0],
+                    "col_end": t["span"][1],
                     "context": line.strip()[:240],
                     "binding_hint": binding_hint,
                 },
@@ -1455,50 +1457,26 @@ def extract_page_entries(
 
 
 def dedupe_and_disambiguate(entries: list[dict]) -> list[dict]:
-    """1) Ensure manifest ids are unique.
-    2) When two entries on DIFFERENT pages share (source_path, format, value),
-       collapse them into a single entry with `pages: [..]`.
+    """Ensure manifest ids are unique. Every (page, anchor_selector) pair
+    stays as a distinct manifest entry — no cross-page merging — because
+    each anchor is its own render target (HTML span / JS array cell /
+    og:description meta) and Stage 2 must be able to update each one
+    independently.
 
-    Same-page entries are NEVER merged: two different render targets
-    (HTML span vs. JS array cell vs. og:description meta attr) are distinct
-    Stage-2 update sites even when they bind to the same source path.
+    A previous version merged entries with matching (source_path, format,
+    value) across pages, which silently dropped JS-array anchors when an
+    HTML anchor with the same value existed elsewhere. We keep them
+    separate so the render script sees every target.
     """
-    # Stage A: collapse cross-page duplicates only (same source_path, format,
-    # value, AND different page). Same-page duplicates remain separate.
-    by_key: dict[tuple, dict] = {}
-    same_page_kept: list[dict] = []
-    no_path: list[dict] = []
-    for e in entries:
-        sp = e["source_path"]
-        if not sp:
-            no_path.append(e)
-            continue
-        key = (sp, e["format"], round(e["editorial_fallback"]["value"], 3))
-        if key not in by_key:
-            by_key[key] = e
-            continue
-        existing = by_key[key]
-        if e["page"] == existing["page"]:
-            # Same page — keep both as distinct anchors
-            same_page_kept.append(e)
-            continue
-        existing.setdefault("pages", [existing["page"]])
-        if e["page"] not in existing["pages"]:
-            existing["pages"].append(e["page"])
-        existing.setdefault("anchor_selectors", [existing["anchor_selector"]])
-        existing["anchor_selectors"].append(e["anchor_selector"])
-    merged = list(by_key.values()) + same_page_kept + no_path
-
-    # Stage B: id uniqueness pass
     seen_ids: dict[str, int] = {}
-    for e in merged:
+    for e in entries:
         base = e["id"]
         if base not in seen_ids:
             seen_ids[base] = 1
         else:
             seen_ids[base] += 1
             e["id"] = f"{base}_{seen_ids[base]}"
-    return merged
+    return entries
 
 
 # ───────────────────────── Outputs ─────────────────────────
