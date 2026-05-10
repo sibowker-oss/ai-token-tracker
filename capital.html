@@ -191,7 +191,7 @@
   <h1>Capital Ledger</h1>
   <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
   <div class="sub">
-    <strong><span data-narrative="capital_sankey_total">$745B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
+    <strong><span data-narrative="capital_sankey_total">$766B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
     Every dollar of cumulative AI capital expenditure &mdash; from spender &rarr; silicon &rarr; current workload &mdash; mapped as a balance-sheet view.
     Anchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.
     The balance-sheet mirror of <a href="revenue.html" class="link-revenue">the Revenue Ledger</a>.
@@ -304,8 +304,8 @@
       </div>
       <div class="sens-result">
         <div class="sens-label">Infrastructure per $1 of current revenue</div>
-        <div class="sens-ratio" id="sens-ratio-display">$34</div>
-        <div class="sens-label" id="sens-ratio-detail" style="margin-top:4px;">$745B total &middot; $22B revenue</div>
+        <div class="sens-ratio" id="sens-ratio-display">$35</div>
+        <div class="sens-label" id="sens-ratio-detail" style="margin-top:4px;">$766B total &middot; $22B revenue</div>
       </div>
     </div>
   </div>
@@ -341,7 +341,7 @@
     <h2>Structure notes</h2>
     <div class="notes">
       <ul>
-        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative="capital_sankey_total">$745B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
+        <li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative="capital_sankey_total">$766B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</li>
         <li><strong>Middle = 5 nodes</strong> &mdash; what the money physically bought. NVIDIA GPU $303B cross-checks against calendarised NVIDIA DC revenue (Tier 1A).</li>
         <li><strong>RHS = 6 nodes = current physical state of each asset</strong> (balance-sheet view, full purchase price):
           <ul>
@@ -462,11 +462,11 @@ fetch('data/scenarios.json?v=' + Date.now())
     }
   })
   .catch(() => { /* fallback SCENARIOS already in place */ });
-let currentScenario = (function() {
-  const p = new URLSearchParams(location.search).get('s');
-  if (p && ['bear','base','bull'].includes(p)) return p;
-  return localStorage.getItem('ai-ledger-scenario') || 'base';
-})();
+// Capital Ledger is locked to Base case on all devices — bear/bull are
+// editorial scenarios that belong on Revenue Ledger only. Ignore URL ?s=
+// and any cross-page localStorage selection so the cumulative capex view
+// is consistent for every visitor.
+let currentScenario = 'base';
 
 function setScenario(s) {
   currentScenario = s;
@@ -801,9 +801,12 @@ function updateSensitivity() {
 
   // Base China = $40B
   const chinaAdj = 40 * chinaFactor;
-  // Adjusted total: base $745B, adjust for idle/ads/china changes
+  // Adjusted total: derive base from live engine FLOWS (validate().t0) so the
+  // sensitivity panel tracks the same cumulative total as the hero card and
+  // narrative copy. Falls back to 745 only if validate() somehow yields 0.
+  const baseTotal = (typeof validate === 'function' ? validate().t0 : 0) || 745;
   const baseIdle = 50, baseAds = 170, baseChina = 40;
-  const adjusted = 745 + (idle - baseIdle) + (ads - baseAds) + (chinaAdj - baseChina);
+  const adjusted = baseTotal + (idle - baseIdle) + (ads - baseAds) + (chinaAdj - baseChina);
   const adjExAd = adjusted - ads;
   const ratio = Math.round(adjusted / sc.revenue);
   const ratioExAd = Math.round(adjExAd / sc.revenue);
