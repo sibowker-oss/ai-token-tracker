@@ -679,7 +679,7 @@ function render() {
       .text(stageLabels[si]);
     svg.append('text').attr('x',cx).attr('y',30).attr('text-anchor','middle')
       .style('font-size','12px').style('font-weight','600').style('fill','#94a3b8')
-      .text('$'+total+'B');
+      .text(formatCurrency(total));
   });
 
   const linkEls = svg.append('g').selectAll('path')
