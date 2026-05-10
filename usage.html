@@ -117,7 +117,7 @@
   .pace-lagging{background:rgba(239,68,68,0.15);color:#ef4444;}
   .pace-ahead{background:rgba(59,130,246,0.15);color:#3b82f6;}
 
-  /* ── SaaS AI Transition Map (wq-101) ── */
+  /* ── SaaS AI Transition Map ── */
   .posture-row{display:grid;grid-template-columns:240px 220px 1fr 110px 90px;gap:20px;padding:22px 0;border-bottom:1px solid var(--card-border);align-items:center;}
   .posture-row:last-child{border-bottom:none;}
   .posture-header{display:grid;grid-template-columns:240px 220px 1fr 110px 90px;gap:20px;padding:0 4px 12px;border-bottom:1px solid var(--card-border);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);font-weight:600;}
@@ -250,7 +250,7 @@
   <div class="hero-grid" id="hero-stats"></div>
   <div id="token-reconciliation" style="font-size:11px;color:var(--text-dim);text-align:center;margin-top:10px;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;"></div>
   <p class="reconciliation-note" style="font-size:11px;color:var(--text-dim);line-height:1.6;padding:8px 12px;background:rgba(59,130,246,0.04);border:1px solid var(--card-border);border-radius:6px;margin-top:6px;text-align:center;">
-    <strong>Revenue reconciliation:</strong> This page shows combined provider ARR (trailing-quarter run-rate × 4, includes inference from ad-platform workloads). The home page shows <span data-num="usage.market_aggregate_revenue.revenue_reconciliation_shows_combined">$22B</span> customer revenue (CY23–25 cumulative, collected). Audited fiscal-year collected revenue surfaces on <a href="timeline.html#fy-revenue" style="color:var(--accent);">/timeline</a> when available. See <a href="methodology.html#arr-vs-collected" style="color:var(--accent);">Methodology</a> for the reconciliation. Per <em>SKILL.md hard rule #6</em>, ARR and collected revenue are never interchangeable.
+    <strong>Revenue reconciliation:</strong> This page shows combined provider ARR (trailing-quarter run-rate × 4, includes inference from ad-platform workloads). The home page shows <span data-num="usage.market_aggregate_revenue.revenue_reconciliation_shows_combined">$22B</span> customer revenue (CY23–25 cumulative, collected). Audited fiscal-year collected revenue surfaces on <a href="timeline.html#fy-revenue" style="color:var(--accent);">/timeline</a> when available. See <a href="methodology.html#arr-vs-collected" style="color:var(--accent);">Methodology</a> for the reconciliation. ARR and collected revenue measure different things and are never interchangeable.
   </p>
 </section>
 
@@ -759,7 +759,7 @@ function renderDemandMatrix() {
   t.innerHTML = html;
 }
 
-// \u2500\u2500 SaaS AI Transition Map (wq-101) \u2500\u2500
+// \u2500\u2500 SaaS AI Transition Map \u2500\u2500
 const POSTURE_AXIS_ORDER = ['disclosure','bundling','pricing','cost','acceleration'];
 const POSTURE_AXIS_LABELS = { disclosure:'DISC', bundling:'BNDL', pricing:'PRICE', cost:'COST', acceleration:'ACCEL' };
 const POSTURE_RUBRIC = [

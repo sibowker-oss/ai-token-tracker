@@ -238,6 +238,15 @@ def derive_provider(entity: dict, year: str, cost_structure: dict, overrides: di
     """Run the §3.1 algorithm for one model_provider entity.
 
     Returns the provider block (or None if entity has no collected_revenue).
+
+    SCOPING RULE (editorial, surfaced as a disclaimer on revenue.html):
+      The Revenue Sankey shows model providers earning AI-attributable customer
+      revenue in the year. Labs that don't directly monetise their models — Meta
+      (Llama, open-weight, ad-funded indirectly) is the canonical example — are
+      deliberately excluded; their AI spend belongs on the Capital and Compute
+      Ledgers. This function enforces that boundary: no collected_revenue → None.
+      Do NOT relax this without first updating the disclaimer block in
+      revenue.html and (root + beta mirrors) — the chart's contract depends on it.
     """
     cr = _fin(entity, year, "collected_revenue")
     if cr is None or cr == 0:

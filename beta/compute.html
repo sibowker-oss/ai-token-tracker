@@ -80,7 +80,7 @@
   footer a{color:var(--accent);text-decoration:none;}
   footer a:hover{text-decoration:underline;}
 
-  /* Forward commitments grid (wq-094) */
+  /* Forward commitments grid */
   .fc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
   /* Frontier-lab compute headline pair (annualised + Q1 2026 callouts).
      2-up on desktop; collapses to 1-up on mobile portrait so the $-figure
@@ -181,14 +181,14 @@
     </div>
   </div>
 
-  <!-- ── §4.3b Forward commitments (wq-094) ── -->
+  <!-- ── Forward commitments ── -->
   <div class="card" id="forward-commitments-card" data-section="forward-commitments">
     <h2>Forward commitments</h2>
     <p class="h2-sub">Multi-year contractual commitments reported <strong>gross</strong>, separately from realised compute revenue. Per the Cross-Ledger Reconciliation rule, these dollars are not rolled into the trajectory chart above — they are forward obligations that flow through over years.</p>
     <div id="forward-commitments-body">Loading…</div>
     <div class="methodology-callout" style="margin-top:14px;">
       <span style="color:var(--accent);font-weight:700;">i</span>
-      <span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google <span data-num="compute.market_aggregate_compute_revenue.why_separate_trajectory_chart">$200B</span> and Anthropic+OpenAI <span data-num="compute.market_aggregate_compute_revenue.why_separate_trajectory_chart_2">$718B</span> are forward commitments to MAG3 hyperscalers — they convert into compute revenue over a 5–8 year window, not at signing. Mixing them into a quarterly trajectory would double-count: the contracted dollars already drive the realised quarterly bars over time. Source: <code>data/compute_disclosures.json:forward_commitments</code>.</span>
+      <span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google <span data-num="compute.market_aggregate_compute_revenue.why_separate_trajectory_chart">$200B</span> and Anthropic+OpenAI <span data-num="compute.market_aggregate_compute_revenue.why_separate_trajectory_chart_2">$718B</span> are forward commitments to MAG3 hyperscalers — they convert into compute revenue over a 5–8 year window, not at signing. Mixing them into a quarterly trajectory would double-count: the contracted dollars already drive the realised quarterly bars over time. Sourced from issuer disclosures of remaining performance obligations and announced multi-year compute commitments.</span>
     </div>
   </div>
 
@@ -222,16 +222,14 @@
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────
-// Compute Ledger — wq-087
+// Compute Ledger
 //
-// Data flow:
-//   data/compute_disclosures.json  →  scripts/derive_compute_revenue.py  →  site-data.json:compute
-//   This page reads site-data.json:compute and renders. Refresh quarterly within 48h
-//   of each major hyperscaler earnings.
+// The page reads the compute block from the live data feed and renders it.
+// Refresh quarterly within 48 hours of each major hyperscaler earnings.
 //
-// Aggregation rule (per brief §5.2 + D6 verification gate):
-//   Compute Revenue (gross) = sum of components' value_gross_*
-//   Compute Revenue (net)   = sum of components' value_net_*
+// Aggregation rule:
+//   Compute Revenue (gross) = sum of components' gross values
+//   Compute Revenue (net)   = sum of components' net values
 //   Concentration math uses gross-disclosed (matches filings).
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -722,7 +720,7 @@ function renderTrajectory() {
   });
 }
 
-// ─── Forward commitments (wq-094) ───
+// ─── Forward commitments ───
 function renderForwardCommitments() {
   const target = document.getElementById('forward-commitments-body');
   if (!target) return;
@@ -808,7 +806,7 @@ function renderLayerStack() {
   const barH = 38;
   const gap = 16;
   // labelW gives the label column more room so the description text doesn't
-  // overlap the start of the bar. Bumped from 170 → 240 (wq-093 polish).
+  // overlap the start of the bar. Bumped from 170 → 240 for legibility.
   const labelW = 240;
 
   ctx.font = 'bold 13px -apple-system,sans-serif';

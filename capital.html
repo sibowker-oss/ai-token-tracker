@@ -94,15 +94,12 @@
   .tooltip .tt-dim { color:#94a3b8; font-size:11px; }
   .mobile-hint { display:none; }
 
-  /* ── Sensitivity Panel ── */
-  .sensitivity-panel { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:12px; }
-  .sens-slider { display:flex; flex-direction:column; gap:4px; }
-  .sens-slider label { font-size:11px; color:var(--text-dim); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
-  .sens-slider input[type="range"] { width:100%; accent-color:var(--accent); }
-  .sens-slider .sens-val { font-size:13px; font-weight:700; color:var(--text); }
-  .sens-result { grid-column:1/-1; text-align:center; padding:14px; background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.25); border-radius:8px; }
-  .sens-result .sens-ratio { font-size:28px; font-weight:800; color:var(--accent); }
-  .sens-result .sens-label { font-size:11px; color:var(--text-dim); margin-top:2px; }
+  /* ── Lag-chart header (inline depreciation slider) ── */
+  .lag-header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+  .dep-life-control { display:flex; flex-direction:column; gap:4px; padding:8px 12px; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); border-radius:8px; min-width:160px; }
+  .dep-life-control label { font-size:10px; color:var(--text-dim); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+  .dep-life-control input[type="range"] { width:100%; accent-color:#ef4444; cursor:pointer; }
+  .dep-life-control .dep-life-val { font-size:14px; font-weight:700; color:#fca5a5; text-align:right; }
 
   /* ── Convergence paths ── */
   .convergence-paths { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:12px; }
@@ -154,7 +151,8 @@
     .notes { font-size:11px; }
     .notes ul { padding-left:14px; }
     #lag-chart { height:340px; }
-    .sensitivity-panel { grid-template-columns:1fr; }
+    .lag-header { flex-direction:column; gap:8px; }
+    .dep-life-control { width:100%; min-width:0; }
     .convergence-paths { grid-template-columns:1fr; }
     .counterfactual-toggle { flex-direction:column; align-items:flex-start; gap:8px; }
     .footer-grid{grid-template-columns:1fr;gap:16px;}
@@ -189,7 +187,7 @@
 
 <div class="container">
   <h1>Capital Ledger</h1>
-  <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time id="data-refresh" datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
+  <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
   <div class="sub">
     <strong><span data-narrative="capital_sankey_total" data-num="capital.market_aggregate_capex_cumulative.766b_infrastructure_investment_ndash">$766B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
     Every dollar of cumulative AI capital expenditure &mdash; from spender &rarr; silicon &rarr; current workload &mdash; mapped as a balance-sheet view.
@@ -258,8 +256,17 @@
 
     <!-- THE THREE-STAGE LAG CHART -->
     <div class="bridge bridge-amber" style="padding:18px 22px;">
-      <div style="font-size:18px;font-weight:800;color:#f8fafc;letter-spacing:-0.3px;">The Three-Stage Lag</div>
-      <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;">How capital, depreciation, and revenue flow through time</div>
+      <div class="lag-header">
+        <div>
+          <div style="font-size:18px;font-weight:800;color:#f8fafc;letter-spacing:-0.3px;">The Three-Stage Lag</div>
+          <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px;">How capital, depreciation, and revenue flow through time</div>
+        </div>
+        <div class="dep-life-control">
+          <label for="dep-life">GPU useful life</label>
+          <input type="range" id="dep-life" min="3" max="6" value="4" step="0.5" oninput="updateDepreciation()">
+          <div class="dep-life-val"><span id="dep-life-val">4.0</span> <span style="font-weight:500;opacity:0.7;">yr</span></div>
+        </div>
+      </div>
       <div style="font-size:12px;margin:6px 0 14px;color:var(--text-dim);line-height:1.6;">
         <strong style="color:#3b82f6;">CapEx</strong> is when the money leaves the bank account &mdash; NVIDIA gets paid first. <strong style="color:#ef4444;">Depreciation</strong> is when that money hits the P&amp;L, spread over 3&ndash;4 years of useful life. <strong style="color:#10b981;">AI revenue</strong> is when the investment generates returns. Three conveyor belts, each trailing the last.
       </div>
@@ -270,7 +277,7 @@
     </div>
   </div>
 
-  <!-- ── Depreciation watch (wq-094) ── -->
+  <!-- ── Depreciation watch ── -->
   <div class="card" id="depreciation-watch-card">
     <h2>Depreciation watch</h2>
     <div style="font-size:12px;color:var(--text-dim);margin-bottom:14px;line-height:1.55;">
@@ -278,37 +285,10 @@
     </div>
     <div id="depreciation-watch-body">Loading depreciation data…</div>
     <div class="bridge bridge-amber" style="margin-top:16px;">
-      <strong>Why this sits below the Three-Stage Lag.</strong> The lag chart is annual aggregate flow; this block is quarterly per-name detail and a forward 2030 framing. Q1 2026 hyperscaler depreciation alone is approximately the same magnitude as the entire 2025 AI customer revenue line — that is the timing problem the lag chart compresses into yearly bars. Source: <code>data/depreciation.json</code>.
+      <strong>Why this sits below the Three-Stage Lag.</strong> The lag chart is annual aggregate flow; this block is quarterly per-name detail and a forward 2030 framing. Q1 2026 hyperscaler depreciation alone is approximately the same magnitude as the entire 2025 AI customer revenue line — that is the timing problem the lag chart compresses into yearly bars. Sourced from each issuer's quarterly PP&amp;E and depreciation disclosures.
     </div>
   </div>
 
-  <!-- Sensitivity Panel -->
-  <div class="card">
-    <h2>Sensitivity analysis</h2>
-    <div style="font-size:12px;color:var(--text-dim);margin-bottom:12px;">Adjust key assumptions to see how the infrastructure-to-revenue ratio changes.</div>
-    <div class="sensitivity-panel">
-      <div class="sens-slider">
-        <label>Idle CapEx</label>
-        <input type="range" id="sens-idle" min="0" max="150" value="50" step="10" oninput="updateSensitivity()">
-        <div class="sens-val" id="sens-idle-val" data-num="capital.dom.sens_idle_val">$50B</div>
-      </div>
-      <div class="sens-slider">
-        <label>Ad-fleet allocation</label>
-        <input type="range" id="sens-ads" min="0" max="300" value="170" step="10" oninput="updateSensitivity()">
-        <div class="sens-val" id="sens-ads-val" data-num="capital.dom.sens_ads_val">$170B</div>
-      </div>
-      <div class="sens-slider">
-        <label>China GPU count (vs. base)</label>
-        <input type="range" id="sens-china" min="50" max="150" value="100" step="5" oninput="updateSensitivity()">
-        <div class="sens-val" id="sens-china-val" data-num="capital.dom.sens_china_val">100%</div>
-      </div>
-      <div class="sens-result">
-        <div class="sens-label">Infrastructure per <span data-num="capital.per_entity_metric_revenue.infrastructure_current_revenue">$1</span> of current revenue</div>
-        <div class="sens-ratio" id="sens-ratio-display" data-num="capital.dom.sens_ratio_display">$35</div>
-        <div class="sens-label" id="sens-ratio-detail" style="margin-top:4px;"><span data-num="capital.dom.sens_ratio_detail">$766B</span> total &middot; <span data-num="capital.dom.sens_ratio_detail_2">$22B</span> revenue</div>
-      </div>
-    </div>
-  </div>
 
   <!-- Three paths to convergence -->
   <div class="card">
@@ -444,7 +424,7 @@
 <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12"></script>
 <script src="data/format-helpers.js"></script>
 <script>
-// ─── SCENARIO DATA (wq-073 — fetched from data/scenarios.json) ────
+// ─── SCENARIO DATA (fetched at runtime) ────
 // Inline defaults remain as graceful fallback if fetch fails.
 let SCENARIOS = {
   bear:  { totalCapex:745, revenue:17, ratio:44, label:'Bear case' },
@@ -458,7 +438,7 @@ fetch('data/scenarios.json?v=' + Date.now())
       SCENARIOS = s.capex_view;
       // Re-render against the fetched scenario set if the page has already initialised.
       if (typeof updateHero === 'function') updateHero();
-      if (typeof updateSensitivity === 'function') updateSensitivity();
+      if (typeof updateDepreciation === 'function') updateDepreciation();
     }
   })
   .catch(() => { /* fallback SCENARIOS already in place */ });
@@ -478,15 +458,15 @@ function setScenario(s) {
     b.classList.toggle('active', b.dataset.s === s);
   });
   updateHero();
-  updateSensitivity();
+  updateDepreciation();
 }
 
 // ─── CUMULATIVE 2023–25 DATA (USD billions) ────────────────────────
-// wq-074 — FLOWS becomes mutable. Inline default below is the FALLBACK_FLOWS
-// (rendered if site-data.json:capital_sankey fetch fails). On success, FLOWS
-// is replaced with engine output (~$766B from market_aggregates._capital_sankey
-// = mag7 sub-allocated across MSFT/AWS/Google/Meta/Oracle/AI labs direct +
-// neocloud + sovereign sub-allocated across China + Sovereign/Gov + enterprise).
+// FLOWS is mutable. The inline default below is the fallback set, rendered
+// only if the live capital sankey block fails to fetch. On success, FLOWS is
+// replaced with the live aggregate (~$766B): MAG7 sub-allocated across
+// Microsoft, AWS, Google, Meta, Oracle and AI labs direct, plus neocloud,
+// sovereign / government and enterprise.
 let FLOWS = [
   // ── Stage 1 → Stage 2 ──
   ['Microsoft CapEx','NVIDIA GPUs',85],['Microsoft CapEx','Other silicon',5],['Microsoft CapEx','Networking',12],['Microsoft CapEx','Data Centre Costs',40],['Microsoft CapEx','Electricity & ops',18],
@@ -631,14 +611,9 @@ function updateHero() {
 function render() {
   const v = validate();
   const vEl = document.getElementById('validation');
-  const paid = v.inSum['Inference (Paid)']||0;
-  const consumer = v.inSum['Inference (Free Tier)']||0;
-  const fleet = paid + consumer;
-  const annualCOGS = 14;
-  const ratio = (fleet / annualCOGS).toFixed(1);
   if (v.errors.length===0) {
-    vEl.className='ok';
-    vEl.innerHTML=`Conservation OK: ${formatCurrency(v.t0)} in = ${formatCurrency(v.t2)} out. Inference fleet (Paid ${formatCurrency(paid)} + Consumer ${formatCurrency(consumer)}) = ${formatCurrency(fleet)} generates ${formatCurrency(annualCOGS)}/yr COGS (ratio ${ratio}x).`;
+    vEl.className='';
+    vEl.innerHTML='';
   } else {
     vEl.className='bad';
     vEl.innerHTML='Error: '+v.errors.join('<br>');
@@ -788,48 +763,46 @@ function render() {
   if (counterfactualActive) applyCounterfactual();
 }
 
-// ─── Sensitivity panel ────────────────────────────────────────────
-function updateSensitivity() {
-  const sc = SCENARIOS[currentScenario];
-  const idle = parseInt(document.getElementById('sens-idle').value);
-  const ads = parseInt(document.getElementById('sens-ads').value);
-  const chinaFactor = parseInt(document.getElementById('sens-china').value) / 100;
-
-  document.getElementById('sens-idle-val').textContent = '$' + idle + 'B';
-  document.getElementById('sens-ads-val').textContent = '$' + ads + 'B';
-  document.getElementById('sens-china-val').textContent = document.getElementById('sens-china').value + '%';
-
-  // Base China = $40B
-  const chinaAdj = 40 * chinaFactor;
-  // Adjusted total: derive base from live engine FLOWS (validate().t0) so the
-  // sensitivity panel tracks the same cumulative total as the hero card and
-  // narrative copy. Falls back to 745 only if validate() somehow yields 0.
-  const baseTotal = (typeof validate === 'function' ? validate().t0 : 0) || 745;
-  const baseIdle = 50, baseAds = 170, baseChina = 40;
-  const adjusted = baseTotal + (idle - baseIdle) + (ads - baseAds) + (chinaAdj - baseChina);
-  const adjExAd = adjusted - ads;
-  const ratio = Math.round(adjusted / sc.revenue);
-  const ratioExAd = Math.round(adjExAd / sc.revenue);
-
-  document.getElementById('sens-ratio-display').textContent = '$' + ratio;
-  document.getElementById('sens-ratio-detail').innerHTML = '$' + adjusted + 'B total &middot; $' + sc.revenue + 'B revenue &middot; Ex-ad: $' + ratioExAd + ':$1';
-}
+// updateDepreciation() is defined below — placed after LAG_RAW so the
+// baseline snapshot can be taken at parse time without a temporal-dead-zone.
 
 // ─── The Three-Stage Lag chart ─────────────────────────────────────
 const LAG_RAW = [
   { year:'2023',  nvidia: 48, totalCapex:167, nvDep:  0, totalDep:   0, revenue:  1  },
   { year:'2024',  nvidia:115, totalCapex:269, nvDep: 12, totalDep:  22, revenue:  5.9  },
   { year:'2025',  nvidia:194, totalCapex:330, nvDep: 41, totalDep:  74, revenue: 19  },
-  // wq-094 — 2026E refreshed from $550B to $850B (4-hyperscaler aggregate
-  // capex guidance, MAG3 + Meta, post Q1 2026 earnings cycle); 2027E refreshed
-  // from $700B to $1.1T per same source. Out-years (2028E–2030E) left at the
-  // wq-087 trajectory pending a separate forward-projection refresh.
+  // 2026E refreshed from $550B to $850B (4-hyperscaler aggregate capex
+  // guidance, MAG3 + Meta, post Q1 2026 earnings cycle); 2027E refreshed
+  // from $700B to $1.1T per the same source. Out-years (2028E–2030E) left
+  // at the prior trajectory pending a separate forward-projection refresh.
   { year:'2026E', nvidia:311, totalCapex:850, nvDep: 89, totalDep: 160, revenue: 64  },
   { year:'2027E', nvidia:400, totalCapex:1100, nvDep:167, totalDep: 300, revenue:115  },
   { year:'2028E', nvidia:470, totalCapex:750, nvDep:255, totalDep: 460, revenue:200  },
   { year:'2029E', nvidia:500, totalCapex:750, nvDep:344, totalDep: 620, revenue:300  },
   { year:'2030E', nvidia:480, totalCapex:700, nvDep:415, totalDep: 747, revenue:420  },
 ];
+
+// ─── Depreciation life slider ───────────────────────────────────
+// Baseline = 4yr (the useful-life assumption the LAG_RAW totalDep/nvDep
+// values are sourced against). Annual depreciation scales inversely with
+// useful life, so dep(L) = dep_baseline × (4 / L). The slider re-derives
+// every year's depreciation values and re-renders the lag chart so only
+// the red Depreciation bars change; CapEx (blue) and Revenue (green) stay
+// fixed because they're independent of depreciation policy.
+const DEP_BASELINE_LIFE = 4.0;
+const LAG_BASELINE_DEP = LAG_RAW.map(d => ({ totalDep: d.totalDep, nvDep: d.nvDep }));
+function updateDepreciation() {
+  const el = document.getElementById('dep-life');
+  if (!el) return;
+  const life = parseFloat(el.value);
+  document.getElementById('dep-life-val').textContent = life.toFixed(1);
+  const k = DEP_BASELINE_LIFE / life;
+  LAG_RAW.forEach((d, i) => {
+    d.totalDep = Math.round(LAG_BASELINE_DEP[i].totalDep * k);
+    d.nvDep    = Math.round(LAG_BASELINE_DEP[i].nvDep    * k);
+  });
+  if (typeof renderLagChart === 'function') renderLagChart();
+}
 
 function renderLagChart() {
   const svg = d3.select('#lag-chart');
@@ -899,22 +872,6 @@ function renderLagChart() {
     }
   }
 
-  // Convergence annotation
-  const last = data[data.length-1];
-  const gapLast = last.bar2 - last.bar3;
-  const xc2 = x(last.year) + x.bandwidth()/2;
-  if (gapLast > 30) {
-    g.append('text').attr('x',xc2).attr('y',y(last.bar2)-18)
-      .attr('text-anchor','middle')
-      .style('font-size','9px').style('font-weight','700').style('fill','#fca5a5')
-      .text('$'+gapLast+'B gap');
-  } else if (Math.abs(gapLast) <= 30) {
-    g.append('text').attr('x',xc2).attr('y',y(last.bar2)-18)
-      .attr('text-anchor','middle')
-      .style('font-size','10px').style('font-weight','700').style('fill','#fbbf24')
-      .text('Convergence zone');
-  }
-
   // Legend
   const legend = svg.append('g').attr('transform',`translate(${margin.left},${height-14})`);
   let lx = 0;
@@ -930,45 +887,37 @@ window.addEventListener('resize',()=>{render(); renderLagChart();});
 // Apply persisted scenario on load
 document.querySelectorAll('.scenario-btn').forEach(b => b.classList.toggle('active', b.dataset.s === currentScenario));
 
-// wq-074 — load capital_sankey from site-data.json (engine output) and replace
-// the inline-default FLOWS. Falls back to inline default on fetch failure
-// (graceful degradation; page still renders the legacy $745B view).
+// Load the capital sankey from the live data feed and replace the inline-default
+// FLOWS. Falls back to the inline default on fetch failure (graceful degradation
+// — the page still renders the prior $745B view).
 fetch('site-data.json?v=' + Date.now())
   .then(r => r.json())
   .then(d => {
-    // wq-077 — hydrate [data-narrative] spans from engine values regardless
-    // of capital_sankey availability. Standalone path so narrative copy stays
-    // current even if FLOWS fetch fails.
+    // Hydrate [data-narrative] spans from the live values regardless of
+    // capital_sankey availability, so narrative copy stays current even
+    // if the FLOWS fetch fails.
     if (typeof hydrateNarrative === 'function') hydrateNarrative(d);
-
-    if (d && d.meta && d.meta.generatedAt) {
-      const t = document.getElementById('data-refresh');
-      if (t) {
-        t.setAttribute('datetime', d.meta.generatedAt);
-        t.textContent = d.meta.generatedAt.replace('T', ' ').substring(0, 19) + ' UTC';
-      }
-    }
 
     const cs = d && d.capital_sankey;
     if (!cs || !cs.flows || !cs.flows.length) {
-      console.warn('wq-074 — capital_sankey not in site-data.json; using FALLBACK_FLOWS');
+      console.warn('capital_sankey not present in data feed; using fallback flows');
       return;
     }
     FLOWS = cs.flows;
     render();
     renderLagChart();
-    updateSensitivity();
+    updateDepreciation();
   })
   .catch(err => {
-    console.warn('wq-074 — capital_sankey fetch failed; using FALLBACK_FLOWS', err);
+    console.warn('capital_sankey fetch failed; using fallback flows', err);
   });
 
 // Initial render uses inline-default FLOWS; fetch above re-renders on success.
 render();
 renderLagChart();
-updateSensitivity();
+updateDepreciation();
 
-// ── wq-094 — Depreciation watch ───────────────────────────────────
+// ── Depreciation watch ───────────────────────────────────
 // Q1 2026 hyperscaler depreciation + WSJ 2030 % net income projection.
 fetch('data/depreciation.json?v=' + Date.now())
   .then(r => r.ok ? r.json() : null)
@@ -1085,9 +1034,9 @@ document.querySelectorAll('.cite-btn').forEach(btn => {
 </footer>
 
 <script>
-// wq-073 — hydrate [data-ratio] spans from site-data.json:cumulative
-// (computes ratio at render time from cumulative aggregator output).
-// Falls back silently to existing inline literals if fetch fails.
+// Hydrate [data-ratio] spans from the live cumulative aggregate, computing
+// the ratio at render time. Falls back silently to existing inline literals
+// if the fetch fails.
 (function() {
   fetch('site-data.json?v=' + Date.now())
     .then(r => r.json())

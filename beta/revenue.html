@@ -137,6 +137,10 @@
       <span style="color:#8b5cf6;font-weight:700;font-size:13px;margin-top:-1px;">i</span>
       <span><strong style="color:#f1f5f9;">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~<span data-num="revenue.market_aggregate_compute_revenue.archetype_channel_routing_each">95%</span> of API revenue direct (<span data-num="revenue.market_aggregate_compute_revenue.archetype_channel_routing_each_2">5%</span> via hyperscaler resale); AI Natives ~<span data-num="revenue.market_aggregate_compute_revenue.archetype_channel_routing_each_3">90%</span> direct; Enterprise SaaS ~50/50. The Who Pays column splits AI buyers into <em>AI Natives</em> (heavy API consumers like Cursor / Glean / Perplexity) and <em>Enterprises &amp; Govs</em> (Fortune 500, regulated, sovereign). See <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology &sect; entity archetype taxonomy</a>.</span>
     </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;margin-top:10px;padding:10px 14px;background:rgba(148,163,184,0.06);border:1px solid rgba(148,163,184,0.2);border-radius:8px;font-size:11px;color:var(--text-dim);line-height:1.6;">
+      <span style="color:#94a3b8;font-weight:700;font-size:13px;margin-top:-1px;">!</span>
+      <span><strong style="color:#f1f5f9;">Scope.</strong> The Revenue Sankey shows model providers <em>earning AI-attributable customer revenue</em> in the year. Labs that don't directly monetise their models &mdash; Meta (Llama, open-weight, ad-funded indirectly) is the canonical example &mdash; are excluded. Their AI spend appears on the <a href="/capital.html" style="color:#cbd5e1;">Capital Ledger</a> (capex) and <a href="/compute.html" style="color:#cbd5e1;">Compute Ledger</a> (chip purchases) instead.</span>
+    </div>
     <div id="tooltip-panel" style="min-height:50px;padding:12px 16px;margin-top:10px;background:rgba(15,23,42,0.6);border:1px solid var(--card-border);border-radius:8px;font-size:12px;color:var(--text-dim);">
       <span style="opacity:0.4;">Click or hover a node to see flow details and tier provenance</span>
     </div>
@@ -154,7 +158,7 @@
 </div>
 
 <script>
-// ── Scenario data (wq-073 — fetched from data/scenarios.json) ──
+// ── Scenario data (fetched at runtime) ──
 // Inline defaults remain as graceful fallback if fetch fails.
 // Scenario multipliers: 2025 is actual (no flex). 2026E/2027E flex by scenario.
 // Bear = current trajectory decelerates. Base = data as modeled. Bull = agent-driven acceleration.
@@ -202,8 +206,9 @@ let allNodes = [], allFlows = [], lockedNode = null, hoveredNode = null;
 
 const COLORS = {
   'Consumer':'#f59e0b','AI Natives':'#8b5cf6','Enterprises & Govs':'#3b82f6','VC/Investors':'#dc2626',
-  // wq-090 backward-compat aliases — older data files still referencing SME/Enterprise
-  // labels resolve to the new archetype palette so partial deploys don't break colors.
+  // Backward-compatibility aliases — older data files still referencing
+  // SME / Enterprise labels resolve to the new archetype palette so partial
+  // deploys don't break colors.
   'SME':'#8b5cf6','Enterprise':'#3b82f6',
   'Model Subs':'#f59e0b','Model API':'#3b82f6','Hyperscalers':'#06b6d4','AI Native Apps':'#10b981',
   'IaaS & Agg.':'#8b5cf6','Trad. SaaS':'#ef4444','Ads':'#ec4899',
@@ -232,8 +237,8 @@ async function init() {
   document.querySelectorAll('.year-btn').forEach(b => b.classList.toggle('active', b.dataset.yr === activeYear));
   renderYear(activeYear);
 
-  // wq-077 — hydrate [data-narrative] spans from site-data.json. Independent
-  // fetch from the sankey-projections one above; failure leaves inline defaults.
+  // Hydrate [data-narrative] spans from the live data feed. Independent
+  // fetch from the projections one above; failure leaves inline defaults.
   fetch('site-data.json?v=' + Date.now())
     .then(r => r.json())
     .then(d => { if (typeof hydrateNarrative === 'function') hydrateNarrative(d); })
@@ -264,11 +269,11 @@ function renderYear(yr) {
   // Base scenario = the data as-is. Bear/bull scale the customer revenue headline.
   const scenarioData = SCENARIOS[currentScenario];
   const mult = scenarioData.multiplier[yr] || 1.0;
-  // wq-063: hero "Customer Revenue" displays BUYER-GROSS (what customers
-  // actually paid, ~$19.86B). Provider-received chPass (~$17.56B) remains
-  // visible as the secondary "→ providers receive" line and via the Sankey
-  // provider column. Falls back to net (totalCustomerRevenue) when gross is
-  // absent (older site-data.json), then to summing non-VC buyers (oldest fallback).
+  // Hero "Customer Revenue" displays BUYER-GROSS (what customers actually paid,
+  // ~$19.86B). Provider-received pass (~$17.56B) remains visible as the
+  // secondary "→ providers receive" line and via the Sankey provider column.
+  // Falls back to net (totalCustomerRevenue) when gross is absent (older
+  // data feeds), then to summing non-VC buyers (oldest fallback).
   const baseRevenue = (d.totalCustomerRevenue_gross != null)
     ? d.totalCustomerRevenue_gross
     : (d.totalCustomerRevenue != null)
@@ -278,7 +283,7 @@ function renderYear(yr) {
   const revenue = baseRevenue * mult;
 
   // VC subsidy scales inversely with revenue growth (higher revenue = less subsidy needed)
-  // wq-076: keep as Number; format at display via formatCurrency()
+  // Keep as Number; format at display via formatCurrency().
   const baseVC = d.totalVCSubsidy || 0;
   const vcMultiplier = yr === '2025' ? 1.0 : (currentScenario === 'bear' ? 1.3 : currentScenario === 'bull' ? 0.5 : 1.0);
   const vcSubsidy = baseVC * vcMultiplier;
@@ -296,8 +301,8 @@ function renderYear(yr) {
   // Tier degrades for non-base scenarios on projected years
   const scenarioTier = (yr === '2025' || currentScenario === 'base') ? '' : ' (scenario)';
 
-  // wq-063: secondary line shows provider-received (net) when gross is the
-  // primary number — gives readers transparency into the channel-margin gap.
+  // Secondary line shows provider-received (net) when gross is the primary
+  // number — gives readers transparency into the channel-margin gap.
   const heroSecondary = (d.totalCustomerRevenue_gross != null && revenueNet != null)
     ? '<div class="detail" style="margin-top:2px;font-size:9px;opacity:0.75;">→ providers receive '+ formatCurrency(revenueNet * mult) +'</div>'
     : '';
@@ -311,7 +316,7 @@ function renderYear(yr) {
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
 
   // Dynamic subtitles incorporating scenario.
-  // wq-077: 2025 branch hydrates from engine values (was hardcoded "$17.5B" / "$9.4B").
+  // 2025 branch hydrates from live values (was hardcoded "$17.5B" / "$9.4B").
   let subtitle = '';
   if (yr === '2025') {
     const grossYr = (d.totalCustomerRevenue_gross != null) ? d.totalCustomerRevenue_gross : revenue;
@@ -328,8 +333,8 @@ function renderYear(yr) {
   renderBuyerProviderPanel(d);
 }
 
-// ── wq-090 — buyer-provider routing panel ──
-// Surfaces the engine-derived buyer × provider net-revenue allocation alongside
+// ── Buyer-provider routing panel ──
+// Surfaces the buyer × provider net-revenue allocation alongside
 // the Sankey. The Sankey itself shows buyer → channel → provider as separate
 // ribbon segments (which fan out at the channel band), so the per-buyer
 // provider preference is editorial information that needs an explicit table.
@@ -365,7 +370,7 @@ function renderBuyerProviderPanel(d) {
 
   let html = '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap;">';
   html += '<strong style="color:#f1f5f9;font-size:12px;">Where each buyer\'s money lands (net to providers)</strong>';
-  html += '<span style="font-size:10px;color:var(--text-dim);opacity:0.7;">wq-090 editorial — see <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology</a></span>';
+  html += '<span style="font-size:10px;color:var(--text-dim);opacity:0.7;">Editorial routing &mdash; see <a href="/methodology.html#revenue-archetype-taxonomy" style="color:#a78bfa;">methodology</a></span>';
   html += '</div>';
   // Wrap the table in an overflow-x:auto container so the multi-column grid
   // (Buyer + N providers + Total) scrolls horizontally inside the panel on
@@ -495,9 +500,10 @@ function buildSankey(d) {
   const spacing = (W - margin*2 - colW*4) / 3;
   const barH = 450, gap = 5, topY = 50;
 
-  // wq-062 — pass color + slug through so the renderer can use data-supplied colors
-  // (fixes Google/Gemini and Other Model Providers grey-fallback bug) and so the
-  // routing-aware Channels→Providers builder can match routing entries by slug.
+  // Pass color + slug through so the renderer can use data-supplied colors
+  // (fixes the Google/Gemini and Other Model Providers grey-fallback bug)
+  // and so the routing-aware Channels→Providers builder can match routing
+  // entries by slug.
   const wrap = arr => arr.map(x=>({name:x.label, value:x.value, tier:x.tier||null, src:x.src||null, color:x.color||null, slug:x.slug||null, inference_cost:(x.inference_cost!=null?x.inference_cost:null), opex:(x.opex!=null?x.opex:null)}));
   const colDefs = [
     { label:'Who Pays', items: wrap(d.buyers) },
@@ -527,12 +533,12 @@ function buildSankey(d) {
   const flowDefs = [];
 
   // Buyers -> Channels
-  // wq-090: prefer engine-derived `buyerChannelMatrix` (per-archetype routing)
-  // over the legacy proportional rescale. The matrix gives gross flow values
-  // for every (buyer, channel) pair, matching how the underlying
-  // subscription_pct / api_pct / enterprise_pct slices actually route through
-  // the cost-structure tables. Falls back to proportional when the matrix is
-  // absent (older data files / projection years that pre-date wq-090).
+  // Prefer the `buyerChannelMatrix` (per-archetype routing) over the legacy
+  // proportional rescale. The matrix gives gross flow values for every
+  // (buyer, channel) pair, matching how the underlying subscription, API and
+  // enterprise slices actually route through the cost-structure tables.
+  // Falls back to proportional when the matrix is absent (older data feeds
+  // or projection years that pre-date the per-archetype build).
   const custBuyers = allNodes.filter(n=>n.col===0 && n.name!=='VC/Investors');
   const chNodes = allNodes.filter(n=>n.col===1);
   const adsCh = chNodes.filter(c=>c.name==='Ads');
@@ -548,7 +554,7 @@ function buildSankey(d) {
     }
     if(remaining <= 0) return;
 
-    // wq-090 engine-derived path
+    // Per-archetype matrix path
     const matrixRow = bcMatrix && bcMatrix[buyer.name];
     if (matrixRow) {
       // Scale matrix row to remaining (= buyer.value − adContrib) so any small
@@ -591,11 +597,11 @@ function buildSankey(d) {
   const baseValue = (p) => (p.name==='OpenAI' ? Math.max(p.value - adsBump, 0) : p.value);
   const frontierBaseTotal = frontierNodes.reduce((s,n)=>s+baseValue(n),0);
 
-  // wq-062 — routing-aware Channels→Providers. d.routing is keyed by provider slug;
-  // each entry maps Sankey channel label → customer-revenue contribution. Channel
-  // values are already grossed up by the engine so chPass = sum(routing per channel)
+  // Routing-aware Channels→Providers. d.routing is keyed by provider slug; each
+  // entry maps Sankey channel label → customer-revenue contribution. Channel
+  // values are already grossed up upstream so chPass = sum(routing per channel)
   // and the channel margin still flows to Generated Cashflow. Falls back to the
-  // pre-wq-062 proportional logic when d.routing is absent (backward compat).
+  // older proportional logic when d.routing is absent (backward compat).
   const routing = d.routing || null;
   const provBySlug = {};
   if (routing) {
@@ -728,7 +734,7 @@ function renderCanvas(ctx, W) {
     const connected = aName && (f.from.name===aName || f.to.name===aName);
     const dimmed = aName && !connected;
     ctx.globalAlpha = dimmed ? 0.03 : connected ? 0.5 : 0.18;
-    // wq-062 — prefer node-supplied color (from data) over the hard-coded COLORS map
+    // Prefer node-supplied color (from data) over the hard-coded COLORS map
     ctx.fillStyle = f.from.color || COLORS[f.from.name] || '#475569';
     ctx.beginPath();
     const cp = (f.rx - f.lx) * 0.4;
@@ -755,7 +761,7 @@ function renderCanvas(ctx, W) {
     const isActive = n.name === aName;
     const dimmed = aName && !isActive && !allFlows.some(f=>(f.from.name===aName&&f.to.name===n.name)||(f.to.name===aName&&f.from.name===n.name));
     ctx.globalAlpha = dimmed ? 0.25 : 1;
-    // wq-062 — prefer node-supplied color over the hard-coded COLORS map
+    // Prefer node-supplied color over the hard-coded COLORS map
     ctx.fillStyle = n.color || COLORS[n.name] || '#475569';
     ctx.beginPath(); ctx.roundRect(n.x, n.y, n.w, Math.max(n.h,2), 4); ctx.fill();
     if(isActive) { ctx.strokeStyle='white'; ctx.lineWidth=2; ctx.stroke(); }

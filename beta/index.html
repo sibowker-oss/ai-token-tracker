@@ -21,7 +21,7 @@
     --green:#10b981; --orange:#f59e0b; --red:#ef4444;
     --capital:#3b82f6; --revenue:#10b981; --usage:#8b5cf6; --power:#f59e0b;
     --sourced:#10b981; --derived:#f59e0b; --modeled:#8b5cf6;
-    /* wq-093 — Layer Stack accents (Apps purple, Compute teal, Silicon coral, Power amber) */
+    /* Layer Stack accents (Apps purple, Compute teal, Silicon coral, Power amber) */
     --apps:#a855f7; --compute:#06b6d4; --silicon:#fb7185;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -56,12 +56,11 @@
   .hero-hook .hook-number{font-size:48px;font-weight:700;color:var(--text-bright);letter-spacing:-1px;font-variant-numeric:tabular-nums;}
   .hero-hook .hook-text{font-size:20px;color:var(--text-dim);margin-top:4px;}
 
-  /* ── wq-093: AI Infrastructure Stack hero (D1 Option I — 5 horizontal pill bars) ──
-     Tactical: visibility-boosted widths locked per brief §5 (100/50/30/22/17).
-     Equivalent to a piecewise function with linear above 50% and a 17% floor,
-     stepped between for the three smallest bars so labels read at desktop and mobile.
-     Figure placement: inside the pill for Capex + Usage (≥50% width); outside the pill
-     (right edge, --fg-dark-1) for Compute, Power, Revenue (<50% width) per brief §5. */
+  /* ── AI Infrastructure Stack hero — 5 horizontal pill bars ──
+     Visibility-boosted widths (100/50/30/22/17) — piecewise with linear above 50%
+     and a 17% floor, stepped between for the three smallest bars so labels read at
+     desktop and mobile. Figures sit inside the pill for Capex + Usage (≥50% width)
+     and on the right edge for Compute, Power, Revenue (<50% width). */
   .ai-infra-stack{padding:32px 24px 56px;border-bottom:1px solid var(--card-border);background:var(--bg-dark);}
   /* Width: 990px = 75% of the page-content 1320px (Simon 2026-05-07: reduce
      total width by 25%). Block is centred under the masthead heading per
@@ -101,7 +100,7 @@
   .lt-badge.stale{background:rgba(245,158,11,0.15);color:#f59e0b;}
   .lt-badge.old{background:rgba(239,68,68,0.15);color:#ef4444;}
 
-  /* ── Ledger Entry Cards (wq-093: 5 cards — 3-up <1100, 5-up >=1100) ── */
+  /* ── Ledger Entry Cards — 5 cards: 3-up below 1100px, 5-up at 1100px and above ── */
   .ledger-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:32px 0;}
   @media(min-width:1100px){
     .ledger-cards{grid-template-columns:repeat(5,1fr);gap:16px;}
@@ -125,7 +124,7 @@
   .supporting a{padding:10px 20px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid var(--card-border);color:var(--text-dim);text-decoration:none;font-size:12px;font-weight:500;transition:all 0.15s;}
   .supporting a:hover{border-color:var(--accent);color:var(--text);}
 
-  /* ── Stay Informed (wq-034: link-out CTA, no on-page form) ── */
+  /* ── Stay Informed — link-out CTA, no on-page form ── */
   .subscribe-wrap{padding:32px 0;display:flex;justify-content:center;}
   .subscribe-box{background:var(--surface-dark);border:1px solid var(--border-dark);border-radius:12px;padding:28px 32px;text-align:center;max-width:560px;width:100%;}
   .subscribe-box .eyebrow{display:block;margin-bottom:8px;}
@@ -161,12 +160,11 @@
     .ledger-cards{grid-template-columns:1fr;}
     .supporting{flex-direction:column;align-items:center;}
     .footer-grid{grid-template-columns:1fr;gap:16px;}
-    /* wq-093 — AI Infrastructure Stack mobile rules.
-       Tactical divergence from brief §5 mobile: brief asks for proportional
-       percentages preserved on mobile, but 17% of 375px = 60px, which can't
-       fit the icon disc + label. Collapse all bars to full width on mobile;
-       the multiplier sublines ("19×", "9.4×", "2.5×") carry the descending-
-       ratio story numerically while the visual stack stays legible. */
+    /* AI Infrastructure Stack mobile rules.
+       Mobile drops the proportional-width treatment because 17% of 375px = 60px,
+       which can't fit the icon disc + label. All bars collapse to full width on
+       mobile; the multiplier sublines ("19×", "9.4×", "2.5×") carry the
+       descending-ratio story numerically while the visual stack stays legible. */
     .ai-infra-stack{padding:24px 12px 40px;}
     .ais-block{max-width:100%;}
     .ais-bar{height:auto;min-height:56px;padding:10px 12px;width:100%;}
@@ -202,18 +200,16 @@
   </a>
 </header>
 
-<!-- ── MASTHEAD (wq-093: five-ledger reframe) ── -->
+<!-- ── MASTHEAD ── -->
 <section class="masthead">
   <h2>The AI economy, layer by layer.</h2>
   <div class="tagline">Capital in. Compute spent. Power drawn. Tokens out. Revenue back. Five ledgers, one system.</div>
   <div class="attribution">&mdash; Hepburn Advisory</div>
 </section>
 
-<!-- ── AI INFRASTRUCTURE STACK HERO (wq-093 D1 Option I — 5 horizontal pill bars) ──
-     Replaces: the prior Option F type-led editorial Layer Stack, the 5-tile hero
-     reconciliation strip (D3: dropped), and the 4-step narrative-flow loop (D4: dropped).
-     The bars carry all three jobs — proportional sizing, per-ledger figures, and
-     causal narrative — in a single hero section. -->
+<!-- ── AI INFRASTRUCTURE STACK HERO — 5 horizontal pill bars ──
+     Single hero section that carries proportional sizing, per-ledger figures,
+     and the causal narrative. -->
 <section class="ai-infra-stack" aria-label="The AI dollar stack — five ledgers, descending by 2025 figure">
   <div class="ais-wrap">
    <div class="ais-block">
@@ -274,12 +270,12 @@
 
 <div class="container">
 
-  <!-- ── HERO HOOK ONE-LINER (wq-093 D7: Compute-anchored) ── -->
+  <!-- ── HERO HOOK ONE-LINER — Compute-anchored ── -->
   <section class="hero-hook">
     <div class="hook-number"><span id="hook-ratio"><span data-num="index.dom.hook_ratio">$2.23</span></span> of compute spend stands behind every <span data-num="index.dom.hook_ratio_2">$1</span> of customer-paid AI Apps Revenue today.</div>
   </section>
 
-  <!-- ── LIVE TILE (wq-093 D5: Compute-derived signal) ── -->
+  <!-- ── LIVE TILE — Compute-derived signal ── -->
   <section class="live-tile-wrap">
     <div class="live-tile">
       <div class="lt-label">Key convergence signal</div>
@@ -293,7 +289,7 @@
     </div>
   </section>
 
-  <!-- ── LEDGER ENTRY CARDS (wq-093: 5 cards per §6.7) ── -->
+  <!-- ── LEDGER ENTRY CARDS — 5 ledger entries ── -->
   <section class="ledger-cards">
     <div class="ledger-card">
       <div class="lc-title" style="color:var(--capital);">Capital Ledger</div>
@@ -355,7 +351,7 @@
     <a href="changelog.html">Changelog</a>
   </section>
 
-  <!-- ── STAY INFORMED (wq-034: HA /contact link-out, single-list subscription) ── -->
+  <!-- ── STAY INFORMED — link-out to /contact, single-list subscription ── -->
   <section class="subscribe-wrap">
     <div class="subscribe-box">
       <span class="eyebrow">Stay informed</span>
@@ -373,14 +369,12 @@
 </div>
 
 <script>
-// Hydrate the ledger cards + hook ratio from site-data.json.
-// wq-102 (2026-05-10): the visible literals (`<span data-num="…">$766B</span>`
-// etc.) are now baked at build time by scripts/render_numbers.py against
-// the SAME engine paths read here. So the data-num literal IS the
-// editorial fallback — we skip the immediate _hydrate(FALLBACK) call to
-// avoid a flash of stale FALLBACK constants on hard refresh. JS only
-// updates the cards if fetch succeeds AND the live value differs from
-// the build-time literal.
+// Hydrate the ledger cards + hook ratio from the live data feed.
+// The visible literals (e.g. <span data-num="…">$766B</span>) are baked at
+// build time against the same numeric paths read here, so the literal is
+// itself the editorial fallback. We skip an immediate _hydrate(FALLBACK)
+// call to avoid a flash of stale constants on hard refresh — JS only
+// updates the cards if the live value differs from the build-time literal.
 const FALLBACK = { capex: 766, apps: 17.36, appsGross: 19.28, compute: 43, tokens: 310 };
 
 function _setText(id, value) { const el = document.getElementById(id); if (el) el.textContent = value; }
@@ -389,10 +383,8 @@ function _hydrate(b) {
   const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
   const fmt$1 = v => '$' + (Math.round(v * 10) / 10).toFixed(1) + 'B';
   const fmtT = v => '~' + Math.round(v) + 'T';
-  // Hook ratio (Compute / Apps Revenue GROSS — per wq-102, anchored on
-  // gross to stay consistent with the visible Revenue pill which also
-  // shows gross). Matches site-data.compute.layer_stack_ratios.
-  // compute_per_dollar_apps_gross — see scripts/derive_layer_stack_ratios.py.
+  // Hook ratio = Compute / Apps Revenue GROSS, anchored on gross to stay
+  // consistent with the visible Revenue pill (which also shows gross).
   const ratio = '$' + (Math.round((b.compute / b.appsGross) * 100) / 100).toFixed(2);
   _setText('card-capex',   fmt$(b.capex));
   _setText('card-revenue', fmt$1(b.appsGross));
@@ -404,9 +396,9 @@ function _hydrate(b) {
   _setText('ais-revenue-figure', fmt$1(b.appsGross));
 }
 
-// wq-102: no immediate _hydrate(FALLBACK) — would flash stale values
-// over the build-time data-num literals on hard refresh. JS hydrates
-// only after fetch resolves with live engine values.
+// No immediate _hydrate(FALLBACK) — that would flash stale constants over
+// the build-time literals on hard refresh. JS hydrates only after fetch
+// resolves with the live values.
 fetch('site-data.json?v=' + Date.now())
   .then(r => r.json())
   .then(d => {

@@ -166,7 +166,7 @@
     <div class="chart-wrap"><canvas id="chart-price"></canvas></div>
   </div>
 
-  <!-- wq-032 P1B: FY revenue surface — audited fiscal-year collected revenue -->
+  <!-- FY revenue surface — audited fiscal-year collected revenue -->
   <div class="card" id="fy-revenue">
     <h2>Audited fiscal-year revenue (where disclosed)</h2>
     <p style="font-size:12px;color:var(--text-dim);margin-bottom:12px;line-height:1.6;">
@@ -324,10 +324,10 @@ function playAnimation() {
 // Load data and initialize
 loadTimelineData();
 
-// wq-032 P1B: FY revenue surface — read entities.json directly and
-// render a table of every (entity, year) tuple where
-// financials.{year}.collected_revenue is populated. Sorted by year DESC,
-// then by value DESC. Renders a placeholder if no entries exist.
+// FY revenue surface — read the entity dataset directly and render a
+// table of every (entity, year) tuple where financials.{year}.collected_revenue
+// is populated. Sorted by year DESC, then by value DESC. Renders a
+// placeholder if no entries exist.
 async function loadFyRevenue() {
   const target = document.getElementById('fy-revenue-content');
   if (!target) return;
