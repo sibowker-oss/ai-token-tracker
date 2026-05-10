@@ -452,7 +452,7 @@ loadFyRevenue();
     </div>
   </div>
   <div class="ds-footer__base">
-    © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated 2026-04-29 · <a href="/methodology.html">Methodology at /methodology</a>
+    © 2026 Hepburn Advisory Pty Ltd · ACN 694 313 641 · ABN 21 694 313 641 · Last updated <span id="footer-last-updated">2026-04-29</span> · <a href="/methodology.html">Methodology at /methodology</a><script>fetch('site-data.json?v='+Date.now()).then(r=>r.json()).then(d=>{const t=d&&d.meta&&d.meta.generatedAt;if(t){const el=document.getElementById('footer-last-updated');if(el)el.textContent=t.substring(0,10);}}).catch(()=>{});</script>
   </div>
 </footer>
 

@@ -26,9 +26,12 @@ Format preserved per page: `YYYY-MM-DD HH:MM:SS UTC` for capital/revenue (matche
 
 ## Open items
 
-- The `/beta/` copies of these three files will continue to show stale dates until the next push to the `beta` branch runs `deploy-beta.yml`. Not user-visible on the canonical public surface.
-- Footer "Last updated 2026-04-29" text on capital.html (line ~1075) and revenue.html (line ~907) is a separate string, not in scope for this fix.
-- The four other priority pages (`index.html`, `usage.html`, `power.html`, plus the just-fixed three) — `usage.html` already does this correctly; `index.html` and `power.html` have no equivalent timestamp line. No action needed.
+- The `/beta/` copies will continue to show stale dates until the next push to the `beta` branch runs `deploy-beta.yml`. Not user-visible on the canonical public surface.
+- `follow-the-trillion.html` uses a different footer format (`Last updated: 22 Apr 2026`); left as-is for now — flag if a unified treatment is wanted.
+
+## Follow-up shipped same session
+
+After the initial push, the footer `Last updated YYYY-MM-DD` string was also made dynamic across all 12 pages that carry the standard `ds-footer__base` template (about, capital, changelog, compute, in-development, index, methodology, openrouter, power, revenue, timeline, usage). Each footer date is now wrapped in `<span id="footer-last-updated">…</span>`, and an inline `<script>` immediately after fetches `site-data.json` and rewrites the span's text from `meta.generatedAt` (date-only). Hardcoded literal preserved as editorial fallback. `validate-numbers-anchored.mjs` re-run after — still clean.
 
 ## Acceptance criteria status
 
