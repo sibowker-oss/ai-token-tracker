@@ -385,13 +385,16 @@ function _hydrate(b) {
   const fmt$ = v => (typeof formatCurrency === 'function') ? formatCurrency(v) : ('$' + Math.round(v) + 'B');
   const fmt$1 = v => '$' + (Math.round(v * 10) / 10).toFixed(1) + 'B';
   const fmtT = v => '~' + Math.round(v) + 'T';
-  const ratio = '$' + (Math.round((b.compute / b.apps) * 10) / 10).toFixed(2);
+  // Hook ratio (Compute / Apps Revenue GROSS — per wq-102, anchored on
+  // gross to stay consistent with the visible Revenue pill which also
+  // shows gross). When the engine pre-computes compute_per_dollar_apps_gross
+  // we read it directly; otherwise we compute from compute / appsGross.
+  const ratio = '$' + (Math.round((b.compute / b.appsGross) * 100) / 100).toFixed(2);
   // Ledger cards
   _setText('card-capex',   fmt$(b.capex));
   _setText('card-revenue', fmt$1(b.appsGross));
   _setText('card-compute', fmt$(b.compute));
   _setText('card-tokens',  fmtT(b.tokens) + '/day');
-  // Hook one-liner ratio (Compute-anchored: Compute / Apps net — provider-side)
   _setText('hook-ratio', ratio);
   // Top bar revenue figure — gross customer revenue, 1-decimal precision
   // (formatCurrency rounds ≥10 to whole-billions and would lose the .3).
