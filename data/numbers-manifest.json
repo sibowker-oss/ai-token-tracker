@@ -41,14 +41,7 @@
         "line": 11,
         "context": "<meta property=\"og:description\" content=\"$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.\">",
         "binding_hint": null
-      },
-      "pages": [
-        "index.html"
-      ],
-      "anchor_selectors": [
-        "[data-num][data-line=\"11\"]",
-        "#card-capex"
-      ]
+      }
     },
     {
       "id": "index.market_aggregate_tokens.value_2",
@@ -58,10 +51,10 @@
       "current_rendered_value": "$43B",
       "semantic": "market_aggregate.tokens",
       "source_state": "editorial",
-      "source_path": "site-data.cumulative.capex_total",
+      "source_path": "site-data.compute.compute_revenue_2025_gross_usd_b",
       "source_path_exists": true,
       "source_path_candidates": [
-        "site-data.cumulative.capex_total"
+        "site-data.compute.compute_revenue_2025_gross_usd_b"
       ],
       "editorial_fallback": {
         "value": 43.0,
@@ -91,10 +84,10 @@
       "current_rendered_value": "$17B",
       "semantic": "market_aggregate.tokens",
       "source_state": "editorial",
-      "source_path": "site-data.cumulative.capex_total",
+      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
       "source_path_exists": true,
       "source_path_candidates": [
-        "site-data.cumulative.capex_total"
+        "site-data.sankey.totalCustomerRevenue_gross"
       ],
       "editorial_fallback": {
         "value": 17.0,
@@ -114,7 +107,15 @@
         "line": 11,
         "context": "<meta property=\"og:description\" content=\"$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.\">",
         "binding_hint": null
-      }
+      },
+      "pages": [
+        "index.html",
+        "capital.html"
+      ],
+      "anchor_selectors": [
+        "[data-num][data-line=\"11\"]",
+        "js:LAG_RAW[2].revenue"
+      ]
     },
     {
       "id": "index.market_aggregate_tokens.value_4",
@@ -147,15 +148,7 @@
         "line": 11,
         "context": "<meta property=\"og:description\" content=\"$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.\">",
         "binding_hint": null
-      },
-      "pages": [
-        "index.html"
-      ],
-      "anchor_selectors": [
-        "[data-num][data-line=\"11\"]",
-        "#ais-usage-sub",
-        "#card-tokens"
-      ]
+      }
     },
     {
       "id": "index.dom.ais_capex_figure",
@@ -326,14 +319,7 @@
         "line": 267,
         "context": "<span class=\"ais-figure-out\" id=\"ais-revenue-figure\">$19.3B</span>",
         "binding_hint": "sankey.totalCustomerRevenue_gross"
-      },
-      "pages": [
-        "index.html"
-      ],
-      "anchor_selectors": [
-        "#ais-revenue-figure",
-        "#card-revenue"
-      ]
+      }
     },
     {
       "id": "index.dom.hook_ratio",
@@ -367,52 +353,6 @@
         "context": "<div class=\"hook-number\"><span id=\"hook-ratio\">$2.50</span> of compute spend stands behind every $1 of customer-paid AI Apps Revenue today.</div>",
         "binding_hint": null
       }
-    },
-    {
-      "id": "index.dom.lt_value",
-      "page": "index.html",
-      "anchor_selector": "#lt-value",
-      "anchor_dom_id": "lt-value",
-      "current_rendered_value": "$43B",
-      "semantic": "uncategorised",
-      "source_state": "editorial",
-      "source_path": "site-data.compute.compute_revenue_2025_gross_usd_b",
-      "source_path_exists": true,
-      "source_path_candidates": [
-        "site-data.compute.compute_revenue_2025_gross_usd_b",
-        "site-data.compute.compute_revenue_2025_gross_sum_of_quarterlies_usd_b",
-        "site-data.compute.layer_stack_ratios.compute_revenue_2025_gross_usd_b",
-        "site-data.arrModel.compute.netExternal",
-        "site-data.arrModel.compute.subtotal",
-        "site-data.meta.acceptedPoints",
-        "site-data.arrModel.combined.compute_net"
-      ],
-      "editorial_fallback": {
-        "value": 43.0,
-        "unit": "B",
-        "raw": "$43B",
-        "origin": "html_literal_at_capture",
-        "audit_ref": "index.html:286"
-      },
-      "supersession_threshold": {
-        "provenance_score_min": 0.7,
-        "consensus_weight_min": "indicative"
-      },
-      "format": "currency_b_compact",
-      "last_changed": null,
-      "notion_id": "35c57414-da2a-8128-bec3-f1b2082b75b2",
-      "_capture": {
-        "line": 286,
-        "context": "<div class=\"lt-value\" style=\"color:var(--compute);\" id=\"lt-value\">$43B</div>",
-        "binding_hint": null
-      },
-      "pages": [
-        "index.html"
-      ],
-      "anchor_selectors": [
-        "#lt-value",
-        "#card-compute"
-      ]
     },
     {
       "id": "index.dom.lt_subline",
@@ -455,10 +395,10 @@
       "current_rendered_value": "79%",
       "semantic": "market_aggregate.compute_revenue",
       "source_state": "editorial",
-      "source_path": "site-data.compute.yoy_growth_pct",
-      "source_path_exists": true,
+      "source_path": "site-data.compute.frontier_lab_share_2025_pct",
+      "source_path_exists": false,
       "source_path_candidates": [
-        "site-data.compute.yoy_growth_pct"
+        "site-data.compute.frontier_lab_share_2025_pct"
       ],
       "editorial_fallback": {
         "value": 79.0,
@@ -514,6 +454,158 @@
       }
     },
     {
+      "id": "capital.lag_raw.2023.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[0].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$160B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates.2023.total_capex",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates.2023.total_capex"
+      ],
+      "editorial_fallback": {
+        "value": 160.0,
+        "unit": "B",
+        "raw": "$160B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:820 (LAG_RAW[0].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-812f-bdf0-e6bb889f7bfd",
+      "_capture": {
+        "line": 820,
+        "context": "LAG_RAW[0] year='2023' totalCapex=160.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 0,
+        "js_array_row_key": "2023",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2024.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[1].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$280B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates.2024.total_capex",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates.2024.total_capex"
+      ],
+      "editorial_fallback": {
+        "value": 280.0,
+        "unit": "B",
+        "raw": "$280B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:821 (LAG_RAW[1].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8108-ad27-ced0e7f01b1b",
+      "_capture": {
+        "line": 821,
+        "context": "LAG_RAW[1] year='2024' totalCapex=280.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 1,
+        "js_array_row_key": "2024",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2024.revenue",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[1].revenue",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$4B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._cumulative_2023_2025.by_year.2024.customer_revenue_gross",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates._cumulative_2023_2025.by_year.2024.customer_revenue_gross"
+      ],
+      "editorial_fallback": {
+        "value": 4.0,
+        "unit": "B",
+        "raw": "$4B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:821 (LAG_RAW[1].revenue)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81ac-9786-fe33a1463548",
+      "_capture": {
+        "line": 821,
+        "context": "LAG_RAW[1] year='2024' revenue=4.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 1,
+        "js_array_row_key": "2024",
+        "js_array_column": "revenue",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2025.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[2].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$380B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates.2025.total_capex",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates.2025.total_capex"
+      ],
+      "editorial_fallback": {
+        "value": 380.0,
+        "unit": "B",
+        "raw": "$380B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:822 (LAG_RAW[2].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8143-bde4-df9df53e1456",
+      "_capture": {
+        "line": 822,
+        "context": "LAG_RAW[2] year='2025' totalCapex=380.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 2,
+        "js_array_row_key": "2025",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": false
+      }
+    },
+    {
       "id": "capital.market_aggregate_capex_cumulative.766b_infrastructure_investment_ndash",
       "page": "capital.html",
       "anchor_selector": "[data-num][data-line=\"194\"]",
@@ -521,15 +613,10 @@
       "current_rendered_value": "$766B",
       "semantic": "market_aggregate.capex_cumulative",
       "source_state": "editorial",
-      "source_path": "site-data.cumulative.capex",
+      "source_path": "site-data.capital_sankey.total",
       "source_path_exists": true,
       "source_path_candidates": [
-        "site-data.cumulative.capex",
-        "site-data.cumulative.capex_total",
-        "entities.market_aggregates._cumulative_2023_2025.capex",
-        "entities.market_aggregates._cumulative_2023_2025.capex_total",
-        "site-data.capital_sankey.total",
-        "entities.market_aggregates._capital_sankey.total"
+        "site-data.capital_sankey.total"
       ],
       "editorial_fallback": {
         "value": 766.0,
@@ -549,14 +636,7 @@
         "line": 194,
         "context": "<strong><span data-narrative=\"capital_sankey_total\">$766B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>",
         "binding_hint": null
-      },
-      "pages": [
-        "capital.html"
-      ],
-      "anchor_selectors": [
-        "[data-num][data-line=\"194\"]",
-        "[data-num][data-line=\"344\"]"
-      ]
+      }
     },
     {
       "id": "capital.market_aggregate_capex_cumulative.anchored_nvidia_revenue_356b",
@@ -629,46 +709,13 @@
       "page": "capital.html",
       "anchor_selector": "[data-num][data-line=\"241\"]",
       "anchor_dom_id": null,
-      "current_rendered_value": "$380B",
-      "semantic": "market_aggregate.capex_cumulative",
-      "source_state": "editorial",
-      "source_path": "entities.market_aggregates._cumulative_2023_2025.capex_total",
-      "source_path_exists": true,
-      "source_path_candidates": [
-        "entities.market_aggregates._cumulative_2023_2025.capex_total"
-      ],
-      "editorial_fallback": {
-        "value": 380.0,
-        "unit": "B",
-        "raw": "$380B",
-        "origin": "html_literal_at_capture",
-        "audit_ref": "capital.html:241"
-      },
-      "supersession_threshold": {
-        "provenance_score_min": 0.7,
-        "consensus_weight_min": "indicative"
-      },
-      "format": "currency_b_compact",
-      "last_changed": null,
-      "notion_id": "35c57414-da2a-81ea-8282-d229ec198777",
-      "_capture": {
-        "line": 241,
-        "context": "<span style=\"color:var(--text-dim); font-size:12px;\"> Total AI CapEx reached approximately <span data-narrative=\"market_2025_total_capex\">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative=\"market_2025_t",
-        "binding_hint": null
-      }
-    },
-    {
-      "id": "capital.market_aggregate_capex_cumulative.total_capex_reached_approximately_2",
-      "page": "capital.html",
-      "anchor_selector": "[data-num][data-line=\"241\"]",
-      "anchor_dom_id": null,
       "current_rendered_value": "$17.5B",
       "semantic": "market_aggregate.capex_cumulative",
       "source_state": "editorial",
-      "source_path": "entities.market_aggregates._cumulative_2023_2025.capex_total",
+      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
       "source_path_exists": true,
       "source_path_candidates": [
-        "entities.market_aggregates._cumulative_2023_2025.capex_total"
+        "site-data.sankey.totalCustomerRevenue_gross"
       ],
       "editorial_fallback": {
         "value": 17.5,
@@ -683,7 +730,7 @@
       },
       "format": "currency_b_compact",
       "last_changed": null,
-      "notion_id": "35c57414-da2a-81d2-be17-e4c342b5a802",
+      "notion_id": "35c57414-da2a-81ea-8282-d229ec198777",
       "_capture": {
         "line": 241,
         "context": "<span style=\"color:var(--text-dim); font-size:12px;\"> Total AI CapEx reached approximately <span data-narrative=\"market_2025_total_capex\">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative=\"market_2025_t",
@@ -859,72 +906,6 @@
       "_capture": {
         "line": 307,
         "context": "<div class=\"sens-ratio\" id=\"sens-ratio-display\">$35</div>",
-        "binding_hint": null
-      }
-    },
-    {
-      "id": "capital.market_aggregate_revenue.customer_revenue_must_grow",
-      "page": "capital.html",
-      "anchor_selector": "[data-num][data-line=\"321\"]",
-      "anchor_dom_id": null,
-      "current_rendered_value": "$17.5B",
-      "semantic": "market_aggregate.revenue",
-      "source_state": "editorial",
-      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
-      "source_path_exists": true,
-      "source_path_candidates": [
-        "site-data.sankey.totalCustomerRevenue_gross"
-      ],
-      "editorial_fallback": {
-        "value": 17.5,
-        "unit": "B",
-        "raw": "$17.5B",
-        "origin": "html_literal_at_capture",
-        "audit_ref": "capital.html:321"
-      },
-      "supersession_threshold": {
-        "provenance_score_min": 0.7,
-        "consensus_weight_min": "indicative"
-      },
-      "format": "currency_b_compact",
-      "last_changed": null,
-      "notion_id": "35c57414-da2a-81f0-b163-dbc99c3f9389",
-      "_capture": {
-        "line": 321,
-        "context": "<div class=\"cp-desc\">AI customer revenue (<span data-narrative=\"market_2025_total_customer_revenue_gross\">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categori",
-        "binding_hint": null
-      }
-    },
-    {
-      "id": "capital.market_aggregate_revenue.customer_revenue_must_grow_2",
-      "page": "capital.html",
-      "anchor_selector": "[data-num][data-line=\"321\"]",
-      "anchor_dom_id": null,
-      "current_rendered_value": "100%",
-      "semantic": "market_aggregate.revenue",
-      "source_state": "editorial",
-      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
-      "source_path_exists": true,
-      "source_path_candidates": [
-        "site-data.sankey.totalCustomerRevenue_gross"
-      ],
-      "editorial_fallback": {
-        "value": 100.0,
-        "unit": "%",
-        "raw": "100%",
-        "origin": "html_literal_at_capture",
-        "audit_ref": "capital.html:321"
-      },
-      "supersession_threshold": {
-        "provenance_score_min": 0.7,
-        "consensus_weight_min": "indicative"
-      },
-      "format": "percentage_1dp",
-      "last_changed": null,
-      "notion_id": "35c57414-da2a-8162-b430-fab696097e98",
-      "_capture": {
-        "line": 321,
-        "context": "<div class=\"cp-desc\">AI customer revenue (<span data-narrative=\"market_2025_total_customer_revenue_gross\">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categori",
         "binding_hint": null
       }
     },
@@ -1200,10 +1181,10 @@
       "current_rendered_value": "5.9x",
       "semantic": "ratio_derived",
       "source_state": "editorial",
-      "source_path": "site-data.compute.concentration.oracle_share_pct",
-      "source_path_exists": true,
+      "source_path": "site-data.capital_sankey.fleet_to_cogs_ratio_x",
+      "source_path_exists": false,
       "source_path_candidates": [
-        "site-data.compute.concentration.oracle_share_pct"
+        "site-data.capital_sankey.fleet_to_cogs_ratio_x"
       ],
       "editorial_fallback": {
         "value": 5.9,
@@ -1356,6 +1337,309 @@
       "_capture": {
         "line": 191,
         "context": "<span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google $200B and Anthropic+OpenAI $718B are forward commitments to MAG3 hyperscalers — ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.ais_usage_sub",
+      "page": "index.html",
+      "anchor_selector": "#ais-usage-sub",
+      "anchor_dom_id": "ais-usage-sub",
+      "current_rendered_value": "~360T/day",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.tokens_2025_annualized",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.tokens_2025_annualized"
+      ],
+      "editorial_fallback": {
+        "value": 360.0,
+        "unit": "T",
+        "raw": "~360T/day",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:234"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "tokens_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8130-848f-f14ed64c48c8",
+      "_capture": {
+        "line": 234,
+        "context": "<span class=\"ais-sub\" id=\"ais-usage-sub\">9.4× Apps Revenue · ~360T/day</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.lt_value",
+      "page": "index.html",
+      "anchor_selector": "#lt-value",
+      "anchor_dom_id": "lt-value",
+      "current_rendered_value": "$43B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.compute_revenue_2025_gross_usd_b",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.compute_revenue_2025_gross_usd_b",
+        "site-data.compute.compute_revenue_2025_gross_sum_of_quarterlies_usd_b",
+        "site-data.compute.layer_stack_ratios.compute_revenue_2025_gross_usd_b",
+        "site-data.arrModel.compute.netExternal",
+        "site-data.arrModel.compute.subtotal",
+        "site-data.meta.acceptedPoints",
+        "site-data.arrModel.combined.compute_net"
+      ],
+      "editorial_fallback": {
+        "value": 43.0,
+        "unit": "B",
+        "raw": "$43B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:286"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8128-bec3-f1b2082b75b2",
+      "_capture": {
+        "line": 286,
+        "context": "<div class=\"lt-value\" style=\"color:var(--compute);\" id=\"lt-value\">$43B</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.card_capex",
+      "page": "index.html",
+      "anchor_selector": "#card-capex",
+      "anchor_dom_id": "card-capex",
+      "current_rendered_value": "$745B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.capex_total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.capex_total"
+      ],
+      "editorial_fallback": {
+        "value": 745.0,
+        "unit": "B",
+        "raw": "$745B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:300"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f4-8ff7-c6b9e0ee79bd",
+      "_capture": {
+        "line": 300,
+        "context": "<div class=\"lc-value\" style=\"color:var(--capital);\" id=\"card-capex\">$745B</div>",
+        "binding_hint": "cumulative.capex_total"
+      }
+    },
+    {
+      "id": "index.dom.card_revenue",
+      "page": "index.html",
+      "anchor_selector": "#card-revenue",
+      "anchor_dom_id": "card-revenue",
+      "current_rendered_value": "$19.3B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.sankey.totalCustomerRevenue_gross"
+      ],
+      "editorial_fallback": {
+        "value": 19.3,
+        "unit": "B",
+        "raw": "$19.3B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:311"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-810f-938c-cf30d169e430",
+      "_capture": {
+        "line": 311,
+        "context": "<div class=\"lc-value\" style=\"color:var(--revenue);\" id=\"card-revenue\">$19.3B</div>",
+        "binding_hint": "sankey.totalCustomerRevenue_gross"
+      }
+    },
+    {
+      "id": "index.dom.card_compute",
+      "page": "index.html",
+      "anchor_selector": "#card-compute",
+      "anchor_dom_id": "card-compute",
+      "current_rendered_value": "$43B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.compute_revenue_2025_gross_usd_b",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.compute_revenue_2025_gross_usd_b"
+      ],
+      "editorial_fallback": {
+        "value": 43.0,
+        "unit": "B",
+        "raw": "$43B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:322"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8167-8591-cb68b43f8c5d",
+      "_capture": {
+        "line": 322,
+        "context": "<div class=\"lc-value\" style=\"color:var(--compute);\" id=\"card-compute\">$43B</div>",
+        "binding_hint": "compute.compute_revenue_2025_gross_usd_b"
+      }
+    },
+    {
+      "id": "index.dom.card_tokens",
+      "page": "index.html",
+      "anchor_selector": "#card-tokens",
+      "anchor_dom_id": "card-tokens",
+      "current_rendered_value": "~360T/day",
+      "semantic": "market_aggregate.tokens",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.tokens_2025_annualized",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.tokens_2025_annualized"
+      ],
+      "editorial_fallback": {
+        "value": 360.0,
+        "unit": "T",
+        "raw": "~360T/day",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:333"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "tokens_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8196-99c6-ea1a64dc90ce",
+      "_capture": {
+        "line": 333,
+        "context": "<div class=\"lc-value\" style=\"color:var(--usage);\" id=\"card-tokens\">~360T/day</div>",
+        "binding_hint": "cumulative.tokens_2025_annualized"
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_cumulative.total_capex_reached_approximately_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"241\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$380B",
+      "semantic": "market_aggregate.capex_cumulative",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates.2025.total_capex",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates.2025.total_capex"
+      ],
+      "editorial_fallback": {
+        "value": 380.0,
+        "unit": "B",
+        "raw": "$380B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:241"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81d2-be17-e4c342b5a802",
+      "_capture": {
+        "line": 241,
+        "context": "<span style=\"color:var(--text-dim); font-size:12px;\"> Total AI CapEx reached approximately <span data-narrative=\"market_2025_total_capex\">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative=\"market_2025_t",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_revenue.customer_revenue_must_grow",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"321\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$17.5B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.sankey.totalCustomerRevenue_gross"
+      ],
+      "editorial_fallback": {
+        "value": 17.5,
+        "unit": "B",
+        "raw": "$17.5B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:321"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f0-b163-dbc99c3f9389",
+      "_capture": {
+        "line": 321,
+        "context": "<div class=\"cp-desc\">AI customer revenue (<span data-narrative=\"market_2025_total_customer_revenue_gross\">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categori",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_cumulative.lhs_source_buckets_cumulative",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"344\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$766B",
+      "semantic": "market_aggregate.capex_cumulative",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.capital_sankey.total"
+      ],
+      "editorial_fallback": {
+        "value": 766.0,
+        "unit": "B",
+        "raw": "$766B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:344"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8150-b85a-fadcd5f7af02",
+      "_capture": {
+        "line": 344,
+        "context": "<li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative=\"capital_sankey_total\">$766B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</",
         "binding_hint": null
       }
     },
@@ -1760,6 +2044,1266 @@
         "line": 337,
         "context": "<span class=\"tier-pill tier-3\">50% Modeled</span>",
         "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.lag_raw.2023.revenue",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[0].revenue",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "B",
+        "raw": "$1B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:820 (LAG_RAW[0].revenue)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b8-b082-d27aec0fec07",
+      "_capture": {
+        "line": 820,
+        "context": "LAG_RAW[0] year='2023' revenue=1.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 0,
+        "js_array_row_key": "2023",
+        "js_array_column": "revenue",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2023.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[0].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$48B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 48.0,
+        "unit": "B",
+        "raw": "$48B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:820 (LAG_RAW[0].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8135-916d-dc6e2b2288ba",
+      "_capture": {
+        "line": 820,
+        "context": "LAG_RAW[0] year='2023' nvidia=48.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 0,
+        "js_array_row_key": "2023",
+        "js_array_column": "nvidia",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2023.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[0].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$0B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 0.0,
+        "unit": "B",
+        "raw": "$0B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:820 (LAG_RAW[0].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81c0-ab69-ef092876f504",
+      "_capture": {
+        "line": 820,
+        "context": "LAG_RAW[0] year='2023' nvDep=0.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 0,
+        "js_array_row_key": "2023",
+        "js_array_column": "nvDep",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2023.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[0].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$0B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 0.0,
+        "unit": "B",
+        "raw": "$0B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:820 (LAG_RAW[0].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-813e-adc8-fcee8eb4d61e",
+      "_capture": {
+        "line": 820,
+        "context": "LAG_RAW[0] year='2023' totalDep=0.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 0,
+        "js_array_row_key": "2023",
+        "js_array_column": "totalDep",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2024.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[1].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$115B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 115.0,
+        "unit": "B",
+        "raw": "$115B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:821 (LAG_RAW[1].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81cf-abae-c9576c7f227f",
+      "_capture": {
+        "line": 821,
+        "context": "LAG_RAW[1] year='2024' nvidia=115.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 1,
+        "js_array_row_key": "2024",
+        "js_array_column": "nvidia",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2024.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[1].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$12B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 12.0,
+        "unit": "B",
+        "raw": "$12B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:821 (LAG_RAW[1].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81e1-9fe3-dd122f405720",
+      "_capture": {
+        "line": 821,
+        "context": "LAG_RAW[1] year='2024' nvDep=12.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 1,
+        "js_array_row_key": "2024",
+        "js_array_column": "nvDep",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2024.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[1].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$22B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 22.0,
+        "unit": "B",
+        "raw": "$22B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:821 (LAG_RAW[1].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8116-8f48-dc2f03a7d7e1",
+      "_capture": {
+        "line": 821,
+        "context": "LAG_RAW[1] year='2024' totalDep=22.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 1,
+        "js_array_row_key": "2024",
+        "js_array_column": "totalDep",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2025.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[2].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$194B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 194.0,
+        "unit": "B",
+        "raw": "$194B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:822 (LAG_RAW[2].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-810d-92c0-d298b499cd3f",
+      "_capture": {
+        "line": 822,
+        "context": "LAG_RAW[2] year='2025' nvidia=194.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 2,
+        "js_array_row_key": "2025",
+        "js_array_column": "nvidia",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2025.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[2].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$41B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 41.0,
+        "unit": "B",
+        "raw": "$41B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:822 (LAG_RAW[2].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8118-9f22-ed6966582706",
+      "_capture": {
+        "line": 822,
+        "context": "LAG_RAW[2] year='2025' nvDep=41.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 2,
+        "js_array_row_key": "2025",
+        "js_array_column": "nvDep",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2025.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[2].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$74B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 74.0,
+        "unit": "B",
+        "raw": "$74B",
+        "origin": "js_array_literal",
+        "audit_ref": "capital.html:822 (LAG_RAW[2].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8185-90ae-f0438c6b97c6",
+      "_capture": {
+        "line": 822,
+        "context": "LAG_RAW[2] year='2025' totalDep=74.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 2,
+        "js_array_row_key": "2025",
+        "js_array_column": "totalDep",
+        "is_forecast_year": false
+      }
+    },
+    {
+      "id": "capital.lag_raw.2026E.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[3].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$850B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 850.0,
+        "unit": "B",
+        "raw": "$850B",
+        "origin": "js_array_literal LAG_RAW[3].totalCapex",
+        "audit_ref": "capital.html:827 (LAG_RAW[3].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81d4-a11e-f9afea6578ba",
+      "_capture": {
+        "line": 827,
+        "context": "LAG_RAW[3] year='2026E' totalCapex=850.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 3,
+        "js_array_row_key": "2026E",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2026E.revenue",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[3].revenue",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$64B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 64.0,
+        "unit": "B",
+        "raw": "$64B",
+        "origin": "js_array_literal LAG_RAW[3].revenue",
+        "audit_ref": "capital.html:827 (LAG_RAW[3].revenue)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f6-b376-ef9ff5f532da",
+      "_capture": {
+        "line": 827,
+        "context": "LAG_RAW[3] year='2026E' revenue=64.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 3,
+        "js_array_row_key": "2026E",
+        "js_array_column": "revenue",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2026E.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[3].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$311B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 311.0,
+        "unit": "B",
+        "raw": "$311B",
+        "origin": "js_array_literal LAG_RAW[3].nvidia",
+        "audit_ref": "capital.html:827 (LAG_RAW[3].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8102-a378-c5c71bdcd23e",
+      "_capture": {
+        "line": 827,
+        "context": "LAG_RAW[3] year='2026E' nvidia=311.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 3,
+        "js_array_row_key": "2026E",
+        "js_array_column": "nvidia",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2026E.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[3].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$89B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 89.0,
+        "unit": "B",
+        "raw": "$89B",
+        "origin": "js_array_literal LAG_RAW[3].nvDep",
+        "audit_ref": "capital.html:827 (LAG_RAW[3].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-816c-a03c-fa5723fa4727",
+      "_capture": {
+        "line": 827,
+        "context": "LAG_RAW[3] year='2026E' nvDep=89.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 3,
+        "js_array_row_key": "2026E",
+        "js_array_column": "nvDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2026E.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[3].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$160B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 160.0,
+        "unit": "B",
+        "raw": "$160B",
+        "origin": "js_array_literal LAG_RAW[3].totalDep",
+        "audit_ref": "capital.html:827 (LAG_RAW[3].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-818b-b2f7-c76438226b69",
+      "_capture": {
+        "line": 827,
+        "context": "LAG_RAW[3] year='2026E' totalDep=160.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 3,
+        "js_array_row_key": "2026E",
+        "js_array_column": "totalDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2027E.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[4].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1100B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1100.0,
+        "unit": "B",
+        "raw": "$1100B",
+        "origin": "js_array_literal LAG_RAW[4].totalCapex",
+        "audit_ref": "capital.html:828 (LAG_RAW[4].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81e9-9dd2-ee6232d56e3c",
+      "_capture": {
+        "line": 828,
+        "context": "LAG_RAW[4] year='2027E' totalCapex=1100.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 4,
+        "js_array_row_key": "2027E",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2027E.revenue",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[4].revenue",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$115B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 115.0,
+        "unit": "B",
+        "raw": "$115B",
+        "origin": "js_array_literal LAG_RAW[4].revenue",
+        "audit_ref": "capital.html:828 (LAG_RAW[4].revenue)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8107-b258-de1d891799dc",
+      "_capture": {
+        "line": 828,
+        "context": "LAG_RAW[4] year='2027E' revenue=115.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 4,
+        "js_array_row_key": "2027E",
+        "js_array_column": "revenue",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2027E.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[4].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$400B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 400.0,
+        "unit": "B",
+        "raw": "$400B",
+        "origin": "js_array_literal LAG_RAW[4].nvidia",
+        "audit_ref": "capital.html:828 (LAG_RAW[4].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8141-83f7-e2fcd88b4745",
+      "_capture": {
+        "line": 828,
+        "context": "LAG_RAW[4] year='2027E' nvidia=400.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 4,
+        "js_array_row_key": "2027E",
+        "js_array_column": "nvidia",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2027E.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[4].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$167B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 167.0,
+        "unit": "B",
+        "raw": "$167B",
+        "origin": "js_array_literal LAG_RAW[4].nvDep",
+        "audit_ref": "capital.html:828 (LAG_RAW[4].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8162-ae5f-fa8cf931e89d",
+      "_capture": {
+        "line": 828,
+        "context": "LAG_RAW[4] year='2027E' nvDep=167.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 4,
+        "js_array_row_key": "2027E",
+        "js_array_column": "nvDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2027E.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[4].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$300B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 300.0,
+        "unit": "B",
+        "raw": "$300B",
+        "origin": "js_array_literal LAG_RAW[4].totalDep",
+        "audit_ref": "capital.html:828 (LAG_RAW[4].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81c6-ab0c-dc42afd7c442",
+      "_capture": {
+        "line": 828,
+        "context": "LAG_RAW[4] year='2027E' totalDep=300.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 4,
+        "js_array_row_key": "2027E",
+        "js_array_column": "totalDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2028E.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[5].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$750B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 750.0,
+        "unit": "B",
+        "raw": "$750B",
+        "origin": "js_array_literal LAG_RAW[5].totalCapex",
+        "audit_ref": "capital.html:829 (LAG_RAW[5].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81d0-ad76-c1bdfdf78870",
+      "_capture": {
+        "line": 829,
+        "context": "LAG_RAW[5] year='2028E' totalCapex=750.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 5,
+        "js_array_row_key": "2028E",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2028E.revenue",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[5].revenue",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$200B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 200.0,
+        "unit": "B",
+        "raw": "$200B",
+        "origin": "js_array_literal LAG_RAW[5].revenue",
+        "audit_ref": "capital.html:829 (LAG_RAW[5].revenue)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81e3-b9c9-d5fe6995a038",
+      "_capture": {
+        "line": 829,
+        "context": "LAG_RAW[5] year='2028E' revenue=200.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 5,
+        "js_array_row_key": "2028E",
+        "js_array_column": "revenue",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2028E.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[5].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$470B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 470.0,
+        "unit": "B",
+        "raw": "$470B",
+        "origin": "js_array_literal LAG_RAW[5].nvidia",
+        "audit_ref": "capital.html:829 (LAG_RAW[5].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8186-84c9-e2561a8b105c",
+      "_capture": {
+        "line": 829,
+        "context": "LAG_RAW[5] year='2028E' nvidia=470.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 5,
+        "js_array_row_key": "2028E",
+        "js_array_column": "nvidia",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2028E.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[5].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$255B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 255.0,
+        "unit": "B",
+        "raw": "$255B",
+        "origin": "js_array_literal LAG_RAW[5].nvDep",
+        "audit_ref": "capital.html:829 (LAG_RAW[5].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-812d-aba2-d599e211e1c6",
+      "_capture": {
+        "line": 829,
+        "context": "LAG_RAW[5] year='2028E' nvDep=255.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 5,
+        "js_array_row_key": "2028E",
+        "js_array_column": "nvDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2028E.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[5].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$460B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 460.0,
+        "unit": "B",
+        "raw": "$460B",
+        "origin": "js_array_literal LAG_RAW[5].totalDep",
+        "audit_ref": "capital.html:829 (LAG_RAW[5].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8133-abfb-f241661bd963",
+      "_capture": {
+        "line": 829,
+        "context": "LAG_RAW[5] year='2028E' totalDep=460.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 5,
+        "js_array_row_key": "2028E",
+        "js_array_column": "totalDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2029E.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[6].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$750B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 750.0,
+        "unit": "B",
+        "raw": "$750B",
+        "origin": "js_array_literal LAG_RAW[6].totalCapex",
+        "audit_ref": "capital.html:830 (LAG_RAW[6].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8169-b727-cb90176ef1bc",
+      "_capture": {
+        "line": 830,
+        "context": "LAG_RAW[6] year='2029E' totalCapex=750.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 6,
+        "js_array_row_key": "2029E",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2029E.revenue",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[6].revenue",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$300B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 300.0,
+        "unit": "B",
+        "raw": "$300B",
+        "origin": "js_array_literal LAG_RAW[6].revenue",
+        "audit_ref": "capital.html:830 (LAG_RAW[6].revenue)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81fc-aef8-c8dd51b28b13",
+      "_capture": {
+        "line": 830,
+        "context": "LAG_RAW[6] year='2029E' revenue=300.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 6,
+        "js_array_row_key": "2029E",
+        "js_array_column": "revenue",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2029E.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[6].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$500B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 500.0,
+        "unit": "B",
+        "raw": "$500B",
+        "origin": "js_array_literal LAG_RAW[6].nvidia",
+        "audit_ref": "capital.html:830 (LAG_RAW[6].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-818e-bb1e-cc54eeb462af",
+      "_capture": {
+        "line": 830,
+        "context": "LAG_RAW[6] year='2029E' nvidia=500.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 6,
+        "js_array_row_key": "2029E",
+        "js_array_column": "nvidia",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2029E.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[6].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$344B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 344.0,
+        "unit": "B",
+        "raw": "$344B",
+        "origin": "js_array_literal LAG_RAW[6].nvDep",
+        "audit_ref": "capital.html:830 (LAG_RAW[6].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81dc-ba61-f24cdd192ed4",
+      "_capture": {
+        "line": 830,
+        "context": "LAG_RAW[6] year='2029E' nvDep=344.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 6,
+        "js_array_row_key": "2029E",
+        "js_array_column": "nvDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2029E.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[6].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$620B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 620.0,
+        "unit": "B",
+        "raw": "$620B",
+        "origin": "js_array_literal LAG_RAW[6].totalDep",
+        "audit_ref": "capital.html:830 (LAG_RAW[6].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81ab-9342-d112714907fe",
+      "_capture": {
+        "line": 830,
+        "context": "LAG_RAW[6] year='2029E' totalDep=620.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 6,
+        "js_array_row_key": "2029E",
+        "js_array_column": "totalDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2030E.totalCapex",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[7].totalCapex",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$700B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 700.0,
+        "unit": "B",
+        "raw": "$700B",
+        "origin": "js_array_literal LAG_RAW[7].totalCapex",
+        "audit_ref": "capital.html:831 (LAG_RAW[7].totalCapex)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81c5-9072-eb8db8a1f648",
+      "_capture": {
+        "line": 831,
+        "context": "LAG_RAW[7] year='2030E' totalCapex=700.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 7,
+        "js_array_row_key": "2030E",
+        "js_array_column": "totalCapex",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2030E.revenue",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[7].revenue",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$420B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 420.0,
+        "unit": "B",
+        "raw": "$420B",
+        "origin": "js_array_literal LAG_RAW[7].revenue",
+        "audit_ref": "capital.html:831 (LAG_RAW[7].revenue)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8121-adff-dce1fdf69d08",
+      "_capture": {
+        "line": 831,
+        "context": "LAG_RAW[7] year='2030E' revenue=420.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 7,
+        "js_array_row_key": "2030E",
+        "js_array_column": "revenue",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2030E.nvidia",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[7].nvidia",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$480B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 480.0,
+        "unit": "B",
+        "raw": "$480B",
+        "origin": "js_array_literal LAG_RAW[7].nvidia",
+        "audit_ref": "capital.html:831 (LAG_RAW[7].nvidia)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81dd-aef4-e567cdd1d4cc",
+      "_capture": {
+        "line": 831,
+        "context": "LAG_RAW[7] year='2030E' nvidia=480.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 7,
+        "js_array_row_key": "2030E",
+        "js_array_column": "nvidia",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2030E.nvDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[7].nvDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$415B",
+      "semantic": "per_entity_metric.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 415.0,
+        "unit": "B",
+        "raw": "$415B",
+        "origin": "js_array_literal LAG_RAW[7].nvDep",
+        "audit_ref": "capital.html:831 (LAG_RAW[7].nvDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-819f-9f27-faf8692040e6",
+      "_capture": {
+        "line": 831,
+        "context": "LAG_RAW[7] year='2030E' nvDep=415.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 7,
+        "js_array_row_key": "2030E",
+        "js_array_column": "nvDep",
+        "is_forecast_year": true
+      }
+    },
+    {
+      "id": "capital.lag_raw.2030E.totalDep",
+      "page": "capital.html",
+      "anchor_selector": "js:LAG_RAW[7].totalDep",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$747B",
+      "semantic": "market_aggregate.depreciation",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 747.0,
+        "unit": "B",
+        "raw": "$747B",
+        "origin": "js_array_literal LAG_RAW[7].totalDep",
+        "audit_ref": "capital.html:831 (LAG_RAW[7].totalDep)"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81da-89ba-f06f5645fef2",
+      "_capture": {
+        "line": 831,
+        "context": "LAG_RAW[7] year='2030E' totalDep=747.0",
+        "binding_hint": null,
+        "js_array": "LAG_RAW",
+        "js_array_row": 7,
+        "js_array_row_key": "2030E",
+        "js_array_column": "totalDep",
+        "is_forecast_year": true
       }
     },
     {
@@ -2290,6 +3834,37 @@
       }
     },
     {
+      "id": "capital.market_aggregate_revenue.customer_revenue_must_grow_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"321\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "100%",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 100.0,
+        "unit": "%",
+        "raw": "100%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:321"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8162-b430-fab696097e98",
+      "_capture": {
+        "line": 321,
+        "context": "<div class=\"cp-desc\">AI customer revenue (<span data-narrative=\"market_2025_total_customer_revenue_gross\">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categori",
+        "binding_hint": null
+      }
+    },
+    {
       "id": "capital.market_aggregate_capex_annual.annual_capex_stabilises_ndash",
       "page": "capital.html",
       "anchor_selector": "[data-num][data-line=\"327\"]",
@@ -2383,7 +3958,7 @@
       }
     },
     {
-      "id": "capital.market_aggregate_capex_cumulative.lhs_source_buckets_cumulative",
+      "id": "capital.market_aggregate_capex_cumulative.lhs_source_buckets_cumulative_2",
       "page": "capital.html",
       "anchor_selector": "[data-num][data-line=\"344\"]",
       "anchor_dom_id": null,
@@ -2406,7 +3981,7 @@
       },
       "format": "currency_b_compact",
       "last_changed": null,
-      "notion_id": "35c57414-da2a-8150-b85a-fadcd5f7af02",
+      "notion_id": "35c57414-da2a-81b2-9f85-f59f068461fb",
       "_capture": {
         "line": 344,
         "context": "<li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative=\"capital_sankey_total\">$766B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</",

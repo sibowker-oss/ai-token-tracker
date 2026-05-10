@@ -4,10 +4,10 @@ Generated 2026-05-10 by `scripts/build_numbers_manifest.py`.
 
 ## Summary
 
-- Total manifest entries: **108**
-- Auto-resolved (`source_path` populated): **39**
-- Intentionally fixed editorial (no path needed, `source_state=fixed`): **68**
-- **Auto-resolution rate (path or fixed): 99.1%** (target ≥40%)
+- Total manifest entries: **153**
+- Auto-resolved (`source_path` populated): **48**
+- Intentionally fixed editorial (no path needed, `source_state=fixed`): **104**
+- **Auto-resolution rate (path or fixed): 99.3%** (target ≥40%)
 - Needs manual path assignment: **1**
 - No path candidate at all: **0** (0.0%) (target ≤10%)
 
@@ -23,7 +23,7 @@ Entries below were extracted but the resolver couldn't pick a unique path. Where
 
 ## Intentionally fixed editorial entries (no source_path expected)
 
-68 entries flagged as `source_state=fixed` (tier-mix percentages, methodology constants, regulatory ids, etc.). Build skips supersession but routes the literal through the formatter.
+104 entries flagged as `source_state=fixed` (tier-mix percentages, methodology constants, regulatory ids, etc.). Build skips supersession but routes the literal through the formatter.
 
 | Page | Line | Raw | Semantic | Context |
 |---|---|---|---|---|
@@ -40,25 +40,31 @@ Entries below were extracted but the resolver couldn't pick a unique path. Where
 | index.html | 327 | `10%` | `percentage_uncategorised` | <span class="tier-pill tier-3">10% Modeled</span> |
 | index.html | 336 | `50%` | `percentage_uncategorised` | <span class="tier-pill tier-2">50% Derived</span> |
 | index.html | 337 | `50%` | `percentage_uncategorised` | <span class="tier-pill tier-3">50% Modeled</span> |
-| capital.html | 222 | `$170B` | `uncategorised` | <label for="cf-check">Ad-platform counterfactual: exclude $170B of self-funded ad/cloud infrastructu |
-| capital.html | 226 | `$34` | `ratio_derived` | Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-rati |
-| capital.html | 226 | `$1` | `ratio_derived` | Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-rati |
-| capital.html | 226 | `$13` | `ratio_derived` | Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-rati |
-| capital.html | 226 | `$1` | `ratio_derived` | Excluding them reduces the infrastructure-to-revenue ratio from <strong id="cf-ratio-from" data-rati |
-| capital.html | 245 | `$24B` | `per_entity_metric.revenue` | <tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation< |
-| capital.html | 245 | `$17.5B` | `per_entity_metric.revenue` | <tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation< |
-| capital.html | 245 | `$41B` | `per_entity_metric.revenue` | <tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation< |
-| capital.html | 245 | `4x` | `ratio_derived` | <tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation< |
-| capital.html | 246 | `~$170B` | `market_aggregate.capex_annual` | <tr><td>Ad/cloud workloads covering their share</td><td>Existing business models justify the CapEx</ |
-| capital.html | 247 | `$368B` | `market_aggregate.capex_annual` | <tr><td>CapEx growth trajectory</td><td>New purchases stabilise so depreciation levels</td><td class |
-| capital.html | 250 | `$1T` | `market_aggregate.revenue` | <strong>NVIDIA $1T target:</strong> cumulative AI-chip revenue through CY2027 = ~$1.07T at projected |
-| capital.html | 250 | `~$1.07T` | `market_aggregate.revenue` | <strong>NVIDIA $1T target:</strong> cumulative AI-chip revenue through CY2027 = ~$1.07T at projected |
-| capital.html | 250 | `$1T` | `market_aggregate.revenue` | <strong>NVIDIA $1T target:</strong> cumulative AI-chip revenue through CY2027 = ~$1.07T at projected |
-| capital.html | 308 | `$766B` | `ratio_derived` | <div class="sens-label" id="sens-ratio-detail" style="margin-top:4px;">$766B total &middot; $22B rev |
-| capital.html | 308 | `$22B` | `ratio_derived` | <div class="sens-label" id="sens-ratio-detail" style="margin-top:4px;">$766B total &middot; $22B rev |
-| capital.html | 320 | `4x` | `ratio_derived` | <div class="cp-title">Revenue compounds at 3&ndash;4x annually</div> |
+| capital.html | 820 | `$1B` | `market_aggregate.revenue` | LAG_RAW[0] year='2023' revenue=1.0 |
+| capital.html | 820 | `$48B` | `per_entity_metric.revenue` | LAG_RAW[0] year='2023' nvidia=48.0 |
+| capital.html | 820 | `$0B` | `per_entity_metric.depreciation` | LAG_RAW[0] year='2023' nvDep=0.0 |
+| capital.html | 820 | `$0B` | `market_aggregate.depreciation` | LAG_RAW[0] year='2023' totalDep=0.0 |
+| capital.html | 821 | `$115B` | `per_entity_metric.revenue` | LAG_RAW[1] year='2024' nvidia=115.0 |
+| capital.html | 821 | `$12B` | `per_entity_metric.depreciation` | LAG_RAW[1] year='2024' nvDep=12.0 |
+| capital.html | 821 | `$22B` | `market_aggregate.depreciation` | LAG_RAW[1] year='2024' totalDep=22.0 |
+| capital.html | 822 | `$194B` | `per_entity_metric.revenue` | LAG_RAW[2] year='2025' nvidia=194.0 |
+| capital.html | 822 | `$41B` | `per_entity_metric.depreciation` | LAG_RAW[2] year='2025' nvDep=41.0 |
+| capital.html | 822 | `$74B` | `market_aggregate.depreciation` | LAG_RAW[2] year='2025' totalDep=74.0 |
+| capital.html | 827 | `$850B` | `market_aggregate.capex_annual` | LAG_RAW[3] year='2026E' totalCapex=850.0 |
+| capital.html | 827 | `$64B` | `market_aggregate.revenue` | LAG_RAW[3] year='2026E' revenue=64.0 |
+| capital.html | 827 | `$311B` | `per_entity_metric.revenue` | LAG_RAW[3] year='2026E' nvidia=311.0 |
+| capital.html | 827 | `$89B` | `per_entity_metric.depreciation` | LAG_RAW[3] year='2026E' nvDep=89.0 |
+| capital.html | 827 | `$160B` | `market_aggregate.depreciation` | LAG_RAW[3] year='2026E' totalDep=160.0 |
+| capital.html | 828 | `$1100B` | `market_aggregate.capex_annual` | LAG_RAW[4] year='2027E' totalCapex=1100.0 |
+| capital.html | 828 | `$115B` | `market_aggregate.revenue` | LAG_RAW[4] year='2027E' revenue=115.0 |
 
-_(38 more …)_
+_(74 more …)_
+
+## Editorial-level bugs flagged for Stage 2
+
+Bugs spotted during Stage 1 review that are NOT manifest entries — they're label / wording fixes needed in the HTML directly. Logged here so they don't fall through Stage 2:
+
+- **`capital.html:607`** — third hero card *Infrastructure per $1 revenue* shows `<div class="kpi-period">2025</div>` but the math (`v.t0` = cumulative CapEx ÷ `sc.revenue`) actually reflects 2023–25. Should read `2023–25` to match the first two cards. Fix: replace literal `2025` with `2023&ndash;25` in the JS template string at line 607. Discovered during wq-102 Stage 1 review (Simon).
 
 ## Notes
 

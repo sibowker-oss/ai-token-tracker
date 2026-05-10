@@ -454,6 +454,12 @@ def detect_anchor_id(line: str) -> str | None:
 
 # data-narrative="market_2025_total_customer_revenue_gross" → source_path hint
 DATA_NARRATIVE_RE = re.compile(r'data-narrative\s*=\s*["\']([\w_\.]+)["\']')
+# Span-local narrative-anchor finder: matches the OPENING <span> through to
+# the captured numeric token. Used to attribute one numeric to one anchor on
+# multi-number lines.
+DATA_NARRATIVE_OPEN_RE = re.compile(
+    r'<span[^>]*\bdata-narrative\s*=\s*["\']([\w_\.]+)["\'][^>]*>'
+)
 
 # Hand-curated map from data-narrative keys to canonical source paths. Add
 # entries here as new narrative keys appear; the build script falls back to
@@ -461,19 +467,44 @@ DATA_NARRATIVE_RE = re.compile(r'data-narrative\s*=\s*["\']([\w_\.]+)["\']')
 DATA_NARRATIVE_MAP = {
     "market_2025_total_customer_revenue_gross": "site-data.sankey.totalCustomerRevenue_gross",
     "market_2025_total_customer_revenue_net": "site-data.sankey.totalCustomerRevenue",
+    "market_2025_total_capex": "entities.market_aggregates.2025.total_capex",
     "cumulative_2023_2025_capex_total": "site-data.cumulative.capex_total",
     "cumulative_2023_2025_tokens": "site-data.cumulative.tokens_2025_annualized",
     "compute_revenue_2025_gross": "site-data.compute.compute_revenue_2025_gross_usd_b",
     "infra_to_revenue_2025": "site-data.cumulative.infra_to_revenue_ratio_2025",
+    "capital_sankey_total": "site-data.capital_sankey.total",
 }
 
 
 def detect_data_narrative_hint(line: str) -> str | None:
-    """Extract data-narrative="..." attribute and map it to a known source_path."""
+    """[Legacy line-level extractor — kept for callers that don't have a span.]"""
     m = DATA_NARRATIVE_RE.search(line)
     if not m:
         return None
     key = m.group(1)
+    return DATA_NARRATIVE_MAP.get(key)
+
+
+def detect_narrative_hint_for_token(line: str, token_span: tuple[int, int]) -> str | None:
+    """Find the nearest preceding <span data-narrative="..."> opening tag and
+    confirm the closing </span> sits AFTER the token. This binds the token to
+    its own anchor on multi-number lines (e.g., L241 / L321 with two anchors).
+    """
+    s, _e = token_span
+    # find all <span data-narrative="..."> open tags before the token
+    candidates = []
+    for m in DATA_NARRATIVE_OPEN_RE.finditer(line):
+        if m.end() <= s:
+            candidates.append(m)
+    if not candidates:
+        return None
+    # pick the LAST opener before the token, then verify the matching </span>
+    # closes AFTER the token (i.e. token is inside this span).
+    open_match = candidates[-1]
+    close_idx = line.find("</span>", open_match.end())
+    if close_idx == -1 or close_idx < s:
+        return None
+    key = open_match.group(1)
     return DATA_NARRATIVE_MAP.get(key)
 
 
@@ -579,11 +610,17 @@ PATH_KEYWORD_HINTS: list[tuple[str, list[str]]] = [
 # `unit_set` of None means any. page_glob "*" means any page.
 SEMANTIC_PATH_RULES: list[tuple[str, list[str], set | None, str]] = [
     # ── Cumulative 2023–2025 aggregates (homepage + capital) ─────────────
-    ("*", ["cumulative", "2023", "infrastructure investment"], {"B"}, "site-data.cumulative.capex_total"),
+    # og:description-style narrow phrases (used with span-local matching so
+    # one rule fires per token on multi-number lines)
     ("*", ["of infrastructure investment"], {"B"}, "site-data.cumulative.capex_total"),
+    ("*", ["of ai compute revenue earned"], {"B"}, "site-data.compute.compute_revenue_2025_gross_usd_b"),
+    ("*", ["ai compute revenue earned"], {"B"}, "site-data.compute.compute_revenue_2025_gross_usd_b"),
+    ("*", ["customer-paid apps revenue"], {"B"}, "site-data.sankey.totalCustomerRevenue_gross"),
+    ("*", ["of customer-paid"], {"B"}, "site-data.sankey.totalCustomerRevenue_gross"),
+    ("*", ["cumulative", "2023", "infrastructure investment"], {"B"}, "site-data.cumulative.capex_total"),
     ("*", ["cumulative 2023", "ai capital expenditure"], {"B"}, "site-data.cumulative.capex_total"),
     ("*", ["cumulative", "tokens"], {"T"}, "site-data.cumulative.tokens_2025_annualized"),
-    ("*", ["tokens/day", "360t", "360 t"], {"T"}, "site-data.cumulative.tokens_2025_annualized"),
+    ("*", ["tokens/day"], {"T"}, "site-data.cumulative.tokens_2025_annualized"),
     ("*", ["~360t"], {"T"}, "site-data.cumulative.tokens_2025_annualized"),
     # ── Compute revenue (homepage hero, compute page) ────────────────────
     ("*", ["ai compute revenue earned", "compute revenue", "compute earned"], {"B"}, "site-data.compute.compute_revenue_2025_gross_usd_b"),
@@ -648,6 +685,11 @@ SEMANTIC_PATH_RULES: list[tuple[str, list[str], set | None, str]] = [
     ("capital.html", ["ai customer revenue"], {"B"}, "site-data.sankey.totalCustomerRevenue_gross"),
     # ── compute.html "for every $1 of customer apps revenue" ratio block ─
     ("compute.html", ["google's rpo jump"], {"B"}, "entities.market_aggregates._narrative.google_rpo_b"),
+    # ── Homepage live tile subline — "frontier labs paid 79% of it" ──────
+    ("index.html", ["frontier labs paid"], {"%"}, "site-data.compute.frontier_lab_share_2025_pct"),
+    # ── Capital narrative bridge — fleet/COGS ratio (~5.9x) ──────────────
+    ("capital.html", ["fleet ($82b) generates"], {"×"}, "site-data.capital_sankey.fleet_to_cogs_ratio_x"),
+    ("capital.html", ["consistent with"], {"×"}, "site-data.capital_sankey.fleet_to_cogs_ratio_x"),
     # ── usage.html token signal lines (signal-current, target are fixed)
     # ── revenue.html methodology percentages (channel routing) — fixed via narrative rule
     # ── power.html — 95 GW manual figure (no engine path; mark as fixed)
@@ -792,21 +834,68 @@ def is_narrative_line(line: str) -> bool:
     return bool(NARRATIVE_TAG_RE.search(line))
 
 
+def _phrase_distance(line_lower: str, phrases: list[str], token_pos: int) -> int | None:
+    """Return the minimum char-distance from any phrase occurrence to the
+    token (whichever phrase is closest, considering all instances). None if
+    any phrase isn't present at all.
+    """
+    best = None
+    for p in phrases:
+        # find all occurrences of p in the line
+        i = 0
+        found_any = False
+        while True:
+            idx = line_lower.find(p, i)
+            if idx < 0:
+                break
+            found_any = True
+            # distance: how far phrase end is from token (or token to phrase start)
+            # Use the closer edge.
+            phrase_end = idx + len(p)
+            d = min(abs(idx - token_pos), abs(phrase_end - token_pos))
+            if best is None or d < best:
+                best = d
+            i = idx + 1
+        if not found_any:
+            return None
+    return best
+
+
 def nominate_via_semantic_rules(
-    page: str, line: str, unit: str | None
+    page: str,
+    line: str,
+    unit: str | None,
+    token_span: tuple[int, int] | None = None,
+    window: int = 120,
 ) -> str | None:
-    """Try to assign source_path by context phrases (not by value match).
-    A rule fires when ALL phrases are present in the line and the unit matches.
-    Rules earlier in SEMANTIC_PATH_RULES win (longest-context phrases first)."""
+    """Pick the source_path rule whose phrase(s) sit closest to the token.
+
+    All phrases in the rule must be present in the line, the unit must match,
+    and the closest phrase occurrence to the token must be within `window`
+    chars. Among satisfying rules, the one with the smallest min-distance
+    wins. Ties are broken by SEMANTIC_PATH_RULES ordering (earlier wins).
+    """
     ll = line.lower()
-    for page_glob, phrases, units, path in SEMANTIC_PATH_RULES:
+    s, e = (token_span or (0, len(ll)))
+    token_pos = (s + e) // 2
+
+    best: tuple[int, int, str] | None = None  # (distance, rule_index, path)
+    for idx, (page_glob, phrases, units, path) in enumerate(SEMANTIC_PATH_RULES):
         if page_glob != "*" and page_glob != page:
             continue
         if units is not None and unit not in units:
             continue
-        if all(p in ll for p in phrases):
+        if not all(p in ll for p in phrases):
+            continue
+        if token_span is None:
+            # no proximity scoring possible — fall back to first-match-wins
             return path
-    return None
+        d = _phrase_distance(ll, phrases, token_pos)
+        if d is None or d > window:
+            continue
+        if best is None or d < best[0] or (d == best[0] and idx < best[1]):
+            best = (d, idx, path)
+    return best[2] if best else None
 
 
 def score_path(path: str, line_lower: str) -> int:
@@ -973,6 +1062,224 @@ def make_id(page: str, semantic: str, line: str, value: float, unit: str | None,
     return f"{page_prefix(page)}.{sem_short}.{slug}"
 
 
+# ───────────────────────── JS data-array mining ─────────────────────────
+#
+# Brief §5: "Numbers inside JS scenario objects" — kept literal but populated
+# from manifest at build time. Catches array-of-objects shapes like
+# capital.html's LAG_RAW = [{year:'2025', totalCapex:380, ...}, ...].
+#
+# Each cell becomes a manifest entry keyed
+#   <page>.<array_name_lower>.<row_key>.<column>
+# The anchor_selector is virtual: `js:<ARRAY_NAME>[<index>].<column>` so the
+# Stage 2 render script knows to rewrite the literal in the JS source.
+
+JS_ARRAY_HEADER_RE = re.compile(
+    r"(?:const|let|var)\s+([A-Z][A-Z_0-9]+)\s*=\s*\[",
+)
+# Row matcher — each {key:value, key:value} — flat (no nested objects). Good
+# enough for chart-row patterns; nested cases are out of scope for now.
+JS_ROW_RE = re.compile(r"\{([^{}]*)\}")
+# Key:value pair inside a row. Numeric values OR quoted strings (for row id).
+JS_KV_RE = re.compile(
+    r"""(\w+)\s*:\s*(?:['"]([^'"]*)['"]|(-?\d+(?:\.\d+)?))""",
+)
+
+
+# Per-array wiring: which page+array, what each column maps to (semantic +
+# format + per-row source_path lookup keyed by the row id (year/key).
+# Values are intentionally narrow — out-year forecasts have no engine path
+# and stay editorial; historical 2023–25 rows resolve where possible.
+JS_ARRAY_WIRING = {
+    # capital.html — LAG_RAW: 8 rows × {year, nvidia, totalCapex, nvDep, totalDep, revenue}
+    ("capital.html", "LAG_RAW"): {
+        "row_key": "year",
+        "columns": {
+            "totalCapex": {
+                "semantic": "market_aggregate.capex_annual",
+                "format": "currency_b_compact",
+                "row_paths": {
+                    "2023": "entities.market_aggregates.2023.total_capex",
+                    "2024": "entities.market_aggregates.2024.total_capex",
+                    "2025": "entities.market_aggregates.2025.total_capex",
+                    # 2026E–2030E: forecasts not in engine, stay editorial
+                },
+            },
+            "revenue": {
+                "semantic": "market_aggregate.revenue",
+                "format": "currency_b_compact",
+                "row_paths": {
+                    # 2025 customer revenue gross
+                    "2025": "site-data.sankey.totalCustomerRevenue_gross",
+                    # 2024/2023: cumulative-by-year capture has gross figures
+                    "2024": "entities.market_aggregates._cumulative_2023_2025.by_year.2024.customer_revenue_gross",
+                    # 2023 has no gross capture — forecast and historical years
+                    # both stay as editorial fallback by design.
+                },
+            },
+            "nvidia": {
+                "semantic": "per_entity_metric.revenue",
+                "format": "currency_b_compact",
+                "row_paths": {},  # no structured engine path for NVIDIA DC
+            },
+            "nvDep": {
+                "semantic": "per_entity_metric.depreciation",
+                "format": "currency_b_compact",
+                "row_paths": {},  # no engine path
+            },
+            "totalDep": {
+                "semantic": "market_aggregate.depreciation",
+                "format": "currency_b_compact",
+                "row_paths": {},  # no engine path; depreciation.json is per-Q
+            },
+        },
+    },
+}
+
+
+def extract_js_data_arrays(
+    text: str,
+    page_name: str,
+    script_blocks: dict[int, dict],
+    site_data: dict,
+    entities: dict,
+) -> tuple[list[dict], list[dict]]:
+    """Mine top-level data-arrays inside <script> blocks against JS_ARRAY_WIRING.
+
+    Returns (entries, raw_rows). Each cell becomes a manifest entry with a
+    virtual anchor_selector `js:<NAME>[<index>].<column>` for Stage 2 to
+    rewrite the literal inside the JS source.
+    """
+    entries: list[dict] = []
+    raw_rows: list[dict] = []
+
+    # Concatenate all script blocks (with their starting line numbers preserved)
+    for blk in script_blocks.values():
+        # Reconstruct text with original line numbers
+        block_text = "\n".join(line for _, line in blk["lines"])
+        line_offsets = [lineno for lineno, _ in blk["lines"]]
+
+        for header_m in JS_ARRAY_HEADER_RE.finditer(block_text):
+            array_name = header_m.group(1)
+            wiring = JS_ARRAY_WIRING.get((page_name, array_name))
+            if not wiring:
+                continue
+            # Walk forward to find the matching closing bracket for the array.
+            start = header_m.end()
+            depth = 1
+            i = start
+            while i < len(block_text) and depth > 0:
+                ch = block_text[i]
+                if ch == "[":
+                    depth += 1
+                elif ch == "]":
+                    depth -= 1
+                i += 1
+            array_body = block_text[start : i - 1]
+            # Iterate row objects
+            row_idx = 0
+            for row_m in JS_ROW_RE.finditer(array_body):
+                row_body = row_m.group(1)
+                kv_pairs: dict[str, tuple[str | None, float | None]] = {}
+                for kv in JS_KV_RE.finditer(row_body):
+                    key = kv.group(1)
+                    str_val = kv.group(2)
+                    num_val = kv.group(3)
+                    if num_val is not None:
+                        kv_pairs[key] = (None, float(num_val))
+                    elif str_val is not None:
+                        kv_pairs[key] = (str_val, None)
+                row_key_field = wiring["row_key"]
+                row_key_val = (kv_pairs.get(row_key_field) or (None, None))[0]
+                if not row_key_val:
+                    row_idx += 1
+                    continue
+                # Translate the row's char position back to a line number for
+                # the audit ref. Crude: count newlines from block start.
+                row_offset_in_block = start + row_m.start()
+                lines_before = block_text[:row_offset_in_block].count("\n")
+                lineno = (
+                    line_offsets[lines_before]
+                    if lines_before < len(line_offsets)
+                    else line_offsets[-1]
+                )
+                # Emit one entry per wired column present in this row
+                for col, col_wiring in wiring["columns"].items():
+                    pair = kv_pairs.get(col)
+                    if not pair or pair[1] is None:
+                        continue
+                    val = pair[1]
+                    semantic = col_wiring["semantic"]
+                    fmt_kind = col_wiring["format"]
+                    src_path = col_wiring["row_paths"].get(row_key_val)
+                    sp_exists = (
+                        bool(src_path) and path_exists(src_path, site_data, entities)
+                    )
+                    forecast_year = "E" in row_key_val
+                    is_fixed = (src_path is None) or forecast_year
+                    raw_str = f"${int(val) if val == int(val) else val}B"
+                    entry = {
+                        "id": f"{Path(page_name).stem}.{array_name.lower()}.{row_key_val.lower().replace('e','E')}.{col}",
+                        "page": page_name,
+                        "anchor_selector": f"js:{array_name}[{row_idx}].{col}",
+                        "anchor_dom_id": None,
+                        "current_rendered_value": raw_str,
+                        "semantic": semantic,
+                        "source_state": "fixed" if is_fixed else "editorial",
+                        "source_path": src_path,
+                        "source_path_exists": sp_exists,
+                        "source_path_candidates": [src_path] if src_path else [],
+                        "editorial_fallback": {
+                            "value": val,
+                            "unit": "B",
+                            "raw": raw_str,
+                            "origin": (
+                                f"js_array_literal LAG_RAW[{row_idx}].{col}"
+                                if forecast_year
+                                else "js_array_literal"
+                            ),
+                            "audit_ref": f"{page_name}:{lineno} ({array_name}[{row_idx}].{col})",
+                        },
+                        "supersession_threshold": {
+                            "provenance_score_min": 0.7,
+                            "consensus_weight_min": "indicative",
+                        },
+                        "format": fmt_kind,
+                        "last_changed": None,
+                        "notion_id": None,
+                        "_capture": {
+                            "line": lineno,
+                            "context": (
+                                f"{array_name}[{row_idx}] "
+                                f"{row_key_field}={row_key_val!r} {col}={val}"
+                            ),
+                            "binding_hint": None,
+                            "js_array": array_name,
+                            "js_array_row": row_idx,
+                            "js_array_row_key": row_key_val,
+                            "js_array_column": col,
+                            "is_forecast_year": forecast_year,
+                        },
+                    }
+                    entries.append(entry)
+                    raw_rows.append(
+                        {
+                            "page": page_name,
+                            "line": lineno,
+                            "raw": raw_str,
+                            "value": val,
+                            "unit": "B",
+                            "semantic": semantic,
+                            "anchor_hint": None,
+                            "binding_hint": None,
+                            "source_path": src_path,
+                            "candidates": [src_path] if src_path else [],
+                            "context": entry["_capture"]["context"],
+                        }
+                    )
+                row_idx += 1
+    return entries, raw_rows
+
+
 # ───────────────────────── Per-page extraction ─────────────────────────
 
 
@@ -992,6 +1299,13 @@ def extract_page_entries(
     entries: list[dict] = []
     raw_rows: list[dict] = []
 
+    # Mine JS data-array literals (LAG_RAW etc.) — brief §5
+    js_entries, js_raw = extract_js_data_arrays(
+        text, page_name, script_blocks, site_data, entities
+    )
+    entries.extend(js_entries)
+    raw_rows.extend(js_raw)
+
     for lineno, line in enumerate(text.split("\n"), 1):
         if lineno in skip_lines:
             continue
@@ -1009,7 +1323,8 @@ def extract_page_entries(
         anchor_hint = detect_anchor_id(line)
         # nominate source_path via existing dom-id binding when present
         binding_hint = bindings.get(anchor_hint) if anchor_hint else None
-        narrative_hint = detect_data_narrative_hint(line)
+        # whether this line carries any data-narrative anchors at all
+        line_has_narrative = bool(DATA_NARRATIVE_OPEN_RE.search(line))
         line_fixed = is_line_fixed(line)
 
         for t in toks:
@@ -1041,17 +1356,31 @@ def extract_page_entries(
                 source_state = "fixed"
             else:
                 # 1) JS hydration binding hint (most reliable)
-                # 2) data-narrative="..." attribute hint
+                # 2) data-narrative="..." attribute (PER-TOKEN, span-local)
                 # 3) Semantic context-phrase rule (handles supersession story
                 #    where editorial value differs from current source value)
                 # 4) Value-index match (fallback when first three miss)
-                rule_path = nominate_via_semantic_rules(page_name, line, unit)
+                #
+                # If the line carries narrative anchors but THIS token sits
+                # outside any of them, we treat the token as fixed editorial
+                # (rhetorical / methodology framing, not a data point). This
+                # fixes the multi-number-line bug from L241 / L321 where every
+                # token on the line was being bound to the same path.
+                token_narrative = detect_narrative_hint_for_token(line, t["span"])
+                rule_path = nominate_via_semantic_rules(
+                    page_name, line, unit, token_span=t["span"]
+                )
                 if binding_hint:
                     source_path = f"site-data.{binding_hint}"
                     candidates = [source_path]
-                elif narrative_hint:
-                    source_path = narrative_hint
-                    candidates = [narrative_hint]
+                elif token_narrative:
+                    source_path = token_narrative
+                    candidates = [token_narrative]
+                elif line_has_narrative:
+                    # Line has narrative anchors but this token is outside them
+                    # → editorial framing (e.g. "must grow at 80–100% CAGR").
+                    source_path = None
+                    candidates = []
                 elif rule_path:
                     source_path = rule_path
                     candidates = [rule_path]
@@ -1127,28 +1456,38 @@ def extract_page_entries(
 
 def dedupe_and_disambiguate(entries: list[dict]) -> list[dict]:
     """1) Ensure manifest ids are unique.
-    2) When two entries on different pages share (source_path, format, value),
+    2) When two entries on DIFFERENT pages share (source_path, format, value),
        collapse them into a single entry with `pages: [..]`.
+
+    Same-page entries are NEVER merged: two different render targets
+    (HTML span vs. JS array cell vs. og:description meta attr) are distinct
+    Stage-2 update sites even when they bind to the same source path.
     """
-    # Stage A: collapse cross-page duplicates by (source_path, format, value)
+    # Stage A: collapse cross-page duplicates only (same source_path, format,
+    # value, AND different page). Same-page duplicates remain separate.
     by_key: dict[tuple, dict] = {}
-    others: list[dict] = []
+    same_page_kept: list[dict] = []
+    no_path: list[dict] = []
     for e in entries:
         sp = e["source_path"]
-        if sp:
-            key = (sp, e["format"], round(e["editorial_fallback"]["value"], 3))
-            if key in by_key:
-                existing = by_key[key]
-                existing.setdefault("pages", [existing["page"]])
-                if e["page"] not in existing["pages"]:
-                    existing["pages"].append(e["page"])
-                existing.setdefault("anchor_selectors", [existing["anchor_selector"]])
-                existing["anchor_selectors"].append(e["anchor_selector"])
-                continue
+        if not sp:
+            no_path.append(e)
+            continue
+        key = (sp, e["format"], round(e["editorial_fallback"]["value"], 3))
+        if key not in by_key:
             by_key[key] = e
-        else:
-            others.append(e)
-    merged = list(by_key.values()) + others
+            continue
+        existing = by_key[key]
+        if e["page"] == existing["page"]:
+            # Same page — keep both as distinct anchors
+            same_page_kept.append(e)
+            continue
+        existing.setdefault("pages", [existing["page"]])
+        if e["page"] not in existing["pages"]:
+            existing["pages"].append(e["page"])
+        existing.setdefault("anchor_selectors", [existing["anchor_selector"]])
+        existing["anchor_selectors"].append(e["anchor_selector"])
+    merged = list(by_key.values()) + same_page_kept + no_path
 
     # Stage B: id uniqueness pass
     seen_ids: dict[str, int] = {}
@@ -1356,6 +1695,19 @@ def write_gap_report(entries: list[dict], raw_rows: list[dict], path: Path) -> N
     else:
         lines.append("_(none)_\n")
 
+    lines.append("## Editorial-level bugs flagged for Stage 2\n")
+    lines.append(
+        "Bugs spotted during Stage 1 review that are NOT manifest entries — they're "
+        "label / wording fixes needed in the HTML directly. Logged here so they don't "
+        "fall through Stage 2:\n"
+    )
+    lines.append(
+        "- **`capital.html:607`** — third hero card *Infrastructure per $1 revenue* shows "
+        "`<div class=\"kpi-period\">2025</div>` but the math (`v.t0` = cumulative CapEx ÷ "
+        "`sc.revenue`) actually reflects 2023–25. Should read `2023–25` to match the "
+        "first two cards. Fix: replace literal `2025` with `2023&ndash;25` in the JS template "
+        "string at line 607. Discovered during wq-102 Stage 1 review (Simon).\n"
+    )
     lines.append("## Notes\n")
     lines.append(
         "- An entry resolved via `<script>` binding mining is marked with `binding_hint` in its "
