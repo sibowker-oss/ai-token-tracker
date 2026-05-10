@@ -3576,7 +3576,8 @@
         "2025": {
           "arr": 4.2,
           "user_count": 650000000,
-          "collected_revenue": 2.2516
+          "collected_revenue": 2.2516,
+          "operating_loss": 4.0
         },
         "2026": {
           "valuation": 11
@@ -3999,6 +4000,28 @@
               "previous_value": null,
               "supersedes_engine": true,
               "role": "supports"
+            }
+          ]
+        },
+        "2025.operating_loss": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-243",
+              "claim": "Google AI division (Gemini + DeepMind) operating loss ~$4.0B in 2025",
+              "value": 4.0,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Editorial estimate \u2014 mid-range of public DeepMind cost estimates ($4\u20135B/yr; Bloomberg, Sacra) less Gemini-attributable revenue contribution",
+              "source_url": "",
+              "date": "2026-05-10",
+              "origin": "accepted",
+              "role": "supports",
+              "reference_revenue": 2.2516,
+              "reference_revenue_source": "Editorial estimate \u2014 published cr at time of dp-243 claim 2026-05-10",
+              "reference_revenue_set_at": "2026-05-10"
             }
           ]
         }
@@ -5040,7 +5063,8 @@
       "financials": {
         "2025": {
           "arr": 0.5,
-          "collected_revenue": 0.2692
+          "collected_revenue": 0.2692,
+          "operating_loss": 4.5
         }
       },
       "current": {
@@ -5342,6 +5366,28 @@
                   ]
                 }
               }
+            }
+          ]
+        },
+        "2025.operating_loss": {
+          "confidence": "low",
+          "claim_count": 1,
+          "claims": [
+            {
+              "id": "dp-244",
+              "claim": "xAI operating loss ~$4.5B in 2025",
+              "value": 4.5,
+              "unit": "$B",
+              "weight": "indicative",
+              "confidence": "estimated",
+              "source": "Editorial estimate \u2014 Bloomberg/Reuters reporting on Nov-2024 $6B raise + mid-2025 $10B rumor; Musk-disclosed burn ~$5B/yr",
+              "source_url": "",
+              "date": "2026-05-10",
+              "origin": "accepted",
+              "role": "supports",
+              "reference_revenue": 0.2692,
+              "reference_revenue_source": "Editorial estimate \u2014 published cr at time of dp-244 claim 2026-05-10",
+              "reference_revenue_set_at": "2026-05-10"
             }
           ]
         }
@@ -15283,7 +15329,7 @@
   "market_aggregates": {
     "2025": {
       "total_customer_revenue": 17.3608,
-      "total_vc_subsidy": 8.4479,
+      "total_vc_subsidy": 18.6935,
       "total_system_cost": 27.27,
       "total_inference_cost": 14.03,
       "total_people_cost": 11.08,
@@ -15331,14 +15377,16 @@
           "inference_cost_derived_from": [
             "customer_revenue \u00d7 0.55 (provider rate from cost_structure)"
           ],
-          "opex": 4.71,
-          "opex_origin": "estimated",
+          "opex": 7.3195,
+          "opex_origin": "derived_with_estimated_inf",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+            "anthropic.2025.operating_loss",
+            "resolved_inference=2.5905 (estimated)",
+            "reference_revenue=4.71 (anthropic.2025.operating_loss.reference_revenue)"
           ],
-          "vc_subsidy": 2.5905,
+          "vc_subsidy": 5.2,
           "vc_origin": "balancing_plug_derived",
-          "value": 7.3005,
+          "value": 9.91,
           "override_discrepancy": null,
           "revenue_by_channel": {
             "api_pct": 72,
@@ -15357,14 +15405,16 @@
           "inference_cost_derived_from": [
             "customer_revenue \u00d7 0.3 (provider rate from cost_structure)"
           ],
-          "opex": 2.2516,
-          "opex_origin": "estimated",
+          "opex": 5.5761,
+          "opex_origin": "derived_with_estimated_inf",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.0 (opex rate from size band)"
+            "google.2025.operating_loss",
+            "resolved_inference=0.67548 (estimated)",
+            "reference_revenue=2.2516 (google.2025.operating_loss.reference_revenue)"
           ],
-          "vc_subsidy": 0.6755,
+          "vc_subsidy": 4.0,
           "vc_origin": "balancing_plug_derived",
-          "value": 2.9271,
+          "value": 6.2516,
           "override_discrepancy": null,
           "revenue_by_channel": null,
           "entity_archetype": "frontier_lab"
@@ -15423,14 +15473,16 @@
           "inference_cost_derived_from": [
             "customer_revenue \u00d7 0.5 (provider rate from cost_structure)"
           ],
-          "opex": 0.323,
-          "opex_origin": "estimated",
+          "opex": 4.6346,
+          "opex_origin": "derived_with_estimated_inf",
           "opex_derived_from": [
-            "customer_revenue \u00d7 1.2 (opex rate from size band)"
+            "xai.2025.operating_loss",
+            "resolved_inference=0.1346 (estimated)",
+            "reference_revenue=0.2692 (xai.2025.operating_loss.reference_revenue)"
           ],
-          "vc_subsidy": 0.1884,
+          "vc_subsidy": 4.5,
           "vc_origin": "balancing_plug_derived",
-          "value": 0.4576,
+          "value": 4.7692,
           "override_discrepancy": null,
           "revenue_by_channel": null,
           "entity_archetype": "frontier_lab"
@@ -15514,17 +15566,19 @@
         "openai",
         "anthropic",
         "google",
-        "iaas",
+        "xai",
         "_other_model_providers"
       ],
       "other_aggregation": {
         "label": "Other Model Providers",
         "color": "#94a3b8",
-        "value": 1.3273,
-        "customer_revenue": 0.7807,
-        "vc_subsidy": 0.5466,
+        "value": 1.4735,
+        "customer_revenue": 0.8153,
+        "vc_subsidy": 0.6582,
+        "inference_cost": 0.5577,
+        "opex": 0.9158,
         "members": [
-          "xai",
+          "iaas",
           "mistral",
           "deepseek",
           "minimax",
@@ -15532,25 +15586,22 @@
         ],
         "aggregation_rule": "value < 2.0% of total AND outside top 4"
       },
-      "total_provider_value": 25.8087,
+      "total_provider_value": 36.0543,
       "fallback_log": [
         "anthropic: inference_cost ESTIMATED (no source/op_loss path)",
-        "anthropic: opex ESTIMATED (no source/op_loss path)",
         "google: inference_cost ESTIMATED (no source/op_loss path)",
-        "google: opex ESTIMATED (no source/op_loss path)",
         "deepseek: inference_cost ESTIMATED (no source/op_loss path)",
         "deepseek: opex ESTIMATED (no source/op_loss path)",
         "mistral: inference_cost ESTIMATED (no source/op_loss path)",
         "mistral: opex ESTIMATED (no source/op_loss path)",
         "xai: inference_cost ESTIMATED (no source/op_loss path)",
-        "xai: opex ESTIMATED (no source/op_loss path)",
         "minimax: inference_cost ESTIMATED (no source/op_loss path)",
         "minimax: opex ESTIMATED (no source/op_loss path)",
         "moonshot: inference_cost ESTIMATED (no source/op_loss path)",
         "moonshot: opex ESTIMATED (no source/op_loss path)"
       ],
       "_residual_doc": "Engine writes per-provider customer_revenue derived from entities.json:financials.<year>.collected_revenue (wq-048). Channel/buyer totals computed by generate_site_data.py from this block + the existing editorial channel structure (proportional rescale to total_customer_revenue). Non-provider revenue (e.g. Microsoft Copilot via Trad SaaS channel) handled in the channel structure, not in providers.",
-      "_engine_run_at": "2026-05-07T03:25:48Z",
+      "_engine_run_at": "2026-05-10T09:40:15Z",
       "_engine": "scripts/derive_sankey.py (wq-055)",
       "routing": {
         "openai": {
@@ -15570,15 +15621,15 @@
           "Model API": 0.9006,
           "AI Native Apps": 0.4503
         },
-        "iaas": {
-          "Model Subs": 0.1215,
-          "Model API": 0.1215,
-          "AI Native Apps": 0.0608
+        "xai": {
+          "Model Subs": 0.1077,
+          "Model API": 0.1077,
+          "AI Native Apps": 0.0538
         },
         "_other_model_providers": {
-          "Model Subs": 0.3123,
-          "Model API": 0.3123,
-          "AI Native Apps": 0.1562
+          "Model Subs": 0.3261,
+          "Model API": 0.3261,
+          "AI Native Apps": 0.1632
         }
       },
       "channels_grossed": [

@@ -16,8 +16,8 @@
   "2025": {
     "label": "2025",
     "totalCustomerRevenue": 17.3608,
-    "totalVCSubsidy": 8.4479,
-    "totalSystem": 27.7269,
+    "totalVCSubsidy": 18.6935,
+    "totalSystem": 37.9725,
     "infrastructureCapex": {
       "value": 250,
       "tier": "1B",
@@ -72,7 +72,7 @@
       },
       {
         "label": "VC/Investors",
-        "value": 8.4479,
+        "value": 18.6935,
         "color": "#dc2626"
       }
     ],
@@ -118,40 +118,50 @@
         "label": "OpenAI",
         "value": 13.65,
         "color": "#10a37f",
+        "inference_cost": 5,
+        "opex": 8.65,
         "tier": "2A",
         "src": "wq-055 engine \u2014 customer_revenue=$9.3147B (wq-048 engine); inference_cost=$5B (sourced); opex=$8.65B (derived); vc_subsidy=$4.3353B (balancing_plug_derived)",
         "slug": "openai"
       },
       {
         "label": "Anthropic",
-        "value": 7.3005,
+        "value": 9.91,
         "color": "#d97706",
+        "inference_cost": 2.5905,
+        "opex": 7.3195,
         "tier": "3C",
-        "src": "wq-055 engine \u2014 customer_revenue=$4.71B (wq-048 engine); inference_cost=$2.5905B (estimated); opex=$4.71B (estimated); vc_subsidy=$2.5905B (balancing_plug_derived)",
+        "src": "wq-055 engine \u2014 customer_revenue=$4.71B (wq-048 engine); inference_cost=$2.5905B (estimated); opex=$7.3195B (derived_with_estimated_inf); vc_subsidy=$5.2B (balancing_plug_derived)",
         "slug": "anthropic"
       },
       {
         "label": "Google/Gemini",
-        "value": 2.9271,
+        "value": 6.2516,
         "color": "#4285f4",
+        "inference_cost": 0.6755,
+        "opex": 5.5761,
         "tier": "3C",
-        "src": "wq-055 engine \u2014 customer_revenue=$2.2516B (wq-048 engine); inference_cost=$0.6755B (estimated); opex=$2.2516B (estimated); vc_subsidy=$0.6755B (balancing_plug_derived)",
+        "src": "wq-055 engine \u2014 customer_revenue=$2.2516B (wq-048 engine); inference_cost=$0.6755B (estimated); opex=$5.5761B (derived_with_estimated_inf); vc_subsidy=$4.0B (balancing_plug_derived)",
         "slug": "google"
       },
       {
-        "label": "IaaS/Open",
-        "value": 0.6038,
-        "color": "#8b5cf6",
+        "label": "xAI",
+        "value": 4.7692,
+        "color": "#e2e8f0",
+        "inference_cost": 0.1346,
+        "opex": 4.6346,
         "tier": "3C",
-        "src": "wq-055 engine \u2014 customer_revenue=$0.3038B (wq-048 engine); inference_cost=$0.3019B (estimated); opex=$0.3019B (estimated); vc_subsidy=$0.3B (preserved_hand_curated)",
-        "slug": "iaas"
+        "src": "wq-055 engine \u2014 customer_revenue=$0.2692B (wq-048 engine); inference_cost=$0.1346B (estimated); opex=$4.6346B (derived_with_estimated_inf); vc_subsidy=$4.5B (balancing_plug_derived)",
+        "slug": "xai"
       },
       {
         "label": "Other Model Providers",
-        "value": 1.3273,
+        "value": 1.4735,
         "color": "#94a3b8",
+        "inference_cost": 0.5577,
+        "opex": 0.9158,
         "tier": "3C",
-        "src": "wq-055 small-provider aggregation: xai, mistral, deepseek, minimax, moonshot (value < 2.0% of total AND outside top 4)",
+        "src": "wq-055 small-provider aggregation: iaas, mistral, deepseek, minimax, moonshot (value < 2.0% of total AND outside top 4)",
         "slug": "_other_model_providers"
       }
     ],
@@ -165,7 +175,7 @@
       },
       {
         "label": "Other Operating Costs",
-        "value": 16.8504,
+        "value": 27.096,
         "color": "#f59e0b",
         "tier": "2A",
         "src": "= sum(provider \u00d7 (1 \u2212 inferencePct)). AI Ledger rollup has $11.08B; 0.48 gap from routing approximations."
@@ -193,10 +203,10 @@
       },
       "vcSubsidy": {
         "OpenAI": 4.3353,
-        "Anthropic": 2.5905,
-        "Google/Gemini": 0.6755,
-        "IaaS/Open": 0.3,
-        "Other Model Providers": 0.5466
+        "Anthropic": 5.2,
+        "Google/Gemini": 4.0,
+        "xAI": 4.5,
+        "Other Model Providers": 0.6582
       },
       "_provenance": {
         "inferencePct": {
@@ -239,15 +249,15 @@
         "Model API": 0.9006,
         "AI Native Apps": 0.4503
       },
-      "iaas": {
-        "Model Subs": 0.1215,
-        "Model API": 0.1215,
-        "AI Native Apps": 0.0608
+      "xai": {
+        "Model Subs": 0.1077,
+        "Model API": 0.1077,
+        "AI Native Apps": 0.0538
       },
       "_other_model_providers": {
-        "Model Subs": 0.3123,
-        "Model API": 0.3123,
-        "AI Native Apps": 0.1562
+        "Model Subs": 0.3261,
+        "Model API": 0.3261,
+        "AI Native Apps": 0.1632
       }
     },
     "totalCustomerRevenue_gross": 19.279,
@@ -430,58 +440,73 @@
         "value": 43.0,
         "color": "#10a37f",
         "tier": "3A",
-        "src": "Anchored: customer revenue ~$29B (Mar 2026 $2B/month \u00d7 12 ramped Q4-exit) + VC subsidy $14B (AI Ledger entity database openai.2026.operating_loss, medium confidence) + ads $2.5B. Bumped from $25.1B in optimistic scenario to $43B to match published loss trajectory."
+        "src": "Anchored: customer revenue ~$29B (Mar 2026 $2B/month \u00d7 12 ramped Q4-exit) + VC subsidy $14B (AI Ledger entity database openai.2026.operating_loss, medium confidence) + ads $2.5B. Bumped from $25.1B in optimistic scenario to $43B to match published loss trajectory.",
+        "inference_cost": 15.7509,
+        "opex": 27.2491,
+        "_cost_basis": "2025 ratio (matched OpenAI)"
       },
       {
         "label": "Anthropic",
         "value": 23.0,
         "color": "#d97706",
         "tier": "3A",
-        "src": "Anchored: customer revenue ~$15B (year-average between Feb 2026 $14B and Mar 2026 $19B ARR) + VC subsidy $7.9B (implied by 9% burn target by 2027 applied to 2026 ramp; 2025 operating_loss was $5.2B, 2026 higher during scale)."
+        "src": "Anchored: customer revenue ~$15B (year-average between Feb 2026 $14B and Mar 2026 $19B ARR) + VC subsidy $7.9B (implied by 9% burn target by 2027 applied to 2026 ramp; 2025 operating_loss was $5.2B, 2026 higher during scale).",
+        "inference_cost": 6.0123,
+        "opex": 16.9877,
+        "_cost_basis": "2025 ratio (matched Anthropic)"
       },
       {
         "label": "Google (Gemini)",
         "value": 6.5,
         "color": "#4285f4",
         "tier": "3C",
-        "src": "Scenario: customer ~$4.3B + VC $2.2B. Scaled from 2025 ARR $4.2B with modest loss continuing during Gemini scale-up. No direct 2026 guidance anchor."
+        "src": "Scenario: customer ~$4.3B + VC $2.2B. Scaled from 2025 ARR $4.2B with modest loss continuing during Gemini scale-up. No direct 2026 guidance anchor.",
+        "inference_cost": 0.7023,
+        "opex": 5.7977,
+        "_cost_basis": "2025 ratio (matched Google/Gemini)"
       },
       {
         "label": "IaaS/Open",
         "value": 7.4,
         "color": "#8b5cf6",
         "tier": "3C",
-        "src": "Scenario: open model adoption via AI Native Apps. Profitable aggregators (Together, Fireworks, Groq) + direct Chinese provider APIs. Breakeven/small profit, no VC subsidy."
+        "src": "Scenario: open model adoption via AI Native Apps. Profitable aggregators (Together, Fireworks, Groq) + direct Chinese provider APIs. Breakeven/small profit, no VC subsidy.",
+        "inference_cost": 3.7,
+        "opex": 3.7,
+        "_cost_basis": "2025 ratio (matched IaaS/Open)"
       },
       {
         "label": "Other Model Providers",
         "value": 1.4,
         "color": "#475569",
         "tier": "3C",
-        "src": "Scenario bucket: xAI Grok ~$500M customer (Sacra; AI Ledger source scan 2026-04-11) + $0.8B VC subsidy (xAI burn continues). Plus Cohere + Mistral + smaller labs."
+        "src": "Scenario bucket: xAI Grok ~$500M customer (Sacra; AI Ledger source scan 2026-04-11) + $0.8B VC subsidy (xAI burn continues). Plus Cohere + Mistral + smaller labs.",
+        "inference_cost": 0.658,
+        "opex": 0.742,
+        "_cost_basis": "no 2025 match; using costParams.inferencePct=0.47"
       }
     ],
     "outcomes": [
       {
         "label": "Inference",
-        "value": 38.2,
+        "value": 26.8235,
         "color": "#10b981",
         "tier": "2A",
-        "src": "= sum(provider \u00d7 INF 0.47). All loss-making except IaaS/Open."
+        "src": "= sum(provider \u00d7 2025 inf_ratio per provider, + per-year overrides where set)"
       },
       {
         "label": "Other Operating Costs",
-        "value": 42.3,
+        "value": 54.4765,
         "color": "#f59e0b",
         "tier": "2A",
-        "src": "= sum(provider \u00d7 min(rate, 1\u2212INF))"
+        "src": "= sum(provider \u00d7 2025 opex_ratio per provider, + per-year overrides where set)"
       },
       {
         "label": "Generated Cashflow",
-        "value": 8.5,
+        "value": 7.7,
         "color": "#94a3b8",
         "tier": "2A",
-        "src": "= channel margins ($7.7B) + IaaS/Open surplus ($0.8B); provider surplus collapses vs old scenario because OpenAI/Anthropic/Google no longer profitable."
+        "src": "= sum(channel \u00d7 marginPct) + sum(provider surplus). channel margins $7.70B + provider surplus $0.00B"
       }
     ],
     "costParams": {
@@ -662,58 +687,73 @@
         "value": 43.0,
         "color": "#10a37f",
         "tier": "3A",
-        "src": "Anchored: Fortune (Feb 2026) leaked OpenAI 2030 revenue forecast $280B (AI Ledger DP-067; entity database openai.2030.arr); 2027 interpolation \u2248 $50B exit ARR. Year-average collected + VC $0.8B + ads $7B \u2248 $43B. Bumped from $41.1B to fix routing artifact (inflow was > value)."
+        "src": "Anchored: Fortune (Feb 2026) leaked OpenAI 2030 revenue forecast $280B (AI Ledger DP-067; entity database openai.2030.arr); 2027 interpolation \u2248 $50B exit ARR. Year-average collected + VC $0.8B + ads $7B \u2248 $43B. Bumped from $41.1B to fix routing artifact (inflow was > value).",
+        "inference_cost": 15.7509,
+        "opex": 27.2491,
+        "_cost_basis": "2025 ratio (matched OpenAI)"
       },
       {
         "label": "Anthropic",
         "value": 29.0,
         "color": "#d97706",
         "tier": "3C",
-        "src": "Scenario: extrapolated from 2026E $23B at ~26% YoY growth (decelerating as base compounds). 9% burn rate target implies $2.6B loss, but explicit VC here is lower as routing absorbs most."
+        "src": "Scenario: extrapolated from 2026E $23B at ~26% YoY growth (decelerating as base compounds). 9% burn rate target implies $2.6B loss, but explicit VC here is lower as routing absorbs most.",
+        "inference_cost": 7.5807,
+        "opex": 21.4193,
+        "_cost_basis": "2025 ratio (matched Anthropic)"
       },
       {
         "label": "Google (Gemini)",
         "value": 11.0,
         "color": "#4285f4",
         "tier": "3C",
-        "src": "Scenario: continued share growth; Gemini 3.x adoption + Vertex enterprise. Near breakeven."
+        "src": "Scenario: continued share growth; Gemini 3.x adoption + Vertex enterprise. Near breakeven.",
+        "inference_cost": 1.1886,
+        "opex": 9.8114,
+        "_cost_basis": "2025 ratio (matched Google/Gemini)"
       },
       {
         "label": "IaaS/Open",
         "value": 14.5,
         "color": "#8b5cf6",
         "tier": "3C",
-        "src": "Scenario: open models continue gaining share via aggregators. Only provider fully profitable in 2027E (rate 0.40 < 0.53)."
+        "src": "Scenario: open models continue gaining share via aggregators. Only provider fully profitable in 2027E (rate 0.40 < 0.53).",
+        "inference_cost": 7.25,
+        "opex": 7.25,
+        "_cost_basis": "2025 ratio (matched IaaS/Open)"
       },
       {
         "label": "Other Model Providers",
         "value": 3.1,
         "color": "#475569",
         "tier": "3C",
-        "src": "Scenario bucket: xAI + Chinese labs + emerging players. xAI burn dominates this cell's VC need."
+        "src": "Scenario bucket: xAI + Chinese labs + emerging players. xAI burn dominates this cell's VC need.",
+        "inference_cost": 1.457,
+        "opex": 1.643,
+        "_cost_basis": "no 2025 match; using costParams.inferencePct=0.47"
       }
     ],
     "outcomes": [
       {
         "label": "Inference",
-        "value": 47.3,
+        "value": 33.2272,
         "color": "#10b981",
         "tier": "2A",
-        "src": "= sum(provider \u00d7 INF 0.47)"
+        "src": "= sum(provider \u00d7 2025 inf_ratio per provider, + per-year overrides where set)"
       },
       {
         "label": "Other Operating Costs",
-        "value": 51.4,
+        "value": 67.3728,
         "color": "#f59e0b",
         "tier": "2A",
-        "src": "= sum(provider \u00d7 min(rate, 1\u2212INF))"
+        "src": "= sum(provider \u00d7 2025 opex_ratio per provider, + per-year overrides where set)"
       },
       {
         "label": "Generated Cashflow",
-        "value": 16.1,
+        "value": 14.22,
         "color": "#94a3b8",
         "tier": "2A",
-        "src": "= channel margins ($14.2B) + IaaS surplus ($1.9B). Provider surplus still modest because only IaaS is profitable in this scenario."
+        "src": "= sum(channel \u00d7 marginPct) + sum(provider surplus). channel margins $14.22B + provider surplus $0.00B"
       }
     ],
     "costParams": {

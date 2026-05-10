@@ -139,13 +139,24 @@ def resolve_inference_cost(entity: dict, year: str, cost_structure: dict) -> tup
             [f"customer_revenue × {rate} (provider rate from cost_structure)"])
 
 
-def resolve_opex(entity: dict, year: str, cost_structure: dict) -> tuple[float, str, list[str]]:
+def resolve_opex(entity: dict, year: str, cost_structure: dict,
+                 resolved_inf: Optional[float] = None,
+                 resolved_inf_origin: Optional[str] = None) -> tuple[float, str, list[str]]:
     """Returns (value, origin, derived_from). Sourced rare; mostly estimated.
 
-    INTERPRETATION A confirmed by Simon 2026-05-03: TIER 2 condition checks
-    entity-field `inference_cost` (literal pseudocode). When entity-field
-    inf is absent, falls to TIER 3 size_band even if a TIER 3 inference
-    estimate could be computed.
+    Resolution order:
+      TIER 1 — entity-field opex (sourced).
+      TIER 2a — derived from operating_loss + entity-field inference_cost
+                (both sourced; opex_origin = "derived").
+      TIER 2b — derived from operating_loss + RESOLVED inference (which may be
+                a TIER 3 estimate). Reverses the 2026-05-03 Interpretation A
+                rule: when we have a sourced op_loss but no sourced inf, we
+                prefer using op_loss with an estimated inf over discarding
+                op_loss entirely. This keeps the implied total cost
+                (= revenue + op_loss) consistent with the sourced loss claim.
+                opex_origin = "derived_with_estimated_inf" so downstream
+                tier-badging doesn't over-claim confidence.
+      TIER 3 — estimated by size band (no op_loss available).
     """
     cr = _fin(entity, year, "collected_revenue")
     opex = _fin(entity, year, "opex")
@@ -156,14 +167,22 @@ def resolve_opex(entity: dict, year: str, cost_structure: dict) -> tuple[float, 
     if opex is not None:
         return (opex, "sourced", [f"{entity['slug']}.{year}.opex"])
 
-    # TIER 2 — derived from operating_loss math
-    # INTERPRETATION A: requires entity-field `inf` (not resolved value).
+    # TIER 2a — derived from operating_loss + entity-field inference_cost
     if op_loss is not None and cr is not None and inf is not None:
         ref_revenue, ref_origin = reference_revenue_for(entity, year, "operating_loss", default=cr)
         derived = max(0, op_loss + ref_revenue - inf)
         return (derived, "derived",
                 [f"{entity['slug']}.{year}.operating_loss",
                  f"{entity['slug']}.{year}.inference_cost",
+                 f"reference_revenue={ref_revenue} ({ref_origin})"])
+
+    # TIER 2b — derived from operating_loss + resolved (estimated) inference
+    if op_loss is not None and cr is not None and resolved_inf is not None:
+        ref_revenue, ref_origin = reference_revenue_for(entity, year, "operating_loss", default=cr)
+        derived = max(0, op_loss + ref_revenue - resolved_inf)
+        return (derived, "derived_with_estimated_inf",
+                [f"{entity['slug']}.{year}.operating_loss",
+                 f"resolved_inference={resolved_inf} ({resolved_inf_origin or 'estimated'})",
                  f"reference_revenue={ref_revenue} ({ref_origin})"])
 
     # TIER 3 — estimated by size band
@@ -225,7 +244,10 @@ def derive_provider(entity: dict, year: str, cost_structure: dict, overrides: di
         return None
 
     inf, inf_origin, inf_from = resolve_inference_cost(entity, year, cost_structure)
-    opex, opex_origin, opex_from = resolve_opex(entity, year, cost_structure)
+    opex, opex_origin, opex_from = resolve_opex(
+        entity, year, cost_structure,
+        resolved_inf=inf, resolved_inf_origin=inf_origin,
+    )
 
     # Provider total from documented/derived/estimated outflows
     engine_provider_total = inf + opex
@@ -330,6 +352,8 @@ def aggregate_small_providers(providers: list[dict], cost_structure: dict) -> li
         "color": cfg["other_node_color"],
         "customer_revenue": round(sum(p["customer_revenue"] for p in aggregated), 4),
         "vc_subsidy": round(sum(p["vc_subsidy"] for p in aggregated), 4),
+        "inference_cost": round(sum(p.get("inference_cost", 0) for p in aggregated), 4),
+        "opex": round(sum(p.get("opex", 0) for p in aggregated), 4),
         "value": round(sum(p["value"] for p in aggregated), 4),
         "members": [p["slug"] for p in aggregated],
         "vc_origin": "small_provider_aggregation",
@@ -1168,6 +1192,8 @@ def apply_market_aggregates(entities: dict, sankey: dict, year: str) -> dict:
             "value": other["value"],
             "customer_revenue": other["customer_revenue"],
             "vc_subsidy": other["vc_subsidy"],
+            "inference_cost": other.get("inference_cost", 0),
+            "opex": other.get("opex", 0),
             "members": other["members"],
             "aggregation_rule": other["aggregation_rule"],
         }

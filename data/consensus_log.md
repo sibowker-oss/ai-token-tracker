@@ -64,3 +64,35 @@
 - total_customer_revenue: 17.3608
 - total_vc_subsidy: 8.4479
 - total_provider_value: 25.8087
+
+## 2026-05-10 — wq-055 derive_sankey.py --apply
+- Year: 2025
+- Providers written: 9
+- Visible (post-aggregation): 5
+- total_customer_revenue: 17.3608
+- total_vc_subsidy: 8.4479
+- total_provider_value: 25.8087
+
+## 2026-05-10 — wq-055 derive_sankey.py --apply
+- Year: 2025
+- Providers written: 9
+- Visible (post-aggregation): 5
+- total_customer_revenue: 17.3608
+- total_vc_subsidy: 8.4479
+- total_provider_value: 25.8087
+
+## 2026-05-10 — wq-055 derive_sankey.py --apply
+- Year: 2025
+- Providers written: 9
+- Visible (post-aggregation): 5
+- total_customer_revenue: 17.3608
+- total_vc_subsidy: 11.0574
+- total_provider_value: 28.4182
+
+## 2026-05-10 — wq-055 derive_sankey.py --apply
+- Year: 2025
+- Providers written: 9
+- Visible (post-aggregation): 5
+- total_customer_revenue: 17.3608
+- total_vc_subsidy: 18.6935
+- total_provider_value: 36.0543

@@ -1,6 +1,6 @@
 # wq-098 hotfix — arrModel source-leak audit
 
-_Generated_: 2026-05-09T02:31:38Z
+_Generated_: 2026-05-10T10:26:34Z
 
 Each row in `arrModel.apps.*` and `arrModel.compute.*` and the data
 source it actually reads from. Generated on every site build by

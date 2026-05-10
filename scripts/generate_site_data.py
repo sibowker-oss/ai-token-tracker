@@ -56,6 +56,162 @@ def get_providers(entities):
 
 # ── wq-055 Phase C — write full Sankey from market_aggregates engine output ──
 
+def _normalise_provider_label(label):
+    """Map per-year label variants ('Google/Gemini' vs 'Google (Gemini)') to a
+    canonical key for cross-year ratio lookups. Slug match is preferred when the
+    entry carries one (engine-derived 2025 entries do; editorial projection
+    entries don't)."""
+    if not label:
+        return ""
+    s = label.lower()
+    for ch in [" ", "/", "(", ")", "-", "."]:
+        s = s.replace(ch, "")
+    return s
+
+
+def _apply_2025_ratios_to_projection_years(sp, cost_structure, market_2025=None):
+    """For every projection year (anything other than 2025) in sankey-projections,
+    derive per-provider inference_cost and opex from the 2025 per-provider ratios
+    (inf/value, opex/value), with optional per-year per-provider overrides from
+    `cost_structure.cost_trajectory_overrides[year][slug]`.
+
+    2025 ratios are read from `market_2025.providers` (the unaggregated engine
+    dict — every entity, including those rolled into 'Other Model Providers' for
+    display) when supplied; falls back to sp['2025'].providers (visible only) so
+    the function still works without market context. The unaggregated dict
+    matters because projection years often surface providers that 2025
+    aggregation collapses (e.g. IaaS/Open, xAI) and we need their individual
+    ratios.
+
+    Override schema (additive to defaults; absent fields keep 2025 ratio):
+      cost_trajectory_overrides:
+        "2026E":
+          openai:
+            inf_ratio:  0.40            # optional
+            opex_ratio: 0.50            # optional
+            src: "scenario: model efficiency improves"
+        "2027E":
+          openai: { inf_ratio: 0.30, opex_ratio: 0.40 }
+
+    After per-provider values are written, the year's outcomes column is
+    rewritten so segment heights exactly match the inflow ribbon sums:
+      Inference            = sum(provider.inference_cost)
+      Other Op Cost        = sum(provider.opex)
+      Generated Cashflow   = sum(channel margins) + sum(provider surplus)
+                             where surplus = max(0, value - inf - opex)
+
+    No-op for years that don't exist in the file. Idempotent: re-runs overwrite
+    the prior block.
+    """
+    # Build canonical 2025 ratios — keyed by slug (preferred) and normalised label.
+    # Prefer market_aggregates (unaggregated entity-level) so providers rolled
+    # into the visible 'Other' bucket still have individual ratios available
+    # for projection-year lookup.
+    base_ratios = {}
+    if market_2025 and (market_2025.get("providers") or {}):
+        for slug, p in (market_2025.get("providers") or {}).items():
+            v = p.get("value") or 0
+            if v <= 0:
+                continue
+            ratio = {
+                "inf_ratio": (p.get("inference_cost") or 0) / v,
+                "opex_ratio": (p.get("opex") or 0) / v,
+                "label_2025": p.get("label") or slug,
+            }
+            base_ratios[slug] = ratio
+            base_ratios[_normalise_provider_label(p.get("label"))] = ratio
+    else:
+        for p in (sp.get("2025") or {}).get("providers") or []:
+            v = p.get("value") or 0
+            if v <= 0:
+                continue
+            ratio = {
+                "inf_ratio": (p.get("inference_cost") or 0) / v,
+                "opex_ratio": (p.get("opex") or 0) / v,
+                "label_2025": p.get("label"),
+            }
+            if p.get("slug"):
+                base_ratios[p["slug"]] = ratio
+            base_ratios[_normalise_provider_label(p.get("label"))] = ratio
+
+    if not base_ratios:
+        return
+
+    overrides_by_year = (cost_structure.get("cost_trajectory_overrides") or {})
+
+    for yr, block in sp.items():
+        if yr == "2025" or not isinstance(block, dict):
+            continue
+        provs = block.get("providers") or []
+        if not provs:
+            continue
+
+        cp = block.get("costParams") or {}
+        inf_pct_fallback = cp.get("inferencePct", 0.47)
+        margin_pcts = cp.get("marginPcts") or {"Hyperscalers": 0.20, "Trad. SaaS": 0.60}
+
+        year_overrides = overrides_by_year.get(yr) or {}
+
+        sum_inf = 0.0
+        sum_op = 0.0
+        sum_surplus = 0.0
+        for p in provs:
+            v = p.get("value") or 0
+            if v <= 0:
+                continue
+            # Match by slug → normalised label → fall back to costParams flat rate
+            slug = p.get("slug")
+            ratio = (base_ratios.get(slug)
+                     or base_ratios.get(_normalise_provider_label(p.get("label"))))
+            if ratio is None:
+                inf_ratio = inf_pct_fallback
+                opex_ratio = max(0.0, 1.0 - inf_pct_fallback)
+                src_note = f"no 2025 match; using costParams.inferencePct={inf_pct_fallback}"
+            else:
+                inf_ratio = ratio["inf_ratio"]
+                opex_ratio = ratio["opex_ratio"]
+                src_note = f"2025 ratio (matched {ratio['label_2025']})"
+
+            ov = (year_overrides.get(slug) if slug else None) or year_overrides.get(_normalise_provider_label(p.get("label"))) or {}
+            if "inf_ratio" in ov:
+                inf_ratio = ov["inf_ratio"]
+            if "opex_ratio" in ov:
+                opex_ratio = ov["opex_ratio"]
+            if ov.get("src"):
+                src_note += f" + override: {ov['src']}"
+
+            inf_v = round(v * inf_ratio, 4)
+            op_v = round(v * opex_ratio, 4)
+            p["inference_cost"] = inf_v
+            p["opex"] = op_v
+            p["_cost_basis"] = src_note
+            sum_inf += inf_v
+            sum_op += op_v
+            sum_surplus += max(0.0, v - inf_v - op_v)
+
+        # Channel margins flow direct to Generated Cashflow alongside any
+        # per-provider surplus (matches the renderer's flow construction).
+        channels = block.get("channels") or []
+        ch_margin = sum((c.get("value") or 0) * margin_pcts.get(c.get("label"), 0) for c in channels)
+        cashflow = round(ch_margin + sum_surplus, 4)
+
+        outcomes = block.get("outcomes") or []
+        for o in outcomes:
+            label = o.get("label", "")
+            if label == "Inference":
+                o["value"] = round(sum_inf, 4)
+                o["src"] = ("= sum(provider × 2025 inf_ratio per provider"
+                            ", + per-year overrides where set)")
+            elif "Operating Cost" in label or "People" in label or "SG&A" in label:
+                o["value"] = round(sum_op, 4)
+                o["src"] = ("= sum(provider × 2025 opex_ratio per provider"
+                            ", + per-year overrides where set)")
+            elif "Cash" in label:
+                o["value"] = cashflow
+                o["src"] = (f"= sum(channel × marginPct) + sum(provider surplus). "
+                            f"channel margins ${ch_margin:.2f}B + provider surplus ${sum_surplus:.2f}B")
+
+
 def _apply_sankey_engine_output(target, market, year, is_projections=False):
     """Apply engine output to target dict.
 
@@ -95,6 +251,13 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
             "label": p["label"],
             "value": p["value"],
             "color": p["color"],
+            # Per-provider engine-derived cost decomposition. Renderer reads these
+            # to draw provider→Inference / provider→Other Op Cost ribbons that
+            # exactly equal the outcomes-column segment values, instead of using
+            # the flat costParams.inferencePct fiction (which diverges whenever
+            # per-provider inference rates differ — OpenAI 0.37 vs IaaS 0.50).
+            "inference_cost": round(p.get("inference_cost", 0), 4),
+            "opex": round(p.get("opex", 0), 4),
         }
         if is_projections:
             entry["tier"] = _tier_from_origins(p)
@@ -105,6 +268,8 @@ def _apply_sankey_engine_output(target, market, year, is_projections=False):
             "label": other_block["label"],
             "value": other_block["value"],
             "color": other_block["color"],
+            "inference_cost": round(other_block.get("inference_cost", 0), 4),
+            "opex": round(other_block.get("opex", 0), 4),
         }
         if is_projections:
             entry["tier"] = "3C"
@@ -562,9 +727,18 @@ def generate(entities_path, existing_site_data_path, output_path):
                 sp = json.load(f)
             if "2025" in sp:
                 _apply_sankey_engine_output(sp["2025"], market, year="2025", is_projections=True)
+            # Propagate 2025 per-provider inf/opex ratios to projection years
+            # (2026E, 2027E, ...). Honours optional overrides in
+            # data/sankey_cost_structure.json:cost_trajectory_overrides.
+            cost_structure_path = os.path.join(SITE_DIR, "data", "sankey_cost_structure.json")
+            cost_structure = {}
+            if os.path.exists(cost_structure_path):
+                with open(cost_structure_path) as f:
+                    cost_structure = json.load(f) or {}
+            _apply_2025_ratios_to_projection_years(sp, cost_structure, market_2025=market)
             with open(sankey_proj_path, "w") as f:
                 json.dump(sp, f, indent=2)
-            print(f"  Written: {sankey_proj_path} (sankey block, year=2025)")
+            print(f"  Written: {sankey_proj_path} (sankey block, year=2025 + projection-year ratios)")
 
     # ── Write output ──
     save_json(output_path, site)

@@ -1,13 +1,13 @@
 # wq-055 Sankey balancing engine — validation report
-_Generated 2026-05-07T03:25:48Z_
+_Generated 2026-05-10T09:40:15Z_
 
 ## Phase B calibration gate (§4) — engine output vs hand-curated
 
 Provider            CR         Inf cost (tier)             Opex (tier)       Total        Hand        Δ%   In band?   vc_subsidy
 ------------  --------  ----------------------  ----------------------  ----------  ----------  --------  ---------  -----------
 openai        $  9.31B         $5.00B (source)         $8.65B (derive)  $   13.65B  $   13.65B     +0.0%      ✓ yes  $     4.34B
-anthropic     $  4.71B         $2.59B (estima)         $4.71B (estima)  $    7.30B  $    7.71B     -5.3%      ✓ yes  $     2.59B
-google        $  2.25B         $0.68B (estima)         $2.25B (estima)  $    2.93B  $    2.50B    +17.1%       ✗ NO  $     0.68B
+anthropic     $  4.71B         $2.59B (estima)         $7.32B (derive)  $    9.91B  $    7.71B    +28.5%       ✗ NO  $     5.20B
+google        $  2.25B         $0.68B (estima)         $5.58B (derive)  $    6.25B  $    2.50B   +150.1%       ✗ NO  $     4.00B
 iaas          $  0.30B         $0.30B (estima)         $0.30B (estima)  $    0.60B  $    0.80B    -24.5%       ✗ NO  $     0.30B
 
 ## New providers (no hand-curated baseline; engine output only)
@@ -16,36 +16,33 @@ Provider            CR         Inf cost (tier)             Opex (tier)       Tot
 ------------  --------  ----------------------  ----------------------  ----------  -----------
 deepseek      $  0.16B         $0.08B (estima)         $0.19B (estima)  $    0.27B  $     0.11B
 mistral       $  0.22B         $0.11B (estima)         $0.26B (estima)  $    0.37B  $     0.15B
-xai           $  0.27B         $0.13B (estima)         $0.32B (estima)  $    0.46B  $     0.19B
+xai           $  0.27B         $0.13B (estima)         $4.63B (derive)  $    4.77B  $     4.50B
 minimax       $  0.08B         $0.04B (estima)         $0.10B (estima)  $    0.14B  $     0.06B
 moonshot      $  0.05B         $0.03B (estima)         $0.06B (estima)  $    0.09B  $     0.04B
 
 ## Small-provider aggregation outcome
 
-  Other Model Providers: $1.33B (members: xai, mistral, deepseek, minimax, moonshot)
-  cr=$0.78B  vc_subsidy=$0.55B
+  Other Model Providers: $1.47B (members: iaas, mistral, deepseek, minimax, moonshot)
+  cr=$0.82B  vc_subsidy=$0.66B
   Aggregation rule: value < 2.0% of total AND outside top 4
 
 ## Visible providers in rendered Sankey (post-aggregation)
 
   OpenAI                     $  13.65B  cr=$  9.31B  vc=$  4.34B
-  Anthropic                  $   7.30B  cr=$  4.71B  vc=$  2.59B
-  Google/Gemini              $   2.93B  cr=$  2.25B  vc=$  0.68B
-  IaaS/Open                  $   0.60B  cr=$  0.30B  vc=$  0.30B (preserved hand-curated)
-  Other Model Providers      $   1.33B  cr=$  0.78B  vc=$  0.55B (aggregated)
+  Anthropic                  $   9.91B  cr=$  4.71B  vc=$  5.20B
+  Google/Gemini              $   6.25B  cr=$  2.25B  vc=$  4.00B
+  xAI                        $   4.77B  cr=$  0.27B  vc=$  4.50B
+  Other Model Providers      $   1.47B  cr=$  0.82B  vc=$  0.66B (aggregated)
 
 ## Fallback signals (entity data missing → TIER 3 estimates fired)
 
   - anthropic: inference_cost ESTIMATED (no source/op_loss path)
-  - anthropic: opex ESTIMATED (no source/op_loss path)
   - google: inference_cost ESTIMATED (no source/op_loss path)
-  - google: opex ESTIMATED (no source/op_loss path)
   - deepseek: inference_cost ESTIMATED (no source/op_loss path)
   - deepseek: opex ESTIMATED (no source/op_loss path)
   - mistral: inference_cost ESTIMATED (no source/op_loss path)
   - mistral: opex ESTIMATED (no source/op_loss path)
   - xai: inference_cost ESTIMATED (no source/op_loss path)
-  - xai: opex ESTIMATED (no source/op_loss path)
   - minimax: inference_cost ESTIMATED (no source/op_loss path)
   - minimax: opex ESTIMATED (no source/op_loss path)
   - moonshot: inference_cost ESTIMATED (no source/op_loss path)
@@ -54,8 +51,8 @@ moonshot      $  0.05B         $0.03B (estima)         $0.06B (estima)  $    0.0
 ## Totals (pre-channel/buyer/outcome derivation)
 
   total_customer_revenue (sum of providers): $17.36B
-  total_vc_subsidy       (sum of providers): $8.45B
-  total_provider_value   (sum of providers): $25.81B
+  total_vc_subsidy       (sum of providers): $18.69B
+  total_provider_value   (sum of providers): $36.05B
   hand-curated total customer revenue:       $17.47B (audit §4.4)
   hand-curated total VC subsidy:              $9.39B
   hand-curated total system:                 $26.86B
