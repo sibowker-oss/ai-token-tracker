@@ -109,7 +109,7 @@
 
 <div class="container">
   <h1>Revenue Ledger</h1>
-  <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
+  <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time id="data-refresh" datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
   <div class="sub" id="page-subtitle">AI-specific revenue by buyer segment, channel, provider, and cost outcome.</div>
 
   <div class="hero-grid" id="hero-stats"></div>
@@ -236,7 +236,16 @@ async function init() {
   // fetch from the sankey-projections one above; failure leaves inline defaults.
   fetch('site-data.json?v=' + Date.now())
     .then(r => r.json())
-    .then(d => { if (typeof hydrateNarrative === 'function') hydrateNarrative(d); })
+    .then(d => {
+      if (typeof hydrateNarrative === 'function') hydrateNarrative(d);
+      if (d && d.meta && d.meta.generatedAt) {
+        const t = document.getElementById('data-refresh');
+        if (t) {
+          t.setAttribute('datetime', d.meta.generatedAt);
+          t.textContent = d.meta.generatedAt.replace('T', ' ').substring(0, 19) + ' UTC';
+        }
+      }
+    })
     .catch(() => { /* graceful fallback to inline defaults */ });
 }
 

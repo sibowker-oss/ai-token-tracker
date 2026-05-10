@@ -297,6 +297,14 @@ async function init() {
     const d = await r1.json();
     computeData = d.compute;
     if (!computeData) throw new Error('site-data.json missing :compute block');
+    if (d.meta && d.meta.generatedAt) {
+      const t = document.getElementById('last-refreshed');
+      if (t) {
+        const iso = d.meta.generatedAt;
+        t.setAttribute('datetime', iso);
+        t.textContent = iso.substring(0, 10);
+      }
+    }
     if (r2.ok) {
       const cd = await r2.json();
       forwardCommitments = cd.forward_commitments || null;

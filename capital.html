@@ -189,7 +189,7 @@
 
 <div class="container">
   <h1>Capital Ledger</h1>
-  <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
+  <p class="data-refreshed" style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:600;">Data refreshed: <time id="data-refresh" datetime="2026-04-20T02:27:20Z">2026-04-20 02:27:20 UTC</time></p>
   <div class="sub">
     <strong><span data-narrative="capital_sankey_total" data-num="capital.market_aggregate_capex_cumulative.766b_infrastructure_investment_ndash">$766B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>
     Every dollar of cumulative AI capital expenditure &mdash; from spender &rarr; silicon &rarr; current workload &mdash; mapped as a balance-sheet view.
@@ -940,6 +940,14 @@ fetch('site-data.json?v=' + Date.now())
     // of capital_sankey availability. Standalone path so narrative copy stays
     // current even if FLOWS fetch fails.
     if (typeof hydrateNarrative === 'function') hydrateNarrative(d);
+
+    if (d && d.meta && d.meta.generatedAt) {
+      const t = document.getElementById('data-refresh');
+      if (t) {
+        t.setAttribute('datetime', d.meta.generatedAt);
+        t.textContent = d.meta.generatedAt.replace('T', ' ').substring(0, 19) + ' UTC';
+      }
+    }
 
     const cs = d && d.capital_sankey;
     if (!cs || !cs.flows || !cs.flows.length) {
