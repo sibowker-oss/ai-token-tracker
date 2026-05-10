@@ -2,7 +2,9 @@
 
 **Date:** 2026-05-10
 **WQ:** none (ad-hoc fix triggered by user-reported desktop/mobile inconsistency)
-**Branch/Commit:** wq-101-vendor-ai-posture (uncommitted)
+**Branch/Commit:** wq-101-vendor-ai-posture → main (`5eb872d`, was `b621cd7` pre-rebase)
+**Staging approval:** 2026-05-10 (verified at `/beta/capital.html` after deploy-beta run 25616132744)
+**Live promote approval:** 2026-05-10 ("push live" + AskUserQuestion confirmation to ship full wq-101 stack — 7 commits)
 
 ## What shipped
 
@@ -30,4 +32,4 @@
 - [x] Hero "Infrastructure per $1 revenue" now consistently reads `$35` (= round(766 / 22)) on desktop and mobile.
 - [x] Narrative copy ("$766B of AI infrastructure investment") matches the hero's "2023-25 AI CapEx" card.
 - [x] Sensitivity panel base total tracks the engine FLOWS sum, not a hardcoded 745.
-- [ ] **Publishing Gate:** NOT yet shipped to live. Awaiting Simon's approval after staging/preview check.
+- [x] **Publishing Gate:** Staged to `/beta/capital.html` → user-verified on desktop + mobile → explicit "push live" approval → promoted to `main` at `5eb872d`.
