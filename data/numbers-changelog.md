@@ -1,12 +1,12 @@
 # Numbers Changelog
 
-Last build: 2026-05-10 07:51 UTC
+Last build: 2026-05-10 08:13 UTC
 
 ## State summary
 
-- **31** numbers rendered from live engine values (sourced)
-- **19** numbers rendered from editorial fallback (path stub — engine extension needed)
-- **104** numbers preserved as fixed editorial (tier mixes, methodology constants, narrative prose)
+- **37** numbers rendered from live engine values (sourced)
+- **17** numbers rendered from editorial fallback (path stub — engine extension needed)
+- **105** numbers preserved as fixed editorial (tier mixes, methodology constants, narrative prose)
 
 ## Sourced (live)
 
@@ -28,14 +28,18 @@ Last build: 2026-05-10 07:51 UTC
 | `capital.html` | `capital.uncategorised.inference_platform_201b_mdash` | `$201B` → `$207B` | `site-data.capital_sankey.utilization.Inference (Ad Platform)` |
 | `capital.html` | `capital.uncategorised.model_training_84b_mdash` | `$84B` → `$87B` | `site-data.capital_sankey.utilization.Model Training` |
 | `index.html` | `index.dom.ais_capex_figure` | `$330B` ≡ `$330B` | `entities.market_aggregates.2025.total_capex` |
+| `index.html` | `index.dom.ais_capex_sub` | `19×` → `17.1×` | `site-data.compute.layer_stack_ratios.capex_to_apps_gross_x` |
 | `index.html` | `index.dom.ais_compute_figure` | `$43.1B` → `$43B` | `site-data.compute.compute_revenue_2025_gross_usd_b` |
 | `index.html` | `index.dom.ais_power_figure` | `$25B` ≡ `$25B` | `site-data.compute.layer_stack_ratios.power_revenue_2025_usd_b` |
 | `index.html` | `index.dom.ais_revenue_figure` | `$19.3B` → `$19B` | `site-data.sankey.totalCustomerRevenue_gross` |
+| `index.html` | `index.dom.ais_usage_figure` | `$164B` → `$141B` | `site-data.compute.layer_stack_ratios.usage_notional_2025_usd_b` |
 | `index.html` | `index.dom.ais_usage_sub` | `~360T/day` → `~310T/day` | `site-data.cumulative.tokens_2025_annualized` |
+| `index.html` | `index.dom.ais_usage_sub_2` | `9.4×` → `7.3×` | `site-data.compute.layer_stack_ratios.usage_notional_to_apps_gross_x` |
 | `index.html` | `index.dom.card_capex` | `$745B` → `$766B` | `site-data.cumulative.capex_total` |
 | `index.html` | `index.dom.card_compute` | `$43B` ≡ `$43B` | `site-data.compute.compute_revenue_2025_gross_usd_b` |
 | `index.html` | `index.dom.card_revenue` | `$19.3B` → `$19B` | `site-data.sankey.totalCustomerRevenue_gross` |
 | `index.html` | `index.dom.card_tokens` | `~360T/day` → `~310T/day` | `site-data.cumulative.tokens_2025_annualized` |
+| `index.html` | `index.dom.hook_ratio` | `$2.50` → `$2.23` | `site-data.compute.layer_stack_ratios.compute_per_dollar_apps_gross` |
 | `index.html` | `index.dom.lt_subline` | `+153%` → `+153.4%` | `site-data.compute.yoy_growth_pct` |
 | `index.html` | `index.dom.lt_value` | `$43B` ≡ `$43B` | `site-data.compute.compute_revenue_2025_gross_usd_b` |
 | `index.html` | `index.market_aggregate_tokens.value` | `$745B` → `$766B` | `site-data.cumulative.capex_total` |
@@ -43,6 +47,8 @@ Last build: 2026-05-10 07:51 UTC
 | `index.html` | `index.market_aggregate_tokens.value_3` | `$17B` → `$19B` | `site-data.sankey.totalCustomerRevenue_gross` |
 | `index.html` | `index.market_aggregate_tokens.value_4` | `~360T` → `~310T` | `site-data.cumulative.tokens_2025_annualized` |
 | `index.html` | `index.percentage_uncategorised.hyperscalers_neoclouds_earned_compute` | `79%` → `79.1%` | `site-data.arrModel.combined.ai_native_total` |
+| `index.html` | `index.ratio_derived.apps_revenue` | `2.5×` → `2.2×` | `site-data.compute.layer_stack_ratios.compute_to_apps_gross_x` |
+| `index.html` | `index.ratio_derived.apps_revenue_2` | `1.4×` → `1.3×` | `site-data.compute.layer_stack_ratios.power_to_apps_gross_x` |
 
 ## Needs source (path nominated, engine doesn't emit)
 
@@ -65,11 +71,9 @@ Stage 2 falls back to the literal until engine extends. Listed for follow-on bri
 | `capital.html` | `capital.ratio_derived.revenue_inference_spend_cross` | `4×` | `site-data.dashboard.enterpriseReality[4].postureScores.acceleration` |
 | `compute.html` | `compute.market_aggregate_compute_revenue.why_separate_trajectory_chart` | `$200B` | `entities.market_aggregates._narrative.google_rpo_b` |
 | `compute.html` | `compute.market_aggregate_compute_revenue.why_separate_trajectory_chart_2` | `$718B` | `entities.market_aggregates._narrative.google_rpo_b` |
-| `index.html` | `index.dom.ais_usage_figure` | `$164B` | `site-data.compute.layer_stack_ratios.usage_revenue_2025_usd_b` |
-| `index.html` | `index.dom.hook_ratio` | `$2.50` | `site-data.compute.layer_stack_ratios.compute_per_dollar_apps` |
 | `index.html` | `index.dom.lt_subline_2` | `79%` | `site-data.compute.frontier_lab_share_2025_pct` |
 | `power.html` | `power.market_aggregate_power.value` | `95 GW` | `(none)` |
 
 ## Fixed editorial (intentional, no supersession)
 
-104 entries — see `data/numbers-manifest.json` for the full list.
+105 entries — see `data/numbers-manifest.json` for the full list.

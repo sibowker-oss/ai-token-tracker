@@ -56,8 +56,12 @@ NUMERIC_PATTERNS = [
     ("currency_plain", re.compile(r"\$\s*\d+(?:\.\d+)?\b(?![BMTKbmtk])")),
     # percentages: 70%, 12.5%, +153% , -2.0%
     ("percentage", re.compile(r"[+\-]?\d+(?:\.\d+)?\s*%")),
-    # ratio x: 19×, 2.5x, 1.4×
-    ("ratio_x", re.compile(r"\d+(?:\.\d+)?\s*[×x]\b")),
+    # ratio x: 19×, 2.5x, 1.4×, 4× — the multiplier is "×" (unicode) or "x"
+    # (Latin). Use a negative lookahead instead of \b after [×x]: \b is a
+    # transition between word and non-word, but × is non-word, so \b after ×
+    # only matches when a word char follows (rarely in our editorial copy
+    # where the next char is space, period, or "Apps").
+    ("ratio_x", re.compile(r"\d+(?:\.\d+)?\s*[×x](?![a-zA-Z0-9])")),
     # gigawatts / megawatts
     ("power_units", re.compile(r"\d+(?:\.\d+)?\s*(?:GW|MW|kW|TWh|GWh)\b")),
 ]
@@ -645,25 +649,28 @@ SEMANTIC_PATH_RULES: list[tuple[str, list[str], set | None, str]] = [
     ("capital.html", ["total ai capex", "total 2025 capex"], {"B"}, "entities.market_aggregates.2025.total_capex"),
     ("capital.html", ["capital sankey total", "total cumulative"], {"B"}, "site-data.capital_sankey.total"),
     # ── Hook ratio (homepage) ────────────────────────────────────────────
-    ("index.html", ["of compute spend stands behind", "compute spend stands"], {"$"}, "site-data.compute.layer_stack_ratios.compute_per_dollar_apps"),
+    # (compute_per_dollar_apps without _gross has been retired in favour of
+    # the gross-anchored rule below — kept the path for older consumers but
+    # the manifest now binds the homepage hook ratio to the gross variant.)
     # ── Hyperscaler concentration (compute.html) ─────────────────────────
     ("*", ["frontier labs paid", "frontier-lab"], {"%"}, "site-data.compute.concentration.frontier_lab_share_pct"),
     # ── Power (placeholder editorial figure) ─────────────────────────────
     ("index.html", ["power", "1.4× apps revenue"], {"B"}, "site-data.compute.layer_stack_ratios.power_per_dollar_apps"),
     ("index.html", ["usage", "9.4× apps revenue"], {"B"}, "site-data.compute.layer_stack_ratios.usage_per_dollar_apps"),
-    ("index.html", ["compute", "2.5× apps revenue"], {"$"}, "site-data.compute.layer_stack_ratios.compute_per_dollar_apps"),
-    # NOTE: layer_stack_ratios.*_per_dollar_apps fields don't exist yet.
-    # They're nominated as stubs — Stage 2 render falls back to editorial
-    # until engine extension lands. _path_exists=false will be recorded.
-    ("index.html", ["19× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.capex_per_dollar_apps"),
-    ("index.html", ["1.4× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.power_per_dollar_apps"),
-    ("index.html", ["9.4× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.usage_per_dollar_apps"),
-    ("index.html", ["2.5× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.compute_per_dollar_apps"),
-    # ── Homepage hook ratio (Compute / Apps Revenue) ─────────────────────
-    ("index.html", ["compute spend stands behind"], {"$"}, "site-data.compute.layer_stack_ratios.compute_per_dollar_apps"),
-    # ── Homepage Power placeholder + Usage notional ──────────────────────
+    # (gross-anchored ratio for the dollar form — see hook ratio rule below)
+    # ── Layer Stack hero pill sublines (× Apps Revenue gross) ────────────
+    # These resolve to the gross-anchored ratios computed by
+    # scripts/derive_layer_stack_ratios.py — runs after generate_site_data
+    # so the values reflect the live engine state.
+    ("index.html", ["19× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.capex_to_apps_gross_x"),
+    ("index.html", ["1.4× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.power_to_apps_gross_x"),
+    ("index.html", ["9.4× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.usage_notional_to_apps_gross_x"),
+    ("index.html", ["2.5× apps revenue"], {"×"}, "site-data.compute.layer_stack_ratios.compute_to_apps_gross_x"),
+    # ── Homepage hook ratio: "$2.50 of compute spend ..." ────────────────
+    ("index.html", ["compute spend stands behind"], {"$"}, "site-data.compute.layer_stack_ratios.compute_per_dollar_apps_gross"),
+    # ── Homepage hero pill main figures ──────────────────────────────────
     ("index.html", ["ais-power-figure"], {"B"}, "site-data.compute.layer_stack_ratios.power_revenue_2025_usd_b"),
-    ("index.html", ["ais-usage-figure"], {"B"}, "site-data.compute.layer_stack_ratios.usage_revenue_2025_usd_b"),
+    ("index.html", ["ais-usage-figure"], {"B"}, "site-data.compute.layer_stack_ratios.usage_notional_2025_usd_b"),
     ("index.html", ["ais-capex-figure"], {"B"}, "entities.market_aggregates.2025.total_capex"),
     # ── capital.html sankey utilization narrative buckets ────────────────
     ("capital.html", ["inference (paid)"], {"B"}, "site-data.capital_sankey.utilization.Inference (Paid)"),
@@ -735,14 +742,14 @@ FIXED_EDITORIAL_LINE_PHRASES = [
 
 # Token-context phrases (looked up in a small window around the token span)
 # that mark THIS PARTICULAR token as rhetorical / fixed, without affecting
-# other tokens on the same line.
+# other tokens on the same line. Windows allow for HTML span wrappers that
+# may be inserted between the phrase and the token by anchor_html.py
+# (~50 chars per nested wrapping span). Phrase must PRECEDE the token.
 FIXED_EDITORIAL_TOKEN_PHRASES = [
     # Rhetorical "every $1 of revenue", "for every $1"
-    ("for every", 30),
-    ("every $1", 30),
-    ("behind every", 30),
-    # "1× baseline" — narrative anchor
-    ("baseline", 20),
+    ("for every", 80),
+    ("every $1", 80),
+    ("behind every", 80),
     # "trailing-q" methodology footnote
     ("trailing-q", 30),
     ("trailing q", 30),
@@ -761,6 +768,12 @@ FIXED_EDITORIAL_TOKEN_PHRASES = [
     ("© 2026", 30),
 ]
 
+# Phrases that follow a rhetorical token (mirror of the precedes list).
+# Pattern: token + space + phrase (e.g. "1× baseline", "1x baseline").
+FIXED_EDITORIAL_TOKEN_PHRASES_AFTER = [
+    ("baseline", 40),  # "1× baseline · 2025 cohort"
+]
+
 
 def is_line_fixed(line: str) -> bool:
     ll = line.lower()
@@ -768,15 +781,22 @@ def is_line_fixed(line: str) -> bool:
 
 
 def is_token_fixed(line: str, span: tuple[int, int]) -> bool:
-    """Check whether the immediate vicinity of the token (±N chars) contains
-    a fixed-editorial phrase. Only marks THIS token, not the whole line."""
+    """Check whether the chars BEFORE OR AFTER the token contain a fixed-
+    editorial phrase. Only marks THIS token, not the whole line.
+
+    Two phrase lists are checked:
+      - FIXED_EDITORIAL_TOKEN_PHRASES         — phrase precedes token
+      - FIXED_EDITORIAL_TOKEN_PHRASES_AFTER   — phrase follows token
+    """
     ll = line.lower()
     s, e = span
     for phrase, window in FIXED_EDITORIAL_TOKEN_PHRASES:
-        # search within [s-window, e+window]
         ws = max(0, s - window)
+        if phrase in ll[ws:s]:
+            return True
+    for phrase, window in FIXED_EDITORIAL_TOKEN_PHRASES_AFTER:
         we = min(len(ll), e + window)
-        if phrase in ll[ws:we]:
+        if phrase in ll[e:we]:
             return True
     return False
 

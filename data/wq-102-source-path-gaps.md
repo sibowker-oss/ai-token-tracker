@@ -4,9 +4,9 @@ Generated 2026-05-10 by `scripts/build_numbers_manifest.py`.
 
 ## Summary
 
-- Total manifest entries: **154**
-- Auto-resolved (`source_path` populated): **49**
-- Intentionally fixed editorial (no path needed, `source_state=fixed`): **104**
+- Total manifest entries: **159**
+- Auto-resolved (`source_path` populated): **53**
+- Intentionally fixed editorial (no path needed, `source_state=fixed`): **105**
 - **Auto-resolution rate (path or fixed): 99.4%** (target ≥40%)
 - Needs manual path assignment: **1**
 - No path candidate at all: **0** (0.0%) (target ≤10%)
@@ -23,11 +23,12 @@ Entries below were extracted but the resolver couldn't pick a unique path. Where
 
 ## Intentionally fixed editorial entries (no source_path expected)
 
-104 entries flagged as `source_state=fixed` (tier-mix percentages, methodology constants, regulatory ids, etc.). Build skips supersession but routes the literal through the formatter.
+105 entries flagged as `source_state=fixed` (tier-mix percentages, methodology constants, regulatory ids, etc.). Build skips supersession but routes the literal through the formatter.
 
 | Page | Line | Raw | Semantic | Context |
 |---|---|---|---|---|
 | index.html | 235 | `$1.25` | `methodology_constant` | <span class="ais-note">notional @ $1.25/M output rate</span> |
+| index.html | 265 | `1×` | `ratio_derived` | <span class="ais-sub">1× baseline · 2025 cohort</span> |
 | index.html | 279 | `$1` | `ratio_derived` | <div class="hook-number"><span id="hook-ratio">$2.50</span> of compute spend stands behind every $1  |
 | index.html | 303 | `40%` | `percentage_uncategorised` | <span class="tier-pill tier-1">40% Sourced</span> |
 | index.html | 304 | `35%` | `percentage_uncategorised` | <span class="tier-pill tier-2">35% Derived</span> |
@@ -56,9 +57,8 @@ Entries below were extracted but the resolver couldn't pick a unique path. Where
 | capital.html | 827 | `$89B` | `per_entity_metric.depreciation` | LAG_RAW[3] year='2026E' nvDep=89.0 |
 | capital.html | 827 | `$160B` | `market_aggregate.depreciation` | LAG_RAW[3] year='2026E' totalDep=160.0 |
 | capital.html | 828 | `$1100B` | `market_aggregate.capex_annual` | LAG_RAW[4] year='2027E' totalCapex=1100.0 |
-| capital.html | 828 | `$115B` | `market_aggregate.revenue` | LAG_RAW[4] year='2027E' revenue=115.0 |
 
-_(74 more …)_
+_(75 more …)_
 
 ## Editorial-level bugs flagged for Stage 2
 

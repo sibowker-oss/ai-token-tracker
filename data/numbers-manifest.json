@@ -151,6 +151,41 @@
       }
     },
     {
+      "id": "index.dom.ais_capex_sub",
+      "page": "index.html",
+      "anchor_selector": "#ais-capex-sub",
+      "anchor_dom_id": "ais-capex-sub",
+      "current_rendered_value": "19×",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.layer_stack_ratios.capex_to_apps_gross_x",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.layer_stack_ratios.capex_to_apps_gross_x"
+      ],
+      "editorial_fallback": {
+        "value": 19.0,
+        "unit": "×",
+        "raw": "19×",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:225"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8180-8a1a-d1aad305a6d4",
+      "_capture": {
+        "line": 225,
+        "col": 51,
+        "col_end": 54,
+        "context": "<span class=\"ais-sub\" id=\"ais-capex-sub\">19× Apps Revenue · 2025 calendar</span>",
+        "binding_hint": null
+      }
+    },
+    {
       "id": "index.dom.ais_capex_figure",
       "page": "index.html",
       "anchor_selector": "#ais-capex-figure",
@@ -221,6 +256,41 @@
       }
     },
     {
+      "id": "index.dom.ais_usage_sub_2",
+      "page": "index.html",
+      "anchor_selector": "#ais-usage-sub",
+      "anchor_dom_id": "ais-usage-sub",
+      "current_rendered_value": "9.4×",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.layer_stack_ratios.usage_notional_to_apps_gross_x",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.layer_stack_ratios.usage_notional_to_apps_gross_x"
+      ],
+      "editorial_fallback": {
+        "value": 9.4,
+        "unit": "×",
+        "raw": "9.4×",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:234"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8130-b43a-e14819fcd174",
+      "_capture": {
+        "line": 234,
+        "col": 51,
+        "col_end": 55,
+        "context": "<span class=\"ais-sub\" id=\"ais-usage-sub\">9.4× Apps Revenue · ~360T/day</span>",
+        "binding_hint": null
+      }
+    },
+    {
       "id": "index.methodology_constant.notional_output_rate",
       "page": "index.html",
       "anchor_selector": "[data-num][data-line=\"235\"]",
@@ -261,10 +331,10 @@
       "current_rendered_value": "$164B",
       "semantic": "uncategorised",
       "source_state": "editorial",
-      "source_path": "site-data.compute.layer_stack_ratios.usage_revenue_2025_usd_b",
-      "source_path_exists": false,
+      "source_path": "site-data.compute.layer_stack_ratios.usage_notional_2025_usd_b",
+      "source_path_exists": true,
       "source_path_candidates": [
-        "site-data.compute.layer_stack_ratios.usage_revenue_2025_usd_b"
+        "site-data.compute.layer_stack_ratios.usage_notional_2025_usd_b"
       ],
       "editorial_fallback": {
         "value": 164.0,
@@ -285,6 +355,41 @@
         "col": 55,
         "col_end": 60,
         "context": "<span class=\"ais-figure\" id=\"ais-usage-figure\">$164B</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.ratio_derived.apps_revenue",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"244\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "2.5×",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.layer_stack_ratios.compute_to_apps_gross_x",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.layer_stack_ratios.compute_to_apps_gross_x"
+      ],
+      "editorial_fallback": {
+        "value": 2.5,
+        "unit": "×",
+        "raw": "2.5×",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:244"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8112-bdba-e902d63b18bf",
+      "_capture": {
+        "line": 244,
+        "col": 32,
+        "col_end": 36,
+        "context": "<span class=\"ais-sub\">2.5× Apps Revenue</span>",
         "binding_hint": null
       }
     },
@@ -330,6 +435,41 @@
       }
     },
     {
+      "id": "index.ratio_derived.apps_revenue_2",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"253\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "1.4×",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.layer_stack_ratios.power_to_apps_gross_x",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.layer_stack_ratios.power_to_apps_gross_x"
+      ],
+      "editorial_fallback": {
+        "value": 1.4,
+        "unit": "×",
+        "raw": "1.4×",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:253"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8138-8e4e-e64635da833c",
+      "_capture": {
+        "line": 253,
+        "col": 32,
+        "col_end": 36,
+        "context": "<span class=\"ais-sub\">1.4× Apps Revenue</span>",
+        "binding_hint": null
+      }
+    },
+    {
       "id": "index.dom.ais_power_figure",
       "page": "index.html",
       "anchor_selector": "#ais-power-figure",
@@ -361,6 +501,39 @@
         "col": 38,
         "col_end": 42,
         "context": "<span id=\"ais-power-figure\">$25B</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.ratio_derived.baseline_cohort",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"265\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "1×",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "×",
+        "raw": "1×",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:265"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8107-9457-c2bea6ef0611",
+      "_capture": {
+        "line": 265,
+        "col": 32,
+        "col_end": 34,
+        "context": "<span class=\"ais-sub\">1× baseline · 2025 cohort</span>",
         "binding_hint": null
       }
     },
@@ -407,10 +580,10 @@
       "current_rendered_value": "$2.50",
       "semantic": "ratio_derived",
       "source_state": "editorial",
-      "source_path": "site-data.compute.layer_stack_ratios.compute_per_dollar_apps",
-      "source_path_exists": false,
+      "source_path": "site-data.compute.layer_stack_ratios.compute_per_dollar_apps_gross",
+      "source_path_exists": true,
       "source_path_candidates": [
-        "site-data.compute.layer_stack_ratios.compute_per_dollar_apps"
+        "site-data.compute.layer_stack_ratios.compute_per_dollar_apps_gross"
       ],
       "editorial_fallback": {
         "value": 2.5,

@@ -39,7 +39,7 @@
     },
     "about": {
       "path": "/about.html",
-      "title": "About — Hepburn Advisory",
+      "title": "About \u2014 Hepburn Advisory",
       "hasDerivedNumbers": false
     },
     "methodology": {
@@ -674,7 +674,7 @@
         "tier": "frontier",
         "arrNumeric": 25.0,
         "arrAsOf": "2026-Q1",
-        "arrSource": "OpenAI commentary 2026 — $25B ARR run-rate",
+        "arrSource": "OpenAI commentary 2026 \u2014 $25B ARR run-rate",
         "provenance": "tier_1b"
       },
       "Alibaba/Qwen": {
@@ -704,7 +704,7 @@
         "tier": "frontier",
         "arrNumeric": 30.0,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Anthropic commentary 2026 — $30B ARR run-rate (single-source highest-quality figure parked separately per Decision D11)",
+        "arrSource": "Anthropic commentary 2026 \u2014 $30B ARR run-rate (single-source highest-quality figure parked separately per Decision D11)",
         "provenance": "tier_2a"
       },
       "Tencent": {
@@ -1493,7 +1493,7 @@
               "conv": "45%",
               "color": "#f59e0b",
               "ex": "ChatGPT Enterprise ($60+/user), Claude for Enterprise",
-              "note": "Standalone AI subs — higher activation, users chose to buy it."
+              "note": "Standalone AI subs \u2014 higher activation, users chose to buy it."
             },
             {
               "arrEstimate": "~$3-5B",
@@ -1507,13 +1507,13 @@
               "conv": "80%",
               "color": "#10b981",
               "ex": "Cursor Enterprise, Harvey, Cognition/Devin, BLACKBOX.AI",
-              "note": "Real usage — AI natives solving specific enterprise workflows."
+              "note": "Real usage \u2014 AI natives solving specific enterprise workflows."
             },
             {
               "arrEstimate": "~$5-7B real (~$15B claimed)",
               "conv": "10-20%",
               "color": "#ef4444",
-              "ex": "M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B — the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real — cleanest reporter)",
+              "ex": "M365 Copilot (list $5.4B, net ~$2.5-3.5B after 40-60% discounting), GitHub Copilot ($1-2.3B \u2014 the one that works), SF Agentforce ($800M claimed, ~$250-350M real), NOW Assist ($600M, ~$400-500M real \u2014 cleanest reporter)",
               "note": "COGS test: SF inference est. $6-12M on $800M \"AI rev\" = 98% margin = not real AI. NOW: 92-97%. MSFT only one with real margin impact (cloud margin -3pp). Vendors claim ~$52B total, real incremental is ~$9-13B across whole market (3.5-5% of enterprise SaaS). 0 of 10 vendors show AI-driven growth acceleration."
             }
           ]
@@ -1528,11 +1528,11 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 5.4,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Microsoft FY26 Q3 earnings — 15M paid seats × $30/mo annualised = $5.4B list-billings",
+        "arrSource": "Microsoft FY26 Q3 earnings \u2014 15M paid seats \u00d7 $30/mo annualised = $5.4B list-billings",
         "provenance": "tier_1b",
         "claimed": "15M seats x $30/mo = $5.4B list (verified, MSFT Q2 FY26 earnings)",
         "usage": "35.8% active (Recon Analytics, 150K respondents). Only 5% of orgs past pilot (Gartner). 70% tried, only 8% kept choosing it.",
-        "real": "~$2.5-3.5B net (40-60% discounting per Citi/JPM). Cloud margin down 3pp (72->69%) — real AI infra cost.",
+        "real": "~$2.5-3.5B net (40-60% discounting per Citi/JPM). Cloud margin down 3pp (72->69%) \u2014 real AI infra cost.",
         "flags": "3.3% of 450M installed base after 2 years. Market share FELL 18.8%->11.5% (Recon Analytics Jul->Jan). Auto-installing. Morgan Stanley: \"wall of sorry.\"",
         "growth": "12-15%",
         "prevGrowth": "15%",
@@ -1545,7 +1545,7 @@
         },
         "archetype": "Real workload, real cost, small share",
         "arrShare": {
-          "value": "1.0–1.4%",
+          "value": "1.0\u20131.4%",
           "denominator": "MSFT total revenue (~$245B FY24)",
           "denominatorType": "parent_total"
         },
@@ -1556,13 +1556,13 @@
           "cost": 5,
           "acceleration": 3,
           "_citations": {
-            "bundling": "Microsoft 365 Copilot pricing page — separate $30/user/mo add-on on top of E3/E5 SKUs (premium add-on, not absorbed).",
-            "cost": "Microsoft FY26 Q3 earnings — Cloud gross margin down 3pp explicitly attributed to AI infrastructure costs."
+            "bundling": "Microsoft 365 Copilot pricing page \u2014 separate $30/user/mo add-on on top of E3/E5 SKUs (premium add-on, not absorbed).",
+            "cost": "Microsoft FY26 Q3 earnings \u2014 Cloud gross margin down 3pp explicitly attributed to AI infrastructure costs."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "3.3% of 450M installed base after two years. Market share fell 18.8% → 11.5% (Recon Analytics). Auto-installing across tenants. Morgan Stanley described enterprise reception as a “wall of sorry.” Cloud margin down 3pp directly attributed to AI infra cost. Disclosure tier_1b but only ~1% of parent revenue.",
+        "watchSignals": "3.3% of 450M installed base after two years. Market share fell 18.8% \u2192 11.5% (Recon Analytics). Auto-installing across tenants. Morgan Stanley described enterprise reception as a \u201cwall of sorry.\u201d Cloud margin down 3pp directly attributed to AI infra cost. Disclosure tier_1b but only ~1% of parent revenue.",
         "product": "M365 Copilot",
         "parent": "Microsoft"
       },
@@ -1573,17 +1573,17 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 1.65,
         "arrAsOf": "2026-Q1",
-        "arrSource": "MSFT earnings narrative — 4.7M paid subs, GitHub total $2B ARR; Copilot midpoint $1-2.3B → $1.65B",
+        "arrSource": "MSFT earnings narrative \u2014 4.7M paid subs, GitHub total $2B ARR; Copilot midpoint $1-2.3B \u2192 $1.65B",
         "provenance": "tier_2a",
-        "claimed": "4.7M paid subs (verified, MSFT earnings). GitHub total $2B ARR — Copilot est. $1-2.3B",
-        "usage": "42% market share of AI coding. 27-30% acceptance rate (not 55% — that was task speed). Lost $20/user/mo in 2023 (WSJ).",
-        "real": "$1-2.3B — the ONE product where AI IS the product",
+        "claimed": "4.7M paid subs (verified, MSFT earnings). GitHub total $2B ARR \u2014 Copilot est. $1-2.3B",
+        "usage": "42% market share of AI coding. 27-30% acceptance rate (not 55% \u2014 that was task speed). Lost $20/user/mo in 2023 (WSJ).",
+        "real": "$1-2.3B \u2014 the ONE product where AI IS the product",
         "flags": "Genuinely works. But facing Cursor ($1B ARR), open-source alternatives. Microsoft added Anthropic models \"at great expense to margins\" (SemiAnalysis). Usage caps introduced mid-2025.",
         "growth": "75% subs YoY",
         "prevGrowth": "N/A",
         "archetype": "AI is the product, but small at parent scale",
         "arrShare": {
-          "value": "50–82%",
+          "value": "50\u201382%",
           "denominator": "GitHub ARR (~$2B)",
           "denominatorType": "business_unit"
         },
@@ -1594,13 +1594,13 @@
           "cost": 5,
           "acceleration": 5,
           "_citations": {
-            "bundling": "GitHub Copilot pricing page — three premium tiers ($10 Pro / $19 Business / $39 Enterprise) separate from base GitHub plans.",
-            "cost": "SemiAnalysis Aug-2025 — Microsoft added Anthropic models 'at great expense to margins.' Usage caps introduced mid-2025 are explicit cost-control signal."
+            "bundling": "GitHub Copilot pricing page \u2014 three premium tiers ($10 Pro / $19 Business / $39 Enterprise) separate from base GitHub plans.",
+            "cost": "SemiAnalysis Aug-2025 \u2014 Microsoft added Anthropic models 'at great expense to margins.' Usage caps introduced mid-2025 are explicit cost-control signal."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "42% market share of AI coding. Acceptance rate 27–30% (not the 55% headline — that was task speed). Microsoft added Anthropic models “at great expense to margins” (SemiAnalysis) — explicit AI cost attribution. Usage caps introduced mid-2025. Real product, real cost, real growth — but still <1% of MSFT total revenue, ~50–82% of GitHub-ARR base.",
+        "watchSignals": "42% market share of AI coding. Acceptance rate 27\u201330% (not the 55% headline \u2014 that was task speed). Microsoft added Anthropic models \u201cat great expense to margins\u201d (SemiAnalysis) \u2014 explicit AI cost attribution. Usage caps introduced mid-2025. Real product, real cost, real growth \u2014 but still <1% of MSFT total revenue, ~50\u201382% of GitHub-ARR base.",
         "product": "GitHub Copilot",
         "parent": "Microsoft"
       },
@@ -1611,12 +1611,12 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 1.5,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Alphabet Q1 2026 commentary — Gemini-in-Workspace external AI seats; reconciles with compute_disclosures.json:googl_cloud_ai.copilot_excluded_2025_usd_b $1.5B (MS-declared analogue)",
+        "arrSource": "Alphabet Q1 2026 commentary \u2014 Gemini-in-Workspace external AI seats; reconciles with compute_disclosures.json:googl_cloud_ai.copilot_excluded_2025_usd_b $1.5B (MS-declared analogue)",
         "provenance": "tier_2a",
         "claimed": "Gemini-in-Workspace AI add-on; bundled in Business/Enterprise tiers",
         "usage": "Strong attach in Workspace base; meaningful seat uplift.",
         "real": "$1.5B (annualised)",
-        "flags": "AI repackaging of existing Workspace SKU = trad_saas. Distinct from Gemini frontier (provider) and GCP (trad_compute) — see Decision D9.",
+        "flags": "AI repackaging of existing Workspace SKU = trad_saas. Distinct from Gemini frontier (provider) and GCP (trad_compute) \u2014 see Decision D9.",
         "growth": "fast",
         "prevGrowth": "n/a",
         "archetype": "Bundled at scale, immaterial at parent",
@@ -1632,13 +1632,13 @@
           "cost": 2,
           "acceleration": 3,
           "_citations": {
-            "bundling": "Google Workspace pricing — Gemini repackaged into Business Standard/Plus and Enterprise tiers; no standalone AI add-on SKU after Jan-2025 consolidation.",
-            "cost": "Alphabet Q1 2026 earnings call — no explicit AI-attributable margin compression in Cloud GM commentary; mostly capex-driven."
+            "bundling": "Google Workspace pricing \u2014 Gemini repackaged into Business Standard/Plus and Enterprise tiers; no standalone AI add-on SKU after Jan-2025 consolidation.",
+            "cost": "Alphabet Q1 2026 earnings call \u2014 no explicit AI-attributable margin compression in Cloud GM commentary; mostly capex-driven."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "Strong attach in Workspace base; meaningful seat uplift. Repackaging of existing Workspace SKUs — no pricing model change. Distinct from Gemini frontier (provider) and GCP (trad_compute) per wq-097 D9. No explicit AI cost attribution in Alphabet GM commentary.",
+        "watchSignals": "Strong attach in Workspace base; meaningful seat uplift. Repackaging of existing Workspace SKUs \u2014 no pricing model change. Distinct from Gemini frontier (provider) and GCP (trad_compute) per wq-097 D9. No explicit AI cost attribution in Alphabet GM commentary.",
         "product": "Google Workspace AI",
         "parent": "Alphabet"
       },
@@ -1649,7 +1649,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.8,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Salesforce Q4 FY26 earnings — Agentforce ACV component of $2.9B AI+Data line",
+        "arrSource": "Salesforce Q4 FY26 earnings \u2014 Agentforce ACV component of $2.9B AI+Data line",
         "provenance": "tier_2a",
         "claimed": "$800M Agentforce ARR (within $2.9B \"AI+Data\" that includes Informatica acquisition)",
         "usage": "~50% of 29K deals are free/seeded. COGS test: inference cost est. $6-12M/yr on $800M = 98%+ \"AI margin\"",
@@ -1666,7 +1666,7 @@
         },
         "archetype": "Bold pricing, no real cost, no lift",
         "arrShare": {
-          "value": "0.6–1.9%",
+          "value": "0.6\u20131.9%",
           "denominator": "CRM total revenue ($41.5B FY25)",
           "denominatorType": "parent_total"
         },
@@ -1677,13 +1677,13 @@
           "cost": 1,
           "acceleration": 1,
           "_citations": {
-            "bundling": "Salesforce pricing — Agentforce metered at $2/conversation premium add-on, separate from Sales/Service Cloud SKUs.",
-            "cost": "Salesforce Q4 FY26 earnings — non-GAAP gross margin flat at 77%; no observable AI-attributable compression despite Agentforce launch."
+            "bundling": "Salesforce pricing \u2014 Agentforce metered at $2/conversation premium add-on, separate from Sales/Service Cloud SKUs.",
+            "cost": "Salesforce Q4 FY26 earnings \u2014 non-GAAP gross margin flat at 77%; no observable AI-attributable compression despite Agentforce launch."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "$2 / conversation pricing exists but isn’t exclusive — traditional Sales Cloud still the dominant commercial model. Gross margin flat at 77% = minimal AI COGS — high pricing posture without observable workload. ~50% of 29K deals are free or seeded. Agentforce represents under 2% of $41.5B revenue.",
+        "watchSignals": "$2 / conversation pricing exists but isn\u2019t exclusive \u2014 traditional Sales Cloud still the dominant commercial model. Gross margin flat at 77% = minimal AI COGS \u2014 high pricing posture without observable workload. ~50% of 29K deals are free or seeded. Agentforce represents under 2% of $41.5B revenue.",
         "product": "Salesforce Agentforce",
         "parent": "Salesforce"
       },
@@ -1694,7 +1694,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.6,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Databricks press 2025 — Mosaic AI + GenAI suite uplift on $3B+ run-rate; editorial AI-attributable share",
+        "arrSource": "Databricks press 2025 \u2014 Mosaic AI + GenAI suite uplift on $3B+ run-rate; editorial AI-attributable share",
         "provenance": "tier_2b",
         "claimed": "Mosaic AI + DBRX + AI agents on Lakehouse; consumption + SKU mix",
         "usage": "Strong enterprise attach; AI workloads largest growth driver of 2025 ARR uplift.",
@@ -1704,7 +1704,7 @@
         "prevGrowth": "n/a",
         "archetype": "Private momentum, opaque margins",
         "arrShare": {
-          "value": "~17–23%",
+          "value": "~17\u201323%",
           "denominator": "Databricks ARR (~$3B+ run-rate)",
           "denominatorType": "business_unit"
         },
@@ -1715,14 +1715,14 @@
           "cost": 0,
           "acceleration": 4,
           "_citations": {
-            "bundling": "Databricks pricing — Mosaic AI Model Serving + Vector Search + Agent Bricks metered as separate consumption SKUs on top of base Lakehouse compute.",
-            "cost": "NA — Databricks is private; no public gross margin disclosure."
+            "bundling": "Databricks pricing \u2014 Mosaic AI Model Serving + Vector Search + Agent Bricks metered as separate consumption SKUs on top of base Lakehouse compute.",
+            "cost": "NA \u2014 Databricks is private; no public gross margin disclosure."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
         "gmUnavailable": true,
-        "watchSignals": "Strong enterprise attach. AI workloads called out as largest growth driver of 2025 ARR uplift. Already consumption-based — AI doesn’t change the model. Reporting via press, not disclosure. Trad_saas because Lakehouse is the underlying product being AI-augmented. GM not publicly available.",
+        "watchSignals": "Strong enterprise attach. AI workloads called out as largest growth driver of 2025 ARR uplift. Already consumption-based \u2014 AI doesn\u2019t change the model. Reporting via press, not disclosure. Trad_saas because Lakehouse is the underlying product being AI-augmented. GM not publicly available.",
         "product": "Databricks (Mosaic + AI)",
         "parent": "Databricks"
       },
@@ -1733,12 +1733,12 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.6,
         "arrAsOf": "2025-Q4",
-        "arrSource": "ServiceNow Q4 2025 earnings — $600M+ Now Assist ACV",
+        "arrSource": "ServiceNow Q4 2025 earnings \u2014 $600M+ Now Assist ACV",
         "provenance": "tier_1b",
         "claimed": "$600M+ Now Assist ACV (verified, Q4 2025 earnings)",
         "usage": "Pro Plus premium est. 30-60% (UpperEdge). COGS test: inference cost est. $15-50M/yr = 92-97% \"AI margin\"",
-        "real": "~$400-500M (cleanest reporter — AI is a genuine premium SKU)",
-        "flags": "Most honest of the group. But Pro Plus bundles non-AI features. Gross margin down 1.7pp (79.2->77.5%) — slight AI cost impact. Hidden consumption-based \"assists\" fees.",
+        "real": "~$400-500M (cleanest reporter \u2014 AI is a genuine premium SKU)",
+        "flags": "Most honest of the group. But Pro Plus bundles non-AI features. Gross margin down 1.7pp (79.2->77.5%) \u2014 slight AI cost impact. Hidden consumption-based \"assists\" fees.",
         "growth": "20-21%",
         "prevGrowth": "25%",
         "arrClaimedVsReal": {
@@ -1746,11 +1746,11 @@
             0.4,
             0.5
           ],
-          "realNote": "Cleanest reporter — AI is genuine premium SKU, but Pro Plus bundles non-AI features."
+          "realNote": "Cleanest reporter \u2014 AI is genuine premium SKU, but Pro Plus bundles non-AI features."
         },
         "archetype": "Cleanest disclosure, real share",
         "arrShare": {
-          "value": "~3.6–4.5%",
+          "value": "~3.6\u20134.5%",
           "denominator": "NOW total revenue (~$11B FY24)",
           "denominatorType": "parent_total"
         },
@@ -1761,13 +1761,13 @@
           "cost": 4,
           "acceleration": 3,
           "_citations": {
-            "bundling": "ServiceNow pricing — Pro Plus is a discrete premium SKU above Pro, marketed as the AI-bundled tier; Now Assist is the differentiator at the upgrade.",
-            "cost": "ServiceNow Q4 2025 earnings — non-GAAP gross margin down 1.7pp (79.2% → 77.5%) with explicit AI / inference cost attribution in management commentary."
+            "bundling": "ServiceNow pricing \u2014 Pro Plus is a discrete premium SKU above Pro, marketed as the AI-bundled tier; Now Assist is the differentiator at the upgrade.",
+            "cost": "ServiceNow Q4 2025 earnings \u2014 non-GAAP gross margin down 1.7pp (79.2% \u2192 77.5%) with explicit AI / inference cost attribution in management commentary."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "Pro Plus premium take est. 30–60% (UpperEdge) — but still a tier upgrade on the existing seat model, not a new pricing model. Inference cost est. $15–50M/yr on $600M+ ACV = 92–97% “AI margin.” Gross margin down 1.7pp (79.2 → 77.5%) with explicit AI attribution. Highest share-of-parent in the cohort and the cleanest disclosure trail.",
+        "watchSignals": "Pro Plus premium take est. 30\u201360% (UpperEdge) \u2014 but still a tier upgrade on the existing seat model, not a new pricing model. Inference cost est. $15\u201350M/yr on $600M+ ACV = 92\u201397% \u201cAI margin.\u201d Gross margin down 1.7pp (79.2 \u2192 77.5%) with explicit AI attribution. Highest share-of-parent in the cohort and the cleanest disclosure trail.",
         "product": "ServiceNow Now Assist",
         "parent": "ServiceNow"
       },
@@ -1778,7 +1778,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.45,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Adobe FY25 earnings narrative — Firefly $400-500M, AI-first ARR $250M; midpoint $450M",
+        "arrSource": "Adobe FY25 earnings narrative \u2014 Firefly $400-500M, AI-first ARR $250M; midpoint $450M",
         "provenance": "tier_2b",
         "claimed": "Firefly ~$400-500M, AI-first ARR $250M",
         "usage": "75% of Fortune 500 \"adopted\" but free tier inflates. Some cannibalizes stock photo revenue.",
@@ -1795,7 +1795,7 @@
         },
         "archetype": "Credits without lift",
         "arrShare": {
-          "value": "0.9–1.4%",
+          "value": "0.9\u20131.4%",
           "denominator": "ADBE total revenue (~$22B FY24)",
           "denominatorType": "parent_total"
         },
@@ -1806,13 +1806,13 @@
           "cost": 1,
           "acceleration": 1,
           "_citations": {
-            "bundling": "Adobe pricing — generative credits bundled into Creative Cloud tiers (no standalone Firefly subscription); Firefly Premium add-on exists but secondary.",
-            "cost": "Adobe FY25 earnings — non-GAAP gross margin stable at ~88%; no AI-attributable compression in management commentary."
+            "bundling": "Adobe pricing \u2014 generative credits bundled into Creative Cloud tiers (no standalone Firefly subscription); Firefly Premium add-on exists but secondary.",
+            "cost": "Adobe FY25 earnings \u2014 non-GAAP gross margin stable at ~88%; no AI-attributable compression in management commentary."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "75% of Fortune 500 “adopted” but free tier inflates. Generative credits represent a real pricing model layer (usage-tied) even though credits are bundled into Creative Cloud tiers. Growth completely flat at 10–11% pre AND post AI. GM stable at 88% — no observable AI cost in margins. Firefly has moved the needle zero on top-line growth.",
+        "watchSignals": "75% of Fortune 500 \u201cadopted\u201d but free tier inflates. Generative credits represent a real pricing model layer (usage-tied) even though credits are bundled into Creative Cloud tiers. Growth completely flat at 10\u201311% pre AND post AI. GM stable at 88% \u2014 no observable AI cost in margins. Firefly has moved the needle zero on top-line growth.",
         "product": "Adobe Firefly",
         "parent": "Adobe"
       },
@@ -1823,9 +1823,9 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.4,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Microsoft FY26 Q3 commentary — Dynamics Copilot SKUs (Sales/Service/Finance/Supply Chain). Editorial estimate within $37B AI run-rate.",
+        "arrSource": "Microsoft FY26 Q3 commentary \u2014 Dynamics Copilot SKUs (Sales/Service/Finance/Supply Chain). Editorial estimate within $37B AI run-rate.",
         "provenance": "tier_2b",
-        "claimed": "Dynamics 365 Copilot SKUs — Sales/Service/Finance/Supply Chain",
+        "claimed": "Dynamics 365 Copilot SKUs \u2014 Sales/Service/Finance/Supply Chain",
         "usage": "Smaller surface than M365 Copilot; targeted to Dynamics base",
         "real": "$300-500M editorial",
         "flags": "Per Decision D9, sits inside Microsoft AI run-rate gross; carved out into trad_saas alongside M365 Copilot + GitHub Copilot.",
@@ -1833,8 +1833,8 @@
         "prevGrowth": "n/a",
         "archetype": "Niche scale, shared infra cost",
         "arrShare": {
-          "value": "~7–8%",
-          "denominator": "Dynamics 365 ARR (~$5–6B)",
+          "value": "~7\u20138%",
+          "denominator": "Dynamics 365 ARR (~$5\u20136B)",
           "denominatorType": "business_unit"
         },
         "postureScores": {
@@ -1844,13 +1844,13 @@
           "cost": 5,
           "acceleration": 3,
           "_citations": {
-            "bundling": "Microsoft Dynamics 365 pricing — Sales/Service/Finance/Supply Chain Copilot SKUs $30–50/user/mo on top of base Dynamics seats (premium add-on).",
-            "cost": "Microsoft FY26 Q3 earnings — Cloud GM compression (-3pp) is parent-level AI infra cost; Dynamics inherits the same shared GM by construction (Microsoft trio shares parent GM)."
+            "bundling": "Microsoft Dynamics 365 pricing \u2014 Sales/Service/Finance/Supply Chain Copilot SKUs $30\u201350/user/mo on top of base Dynamics seats (premium add-on).",
+            "cost": "Microsoft FY26 Q3 earnings \u2014 Cloud GM compression (-3pp) is parent-level AI infra cost; Dynamics inherits the same shared GM by construction (Microsoft trio shares parent GM)."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "Smaller surface than M365 Copilot, targeted to Dynamics base. Per wq-097 D9, sits inside Microsoft AI run-rate gross. Inherits parent-level AI cost realisation (Microsoft cloud margin -3pp) — Microsoft trio shares parent GM, by design. Editorial estimate, immaterial at parent scale.",
+        "watchSignals": "Smaller surface than M365 Copilot, targeted to Dynamics base. Per wq-097 D9, sits inside Microsoft AI run-rate gross. Inherits parent-level AI cost realisation (Microsoft cloud margin -3pp) \u2014 Microsoft trio shares parent GM, by design. Editorial estimate, immaterial at parent scale.",
         "product": "Dynamics 365 Copilot",
         "parent": "Microsoft"
       },
@@ -1861,7 +1861,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.25,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Notion press commentary 2025 — $10/seat AI add-on; >$200M ARR-stack reported. Editorial uplift to $250M for early 2026.",
+        "arrSource": "Notion press commentary 2025 \u2014 $10/seat AI add-on; >$200M ARR-stack reported. Editorial uplift to $250M for early 2026.",
         "provenance": "tier_2b",
         "claimed": "$10/seat AI add-on; ~$200-300M ARR estimated late 2025",
         "usage": "Strong attach in mid-market; consumer take-rate softer.",
@@ -1871,7 +1871,7 @@
         "prevGrowth": "n/a",
         "archetype": "Private add-on momentum",
         "arrShare": {
-          "value": "~20–30%",
+          "value": "~20\u201330%",
           "denominator": "Notion ARR (~$1B est.)",
           "denominatorType": "business_unit"
         },
@@ -1882,14 +1882,14 @@
           "cost": 0,
           "acceleration": 4,
           "_citations": {
-            "bundling": "Notion pricing — Notion AI is a $10/user/month add-on on top of Plus/Business/Enterprise seats (premium add-on, not absorbed).",
-            "cost": "NA — Notion is private; no public gross margin disclosure."
+            "bundling": "Notion pricing \u2014 Notion AI is a $10/user/month add-on on top of Plus/Business/Enterprise seats (premium add-on, not absorbed).",
+            "cost": "NA \u2014 Notion is private; no public gross margin disclosure."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
         "gmUnavailable": true,
-        "watchSignals": "Strong attach in mid-market; consumer take-rate softer. $10/seat AI add-on — premium tier on existing seat model. High share of own (private) ARR. Repackaging existing Notion product with AI. Reporting via press, not disclosure. GM not publicly available.",
+        "watchSignals": "Strong attach in mid-market; consumer take-rate softer. $10/seat AI add-on \u2014 premium tier on existing seat model. High share of own (private) ARR. Repackaging existing Notion product with AI. Reporting via press, not disclosure. GM not publicly available.",
         "product": "Notion AI",
         "parent": "Notion"
       },
@@ -1900,7 +1900,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.2,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Intuit FY26 narrative — Assist agentic AI rolling across QuickBooks/TurboTax/Mailchimp; editorial estimate of incremental seat uplift",
+        "arrSource": "Intuit FY26 narrative \u2014 Assist agentic AI rolling across QuickBooks/TurboTax/Mailchimp; editorial estimate of incremental seat uplift",
         "provenance": "tier_2b",
         "claimed": "Assist (agentic AI) bundled across QuickBooks/TurboTax/Mailchimp",
         "usage": "Active rollout 2025-26; usage growing",
@@ -1910,7 +1910,7 @@
         "prevGrowth": "13%",
         "archetype": "Bundled, stable, invisible",
         "arrShare": {
-          "value": "0.9–1.6%",
+          "value": "0.9\u20131.6%",
           "denominator": "INTU total revenue (~$16B FY24)",
           "denominatorType": "parent_total"
         },
@@ -1921,13 +1921,13 @@
           "cost": 2,
           "acceleration": 2,
           "_citations": {
-            "bundling": "Intuit pricing — Assist bundled into existing QuickBooks/TurboTax/Mailchimp tiers at no upcharge; no standalone AI SKU disclosed.",
-            "cost": "Intuit FY26 narrative — non-GAAP gross margin ~83–84%, minimal AI-attributable movement; bundled inference cost not broken out."
+            "bundling": "Intuit pricing \u2014 Assist bundled into existing QuickBooks/TurboTax/Mailchimp tiers at no upcharge; no standalone AI SKU disclosed.",
+            "cost": "Intuit FY26 narrative \u2014 non-GAAP gross margin ~83\u201384%, minimal AI-attributable movement; bundled inference cost not broken out."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "Active rollout 2025–26; usage growing. Repackaging existing SKUs with AI — no pricing model change, no premium tier, no separate disclosure. Growth flat vs pre-AI baseline. No observable AI cost in Intuit GM.",
+        "watchSignals": "Active rollout 2025\u201326; usage growing. Repackaging existing SKUs with AI \u2014 no pricing model change, no premium tier, no separate disclosure. Growth flat vs pre-AI baseline. No observable AI cost in Intuit GM.",
         "product": "Intuit Assist",
         "parent": "Intuit"
       },
@@ -1938,9 +1938,9 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.2,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Oracle Q3 FY26 commentary — Fusion AI bundled into SaaS apps; no discrete disclosure. Editorial estimate.",
+        "arrSource": "Oracle Q3 FY26 commentary \u2014 Fusion AI bundled into SaaS apps; no discrete disclosure. Editorial estimate.",
         "provenance": "tier_2b",
-        "claimed": "Fusion AI agents — bundled into Oracle SaaS apps; no discrete revenue disclosure",
+        "claimed": "Fusion AI agents \u2014 bundled into Oracle SaaS apps; no discrete revenue disclosure",
         "usage": "Limited disclosure; small relative to OCI infra revenue",
         "real": "~$100-300M editorial",
         "flags": "Distinct from OCI (trad_compute). Per Decision D9, Oracle splits across Fusion AI (trad_saas) and OCI AI infra (trad_compute).",
@@ -1959,13 +1959,13 @@
           "cost": 2,
           "acceleration": 3,
           "_citations": {
-            "bundling": "Oracle Fusion Cloud pricing — Fusion AI agents bundled into Cloud Apps SKUs without discrete AI add-on; no separately-priced AI tier.",
-            "cost": "Oracle Q3 FY26 earnings — gross margin pressure visible at parent but driven by OCI capex/depreciation, not Fusion AI inference cost."
+            "bundling": "Oracle Fusion Cloud pricing \u2014 Fusion AI agents bundled into Cloud Apps SKUs without discrete AI add-on; no separately-priced AI tier.",
+            "cost": "Oracle Q3 FY26 earnings \u2014 gross margin pressure visible at parent but driven by OCI capex/depreciation, not Fusion AI inference cost."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "Distinct from OCI (trad_compute). Per wq-097 D9, Oracle splits across Fusion AI (trad_saas) and OCI AI infra (trad_compute). Limited public disclosure — bundled into Oracle SaaS without discrete revenue line. Margin pressure visible at parent but mostly OCI capex, not Fusion AI software cost.",
+        "watchSignals": "Distinct from OCI (trad_compute). Per wq-097 D9, Oracle splits across Fusion AI (trad_saas) and OCI AI infra (trad_compute). Limited public disclosure \u2014 bundled into Oracle SaaS without discrete revenue line. Margin pressure visible at parent but mostly OCI capex, not Fusion AI software cost.",
         "product": "Oracle Fusion AI",
         "parent": "Oracle"
       },
@@ -1976,7 +1976,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.2,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Snowflake Q4 FY26 commentary — Cortex AI suite; consumption-based; not separately disclosed. Editorial estimate.",
+        "arrSource": "Snowflake Q4 FY26 commentary \u2014 Cortex AI suite; consumption-based; not separately disclosed. Editorial estimate.",
         "provenance": "tier_2b",
         "claimed": "Cortex AI/ML suite; consumption-based; not separately disclosed",
         "usage": "Bundled into Data Cloud consumption; meaningful but small share.",
@@ -1986,7 +1986,7 @@
         "prevGrowth": "n/a",
         "archetype": "Consumption-bundled",
         "arrShare": {
-          "value": "~4.3–7.1%",
+          "value": "~4.3\u20137.1%",
           "denominator": "SNOW total revenue (~$3.5B FY25)",
           "denominatorType": "parent_total"
         },
@@ -1997,13 +1997,13 @@
           "cost": 2,
           "acceleration": 3,
           "_citations": {
-            "bundling": "Snowflake pricing — Cortex AI / ML functions metered as part of existing Data Cloud consumption credits; no separate AI SKU.",
-            "cost": "Snowflake Q4 FY26 earnings — non-GAAP product gross margin stable; AI inference cost hidden inside total platform consumption with no discrete AI margin call-out."
+            "bundling": "Snowflake pricing \u2014 Cortex AI / ML functions metered as part of existing Data Cloud consumption credits; no separate AI SKU.",
+            "cost": "Snowflake Q4 FY26 earnings \u2014 non-GAAP product gross margin stable; AI inference cost hidden inside total platform consumption with no discrete AI margin call-out."
           },
           "_prototype": true,
           "_lastVerified": "2026-Q1"
         },
-        "watchSignals": "Bundled into Data Cloud consumption — AI extends an already-consumption-based model. Material share of SNOW total revenue (~5%). AI-on-data feature stack repackages Snowflake’s existing platform. Margin stable; AI cost hidden inside total platform consumption.",
+        "watchSignals": "Bundled into Data Cloud consumption \u2014 AI extends an already-consumption-based model. Material share of SNOW total revenue (~5%). AI-on-data feature stack repackages Snowflake\u2019s existing platform. Margin stable; AI cost hidden inside total platform consumption.",
         "product": "Snowflake Cortex",
         "parent": "Snowflake"
       },
@@ -2014,9 +2014,9 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.15,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Atlassian FY26 Q3 commentary — Rovo paid SKU launched late 2025; editorial estimate from cloud uplift attribution",
+        "arrSource": "Atlassian FY26 Q3 commentary \u2014 Rovo paid SKU launched late 2025; editorial estimate from cloud uplift attribution",
         "provenance": "tier_2b",
-        "claimed": "Rovo + Atlassian Intelligence — paid SKU launched late 2025; not separately disclosed",
+        "claimed": "Rovo + Atlassian Intelligence \u2014 paid SKU launched late 2025; not separately disclosed",
         "usage": "Bundled with Premium/Enterprise; Rovo standalone available. Adoption modest.",
         "real": "~$100-200M editorial",
         "flags": "Atlassian growth narrative leans on AI but no discrete revenue line; reconcile against Cloud growth attribution.",
@@ -2030,9 +2030,9 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.1,
         "arrAsOf": "2026-Q1",
-        "arrSource": "SAP commentary — 'Joule bundled free in RISE/GROW; 2/3 of deals include AI'; no separate metering. Editorial midpoint of $0-200M range.",
+        "arrSource": "SAP commentary \u2014 'Joule bundled free in RISE/GROW; 2/3 of deals include AI'; no separate metering. Editorial midpoint of $0-200M range.",
         "provenance": "tier_3a",
-        "claimed": "\"2/3 of deals include AI\" — Joule bundled free in RISE/GROW",
+        "claimed": "\"2/3 of deals include AI\" \u2014 Joule bundled free in RISE/GROW",
         "usage": "No separate metering. No AI revenue disclosed = immaterial.",
         "real": "~$0-200M. Like saying \"100% of iPhones include Siri\"",
         "flags": "Cloud growth (23%) driven by S/4HANA forced migration (ECC end-of-life 2027), NOT AI. No analyst attributes growth to Joule.",
@@ -2053,7 +2053,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.1,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Zendesk press commentary 2025 — Advanced AI add-on $50/agent/mo; editorial estimate",
+        "arrSource": "Zendesk press commentary 2025 \u2014 Advanced AI add-on $50/agent/mo; editorial estimate",
         "provenance": "tier_3a",
         "claimed": "Advanced AI add-on at $50/agent/mo + Resolution Bot consumption",
         "usage": "Mid-market attach growing; enterprise slower",
@@ -2069,10 +2069,10 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.08,
         "arrAsOf": "2026-Q1",
-        "arrSource": "HubSpot FY25 earnings narrative — Breeze AI bundled into Hubs; no discrete disclosure. Editorial.",
+        "arrSource": "HubSpot FY25 earnings narrative \u2014 Breeze AI bundled into Hubs; no discrete disclosure. Editorial.",
         "provenance": "tier_3a",
         "claimed": "Breeze AI agents/copilot bundled into Hubs",
-        "usage": "Bundled — no AI metering",
+        "usage": "Bundled \u2014 no AI metering",
         "real": "<$100M",
         "flags": "Breeze bundled into existing Hub SKUs; not a paid add-on.",
         "growth": "16-18%",
@@ -2085,7 +2085,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.05,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Box FY26 narrative — Enterprise Plus AI tier; small contribution. Editorial.",
+        "arrSource": "Box FY26 narrative \u2014 Enterprise Plus AI tier; small contribution. Editorial.",
         "provenance": "tier_3a",
         "claimed": "Box AI in Enterprise Plus tier; consumption-based",
         "usage": "Small share of revenue mix",
@@ -2101,10 +2101,10 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.05,
         "arrAsOf": "2026-Q1",
-        "arrSource": "GitHub commentary — AI-augmented security scanning bundled with Advanced Security SKU",
+        "arrSource": "GitHub commentary \u2014 AI-augmented security scanning bundled with Advanced Security SKU",
         "provenance": "tier_3a",
         "claimed": "AI features within GitHub Advanced Security",
-        "usage": "Bundled — small AI attribution",
+        "usage": "Bundled \u2014 small AI attribution",
         "real": "<$100M",
         "flags": "Small surface area; included for completeness within the MSFT trad_saas family.",
         "growth": "fast",
@@ -2117,9 +2117,9 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.05,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Workday narrative — 'growing demand for AI SKUs'; no AI metric disclosed. Editorial midpoint of $0-100M range.",
+        "arrSource": "Workday narrative \u2014 'growing demand for AI SKUs'; no AI metric disclosed. Editorial midpoint of $0-100M range.",
         "provenance": "tier_3b",
-        "claimed": "Not disclosed — \"growing demand for AI SKUs\"",
+        "claimed": "Not disclosed \u2014 \"growing demand for AI SKUs\"",
         "usage": "No AI metric = immaterial. Flex Credits model.",
         "real": "~$0-100M",
         "flags": "Growth crashing: 21%->13%. AI has zero visible impact.",
@@ -2140,7 +2140,7 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 0.05,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Zoom FY26 narrative — AI Companion bundled free in paid plans; no discrete revenue. Editorial.",
+        "arrSource": "Zoom FY26 narrative \u2014 AI Companion bundled free in paid plans; no discrete revenue. Editorial.",
         "provenance": "tier_3b",
         "claimed": "AI Companion bundled in paid Zoom plans (no incremental fee)",
         "usage": "High activation but immaterial revenue impact (no premium SKU)",
@@ -2206,7 +2206,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "OpenClaw press 2026 — recent launch; ~$10M editorial",
+        "arrSource": "OpenClaw press 2026 \u2014 recent launch; ~$10M editorial",
         "provenance": "tier_3b",
         "arrAsOf": "2026-Q1"
       },
@@ -2246,7 +2246,7 @@
         "type": "AI Gateway",
         "tokens": "280B/day",
         "prov": "All (400+)",
-        "ev": "Self-reported 8.4T/mo. Most reliable figure — transparent platform with public pricing. Gateway passthrough.",
+        "ev": "Self-reported 8.4T/mo. Most reliable figure \u2014 transparent platform with public pricing. Gateway passthrough.",
         "conf": "High",
         "founded": 2023,
         "category": "ai-infrastructure",
@@ -2301,7 +2301,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Kilo Code press 2025 — small commercial ARR; ~$8M editorial",
+        "arrSource": "Kilo Code press 2025 \u2014 small commercial ARR; ~$8M editorial",
         "provenance": "tier_3b",
         "arrAsOf": "2026-Q1"
       },
@@ -2432,7 +2432,7 @@
         "type": "AI App Builder",
         "tokens": "~100B/day",
         "prov": "Anthropic, OpenAI",
-        "ev": "Lean AI Leaderboard. $400M ARR, 40 employees. Triangulated: COGS method ($8-12M/mo API spend at $2-3/M = 3-5T/mo = 100-170B/day), user method (100K DAU × 10-15 prompts × 50K tokens = 60-90B/day). Central estimate ~100B/day.",
+        "ev": "Lean AI Leaderboard. $400M ARR, 40 employees. Triangulated: COGS method ($8-12M/mo API spend at $2-3/M = 3-5T/mo = 100-170B/day), user method (100K DAU \u00d7 10-15 prompts \u00d7 50K tokens = 60-90B/day). Central estimate ~100B/day.",
         "conf": "Low-Med",
         "founded": 2023,
         "category": "ai-application",
@@ -2482,7 +2482,7 @@
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
         "arrPending": true,
-        "arrPendingReason": "Canva is a digital-native platform — AI-attributable ARR not separately disclosed; would require split from total Canva ARR ($3B+)"
+        "arrPendingReason": "Canva is a digital-native platform \u2014 AI-attributable ARR not separately disclosed; would require split from total Canva ARR ($3B+)"
       },
       {
         "co": "Cline",
@@ -2511,7 +2511,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Cline press 2025 — small commercial ARR (mostly OSS); ~$5M editorial",
+        "arrSource": "Cline press 2025 \u2014 small commercial ARR (mostly OSS); ~$5M editorial",
         "provenance": "tier_3b",
         "arrAsOf": "2026-Q1"
       },
@@ -2807,7 +2807,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Janitor AI press 2025 — ~$15M ARR; consumer roleplay",
+        "arrSource": "Janitor AI press 2025 \u2014 ~$15M ARR; consumer roleplay",
         "provenance": "tier_3a",
         "arrAsOf": "2026-Q1"
       },
@@ -3100,7 +3100,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Sierra press 2025 — $100M ARR end-2025 at $4.5B+ valuation",
+        "arrSource": "Sierra press 2025 \u2014 $100M ARR end-2025 at $4.5B+ valuation",
         "provenance": "tier_2b",
         "arrAsOf": "2026-Q1"
       },
@@ -3159,7 +3159,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Hebbia press 2025 — ~$25M ARR; legal/finance vertical",
+        "arrSource": "Hebbia press 2025 \u2014 ~$25M ARR; legal/finance vertical",
         "provenance": "tier_3a",
         "arrAsOf": "2026-Q1"
       },
@@ -3277,7 +3277,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Captions press 2025 — ~$30M ARR estimated",
+        "arrSource": "Captions press 2025 \u2014 ~$30M ARR estimated",
         "provenance": "tier_3a",
         "arrAsOf": "2026-Q1"
       },
@@ -3307,7 +3307,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Decagon Series C 2025 — ~$50M ARR end-2025",
+        "arrSource": "Decagon Series C 2025 \u2014 ~$50M ARR end-2025",
         "provenance": "tier_2b",
         "arrAsOf": "2026-Q1"
       },
@@ -3393,7 +3393,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Speak press 2025 — ~$50M ARR; language-learning AI",
+        "arrSource": "Speak press 2025 \u2014 ~$50M ARR; language-learning AI",
         "provenance": "tier_3a",
         "arrAsOf": "2026-Q1"
       },
@@ -3543,7 +3543,7 @@
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
         "arrPending": true,
-        "arrPendingReason": "SillyTavern is OSS — no commercial ARR"
+        "arrPendingReason": "SillyTavern is OSS \u2014 no commercial ARR"
       },
       {
         "co": "Abridge",
@@ -3551,7 +3551,7 @@
         "type": "Clinical AI",
         "tokens": "~8B/day",
         "prov": "OpenAI",
-        "ev": "Forbes AI 50. AI notetaker for doctors — records and summarizes medical conversations. $458M funding.",
+        "ev": "Forbes AI 50. AI notetaker for doctors \u2014 records and summarizes medical conversations. $458M funding.",
         "conf": "Low-Med",
         "founded": 2018,
         "category": "vertical-ai",
@@ -3659,7 +3659,7 @@
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
         "arrPending": true,
-        "arrPendingReason": "Agent Zero is OSS / experimental — no commercial ARR"
+        "arrPendingReason": "Agent Zero is OSS / experimental \u2014 no commercial ARR"
       },
       {
         "co": "Fathom",
@@ -3667,7 +3667,7 @@
         "type": "AI Meeting Assistant / Note-taking AI",
         "tokens": "~7B/day",
         "prov": "Openai, Anthropic",
-        "ev": "Fathom is an AI-powered meeting assistant that automatically records, transcribes, highlights, and summarizes video calls on platforms like Zoom, Google Meet, and Microsoft Teams.\n\nSources: Crunchbase funding data, TechCrunch coverage, ProductHunt launch, LinkedIn employee count, general SaaS freemium benchmarking\nConfidence: low — Fathom is a private company with limited public financial disclosures. They raised a ~$17-18M seed/Series A round (reported ~2022-2023), have a freemium model with a paid tier (Fathom Team Edition), and have reported strong user growth (millions of users). ARR estimate is a rough extrapolation based on funding size, team size, and freemium conversion typical for this category — no verified press report of exact ARR figure.",
+        "ev": "Fathom is an AI-powered meeting assistant that automatically records, transcribes, highlights, and summarizes video calls on platforms like Zoom, Google Meet, and Microsoft Teams.\n\nSources: Crunchbase funding data, TechCrunch coverage, ProductHunt launch, LinkedIn employee count, general SaaS freemium benchmarking\nConfidence: low \u2014 Fathom is a private company with limited public financial disclosures. They raised a ~$17-18M seed/Series A round (reported ~2022-2023), have a freemium model with a paid tier (Fathom Team Edition), and have reported strong user growth (millions of users). ARR estimate is a rough extrapolation based on funding size, team size, and freemium conversion typical for this category \u2014 no verified press report of exact ARR figure.",
         "conf": "Low",
         "founded": 2020,
         "category": "ai-application",
@@ -3716,7 +3716,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Pika press 2025 — ~$25M ARR estimated",
+        "arrSource": "Pika press 2025 \u2014 ~$25M ARR estimated",
         "provenance": "tier_3a",
         "arrAsOf": "2026-Q1"
       },
@@ -3745,7 +3745,7 @@
         "employeeCount": null,
         "lastUpdated": "2026-03-30",
         "tier": "ai_native_app",
-        "arrSource": "Suno press 2025 — $120M ARR estimated end-2025",
+        "arrSource": "Suno press 2025 \u2014 $120M ARR estimated end-2025",
         "provenance": "tier_2b",
         "arrAsOf": "2026-Q1"
       },
@@ -3845,7 +3845,7 @@
         "inP": "$0.15",
         "outP": "$0.60",
         "use": "Chat, agents, coding",
-        "trend": "↑↑",
+        "trend": "\u2191\u2191",
         "region": "US"
       },
       {
@@ -3855,7 +3855,7 @@
         "inP": "$2.50",
         "outP": "$10.00",
         "use": "Enterprise, complex tasks",
-        "trend": "→",
+        "trend": "\u2192",
         "region": "US"
       },
       {
@@ -3865,7 +3865,7 @@
         "inP": "$0.40",
         "outP": "$1.60",
         "use": "Coding, agents",
-        "trend": "↑↑↑",
+        "trend": "\u2191\u2191\u2191",
         "region": "US"
       },
       {
@@ -3875,7 +3875,7 @@
         "inP": "$0.10",
         "outP": "$0.40",
         "use": "High-volume, agents",
-        "trend": "↑↑↑",
+        "trend": "\u2191\u2191\u2191",
         "region": "US"
       },
       {
@@ -3885,7 +3885,7 @@
         "inP": "$3.00",
         "outP": "$15.00",
         "use": "Coding, analysis",
-        "trend": "→",
+        "trend": "\u2192",
         "region": "US"
       },
       {
@@ -3895,7 +3895,7 @@
         "inP": "$3.00",
         "outP": "$15.00",
         "use": "Coding, enterprise",
-        "trend": "↑↑",
+        "trend": "\u2191\u2191",
         "region": "US"
       },
       {
@@ -3905,7 +3905,7 @@
         "inP": "Self-host",
         "outP": "Self-host",
         "use": "On-prem enterprise",
-        "trend": "→",
+        "trend": "\u2192",
         "region": "US"
       },
       {
@@ -3915,7 +3915,7 @@
         "inP": "Self-host",
         "outP": "Self-host",
         "use": "Agents, coding",
-        "trend": "↑↑↑",
+        "trend": "\u2191\u2191\u2191",
         "region": "US"
       },
       {
@@ -3925,7 +3925,7 @@
         "inP": "$1.25",
         "outP": "$10.00",
         "use": "Reasoning, analysis",
-        "trend": "↑↑",
+        "trend": "\u2191\u2191",
         "region": "US"
       },
       {
@@ -3935,7 +3935,7 @@
         "inP": "$0.55",
         "outP": "$2.19",
         "use": "Reasoning, math",
-        "trend": "↑↑",
+        "trend": "\u2191\u2191",
         "region": "Asia"
       },
       {
@@ -3945,7 +3945,7 @@
         "inP": "$5.00",
         "outP": "$20.00",
         "use": "Frontier reasoning",
-        "trend": "↑↑↑",
+        "trend": "\u2191\u2191\u2191",
         "region": "US"
       },
       {
@@ -3955,7 +3955,7 @@
         "inP": "$0.27",
         "outP": "$1.10",
         "use": "General, coding",
-        "trend": "↑",
+        "trend": "\u2191",
         "region": "Asia"
       },
       {
@@ -3965,7 +3965,7 @@
         "inP": "$2.00",
         "outP": "$6.00",
         "use": "Enterprise, multilingual",
-        "trend": "↑",
+        "trend": "\u2191",
         "region": "Europe"
       },
       {
@@ -3975,7 +3975,7 @@
         "inP": "$3.00",
         "outP": "$15.00",
         "use": "Reasoning, X integration",
-        "trend": "↑↑",
+        "trend": "\u2191\u2191",
         "region": "US"
       },
       {
@@ -3985,7 +3985,7 @@
         "inP": "$15.00",
         "outP": "$75.00",
         "use": "Complex agents, coding",
-        "trend": "↑",
+        "trend": "\u2191",
         "region": "US"
       },
       {
@@ -3995,7 +3995,7 @@
         "inP": "$0.10",
         "outP": "$0.40",
         "use": "Chat, agents, coding",
-        "trend": "↑↑↑",
+        "trend": "\u2191\u2191\u2191",
         "region": "Asia"
       },
       {
@@ -4005,7 +4005,7 @@
         "inP": "Free/$0.10",
         "outP": "Free/$0.40",
         "use": "High-volume, chat",
-        "trend": "↑↑",
+        "trend": "\u2191\u2191",
         "region": "Asia"
       },
       {
@@ -4015,7 +4015,7 @@
         "inP": "$0.20",
         "outP": "$0.80",
         "use": "Reasoning, agents",
-        "trend": "↑↑",
+        "trend": "\u2191\u2191",
         "region": "Asia"
       }
     ],
@@ -4216,7 +4216,7 @@
             "activeRate": 0.45,
             "tokenConv": 0.4,
             "category": "modelsub",
-            "source": "Higher activation than bundled SaaS — users chose to buy it",
+            "source": "Higher activation than bundled SaaS \u2014 users chose to buy it",
             "perConvo": false
           },
           {
@@ -4767,15 +4767,15 @@
     "events": [
       {
         "title": "The GPT-4 Era Begins",
-        "body": "OpenAI dominates with GPT-4 at $3.4B ARR, processing ~5T tokens/day via API. Google quietly runs more total tokens through Search and Workspace but generates a fraction of the revenue. Anthropic is a $200M niche player. China's AI market is nascent — ByteDance hasn't launched Doubao yet. Total market: ~18T tokens/day, almost entirely US-driven."
+        "body": "OpenAI dominates with GPT-4 at $3.4B ARR, processing ~5T tokens/day via API. Google quietly runs more total tokens through Search and Workspace but generates a fraction of the revenue. Anthropic is a $200M niche player. China's AI market is nascent \u2014 ByteDance hasn't launched Doubao yet. Total market: ~18T tokens/day, almost entirely US-driven."
       },
       {
         "title": "GPT-4o + Claude 3.5 + Llama 3 Launch",
-        "body": "Three inflection points in one quarter. OpenAI ships GPT-4o (multimodal, faster, cheaper). Anthropic releases Claude 3.5 Sonnet, winning developer mindshare. Meta open-sources Llama 3, igniting the open-model movement. ByteDance launches Doubao at 120B tokens/day — tiny, but the start of a 1,000x growth curve. Token volumes double as prices halve."
+        "body": "Three inflection points in one quarter. OpenAI ships GPT-4o (multimodal, faster, cheaper). Anthropic releases Claude 3.5 Sonnet, winning developer mindshare. Meta open-sources Llama 3, igniting the open-model movement. ByteDance launches Doubao at 120B tokens/day \u2014 tiny, but the start of a 1,000x growth curve. Token volumes double as prices halve."
       },
       {
         "title": "The Mini Model Revolution",
-        "body": "Small, cheap models change the economics. GPT-4o mini, Claude 3.5 Haiku, and Gemini Flash slash inference costs by 10-50x. API pricing collapses from $20/M to under $1/M for capable models. This unlocks massive developer adoption — every startup can now afford AI. Enterprise pilots proliferate but actual usage remains shallow."
+        "body": "Small, cheap models change the economics. GPT-4o mini, Claude 3.5 Haiku, and Gemini Flash slash inference costs by 10-50x. API pricing collapses from $20/M to under $1/M for capable models. This unlocks massive developer adoption \u2014 every startup can now afford AI. Enterprise pilots proliferate but actual usage remains shallow."
       },
       {
         "title": "Open Source Inflection Point",
@@ -4783,23 +4783,23 @@
       },
       {
         "title": "The DeepSeek Shock",
-        "body": "DeepSeek V3 trains for $6M (vs GPT-4's $79M) and matches frontier performance. The AI cost narrative inverts — it's no longer about who spends the most, but who spends the smartest. China's token consumption explodes. ByteDance reaches 8T/day. Anthropic hits $4B ARR with 70% from API, proving the enterprise AI market is real. OpenAI races to $20B ARR."
+        "body": "DeepSeek V3 trains for $6M (vs GPT-4's $79M) and matches frontier performance. The AI cost narrative inverts \u2014 it's no longer about who spends the most, but who spends the smartest. China's token consumption explodes. ByteDance reaches 8T/day. Anthropic hits $4B ARR with 70% from API, proving the enterprise AI market is real. OpenAI races to $20B ARR."
       },
       {
         "title": "The Enterprise AI Reality Check",
-        "body": "Microsoft Copilot has 15M paid seats but only 35.8% actually use it. Gartner finds only 5% of enterprises are past pilot stage. Salesforce gives away 50% of Agentforce deals for free. The gap between AI hype and enterprise reality becomes undeniable. Meanwhile, developer and API usage grows 20x — the real demand is bottom-up, not top-down."
+        "body": "Microsoft Copilot has 15M paid seats but only 35.8% actually use it. Gartner finds only 5% of enterprises are past pilot stage. Salesforce gives away 50% of Agentforce deals for free. The gap between AI hype and enterprise reality becomes undeniable. Meanwhile, developer and API usage grows 20x \u2014 the real demand is bottom-up, not top-down."
       },
       {
         "title": "Anthropic Takes Enterprise, China Takes Volume",
-        "body": "Anthropic becomes the enterprise inference leader (Barclays), hitting $14B ARR in February. Claude Code launches at >$2.5B ARR. But the volume story is in China — ByteDance passes 45T tokens/day, overtaking Google as the world's largest token processor. Alibaba's internal AI usage hits 16T/day. China's National Data Administration reports 140T+ tokens/day nationally."
+        "body": "Anthropic becomes the enterprise inference leader (Barclays), hitting $14B ARR in February. Claude Code launches at >$2.5B ARR. But the volume story is in China \u2014 ByteDance passes 45T tokens/day, overtaking Google as the world's largest token processor. Alibaba's internal AI usage hits 16T/day. China's National Data Administration reports 140T+ tokens/day nationally."
       },
       {
         "title": "The AI-Native Explosion",
-        "body": "Cursor, Perplexity, and a wave of AI-native apps cross $100M+ ARR. Coding becomes the dominant use case — over 50% of OpenRouter traffic is now programming (up from 11%). OpenAI launches Codex with 70% month-over-month growth. The token mix shifts from chat to agents and multi-step workflows, multiplying tokens per task by 10-100x."
+        "body": "Cursor, Perplexity, and a wave of AI-native apps cross $100M+ ARR. Coding becomes the dominant use case \u2014 over 50% of OpenRouter traffic is now programming (up from 11%). OpenAI launches Codex with 70% month-over-month growth. The token mix shifts from chat to agents and multi-step workflows, multiplying tokens per task by 10-100x."
       },
       {
         "title": "Revenue Explosion Meets the China Surge",
-        "body": "OpenAI hits $2B/month revenue and 900M weekly active users. Anthropic reaches $19B ARR. But the biggest story is ByteDance at 110T tokens/day — more than all Western providers combined. China represents ~48% of global tokens. Total market: ~320T tokens/day across 14+ major providers. The industry generates $52B ARR but frontier providers still operate at a loss — spending $2.25-$2.60 for every $1 of revenue."
+        "body": "OpenAI hits $2B/month revenue and 900M weekly active users. Anthropic reaches $19B ARR. But the biggest story is ByteDance at 110T tokens/day \u2014 more than all Western providers combined. China represents ~48% of global tokens. Total market: ~320T tokens/day across 14+ major providers. The industry generates $52B ARR but frontier providers still operate at a loss \u2014 spending $2.25-$2.60 for every $1 of revenue."
       }
     ]
   },
@@ -5194,7 +5194,7 @@
         "sourceUrl": "https://www.sec.gov/cgi-bin/browse-edgar",
         "retrievedAt": "2026-04-22",
         "nextReview": "2026-10-22",
-        "note": "Supply-side check — is build-out coherent with revenue path",
+        "note": "Supply-side check \u2014 is build-out coherent with revenue path",
         "confidence": "High"
       },
       {
@@ -5275,7 +5275,7 @@
       "2024: gross=5.9 (per_entity_collected_revenue), net=None, capex=269",
       "2025: gross=19.6656 (engine_gross_field), net=17.3608, capex=330"
     ],
-    "_doc": "Cumulative 2023–2025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
+    "_doc": "Cumulative 2023\u20132025 totals. Buyer-gross is the public headline number (what customers actually paid; includes channel margins). Net is provider-received chPass. Years without a market_aggregates entry fall back to per-entity collected_revenue summing where available. Tokens require an annual aggregation field on market_aggregates that doesn't yet exist for prior years; falls back to null and the front-end keeps its hardcoded ~360T display."
   },
   "market": {
     "2023": {
@@ -5820,7 +5820,7 @@
           "confidence": "low",
           "as_of": "2026-04-30",
           "source": "SemiAnalysis estimate",
-          "methodology_note": "Anthropic calculates annualised revenue as last 4 weeks of API revenue × 13 + monthly chatbot subscription revenue (single-day active subs anchor) × 12 (per The Information). Selecting a single-day anchor and 4-week-window can inflate vs steady-state. Published number on TAIL = $30B (Anthropic-disclosed); $44B carried as external estimate only."
+          "methodology_note": "Anthropic calculates annualised revenue as last 4 weeks of API revenue \u00d7 13 + monthly chatbot subscription revenue (single-day active subs anchor) \u00d7 12 (per The Information). Selecting a single-day anchor and 4-week-window can inflate vs steady-state. Published number on TAIL = $30B (Anthropic-disclosed); $44B carried as external estimate only."
         },
         "usd_per_gw_year": 10.0,
         "input_token_price_usd_per_m": 5.0,
@@ -6342,7 +6342,7 @@
         "founded": 2021,
         "confidence": "Med",
         "tokens_per_day_basis": "editorial_estimate",
-        "tokens_per_day_methodology": "Editorial estimate: ~4.7M paid seats (MSFT Q4 FY25 earnings) × ~50–70% active × ~50–200 requests/day × ~1–5K tokens/req → ~0.5–1.5 T/day; central 1.0 T/day. Cross-check: GitHub Copilot reported as 2nd largest customer of Anthropic models (Zitron 2026-05-06). Anthropic total ~6 T/day → if GitHub is ~10–20% of Anthropic volume that's 0.6–1.2 T/day from Anthropic alone, plus residual OpenAI portion. Replaces unsourced 1000.0 T/day legacy value — wq-094 cleanup.",
+        "tokens_per_day_methodology": "Editorial estimate: ~4.7M paid seats (MSFT Q4 FY25 earnings) \u00d7 ~50\u201370% active \u00d7 ~50\u2013200 requests/day \u00d7 ~1\u20135K tokens/req \u2192 ~0.5\u20131.5 T/day; central 1.0 T/day. Cross-check: GitHub Copilot reported as 2nd largest customer of Anthropic models (Zitron 2026-05-06). Anthropic total ~6 T/day \u2192 if GitHub is ~10\u201320% of Anthropic volume that's 0.6\u20131.2 T/day from Anthropic alone, plus residual OpenAI portion. Replaces unsourced 1000.0 T/day legacy value \u2014 wq-094 cleanup.",
         "tokens_per_day_confidence": "low",
         "tokens_per_day_date": "2026-05-07",
         "paid_seats": 4700000,
@@ -6350,7 +6350,7 @@
         "anthropic_customer_rank": 2,
         "anthropic_customer_rank_source": "Zitron 2026-05-06",
         "compute_subsidy_relationship": true,
-        "compute_subsidy_note": "Microsoft subsidises customer compute spend on GitHub Copilot — published ARR overstates economic margin. June 2026 token-based billing transition will alter both revenue trajectory and margin disclosure. Watch Q3 2026 earnings.",
+        "compute_subsidy_note": "Microsoft subsidises customer compute spend on GitHub Copilot \u2014 published ARR overstates economic margin. June 2026 token-based billing transition will alter both revenue trajectory and margin disclosure. Watch Q3 2026 earnings.",
         "june_2026_token_billing_transition": true
       },
       "best_confidence": "medium",
@@ -7786,7 +7786,7 @@
     "layer_stack_ratios": {
       "apps_revenue_2025_usd_b": 17.361,
       "apps_revenue_2025_basis": "measured_cohort_sankey_totalCustomerRevenue",
-      "apps_revenue_2025_source": "Live read from site-data.json:sankey.totalCustomerRevenue (~$17.36B as of 2026-05-06) — the Revenue Ledger cohort total (Tier 1A-derived). NOT editorially multiplied to ecosystem scale; the cohort-vs-ecosystem gap is flagged on /methodology.html as a future-Apps-Ledger scope.",
+      "apps_revenue_2025_source": "Live read from site-data.json:sankey.totalCustomerRevenue (~$17.36B as of 2026-05-06) \u2014 the Revenue Ledger cohort total (Tier 1A-derived). NOT editorially multiplied to ecosystem scale; the cohort-vs-ecosystem gap is flagged on /methodology.html as a future-Apps-Ledger scope.",
       "apps_revenue_2025_tier": "1A",
       "compute_revenue_2025_gross_usd_b": 43.08,
       "compute_revenue_2025_net_usd_b": 42.08,
@@ -7796,11 +7796,21 @@
       "silicon_revenue_2025_source": "NVIDIA Data Center revenue FY26 (calendar 2025) ~$135B + AMD MI300/MI350 ~$5B + custom ASIC (Broadcom, Marvell) ~$25B",
       "silicon_revenue_2025_tier": "1A",
       "power_revenue_2025_usd_b": 25.0,
-      "power_revenue_2025_source": "Editorial — DC power + utilities AI-attributable. Power Ledger placeholder (wq-006).",
+      "power_revenue_2025_source": "Editorial \u2014 DC power + utilities AI-attributable. Power Ledger placeholder (wq-006).",
       "power_revenue_2025_tier": "3C",
       "apps_to_compute_2025": 2.42,
       "compute_to_silicon_2025": 3.92,
-      "silicon_to_power_2025": 0.15
+      "silicon_to_power_2025": 0.15,
+      "apps_revenue_2025_gross_usd_b": 19.279,
+      "capex_2025_usd_b": 330,
+      "capex_to_apps_gross_x": 17.12,
+      "compute_to_apps_gross_x": 2.23,
+      "compute_per_dollar_apps_gross": 2.23,
+      "power_to_apps_gross_x": 1.3,
+      "usage_notional_2025_usd_b": 141.44,
+      "usage_notional_to_apps_gross_x": 7.34,
+      "usage_notional_rate_usd_per_m_output_tokens": 1.25,
+      "_layer_stack_gross_doc": "Layer-stack ratios anchored on GROSS apps revenue (site-data.sankey.totalCustomerRevenue_gross). The homepage hero stack reads against gross because the Revenue pill shows gross. Existing apps_to_compute_2025 etc. anchor on NET \u2014 preserved for backwards compat with prior consumers."
     },
     "quarterly": [
       {
@@ -7884,7 +7894,7 @@
         "tier_frontier_lab_compute": "2A",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "2A",
-        "segment_basis": "MSFT 2025 calendar uses sum-of-quarterlies basis ($25.25B) per wq-092 D1, NOT annualised run-rate basis ($28B Microsoft self-disclosed; preserved as value_2025_annualised_run_rate_basis_usd_b for context). The two diverge because MSFT AI grew rapidly through 2025 (+123% YoY into Q1 26): sum-of-Q < annualised when growth accelerates. Trajectory + Layer Stack lookback use sum-of-Q so quarterly chart shows monotonic growth Q1 25 → Q1 26 (no Q-o-Q drops). Segment shares (proportional to annualised $28B): Frontier lab compute 64.3% → $16.23B sum-of-Q (OpenAI ~80% Azure-resident); Hosted model APIs gross 5.4% → $1.35B (Azure OpenAI Service to enterprise; Pass-through 20% per Zitron-leaked rev-share); AI workload compute 3.9% → $0.99B; Copilot excluded 26.4% → $6.67B (MS-declared scope-out: M365 Copilot list billings + GitHub Copilot + Copilot Studio/Sales/Service). Tie-out (sum-of-Q): 16.23+0.99+1.35+6.67 = $25.24B ≈ $25.25B ✓. Q1 26 quarterly = $9.25B (= $37B disclosed run-rate ÷ 4 per Q1 26 earnings).",
+        "segment_basis": "MSFT 2025 calendar uses sum-of-quarterlies basis ($25.25B) per wq-092 D1, NOT annualised run-rate basis ($28B Microsoft self-disclosed; preserved as value_2025_annualised_run_rate_basis_usd_b for context). The two diverge because MSFT AI grew rapidly through 2025 (+123% YoY into Q1 26): sum-of-Q < annualised when growth accelerates. Trajectory + Layer Stack lookback use sum-of-Q so quarterly chart shows monotonic growth Q1 25 \u2192 Q1 26 (no Q-o-Q drops). Segment shares (proportional to annualised $28B): Frontier lab compute 64.3% \u2192 $16.23B sum-of-Q (OpenAI ~80% Azure-resident); Hosted model APIs gross 5.4% \u2192 $1.35B (Azure OpenAI Service to enterprise; Pass-through 20% per Zitron-leaked rev-share); AI workload compute 3.9% \u2192 $0.99B; Copilot excluded 26.4% \u2192 $6.67B (MS-declared scope-out: M365 Copilot list billings + GitHub Copilot + Copilot Studio/Sales/Service). Tie-out (sum-of-Q): 16.23+0.99+1.35+6.67 = $25.24B \u2248 $25.25B \u2713. Q1 26 quarterly = $9.25B (= $37B disclosed run-rate \u00f7 4 per Q1 26 earnings).",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": {
@@ -7901,7 +7911,7 @@
         "retrievedAt": "2026-05-06",
         "nextReview": "2026-07-30",
         "confidence": "medium",
-        "notes": "Segment-decomposed per wq-091; calendar basis switched to sum-of-quarterlies under wq-092 D1 (was annualised run-rate basis under wq-091, which produced Q4 25 ≥ Q1 26 trajectory). Sum-of-Q $25.25B ($28B annualised retained as context field). Frontier lab compute dominates — OpenAI's compute spend on Azure is the central circular-financing line on the page. Copilot scope-out is MS-declared per wq-091 D4. See dec-2026-05-06-compute-ledger-bucket-sizing.md §Issue 3 for full Copilot derivation."
+        "notes": "Segment-decomposed per wq-091; calendar basis switched to sum-of-quarterlies under wq-092 D1 (was annualised run-rate basis under wq-091, which produced Q4 25 \u2265 Q1 26 trajectory). Sum-of-Q $25.25B ($28B annualised retained as context field). Frontier lab compute dominates \u2014 OpenAI's compute spend on Azure is the central circular-financing line on the page. Copilot scope-out is MS-declared per wq-091 D4. See dec-2026-05-06-compute-ledger-bucket-sizing.md \u00a7Issue 3 for full Copilot derivation."
       },
       "googl_cloud_ai": {
         "label": "Google Cloud AI",
@@ -7927,7 +7937,7 @@
         "tier_frontier_lab_compute": "2A",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "2A",
-        "segment_basis": "GCP 2025 calendar = $7B both sum-of-quarterlies AND annualised bases (bottom-up build does not diverge between bases). Per wq-091, $7B replaces wq-089's $18B editorial 30%-of-cloud overstatement; per wq-092 D4, Q1 26 raised from $2.50B (wq-091) to $3.00B — re-derived from '+800% YoY on gen AI products' narrative back-cast (Tier 2A editorial), ensures growth from Q4 25 ($2.80B) into Q1 26 (+7%). Quarterly trajectory per Final Locked Trajectory: Q1 25 $0.70B → Q2 $1.40B → Q3 $2.10B → Q4 $2.80B → Q1 26 $3.00B (sum 25 = $7.00B; monotonic Q-o-Q growth across the chart). Frontier lab compute ($3.5B 2025): Anthropic on TPUs $1.5–2B (deep partnership, April 2026 expanded multi-GW agreement from 2027); OpenAI on GCP $0.5–1B (CNBC 2025-07-16 partial-year diversification); Mistral + Cohere + AI21 + others ~$1B. Per D5 wq-091, internal-recursion (Google's own Gemini compute on GCP) contributes $0. Hosted model APIs ($0.5B): Vertex partner-served. AI workload compute ($1.5B). Copilot excluded $1.5B (MS-declared analogue): Gemini-in-Workspace external Apps revenue. The $36.9B Q1 2026 Anthropic equity gain is investment income, NOT Cloud operating revenue (Fortune 2026-04-30) — does not inflate this line. Tie-out: 3.5+1.5+0.5+1.5 = $7.0B ✓.",
+        "segment_basis": "GCP 2025 calendar = $7B both sum-of-quarterlies AND annualised bases (bottom-up build does not diverge between bases). Per wq-091, $7B replaces wq-089's $18B editorial 30%-of-cloud overstatement; per wq-092 D4, Q1 26 raised from $2.50B (wq-091) to $3.00B \u2014 re-derived from '+800% YoY on gen AI products' narrative back-cast (Tier 2A editorial), ensures growth from Q4 25 ($2.80B) into Q1 26 (+7%). Quarterly trajectory per Final Locked Trajectory: Q1 25 $0.70B \u2192 Q2 $1.40B \u2192 Q3 $2.10B \u2192 Q4 $2.80B \u2192 Q1 26 $3.00B (sum 25 = $7.00B; monotonic Q-o-Q growth across the chart). Frontier lab compute ($3.5B 2025): Anthropic on TPUs $1.5\u20132B (deep partnership, April 2026 expanded multi-GW agreement from 2027); OpenAI on GCP $0.5\u20131B (CNBC 2025-07-16 partial-year diversification); Mistral + Cohere + AI21 + others ~$1B. Per D5 wq-091, internal-recursion (Google's own Gemini compute on GCP) contributes $0. Hosted model APIs ($0.5B): Vertex partner-served. AI workload compute ($1.5B). Copilot excluded $1.5B (MS-declared analogue): Gemini-in-Workspace external Apps revenue. The $36.9B Q1 2026 Anthropic equity gain is investment income, NOT Cloud operating revenue (Fortune 2026-04-30) \u2014 does not inflate this line. Tie-out: 3.5+1.5+0.5+1.5 = $7.0B \u2713.",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": {
@@ -7951,7 +7961,7 @@
         "retrievedAt": "2026-05-06",
         "nextReview": "2026-07-30",
         "confidence": "medium",
-        "notes": "Restated downward from $18B (wq-089) to $7B (wq-091) per bottom-up build vs prior 30% editorial AI-share weight on GCP. Per wq-092 D4, Q1 26 raised from $2.50B to $3.00B to ensure monotonic Q4 25 → Q1 26 growth on the trajectory chart (was a ~32% Q-o-Q drop under wq-091). The $0.50B uplift is re-derived from the +800% YoY gen-AI-products narrative — under wq-091 Q1 26 was set to $2.50B as a normalisation-from-Q4-spike heuristic; under wq-092 we treat the late-Q4-2025 Anthropic-on-TPUs + OpenAI-on-GCP ramps as continuing into Q1 26 rather than dipping. Per D5 wq-091, internal-recursion (Google's own Gemini compute) does NOT contribute to Frontier lab compute. See dec-2026-05-06-compute-ledger-bucket-sizing.md §Issues 5 + 6."
+        "notes": "Restated downward from $18B (wq-089) to $7B (wq-091) per bottom-up build vs prior 30% editorial AI-share weight on GCP. Per wq-092 D4, Q1 26 raised from $2.50B to $3.00B to ensure monotonic Q4 25 \u2192 Q1 26 growth on the trajectory chart (was a ~32% Q-o-Q drop under wq-091). The $0.50B uplift is re-derived from the +800% YoY gen-AI-products narrative \u2014 under wq-091 Q1 26 was set to $2.50B as a normalisation-from-Q4-spike heuristic; under wq-092 we treat the late-Q4-2025 Anthropic-on-TPUs + OpenAI-on-GCP ramps as continuing into Q1 26 rather than dipping. Per D5 wq-091, internal-recursion (Google's own Gemini compute) does NOT contribute to Frontier lab compute. See dec-2026-05-06-compute-ledger-bucket-sizing.md \u00a7Issues 5 + 6."
       },
       "amzn_aws_ai": {
         "label": "AWS AI",
@@ -7977,7 +7987,7 @@
         "tier_frontier_lab_compute": "1B",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "1B",
-        "segment_basis": "AWS 2025 calendar = $10B both sum-of-quarterlies AND annualised bases (Jassy's $15B Q1 2026 run-rate × 4 implies $15B annualised exit but sum-of-Q for 2025 calendar lands at the same $10B). Quarterly trajectory restated per wq-092 Final Locked Trajectory to ensure monotonic growth into Q1 26 (under wq-091, Q3=Q4=Q1 26=$3.75B was a flat plateau; under wq-092, Q4 25 = $3.60B → Q1 26 = $3.75B = +4% Q-o-Q). Trajectory: Q1 25 $1.50B → Q2 $2.20B → Q3 $2.70B → Q4 $3.60B → Q1 26 $3.75B (Jassy ÷ 4). Frontier lab compute ($7.0B 2025): Anthropic 2025 revenue $4.71B with compute spend exceeding revenue — Anthropic on AWS infra ~60% (training + inference) ~$5–6B + minor labs (Mistral via Bedrock partner, Cohere, AI21, smaller labs) ~$1–2B. Hosted model APIs ($2.5B 2025): Bedrock customer-paid resale of frontier models. Pass-through 25% blended. AI workload compute ($0.5B): non-frontier residual. Copilot excluded $0: no AWS Copilot-equivalent. Tie-out: 7.0+0.5+2.5+0 = $10.0B ✓. CoreWeave double-count note: ~$3.8B of CoreWeave's $4.5B AI line is Microsoft-sub-rent for OpenAI compute — captured separately under msft_ai Frontier lab compute and under coreweave Frontier lab compute (same flow, different legs of ASC 606 principal treatment).",
+        "segment_basis": "AWS 2025 calendar = $10B both sum-of-quarterlies AND annualised bases (Jassy's $15B Q1 2026 run-rate \u00d7 4 implies $15B annualised exit but sum-of-Q for 2025 calendar lands at the same $10B). Quarterly trajectory restated per wq-092 Final Locked Trajectory to ensure monotonic growth into Q1 26 (under wq-091, Q3=Q4=Q1 26=$3.75B was a flat plateau; under wq-092, Q4 25 = $3.60B \u2192 Q1 26 = $3.75B = +4% Q-o-Q). Trajectory: Q1 25 $1.50B \u2192 Q2 $2.20B \u2192 Q3 $2.70B \u2192 Q4 $3.60B \u2192 Q1 26 $3.75B (Jassy \u00f7 4). Frontier lab compute ($7.0B 2025): Anthropic 2025 revenue $4.71B with compute spend exceeding revenue \u2014 Anthropic on AWS infra ~60% (training + inference) ~$5\u20136B + minor labs (Mistral via Bedrock partner, Cohere, AI21, smaller labs) ~$1\u20132B. Hosted model APIs ($2.5B 2025): Bedrock customer-paid resale of frontier models. Pass-through 25% blended. AI workload compute ($0.5B): non-frontier residual. Copilot excluded $0: no AWS Copilot-equivalent. Tie-out: 7.0+0.5+2.5+0 = $10.0B \u2713. CoreWeave double-count note: ~$3.8B of CoreWeave's $4.5B AI line is Microsoft-sub-rent for OpenAI compute \u2014 captured separately under msft_ai Frontier lab compute and under coreweave Frontier lab compute (same flow, different legs of ASC 606 principal treatment).",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": {
@@ -7985,7 +7995,7 @@
           "narrative_quote": "AWS's AI business is generating a $15 billion annualized revenue run rate.",
           "ceo_anchor_quote": "Andy Jassy 2026 shareholder letter: AWS AI revenue crossed a $15B annualized run rate.",
           "as_of": "2026-Q1",
-          "source": "Amazon CEO Andy Jassy 2026 shareholder letter (early 2026); plus Q1 2026 earnings call narrative — Bedrock client spending +170% Q-over-Q.",
+          "source": "Amazon CEO Andy Jassy 2026 shareholder letter (early 2026); plus Q1 2026 earnings call narrative \u2014 Bedrock client spending +170% Q-over-Q.",
           "sourceUrl": "https://www.aboutamazon.com/news/company-news/amazon-earnings-q1-2026-report",
           "filing_url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000014/amzn-20260331.htm",
           "tier": "1B"
@@ -7999,7 +8009,7 @@
         "retrievedAt": "2026-05-06",
         "nextReview": "2026-07-30",
         "confidence": "medium",
-        "notes": "Restated downward from $18B (wq-089) to $10B (wq-091) per Andy Jassy CEO disclosure of $15B Q1 2026 run-rate. Quarterly trajectory restated under wq-092 to eliminate the wq-091 Q3=Q4=Q1 26 flat plateau (Q4 25 now $3.60B → Q1 26 $3.75B = +4% Q-o-Q growth, modest but monotonic). Tier annotations on Frontier lab compute / Hosted model APIs are 1B (CEO disclosure anchor). AWS-OpenAI Q1 2026 announcement of $38B + $100B/8yr expansion is RPO not realised revenue and does not affect 2025 segments. See dec-2026-05-06-compute-ledger-bucket-sizing.md §Issue 4."
+        "notes": "Restated downward from $18B (wq-089) to $10B (wq-091) per Andy Jassy CEO disclosure of $15B Q1 2026 run-rate. Quarterly trajectory restated under wq-092 to eliminate the wq-091 Q3=Q4=Q1 26 flat plateau (Q4 25 now $3.60B \u2192 Q1 26 $3.75B = +4% Q-o-Q growth, modest but monotonic). Tier annotations on Frontier lab compute / Hosted model APIs are 1B (CEO disclosure anchor). AWS-OpenAI Q1 2026 announcement of $38B + $100B/8yr expansion is RPO not realised revenue and does not affect 2025 segments. See dec-2026-05-06-compute-ledger-bucket-sizing.md \u00a7Issue 4."
       },
       "oracle_cloud_ai": {
         "label": "Oracle OCI AI",
@@ -8025,7 +8035,7 @@
         "tier_frontier_lab_compute": "2A",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "2A",
-        "segment_basis": "OCI 2025 calendar (sum-of-quarterlies basis) = $2.95B (annualised exit run-rate = $3B; preserved as context). Frontier lab compute ($1.97B 2025): OpenAI Stargate workload billing through OCI as data centers come online late 2025; partial-year contribution. The contracted $300B+ OpenAI commitment is RPO not realised revenue. AI workload compute ($0.98B): general OCI AI workload. No Hosted model APIs (Oracle has no Bedrock/AOAI/Vertex equivalent). Copilot excluded $0. Tie-out: 1.97+0.98+0+0 = $2.95B ✓. Update each cycle as Stargate billings ramp.",
+        "segment_basis": "OCI 2025 calendar (sum-of-quarterlies basis) = $2.95B (annualised exit run-rate = $3B; preserved as context). Frontier lab compute ($1.97B 2025): OpenAI Stargate workload billing through OCI as data centers come online late 2025; partial-year contribution. The contracted $300B+ OpenAI commitment is RPO not realised revenue. AI workload compute ($0.98B): general OCI AI workload. No Hosted model APIs (Oracle has no Bedrock/AOAI/Vertex equivalent). Copilot excluded $0. Tie-out: 1.97+0.98+0+0 = $2.95B \u2713. Update each cycle as Stargate billings ramp.",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": {
@@ -8045,7 +8055,7 @@
         "retrievedAt": "2026-05-06",
         "nextReview": "2026-06-15",
         "confidence": "low",
-        "notes": "ORCL fiscal year ends May; Q3 FY26 = Dec 2025 – Feb 2026 quarter. Tighten as Stargate revenue ramps through 2026. AI line $3B holds from wq-089; per-segment reallocation moves Stargate portion to Frontier lab compute (was AI workload compute under wq-089)."
+        "notes": "ORCL fiscal year ends May; Q3 FY26 = Dec 2025 \u2013 Feb 2026 quarter. Tighten as Stargate revenue ramps through 2026. AI line $3B holds from wq-089; per-segment reallocation moves Stargate portion to Frontier lab compute (was AI workload compute under wq-089)."
       },
       "coreweave": {
         "label": "CoreWeave",
@@ -8071,7 +8081,7 @@
         "tier_frontier_lab_compute": "1A",
         "tier_ai_workload_compute": "1A",
         "tier_hosted_model_apis": "1A",
-        "segment_basis": "CoreWeave 2025 calendar (sum-of-Q basis) = $4.23B (annualised exit run-rate $4.5B preserved as context — 10-Q disclosed). Frontier lab compute ($3.76B 2025): ~85% of CoreWeave revenue is Microsoft sub-rent — much of which is OpenAI workload Microsoft sub-rents to CoreWeave to handle peak frontier-lab demand. The 'circular financing made visible' line on the Layer Stack. Note — at OpenAI-line resolution this is the same flow as msft_ai Frontier lab compute; ASC 606 principal treatment on each entity's P&L means both are real revenue lines that aggregate gross-of-double-count by definition. AI workload compute ($0.47B): other AI Native + research customers on CoreWeave directly. No Hosted model APIs — pure-play GPU cloud. Tie-out (sum-of-Q): 3.76+0.47+0+0 = $4.23B ✓.",
+        "segment_basis": "CoreWeave 2025 calendar (sum-of-Q basis) = $4.23B (annualised exit run-rate $4.5B preserved as context \u2014 10-Q disclosed). Frontier lab compute ($3.76B 2025): ~85% of CoreWeave revenue is Microsoft sub-rent \u2014 much of which is OpenAI workload Microsoft sub-rents to CoreWeave to handle peak frontier-lab demand. The 'circular financing made visible' line on the Layer Stack. Note \u2014 at OpenAI-line resolution this is the same flow as msft_ai Frontier lab compute; ASC 606 principal treatment on each entity's P&L means both are real revenue lines that aggregate gross-of-double-count by definition. AI workload compute ($0.47B): other AI Native + research customers on CoreWeave directly. No Hosted model APIs \u2014 pure-play GPU cloud. Tie-out (sum-of-Q): 3.76+0.47+0+0 = $4.23B \u2713.",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": {
@@ -8083,7 +8093,7 @@
         "retrievedAt": "2026-05-06",
         "nextReview": "2026-08-15",
         "confidence": "high",
-        "notes": "CoreWeave IPO'd March 2025. The Microsoft-sub-rent-for-OpenAI line is editorially the most important callout for the Layer Stack — it's where the circular-financing geometry is most visible to a non-specialist reader. Per-segment reallocation under wq-091: Frontier lab compute up $0.2B / AI workload compute down $0.2B vs wq-089 — Microsoft-sub-rent share of total revenue is more concentrated on frontier-lab work than the prior 84%/16% split implied."
+        "notes": "CoreWeave IPO'd March 2025. The Microsoft-sub-rent-for-OpenAI line is editorially the most important callout for the Layer Stack \u2014 it's where the circular-financing geometry is most visible to a non-specialist reader. Per-segment reallocation under wq-091: Frontier lab compute up $0.2B / AI workload compute down $0.2B vs wq-089 \u2014 Microsoft-sub-rent share of total revenue is more concentrated on frontier-lab work than the prior 84%/16% split implied."
       },
       "nebius": {
         "label": "Nebius",
@@ -8109,7 +8119,7 @@
         "tier_frontier_lab_compute": "2A",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "1A",
-        "segment_basis": "Nebius 2025 calendar (sum-of-Q basis) = $0.89B (annualised $0.95B preserved). Frontier lab compute ($0.61B 2025): Mistral and other smaller frontier labs renting capacity from Nebius (US-Europe footprint). AI workload compute ($0.28B): AI Native customers + research. No Hosted model APIs. Tie-out (sum-of-Q): 0.61+0.28+0+0 = $0.89B ✓.",
+        "segment_basis": "Nebius 2025 calendar (sum-of-Q basis) = $0.89B (annualised $0.95B preserved). Frontier lab compute ($0.61B 2025): Mistral and other smaller frontier labs renting capacity from Nebius (US-Europe footprint). AI workload compute ($0.28B): AI Native customers + research. No Hosted model APIs. Tie-out (sum-of-Q): 0.61+0.28+0+0 = $0.89B \u2713.",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": null,
@@ -8117,7 +8127,7 @@
         "retrievedAt": "2026-05-06",
         "nextReview": "2026-05-30",
         "confidence": "high",
-        "notes": "Nebius (NBIS) — formerly Yandex N.V. assets, US-listed AI cloud. 6-K filer. Per-segment split is editorial 2A estimate; tighten if Nebius discloses customer concentration. Per-segment reallocation under wq-091: Frontier lab compute slightly higher / AI workload compute slightly lower vs wq-089 to align with neoclouds aggregate per Final Locked Table."
+        "notes": "Nebius (NBIS) \u2014 formerly Yandex N.V. assets, US-listed AI cloud. 6-K filer. Per-segment split is editorial 2A estimate; tighten if Nebius discloses customer concentration. Per-segment reallocation under wq-091: Frontier lab compute slightly higher / AI workload compute slightly lower vs wq-089 to align with neoclouds aggregate per Final Locked Table."
       },
       "lambda": {
         "label": "Lambda Labs",
@@ -8143,7 +8153,7 @@
         "tier_frontier_lab_compute": "2A",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "1A",
-        "segment_basis": "Lambda 2025 calendar (sum-of-Q basis) = $0.56B (annualised $0.60B preserved). Frontier lab compute ($0.47B 2025): smaller frontier labs + research orgs renting GPU capacity. AI workload compute ($0.09B): AI Native customers + sole-trader / academic. No Hosted model APIs. Tie-out (sum-of-Q): 0.47+0.09+0+0 = $0.56B ✓.",
+        "segment_basis": "Lambda 2025 calendar (sum-of-Q basis) = $0.56B (annualised $0.60B preserved). Frontier lab compute ($0.47B 2025): smaller frontier labs + research orgs renting GPU capacity. AI workload compute ($0.09B): AI Native customers + sole-trader / academic. No Hosted model APIs. Tie-out (sum-of-Q): 0.47+0.09+0+0 = $0.56B \u2713.",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": null,
@@ -8177,7 +8187,7 @@
         "tier_frontier_lab_compute": "2A",
         "tier_ai_workload_compute": "2A",
         "tier_hosted_model_apis": "1A",
-        "segment_basis": "Crusoe 2025 calendar (sum-of-Q basis) = $0.37B (annualised $0.40B preserved). Frontier lab compute ($0.28B 2025): smaller labs + applied-research customers renting GPU capacity. AI workload compute ($0.09B): AI Native + general research. No Hosted model APIs. Tie-out (sum-of-Q): 0.28+0.09+0+0 = $0.37B ✓.",
+        "segment_basis": "Crusoe 2025 calendar (sum-of-Q basis) = $0.37B (annualised $0.40B preserved). Frontier lab compute ($0.28B 2025): smaller labs + applied-research customers renting GPU capacity. AI workload compute ($0.09B): AI Native + general research. No Hosted model APIs. Tie-out (sum-of-Q): 0.28+0.09+0+0 = $0.37B \u2713.",
         "principal_agent_confirmed": true,
         "treatment": "principal",
         "ai_run_rate_disclosure": null,
@@ -8188,14 +8198,14 @@
         "notes": "Private. Press-disclosed. Per-segment split is 2A editorial."
       }
     },
-    "_d6_gate": "PASS — principal-everywhere confirmed per data/methodology_constants.json:compute_revenue.principal_agent_treatment; Copilot scope-out applied; pass-through scoped to Hosted model APIs only.",
-    "_engine": "scripts/derive_compute_revenue.py (wq-091 v3 — plain-English segment schema)",
+    "_d6_gate": "PASS \u2014 principal-everywhere confirmed per data/methodology_constants.json:compute_revenue.principal_agent_treatment; Copilot scope-out applied; pass-through scoped to Hosted model APIs only.",
+    "_engine": "scripts/derive_compute_revenue.py (wq-091 v3 \u2014 plain-English segment schema)",
     "_generatedAt": "2026-05-06T05:50:25.106917+00:00",
-    "_notes": "Three-segment model: Frontier lab compute (the circular-financing line — Model Providers paying external hyperscalers/neoclouds), AI workload compute (AI Natives + enterprises + sovereign workloads), Hosted model APIs (packaged token APIs). Pass-through applies to Hosted model APIs only. Copilot scoped OUT — tracked separately under copilot_excluded_*. See /methodology.html §Compute Revenue — three-segment model."
+    "_notes": "Three-segment model: Frontier lab compute (the circular-financing line \u2014 Model Providers paying external hyperscalers/neoclouds), AI workload compute (AI Natives + enterprises + sovereign workloads), Hosted model APIs (packaged token APIs). Pass-through applies to Hosted model APIs only. Copilot scoped OUT \u2014 tracked separately under copilot_excluded_*. See /methodology.html \u00a7Compute Revenue \u2014 three-segment model."
   },
   "computeProviders": {
     "_generatedAt": "2026-05-09T02:31:38Z",
-    "_doc": "wq-096 — Tier 4 (trad_compute) and Tier 5 (ai_native_compute) records. tradCompute carries appsCarveout pointing at trad_saas record IDs whose ARR is deducted to produce arrNetOfAppsCarveout. Per Decision D9, multi-tier companies (Google, Microsoft, Oracle) split into separate records per tier; Microsoft has no Frontier entry.",
+    "_doc": "wq-096 \u2014 Tier 4 (trad_compute) and Tier 5 (ai_native_compute) records. tradCompute carries appsCarveout pointing at trad_saas record IDs whose ARR is deducted to produce arrNetOfAppsCarveout. Per Decision D9, multi-tier companies (Google, Microsoft, Oracle) split into separate records per tier; Microsoft has no Frontier entry.",
     "tradCompute": [
       {
         "id": "aws",
@@ -8204,7 +8214,7 @@
         "arrGrossDisclosed": 15.0,
         "arrNetOfAppsCarveout": 15.0,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Amazon CEO Andy Jassy 2026 shareholder letter — '$15B annualised run-rate'",
+        "arrSource": "Amazon CEO Andy Jassy 2026 shareholder letter \u2014 '$15B annualised run-rate'",
         "provenance": "tier_1b",
         "appsCarveout": [],
         "appsCarveoutNote": "AWS has no Copilot-equivalent productivity SaaS. Q-Developer and Bedrock pass-through are infra/compute, not Apps. Carve-out is empty."
@@ -8216,14 +8226,14 @@
         "arrGrossDisclosed": 37.0,
         "arrNetOfAppsCarveout": 29.55,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Microsoft FY26 Q3 earnings — '$37B annualised AI run-rate, +123% YoY'",
+        "arrSource": "Microsoft FY26 Q3 earnings \u2014 '$37B annualised AI run-rate, +123% YoY'",
         "provenance": "tier_1b",
         "appsCarveout": [
           "m365_copilot",
           "github_copilot",
           "microsoft_dynamics_copilot"
         ],
-        "appsCarveoutNote": "Decision D9: Microsoft has NO frontier entry; Azure carves out M365 Copilot + GitHub Copilot + Dynamics Copilot which are trad_saas. Net = gross − sum(arrClaimedNumeric of carveout records)."
+        "appsCarveoutNote": "Decision D9: Microsoft has NO frontier entry; Azure carves out M365 Copilot + GitHub Copilot + Dynamics Copilot which are trad_saas. Net = gross \u2212 sum(arrClaimedNumeric of carveout records)."
       },
       {
         "id": "gcp",
@@ -8232,7 +8242,7 @@
         "arrGrossDisclosed": 12.0,
         "arrNetOfAppsCarveout": 10.5,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Editorial Tier 2A — bottom-up from GCP Q1 2026 AI revenue $3.0B × 4 (per data/compute_disclosures.json:googl_cloud_ai.frontier_lab_compute_q1_2026 + ai_workload_compute + hosted_model_apis_gross + copilot_excluded), grossed for Workspace AI",
+        "arrSource": "Editorial Tier 2A \u2014 bottom-up from GCP Q1 2026 AI revenue $3.0B \u00d7 4 (per data/compute_disclosures.json:googl_cloud_ai.frontier_lab_compute_q1_2026 + ai_workload_compute + hosted_model_apis_gross + copilot_excluded), grossed for Workspace AI",
         "provenance": "tier_2a",
         "appsCarveout": [
           "google_workspace_ai"
@@ -8246,7 +8256,7 @@
         "arrGrossDisclosed": 3.6,
         "arrNetOfAppsCarveout": 3.4,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Oracle Q3 FY26 earnings narrative — OCI AI portion editorial Tier 2A; Q1 26 quarterly $0.9B × 4",
+        "arrSource": "Oracle Q3 FY26 earnings narrative \u2014 OCI AI portion editorial Tier 2A; Q1 26 quarterly $0.9B \u00d7 4",
         "provenance": "tier_2a",
         "appsCarveout": [
           "oracle_fusion_ai"
@@ -8262,7 +8272,7 @@
         "subType": "token_factory",
         "arrNumeric": 0.05,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Anyscale press — ~$50M ARR estimated 2025; Ray-platform based AI serving",
+        "arrSource": "Anyscale press \u2014 ~$50M ARR estimated 2025; Ray-platform based AI serving",
         "provenance": "tier_3a",
         "movedFromTopConsumers": false,
         "doubleCountNote": ""
@@ -8274,10 +8284,10 @@
         "subType": "bare_metal_gpu",
         "arrNumeric": 6.0,
         "arrAsOf": "2026-Q1",
-        "arrSource": "CoreWeave Q1 2026 10-Q — annualised exit run-rate (Q1 26 quarterly $1.5B × 4 = $6.0B)",
+        "arrSource": "CoreWeave Q1 2026 10-Q \u2014 annualised exit run-rate (Q1 26 quarterly $1.5B \u00d7 4 = $6.0B)",
         "provenance": "tier_1a",
         "movedFromTopConsumers": false,
-        "doubleCountNote": "~85% of CoreWeave revenue is Microsoft sub-rent for OpenAI workload — captured in passthrough_aiNativeCompute_to_tradCompute layer."
+        "doubleCountNote": "~85% of CoreWeave revenue is Microsoft sub-rent for OpenAI workload \u2014 captured in passthrough_aiNativeCompute_to_tradCompute layer."
       },
       {
         "id": "crusoe",
@@ -8286,7 +8296,7 @@
         "subType": "bare_metal_gpu",
         "arrNumeric": 0.48,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Crusoe press-disclosed — annualised exit run-rate (Q1 26 quarterly ~$0.12B × 4)",
+        "arrSource": "Crusoe press-disclosed \u2014 annualised exit run-rate (Q1 26 quarterly ~$0.12B \u00d7 4)",
         "provenance": "tier_2b",
         "movedFromTopConsumers": false,
         "doubleCountNote": ""
@@ -8298,7 +8308,7 @@
         "subType": "token_factory",
         "arrNumeric": 0.095,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Fal.ai press 2025 — ~$95M ARR end-2025; generative-media model serving",
+        "arrSource": "Fal.ai press 2025 \u2014 ~$95M ARR end-2025; generative-media model serving",
         "provenance": "tier_2b",
         "movedFromTopConsumers": true,
         "doubleCountNote": ""
@@ -8310,7 +8320,7 @@
         "subType": "token_factory",
         "arrNumeric": 0.14,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Fireworks press 2025 — ~$100M ARR late 2025; editorial uplift to $140M for early 2026",
+        "arrSource": "Fireworks press 2025 \u2014 ~$100M ARR late 2025; editorial uplift to $140M for early 2026",
         "provenance": "tier_2b",
         "movedFromTopConsumers": true,
         "doubleCountNote": ""
@@ -8322,7 +8332,7 @@
         "subType": "token_factory",
         "arrNumeric": 0.09,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Groq press 2025 — Bain estimates $90M ARR late 2025",
+        "arrSource": "Groq press 2025 \u2014 Bain estimates $90M ARR late 2025",
         "provenance": "tier_2b",
         "movedFromTopConsumers": true,
         "doubleCountNote": ""
@@ -8334,7 +8344,7 @@
         "subType": "bare_metal_gpu",
         "arrNumeric": 0.72,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Lambda press-disclosed — annualised exit run-rate (Q1 26 quarterly ~$0.18B × 4)",
+        "arrSource": "Lambda press-disclosed \u2014 annualised exit run-rate (Q1 26 quarterly ~$0.18B \u00d7 4)",
         "provenance": "tier_2b",
         "movedFromTopConsumers": false,
         "doubleCountNote": ""
@@ -8346,7 +8356,7 @@
         "subType": "bare_metal_gpu",
         "arrNumeric": 1.36,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Nebius (NBIS) Q1 2026 6-K — annualised exit run-rate (Q1 26 quarterly $0.34B × 4)",
+        "arrSource": "Nebius (NBIS) Q1 2026 6-K \u2014 annualised exit run-rate (Q1 26 quarterly $0.34B \u00d7 4)",
         "provenance": "tier_1a",
         "movedFromTopConsumers": false,
         "doubleCountNote": ""
@@ -8358,7 +8368,7 @@
         "subType": "token_factory",
         "arrNumeric": 0.05,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Replicate press — ~$50M ARR estimated 2025",
+        "arrSource": "Replicate press \u2014 ~$50M ARR estimated 2025",
         "provenance": "tier_3a",
         "movedFromTopConsumers": false,
         "doubleCountNote": ""
@@ -8370,7 +8380,7 @@
         "subType": "token_factory",
         "arrNumeric": 0.13,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Together AI press 2025 — ~$100M ARR mid-2025; editorial uplift to $130M",
+        "arrSource": "Together AI press 2025 \u2014 ~$100M ARR mid-2025; editorial uplift to $130M",
         "provenance": "tier_2b",
         "movedFromTopConsumers": true,
         "doubleCountNote": ""
@@ -9159,7 +9169,7 @@
               "from": "anthropic",
               "to": "aws",
               "valueUsdB": 5.5,
-              "valueBasis": "Q1 2026 annualised — Anthropic's AWS compute spend",
+              "valueBasis": "Q1 2026 annualised \u2014 Anthropic's AWS compute spend",
               "evidence": "Anthropic + Amazon disclosures 2025-26; ~60% of Anthropic compute on AWS; aggregate compute spend > Anthropic's $30B ARR",
               "provenance": "tier_2b",
               "rationale": "Anthropic's compute spend exceeds its revenue (training-heavy phase). AWS share ~60% of compute."
@@ -9169,8 +9179,8 @@
               "from": "anthropic",
               "to": "gcp",
               "valueUsdB": 1.8,
-              "valueBasis": "Q1 2026 annualised — Anthropic's GCP/TPU compute spend",
-              "evidence": "The Information 2026-04-30 — Anthropic-Google $200B 5-year commitment; Q1 2026 annualised flow ~$1.8B (early in ramp)",
+              "valueBasis": "Q1 2026 annualised \u2014 Anthropic's GCP/TPU compute spend",
+              "evidence": "The Information 2026-04-30 \u2014 Anthropic-Google $200B 5-year commitment; Q1 2026 annualised flow ~$1.8B (early in ramp)",
               "provenance": "tier_2b",
               "rationale": "Deep Anthropic-on-TPUs partnership; April 2026 expanded multi-GW agreement from 2027. Q1 26 actual flow modest pre-ramp."
             },
@@ -9179,7 +9189,7 @@
               "from": "openai",
               "to": "aws",
               "valueUsdB": 0.5,
-              "valueBasis": "Q1 2026 annualised — OpenAI AWS workloads (post Q1 2026 announcement)",
+              "valueBasis": "Q1 2026 annualised \u2014 OpenAI AWS workloads (post Q1 2026 announcement)",
               "evidence": "AWS-OpenAI Q1 2026 announcement of $38B + $100B/8yr expansion is RPO; realised early flow modest",
               "provenance": "tier_2b",
               "rationale": "Recently announced; realised revenue Q1 26 small relative to RPO."
@@ -9189,7 +9199,7 @@
               "from": "openai",
               "to": "azure",
               "valueUsdB": 6.5,
-              "valueBasis": "Q1 2026 annualised — OpenAI's Azure compute spend",
+              "valueBasis": "Q1 2026 annualised \u2014 OpenAI's Azure compute spend",
               "evidence": "Bloomberg/Information 2025-26 reporting; Zitron 2026-05-06 leak corroborates Azure-resident OpenAI inference at $18.5B annualised exit run-rate (compute-paid back to Microsoft est. ~$6.5B share of OpenAI's $25B ARR)",
               "provenance": "tier_2b",
               "rationale": "OpenAI's compute spend on Azure dwarfs all other frontier-to-trad flows. Estimated as ~26% of OpenAI's $25B ARR run-rate."
@@ -9199,14 +9209,14 @@
               "from": "openai",
               "to": "oci",
               "valueUsdB": 2.4,
-              "valueBasis": "Q1 2026 annualised — OpenAI Stargate billings via OCI",
-              "evidence": "Oracle Q3 FY26 RPO disclosure mentions $300B+ OpenAI commitment; realised flow Q1 26 partial-year as DCs come online (Q1 26 quarterly $0.6B × 4)",
+              "valueBasis": "Q1 2026 annualised \u2014 OpenAI Stargate billings via OCI",
+              "evidence": "Oracle Q3 FY26 RPO disclosure mentions $300B+ OpenAI commitment; realised flow Q1 26 partial-year as DCs come online (Q1 26 quarterly $0.6B \u00d7 4)",
               "provenance": "tier_2a",
               "rationale": "Stargate compute billing through OCI; partial-year contribution."
             }
           ],
           "longTailMultiplier": {
-            "baseValueBasis": "Aggregate ARR of frontier labs ex-OpenAI/Anthropic (xAI, Mistral, Cohere, DeepSeek, Alibaba/Qwen, Baidu, Tencent, Minimax, Moonshot, ByteDance, Meta) — ~$3.5B 2026-Q1 annualised",
+            "baseValueBasis": "Aggregate ARR of frontier labs ex-OpenAI/Anthropic (xAI, Mistral, Cohere, DeepSeek, Alibaba/Qwen, Baidu, Tencent, Minimax, Moonshot, ByteDance, Meta) \u2014 ~$3.5B 2026-Q1 annualised",
             "baseValue": 3.5,
             "multiplierPct": 25.0,
             "computedValue": 0.875,
@@ -9224,8 +9234,8 @@
               "from": "cursor",
               "to": "_aiNativeCompute_aggregate",
               "valueUsdB": 0.45,
-              "valueBasis": "Q1 2026 annualised — Cursor compute spend on AI-native compute (token factories + neoclouds)",
-              "evidence": "SemiAnalysis 2025 commentary — Cursor blended COGS ~45% of $1B ARR; majority via direct frontier APIs (not aiNativeCompute), residual ~10% via aiNativeCompute serving",
+              "valueBasis": "Q1 2026 annualised \u2014 Cursor compute spend on AI-native compute (token factories + neoclouds)",
+              "evidence": "SemiAnalysis 2025 commentary \u2014 Cursor blended COGS ~45% of $1B ARR; majority via direct frontier APIs (not aiNativeCompute), residual ~10% via aiNativeCompute serving",
               "provenance": "tier_2b",
               "rationale": "Cursor mostly hits frontier API endpoints directly (Anthropic, OpenAI). aiNativeCompute exposure modest."
             },
@@ -9234,14 +9244,14 @@
               "from": "perplexity",
               "to": "_aiNativeCompute_aggregate",
               "valueUsdB": 0.05,
-              "valueBasis": "Q1 2026 annualised — Perplexity compute spend on aiNativeCompute (residual, mostly direct frontier API)",
-              "evidence": "Perplexity press 2025 — most spend through frontier APIs; small share via Together/Fireworks for OSS-model serving",
+              "valueBasis": "Q1 2026 annualised \u2014 Perplexity compute spend on aiNativeCompute (residual, mostly direct frontier API)",
+              "evidence": "Perplexity press 2025 \u2014 most spend through frontier APIs; small share via Together/Fireworks for OSS-model serving",
               "provenance": "tier_3a",
               "rationale": "Most apps in this layer hit frontier APIs directly; aiNativeCompute share is small."
             }
           ],
           "longTailMultiplier": {
-            "baseValueBasis": "Aggregate ai_native_app ARR ex-named entries — see arrModel.apps.aiNative residual",
+            "baseValueBasis": "Aggregate ai_native_app ARR ex-named entries \u2014 see arrModel.apps.aiNative residual",
             "baseValue": 4.0,
             "multiplierPct": 8.0,
             "computedValue": 0.32,
@@ -9259,7 +9269,7 @@
               "from": "coreweave",
               "to": "azure",
               "valueUsdB": 5.1,
-              "valueBasis": "Q1 2026 annualised — CoreWeave revenue from Microsoft sub-rent for OpenAI workload",
+              "valueBasis": "Q1 2026 annualised \u2014 CoreWeave revenue from Microsoft sub-rent for OpenAI workload",
               "evidence": "CoreWeave 10-Q customer concentration; ~85% of CoreWeave $6B run-rate is Microsoft sub-rent",
               "provenance": "tier_2a",
               "rationale": "Critical double-count guard. Microsoft's $37B AI run-rate already includes Azure capacity powered by CoreWeave GPUs. CoreWeave's revenue from MSFT must be deducted from the gross-summed compute layer to avoid counting the same dollars twice."
@@ -9269,7 +9279,7 @@
               "from": "fireworks",
               "to": "aws",
               "valueUsdB": 0.07,
-              "valueBasis": "Q1 2026 annualised — Fireworks compute backed by AWS",
+              "valueBasis": "Q1 2026 annualised \u2014 Fireworks compute backed by AWS",
               "evidence": "Token factory infra mostly on hyperscaler primary; ~50% of Fireworks $140M ARR backs onto AWS GPU instances (editorial)",
               "provenance": "tier_3a",
               "rationale": "Token factories run on hyperscaler GPU capacity; pass-through estimated at ~50% of their ARR."
@@ -9279,8 +9289,8 @@
               "from": "together_ai",
               "to": "aws",
               "valueUsdB": 0.065,
-              "valueBasis": "Q1 2026 annualised — Together compute backed by AWS",
-              "evidence": "Editorial — same logic as Fireworks (~50% of $130M ARR)",
+              "valueBasis": "Q1 2026 annualised \u2014 Together compute backed by AWS",
+              "evidence": "Editorial \u2014 same logic as Fireworks (~50% of $130M ARR)",
               "provenance": "tier_3a",
               "rationale": "Same logic as Fireworks."
             }
