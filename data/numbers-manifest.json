@@ -1,0 +1,3509 @@
+{
+  "version": "1.0",
+  "generated": "2026-05-10",
+  "scope": [
+    "index.html",
+    "capital.html",
+    "revenue.html",
+    "compute.html",
+    "usage.html",
+    "power.html"
+  ],
+  "entries": [
+    {
+      "id": "index.market_aggregate_tokens.value",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"11\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$745B",
+      "semantic": "market_aggregate.tokens",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.capex_total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.capex_total"
+      ],
+      "editorial_fallback": {
+        "value": 745.0,
+        "unit": "B",
+        "raw": "$745B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:11"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8108-a534-d474234ff82c",
+      "_capture": {
+        "line": 11,
+        "context": "<meta property=\"og:description\" content=\"$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.\">",
+        "binding_hint": null
+      },
+      "pages": [
+        "index.html"
+      ],
+      "anchor_selectors": [
+        "[data-num][data-line=\"11\"]",
+        "#card-capex"
+      ]
+    },
+    {
+      "id": "index.market_aggregate_tokens.value_2",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"11\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$43B",
+      "semantic": "market_aggregate.tokens",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.capex_total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.capex_total"
+      ],
+      "editorial_fallback": {
+        "value": 43.0,
+        "unit": "B",
+        "raw": "$43B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:11"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8151-a54b-cb0b96992fb5",
+      "_capture": {
+        "line": 11,
+        "context": "<meta property=\"og:description\" content=\"$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.\">",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.market_aggregate_tokens.value_3",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"11\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$17B",
+      "semantic": "market_aggregate.tokens",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.capex_total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.capex_total"
+      ],
+      "editorial_fallback": {
+        "value": 17.0,
+        "unit": "B",
+        "raw": "$17B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:11"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-819c-9e0c-fc9a56b51be5",
+      "_capture": {
+        "line": 11,
+        "context": "<meta property=\"og:description\" content=\"$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.\">",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.market_aggregate_tokens.value_4",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"11\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "~360T",
+      "semantic": "market_aggregate.tokens",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.tokens_2025_annualized",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.tokens_2025_annualized"
+      ],
+      "editorial_fallback": {
+        "value": 360.0,
+        "unit": "T",
+        "raw": "~360T",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:11"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "tokens_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8145-b242-d1b940dd28b7",
+      "_capture": {
+        "line": 11,
+        "context": "<meta property=\"og:description\" content=\"$745B of infrastructure investment. $43B of AI compute revenue earned. $17B of customer-paid Apps Revenue. ~360T tokens/day. The full AI economy, triangulated from primary sources.\">",
+        "binding_hint": null
+      },
+      "pages": [
+        "index.html"
+      ],
+      "anchor_selectors": [
+        "[data-num][data-line=\"11\"]",
+        "#ais-usage-sub",
+        "#card-tokens"
+      ]
+    },
+    {
+      "id": "index.dom.ais_capex_figure",
+      "page": "index.html",
+      "anchor_selector": "#ais-capex-figure",
+      "anchor_dom_id": "ais-capex-figure",
+      "current_rendered_value": "$330B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates.2025.total_capex",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates.2025.total_capex"
+      ],
+      "editorial_fallback": {
+        "value": 330.0,
+        "unit": "B",
+        "raw": "$330B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:227"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8147-ad08-c26499dc34dd",
+      "_capture": {
+        "line": 227,
+        "context": "<span class=\"ais-figure\" id=\"ais-capex-figure\">$330B</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.ais_usage_figure",
+      "page": "index.html",
+      "anchor_selector": "#ais-usage-figure",
+      "anchor_dom_id": "ais-usage-figure",
+      "current_rendered_value": "$164B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.layer_stack_ratios.usage_revenue_2025_usd_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.compute.layer_stack_ratios.usage_revenue_2025_usd_b"
+      ],
+      "editorial_fallback": {
+        "value": 164.0,
+        "unit": "B",
+        "raw": "$164B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:237"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81c4-adf7-d76db6540354",
+      "_capture": {
+        "line": 237,
+        "context": "<span class=\"ais-figure\" id=\"ais-usage-figure\">$164B</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.ais_compute_figure",
+      "page": "index.html",
+      "anchor_selector": "#ais-compute-figure",
+      "anchor_dom_id": "ais-compute-figure",
+      "current_rendered_value": "$43.1B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.compute_revenue_2025_gross_usd_b",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.compute_revenue_2025_gross_usd_b",
+        "site-data.compute.compute_revenue_2025_gross_sum_of_quarterlies_usd_b",
+        "site-data.compute.layer_stack_ratios.compute_revenue_2025_gross_usd_b",
+        "site-data.arrModel.compute.netExternal",
+        "site-data.arrModel.compute.subtotal",
+        "site-data.arrModel.combined.compute_net",
+        "site-data.meta.acceptedPoints"
+      ],
+      "editorial_fallback": {
+        "value": 43.1,
+        "unit": "B",
+        "raw": "$43.1B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:246"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-818c-a7f7-ed7e4499d027",
+      "_capture": {
+        "line": 246,
+        "context": "<span class=\"ais-figure-out\" id=\"ais-compute-figure\">$43.1B</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.ais_power_figure",
+      "page": "index.html",
+      "anchor_selector": "#ais-power-figure",
+      "anchor_dom_id": "ais-power-figure",
+      "current_rendered_value": "$25B",
+      "semantic": "market_aggregate.power",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.layer_stack_ratios.power_revenue_2025_usd_b",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.layer_stack_ratios.power_revenue_2025_usd_b"
+      ],
+      "editorial_fallback": {
+        "value": 25.0,
+        "unit": "B",
+        "raw": "$25B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:256"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-815c-affd-c5a0503c7198",
+      "_capture": {
+        "line": 256,
+        "context": "<span id=\"ais-power-figure\">$25B</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.ais_revenue_figure",
+      "page": "index.html",
+      "anchor_selector": "#ais-revenue-figure",
+      "anchor_dom_id": "ais-revenue-figure",
+      "current_rendered_value": "$19.3B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.sankey.totalCustomerRevenue_gross"
+      ],
+      "editorial_fallback": {
+        "value": 19.3,
+        "unit": "B",
+        "raw": "$19.3B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:267"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-817b-9597-e28eda3841ca",
+      "_capture": {
+        "line": 267,
+        "context": "<span class=\"ais-figure-out\" id=\"ais-revenue-figure\">$19.3B</span>",
+        "binding_hint": "sankey.totalCustomerRevenue_gross"
+      },
+      "pages": [
+        "index.html"
+      ],
+      "anchor_selectors": [
+        "#ais-revenue-figure",
+        "#card-revenue"
+      ]
+    },
+    {
+      "id": "index.dom.hook_ratio",
+      "page": "index.html",
+      "anchor_selector": "#hook-ratio",
+      "anchor_dom_id": "hook-ratio",
+      "current_rendered_value": "$2.50",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.layer_stack_ratios.compute_per_dollar_apps",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.compute.layer_stack_ratios.compute_per_dollar_apps"
+      ],
+      "editorial_fallback": {
+        "value": 2.5,
+        "unit": "$",
+        "raw": "$2.50",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:279"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f7-b174-c63da58a4057",
+      "_capture": {
+        "line": 279,
+        "context": "<div class=\"hook-number\"><span id=\"hook-ratio\">$2.50</span> of compute spend stands behind every $1 of customer-paid AI Apps Revenue today.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.lt_value",
+      "page": "index.html",
+      "anchor_selector": "#lt-value",
+      "anchor_dom_id": "lt-value",
+      "current_rendered_value": "$43B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.compute_revenue_2025_gross_usd_b",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.compute_revenue_2025_gross_usd_b",
+        "site-data.compute.compute_revenue_2025_gross_sum_of_quarterlies_usd_b",
+        "site-data.compute.layer_stack_ratios.compute_revenue_2025_gross_usd_b",
+        "site-data.arrModel.compute.netExternal",
+        "site-data.arrModel.compute.subtotal",
+        "site-data.meta.acceptedPoints",
+        "site-data.arrModel.combined.compute_net"
+      ],
+      "editorial_fallback": {
+        "value": 43.0,
+        "unit": "B",
+        "raw": "$43B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:286"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8128-bec3-f1b2082b75b2",
+      "_capture": {
+        "line": 286,
+        "context": "<div class=\"lt-value\" style=\"color:var(--compute);\" id=\"lt-value\">$43B</div>",
+        "binding_hint": null
+      },
+      "pages": [
+        "index.html"
+      ],
+      "anchor_selectors": [
+        "#lt-value",
+        "#card-compute"
+      ]
+    },
+    {
+      "id": "index.dom.lt_subline",
+      "page": "index.html",
+      "anchor_selector": "#lt-subline",
+      "anchor_dom_id": "lt-subline",
+      "current_rendered_value": "+153%",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.yoy_growth_pct",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.yoy_growth_pct"
+      ],
+      "editorial_fallback": {
+        "value": 153.0,
+        "unit": "%",
+        "raw": "+153%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:287"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8187-9662-d84c4a5bc8d4",
+      "_capture": {
+        "line": 287,
+        "context": "<div style=\"font-size:13px;color:var(--text);margin-bottom:8px;\" id=\"lt-subline\">AI compute revenue earned in 2025 — +153% YoY. Frontier labs paid 79% of it.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.lt_subline_2",
+      "page": "index.html",
+      "anchor_selector": "#lt-subline",
+      "anchor_dom_id": "lt-subline",
+      "current_rendered_value": "79%",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.yoy_growth_pct",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.yoy_growth_pct"
+      ],
+      "editorial_fallback": {
+        "value": 79.0,
+        "unit": "%",
+        "raw": "79%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:287"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8162-8974-e908acdf4d3c",
+      "_capture": {
+        "line": 287,
+        "context": "<div style=\"font-size:13px;color:var(--text);margin-bottom:8px;\" id=\"lt-subline\">AI compute revenue earned in 2025 — +153% YoY. Frontier labs paid 79% of it.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.hyperscalers_neoclouds_earned_compute",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"323\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "79%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.arrModel.combined.ai_native_total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.arrModel.combined.ai_native_total"
+      ],
+      "editorial_fallback": {
+        "value": 79.0,
+        "unit": "%",
+        "raw": "79%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:323"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81c7-919a-db1439420d82",
+      "_capture": {
+        "line": 323,
+        "context": "<div class=\"lc-desc\">What hyperscalers and neoclouds earned from AI compute in 2025. Three segments — frontier-lab compute (79%), AI workload compute, hosted model APIs.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_cumulative.766b_infrastructure_investment_ndash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"194\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$766B",
+      "semantic": "market_aggregate.capex_cumulative",
+      "source_state": "editorial",
+      "source_path": "site-data.cumulative.capex",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.cumulative.capex",
+        "site-data.cumulative.capex_total",
+        "entities.market_aggregates._cumulative_2023_2025.capex",
+        "entities.market_aggregates._cumulative_2023_2025.capex_total",
+        "site-data.capital_sankey.total",
+        "entities.market_aggregates._capital_sankey.total"
+      ],
+      "editorial_fallback": {
+        "value": 766.0,
+        "unit": "B",
+        "raw": "$766B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:194"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8188-882a-dc44bce10537",
+      "_capture": {
+        "line": 194,
+        "context": "<strong><span data-narrative=\"capital_sankey_total\">$766B</span> of AI infrastructure investment, 2023&ndash;2025.</strong>",
+        "binding_hint": null
+      },
+      "pages": [
+        "capital.html"
+      ],
+      "anchor_selectors": [
+        "[data-num][data-line=\"194\"]",
+        "[data-num][data-line=\"344\"]"
+      ]
+    },
+    {
+      "id": "capital.market_aggregate_capex_cumulative.anchored_nvidia_revenue_356b",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"196\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$356B",
+      "semantic": "market_aggregate.capex_cumulative",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._cumulative_2023_2025.nvidia_dc_revenue_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.market_aggregates._cumulative_2023_2025.nvidia_dc_revenue_b"
+      ],
+      "editorial_fallback": {
+        "value": 356.0,
+        "unit": "B",
+        "raw": "$356B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:196"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81ff-b58e-e378a0df4823",
+      "_capture": {
+        "line": 196,
+        "context": "Anchored from <strong>NVIDIA DC revenue: $356B cumulative</strong> (Tier 1A). Cross-checked against Microsoft, Google, Meta, Amazon 10-K CapEx disclosures.",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_annual.meta_google_microsoft_allocate",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"224\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$170B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._counterfactual.ad_self_funded_capex_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.market_aggregates._counterfactual.ad_self_funded_capex_b"
+      ],
+      "editorial_fallback": {
+        "value": 170.0,
+        "unit": "B",
+        "raw": "$170B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:224"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-815a-9e2a-cfaab01906ea",
+      "_capture": {
+        "line": 224,
+        "context": "Meta, Google, and Microsoft allocate approximately $170B of AI CapEx to ad ranking, search, recommendations, and cloud workloads.",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_cumulative.total_capex_reached_approximately",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"241\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$380B",
+      "semantic": "market_aggregate.capex_cumulative",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._cumulative_2023_2025.capex_total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates._cumulative_2023_2025.capex_total"
+      ],
+      "editorial_fallback": {
+        "value": 380.0,
+        "unit": "B",
+        "raw": "$380B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:241"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81ea-8282-d229ec198777",
+      "_capture": {
+        "line": 241,
+        "context": "<span style=\"color:var(--text-dim); font-size:12px;\"> Total AI CapEx reached approximately <span data-narrative=\"market_2025_total_capex\">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative=\"market_2025_t",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_cumulative.total_capex_reached_approximately_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"241\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$17.5B",
+      "semantic": "market_aggregate.capex_cumulative",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._cumulative_2023_2025.capex_total",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "entities.market_aggregates._cumulative_2023_2025.capex_total"
+      ],
+      "editorial_fallback": {
+        "value": 17.5,
+        "unit": "B",
+        "raw": "$17.5B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:241"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81d2-be17-e4c342b5a802",
+      "_capture": {
+        "line": 241,
+        "context": "<span style=\"color:var(--text-dim); font-size:12px;\"> Total AI CapEx reached approximately <span data-narrative=\"market_2025_total_capex\">$380B</span> in 2025. Current AI customer revenue is approximately <span data-narrative=\"market_2025_t",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.sens_idle_val",
+      "page": "capital.html",
+      "anchor_selector": "#sens-idle-val",
+      "anchor_dom_id": "sens-idle-val",
+      "current_rendered_value": "$50B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.sensitivity_defaults.idle_capex_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.capital_sankey.sensitivity_defaults.idle_capex_b"
+      ],
+      "editorial_fallback": {
+        "value": 50.0,
+        "unit": "B",
+        "raw": "$50B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:293"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f8-9e96-e287f153f10c",
+      "_capture": {
+        "line": 293,
+        "context": "<div class=\"sens-val\" id=\"sens-idle-val\">$50B</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.sens_ads_val",
+      "page": "capital.html",
+      "anchor_selector": "#sens-ads-val",
+      "anchor_dom_id": "sens-ads-val",
+      "current_rendered_value": "$170B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.sensitivity_defaults.ads_capex_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.capital_sankey.sensitivity_defaults.ads_capex_b"
+      ],
+      "editorial_fallback": {
+        "value": 170.0,
+        "unit": "B",
+        "raw": "$170B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:298"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-819c-bdf7-f0e6dbfdf569",
+      "_capture": {
+        "line": 298,
+        "context": "<div class=\"sens-val\" id=\"sens-ads-val\">$170B</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.sens_china_val",
+      "page": "capital.html",
+      "anchor_selector": "#sens-china-val",
+      "anchor_dom_id": "sens-china-val",
+      "current_rendered_value": "100%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.sensitivity_defaults.china_share_pct",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.capital_sankey.sensitivity_defaults.china_share_pct"
+      ],
+      "editorial_fallback": {
+        "value": 100.0,
+        "unit": "%",
+        "raw": "100%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:303"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81fa-85c3-ed7bcb7b4ad8",
+      "_capture": {
+        "line": 303,
+        "context": "<div class=\"sens-val\" id=\"sens-china-val\">100%</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.infrastructure_current_revenue",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"306\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "editorial",
+      "source_path": "entities.companies[3].provenance.2026.capex.claim_count",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.companies[3].provenance.2026.capex.claim_count",
+        "entities.market_aggregates.2025._market_provenance.mag7_capex.engine_rollup_value",
+        "entities.market_aggregates.2024._market_provenance.enterprise_capex.engine_rollup_value",
+        "site-data.entityDirectory[31].current.tokens_per_day",
+        "site-data.entityDirectory[43].current.valuation",
+        "site-data.entityDirectory[56].current.valuation",
+        "site-data.entityDirectory[68].current.valuation",
+        "site-data.entityDirectory[76].current.valuation"
+      ],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "$",
+        "raw": "$1",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:306"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-815d-ae73-e442a5065264",
+      "_capture": {
+        "line": 306,
+        "context": "<div class=\"sens-label\">Infrastructure per $1 of current revenue</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.sens_ratio_display",
+      "page": "capital.html",
+      "anchor_selector": "#sens-ratio-display",
+      "anchor_dom_id": "sens-ratio-display",
+      "current_rendered_value": "$35",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.sensitivity_defaults.ratio_display_usd",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.capital_sankey.sensitivity_defaults.ratio_display_usd"
+      ],
+      "editorial_fallback": {
+        "value": 35.0,
+        "unit": "$",
+        "raw": "$35",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:307"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8157-a460-d63c52a8a0ec",
+      "_capture": {
+        "line": 307,
+        "context": "<div class=\"sens-ratio\" id=\"sens-ratio-display\">$35</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_revenue.customer_revenue_must_grow",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"321\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$17.5B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.sankey.totalCustomerRevenue_gross"
+      ],
+      "editorial_fallback": {
+        "value": 17.5,
+        "unit": "B",
+        "raw": "$17.5B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:321"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f0-b163-dbc99c3f9389",
+      "_capture": {
+        "line": 321,
+        "context": "<div class=\"cp-desc\">AI customer revenue (<span data-narrative=\"market_2025_total_customer_revenue_gross\">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categori",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_revenue.customer_revenue_must_grow_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"321\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "100%",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.sankey.totalCustomerRevenue_gross",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.sankey.totalCustomerRevenue_gross"
+      ],
+      "editorial_fallback": {
+        "value": 100.0,
+        "unit": "%",
+        "raw": "100%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:321"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8162-b430-fab696097e98",
+      "_capture": {
+        "line": 321,
+        "context": "<div class=\"cp-desc\">AI customer revenue (<span data-narrative=\"market_2025_total_customer_revenue_gross\">$17.5B</span> in 2025) must grow at 80&ndash;100% CAGR for several years. Enterprise adoption, pricing power, and new product categori",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.middle_nodes_mdash_money",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"345\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$303B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._cumulative_2023_2025.nvidia_dc_revenue_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.market_aggregates._cumulative_2023_2025.nvidia_dc_revenue_b"
+      ],
+      "editorial_fallback": {
+        "value": 303.0,
+        "unit": "B",
+        "raw": "$303B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:345"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8173-b42c-ef8bdad0c665",
+      "_capture": {
+        "line": 345,
+        "context": "<li><strong>Middle = 5 nodes</strong> &mdash; what the money physically bought. NVIDIA GPU $303B cross-checks against calendarised NVIDIA DC revenue (Tier 1A).</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.inference_paid_50b_mdash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"348\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$50B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.utilization.Inference (Paid)",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.capital_sankey.utilization.Inference (Paid)"
+      ],
+      "editorial_fallback": {
+        "value": 50.0,
+        "unit": "B",
+        "raw": "$50B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:348"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-812c-ba1f-c3d4012cef4e",
+      "_capture": {
+        "line": 348,
+        "context": "<li><strong>Inference (Paid) ($50B)</strong> &mdash; fleet currently serving paid API + subscription queries</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.inference_free_tier_32b",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"349\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$32B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.utilization.Inference (Free Tier)",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.capital_sankey.utilization.Inference (Free Tier)"
+      ],
+      "editorial_fallback": {
+        "value": 32.0,
+        "unit": "B",
+        "raw": "$32B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:349"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8170-b29c-dd856358473d",
+      "_capture": {
+        "line": 349,
+        "context": "<li><strong>Inference (Free Tier) ($32B)</strong> &mdash; fleet serving free-tier ChatGPT, Gemini in search, Meta AI</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.inference_platform_201b_mdash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"350\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$201B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.utilization.Inference (Ad Platform)",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.capital_sankey.utilization.Inference (Ad Platform)"
+      ],
+      "editorial_fallback": {
+        "value": 201.0,
+        "unit": "B",
+        "raw": "$201B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:350"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81e8-b86c-fd5dca3834eb",
+      "_capture": {
+        "line": 350,
+        "context": "<li><strong>Inference (Ad Platform) ($201B)</strong> &mdash; fleet running ads, feed ranking, search, recommendations</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.model_training_84b_mdash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"351\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$84B",
+      "semantic": "uncategorised",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.utilization.Model Training",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.capital_sankey.utilization.Model Training"
+      ],
+      "editorial_fallback": {
+        "value": 84.0,
+        "unit": "B",
+        "raw": "$84B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:351"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8160-9601-e3099cc8a7ce",
+      "_capture": {
+        "line": 351,
+        "context": "<li><strong>Model Training ($84B)</strong> &mdash; fleet currently dedicated to training runs</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_power.idle_68b_mdash_commissioned",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"352\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$68B",
+      "semantic": "market_aggregate.power",
+      "source_state": "editorial",
+      "source_path": "site-data.arrModel.compute.tradCompute.totalGross",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.arrModel.compute.tradCompute.totalGross"
+      ],
+      "editorial_fallback": {
+        "value": 68.0,
+        "unit": "B",
+        "raw": "$68B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:352"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8101-a8ab-ccf241fb4387",
+      "_capture": {
+        "line": 352,
+        "context": "<li><strong>Idle ($68B)</strong> &mdash; commissioned, powered, no current workload</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_annual.build_transit_310b_mdash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"353\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$310B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "editorial",
+      "source_path": "site-data.capital_sankey.utilization.In Build / In Transit",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.capital_sankey.utilization.In Build / In Transit"
+      ],
+      "editorial_fallback": {
+        "value": 310.0,
+        "unit": "B",
+        "raw": "$310B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:353"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f2-9c6d-e3d35ce03c2f",
+      "_capture": {
+        "line": 353,
+        "context": "<li><strong>In build / in transit ($310B)</strong> &mdash; CapEx committed, not yet commissioned. Mostly 2025 DC shell + substations.</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.ratio_derived.bridge_revenue_paid_consumer",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"356\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$82B",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "entities.companies[2].provenance.Q4 2025.tokens_per_day.claims[0].value",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.companies[2].provenance.Q4 2025.tokens_per_day.claims[0].value"
+      ],
+      "editorial_fallback": {
+        "value": 82.0,
+        "unit": "B",
+        "raw": "$82B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:356"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8145-9856-fec2afa37ddb",
+      "_capture": {
+        "line": 356,
+        "context": "<li><strong>Bridge to Revenue Ledger:</strong> Paid + Consumer fleet ($82B) generates ~$14B/yr COGS via depreciation + hosting + electricity. Ratio ~5.9x consistent with ~3.5yr asset life + operating overhead.</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.ratio_derived.bridge_revenue_paid_consumer_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"356\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "5.9x",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.compute.concentration.oracle_share_pct",
+      "source_path_exists": true,
+      "source_path_candidates": [
+        "site-data.compute.concentration.oracle_share_pct"
+      ],
+      "editorial_fallback": {
+        "value": 5.9,
+        "unit": "×",
+        "raw": "5.9x",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:356"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81a5-929a-c00dc2cb2b4f",
+      "_capture": {
+        "line": 356,
+        "context": "<li><strong>Bridge to Revenue Ledger:</strong> Paid + Consumer fleet ($82B) generates ~$14B/yr COGS via depreciation + hosting + electricity. Ratio ~5.9x consistent with ~3.5yr asset life + operating overhead.</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.percentage_uncategorised.value",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"377\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "85%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "editorial",
+      "source_path": "entities.companies[12].financials.2025.microsoft_backlog_share_at_2025_start_pct",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.companies[12].financials.2025.microsoft_backlog_share_at_2025_start_pct"
+      ],
+      "editorial_fallback": {
+        "value": 85.0,
+        "unit": "%",
+        "raw": "85%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:377"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81fe-87fb-e63457b44ad7",
+      "_capture": {
+        "line": 377,
+        "context": "<td class=\"num\">~85% / ~15%</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.ratio_derived.revenue_inference_spend_cross",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"408\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "4x",
+      "semantic": "ratio_derived",
+      "source_state": "editorial",
+      "source_path": "site-data.dashboard.enterpriseReality[4].postureScores.acceleration",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.dashboard.enterpriseReality[4].postureScores.acceleration",
+        "site-data.dashboard.enterpriseReality[8].postureScores.acceleration",
+        "site-data.compute.layer_stack_ratios.compute_to_silicon_2025"
+      ],
+      "editorial_fallback": {
+        "value": 4.0,
+        "unit": "×",
+        "raw": "4x",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:408"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8144-98a8-e1db5d1d7756",
+      "_capture": {
+        "line": 408,
+        "context": "<td>From the <a href=\"revenue.html\" class=\"link-revenue\">Revenue Ledger</a> 2025 inference spend; cross-checks at ~4x ratio to fleet value</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "compute.market_aggregate_compute_revenue.why_separate_trajectory_chart",
+      "page": "compute.html",
+      "anchor_selector": "[data-num][data-line=\"191\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$200B",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._narrative.google_rpo_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.market_aggregates._narrative.google_rpo_b"
+      ],
+      "editorial_fallback": {
+        "value": 200.0,
+        "unit": "B",
+        "raw": "$200B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "compute.html:191"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-811b-8962-ed6864dddcac",
+      "_capture": {
+        "line": 191,
+        "context": "<span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google $200B and Anthropic+OpenAI $718B are forward commitments to MAG3 hyperscalers — ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "compute.market_aggregate_compute_revenue.why_separate_trajectory_chart_2",
+      "page": "compute.html",
+      "anchor_selector": "[data-num][data-line=\"191\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$718B",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "editorial",
+      "source_path": "entities.market_aggregates._narrative.google_rpo_b",
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "entities.market_aggregates._narrative.google_rpo_b"
+      ],
+      "editorial_fallback": {
+        "value": 718.0,
+        "unit": "B",
+        "raw": "$718B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "compute.html:191"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b8-804e-c7e38e19e764",
+      "_capture": {
+        "line": 191,
+        "context": "<span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google $200B and Anthropic+OpenAI $718B are forward commitments to MAG3 hyperscalers — ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.methodology_constant.notional_output_rate",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"235\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1.25",
+      "semantic": "methodology_constant",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.25,
+        "unit": "$",
+        "raw": "$1.25",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:235"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8172-aa1c-cdee64d44f56",
+      "_capture": {
+        "line": 235,
+        "context": "<span class=\"ais-note\">notional @ $1.25/M output rate</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.dom.hook_ratio_2",
+      "page": "index.html",
+      "anchor_selector": "#hook-ratio",
+      "anchor_dom_id": "hook-ratio",
+      "current_rendered_value": "$1",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "$",
+        "raw": "$1",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:279"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-813b-a120-cb2b516dd878",
+      "_capture": {
+        "line": 279,
+        "context": "<div class=\"hook-number\"><span id=\"hook-ratio\">$2.50</span> of compute spend stands behind every $1 of customer-paid AI Apps Revenue today.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.sourced",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"303\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "40%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 40.0,
+        "unit": "%",
+        "raw": "40%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:303"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8159-8798-db4d768a47c9",
+      "_capture": {
+        "line": 303,
+        "context": "<span class=\"tier-pill tier-1\">40% Sourced</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.derived",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"304\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "35%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 35.0,
+        "unit": "%",
+        "raw": "35%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:304"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-813a-9500-e3323dd69cef",
+      "_capture": {
+        "line": 304,
+        "context": "<span class=\"tier-pill tier-2\">35% Derived</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.modeled",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"305\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "25%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 25.0,
+        "unit": "%",
+        "raw": "25%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:305"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f1-9c68-cd883b7606ac",
+      "_capture": {
+        "line": 305,
+        "context": "<span class=\"tier-pill tier-3\">25% Modeled</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.sourced_2",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"314\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "65%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 65.0,
+        "unit": "%",
+        "raw": "65%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:314"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8164-9ba0-dfc4044e6ff9",
+      "_capture": {
+        "line": 314,
+        "context": "<span class=\"tier-pill tier-1\">65% Sourced</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.derived_2",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"315\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "25%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 25.0,
+        "unit": "%",
+        "raw": "25%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:315"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-815c-98fb-cb347e7f3672",
+      "_capture": {
+        "line": 315,
+        "context": "<span class=\"tier-pill tier-2\">25% Derived</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.modeled_2",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"316\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "10%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 10.0,
+        "unit": "%",
+        "raw": "10%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:316"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-814d-b998-c6235954d451",
+      "_capture": {
+        "line": 316,
+        "context": "<span class=\"tier-pill tier-3\">10% Modeled</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.sourced_3",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"325\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "60%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 60.0,
+        "unit": "%",
+        "raw": "60%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:325"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81bf-89ce-d1b4235f1a68",
+      "_capture": {
+        "line": 325,
+        "context": "<span class=\"tier-pill tier-1\">60% Sourced</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.derived_3",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"326\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "30%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 30.0,
+        "unit": "%",
+        "raw": "30%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:326"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8116-88ba-d6c675881333",
+      "_capture": {
+        "line": 326,
+        "context": "<span class=\"tier-pill tier-2\">30% Derived</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.modeled_3",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"327\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "10%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 10.0,
+        "unit": "%",
+        "raw": "10%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:327"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8143-a843-cb5ba05a2002",
+      "_capture": {
+        "line": 327,
+        "context": "<span class=\"tier-pill tier-3\">10% Modeled</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.derived_4",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"336\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "50%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 50.0,
+        "unit": "%",
+        "raw": "50%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:336"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8166-9833-eb97c360b24b",
+      "_capture": {
+        "line": 336,
+        "context": "<span class=\"tier-pill tier-2\">50% Derived</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "index.percentage_uncategorised.modeled_4",
+      "page": "index.html",
+      "anchor_selector": "[data-num][data-line=\"337\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "50%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 50.0,
+        "unit": "%",
+        "raw": "50%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "index.html:337"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8171-b26a-ecbb41f61b90",
+      "_capture": {
+        "line": 337,
+        "context": "<span class=\"tier-pill tier-3\">50% Modeled</span>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.platform_counterfactual_exclude_170b",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"222\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$170B",
+      "semantic": "uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 170.0,
+        "unit": "B",
+        "raw": "$170B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:222"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8118-9ace-fedd8f2076d9",
+      "_capture": {
+        "line": 222,
+        "context": "<label for=\"cf-check\">Ad-platform counterfactual: exclude $170B of self-funded ad/cloud infrastructure</label>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.cf_ratio_from",
+      "page": "capital.html",
+      "anchor_selector": "#cf-ratio-from",
+      "anchor_dom_id": "cf-ratio-from",
+      "current_rendered_value": "$34",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 34.0,
+        "unit": "$",
+        "raw": "$34",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:226"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-819a-b6cf-f78b84fb08f5",
+      "_capture": {
+        "line": 226,
+        "context": "Excluding them reduces the infrastructure-to-revenue ratio from <strong id=\"cf-ratio-from\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025\">$34:$1</strong> to <strong id=\"cf-ratio-to\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025_ex",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.cf_ratio_from_2",
+      "page": "capital.html",
+      "anchor_selector": "#cf-ratio-from",
+      "anchor_dom_id": "cf-ratio-from",
+      "current_rendered_value": "$1",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "$",
+        "raw": "$1",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:226"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8173-9d8b-fe8c236fa0a5",
+      "_capture": {
+        "line": 226,
+        "context": "Excluding them reduces the infrastructure-to-revenue ratio from <strong id=\"cf-ratio-from\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025\">$34:$1</strong> to <strong id=\"cf-ratio-to\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025_ex",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.cf_ratio_from_3",
+      "page": "capital.html",
+      "anchor_selector": "#cf-ratio-from",
+      "anchor_dom_id": "cf-ratio-from",
+      "current_rendered_value": "$13",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 13.0,
+        "unit": "$",
+        "raw": "$13",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:226"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81a1-b819-ed4281e06377",
+      "_capture": {
+        "line": 226,
+        "context": "Excluding them reduces the infrastructure-to-revenue ratio from <strong id=\"cf-ratio-from\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025\">$34:$1</strong> to <strong id=\"cf-ratio-to\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025_ex",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.cf_ratio_from_4",
+      "page": "capital.html",
+      "anchor_selector": "#cf-ratio-from",
+      "anchor_dom_id": "cf-ratio-from",
+      "current_rendered_value": "$1",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "$",
+        "raw": "$1",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:226"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b3-94e8-cff79ca7bfad",
+      "_capture": {
+        "line": 226,
+        "context": "Excluding them reduces the infrastructure-to-revenue ratio from <strong id=\"cf-ratio-from\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025\">$34:$1</strong> to <strong id=\"cf-ratio-to\" data-ratio=\"cumulative.infra_to_revenue_ratio_2025_ex",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.revenue_growth_rate_depreciation",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"245\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$24B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 24.0,
+        "unit": "B",
+        "raw": "$24B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:245"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8108-99d5-f45048239e2d",
+      "_capture": {
+        "line": 245,
+        "context": "<tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation</td><td class=\"num\"><span class=\"status-pill status-gap\">Gap: $24B</span> <span style=\"color:var(--text-dim);font-size:11px;\">$17.5B rev vs ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.revenue_growth_rate_depreciation_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"245\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$17.5B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 17.5,
+        "unit": "B",
+        "raw": "$17.5B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:245"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-810c-a626-de0326c8bcac",
+      "_capture": {
+        "line": 245,
+        "context": "<tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation</td><td class=\"num\"><span class=\"status-pill status-gap\">Gap: $24B</span> <span style=\"color:var(--text-dim);font-size:11px;\">$17.5B rev vs ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.revenue_growth_rate_depreciation_3",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"245\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$41B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 41.0,
+        "unit": "B",
+        "raw": "$41B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:245"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b1-97b2-c6e175be29a0",
+      "_capture": {
+        "line": 245,
+        "context": "<tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation</td><td class=\"num\"><span class=\"status-pill status-gap\">Gap: $24B</span> <span style=\"color:var(--text-dim);font-size:11px;\">$17.5B rev vs ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.ratio_derived.revenue_growth_rate_depreciation",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"245\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "4x",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 4.0,
+        "unit": "×",
+        "raw": "4x",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:245"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81df-938d-f5eff075ee33",
+      "_capture": {
+        "line": 245,
+        "context": "<tr><td>Revenue growth rate vs. depreciation</td><td>3&ndash;4x annual growth to cover depreciation</td><td class=\"num\"><span class=\"status-pill status-gap\">Gap: $24B</span> <span style=\"color:var(--text-dim);font-size:11px;\">$17.5B rev vs ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_annual.cloud_workloads_covering_share",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"246\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "~$170B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 170.0,
+        "unit": "B",
+        "raw": "~$170B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:246"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-811c-bca9-fc75e0384b4a",
+      "_capture": {
+        "line": 246,
+        "context": "<tr><td>Ad/cloud workloads covering their share</td><td>Existing business models justify the CapEx</td><td class=\"num\"><span class=\"status-pill status-covered\">Covered</span> <span style=\"color:var(--text-dim);font-size:11px;\">~$170B self-f",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_annual.capex_growth_trajectory_new",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"247\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$368B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 368.0,
+        "unit": "B",
+        "raw": "$368B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:247"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8100-ba3f-c55e6383ef35",
+      "_capture": {
+        "line": 247,
+        "context": "<tr><td>CapEx growth trajectory</td><td>New purchases stabilise so depreciation levels</td><td class=\"num\"><span class=\"status-pill status-growing\">Accelerating</span> <span style=\"color:var(--text-dim);font-size:11px;\">FY27 $368B guided</s",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_revenue.nvidia_target_cumulative_chip",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"250\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1T",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "T",
+        "raw": "$1T",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:250"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_t_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-818b-9be8-de27fdc2133a",
+      "_capture": {
+        "line": 250,
+        "context": "<strong>NVIDIA $1T target:</strong> cumulative AI-chip revenue through CY2027 = ~$1.07T at projected rates. That represents $1T of silicon entering depreciation over a 3&ndash;4yr window.",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_revenue.nvidia_target_cumulative_chip_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"250\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "~$1.07T",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.07,
+        "unit": "T",
+        "raw": "~$1.07T",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:250"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_t_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b0-82d7-ec6522112956",
+      "_capture": {
+        "line": 250,
+        "context": "<strong>NVIDIA $1T target:</strong> cumulative AI-chip revenue through CY2027 = ~$1.07T at projected rates. That represents $1T of silicon entering depreciation over a 3&ndash;4yr window.",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_revenue.nvidia_target_cumulative_chip_3",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"250\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1T",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "T",
+        "raw": "$1T",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:250"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_t_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-818b-81ef-f1623787bc9e",
+      "_capture": {
+        "line": 250,
+        "context": "<strong>NVIDIA $1T target:</strong> cumulative AI-chip revenue through CY2027 = ~$1.07T at projected rates. That represents $1T of silicon entering depreciation over a 3&ndash;4yr window.",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.sens_ratio_detail",
+      "page": "capital.html",
+      "anchor_selector": "#sens-ratio-detail",
+      "anchor_dom_id": "sens-ratio-detail",
+      "current_rendered_value": "$766B",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 766.0,
+        "unit": "B",
+        "raw": "$766B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:308"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81e3-b3e8-d241cfbab4db",
+      "_capture": {
+        "line": 308,
+        "context": "<div class=\"sens-label\" id=\"sens-ratio-detail\" style=\"margin-top:4px;\">$766B total &middot; $22B revenue</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.dom.sens_ratio_detail_2",
+      "page": "capital.html",
+      "anchor_selector": "#sens-ratio-detail",
+      "anchor_dom_id": "sens-ratio-detail",
+      "current_rendered_value": "$22B",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 22.0,
+        "unit": "B",
+        "raw": "$22B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:308"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8111-86f9-daa4bec3103d",
+      "_capture": {
+        "line": 308,
+        "context": "<div class=\"sens-label\" id=\"sens-ratio-detail\" style=\"margin-top:4px;\">$766B total &middot; $22B revenue</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.ratio_derived.revenue_compounds_ndash_annually",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"320\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "4x",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 4.0,
+        "unit": "×",
+        "raw": "4x",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:320"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8139-b355-e7155c0f322e",
+      "_capture": {
+        "line": 320,
+        "context": "<div class=\"cp-title\">Revenue compounds at 3&ndash;4x annually</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_annual.annual_capex_stabilises_ndash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"327\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "750B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 750.0,
+        "unit": "B",
+        "raw": "750B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:327"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b0-8f39-d2565b275ba4",
+      "_capture": {
+        "line": 327,
+        "context": "<div class=\"cp-desc\">If annual CapEx stabilises at $700&ndash;750B, the depreciation wave crests by 2029&ndash;2030. Current guidance suggests 2026&ndash;2027 is still accelerating.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_annual.annual_capex_stabilises_ndash_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"327\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$700",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 700.0,
+        "unit": "$",
+        "raw": "$700",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:327"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-817a-8ad2-d457f15ccc1a",
+      "_capture": {
+        "line": 327,
+        "context": "<div class=\"cp-desc\">If annual CapEx stabilises at $700&ndash;750B, the depreciation wave crests by 2029&ndash;2030. Current guidance suggests 2026&ndash;2027 is still accelerating.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.scenario_assumption.gpu_depreciation_extended_ndash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"333\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "35%",
+      "semantic": "scenario_assumption",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 35.0,
+        "unit": "%",
+        "raw": "35%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:333"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81a7-a5d2-f3ef3df72e8c",
+      "_capture": {
+        "line": 333,
+        "context": "<div class=\"cp-desc\">If GPU depreciation is extended from 4 to 5&ndash;6 years (as Microsoft and Google have done for servers), annual depreciation charges decrease by 25&ndash;35%.</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_cumulative.lhs_source_buckets_cumulative",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"344\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$356B",
+      "semantic": "market_aggregate.capex_cumulative",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 356.0,
+        "unit": "B",
+        "raw": "$356B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:344"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8150-b85a-fadcd5f7af02",
+      "_capture": {
+        "line": 344,
+        "context": "<li><strong>LHS = 10 source buckets, cumulative 2023&ndash;25 CapEx</strong> (<span data-narrative=\"capital_sankey_total\">$766B</span>). Anchored from NVIDIA DC $356B (Tier 1A) + cross-checked against MSFT/GOOG/META/AMZN 10-K disclosures.</",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.ratio_derived.bridge_revenue_paid_consumer_3",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"356\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "~$14B",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 14.0,
+        "unit": "B",
+        "raw": "~$14B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:356"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f5-afa8-cd05ae238dea",
+      "_capture": {
+        "line": 356,
+        "context": "<li><strong>Bridge to Revenue Ledger:</strong> Paid + Consumer fleet ($82B) generates ~$14B/yr COGS via depreciation + hosting + electricity. Ratio ~5.9x consistent with ~3.5yr asset life + operating overhead.</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.market_aggregate_capex_annual.platform_context_meta_google",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"357\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$201B",
+      "semantic": "market_aggregate.capex_annual",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 201.0,
+        "unit": "B",
+        "raw": "$201B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:357"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8153-9273-e747edb9a9ec",
+      "_capture": {
+        "line": 357,
+        "context": "<li><strong>Ad Platform context:</strong> Meta/Google/MSFT use this fleet for ads/search/cloud workloads. These $201B of assets are funded through existing business models and do not require new AI revenue to justify the investment.</li>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.356b",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"371\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$356B",
+      "semantic": "uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 356.0,
+        "unit": "B",
+        "raw": "$356B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:371"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f4-ab9a-fb73e0a37190",
+      "_capture": {
+        "line": 371,
+        "context": "<td class=\"num\">$356B</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.fy24_fy25_fy26_mdash",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"372\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$47.5B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 47.5,
+        "unit": "B",
+        "raw": "$47.5B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:372"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8174-99d2-ca4fdbbf2022",
+      "_capture": {
+        "line": 372,
+        "context": "<td>FY24 $47.5B + FY25 $115.2B + FY26 $193.7B &mdash; quarterly earnings</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.fy24_fy25_fy26_mdash_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"372\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$115.2B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 115.2,
+        "unit": "B",
+        "raw": "$115.2B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:372"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8130-8215-e8072808f5f2",
+      "_capture": {
+        "line": 372,
+        "context": "<td>FY24 $47.5B + FY25 $115.2B + FY26 $193.7B &mdash; quarterly earnings</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.per_entity_metric_revenue.fy24_fy25_fy26_mdash_3",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"372\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$193.7B",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 193.7,
+        "unit": "B",
+        "raw": "$193.7B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:372"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8121-941b-e994adca63ee",
+      "_capture": {
+        "line": 372,
+        "context": "<td>FY24 $47.5B + FY25 $115.2B + FY26 $193.7B &mdash; quarterly earnings</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.percentage_uncategorised.value_2",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"377\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "15%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 15.0,
+        "unit": "%",
+        "raw": "15%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:377"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-812f-9c96-f35f1a722e72",
+      "_capture": {
+        "line": 377,
+        "context": "<td class=\"num\">~85% / ~15%</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.percentage_uncategorised.value_3",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"383\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "55%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 55.0,
+        "unit": "%",
+        "raw": "55%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:383"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-818a-a276-e92a41fe5357",
+      "_capture": {
+        "line": 383,
+        "context": "<td class=\"num\">~55%</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.14b",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"407\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$14B",
+      "semantic": "uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 14.0,
+        "unit": "B",
+        "raw": "$14B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:407"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8156-986e-d2182f2b2d86",
+      "_capture": {
+        "line": 407,
+        "context": "<td class=\"num\">$14B/yr</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.170b",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"413\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "~$170B",
+      "semantic": "uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 170.0,
+        "unit": "B",
+        "raw": "~$170B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:413"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8124-a454-ffcfb135d3b3",
+      "_capture": {
+        "line": 413,
+        "context": "<td class=\"num\">~$170B</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.meta_55b_gpu_ads",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"414\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$55B",
+      "semantic": "uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 55.0,
+        "unit": "B",
+        "raw": "$55B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:414"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8191-9854-c00d93b7d1e3",
+      "_capture": {
+        "line": 414,
+        "context": "<td>Meta ($55B GPU + ads infra), Google (TPU fleet for search/ads), MSFT (Bing/Copilot). Largest single workload category.</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.474k_h100e",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"419\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "474K",
+      "semantic": "uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 474.0,
+        "unit": "K",
+        "raw": "474K",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:419"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "count_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8149-964e-ef2dd1f5b14a",
+      "_capture": {
+        "line": 419,
+        "context": "<td class=\"num\">474K H100e</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "capital.uncategorised.50b",
+      "page": "capital.html",
+      "anchor_selector": "[data-num][data-line=\"425\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "~$50B",
+      "semantic": "uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 50.0,
+        "unit": "B",
+        "raw": "~$50B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "capital.html:425"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8169-b2b2-e29a75234b63",
+      "_capture": {
+        "line": 425,
+        "context": "<td class=\"num\">~$50B</td>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "revenue.market_aggregate_compute_revenue.why_middle_columns_shrink",
+      "page": "revenue.html",
+      "anchor_selector": "[data-num][data-line=\"134\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "20%",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 20.0,
+        "unit": "%",
+        "raw": "20%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "revenue.html:134"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81c9-b680-ff1d6e22b10f",
+      "_capture": {
+        "line": 134,
+        "context": "<span><strong style=\"color:#f1f5f9;\">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers &mdas",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "revenue.market_aggregate_compute_revenue.why_middle_columns_shrink_2",
+      "page": "revenue.html",
+      "anchor_selector": "[data-num][data-line=\"134\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "60%",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 60.0,
+        "unit": "%",
+        "raw": "60%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "revenue.html:134"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-811d-8276-e9257fd00a5b",
+      "_capture": {
+        "line": 134,
+        "context": "<span><strong style=\"color:#f1f5f9;\">Why do the middle columns shrink?</strong> Each column shows the dollars that flow <em>through</em> it. Channels (Hyperscalers, Trad. SaaS) retain a margin before passing revenue to Model Providers &mdas",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "revenue.market_aggregate_compute_revenue.archetype_channel_routing_each",
+      "page": "revenue.html",
+      "anchor_selector": "[data-num][data-line=\"138\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "95%",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 95.0,
+        "unit": "%",
+        "raw": "95%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "revenue.html:138"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8173-b675-dd29f7952425",
+      "_capture": {
+        "line": 138,
+        "context": "<span><strong style=\"color:#f1f5f9;\">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~95% of API revenue direct (5% via hyperscaler resale); AI ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "revenue.market_aggregate_compute_revenue.archetype_channel_routing_each_2",
+      "page": "revenue.html",
+      "anchor_selector": "[data-num][data-line=\"138\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "5%",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 5.0,
+        "unit": "%",
+        "raw": "5%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "revenue.html:138"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8102-af85-f5ea87790146",
+      "_capture": {
+        "line": 138,
+        "context": "<span><strong style=\"color:#f1f5f9;\">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~95% of API revenue direct (5% via hyperscaler resale); AI ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "revenue.market_aggregate_compute_revenue.archetype_channel_routing_each_3",
+      "page": "revenue.html",
+      "anchor_selector": "[data-num][data-line=\"138\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "90%",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 90.0,
+        "unit": "%",
+        "raw": "90%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "revenue.html:138"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8181-a2a5-e1961be599e8",
+      "_capture": {
+        "line": 138,
+        "context": "<span><strong style=\"color:#f1f5f9;\">Per-archetype channel routing.</strong> Each provider's revenue routes to channels per its <em>entity archetype</em> &mdash; frontier labs send ~95% of API revenue direct (5% via hyperscaler resale); AI ",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "compute.methodology_constant.one_line_major_seller",
+      "page": "compute.html",
+      "anchor_selector": "[data-num][data-line=\"173\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$9.25B",
+      "semantic": "methodology_constant",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 9.25,
+        "unit": "B",
+        "raw": "$9.25B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "compute.html:173"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8111-b860-e5d75c22fe09",
+      "_capture": {
+        "line": 173,
+        "context": "<p class=\"h2-sub\">Q1 2025 → Q1 2026, one line per major seller. 2025 calendar = sum-of-quarterlies basis; Q1 2026 anchored at disclosed run-rates ÷ 4 (MSFT $9.25B = $37B/4; AWS $3.75B = $15B/4 per Jassy). Every major provider grows monotoni",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "compute.methodology_constant.one_line_major_seller_2",
+      "page": "compute.html",
+      "anchor_selector": "[data-num][data-line=\"173\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$37B",
+      "semantic": "methodology_constant",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 37.0,
+        "unit": "B",
+        "raw": "$37B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "compute.html:173"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-812c-bf75-d86172d01ef9",
+      "_capture": {
+        "line": 173,
+        "context": "<p class=\"h2-sub\">Q1 2025 → Q1 2026, one line per major seller. 2025 calendar = sum-of-quarterlies basis; Q1 2026 anchored at disclosed run-rates ÷ 4 (MSFT $9.25B = $37B/4; AWS $3.75B = $15B/4 per Jassy). Every major provider grows monotoni",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "compute.methodology_constant.one_line_major_seller_3",
+      "page": "compute.html",
+      "anchor_selector": "[data-num][data-line=\"173\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$3.75B",
+      "semantic": "methodology_constant",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 3.75,
+        "unit": "B",
+        "raw": "$3.75B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "compute.html:173"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8131-aa05-f936fda083ad",
+      "_capture": {
+        "line": 173,
+        "context": "<p class=\"h2-sub\">Q1 2025 → Q1 2026, one line per major seller. 2025 calendar = sum-of-quarterlies basis; Q1 2026 anchored at disclosed run-rates ÷ 4 (MSFT $9.25B = $37B/4; AWS $3.75B = $15B/4 per Jassy). Every major provider grows monotoni",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "compute.methodology_constant.one_line_major_seller_4",
+      "page": "compute.html",
+      "anchor_selector": "[data-num][data-line=\"173\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$15B",
+      "semantic": "methodology_constant",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 15.0,
+        "unit": "B",
+        "raw": "$15B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "compute.html:173"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b3-be8f-fe68e48c4854",
+      "_capture": {
+        "line": 173,
+        "context": "<p class=\"h2-sub\">Q1 2025 → Q1 2026, one line per major seller. 2025 calendar = sum-of-quarterlies basis; Q1 2026 anchored at disclosed run-rates ÷ 4 (MSFT $9.25B = $37B/4; AWS $3.75B = $15B/4 per Jassy). Every major provider grows monotoni",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "compute.market_aggregate_compute_revenue.every_customer_apps_revenue",
+      "page": "compute.html",
+      "anchor_selector": "[data-num][data-line=\"198\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1",
+      "semantic": "market_aggregate.compute_revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "$",
+        "raw": "$1",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "compute.html:198"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81ee-ad11-effb37a1a957",
+      "_capture": {
+        "line": 198,
+        "context": "<p class=\"h2-sub\">For every $1 of customer Apps Revenue, how many dollars flow down the stack to Compute, Silicon, and Power. The recycling chart nobody else publishes.</p>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.market_aggregate_revenue.revenue_reconciliation_shows_combined",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"253\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$22B",
+      "semantic": "market_aggregate.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 22.0,
+        "unit": "B",
+        "raw": "$22B",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:253"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_b_compact",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81cd-944b-c80ad40b1f92",
+      "_capture": {
+        "line": 253,
+        "context": "<strong>Revenue reconciliation:</strong> This page shows combined provider ARR (trailing-quarter run-rate × 4, includes inference from ad-platform workloads). The home page shows $22B customer revenue (CY23–25 cumulative, collected). Audite",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.per_entity_metric_revenue.token_demand_quality_matrix",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"265\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "$1",
+      "semantic": "per_entity_metric.revenue",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 1.0,
+        "unit": "$",
+        "raw": "$1",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:265"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "currency_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81e9-b280-f9521efbab50",
+      "_capture": {
+        "line": 265,
+        "context": "<h2>Token Demand Quality Matrix <span class=\"sub\">&mdash; who buys &times; how they buy. Actual 2025 collected revenue. Not all \"$1 of AI revenue\" is equal.</span></h2>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.market_aggregate_tokens.token_volume_growth_compounding",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"370\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "80%",
+      "semantic": "market_aggregate.tokens",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 80.0,
+        "unit": "%",
+        "raw": "80%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:370"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81b5-ba6e-d838e28c4ddc",
+      "_capture": {
+        "line": 370,
+        "context": "<div class=\"signal-condition\">Token volume growth compounding &ge; 80% YoY</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.percentage_uncategorised.yoy",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"371\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "120%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 120.0,
+        "unit": "%",
+        "raw": "120%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:371"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8124-a655-eee8e0eca67d",
+      "_capture": {
+        "line": 371,
+        "context": "<div class=\"signal-current\" style=\"color:var(--green);\">~120% YoY</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.percentage_uncategorised.target",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"372\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "80%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 80.0,
+        "unit": "%",
+        "raw": "80%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:372"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-819b-a548-cc3bf1f88080",
+      "_capture": {
+        "line": 372,
+        "context": "<div class=\"signal-target\">Target: &ge;80%</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.percentage_uncategorised.paid_free_token_share",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"376\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "35%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 35.0,
+        "unit": "%",
+        "raw": "35%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:376"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-812a-a95f-c37e2dba27de",
+      "_capture": {
+        "line": 376,
+        "context": "<div class=\"signal-condition\">Paid vs. free token share &ge; 35%</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.percentage_uncategorised.value",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"377\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "28%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 28.0,
+        "unit": "%",
+        "raw": "28%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:377"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-816d-9232-da013b4301b2",
+      "_capture": {
+        "line": 377,
+        "context": "<div class=\"signal-current\" style=\"color:var(--orange);\">~28%</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.percentage_uncategorised.target_2",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"378\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "35%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 35.0,
+        "unit": "%",
+        "raw": "35%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:378"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81a3-8009-ccaa30314f4c",
+      "_capture": {
+        "line": 378,
+        "context": "<div class=\"signal-target\">Target: &ge;35%</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.ratio_derived.10x_decline",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"383\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "10x",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 10.0,
+        "unit": "×",
+        "raw": "10x",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:383"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81d8-86dd-f5e9ecc86bd3",
+      "_capture": {
+        "line": 383,
+        "context": "<div class=\"signal-current\" style=\"color:var(--accent);\">~10x/yr decline</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "usage.ratio_derived.threshold",
+      "page": "usage.html",
+      "anchor_selector": "[data-num][data-line=\"384\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "3x",
+      "semantic": "ratio_derived",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 3.0,
+        "unit": "×",
+        "raw": "3x",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "usage.html:384"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "ratio_x_to_1",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81f3-a208-e8d941751ce4",
+      "_capture": {
+        "line": 384,
+        "context": "<div class=\"signal-target\">Threshold: &le;3x/yr</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "power.market_aggregate_power.value",
+      "page": "power.html",
+      "anchor_selector": "[data-num][data-line=\"115\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "95 GW",
+      "semantic": "market_aggregate.power",
+      "source_state": "editorial",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [
+        "site-data.computeProviders.aiNativeCompute[3].arrNumeric",
+        "site-data.arrModel.compute.aiNativeCompute.entries[3].arr",
+        "entities.companies[0].provenance.Q4 2024.tokens_per_day.claims[0].value",
+        "entities.companies[66].financials.2025.arr",
+        "entities.companies[66].provenance.2025.arr.claims[0].value",
+        "entities.companies[66].provenance.2025.collected_revenue.claims[0].inputs.endingARR"
+      ],
+      "editorial_fallback": {
+        "value": 95.0,
+        "unit": "GW",
+        "raw": "95 GW",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "power.html:115"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "power_unit",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-8184-8e00-d98d0e46a935",
+      "_capture": {
+        "line": 115,
+        "context": "<div style=\"font-size:36px;font-weight:800;color:var(--orange);\">95 GW</div>",
+        "binding_hint": null
+      }
+    },
+    {
+      "id": "power.percentage_uncategorised.yoy_source_ercot_pjm",
+      "page": "power.html",
+      "anchor_selector": "[data-num][data-line=\"117\"]",
+      "anchor_dom_id": null,
+      "current_rendered_value": "40%",
+      "semantic": "percentage_uncategorised",
+      "source_state": "fixed",
+      "source_path": null,
+      "source_path_exists": false,
+      "source_path_candidates": [],
+      "editorial_fallback": {
+        "value": 40.0,
+        "unit": "%",
+        "raw": "40%",
+        "origin": "html_literal_at_capture",
+        "audit_ref": "power.html:117"
+      },
+      "supersession_threshold": {
+        "provenance_score_min": 0.7,
+        "consensus_weight_min": "indicative"
+      },
+      "format": "percentage_1dp",
+      "last_changed": null,
+      "notion_id": "35c57414-da2a-81d1-aeb9-d603570166b8",
+      "_capture": {
+        "line": 117,
+        "context": "<div style=\"font-size:11px;color:var(--text-dim);margin-top:8px;\">Up ~40% YoY. Source: ERCOT + PJM filings, Q1 2026</div>",
+        "binding_hint": null
+      }
+    }
+  ]
+}
