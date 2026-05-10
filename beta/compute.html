@@ -170,7 +170,7 @@
   <!-- ── §4.3 Quarterly trajectory chart (screenshot-first) ── -->
   <div class="card">
     <h2>Quarterly Trajectory</h2>
-    <p class="h2-sub">Q1 2025 → Q1 2026, one line per major seller. 2025 calendar = sum-of-quarterlies basis; Q1 2026 anchored at disclosed run-rates ÷ 4 (MSFT $9.25B = $37B/4; AWS $3.75B = $15B/4 per Jassy). Every major provider grows monotonically into Q1 2026.</p>
+    <p class="h2-sub">Q1 2025 → Q1 2026, one line per major seller. 2025 calendar = sum-of-quarterlies basis; Q1 2026 anchored at disclosed run-rates ÷ 4 (MSFT <span data-num="compute.methodology_constant.one_line_major_seller">$9.25B</span> = <span data-num="compute.methodology_constant.one_line_major_seller_2">$37B</span>/4; AWS <span data-num="compute.methodology_constant.one_line_major_seller_3">$3.75B</span> = <span data-num="compute.methodology_constant.one_line_major_seller_4">$15B</span>/4 per Jassy). Every major provider grows monotonically into Q1 2026.</p>
     <div style="position:relative;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">
       <span class="chart-watermark" style="right:14px;top:10px;">ai-index.hepburnadvisory.com.au</span>
       <canvas id="trajectory-chart" height="400"></canvas>
@@ -188,14 +188,14 @@
     <div id="forward-commitments-body">Loading…</div>
     <div class="methodology-callout" style="margin-top:14px;">
       <span style="color:var(--accent);font-weight:700;">i</span>
-      <span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google $200B and Anthropic+OpenAI $718B are forward commitments to MAG3 hyperscalers — they convert into compute revenue over a 5–8 year window, not at signing. Mixing them into a quarterly trajectory would double-count: the contracted dollars already drive the realised quarterly bars over time. Source: <code>data/compute_disclosures.json:forward_commitments</code>.</span>
+      <span><strong>Why this is separate from the trajectory chart.</strong> Google's RPO jump is the contractual order book, not Q1 26 revenue. The Anthropic-Google <span data-num="compute.market_aggregate_compute_revenue.why_separate_trajectory_chart">$200B</span> and Anthropic+OpenAI <span data-num="compute.market_aggregate_compute_revenue.why_separate_trajectory_chart_2">$718B</span> are forward commitments to MAG3 hyperscalers — they convert into compute revenue over a 5–8 year window, not at signing. Mixing them into a quarterly trajectory would double-count: the contracted dollars already drive the realised quarterly bars over time. Source: <code>data/compute_disclosures.json:forward_commitments</code>.</span>
     </div>
   </div>
 
   <!-- ── §4.4 Layer-Stack Multiplier (signature visual per D4) ── -->
   <div class="card">
     <h2>The Layer-Stack Multiplier</h2>
-    <p class="h2-sub">For every $1 of customer Apps Revenue, how many dollars flow down the stack to Compute, Silicon, and Power. The recycling chart nobody else publishes.</p>
+    <p class="h2-sub">For every <span data-num="compute.market_aggregate_compute_revenue.every_customer_apps_revenue">$1</span> of customer Apps Revenue, how many dollars flow down the stack to Compute, Silicon, and Power. The recycling chart nobody else publishes.</p>
     <div class="layer-stack">
       <div class="layer-stack-title" id="lsm-title">2025 lookback flows · sum-of-quarterlies basis (USD billions)</div>
       <div style="position:relative;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;">

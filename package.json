@@ -9,6 +9,7 @@
     "preview": "http-server -p 4173 -c-1 --silent .",
     "release-check": "node scripts/release-check.mjs",
     "release-check:provenance": "node scripts/validate-provenance.mjs",
+    "release-check:numbers-anchored": "node scripts/validate-numbers-anchored.mjs",
     "release-check:mobile": "playwright test --project mobile-iphone --project mobile-android",
     "release-check:visual": "playwright test tests/release-check/visual.spec.ts",
     "release-check:update-baselines": "playwright test tests/release-check/visual.spec.ts --update-snapshots",

@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TAIL Numbers Manifest",
+  "description": "wq-102 — binding spec for every public-rendered number on the six priority pages.",
+  "type": "object",
+  "required": [
+    "version",
+    "generated",
+    "entries"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "generated": {
+      "type": "string",
+      "format": "date"
+    },
+    "scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "page",
+          "anchor_selector",
+          "current_rendered_value",
+          "semantic",
+          "source_state",
+          "editorial_fallback",
+          "supersession_threshold",
+          "format"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+(\\.[a-zA-Z0-9_]+)+$"
+          },
+          "page": {
+            "type": "string"
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "anchor_selector": {
+            "type": "string"
+          },
+          "anchor_selectors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "anchor_dom_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "current_rendered_value": {
+            "type": "string"
+          },
+          "semantic": {
+            "type": "string"
+          },
+          "source_state": {
+            "type": "string",
+            "enum": [
+              "editorial",
+              "sourced",
+              "computed",
+              "fixed"
+            ]
+          },
+          "source_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_path_exists": {
+            "type": "boolean"
+          },
+          "source_path_candidates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "editorial_fallback": {
+            "type": "object",
+            "required": [
+              "value",
+              "origin"
+            ],
+            "properties": {
+              "value": {
+                "type": [
+                  "number",
+                  "string"
+                ]
+              },
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "raw": {
+                "type": "string"
+              },
+              "origin": {
+                "type": "string"
+              },
+              "audit_ref": {
+                "type": "string"
+              }
+            }
+          },
+          "supersession_threshold": {
+            "type": "object",
+            "required": [
+              "provenance_score_min",
+              "consensus_weight_min"
+            ],
+            "properties": {
+              "provenance_score_min": {
+                "type": "number"
+              },
+              "consensus_weight_min": {
+                "type": "string",
+                "enum": [
+                  "indicative",
+                  "robust"
+                ]
+              }
+            }
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "currency_b_compact",
+              "currency_m_compact",
+              "currency_t_compact",
+              "currency_unit",
+              "tokens_compact",
+              "percentage_1dp",
+              "ratio_x_to_1",
+              "count_compact",
+              "power_unit",
+              "text_passthrough"
+            ]
+          },
+          "last_changed": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notion_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "_capture": {
+            "type": "object",
+            "properties": {
+              "line": {
+                "type": "integer"
+              },
+              "context": {
+                "type": "string"
+              },
+              "binding_hint": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
