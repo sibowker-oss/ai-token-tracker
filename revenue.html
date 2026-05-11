@@ -182,12 +182,15 @@ fetch('data/scenarios.json?v=' + Date.now())
 // Bull 2026E: $64B * 1.35 = ~$86B (agent workflows accelerate adoption)
 // Bull 2027E: $112B * 1.80 = ~$201B (step-change in enterprise + consumer)
 
+// Revenue Ledger is locked to Base case — the bull/bear/base toggle was
+// retired in commit 75f4cc6 (2026-05-08). Cached localStorage selections
+// from before that change were still flowing through to hero-stat labels,
+// producing per-device drift (desktop showed "Base", mobile showed "Bull").
+// Ignore URL ?s= and localStorage entirely.
 let currentScenario = 'base';
 
 function getScenario() {
-  const p = new URLSearchParams(location.search).get('s');
-  if (p && SCENARIOS[p]) return p;
-  return localStorage.getItem('ai-ledger-scenario') || 'base';
+  return 'base';
 }
 
 function setScenario(s) {
@@ -317,10 +320,10 @@ function renderYear(yr) {
     : '';
 
   let h = '';
-  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">'+formatCurrency(revenue)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Customer Revenue</div><div class="value" style="color:var(--accent);">'+formatCurrency(revenue)+'</div><div class="detail">'+tierPill(yr==='2025'?'1B':'3C')+'</div>'+heroSecondary+'<div class="kpi-period">'+yr+'</div></div>';
   h += '<div class="hero-stat"><div class="label">Infrastructure Capex</div><div class="value" style="color:var(--orange);">'+formatCurrency(capex)+'</div><div class="detail">'+tierPill(capexTier)+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">'+formatCurrency(vcSubsidy)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
-  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">'+formatCurrency(cashflow)+'</div><div class="detail">'+scenarioData.label+scenarioTier+' '+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">VC Operating Subsidy</div><div class="value" style="color:var(--red);">'+formatCurrency(vcSubsidy)+'</div><div class="detail">'+tierPill(yr==='2025'?'1B':'3A')+'</div><div class="kpi-period">'+yr+'</div></div>';
+  h += '<div class="hero-stat"><div class="label">Generated Cashflow</div><div class="value" style="color:var(--green);">'+formatCurrency(cashflow)+'</div><div class="detail">'+tierPill(cf?cf.tier:'2A')+'</div><div class="kpi-period">'+yr+'</div></div>';
   document.getElementById('hero-stats').innerHTML = h;
   document.getElementById('flow-title').textContent = d.label + ' Revenue Flow';
 
@@ -332,7 +335,7 @@ function renderYear(yr) {
     const vcYr = (d.totalVCSubsidy != null) ? d.totalVCSubsidy : vcSubsidy;
     subtitle = formatCurrency(grossYr) + ' in customer revenue and ' + formatCurrency(vcYr) + ' in VC-funded operating losses across frontier AI providers.';
   } else {
-    subtitle = scenarioData.label + ' case: ' + formatCurrency(revenue) + ' in customer revenue. VC subsidy ' + formatCurrency(vcSubsidy) + '. Growth assumption: ' + scenarioData.growth + ' annually.';
+    subtitle = formatCurrency(revenue) + ' in customer revenue (projected). VC subsidy ' + formatCurrency(vcSubsidy) + '. Growth assumption: ' + scenarioData.growth + ' annually.';
   }
   const subtitleEl = document.getElementById('page-subtitle');
   if (subtitleEl) subtitleEl.textContent = subtitle;

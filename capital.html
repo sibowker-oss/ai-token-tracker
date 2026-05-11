@@ -582,7 +582,7 @@ function updateHero() {
   const effectiveRatio = Math.round(effectiveCapex / effectiveRev);
 
   document.getElementById('hero').innerHTML=`
-    <div class="hero-stat"><div class="label">2023-25 AI CapEx</div><div class="value" style="color:var(--accent)">${formatCurrency(v.t0)}</div><div class="detail">${sc.label} &middot; cumulative balance sheet</div><div class="kpi-period">2023\u201325</div></div>
+    <div class="hero-stat"><div class="label">2023-25 AI CapEx</div><div class="value" style="color:var(--accent)">${formatCurrency(v.t0)}</div><div class="detail">Cumulative balance sheet</div><div class="kpi-period">2023\u201325</div></div>
     <div class="hero-stat"><div class="label">NVIDIA share</div><div class="value" style="color:#22c55e">${formatCurrency(nvidiaTotal)}</div><div class="detail">${nvidiaShare}% of total &middot; GPU ${formatCurrency(nvidiaGpu)} + networking ${formatCurrency(nvidiaNet)}</div><div class="kpi-period">2023\u201325</div></div>
     <div class="hero-stat"><div class="label">Infrastructure per $1 revenue</div><div class="value" style="color:${counterfactualActive ? 'var(--cyan)' : 'var(--orange)'}">$${effectiveRatio}</div><div class="detail">${counterfactualActive ? formatCurrency(effectiveCapex) + ' (ex-ad) ' : formatCurrency(v.t0) + ' '}CapEx / ${formatCurrency(effectiveRev)} revenue${counterfactualActive ? ' (excl. ad platform)' : ''}</div><div class="kpi-period">2025</div></div>
     <div class="hero-stat"><div class="label">Idle + In Build</div><div class="value" style="color:var(--orange)">${formatCurrency(idle+inBuild)}</div><div class="detail">${((idle+inBuild)/v.t0*100).toFixed(0)}% of CapEx &middot; not yet generating revenue</div><div class="kpi-period">Current</div></div>
