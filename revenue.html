@@ -411,9 +411,6 @@ function renderBuyerProviderPanel(d) {
   });
   html += '</tbody></table>';
   html += '</div>';
-  // overflow-wrap:anywhere lets long inline <code> paths break inside the
-  // narrow mobile card width so they don't overflow the panel boundary.
-  html += '<p style="margin:8px 0 0;font-size:10px;color:var(--text-dim);opacity:0.7;line-height:1.5;overflow-wrap:anywhere;word-break:break-word;">AI Natives split (45/45/10 to OpenAI / Anthropic / Google) is editorial per <code>data/sankey_cost_structure.json:channel_mapping.buyer_provider_split</code>. Consumer split is engine-derived from per-provider <code>subscription_pct</code> rollup; Enterprises &amp; Govs back-solves to satisfy each provider\'s <code>customer_revenue</code>. Net basis — channel margins kept by Hyperscaler / SaaS resellers flow to Generated Cashflow, not providers.</p>';
   el.innerHTML = html;
 }
 
