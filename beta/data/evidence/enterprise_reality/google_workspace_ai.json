@@ -5,13 +5,13 @@
   "tier": "trad_saas",
   "arrClaimedNumeric": 1.5,
   "arrAsOf": "2026-Q1",
-  "arrSource": "Alphabet Q1 2026 commentary \u2014 Gemini-in-Workspace external AI seats; reconciles with compute_disclosures.json:googl_cloud_ai.copilot_excluded_2025_usd_b $1.5B (MS-declared analogue)",
+  "arrSource": "Alphabet Q1 2026 commentary \u2014 Gemini-in-Workspace external AI seats; reconciles with the $1.5B copilot-excluded figure declared by Microsoft for the same cohort.",
   "provenance": "tier_2a",
   "narrative": {
     "claimed": "Gemini-in-Workspace AI add-on; bundled in Business/Enterprise tiers",
     "usage": "Strong attach in Workspace base; meaningful seat uplift.",
     "real": "$1.5B (annualised)",
-    "flags": "AI repackaging of existing Workspace SKU = trad_saas. Distinct from Gemini frontier (provider) and GCP (trad_compute) \u2014 see Decision D9."
+    "flags": "AI repackaging of existing Workspace SKU. Scored as a trad-SaaS AI seat product, separate from Gemini's frontier model business and from Google Cloud infrastructure revenue."
   },
   "growth": "fast",
   "prevGrowth": "n/a"

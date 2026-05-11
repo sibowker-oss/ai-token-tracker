@@ -84,9 +84,10 @@ POSTURE = {
         },
         "watchSignals": (
             "Strong attach in Workspace base; meaningful seat uplift. Repackaging of "
-            "existing Workspace SKUs — no pricing model change. Distinct from Gemini "
-            "frontier (provider) and GCP (trad_compute) per wq-097 D9. No explicit AI "
-            "cost attribution in Alphabet GM commentary."
+            "existing Workspace SKUs — no pricing model change. Scoped narrowly to "
+            "Workspace AI seats, separate from Gemini's frontier model business and "
+            "from Google Cloud infrastructure revenue. No explicit AI cost attribution "
+            "in Alphabet gross margin commentary."
         ),
     },
     "salesforce_agentforce": {
@@ -192,9 +193,9 @@ POSTURE = {
             "cost": "Microsoft FY26 Q3 earnings — Cloud GM compression (-3pp) is parent-level AI infra cost; Dynamics inherits the same shared GM by construction (Microsoft trio shares parent GM).",
         },
         "watchSignals": (
-            "Smaller surface than M365 Copilot, targeted to Dynamics base. Per wq-097 D9, "
-            "sits inside Microsoft AI run-rate gross. Inherits parent-level AI cost "
-            "realisation (Microsoft cloud margin -3pp) — Microsoft trio shares parent GM, "
+            "Smaller surface than M365 Copilot, targeted to Dynamics base. Sits inside "
+            "Microsoft's reported AI run-rate gross. Inherits parent-level AI cost "
+            "realisation (Microsoft cloud margin -3pp) — the Microsoft Copilot trio shares parent GM, "
             "by design. Editorial estimate, immaterial at parent scale."
         ),
     },
@@ -256,10 +257,11 @@ POSTURE = {
             "cost": "Oracle Q3 FY26 earnings — gross margin pressure visible at parent but driven by OCI capex/depreciation, not Fusion AI inference cost.",
         },
         "watchSignals": (
-            "Distinct from OCI (trad_compute). Per wq-097 D9, Oracle splits across Fusion "
-            "AI (trad_saas) and OCI AI infra (trad_compute). Limited public disclosure — "
-            "bundled into Oracle SaaS without discrete revenue line. Margin pressure "
-            "visible at parent but mostly OCI capex, not Fusion AI software cost."
+            "Distinct from OCI infrastructure revenue: Oracle's AI footprint splits across "
+            "Fusion AI (the SaaS apps line) and OCI AI infrastructure (the compute line), "
+            "which sit in separate cohorts. Limited public disclosure — bundled into Oracle "
+            "SaaS without a discrete revenue line. Margin pressure visible at parent but mostly "
+            "OCI capex, not Fusion AI software cost."
         ),
     },
     "snowflake_cortex": {
@@ -307,10 +309,10 @@ VENDOR_POSTURE_METHODOLOGY = {
 }
 
 
-def main():
-    text = SITE_DATA.read_text(encoding="utf-8")
-    data = json.loads(text)
-    dash = data["dashboard"]
+def apply(site):
+    # Mutates site dict in place. Importable from generate_site_data.py so the
+    # cohort posture scores survive every regenerate of enterpriseReality.
+    dash = site["dashboard"]
     dash["vendorPostureMethodology"] = VENDOR_POSTURE_METHODOLOGY
 
     er = dash["enterpriseReality"]
@@ -346,11 +348,18 @@ def main():
     if missing:
         raise SystemExit(f"FATAL: cohort entries missing from enterpriseReality: {sorted(missing)}")
 
+    return len(found)
+
+
+def main():
+    text = SITE_DATA.read_text(encoding="utf-8")
+    data = json.loads(text)
+    count = apply(data)
     SITE_DATA.write_text(
         json.dumps(data, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
-    print(f"OK: extended {len(found)}/12 cohort entries; vendorPostureMethodology block written.")
+    print(f"OK: extended {count}/12 cohort entries; vendorPostureMethodology block written.")
 
 
 if __name__ == "__main__":

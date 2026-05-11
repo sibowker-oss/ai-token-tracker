@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-05-10T10:26:34Z",
+    "generatedAt": "2026-05-11T00:37:02Z",
     "source": "Generated from entities.json",
     "acceptedPoints": 43,
     "consensusMetrics": 3,
@@ -1552,7 +1552,29 @@
             3.5
           ],
           "realNote": "40-60% effective discounting per Citi/JPM channel checks; cloud margin down 3pp = real AI infra cost."
-        }
+        },
+        "product": "M365 Copilot",
+        "parent": "Microsoft",
+        "archetype": "Real workload, real cost, small share",
+        "arrShare": {
+          "value": "1.0\u20131.4%",
+          "denominator": "MSFT total revenue (~$245B FY24)",
+          "denominatorType": "parent_total"
+        },
+        "postureScores": {
+          "disclosure": 4,
+          "bundling": 4,
+          "pricing": 2,
+          "cost": 5,
+          "acceleration": 3,
+          "_citations": {
+            "bundling": "Microsoft 365 Copilot pricing page \u2014 separate $30/user/mo add-on on top of E3/E5 SKUs (premium add-on, not absorbed).",
+            "cost": "Microsoft FY26 Q3 earnings \u2014 Cloud gross margin down 3pp explicitly attributed to AI infrastructure costs."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "3.3% of 450M installed base after two years. Market share fell 18.8% \u2192 11.5% (Recon Analytics). Auto-installing across tenants. Morgan Stanley described enterprise reception as a \u201cwall of sorry.\u201d Cloud margin down 3pp directly attributed to AI infra cost. Disclosure tier_1b but only ~1% of parent revenue."
       },
       {
         "id": "github_copilot",
@@ -1568,7 +1590,29 @@
         "real": "$1-2.3B \u2014 the ONE product where AI IS the product",
         "flags": "Genuinely works. But facing Cursor ($1B ARR), open-source alternatives. Microsoft added Anthropic models \"at great expense to margins\" (SemiAnalysis). Usage caps introduced mid-2025.",
         "growth": "75% subs YoY",
-        "prevGrowth": "N/A"
+        "prevGrowth": "N/A",
+        "product": "GitHub Copilot",
+        "parent": "Microsoft",
+        "archetype": "AI is the product, but small at parent scale",
+        "arrShare": {
+          "value": "50\u201382%",
+          "denominator": "GitHub ARR (~$2B)",
+          "denominatorType": "business_unit"
+        },
+        "postureScores": {
+          "disclosure": 5,
+          "bundling": 5,
+          "pricing": 2,
+          "cost": 5,
+          "acceleration": 5,
+          "_citations": {
+            "bundling": "GitHub Copilot pricing page \u2014 three premium tiers ($10 Pro / $19 Business / $39 Enterprise) separate from base GitHub plans.",
+            "cost": "SemiAnalysis Aug-2025 \u2014 Microsoft added Anthropic models 'at great expense to margins.' Usage caps introduced mid-2025 are explicit cost-control signal."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "42% market share of AI coding. Acceptance rate 27\u201330% (not the 55% headline \u2014 that was task speed). Microsoft added Anthropic models \u201cat great expense to margins\u201d (SemiAnalysis) \u2014 explicit AI cost attribution. Usage caps introduced mid-2025. Real product, real cost, real growth \u2014 but still <1% of MSFT total revenue, ~50\u201382% of GitHub-ARR base."
       },
       {
         "id": "google_workspace_ai",
@@ -1577,14 +1621,36 @@
         "tier": "trad_saas",
         "arrClaimedNumeric": 1.5,
         "arrAsOf": "2026-Q1",
-        "arrSource": "Alphabet Q1 2026 commentary \u2014 Gemini-in-Workspace external AI seats; reconciles with compute_disclosures.json:googl_cloud_ai.copilot_excluded_2025_usd_b $1.5B (MS-declared analogue)",
+        "arrSource": "Alphabet Q1 2026 commentary \u2014 Gemini-in-Workspace external AI seats; reconciles with the $1.5B copilot-excluded figure declared by Microsoft for the same cohort.",
         "provenance": "tier_2a",
         "claimed": "Gemini-in-Workspace AI add-on; bundled in Business/Enterprise tiers",
         "usage": "Strong attach in Workspace base; meaningful seat uplift.",
         "real": "$1.5B (annualised)",
-        "flags": "AI repackaging of existing Workspace SKU = trad_saas. Distinct from Gemini frontier (provider) and GCP (trad_compute) \u2014 see Decision D9.",
+        "flags": "AI repackaging of existing Workspace SKU. Scored as a trad-SaaS AI seat product, separate from Gemini's frontier model business and from Google Cloud infrastructure revenue.",
         "growth": "fast",
-        "prevGrowth": "n/a"
+        "prevGrowth": "n/a",
+        "product": "Google Workspace AI",
+        "parent": "Alphabet",
+        "archetype": "Bundled at scale, immaterial at parent",
+        "arrShare": {
+          "value": "~5%",
+          "denominator": "Workspace ARR (~$30B est.)",
+          "denominatorType": "business_unit"
+        },
+        "postureScores": {
+          "disclosure": 3,
+          "bundling": 2,
+          "pricing": 1,
+          "cost": 2,
+          "acceleration": 3,
+          "_citations": {
+            "bundling": "Google Workspace pricing \u2014 Gemini repackaged into Business Standard/Plus and Enterprise tiers; no standalone AI add-on SKU after Jan-2025 consolidation.",
+            "cost": "Alphabet Q1 2026 earnings call \u2014 no explicit AI-attributable margin compression in Cloud GM commentary; mostly capex-driven."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "Strong attach in Workspace base; meaningful seat uplift. Repackaging of existing Workspace SKUs \u2014 no pricing model change. Scoped narrowly to Workspace AI seats, separate from Gemini's frontier model business and from Google Cloud infrastructure revenue. No explicit AI cost attribution in Alphabet gross margin commentary."
       },
       {
         "id": "salesforce_agentforce",
@@ -1607,7 +1673,29 @@
             0.35
           ],
           "realNote": "Real GenAI ~$250-350M (rest is Data Cloud, Informatica, legacy Einstein); ~50% of 29K deals free/seeded."
-        }
+        },
+        "product": "Salesforce Agentforce",
+        "parent": "Salesforce",
+        "archetype": "Bold pricing, no real cost, no lift",
+        "arrShare": {
+          "value": "0.6\u20131.9%",
+          "denominator": "CRM total revenue ($41.5B FY25)",
+          "denominatorType": "parent_total"
+        },
+        "postureScores": {
+          "disclosure": 3,
+          "bundling": 5,
+          "pricing": 3,
+          "cost": 1,
+          "acceleration": 1,
+          "_citations": {
+            "bundling": "Salesforce pricing \u2014 Agentforce metered at $2/conversation premium add-on, separate from Sales/Service Cloud SKUs.",
+            "cost": "Salesforce Q4 FY26 earnings \u2014 non-GAAP gross margin flat at 77%; no observable AI-attributable compression despite Agentforce launch."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "$2 / conversation pricing exists but isn\u2019t exclusive \u2014 traditional Sales Cloud still the dominant commercial model. Gross margin flat at 77% = minimal AI COGS \u2014 high pricing posture without observable workload. ~50% of 29K deals are free or seeded. Agentforce represents under 2% of $41.5B revenue."
       },
       {
         "id": "databricks_mosaic",
@@ -1623,7 +1711,30 @@
         "real": "$500-700M editorial",
         "flags": "Private; reporting via press; AI-attributable share is editorial. Trad_saas because Lakehouse is the underlying product being AI-augmented.",
         "growth": "fast",
-        "prevGrowth": "n/a"
+        "prevGrowth": "n/a",
+        "product": "Databricks (Mosaic + AI)",
+        "parent": "Databricks",
+        "archetype": "Private momentum, opaque margins",
+        "arrShare": {
+          "value": "~17\u201323%",
+          "denominator": "Databricks ARR (~$3B+ run-rate)",
+          "denominatorType": "business_unit"
+        },
+        "postureScores": {
+          "disclosure": 3,
+          "bundling": 4,
+          "pricing": 2,
+          "cost": 0,
+          "acceleration": 4,
+          "_citations": {
+            "bundling": "Databricks pricing \u2014 Mosaic AI Model Serving + Vector Search + Agent Bricks metered as separate consumption SKUs on top of base Lakehouse compute.",
+            "cost": "NA \u2014 Databricks is private; no public gross margin disclosure."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "gmUnavailable": true,
+        "watchSignals": "Strong enterprise attach. AI workloads called out as largest growth driver of 2025 ARR uplift. Already consumption-based \u2014 AI doesn\u2019t change the model. Reporting via press, not disclosure. Trad_saas because Lakehouse is the underlying product being AI-augmented. GM not publicly available."
       },
       {
         "id": "servicenow_now_assist",
@@ -1646,7 +1757,29 @@
             0.5
           ],
           "realNote": "Cleanest reporter \u2014 AI is genuine premium SKU, but Pro Plus bundles non-AI features."
-        }
+        },
+        "product": "ServiceNow Now Assist",
+        "parent": "ServiceNow",
+        "archetype": "Cleanest disclosure, real share",
+        "arrShare": {
+          "value": "~3.6\u20134.5%",
+          "denominator": "NOW total revenue (~$11B FY24)",
+          "denominatorType": "parent_total"
+        },
+        "postureScores": {
+          "disclosure": 5,
+          "bundling": 5,
+          "pricing": 2,
+          "cost": 4,
+          "acceleration": 3,
+          "_citations": {
+            "bundling": "ServiceNow pricing \u2014 Pro Plus is a discrete premium SKU above Pro, marketed as the AI-bundled tier; Now Assist is the differentiator at the upgrade.",
+            "cost": "ServiceNow Q4 2025 earnings \u2014 non-GAAP gross margin down 1.7pp (79.2% \u2192 77.5%) with explicit AI / inference cost attribution in management commentary."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "Pro Plus premium take est. 30\u201360% (UpperEdge) \u2014 but still a tier upgrade on the existing seat model, not a new pricing model. Inference cost est. $15\u201350M/yr on $600M+ ACV = 92\u201397% \u201cAI margin.\u201d Gross margin down 1.7pp (79.2 \u2192 77.5%) with explicit AI attribution. Highest share-of-parent in the cohort and the cleanest disclosure trail."
       },
       {
         "id": "adobe_firefly",
@@ -1669,7 +1802,29 @@
             0.3
           ],
           "realNote": "Some cannibalises stock photo revenue; growth flat at 10-11% pre and post AI."
-        }
+        },
+        "product": "Adobe Firefly",
+        "parent": "Adobe",
+        "archetype": "Credits without lift",
+        "arrShare": {
+          "value": "0.9\u20131.4%",
+          "denominator": "ADBE total revenue (~$22B FY24)",
+          "denominatorType": "parent_total"
+        },
+        "postureScores": {
+          "disclosure": 2,
+          "bundling": 2,
+          "pricing": 3,
+          "cost": 1,
+          "acceleration": 1,
+          "_citations": {
+            "bundling": "Adobe pricing \u2014 generative credits bundled into Creative Cloud tiers (no standalone Firefly subscription); Firefly Premium add-on exists but secondary.",
+            "cost": "Adobe FY25 earnings \u2014 non-GAAP gross margin stable at ~88%; no AI-attributable compression in management commentary."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "75% of Fortune 500 \u201cadopted\u201d but free tier inflates. Generative credits represent a real pricing model layer (usage-tied) even though credits are bundled into Creative Cloud tiers. Growth completely flat at 10\u201311% pre AND post AI. GM stable at 88% \u2014 no observable AI cost in margins. Firefly has moved the needle zero on top-line growth."
       },
       {
         "id": "microsoft_dynamics_copilot",
@@ -1683,9 +1838,31 @@
         "claimed": "Dynamics 365 Copilot SKUs \u2014 Sales/Service/Finance/Supply Chain",
         "usage": "Smaller surface than M365 Copilot; targeted to Dynamics base",
         "real": "$300-500M editorial",
-        "flags": "Per Decision D9, sits inside Microsoft AI run-rate gross; carved out into trad_saas alongside M365 Copilot + GitHub Copilot.",
+        "flags": "Sits inside Microsoft's reported AI run-rate gross; carved out into the trad-SaaS AI cohort alongside M365 Copilot and GitHub Copilot.",
         "growth": "fast",
-        "prevGrowth": "n/a"
+        "prevGrowth": "n/a",
+        "product": "Dynamics 365 Copilot",
+        "parent": "Microsoft",
+        "archetype": "Niche scale, shared infra cost",
+        "arrShare": {
+          "value": "~7\u20138%",
+          "denominator": "Dynamics 365 ARR (~$5\u20136B)",
+          "denominatorType": "business_unit"
+        },
+        "postureScores": {
+          "disclosure": 3,
+          "bundling": 4,
+          "pricing": 2,
+          "cost": 5,
+          "acceleration": 3,
+          "_citations": {
+            "bundling": "Microsoft Dynamics 365 pricing \u2014 Sales/Service/Finance/Supply Chain Copilot SKUs $30\u201350/user/mo on top of base Dynamics seats (premium add-on).",
+            "cost": "Microsoft FY26 Q3 earnings \u2014 Cloud GM compression (-3pp) is parent-level AI infra cost; Dynamics inherits the same shared GM by construction (Microsoft trio shares parent GM)."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "Smaller surface than M365 Copilot, targeted to Dynamics base. Sits inside Microsoft's reported AI run-rate gross. Inherits parent-level AI cost realisation (Microsoft cloud margin -3pp) \u2014 the Microsoft Copilot trio shares parent GM, by design. Editorial estimate, immaterial at parent scale."
       },
       {
         "id": "notion_ai",
@@ -1701,7 +1878,30 @@
         "real": "$200-300M",
         "flags": "Private; reporting via press, not disclosure. Repackaging existing Notion product with AI = trad_saas.",
         "growth": "fast",
-        "prevGrowth": "n/a"
+        "prevGrowth": "n/a",
+        "product": "Notion AI",
+        "parent": "Notion",
+        "archetype": "Private add-on momentum",
+        "arrShare": {
+          "value": "~20\u201330%",
+          "denominator": "Notion ARR (~$1B est.)",
+          "denominatorType": "business_unit"
+        },
+        "postureScores": {
+          "disclosure": 3,
+          "bundling": 5,
+          "pricing": 2,
+          "cost": 0,
+          "acceleration": 4,
+          "_citations": {
+            "bundling": "Notion pricing \u2014 Notion AI is a $10/user/month add-on on top of Plus/Business/Enterprise seats (premium add-on, not absorbed).",
+            "cost": "NA \u2014 Notion is private; no public gross margin disclosure."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "gmUnavailable": true,
+        "watchSignals": "Strong attach in mid-market; consumer take-rate softer. $10/seat AI add-on \u2014 premium tier on existing seat model. High share of own (private) ARR. Repackaging existing Notion product with AI. Reporting via press, not disclosure. GM not publicly available."
       },
       {
         "id": "intuit_assist",
@@ -1717,7 +1917,29 @@
         "real": "$150-250M editorial",
         "flags": "Repackaging existing SKUs with AI = trad_saas.",
         "growth": "12-13%",
-        "prevGrowth": "13%"
+        "prevGrowth": "13%",
+        "product": "Intuit Assist",
+        "parent": "Intuit",
+        "archetype": "Bundled, stable, invisible",
+        "arrShare": {
+          "value": "0.9\u20131.6%",
+          "denominator": "INTU total revenue (~$16B FY24)",
+          "denominatorType": "parent_total"
+        },
+        "postureScores": {
+          "disclosure": 2,
+          "bundling": 1,
+          "pricing": 1,
+          "cost": 2,
+          "acceleration": 2,
+          "_citations": {
+            "bundling": "Intuit pricing \u2014 Assist bundled into existing QuickBooks/TurboTax/Mailchimp tiers at no upcharge; no standalone AI SKU disclosed.",
+            "cost": "Intuit FY26 narrative \u2014 non-GAAP gross margin ~83\u201384%, minimal AI-attributable movement; bundled inference cost not broken out."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "Active rollout 2025\u201326; usage growing. Repackaging existing SKUs with AI \u2014 no pricing model change, no premium tier, no separate disclosure. Growth flat vs pre-AI baseline. No observable AI cost in Intuit GM."
       },
       {
         "id": "oracle_fusion_ai",
@@ -1731,9 +1953,31 @@
         "claimed": "Fusion AI agents \u2014 bundled into Oracle SaaS apps; no discrete revenue disclosure",
         "usage": "Limited disclosure; small relative to OCI infra revenue",
         "real": "~$100-300M editorial",
-        "flags": "Distinct from OCI (trad_compute). Per Decision D9, Oracle splits across Fusion AI (trad_saas) and OCI AI infra (trad_compute).",
+        "flags": "Distinct from OCI infrastructure revenue. Oracle's AI footprint splits across Fusion AI (the SaaS apps line) and OCI AI infrastructure (the compute line), which sit in separate cohorts.",
         "growth": "fast",
-        "prevGrowth": "n/a"
+        "prevGrowth": "n/a",
+        "product": "Oracle Fusion AI",
+        "parent": "Oracle",
+        "archetype": "Hidden in the bundle",
+        "arrShare": {
+          "value": "~1.3%",
+          "denominator": "Oracle Cloud Applications (~$15B)",
+          "denominatorType": "business_unit"
+        },
+        "postureScores": {
+          "disclosure": 2,
+          "bundling": 1,
+          "pricing": 1,
+          "cost": 2,
+          "acceleration": 3,
+          "_citations": {
+            "bundling": "Oracle Fusion Cloud pricing \u2014 Fusion AI agents bundled into Cloud Apps SKUs without discrete AI add-on; no separately-priced AI tier.",
+            "cost": "Oracle Q3 FY26 earnings \u2014 gross margin pressure visible at parent but driven by OCI capex/depreciation, not Fusion AI inference cost."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "Distinct from OCI infrastructure revenue: Oracle's AI footprint splits across Fusion AI (the SaaS apps line) and OCI AI infrastructure (the compute line), which sit in separate cohorts. Limited public disclosure \u2014 bundled into Oracle SaaS without a discrete revenue line. Margin pressure visible at parent but mostly OCI capex, not Fusion AI software cost."
       },
       {
         "id": "snowflake_cortex",
@@ -1749,7 +1993,29 @@
         "real": "~$150-250M editorial",
         "flags": "AI-on-data feature stack; trad_saas because it's repackaging Snowflake data platform with AI.",
         "growth": "fast",
-        "prevGrowth": "n/a"
+        "prevGrowth": "n/a",
+        "product": "Snowflake Cortex",
+        "parent": "Snowflake",
+        "archetype": "Consumption-bundled",
+        "arrShare": {
+          "value": "~4.3\u20137.1%",
+          "denominator": "SNOW total revenue (~$3.5B FY25)",
+          "denominatorType": "parent_total"
+        },
+        "postureScores": {
+          "disclosure": 3,
+          "bundling": 2,
+          "pricing": 3,
+          "cost": 2,
+          "acceleration": 3,
+          "_citations": {
+            "bundling": "Snowflake pricing \u2014 Cortex AI / ML functions metered as part of existing Data Cloud consumption credits; no separate AI SKU.",
+            "cost": "Snowflake Q4 FY26 earnings \u2014 non-GAAP product gross margin stable; AI inference cost hidden inside total platform consumption with no discrete AI margin call-out."
+          },
+          "_prototype": true,
+          "_lastVerified": "2026-Q1"
+        },
+        "watchSignals": "Bundled into Data Cloud consumption \u2014 AI extends an already-consumption-based model. Material share of SNOW total revenue (~5%). AI-on-data feature stack repackages Snowflake\u2019s existing platform. Margin stable; AI cost hidden inside total platform consumption."
       },
       {
         "id": "atlassian_intelligence",
@@ -7948,7 +8214,7 @@
     "_notes": "Three-segment model: Frontier lab compute (the circular-financing line \u2014 Model Providers paying external hyperscalers/neoclouds), AI workload compute (AI Natives + enterprises + sovereign workloads), Hosted model APIs (packaged token APIs). Pass-through applies to Hosted model APIs only. Copilot scoped OUT \u2014 tracked separately under copilot_excluded_*. See /methodology.html \u00a7Compute Revenue \u2014 three-segment model."
   },
   "computeProviders": {
-    "_generatedAt": "2026-05-10T10:26:34Z",
+    "_generatedAt": "2026-05-11T00:37:02Z",
     "_doc": "wq-096 \u2014 Tier 4 (trad_compute) and Tier 5 (ai_native_compute) records. tradCompute carries appsCarveout pointing at trad_saas record IDs whose ARR is deducted to produce arrNetOfAppsCarveout. Per Decision D9, multi-tier companies (Google, Microsoft, Oracle) split into separate records per tier; Microsoft has no Frontier entry.",
     "tradCompute": [
       {
@@ -8132,7 +8398,7 @@
     ]
   },
   "arrModel": {
-    "_generatedAt": "2026-05-10T10:26:34Z",
+    "_generatedAt": "2026-05-11T00:37:02Z",
     "_brief": "wq-096",
     "_doc": "Five-tier revenue model aggregator. apps_total + compute_net = industry_total within $0.1B tolerance. ai_native_total / trad_total cross-cut the apps/compute split per the editorial axis (Decision D1) and do not sum to industry_total because pass-through deductions are netted at the compute layer.",
     "asOf": "2026-Q1-annualised",

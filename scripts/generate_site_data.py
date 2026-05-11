@@ -712,6 +712,16 @@ def generate(entities_path, existing_site_data_path, output_path):
         print(f"  wq-096 emit failed: {e}")
         raise
 
+    # ── wq-101: vendor-posture cohort scores. Must run after wq096_emit, which
+    # rebuilds enterpriseReality from evidence and would otherwise drop scores.
+    try:
+        import wq101_extend_posture
+        n = wq101_extend_posture.apply(site)
+        print(f"  wq-101: extended {n}/12 cohort entries with postureScores")
+    except Exception as e:
+        print(f"  wq-101 posture extend failed: {e}")
+        raise
+
     # ── wq-055: write FULL Sankey from market_aggregates engine output ──
     # Per brief §2 #3: providers, costParams.vcSubsidy, buyers, channels,
     # outcomes, totals — all derived consistently from one engine block.
