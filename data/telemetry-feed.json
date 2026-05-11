@@ -769,7 +769,343 @@
         "claim": "HF Hub openai-community/gpt2-xl: 203,548 downloads, 378 likes (telemetry)."
       },
       "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260511-src-069-048",
+      "type": "hiring_snapshot",
+      "entity": "anthropic",
+      "source_id": "src-069",
+      "source_url": "https://boards-api.greenhouse.io/v1/boards/anthropic",
+      "scraped_at": "2026-05-11T05:38:55Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "anthropic",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 422,
+          "open_roles_ai_titled": 137,
+          "open_roles_prompt_engineer": 2,
+          "ai_titled_share": 0.325,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "anthropic-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-069-049",
+      "type": "hiring_snapshot",
+      "entity": "fireworks",
+      "source_id": "src-069",
+      "source_url": "https://boards-api.greenhouse.io/v1/boards/fireworksai",
+      "scraped_at": "2026-05-11T05:38:55Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "fireworks",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 30,
+          "open_roles_ai_titled": 10,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.333,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "fireworks-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-069-050",
+      "type": "hiring_snapshot",
+      "entity": "glean",
+      "source_id": "src-069",
+      "source_url": "https://boards-api.greenhouse.io/v1/boards/gleanwork",
+      "scraped_at": "2026-05-11T05:38:55Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "glean",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 166,
+          "open_roles_ai_titled": 11,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.066,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "glean-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-069-051",
+      "type": "hiring_snapshot",
+      "entity": "databricks",
+      "source_id": "src-069",
+      "source_url": "https://boards-api.greenhouse.io/v1/boards/databricks",
+      "scraped_at": "2026-05-11T05:38:55Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "databricks",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 813,
+          "open_roles_ai_titled": 132,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.162,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "databricks-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-069-052",
+      "type": "hiring_snapshot",
+      "entity": "scale",
+      "source_id": "src-069",
+      "source_url": "https://boards-api.greenhouse.io/v1/boards/scaleai",
+      "scraped_at": "2026-05-11T05:38:55Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "scale",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 177,
+          "open_roles_ai_titled": 59,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.333,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "scale-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-070-053",
+      "type": "hiring_snapshot",
+      "entity": "mistral",
+      "source_id": "src-070",
+      "source_url": "https://api.lever.co/v0/postings/mistral",
+      "scraped_at": "2026-05-11T05:38:57Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "mistral",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 162,
+          "open_roles_ai_titled": 53,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.327,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "mistral-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-054",
+      "type": "hiring_snapshot",
+      "entity": "cohere",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/cohere",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "cohere",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 128,
+          "open_roles_ai_titled": 11,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.086,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "cohere-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-055",
+      "type": "hiring_snapshot",
+      "entity": "lambda",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/lambda",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "lambda",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 32,
+          "open_roles_ai_titled": 0,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.0,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "lambda-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-056",
+      "type": "hiring_snapshot",
+      "entity": "modal",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/modal",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "modal",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 28,
+          "open_roles_ai_titled": 0,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.0,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "modal-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-057",
+      "type": "hiring_snapshot",
+      "entity": "anyscale",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/anyscale",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "anyscale",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 7,
+          "open_roles_ai_titled": 1,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.143,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "anyscale-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-058",
+      "type": "hiring_snapshot",
+      "entity": "cursor",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/cursor",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "cursor",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 86,
+          "open_roles_ai_titled": 2,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.023,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "cursor-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-059",
+      "type": "hiring_snapshot",
+      "entity": "harvey",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/harvey",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "harvey",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 250,
+          "open_roles_ai_titled": 0,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.0,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "harvey-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-060",
+      "type": "hiring_snapshot",
+      "entity": "perplexity",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/perplexity",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "perplexity",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 65,
+          "open_roles_ai_titled": 14,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.215,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "perplexity-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-061",
+      "type": "hiring_snapshot",
+      "entity": "elevenlabs",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/elevenlabs",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "elevenlabs",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 141,
+          "open_roles_ai_titled": 1,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.007,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "elevenlabs-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-062",
+      "type": "hiring_snapshot",
+      "entity": "runway",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/runway",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "runway",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 4,
+          "open_roles_ai_titled": 0,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.0,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "runway-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260511-src-071-063",
+      "type": "hiring_snapshot",
+      "entity": "writer",
+      "source_id": "src-071",
+      "source_url": "https://api.ashbyhq.com/posting-api/job-board/writer",
+      "scraped_at": "2026-05-11T05:39:24Z",
+      "data": {
+        "type": "hiring_snapshot",
+        "company_slug": "writer",
+        "window": "2026-W20",
+        "metrics": {
+          "open_roles_total": 51,
+          "open_roles_ai_titled": 6,
+          "open_roles_prompt_engineer": 0,
+          "ai_titled_share": 0.118,
+          "new_ai_roles_7d": 0
+        }
+      },
+      "metric_key": "writer-hiring_snapshot"
     }
   ],
-  "lastWritten": "2026-05-04T23:59:15Z"
+  "lastWritten": "2026-05-11T05:39:24Z"
 }
