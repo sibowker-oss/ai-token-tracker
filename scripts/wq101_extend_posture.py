@@ -32,9 +32,13 @@ POSTURE = {
             "denominator": "MSFT total revenue (~$245B FY24)",
             "denominatorType": "parent_total",
         },
-        "postureScores": {"disclosure": 4, "bundling": 4, "pricing": 2, "cost": 5, "acceleration": 3},
+        "aiArr": {
+            "value": "~$2.5–3.5B",
+            "basis": "real, net of discounting",
+        },
+        "postureScores": {"disclosure": 4, "bundling": 5, "pricing": 2, "cost": 5, "acceleration": 3},
         "scoreCitations": {
-            "bundling": "Microsoft 365 Copilot pricing page — separate $30/user/mo add-on on top of E3/E5 SKUs (premium add-on, not absorbed).",
+            "bundling": "Distinct $30/user/mo product line with its own SKU, marketed as a flagship Microsoft surface alongside Windows and Office at top-of-company messaging.",
             "cost": "Microsoft FY26 Q3 earnings — Cloud gross margin down 3pp explicitly attributed to AI infrastructure costs.",
         },
         "watchSignals": (
@@ -53,10 +57,14 @@ POSTURE = {
             "denominator": "GitHub ARR (~$2B)",
             "denominatorType": "business_unit",
         },
+        "aiArr": {
+            "value": "$1–2.3B",
+            "basis": "AI is the product",
+        },
         # D7: with GitHub-ARR denominator, disclosure rises 2 → 5
         "postureScores": {"disclosure": 5, "bundling": 5, "pricing": 2, "cost": 5, "acceleration": 5},
         "scoreCitations": {
-            "bundling": "GitHub Copilot pricing page — three premium tiers ($10 Pro / $19 Business / $39 Enterprise) separate from base GitHub plans.",
+            "bundling": "Separately-priced product line with three tiers ($10 Pro / $19 Business / $39 Enterprise), branded as the headline AI developer product across GitHub and Microsoft messaging.",
             "cost": "SemiAnalysis Aug-2025 — Microsoft added Anthropic models 'at great expense to margins.' Usage caps introduced mid-2025 are explicit cost-control signal.",
         },
         "watchSignals": (
@@ -76,10 +84,14 @@ POSTURE = {
             "denominator": "Workspace ARR (~$30B est.)",
             "denominatorType": "business_unit",
         },
+        "aiArr": {
+            "value": "~$1.5B",
+            "basis": "annualised",
+        },
         # D7: with Workspace denominator, disclosure rises 2 → 3
         "postureScores": {"disclosure": 3, "bundling": 2, "pricing": 1, "cost": 2, "acceleration": 3},
         "scoreCitations": {
-            "bundling": "Google Workspace pricing — Gemini repackaged into Business Standard/Plus and Enterprise tiers; no standalone AI add-on SKU after Jan-2025 consolidation.",
+            "bundling": "Gemini repackaged into existing Business Standard/Plus and Enterprise tiers since Jan-2025; no standalone AI SKU and only modest brand prominence inside Workspace.",
             "cost": "Alphabet Q1 2026 earnings call — no explicit AI-attributable margin compression in Cloud GM commentary; mostly capex-driven.",
         },
         "watchSignals": (
@@ -99,9 +111,13 @@ POSTURE = {
             "denominator": "CRM total revenue ($41.5B FY25)",
             "denominatorType": "parent_total",
         },
+        "aiArr": {
+            "value": "~$250–350M",
+            "basis": "real GenAI only",
+        },
         "postureScores": {"disclosure": 3, "bundling": 5, "pricing": 3, "cost": 1, "acceleration": 1},
         "scoreCitations": {
-            "bundling": "Salesforce pricing — Agentforce metered at $2/conversation premium add-on, separate from Sales/Service Cloud SKUs.",
+            "bundling": "Sold as a distinct $2-per-conversation product line, separate from Sales/Service Cloud SKUs, and used as the headline platform message company-wide.",
             "cost": "Salesforce Q4 FY26 earnings — non-GAAP gross margin flat at 77%; no observable AI-attributable compression despite Agentforce launch.",
         },
         "watchSignals": (
@@ -120,9 +136,13 @@ POSTURE = {
             "denominator": "Databricks ARR (~$3B+ run-rate)",
             "denominatorType": "business_unit",
         },
+        "aiArr": {
+            "value": "$500–700M",
+            "basis": "editorial estimate",
+        },
         "postureScores": {"disclosure": 3, "bundling": 4, "pricing": 2, "cost": 0, "acceleration": 4},
         "scoreCitations": {
-            "bundling": "Databricks pricing — Mosaic AI Model Serving + Vector Search + Agent Bricks metered as separate consumption SKUs on top of base Lakehouse compute.",
+            "bundling": "Mosaic AI Model Serving, Vector Search and Agent Bricks priced as discrete consumption SKUs under a unified Mosaic AI brand at the top of Databricks platform messaging.",
             "cost": "NA — Databricks is private; no public gross margin disclosure.",
         },
         "gmUnavailable": True,
@@ -142,9 +162,13 @@ POSTURE = {
             "denominator": "NOW total revenue (~$11B FY24)",
             "denominatorType": "parent_total",
         },
-        "postureScores": {"disclosure": 5, "bundling": 5, "pricing": 2, "cost": 4, "acceleration": 3},
+        "aiArr": {
+            "value": "~$400–500M",
+            "basis": "premium-SKU ACV",
+        },
+        "postureScores": {"disclosure": 5, "bundling": 4, "pricing": 2, "cost": 4, "acceleration": 3},
         "scoreCitations": {
-            "bundling": "ServiceNow pricing — Pro Plus is a discrete premium SKU above Pro, marketed as the AI-bundled tier; Now Assist is the differentiator at the upgrade.",
+            "bundling": "Now Assist is the differentiator inside the new Pro Plus premium tier rather than a standalone SKU — heavily marketed, but the AI capability is sold by upgrading the existing platform tier.",
             "cost": "ServiceNow Q4 2025 earnings — non-GAAP gross margin down 1.7pp (79.2% → 77.5%) with explicit AI / inference cost attribution in management commentary.",
         },
         "watchSignals": (
@@ -164,9 +188,13 @@ POSTURE = {
             "denominator": "ADBE total revenue (~$22B FY24)",
             "denominatorType": "parent_total",
         },
+        "aiArr": {
+            "value": "~$200–300M",
+            "basis": "incremental",
+        },
         "postureScores": {"disclosure": 2, "bundling": 2, "pricing": 3, "cost": 1, "acceleration": 1},
         "scoreCitations": {
-            "bundling": "Adobe pricing — generative credits bundled into Creative Cloud tiers (no standalone Firefly subscription); Firefly Premium add-on exists but secondary.",
+            "bundling": "Firefly generative credits absorbed into Creative Cloud tiers with no standalone subscription; a secondary Firefly Premium add-on exists but does not anchor Adobe's SKU stack.",
             "cost": "Adobe FY25 earnings — non-GAAP gross margin stable at ~88%; no AI-attributable compression in management commentary.",
         },
         "watchSignals": (
@@ -186,10 +214,14 @@ POSTURE = {
             "denominator": "Dynamics 365 ARR (~$5–6B)",
             "denominatorType": "business_unit",
         },
+        "aiArr": {
+            "value": "$300–500M",
+            "basis": "editorial estimate",
+        },
         # D7: with Dynamics denominator, disclosure rises 1 → 3
         "postureScores": {"disclosure": 3, "bundling": 4, "pricing": 2, "cost": 5, "acceleration": 3},
         "scoreCitations": {
-            "bundling": "Microsoft Dynamics 365 pricing — Sales/Service/Finance/Supply Chain Copilot SKUs $30–50/user/mo on top of base Dynamics seats (premium add-on).",
+            "bundling": "Copilot add-ons for Sales/Service/Finance/Supply Chain priced as $30–50/user/mo premium SKUs on top of existing Dynamics modules under the Copilot product brand.",
             "cost": "Microsoft FY26 Q3 earnings — Cloud GM compression (-3pp) is parent-level AI infra cost; Dynamics inherits the same shared GM by construction (Microsoft trio shares parent GM).",
         },
         "watchSignals": (
@@ -208,9 +240,13 @@ POSTURE = {
             "denominator": "Notion ARR (~$1B est.)",
             "denominatorType": "business_unit",
         },
-        "postureScores": {"disclosure": 3, "bundling": 5, "pricing": 2, "cost": 0, "acceleration": 4},
+        "aiArr": {
+            "value": "$200–300M",
+            "basis": "estimated late 2025",
+        },
+        "postureScores": {"disclosure": 3, "bundling": 4, "pricing": 2, "cost": 0, "acceleration": 4},
         "scoreCitations": {
-            "bundling": "Notion pricing — Notion AI is a $10/user/month add-on on top of Plus/Business/Enterprise seats (premium add-on, not absorbed).",
+            "bundling": "$10/user/month add-on attached to existing Plus/Business/Enterprise seats — discrete in price but positioned as a feature add-on rather than a separate Notion product line.",
             "cost": "NA — Notion is private; no public gross margin disclosure.",
         },
         "gmUnavailable": True,
@@ -230,9 +266,13 @@ POSTURE = {
             "denominator": "INTU total revenue (~$16B FY24)",
             "denominatorType": "parent_total",
         },
+        "aiArr": {
+            "value": "$150–250M",
+            "basis": "editorial estimate",
+        },
         "postureScores": {"disclosure": 2, "bundling": 1, "pricing": 1, "cost": 2, "acceleration": 2},
         "scoreCitations": {
-            "bundling": "Intuit pricing — Assist bundled into existing QuickBooks/TurboTax/Mailchimp tiers at no upcharge; no standalone AI SKU disclosed.",
+            "bundling": "Assist absorbed into existing QuickBooks, TurboTax and Mailchimp tiers at no upcharge — no separate AI SKU and limited top-line brand prominence.",
             "cost": "Intuit FY26 narrative — non-GAAP gross margin ~83–84%, minimal AI-attributable movement; bundled inference cost not broken out.",
         },
         "watchSignals": (
@@ -250,10 +290,14 @@ POSTURE = {
             "denominator": "Oracle Cloud Applications (~$15B)",
             "denominatorType": "business_unit",
         },
+        "aiArr": {
+            "value": "~$100–300M",
+            "basis": "editorial estimate",
+        },
         # D7: with ORCL Apps denominator, disclosure rises 1 → 2
         "postureScores": {"disclosure": 2, "bundling": 1, "pricing": 1, "cost": 2, "acceleration": 3},
         "scoreCitations": {
-            "bundling": "Oracle Fusion Cloud pricing — Fusion AI agents bundled into Cloud Apps SKUs without discrete AI add-on; no separately-priced AI tier.",
+            "bundling": "Fusion AI agents rolled into existing Cloud Apps SKUs with no discrete AI tier or distinct product brand at the Oracle messaging level.",
             "cost": "Oracle Q3 FY26 earnings — gross margin pressure visible at parent but driven by OCI capex/depreciation, not Fusion AI inference cost.",
         },
         "watchSignals": (
@@ -273,9 +317,13 @@ POSTURE = {
             "denominator": "SNOW total revenue (~$3.5B FY25)",
             "denominatorType": "parent_total",
         },
+        "aiArr": {
+            "value": "~$150–250M",
+            "basis": "editorial estimate",
+        },
         "postureScores": {"disclosure": 3, "bundling": 2, "pricing": 3, "cost": 2, "acceleration": 3},
         "scoreCitations": {
-            "bundling": "Snowflake pricing — Cortex AI / ML functions metered as part of existing Data Cloud consumption credits; no separate AI SKU.",
+            "bundling": "Cortex AI/ML functions metered inside existing Data Cloud consumption credits with no separate SKU; Cortex is branded but the catalog structure is unchanged.",
             "cost": "Snowflake Q4 FY26 earnings — non-GAAP product gross margin stable; AI inference cost hidden inside total platform consumption with no discrete AI margin call-out.",
         },
         "watchSignals": (
@@ -295,9 +343,9 @@ VENDOR_POSTURE_METHODOLOGY = {
     "axes": ["disclosure", "bundling", "pricing", "cost", "acceleration"],
     "axisLabels": {
         "disclosure": "DISC",
-        "bundling": "BNDL",
+        "bundling": "PKG",
         "pricing": "PRICE",
-        "cost": "COST",
+        "cost": "GM",
         "acceleration": "ACCEL",
     },
     "lastUpdated": "2026-05-09",
@@ -329,6 +377,8 @@ def apply(site):
             entry["parent"] = spec["parent"]
         entry["archetype"] = spec["archetype"]
         entry["arrShare"] = spec["arrShare"]
+        if spec.get("aiArr"):
+            entry["aiArr"] = dict(spec["aiArr"])
         scores = dict(spec["postureScores"])
         # D4 path-b: drafted citations for Bundling and Cost editorial scores;
         # Simon validates each at staging review before clearing _prototype.
@@ -356,7 +406,7 @@ def main():
     data = json.loads(text)
     count = apply(data)
     SITE_DATA.write_text(
-        json.dumps(data, indent=2, ensure_ascii=False) + "\n",
+        json.dumps(data, indent=2) + "\n",
         encoding="utf-8",
     )
     print(f"OK: extended {count}/12 cohort entries; vendorPostureMethodology block written.")
