@@ -1105,7 +1105,441 @@
         }
       },
       "metric_key": "writer-hiring_snapshot"
+    },
+    {
+      "id": "tel-20260512-src-079-064",
+      "type": "github_stars",
+      "entity": "anthropics",
+      "source_id": "src-079",
+      "source_url": "https://api.github.com/repos/anthropics/anthropic-sdk-python",
+      "scraped_at": "2026-05-12T05:07:10Z",
+      "data": {
+        "value": 3409,
+        "unit": "stars",
+        "claim": "GitHub anthropics/anthropic-sdk-python: 3409 stars, 662 forks (telemetry)."
+      },
+      "metric_key": "github_stars"
+    },
+    {
+      "id": "tel-20260512-src-079-065",
+      "type": "github_stars",
+      "entity": "openai",
+      "source_id": "src-079",
+      "source_url": "https://api.github.com/repos/openai/openai-python",
+      "scraped_at": "2026-05-12T05:07:10Z",
+      "data": {
+        "value": 30751,
+        "unit": "stars",
+        "claim": "GitHub openai/openai-python: 30751 stars, 4779 forks (telemetry)."
+      },
+      "metric_key": "github_stars"
+    },
+    {
+      "id": "tel-20260512-src-079-066",
+      "type": "github_stars",
+      "entity": "meta-llama",
+      "source_id": "src-079",
+      "source_url": "https://api.github.com/repos/meta-llama/llama-models",
+      "scraped_at": "2026-05-12T05:07:10Z",
+      "data": {
+        "value": 7600,
+        "unit": "stars",
+        "claim": "GitHub meta-llama/llama-models: 7600 stars, 1369 forks (telemetry)."
+      },
+      "metric_key": "github_stars"
+    },
+    {
+      "id": "tel-20260512-src-079-067",
+      "type": "github_stars",
+      "entity": "mistralai",
+      "source_id": "src-079",
+      "source_url": "https://api.github.com/repos/mistralai/mistral-inference",
+      "scraped_at": "2026-05-12T05:07:10Z",
+      "data": {
+        "value": 10799,
+        "unit": "stars",
+        "claim": "GitHub mistralai/mistral-inference: 10799 stars, 1045 forks (telemetry)."
+      },
+      "metric_key": "github_stars"
+    },
+    {
+      "id": "tel-20260512-src-079-068",
+      "type": "github_stars",
+      "entity": "deepseek-ai",
+      "source_id": "src-079",
+      "source_url": "https://api.github.com/repos/deepseek-ai/DeepSeek-V3",
+      "scraped_at": "2026-05-12T05:07:10Z",
+      "data": {
+        "value": 103466,
+        "unit": "stars",
+        "claim": "GitHub deepseek-ai/DeepSeek-V3: 103466 stars, 16729 forks (telemetry)."
+      },
+      "metric_key": "github_stars"
+    },
+    {
+      "id": "tel-20260512-src-079-069",
+      "type": "github_stars",
+      "entity": "huggingface",
+      "source_id": "src-079",
+      "source_url": "https://api.github.com/repos/huggingface/transformers",
+      "scraped_at": "2026-05-12T05:07:10Z",
+      "data": {
+        "value": 160501,
+        "unit": "stars",
+        "claim": "GitHub huggingface/transformers: 160501 stars, 33175 forks (telemetry)."
+      },
+      "metric_key": "github_stars"
+    },
+    {
+      "id": "tel-20260512-src-080-070",
+      "type": "package_downloads",
+      "entity": "meta-llama",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=meta-llama&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 9389311,
+        "unit": "downloads",
+        "claim": "HF Hub meta-llama/Llama-3.1-8B-Instruct: 9,389,311 downloads, 5811 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-071",
+      "type": "package_downloads",
+      "entity": "meta-llama",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=meta-llama&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 6896958,
+        "unit": "downloads",
+        "claim": "HF Hub meta-llama/Llama-3.2-1B-Instruct: 6,896,958 downloads, 1400 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-072",
+      "type": "package_downloads",
+      "entity": "meta-llama",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=meta-llama&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 3178304,
+        "unit": "downloads",
+        "claim": "HF Hub meta-llama/Meta-Llama-3-8B: 3,178,304 downloads, 6531 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-073",
+      "type": "package_downloads",
+      "entity": "meta-llama",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=meta-llama&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 2471785,
+        "unit": "downloads",
+        "claim": "HF Hub meta-llama/Llama-3.2-3B-Instruct: 2,471,785 downloads, 2124 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-074",
+      "type": "package_downloads",
+      "entity": "meta-llama",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=meta-llama&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 1686123,
+        "unit": "downloads",
+        "claim": "HF Hub meta-llama/Meta-Llama-3-8B-Instruct: 1,686,123 downloads, 4515 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-075",
+      "type": "package_downloads",
+      "entity": "mistralai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=mistralai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 3914752,
+        "unit": "downloads",
+        "claim": "HF Hub mistralai/Mistral-7B-Instruct-v0.3: 3,914,752 downloads, 2571 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-076",
+      "type": "package_downloads",
+      "entity": "mistralai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=mistralai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 3127047,
+        "unit": "downloads",
+        "claim": "HF Hub mistralai/Mistral-7B-Instruct-v0.2: 3,127,047 downloads, 3134 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-077",
+      "type": "package_downloads",
+      "entity": "mistralai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=mistralai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 1185323,
+        "unit": "downloads",
+        "claim": "HF Hub mistralai/Voxtral-Mini-4B-Realtime-2602: 1,185,323 downloads, 843 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-078",
+      "type": "package_downloads",
+      "entity": "mistralai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=mistralai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 1031772,
+        "unit": "downloads",
+        "claim": "HF Hub mistralai/Mistral-7B-v0.1: 1,031,772 downloads, 4084 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-079",
+      "type": "package_downloads",
+      "entity": "mistralai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=mistralai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 870926,
+        "unit": "downloads",
+        "claim": "HF Hub mistralai/Mistral-Small-3.2-24B-Instruct-2506: 870,926 downloads, 588 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-080",
+      "type": "package_downloads",
+      "entity": "deepseek-ai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=deepseek-ai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 11120947,
+        "unit": "downloads",
+        "claim": "HF Hub deepseek-ai/DeepSeek-V3.2: 11,120,947 downloads, 1431 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-081",
+      "type": "package_downloads",
+      "entity": "deepseek-ai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=deepseek-ai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 3633664,
+        "unit": "downloads",
+        "claim": "HF Hub deepseek-ai/DeepSeek-R1: 3,633,664 downloads, 13326 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-082",
+      "type": "package_downloads",
+      "entity": "deepseek-ai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=deepseek-ai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 2858454,
+        "unit": "downloads",
+        "claim": "HF Hub deepseek-ai/DeepSeek-OCR: 2,858,454 downloads, 3228 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-083",
+      "type": "package_downloads",
+      "entity": "deepseek-ai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=deepseek-ai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 2017835,
+        "unit": "downloads",
+        "claim": "HF Hub deepseek-ai/DeepSeek-V4-Pro: 2,017,835 downloads, 3861 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-084",
+      "type": "package_downloads",
+      "entity": "deepseek-ai",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=deepseek-ai&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 1725841,
+        "unit": "downloads",
+        "claim": "HF Hub deepseek-ai/DeepSeek-R1-0528: 1,725,841 downloads, 2447 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-085",
+      "type": "package_downloads",
+      "entity": "google",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=google&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 53356832,
+        "unit": "downloads",
+        "claim": "HF Hub google/electra-base-discriminator: 53,356,832 downloads, 105 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-086",
+      "type": "package_downloads",
+      "entity": "google",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=google&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 9119339,
+        "unit": "downloads",
+        "claim": "HF Hub google/gemma-4-31B-it: 9,119,339 downloads, 2603 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-087",
+      "type": "package_downloads",
+      "entity": "google",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=google&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 7179265,
+        "unit": "downloads",
+        "claim": "HF Hub google/gemma-4-26B-A4B-it: 7,179,265 downloads, 929 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-088",
+      "type": "package_downloads",
+      "entity": "google",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=google&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 5663281,
+        "unit": "downloads",
+        "claim": "HF Hub google/gemma-4-E4B-it: 5,663,281 downloads, 975 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-089",
+      "type": "package_downloads",
+      "entity": "google",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=google&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 4780326,
+        "unit": "downloads",
+        "claim": "HF Hub google/vit-base-patch16-224: 4,780,326 downloads, 958 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-090",
+      "type": "package_downloads",
+      "entity": "openai-community",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=openai-community&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 15869233,
+        "unit": "downloads",
+        "claim": "HF Hub openai-community/gpt2: 15,869,233 downloads, 3236 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-091",
+      "type": "package_downloads",
+      "entity": "openai-community",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=openai-community&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 2042727,
+        "unit": "downloads",
+        "claim": "HF Hub openai-community/gpt2-large: 2,042,727 downloads, 349 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-092",
+      "type": "package_downloads",
+      "entity": "openai-community",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=openai-community&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 737548,
+        "unit": "downloads",
+        "claim": "HF Hub openai-community/gpt2-medium: 737,548 downloads, 202 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-093",
+      "type": "package_downloads",
+      "entity": "openai-community",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=openai-community&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 402418,
+        "unit": "downloads",
+        "claim": "HF Hub openai-community/roberta-base-openai-detector: 402,418 downloads, 132 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
+    },
+    {
+      "id": "tel-20260512-src-080-094",
+      "type": "package_downloads",
+      "entity": "openai-community",
+      "source_id": "src-080",
+      "source_url": "https://huggingface.co/api/models?author=openai-community&limit=10&sort=downloads&direction=-1",
+      "scraped_at": "2026-05-12T05:07:11Z",
+      "data": {
+        "value": 188507,
+        "unit": "downloads",
+        "claim": "HF Hub openai-community/gpt2-xl: 188,507 downloads, 379 likes (telemetry)."
+      },
+      "metric_key": "hf_downloads"
     }
   ],
-  "lastWritten": "2026-05-11T05:39:24Z"
+  "lastWritten": "2026-05-12T05:07:11Z"
 }
