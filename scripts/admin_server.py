@@ -50,6 +50,28 @@ def save_json(path, data):
         json.dump(data, f, indent=2)
 
 
+def _git_commit_paths(paths, message):
+    """Stage and commit the given paths with the given message. Local-only.
+
+    Raises on failure so the caller can decide whether to swallow or surface.
+    Skipped silently if there is nothing to commit (e.g. paths unchanged).
+    """
+    rel = [os.path.relpath(p, ROOT_DIR) for p in paths]
+    add = subprocess.run(["git", "add", "--"] + rel, cwd=ROOT_DIR,
+                         capture_output=True, text=True)
+    if add.returncode != 0:
+        raise RuntimeError(f"git add failed: {add.stderr.strip()}")
+    # `git diff --cached --quiet` returns 1 when there are staged changes.
+    diff = subprocess.run(["git", "diff", "--cached", "--quiet", "--"] + rel,
+                          cwd=ROOT_DIR, capture_output=True, text=True)
+    if diff.returncode == 0:
+        return  # nothing staged → nothing to commit
+    commit = subprocess.run(["git", "commit", "-m", message, "--"] + rel,
+                            cwd=ROOT_DIR, capture_output=True, text=True)
+    if commit.returncode != 0:
+        raise RuntimeError(f"git commit failed: {commit.stderr.strip()}")
+
+
 class AdminHandler(SimpleHTTPRequestHandler):
 
     def __init__(self, *args, **kwargs):
@@ -692,6 +714,20 @@ PAGE CONTENT:
 
         inbox["lastProcessed"] = datetime.now().strftime("%Y-%m-%d")
         save_json(inbox_path, inbox)
+
+        # wq-103: snapshot the write into git immediately so a subsequent
+        # `git pull --rebase` can't silently discard in-flight extractions
+        # before the operator reviews them. Local commit only — never push.
+        # Failure here is non-fatal: the inbox write already succeeded.
+        if added > 0:
+            try:
+                _git_commit_paths(
+                    [inbox_path],
+                    f"inbox: extract {added} claim(s) from {source_id} via /api/extract-claims",
+                )
+            except Exception as ge:
+                print(f"  WARN: extract-claims auto-commit failed: {ge}", file=sys.stderr)
+
         return added
 
     # ── Add Company ──
