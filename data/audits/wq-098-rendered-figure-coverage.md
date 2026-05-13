@@ -1,6 +1,6 @@
 # wq-098 hotfix follow-up — rendered-figure vault coverage
 
-_Generated_: 2026-05-11T00:37:02Z
+_Generated_: 2026-05-12T22:43:42Z
 
 Every numeric figure rendered on `usage.html` (and its source). Generated on every site build by `scripts/wq096_emit.py` and read by reconcile assertion #9 (`a_rendered_figure_coverage`).
 

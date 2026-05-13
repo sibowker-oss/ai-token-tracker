@@ -2421,3 +2421,30 @@
 [INFO] inbox migration: minted 0 new vault dp(s); backfilled human_reviewed on 0 existing dp(s); skipped 19 malformed-unit item(s); total accepted inbox items: 165
 [INFO] site-data.json regenerated
 [INFO] apply_log: /Users/simonbowker/Developer/apac-ai-intel/data/apply_log.json
+
+=== apply_pipeline.py — 2026-05-11T00:46:34.380467Z ===
+[INFO] inbox migration: minted 0 new vault dp(s); backfilled human_reviewed on 0 existing dp(s); skipped 19 malformed-unit item(s); total accepted inbox items: 165
+[INFO] site-data.json regenerated
+[INFO] apply_log: /Users/simonbowker/Developer/apac-ai-intel/data/apply_log.json
+
+=== apply_pipeline.py — 2026-05-11T23:16:15.343180Z ===
+[INFO] inbox migration: minted 0 new vault dp(s); backfilled human_reviewed on 0 existing dp(s); skipped 19 malformed-unit item(s); total accepted inbox items: 165
+[INFO] site-data.json regenerated
+[INFO] apply_log: /Users/simonbowker/Developer/apac-ai-intel/data/apply_log.json
+
+=== apply_pipeline.py — 2026-05-12T22:43:42.077143Z ===
+[MIGRATE] created dp-260 from inbox item extract-20260511-src-107-1: OpenAI is reportedly sitting in the mid‑20 billions of annualized revenue
+[MIGRATE] created dp-261 from inbox item extract-20260511-src-107-2: Anthropic is said to have crossed a 30‑billion‑dollar run rate
+[MIGRATE] created dp-262 from inbox item extract-20260511-src-107-8: Mistral AI is valued somewhere around 11.7 to 14 billion dollars on the private 
+[INFO] inbox migration: minted 3 new vault dp(s); backfilled human_reviewed on 0 existing dp(s); skipped 19 malformed-unit item(s); total accepted inbox items: 168
+[OK] dp-260 → 1 writes (OpenAI 2026.arr = $25.0B)
+[OK] dp-261 → 1 writes (Anthropic 2026.arr = $30.0B)
+[OK] dp-262 → 1 writes (Mistral 2026.valuation = $12.85B valuation)
+[GATE] auto-apply OpenAI 2026.arr = $25.0B — human_reviewed — variance gate bypassed because the inbox item was accepted in claims.html
+[GATE] auto-apply Anthropic 2026.arr = $30.0B — human_reviewed — variance gate bypassed because the inbox item was accepted in claims.html
+[GATE] auto-apply Mistral 2026.valuation = $12.85B valuation — human_reviewed — variance gate bypassed because the inbox item was accepted in claims.html
+[OK-EQUAL] OpenAI 2026.arr = $25.0B (already at value)
+[OK-EQUAL] Anthropic 2026.arr = $30.0B (already at value)
+[APPLY] Mistral 2026.valuation = $12.85B valuation (was None)
+[INFO] site-data.json regenerated
+[INFO] apply_log: /Users/simonbowker/Developer/apac-ai-intel/data/apply_log.json

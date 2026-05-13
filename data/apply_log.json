@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-09T02:31:38Z",
+  "lastUpdated": "2026-05-12T22:43:42Z",
   "runs": [
     {
       "ts": "2026-05-08T06:53:08Z",
@@ -374,10 +374,77 @@
       "routed_to_review": 0,
       "anomalies": 0,
       "diffs": []
+    },
+    {
+      "ts": "2026-05-11T00:46:34Z",
+      "auto_applied": 0,
+      "routed_to_review": 0,
+      "anomalies": 0,
+      "diffs": []
+    },
+    {
+      "ts": "2026-05-11T23:16:15Z",
+      "auto_applied": 0,
+      "routed_to_review": 0,
+      "anomalies": 0,
+      "diffs": []
+    },
+    {
+      "ts": "2026-05-12T22:43:42Z",
+      "auto_applied": 3,
+      "routed_to_review": 0,
+      "anomalies": 0,
+      "diffs": [
+        {
+          "claim_id": "dp-260",
+          "entity_slug": "openai",
+          "year_key": "2026",
+          "field_key": "arr",
+          "incoming_value": 25.0,
+          "prior_value": 25.0,
+          "incoming_tier": "tier_1B",
+          "existing_tier": "tier_2A",
+          "variance": 0.0,
+          "is_first_time": false,
+          "label": "OpenAI 2026.arr = $25.0B",
+          "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+          "bucket": "auto_apply"
+        },
+        {
+          "claim_id": "dp-261",
+          "entity_slug": "anthropic",
+          "year_key": "2026",
+          "field_key": "arr",
+          "incoming_value": 30.0,
+          "prior_value": 30,
+          "incoming_tier": "tier_1B",
+          "existing_tier": "tier_2A",
+          "variance": 0.0,
+          "is_first_time": false,
+          "label": "Anthropic 2026.arr = $30.0B",
+          "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+          "bucket": "auto_apply"
+        },
+        {
+          "claim_id": "dp-262",
+          "entity_slug": "mistral",
+          "year_key": "2026",
+          "field_key": "valuation",
+          "incoming_value": 12.85,
+          "prior_value": null,
+          "incoming_tier": "tier_1B",
+          "existing_tier": null,
+          "variance": null,
+          "is_first_time": false,
+          "label": "Mistral 2026.valuation = $12.85B valuation",
+          "reason": "human_reviewed \u2014 variance gate bypassed because the inbox item was accepted in claims.html",
+          "bucket": "auto_apply"
+        }
+      ]
     }
   ],
   "counters_30d": {
-    "auto_applied": 22,
+    "auto_applied": 25,
     "routed_to_review": 0,
     "anomalies": 0
   }

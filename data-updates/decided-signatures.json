@@ -83,6 +83,10 @@
     "decided_at": "2026-05-09T02:31:09.486Z",
     "decision": "accepted"
   },
+  "anthropic|other|30 $b arr||": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "accepted"
+  },
   "anthropic|profitability_target_year|2028||2028": {
     "decided_at": "2026-05-09T02:31:09.486Z",
     "decision": "accepted"
@@ -126,6 +130,10 @@
   "claim:a cardiologist/author (eric topol) concluded there is 'very little evidence for llms benefiting patients or doctors for health outcomes' aside from administrative work, based on his review published a": {
     "decided_at": "2026-05-09T02:31:38.723Z",
     "decision": "declined"
+  },
+  "claim:a global logistics player has rolled out an ai assistant based on mistral to more than 100,000 employees across 160+ countries": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "parked"
   },
   "claim:a human researcher is expected to take 4 to 8 hours of work to achieve a 4\u00d7 speedup on anthropic's llm training optimization task.": {
     "decided_at": "2026-05-09T02:31:38.723Z",
@@ -297,6 +305,10 @@
   },
   "claim:anthropic is planning compute purchases assuming revenue could reach $100b end of 2026 and $1t end of 2027 if 10x continues, considering up to $5t compute commitments.": {
     "decided_at": "2026-05-09T02:31:09.486Z",
+    "decision": "accepted"
+  },
+  "claim:anthropic is said to have crossed a 30\u2011billion\u2011dollar run rate": {
+    "decided_at": "2026-05-12T09:16:15",
     "decision": "accepted"
   },
   "claim:anthropic launched claude design, a new anthropic labs product for creating visual work such as designs, prototypes, slides, and one-pagers.": {
@@ -555,6 +567,50 @@
     "decided_at": "2026-05-09T02:31:38.723Z",
     "decision": "declined"
   },
+  "claim:goldman sachs assumes $15 million per mw for data centers": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs assumes $2,500 per kw for new power": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs assumes 15% of required data center space is brownfield in 2026": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs assumes 30% of required data center space is brownfield in 2031": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs assumes vr200 chip power consumption of 3,000 w per package": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs baseline assumes 5% yoy compute growth past 2031": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs baseline assumes nvidia accounts for 75% of total compute spend in each period": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs baseline model implies $1.6 trillion in annual ai capex in 2031": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs baseline model projects $7.6 trillion of cumulative ai capex between 2026 and 2031": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs estimates $4 trillion to $8 trillion of total ai capital investment over the next five years": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
+  "claim:goldman sachs uses vr200 chip baseline spec at $80.5k per gpu including node costs": {
+    "decided_at": "2026-05-11T10:46:34",
+    "decision": "raw_pool"
+  },
   "claim:google + amazon + microsoft combined ai capex (cumulative, to date): $803b": {
     "decided_at": "2026-05-09T02:31:38.723Z",
     "decision": "declined"
@@ -710,6 +766,26 @@
   "claim:midjourney monthly inference spend: $700k/month (google tpus)": {
     "decided_at": "2026-05-09T02:31:38.723Z",
     "decision": "declined"
+  },
+  "claim:mistral ai 20x'd its arr in about a year": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "parked"
+  },
+  "claim:mistral ai ceo expects about one billion euros in revenue in 2026": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "parked"
+  },
+  "claim:mistral ai is at roughly 400 million dollars in arr as of early 2026": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "parked"
+  },
+  "claim:mistral ai is valued somewhere around 11.7 to 14 billion dollars on the private markets": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "accepted"
+  },
+  "claim:mistral ai was at about 20 million a year earlier": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "parked"
   },
   "claim:mistral's h1 2026 revenue ran at $250m, doubling from h2 2025 levels.": {
     "decided_at": "2026-05-09T02:31:09.486Z",
@@ -950,6 +1026,10 @@
   "claim:openai introduced gpt-5.5, a new model release signaling continued product cadence and potential new revenue tier.": {
     "decided_at": "2026-05-09T02:31:38.723Z",
     "decision": "declined"
+  },
+  "claim:openai is reportedly sitting in the mid\u201120 billions of annualized revenue": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "accepted"
   },
   "claim:openai is still ahead of anthropic in terms of total spend, but the marginal buyer in the last 6-10 weeks has massively shifted toward anthropic.": {
     "decided_at": "2026-05-09T02:31:38.723Z",
@@ -1251,9 +1331,17 @@
     "decided_at": "2026-05-09T02:31:09.486Z",
     "decision": "accepted"
   },
+  "claim:xai has marks north of 200 billion on revenue": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "parked"
+  },
   "claim:xai raised $15b series d round.": {
     "decided_at": "2026-05-09T02:31:09.486Z",
     "decision": "accepted"
+  },
+  "claim:xai shows up at under five percent of openai's revenue": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "declined"
   },
   "claude / anthropic|monthly token spend per app|$200\u2013$10,000/month|https://thetwentyminutevc.libsyn.com/20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthropic-who-wins-enterprise-spacex-at-2trn-and-data-centers-in-space-the-20bn-groq-deal-broken-down-jeff-bezos-100bn-new-fund|2025": {
     "decided_at": "2026-05-09T02:31:09.486Z",
@@ -1331,6 +1419,10 @@
     "decided_at": "2026-05-09T02:31:09.486Z",
     "decision": "accepted"
   },
+  "mistral ai|other|12.85 $b||": {
+    "decided_at": "2026-05-12T09:16:15",
+    "decision": "accepted"
+  },
   "model training infrastructure|spend|$4.0b|https://menlovc.com/perspective/2025-the-state-of-generative-ai-in-the-enterprise/|2025": {
     "decided_at": "2026-05-09T02:31:09.486Z",
     "decision": "accepted"
@@ -1353,6 +1445,10 @@
   },
   "openai|headcount target|8,000 employees|https://thetwentyminutevc.libsyn.com/20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthropic-who-wins-enterprise-spacex-at-2trn-and-data-centers-in-space-the-20bn-groq-deal-broken-down-jeff-bezos-100bn-new-fund|end of 2025": {
     "decided_at": "2026-05-09T02:31:09.486Z",
+    "decision": "accepted"
+  },
+  "openai|revenue|25 $b arr||": {
+    "decided_at": "2026-05-12T09:16:15",
     "decision": "accepted"
   },
   "openai|total ai spend share vs anthropic|still ahead in total spend|https://thetwentyminutevc.libsyn.com/20vc-why-you-need-1bn-to-do-series-a-today-openai-vs-anthropic-who-wins-enterprise-spacex-at-2trn-and-data-centers-in-space-the-20bn-groq-deal-broken-down-jeff-bezos-100bn-new-fund|early 2025": {
