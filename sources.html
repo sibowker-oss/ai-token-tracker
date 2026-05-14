@@ -62,7 +62,15 @@
   .source-org { font-size:12px; color:var(--text-dim); margin-top:2px; }
   .source-url-small { font-size:10px; color:var(--accent); text-decoration:none; word-break:break-all; margin-top:3px; display:block; }
   .source-url-small:hover { text-decoration:underline; }
-  .source-badges { display:flex; gap:4px; flex-shrink:0; flex-wrap:wrap; }
+  .source-badges { display:flex; gap:4px; flex-shrink:0; flex-wrap:wrap; align-items:center; }
+
+  /* Action buttons next to Delete */
+  .card-action { padding:2px 8px; border-radius:4px; font-size:10px; cursor:pointer; opacity:0.7; transition:opacity 0.15s; background:transparent; }
+  .card-action:hover { opacity:1; }
+  .card-action[disabled] { opacity:0.3; cursor:not-allowed; }
+  .card-action-review { border:1px solid rgba(245,158,11,0.4); color:var(--orange); text-decoration:none; }
+  .card-action-extract { border:1px solid rgba(59,130,246,0.4); color:var(--accent); }
+  .card-action-delete { border:1px solid rgba(239,68,68,0.3); color:var(--red); margin-left:4px; }
 
   .badge { display:inline-block; padding:2px 7px; border-radius:5px; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px; }
   .badge-active { background:rgba(16,185,129,0.15); color:var(--green); }
@@ -75,6 +83,34 @@
 
   .source-tags { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; }
   .source-tag { padding:2px 8px; border-radius:10px; background:rgba(59,130,246,0.08); color:var(--accent); font-size:10px; }
+
+  /* Chip filter row */
+  .chip-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+  .chip { display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:14px; background:transparent; border:1px solid var(--card-border); color:var(--text-dim); font-size:12px; cursor:pointer; transition:border-color 0.15s,color 0.15s,background 0.15s; user-select:none; }
+  .chip:hover { border-color:var(--accent); color:var(--text); }
+  .chip.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .chip .chip-count { font-size:10px; opacity:0.75; }
+  .chip.active .chip-count { opacity:1; }
+
+  /* Per-card Monitoring block */
+  .monitoring-block { margin-top:10px; padding:10px 12px; background:var(--bg); border:1px solid var(--card-border); border-radius:8px; font-size:11px; }
+  .mon-row { display:flex; gap:10px; align-items:flex-start; margin-bottom:4px; }
+  .mon-row:last-child { margin-bottom:0; }
+  .mon-label { color:var(--text-dim); font-weight:600; text-transform:uppercase; letter-spacing:0.4px; font-size:9px; min-width:62px; padding-top:2px; flex-shrink:0; }
+  .mon-value { color:var(--text); flex:1; line-height:1.4; }
+  .mon-status { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:600; }
+  .mon-status-healthy { background:rgba(16,185,129,0.15); color:var(--green); }
+  .mon-status-stale { background:rgba(245,158,11,0.15); color:var(--orange); }
+  .mon-status-overdue { background:rgba(239,68,68,0.15); color:var(--red); }
+  .mon-status-never { background:rgba(239,68,68,0.15); color:var(--red); }
+  .mon-status-manual { background:rgba(148,163,184,0.15); color:var(--text-dim); }
+  .mon-status-event { background:rgba(139,92,246,0.15); color:var(--purple); }
+  .mon-dates { color:var(--text-dim); font-size:10px; margin-left:6px; }
+
+  @media (max-width: 600px) {
+    .mon-row { flex-direction:column; gap:2px; margin-bottom:8px; }
+    .mon-label { min-width:0; padding-top:0; }
+  }
 
   /* Expanded detail */
   .source-detail { display:none; margin-top:16px; padding-top:16px; border-top:1px solid var(--card-border); }
@@ -117,6 +153,8 @@
     <button onclick="quickAdd()">Add Source</button>
   </div>
 
+  <div class="chip-row" id="chip-row"></div>
+
   <div class="search-bar">
     <span class="search-icon">&#128269;</span>
     <input type="text" id="search" placeholder="Search sources by name, tag, or URL..." oninput="renderSources()">
@@ -129,15 +167,167 @@
 <footer>AI Ledger v2 Beta</footer>
 
 <script>
+// --- wq-104 constant maps (brief §3) ---
+// §3.1 type → display label
+const TYPE_LABELS = {
+  slide_deck: 'Slide Deck',
+  pdf: 'PDF Report',
+  rss_feed: 'RSS Feed',
+  podcast_feed: 'Podcast Feed',
+  newsletter: 'Newsletter',
+  web_page: 'Web Page',
+  web_scrape: 'Live Web Signal',
+  api: 'API',
+  gov_api: 'Government API',
+  gov_dataset: 'Government Dataset',
+  cloud_dataset: 'Cloud Dataset',
+  curated_dataset: 'Curated Dataset',
+  iso_queue: 'ISO Queue',
+  ir_page: 'Investor Relations',
+  earnings_aggregation: 'Earnings Aggregation',
+  sec_filing: 'SEC Filing',
+  regulatory_tracker: 'Regulatory Tracker',
+  press_room: 'Press Room',
+  ats_api: 'ATS API',
+  github_repo: 'GitHub Repo',
+  package_index: 'Package Index'
+};
+
+// §3.2 extraction_method → human description
+// Brief §3.2 locks 7 entries; remainder (wq-104 §3.2 extension, 2026-05-14) added
+// to cover all extraction_methods present in sources-registry.json today.
+// See deploy record for full list.
+const EXTRACTION_DESCRIPTIONS = {
+  // Brief §3.2 (locked)
+  pdf_export: 'PDF exported and parsed on update.',
+  podcast_scraper: 'RSS polled; episodes downloaded, transcribed, and parsed for claims.',
+  signal_scraper: 'Page scraped for live metric snapshots on each cycle.',
+  web_extract: 'Page fetched on cadence; text extracted and claims parsed.',
+  api: 'API polled; structured records ingested directly.',
+  youtube_captions: 'Captions fetched; transcript parsed for claims.',
+  manual: 'Manually added; no automatic re-check.',
+  // Extension (wq-104, 2026-05-14)
+  rss_feed: 'RSS feed polled; new entries fetched and parsed for claims.',
+  ir_page_extract: 'Investor relations page scraped; press releases and disclosures parsed for claims.',
+  manual_import: 'Manually imported; no automatic re-check.',
+  sec_edgar_scan: 'SEC EDGAR scanned on cadence; new filings parsed for claims.',
+  iso_queue_ercot: 'ERCOT interconnection queue ingested; new project rows parsed for claims.',
+  iso_queue_pjm: 'PJM interconnection queue ingested; new project rows parsed for claims.',
+  iso_queue_caiso: 'CAISO interconnection queue ingested; new project rows parsed for claims.',
+  eia_api: 'U.S. Energy Information Administration API polled; energy data points ingested.',
+  neso_tec: 'UK National Grid ESO transmission entry capacity register polled.',
+  epoch_frontier: 'Epoch AI frontier model dataset polled; new model entries ingested.',
+  patentsview_search: 'USPTO PatentsView API queried; relevant patents ingested.',
+  google_patents_bq: 'Google Patents BigQuery dataset queried; relevant patents ingested.',
+  epo_ops: 'European Patent Office Open Patent Services queried; relevant patents ingested.',
+  dol_lca_xlsx: 'U.S. DOL Labor Condition Application disclosures downloaded; H-1B records parsed.',
+  greenhouse_board: 'Greenhouse public job board polled; new postings ingested.',
+  lever_postings: 'Lever public job postings polled; new postings ingested.',
+  ashby_public: 'Ashby public job board polled; new postings ingested.',
+  workable_jobs: 'Workable public job board polled; new postings ingested.',
+  fred_api: 'St. Louis Fed FRED API polled; economic series ingested.',
+  worldbank_api: 'World Bank API polled; macro indicators ingested.',
+  abs_api: 'Australian Bureau of Statistics API polled; economic series ingested.',
+  rba_api: 'Reserve Bank of Australia API polled; rate and macro series ingested.',
+  aemo_nem: 'AEMO National Electricity Market data polled; market data ingested.',
+  github_api: 'GitHub API polled; repository activity and releases ingested.',
+  huggingface_api: 'Hugging Face API polled; model and dataset metadata ingested.'
+};
+
+// §3.3 frequency → human cadence
+const FREQUENCY_LABELS = {
+  daily: 'Checked daily',
+  weekly: 'Checked weekly',
+  monthly: 'Checked monthly',
+  quarterly: 'Checked quarterly',
+  annual: 'Checked annually',
+  one_time: 'One-time ingest',
+  on_event: 'Checked on event'
+};
+
+// §5 cadence → days (on_event omitted; status derivation skips it)
+const CADENCE_DAYS = { daily:1, weekly:7, monthly:30, quarterly:90, annual:365 };
+
+// extraction_method → workflow_dispatch target.
+// Each workflow triggers the FULL batch for its extraction class — clicking
+// 'Run extraction' on a web_extract source kicks off scan_sources for all
+// due web sources. Per-source dispatch is a follow-on (needs script flags).
+// Methods mapped to null have no automated workflow (manual / undetermined).
+const METHOD_TO_WORKFLOW = {
+  web_extract: 'daily-scan-sources.yml',
+  pdf_export: 'daily-scan-sources.yml',
+  podcast_scraper: 'weekly-podcasts.yml',
+  rss_feed: 'daily-news.yml',
+  ir_page_extract: 'daily-monitor-sources-adapters.yml',
+  sec_edgar_scan: 'daily-monitor-sources-adapters.yml',
+  iso_queue_ercot: 'daily-monitor-sources-adapters.yml',
+  iso_queue_pjm: 'daily-monitor-sources-adapters.yml',
+  iso_queue_caiso: 'daily-monitor-sources-adapters.yml',
+  eia_api: 'daily-monitor-sources-adapters.yml',
+  neso_tec: 'daily-monitor-sources-adapters.yml',
+  epoch_frontier: 'daily-monitor-sources-adapters.yml',
+  patentsview_search: 'daily-monitor-sources-adapters.yml',
+  google_patents_bq: 'daily-monitor-sources-adapters.yml',
+  epo_ops: 'daily-monitor-sources-adapters.yml',
+  dol_lca_xlsx: 'daily-monitor-sources-adapters.yml',
+  greenhouse_board: 'daily-monitor-sources-adapters.yml',
+  lever_postings: 'daily-monitor-sources-adapters.yml',
+  ashby_public: 'daily-monitor-sources-adapters.yml',
+  workable_jobs: 'daily-monitor-sources-adapters.yml',
+  fred_api: 'daily-monitor-sources-adapters.yml',
+  worldbank_api: 'daily-monitor-sources-adapters.yml',
+  abs_api: 'daily-monitor-sources-adapters.yml',
+  rba_api: 'daily-monitor-sources-adapters.yml',
+  aemo_nem: 'daily-monitor-sources-adapters.yml',
+  github_api: 'daily-monitor-sources-adapters.yml',
+  huggingface_api: 'daily-monitor-sources-adapters.yml',
+  signal_scraper: 'daily-monitor-sources-adapters.yml',
+  manual: null,
+  manual_import: null,
+  api: null,
+  youtube_captions: null
+};
+
+function titleCaseToken(raw) {
+  if (!raw) return '';
+  return String(raw).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+function typeLabel(t) { return TYPE_LABELS[t] || titleCaseToken(t); }
+function extractionDescription(m) { return EXTRACTION_DESCRIPTIONS[m] || titleCaseToken(m); }
+function frequencyLabel(f) { return FREQUENCY_LABELS[f] || titleCaseToken(f); }
+
+// §5 status derivation. Returns null for on_event (brief §6: no verdict).
+function deriveStatus(src) {
+  const freq = src.frequency;
+  if (freq === 'on_event') return null;
+  if (freq === 'one_time' || freq === 'annual') return { kind:'manual', label:'⏸ Manual', cls:'mon-status-manual' };
+  if (!src.last_checked) return { kind:'never', label:'✗ Never', cls:'mon-status-never' };
+  const days = CADENCE_DAYS[freq];
+  if (!days) return null;
+  const last = Date.parse(src.last_checked);
+  if (isNaN(last)) return { kind:'never', label:'✗ Never', cls:'mon-status-never' };
+  const ageDays = (Date.now() - last) / 86400000;
+  if (ageDays <= days) return { kind:'healthy', label:'✓ Healthy', cls:'mon-status-healthy' };
+  if (ageDays <= 1.5 * days) return { kind:'stale', label:'⚠ Stale', cls:'mon-status-stale' };
+  return { kind:'overdue', label:'✗ Overdue', cls:'mon-status-overdue' };
+}
+
 let sources = [];
 let vaultData = [];
 let inboxItems = [];
 let highlightId = null;
+let activeTypes = new Set();
+let typeCounts = {};
 
 async function loadAll() {
-  // Check URL params for highlight
   const params = new URLSearchParams(window.location.search);
   highlightId = params.get('highlight');
+
+  // Initialize active type filter from URL
+  const typesParam = params.get('types');
+  if (typesParam) {
+    typesParam.split(',').map(s => s.trim()).filter(Boolean).forEach(t => activeTypes.add(t));
+  }
 
   const [registry, vault, inbox] = await Promise.all([
     loadJSON('sources-registry.json'),
@@ -149,7 +339,21 @@ async function loadAll() {
   vaultData = vault?.dataPoints || [];
   inboxItems = inbox?.items || [];
 
+  // Compute type counts (total registry, AC#4 — never recomputed on chip toggle)
+  typeCounts = {};
+  sources.forEach(s => { typeCounts[s.type] = (typeCounts[s.type] || 0) + 1; });
+
+  // Highlight override (§6 edge case): if highlighted source's type isn't in
+  // the active filter, add it so the card is visible.
+  if (highlightId && activeTypes.size > 0) {
+    const target = sources.find(s => s.id === highlightId);
+    if (target && !activeTypes.has(target.type)) {
+      activeTypes.add(target.type);
+    }
+  }
+
   renderStats();
+  renderChipRow();
   renderSources();
 
   // Auto-expand highlighted source
@@ -162,6 +366,52 @@ async function loadAll() {
       }
     }, 100);
   }
+}
+
+function syncUrl() {
+  const params = new URLSearchParams(window.location.search);
+  if (activeTypes.size === 0) {
+    params.delete('types');
+  } else {
+    params.set('types', Array.from(activeTypes).join(','));
+  }
+  const qs = params.toString();
+  const newUrl = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
+  history.replaceState(null, '', newUrl);
+}
+
+function renderChipRow() {
+  const row = document.getElementById('chip-row');
+  if (!row) return;
+  const total = sources.length;
+  const typeKeys = Object.keys(typeCounts).sort((a, b) => typeCounts[b] - typeCounts[a]);
+
+  let html = '';
+  // "All" chip — active when no types selected
+  const allActive = activeTypes.size === 0;
+  html += `<button class="chip${allActive ? ' active' : ''}" data-type="__all__" onclick="clearChips()">All <span class="chip-count">(${total})</span></button>`;
+  typeKeys.forEach(t => {
+    const active = activeTypes.has(t);
+    const label = typeLabel(t);
+    html += `<button class="chip${active ? ' active' : ''}" data-type="${esc(t)}" onclick="toggleChip('${esc(t)}')">${esc(label)} <span class="chip-count">(${typeCounts[t]})</span></button>`;
+  });
+  row.innerHTML = html;
+}
+
+function toggleChip(typeKey) {
+  if (activeTypes.has(typeKey)) activeTypes.delete(typeKey);
+  else activeTypes.add(typeKey);
+  syncUrl();
+  renderChipRow();
+  renderSources();
+}
+
+function clearChips() {
+  if (activeTypes.size === 0) return;
+  activeTypes.clear();
+  syncUrl();
+  renderChipRow();
+  renderSources();
 }
 
 async function loadJSON(path) {
@@ -195,9 +445,13 @@ function renderStats() {
 function renderSources() {
   const query = (document.getElementById('search')?.value || '').toLowerCase();
 
+  // Chip filter (AC#2, AC#5): OR within types, AND with search.
   let filtered = sources;
+  if (activeTypes.size > 0) {
+    filtered = filtered.filter(s => activeTypes.has(s.type));
+  }
   if (query) {
-    filtered = sources.filter(s =>
+    filtered = filtered.filter(s =>
       s.title.toLowerCase().includes(query) ||
       s.url.toLowerCase().includes(query) ||
       (s.organization || '').toLowerCase().includes(query) ||
@@ -240,18 +494,23 @@ function renderSources() {
 
     html += '<div class="source-badges">';
     html += '<span class="badge badge-' + src.status + '">' + (src.status === 'active' ? 'Active' : 'Pending') + '</span>';
-    html += '<span class="badge badge-type">' + esc(src.type.replace(/_/g, ' ')) + '</span>';
-    html += '<span class="badge badge-freq">' + esc(src.frequency) + '</span>';
+    html += '<span class="badge badge-type">' + esc(typeLabel(src.type)) + '</span>';
     if (totalClaims > 0) html += '<span class="badge badge-claims">' + totalClaims + ' claims</span>';
-    html += '<button onclick="event.stopPropagation();deleteSource(\'' + src.id + '\',\'' + esc(src.title).replace(/'/g,'\\\'') + '\')" style="margin-left:8px;padding:2px 8px;border-radius:4px;border:1px solid rgba(239,68,68,0.3);background:transparent;color:var(--red);font-size:10px;cursor:pointer;opacity:0.6;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">Delete</button>';
-    html += '</div></div>';
 
-    // Meta row
-    html += '<div class="source-meta">';
-    html += '<span>Method: <strong style="color:var(--text);">' + esc(src.extraction_method.replace(/_/g, ' ')) + '</strong></span>';
-    if (src.last_checked) html += '<span>Last checked: <strong style="color:var(--text);">' + esc(src.last_checked) + '</strong></span>';
-    if (src.next_check && src.next_check < '2100') html += '<span>Next: <strong style="color:var(--text);">' + esc(src.next_check) + '</strong></span>';
-    html += '</div>';
+    // Review pending — only when there's something to review
+    if (pending.length > 0) {
+      html += '<a class="card-action card-action-review" href="review.html?source=' + esc(src.id) + '" onclick="event.stopPropagation()" title="Review ' + pending.length + ' pending claim' + (pending.length > 1 ? 's' : '') + ' from this source">Review (' + pending.length + ')</a>';
+    }
+
+    // Run extraction — only when there's a workflow target and source is active-ish
+    const wf = METHOD_TO_WORKFLOW[src.extraction_method];
+    const canExtract = !!wf && src.status !== 'deferred';
+    if (canExtract) {
+      html += '<button class="card-action card-action-extract" onclick="event.stopPropagation();runExtraction(\'' + src.id + '\')" title="Trigger ' + esc(wf) + ' on GitHub Actions">Run extraction</button>';
+    }
+
+    html += '<button class="card-action card-action-delete" onclick="event.stopPropagation();deleteSource(\'' + src.id + '\',\'' + esc(src.title).replace(/'/g,'\\\'') + '\')">Delete</button>';
+    html += '</div></div>';
 
     // Tags
     if (src.tags && src.tags.length > 0) {
@@ -259,6 +518,23 @@ function renderSources() {
       src.tags.forEach(t => html += '<span class="source-tag">' + esc(t) + '</span>');
       html += '</div>';
     }
+
+    // Monitoring block (AC#6 — always visible, not gated behind expand)
+    const status = deriveStatus(src);
+    const datesBits = [];
+    if (src.last_checked) datesBits.push('Last: ' + esc(src.last_checked));
+    if (src.next_check && src.next_check < '2100') datesBits.push('Next: ' + esc(src.next_check));
+    html += '<div class="monitoring-block">';
+    html += '<div class="mon-row"><div class="mon-label">Process</div><div class="mon-value">' + esc(extractionDescription(src.extraction_method)) + '</div></div>';
+    html += '<div class="mon-row"><div class="mon-label">Cadence</div><div class="mon-value">' + esc(frequencyLabel(src.frequency)) + '</div></div>';
+    if (status) {
+      html += '<div class="mon-row"><div class="mon-label">Status</div><div class="mon-value"><span class="mon-status ' + status.cls + '">' + esc(status.label) + '</span>';
+      if (datesBits.length) html += '<span class="mon-dates">' + datesBits.join(' · ') + '</span>';
+      html += '</div></div>';
+    } else if (datesBits.length) {
+      html += '<div class="mon-row"><div class="mon-label">Dates</div><div class="mon-value mon-dates" style="margin-left:0;">' + datesBits.join(' · ') + '</div></div>';
+    }
+    html += '</div>';
 
     // Expandable detail — linked claims
     html += '<div class="source-detail">';
@@ -368,6 +644,29 @@ function esc(s) {
   const d = document.createElement('div');
   d.textContent = String(s);
   return d.innerHTML;
+}
+
+async function runExtraction(sourceId) {
+  const src = sources.find(s => s.id === sourceId);
+  if (!src) return;
+  const wf = METHOD_TO_WORKFLOW[src.extraction_method];
+  if (!wf) { alert('No automated workflow runs sources with method: ' + src.extraction_method); return; }
+  if (!window.GitHubAPI || !GitHubAPI.hasToken()) {
+    alert('GitHub token not set — go to Settings tab first');
+    return;
+  }
+  const label = src.title || sourceId;
+  if (!confirm('Trigger "' + wf + '" on GitHub Actions?\n\nThis kicks off the whole batch for ' + src.extraction_method + ' sources, not just "' + label + '". It will pick up "' + label + '" if it is due.\n\nContinue?')) return;
+  try {
+    const ok = await GitHubAPI.triggerWorkflow(wf);
+    if (ok) {
+      showToast('Triggered ' + wf + ' — ' + label + ' refreshes on its next eligible cycle');
+    } else {
+      alert('Workflow dispatch failed. Check the token has actions:write scope and the workflow file is on the default branch.');
+    }
+  } catch (e) {
+    alert('Error triggering workflow: ' + e.message);
+  }
 }
 
 async function deleteSource(sourceId, sourceTitle) {
