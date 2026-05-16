@@ -253,7 +253,9 @@ const GitHubAPI = (() => {
   /**
    * Trigger a workflow via workflow_dispatch.
    * @param {string} workflowFile — e.g. "apply-decisions.yml"
-   * @returns {Promise<boolean>} — true if triggered
+   * @returns {Promise<{ok:boolean, status:number, message:string, scopes:string}>}
+   *   ok=true on 204. On failure, message includes GitHub's error body and the
+   *   x-oauth-scopes header so scope mismatches are obvious.
    */
   async function triggerWorkflow(workflowFile) {
     const headers = await _headers();
@@ -262,7 +264,20 @@ const GitHubAPI = (() => {
       headers,
       body: JSON.stringify({ ref: BRANCH })
     });
-    return resp.status === 204;
+    const scopes = resp.headers.get('x-oauth-scopes') || '(fine-grained or none)';
+    if (resp.status === 204) {
+      return { ok: true, status: 204, message: 'OK', scopes };
+    }
+    let body = '';
+    try { body = await resp.text(); } catch (_) {}
+    let parsedMsg = '';
+    try { parsedMsg = (JSON.parse(body) || {}).message || ''; } catch (_) {}
+    return {
+      ok: false,
+      status: resp.status,
+      message: parsedMsg || body || resp.statusText,
+      scopes
+    };
   }
 
   return { getToken, setToken, clearToken, hasToken, commitFiles, readFile, validateToken, triggerWorkflow, countMojibakeMarkers, OWNER, REPO };

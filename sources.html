@@ -658,12 +658,16 @@ async function runExtraction(sourceId) {
   const label = src.title || sourceId;
   if (!confirm('Trigger "' + wf + '" on GitHub Actions?\n\nThis kicks off the whole batch for ' + src.extraction_method + ' sources, not just "' + label + '". It will pick up "' + label + '" if it is due.\n\nContinue?')) return;
   try {
-    const ok = await GitHubAPI.triggerWorkflow(wf);
-    if (ok) {
+    const r = await GitHubAPI.triggerWorkflow(wf);
+    if (r.ok) {
       showToast('Triggered ' + wf + ' — ' + label + ' refreshes on its next eligible cycle');
-    } else {
-      alert('Workflow dispatch failed. Check the token has actions:write scope and the workflow file is on the default branch.');
+      return;
     }
+    let hint = '';
+    if (r.status === 403) hint = '\n\nLikely cause: token lacks "workflow" scope (classic PAT) or "Actions: Read and write" (fine-grained). Generate a new token with that permission and re-save in Settings.';
+    else if (r.status === 404) hint = '\n\nLikely cause: workflow file "' + wf + '" not found on the default branch, OR the token cannot see this repo.';
+    else if (r.status === 401) hint = '\n\nLikely cause: token is invalid or expired. Re-generate and re-save in Settings.';
+    alert('Workflow dispatch failed (HTTP ' + r.status + ')\n\nGitHub says: ' + r.message + '\n\nToken scopes: ' + r.scopes + hint);
   } catch (e) {
     alert('Error triggering workflow: ' + e.message);
   }
