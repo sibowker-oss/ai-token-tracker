@@ -651,7 +651,7 @@ async function runExtraction(sourceId) {
   if (!src) return;
   const wf = METHOD_TO_WORKFLOW[src.extraction_method];
   if (!wf) { alert('No automated workflow runs sources with method: ' + src.extraction_method); return; }
-  if (!window.GitHubAPI || !GitHubAPI.hasToken()) {
+  if (typeof GitHubAPI === 'undefined' || !GitHubAPI.hasToken()) {
     alert('GitHub token not set — go to Settings tab first');
     return;
   }
@@ -671,7 +671,7 @@ async function runExtraction(sourceId) {
 
 async function deleteSource(sourceId, sourceTitle) {
   if (!confirm('Delete source "' + sourceTitle + '"? This will mark it as inactive.')) return;
-  if (!window.GitHubAPI || !GitHubAPI.hasToken()) {
+  if (typeof GitHubAPI === 'undefined' || !GitHubAPI.hasToken()) {
     alert('GitHub token not set — go to Settings tab first');
     return;
   }
