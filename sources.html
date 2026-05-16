@@ -106,6 +106,7 @@
   .mon-status-manual { background:rgba(148,163,184,0.15); color:var(--text-dim); }
   .mon-status-event { background:rgba(139,92,246,0.15); color:var(--purple); }
   .mon-dates { color:var(--text-dim); font-size:10px; margin-left:6px; }
+  .mon-yield-flag { color:var(--orange); }
 
   @media (max-width: 600px) {
     .mon-row { flex-direction:column; gap:2px; margin-bottom:8px; }
@@ -428,6 +429,18 @@ function getClaimsForSource(sourceId) {
   return { accepted, pending };
 }
 
+// wq-104 follow-up: derive most-recent claim arrival from accepted + pending.
+// dateAdded is set by extractors at the time the claim enters the inbox.
+// Returns ISO date string or null.
+function lastClaimAddedDate(accepted, pending) {
+  const dates = [];
+  accepted.forEach(dp => { if (dp.dateAdded) dates.push(dp.dateAdded); });
+  pending.forEach(i => { if (i.dateAdded) dates.push(i.dateAdded); });
+  if (!dates.length) return null;
+  dates.sort();
+  return dates[dates.length - 1];
+}
+
 function renderStats() {
   const totalSources = sources.length;
   const activeSources = sources.filter(s => s.status === 'active').length;
@@ -524,6 +537,25 @@ function renderSources() {
     const datesBits = [];
     if (src.last_checked) datesBits.push('Last: ' + esc(src.last_checked));
     if (src.next_check && src.next_check < '2100') datesBits.push('Next: ' + esc(src.next_check));
+
+    // Yield (wq-104 follow-up): total claims linked to source + age of newest one
+    const yieldDate = lastClaimAddedDate(accepted, pending);
+    const cadenceDays = CADENCE_DAYS[src.frequency];
+    let yieldText, yieldFlag = '';
+    if (totalClaims === 0) {
+      yieldText = src.last_checked ? 'No claims yet — last scan returned nothing' : 'No claims yet';
+    } else {
+      yieldText = totalClaims + ' claim' + (totalClaims === 1 ? '' : 's') + ' linked';
+      if (yieldDate) yieldText += ' · newest ' + yieldDate;
+      if (yieldDate && cadenceDays && status && status.kind === 'healthy') {
+        const ageDays = (Date.now() - Date.parse(yieldDate)) / 86400000;
+        if (!isNaN(ageDays) && ageDays > 3 * cadenceDays) {
+          const cycles = Math.floor(ageDays / cadenceDays);
+          yieldFlag = ' · ⚠ no new claims in ' + cycles + ' cycle' + (cycles === 1 ? '' : 's');
+        }
+      }
+    }
+
     html += '<div class="monitoring-block">';
     html += '<div class="mon-row"><div class="mon-label">Process</div><div class="mon-value">' + esc(extractionDescription(src.extraction_method)) + '</div></div>';
     html += '<div class="mon-row"><div class="mon-label">Cadence</div><div class="mon-value">' + esc(frequencyLabel(src.frequency)) + '</div></div>';
@@ -534,6 +566,7 @@ function renderSources() {
     } else if (datesBits.length) {
       html += '<div class="mon-row"><div class="mon-label">Dates</div><div class="mon-value mon-dates" style="margin-left:0;">' + datesBits.join(' · ') + '</div></div>';
     }
+    html += '<div class="mon-row"><div class="mon-label">Yield</div><div class="mon-value' + (yieldFlag ? ' mon-yield-flag' : '') + '">' + esc(yieldText) + esc(yieldFlag) + '</div></div>';
     html += '</div>';
 
     // Expandable detail — linked claims
@@ -700,6 +733,6 @@ async function deleteSource(sourceId, sourceTitle) {
 
 loadAll();
 </script>
-<script src="github-api.js?v=2026-05-14-wq104-diag"></script>
+<script src="github-api.js?v=2026-05-14-wq104-yield"></script>
 </body>
 </html>
