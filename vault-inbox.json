@@ -1,5 +1,5 @@
 {
-  "lastProcessed": "2026-05-18",
+  "lastProcessed": "2026-05-19",
   "items": [
     {
       "id": "email-20260328-a1x",
@@ -93937,6 +93937,100 @@
       "decidedAt": "2026-05-12T22:43:33",
       "decidedBy": "manual-backfill@wq-103",
       "decisionReason": "lost-to-rebase: backfilled from data-updates/decisions/2026-05-12-review-091615.json"
+    },
+    {
+      "id": "extract-20260519-src-109-1",
+      "claim": "Agentic inference consumes 10-50x more compute than a human session",
+      "value": 10,
+      "unit": "x minimum multiplier",
+      "sourceUrl": "https://x.com/sriramkri/status/2054594308494229882?utm_source=tldrai",
+      "sourceType": "reporting",
+      "sourceAuthor": "AI agents",
+      "confidence": "estimated",
+      "dateOfClaim": "2024-12-01",
+      "dateAdded": "2026-05-19",
+      "usedOn": [],
+      "tags": [
+        "compute",
+        "inference",
+        "agents",
+        "comparison"
+      ],
+      "notes": "Auto-extracted from AI eco 2",
+      "status": "pending",
+      "replaces": null,
+      "source_id": "src-109",
+      "metricKey": null
+    },
+    {
+      "id": "extract-20260519-src-109-2",
+      "claim": "Agentic inference consumes 10-50x more compute than a human session",
+      "value": 50,
+      "unit": "x maximum multiplier",
+      "sourceUrl": "https://x.com/sriramkri/status/2054594308494229882?utm_source=tldrai",
+      "sourceType": "reporting",
+      "sourceAuthor": "AI agents",
+      "confidence": "estimated",
+      "dateOfClaim": "2024-12-01",
+      "dateAdded": "2026-05-19",
+      "usedOn": [],
+      "tags": [
+        "compute",
+        "inference",
+        "agents",
+        "comparison"
+      ],
+      "notes": "Auto-extracted from AI eco 2",
+      "status": "pending",
+      "replaces": null,
+      "source_id": "src-109",
+      "metricKey": null
+    },
+    {
+      "id": "extract-20260519-src-109-3",
+      "claim": "A 2% error rate across 50 tool calls means the job fails most of the time for agents",
+      "value": 2,
+      "unit": "%",
+      "sourceUrl": "https://x.com/sriramkri/status/2054594308494229882?utm_source=tldrai",
+      "sourceType": "reporting",
+      "sourceAuthor": "AI agents",
+      "confidence": "estimated",
+      "dateOfClaim": "2024-12-01",
+      "dateAdded": "2026-05-19",
+      "usedOn": [],
+      "tags": [
+        "error_rate",
+        "agents",
+        "reliability"
+      ],
+      "notes": "Auto-extracted from AI eco 2",
+      "status": "pending",
+      "replaces": null,
+      "source_id": "src-109",
+      "metricKey": null
+    },
+    {
+      "id": "extract-20260519-src-109-4",
+      "claim": "A 2% error rate across 50 tool calls means the job fails most of the time for agents",
+      "value": 50,
+      "unit": "count",
+      "sourceUrl": "https://x.com/sriramkri/status/2054594308494229882?utm_source=tldrai",
+      "sourceType": "reporting",
+      "sourceAuthor": "AI agents",
+      "confidence": "estimated",
+      "dateOfClaim": "2024-12-01",
+      "dateAdded": "2026-05-19",
+      "usedOn": [],
+      "tags": [
+        "tool_calls",
+        "agents",
+        "reliability"
+      ],
+      "notes": "Auto-extracted from AI eco 2",
+      "status": "pending",
+      "replaces": null,
+      "source_id": "src-109",
+      "metricKey": null
     }
   ]
 }
